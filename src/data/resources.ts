@@ -11,6 +11,17 @@ export type ResourceCard = {
 
 export const resources: ResourceCard[] = [
   {
+    slug: 'demo-guides',
+    title: { vi: 'Script demo dashboard', en: 'Dashboard demo scripts' },
+    description: {
+      vi: 'Demo Application Security & Cloudflare One — cấu hình, menu dashboard, bước showcase cho SME.',
+      en: 'Application Security & Cloudflare One demos — config paths and SME showcase steps.',
+    },
+    type: 'external',
+    href: '/demo-guides',
+    status: 'available',
+  },
+  {
     slug: 'plan-comparison',
     title: { vi: 'So sánh gói Cloudflare (SME)', en: 'Cloudflare plan comparison (SME)' },
     description: {

@@ -163,6 +163,7 @@ export const tracks: Track[] = [
               vi: 'Phân biệt bot xấu (scrape, spam) và traffic hợp lệ. Kết hợp challenge hoặc block theo score.',
               en: 'Separate bad bots (scraping, spam) from legitimate traffic. Combine challenges or blocks by score.',
             },
+            hubLink: '/demo-guides#application-security',
           },
         ],
       },
@@ -480,6 +481,7 @@ export const tracks: Track[] = [
               vi: 'Tích hợp Google Workspace, Azure AD hoặc Okta. Bật MFA ở IdP trước khi enforce policy trên Cloudflare.',
               en: 'Integrate Google Workspace, Azure AD, or Okta. Enable MFA at the IdP before enforcing Cloudflare policies.',
             },
+            hubLink: '/demo-guides#cloudflare-one',
           },
           {
             title: { vi: 'Policy: ai được vào app nào', en: 'Policies: who can access which app' },

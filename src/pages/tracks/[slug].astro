@@ -30,6 +30,8 @@ import {
   getResourceHubForTrack,
   CLOUDFLARE_RESOURCE_HUB_URL,
 } from '../../data/resourceHub';
+import DemoVignetteList from '../../components/interactive/DemoVignetteList';
+import { getDemosForTrack } from '../../data/demoScripts';
 
 export function getStaticPaths() {
   return tracks.map((t) => ({ params: { slug: t.slug } }));
@@ -55,6 +57,11 @@ const githubReading = getGitHubReposForTrack(track.slug, 4);
 const githubPaths = githubLearningPaths.filter((p) => p.relatedTrack === track.slug);
 const referenceReading = getReferenceItemsForTrack(track.slug, 4);
 const resourceHubReading = getResourceHubForTrack(track.slug, 4);
+
+const trackDemoVignettes =
+  track.slug === 'application-services' || track.slug === 'cloudflare-one'
+    ? getDemosForTrack(track.slug)
+    : [];
 ---
 
 <BaseLayout
@@ -156,6 +163,31 @@ const resourceHubReading = getResourceHubForTrack(track.slug, 4);
       </a>
     </div>
   </section>
+
+  {trackDemoVignettes.length > 0 ? (
+    <section id="demo-guides" class="mb-8 scroll-mt-24">
+      <LangText
+        as="h2"
+        class="text-xl font-semibold"
+        text={{ vi: 'Script demo dashboard (thực chiến)', en: 'Field demo scripts (dashboard)' }}
+      />
+      <LangText
+        as="p"
+        class="text-muted mt-2 max-w-3xl text-sm leading-relaxed"
+        text={{
+          vi: 'Cấu hình theo nhu cầu khách hàng — đường dẫn menu, bước showcase và mẹo demo từ playbook SE. Mở rộng đầy đủ trên trang Script demo.',
+          en: 'Configure to customer needs — menu paths, showcase steps, and SE playbook tips. Full library on the Demo guides page.',
+        }}
+      />
+      <a class="link mt-2 inline-block text-sm" href="/demo-guides">
+        <span class="lang-vi">Xem tất cả script (kèm phần nền tảng) →</span>
+        <span class="lang-en">View all scripts (including platform) →</span>
+      </a>
+      <div class="mt-6">
+        <DemoVignetteList client:load vignettes={trackDemoVignettes} />
+      </div>
+    </section>
+  ) : null}
 
   {resourceHubReading.length > 0 ? (
     <section id="resource-hub-reading" class="mb-8">

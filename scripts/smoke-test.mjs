@@ -24,6 +24,7 @@ const ROUTES = [
   '/glossary',
   '/resources',
   '/plans',
+  '/demo-guides',
   '/workshop',
   '/workshop/admin',
   '/privacy',
