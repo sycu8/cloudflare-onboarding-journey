@@ -4,28 +4,25 @@ import CloudflareLogo from './CloudflareLogo.astro';
 import LanguageSwitcher from '../ui/LanguageSwitcher';
 import ThemeToggle from '../ui/ThemeToggle';
 import MobileMenu from '../interactive/MobileMenu';
-import { navItems, mobileNavItems } from '../../data/navigation';
-
-const nav = navItems.filter((item) =>
-  ['/start-here', '/cloudflare-101', '/tracks', '/use-cases/protect-website', '/resources', '/workshop'].includes(item.href),
-);
+import { primaryNavItems, mobileNavPrimary, mobileNavMore } from '../../data/navigation';
 
 const currentPath = Astro.url.pathname;
 ---
 
 <header class="site-header sticky top-0 z-50">
-  <div class="container flex h-16 items-center justify-between gap-3">
-    <a href="/" class="flex min-w-0 items-center font-semibold tracking-tight" aria-label="Cloudflare Starter Hub — Home">
+  <div class="container flex h-14 items-center justify-between gap-2 sm:h-16 sm:gap-3">
+    <a href="/" class="flex min-w-0 shrink items-center font-semibold tracking-tight" aria-label="Cloudflare Starter Hub — Home">
       <CloudflareLogo />
     </a>
 
     <nav class="hidden items-center gap-0.5 lg:flex" aria-label="Primary">
-      {nav.map((item) => {
-        const active = currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href));
+      {primaryNavItems.map((item) => {
+        const active =
+          currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href));
         return (
           <a
             href={item.href}
-            class:list={['btn btn-ghost px-3 py-2 text-sm', active ? 'nav-link-active' : '']}
+            class:list={['btn btn-ghost px-2.5 py-2 text-sm xl:px-3', active ? 'nav-link-active' : '']}
             aria-current={active ? 'page' : undefined}
           >
             <LangText text={item.label} />
@@ -34,11 +31,11 @@ const currentPath = Astro.url.pathname;
       })}
     </nav>
 
-    <div class="flex shrink-0 items-center gap-0.5 sm:gap-1">
-      <MobileMenu client:load items={[...mobileNavItems]} />
+    <div class="flex shrink-0 items-center gap-0">
+      <MobileMenu client:load primary={[...mobileNavPrimary]} more={[...mobileNavMore]} />
       <ThemeToggle client:load />
       <LanguageSwitcher client:load />
-      <a href="/choose-your-path" class="btn btn-primary hidden sm:inline-flex">
+      <a href="/choose-your-path" class="btn btn-primary ml-1 hidden px-3 py-2 text-sm lg:inline-flex">
         <LangText text={{ vi: 'Chọn lộ trình', en: 'Choose path' }} />
       </a>
     </div>

@@ -1,0 +1,58 @@
+---
+import LangText from '../ui/LangText.astro';
+import type { Cf101Category, Cf101Product } from '../../data/cloudflare101';
+import { docsUrl } from '../../data/cloudflare101';
+
+type Props = {
+  categories: Cf101Category[];
+};
+
+const { categories } = Astro.props;
+---
+
+<div class="space-y-10">
+  {
+    categories.map((cat) => (
+      <section id={cat.id} class="scroll-mt-24">
+        <div class="mb-4 flex flex-wrap items-end justify-between gap-2">
+          <LangText as="h2" class="text-xl font-semibold md:text-2xl" text={cat.title} />
+          <a
+            href={`https://developers.cloudflare.com/#${cat.id}`}
+            class="link text-xs"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span class="lang-vi">Xem trên Developer Docs →</span>
+            <span class="lang-en">View on Developer Docs →</span>
+          </a>
+        </div>
+        <LangText as="p" class="text-muted mb-4 max-w-3xl text-sm leading-relaxed" text={cat.intro} />
+
+        <ul class="grid gap-3 sm:grid-cols-2">
+          {cat.products.map((p: Cf101Product) => {
+            const href = docsUrl(p.docsPath);
+            return (
+              <li class="card flex h-full flex-col p-4">
+                <div class="flex items-start justify-between gap-2">
+                  <LangText as="h3" class="text-base font-semibold leading-snug" text={p.name} />
+                  {href ? (
+                    <a
+                      href={href}
+                      class="link shrink-0 text-xs"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Docs: ${p.name.en}`}
+                    >
+                      Docs
+                    </a>
+                  ) : null}
+                </div>
+                <LangText as="p" class="text-muted mt-2 flex-1 text-sm leading-relaxed" text={p.summary} />
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    ))
+  }
+</div>

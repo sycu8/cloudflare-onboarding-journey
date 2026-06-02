@@ -3,155 +3,135 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumbs from '../components/chrome/Breadcrumbs.astro';
 import LangText from '../components/ui/LangText.astro';
 import CTASection from '../components/content/CTASection.astro';
+import Cloudflare101Catalog from '../components/content/Cloudflare101Catalog.astro';
+import { cf101Categories, cf101Foundations, developerDocsHome, docsUrl } from '../data/cloudflare101';
 ---
 
 <BaseLayout
-  title={{ vi: 'Cloudflare 101: DNS, proxy, edge, origin và Zero Trust', en: 'Cloudflare 101: DNS, proxy, edge, origin, and Zero Trust' }}
+  title={{
+    vi: 'Cloudflare 101: bản đồ sản phẩm theo Developer Docs',
+    en: 'Cloudflare 101: product map aligned with Developer Docs',
+  }}
   description={{
-    vi: 'Khái niệm nền tảng: DNS, proxy, edge, origin, cache, WAF, DDoS, Workers, Pages và Zero Trust.',
-    en: 'Foundations: DNS, proxy, edge, origin, cache, WAF, DDoS, Workers, Pages, and Zero Trust.',
+    vi: 'Khái niệm nền DNS/proxy/edge/origin và chú thích từng sản phẩm: Compute, AI, Storage, Media, Application Security, Cloudflare One.',
+    en: 'Foundations plus annotated products: Compute, AI, Storage, Media, Application Security, Cloudflare One.',
   }}
   canonicalPath="/cloudflare-101"
   showProgressBar
 >
   <Breadcrumbs items={[{ href: '/cloudflare-101', label: { vi: 'Cloudflare 101', en: 'Cloudflare 101' } }]} />
 
-  <header class="mb-6">
-    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: 'Cloudflare 101: DNS, proxy, edge, origin và Zero Trust', en: 'Cloudflare 101: DNS, proxy, edge, origin, and Zero Trust' }} />
+  <header class="mb-8">
     <LangText
-      as="p"
-      class="text-muted mt-2 max-w-3xl text-sm"
+      as="h1"
+      class="text-2xl font-semibold md:text-3xl"
       text={{
-        vi: 'Sau bài này, bạn sẽ hiểu các khái niệm nền tảng giúp đọc tiếp toàn bộ learning hub.',
-        en: 'After this lesson, you will understand the foundational concepts needed for the rest of this learning hub.',
+        vi: 'Cloudflare 101 — bản đồ sản phẩm',
+        en: 'Cloudflare 101 — product map',
       }}
     />
+    <LangText
+      as="p"
+      class="text-muted mt-2 max-w-3xl text-sm leading-relaxed"
+      text={{
+        vi: 'Cấu trúc theo nhóm giống trang Cloudflare Developer Docs: mỗi chuyên mục gồm các dịch vụ con và chú thích ngắn bằng tiếng Việt (bật English only nếu cần).',
+        en: 'Grouped like Cloudflare Developer Docs: each section lists sub-products with short explanations (toggle English only if needed).',
+      }}
+    />
+    <p class="mt-3 text-sm">
+      <a class="link font-medium" href={developerDocsHome} target="_blank" rel="noopener noreferrer">
+        developers.cloudflare.com
+      </a>
+      <span class="text-muted lang-vi"> — nguồn chính thức khi triển khai thật.</span>
+      <span class="text-muted lang-en"> — the canonical source for production work.</span>
+    </p>
   </header>
 
-  <section class="grid gap-4 md:grid-cols-2">
-    {[
+  <nav
+    class="card mb-8 flex flex-wrap gap-2 p-4 text-sm"
+    aria-label="Cloudflare 101 sections"
+  >
+    <span class="text-muted w-full text-xs font-medium uppercase tracking-wide">
+      <span class="lang-vi">Chuyên mục</span>
+      <span class="lang-en">Sections</span>
+    </span>
+  {
+    [
+      { id: 'foundations', vi: 'Nền tảng', en: 'Foundations' },
+      ...cf101Categories.map((c) => ({ id: c.id, vi: c.title.vi, en: c.title.en })),
+    ].map((s) => (
+      <a href={`#${s.id}`} class="badge hover:border-[var(--cf-accent)]">
+        <span class="lang-vi">{s.vi}</span>
+        <span class="lang-en">{s.en}</span>
+      </a>
+    ))
+  }
+  </nav>
+
+  <section id="foundations" class="scroll-mt-24">
+    <LangText
+      as="h2"
+      class="mb-2 text-xl font-semibold md:text-2xl"
+      text={{ vi: 'Nền tảng — đọc trước', en: 'Foundations — read first' }}
+    />
+    <LangText
+      as="p"
+      class="text-muted mb-4 max-w-3xl text-sm"
+      text={{
+        vi: 'Bốn khái niệm giúp bạn đọc mọi sản phẩm phía dưới mà không bị lạc.',
+        en: 'Four concepts that make every product section below easier to follow.',
+      }}
+    />
+    <ul class="grid gap-3 sm:grid-cols-2">
       {
-        term: 'DNS',
-        vi: 'DNS là hệ thống ánh xạ domain name đến server hoặc service phía sau.',
-        en: 'DNS maps a domain name to the server or service behind it.',
-      },
-      {
-        term: 'Proxy',
-        vi: 'Khi một DNS record được proxy qua Cloudflare, traffic sẽ đi qua Cloudflare trước khi đến origin. Nhờ đó Cloudflare có thể áp dụng security, performance, routing và visibility controls.',
-        en: 'When a DNS record is proxied through Cloudflare, traffic goes through Cloudflare before the origin. This allows Cloudflare to apply security, performance, routing, and visibility controls.',
-      },
-      {
-        term: 'Edge',
-        vi: 'Edge là lớp xử lý của Cloudflare gần user. Security checks, caching, routing và compute có thể diễn ra tại đây.',
-        en: 'The edge is where Cloudflare processes traffic close to users. Security checks, caching, routing, and compute can happen at this layer.',
-      },
-      {
-        term: 'Origin',
-        vi: 'Origin là server, application, storage hoặc backend mà Cloudflare bảo vệ hoặc kết nối đến.',
-        en: 'Origin is the server, application, storage, or backend that Cloudflare protects or connects to.',
-      },
-      {
-        term: 'CDN/cache',
-        vi: 'CDN/cache giúp lưu và phục vụ nội dung gần user hơn để tăng tốc độ tải và giảm tải cho origin.',
-        en: 'CDN/cache stores and serves content closer to users to improve loading speed and reduce origin load.',
-      },
-      {
-        term: 'WAF',
-        vi: 'WAF giúp chặn các kiểu tấn công web phổ biến trước khi chúng đến application.',
-        en: 'A WAF helps block common web attack patterns before they reach the application.',
-      },
-      {
-        term: 'DDoS protection',
-        vi: 'DDoS protection giúp hấp thụ và giảm thiểu lượng traffic tấn công lớn nhằm làm gián đoạn service.',
-        en: 'DDoS protection helps absorb and mitigate large attack traffic designed to disrupt services.',
-      },
-      {
-        term: 'Bot protection',
-        vi: 'Bot protection giúp phân biệt traffic tự động có ích và traffic tự động gây hại như scraping, spam hoặc credential stuffing.',
-        en: 'Bot protection helps distinguish useful automated traffic from harmful automation such as scraping, spam, or credential stuffing.',
-      },
-      {
-        term: 'Worker',
-        vi: 'Worker là serverless code chạy trên Cloudflare, thường dùng để build API, middleware, edge logic hoặc backend nhẹ.',
-        en: 'A Worker is serverless code running on Cloudflare, often used to build APIs, middleware, edge logic, or lightweight backends.',
-      },
-      {
-        term: 'Pages',
-        vi: 'Pages là nền tảng deploy website và full-stack application trên Cloudflare.',
-        en: 'Pages is Cloudflare’s platform for deploying websites and full-stack applications.',
-      },
-      {
-        term: 'Zero Trust',
-        vi: 'Zero Trust là mô hình bảo mật không tin mặc định. Mỗi request cần được xác minh dựa trên identity, device, context và policy.',
-        en: 'Zero Trust is a security model that does not trust by default. Each request is verified based on identity, device, context, and policy.',
-      },
-      {
-        term: 'ZTNA',
-        vi: 'ZTNA cho phép user truy cập private applications theo policy mà không cần mở rộng quyền truy cập toàn mạng như VPN truyền thống.',
-        en: 'ZTNA gives users policy-based access to private applications without broad network-level access like traditional VPN.',
-      },
-      {
-        term: 'SWG',
-        vi: 'Secure Web Gateway bảo vệ users khi truy cập Internet bằng cách kiểm soát DNS, HTTP, malware, phishing và policy.',
-        en: 'Secure Web Gateway protects users browsing the Internet by controlling DNS, HTTP, malware, phishing, and policy.',
-      },
-      {
-        term: 'CASB',
-        vi: 'CASB giúp phát hiện, đánh giá và kiểm soát rủi ro khi sử dụng SaaS applications.',
-        en: 'CASB helps discover, assess, and control risks across SaaS applications.',
-      },
-      {
-        term: 'DLP',
-        vi: 'DLP giúp giảm rủi ro rò rỉ dữ liệu nhạy cảm.',
-        en: 'DLP helps reduce the risk of sensitive data leakage.',
-      },
-      {
-        term: 'KV / D1 / R2',
-        vi: 'KV: key-value cho config/flags. D1: SQL serverless. R2: object storage (file, assets) — chọn đúng loại storage.',
-        en: 'KV: key-value for config/flags. D1: serverless SQL. R2: object storage for files and assets — pick the right storage type.',
-      },
-      {
-        term: 'Turnstile',
-        vi: 'Turnstile chống bot cho form public — server phải verify token trước khi ghi dữ liệu.',
-        en: 'Turnstile protects public forms from bots — your server must verify the token before persisting data.',
-      },
-      {
-        term: 'AI Gateway',
-        vi: 'AI Gateway quản trị request tới nhiều AI provider (cache, log, cost) — bổ sung cho Workers AI.',
-        en: 'AI Gateway governs requests to multiple AI providers (cache, logs, cost) — complementary to Workers AI.',
-      },
-      {
-        term: 'Cloudflare Tunnel',
-        vi: 'Tunnel outbound (`cloudflared`) — tên cũ Argo Tunnel — kết nối app nội bộ an toàn qua Zero Trust.',
-        en: 'Outbound tunnel (`cloudflared`) — formerly Argo Tunnel — securely connects internal apps via Zero Trust.',
-      },
-    ].map((c) => (
-      <article class="card">
-        <div class="badge">{c.term}</div>
-        <p class="text-muted mt-3 text-sm">
-          <span class="lang-vi">{c.vi}</span>
-          <span class="lang-en">{c.en}</span>
-        </p>
-      </article>
-    ))}
+        cf101Foundations.map((p) => {
+          const href = docsUrl(p.docsPath);
+          return (
+            <li class="card p-4">
+              <div class="flex items-start justify-between gap-2">
+                <LangText as="h3" class="text-base font-semibold" text={p.name} />
+                {href ? (
+                  <a href={href} class="link shrink-0 text-xs" target="_blank" rel="noopener noreferrer">
+                    Docs
+                  </a>
+                ) : null}
+              </div>
+              <LangText as="p" class="text-muted mt-2 text-sm leading-relaxed" text={p.summary} />
+            </li>
+          );
+        })
+      }
+    </ul>
   </section>
 
-  <section class="card mt-6">
-    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Đọc sâu hơn (thực chiến)', en: 'Go deeper (field notes)' }} />
+  <div class="mt-10 border-t pt-10" style="border-color: var(--cf-border)">
+    <Cloudflare101Catalog categories={cf101Categories} />
+  </div>
+
+  <section class="card mt-10">
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Đọc sâu hơn', en: 'Go deeper' }} />
     <p class="text-muted mt-2 text-sm leading-relaxed">
       <span class="lang-vi">
-        Xem <a class="link" href="/first-week#platform-2026">cập nhật 2026</a>, <a class="link" href="/resources#reference-architecture">Reference Architecture</a>, blog <a class="link" href="https://cloudsecop.net/tag/cloudflare/" target="_blank" rel="noopener noreferrer">CloudSecOp</a> và <a class="link" href="/resources#cloudsecop">Tài nguyên</a>.
+        <a class="link" href="/first-week#platform-2026">Cập nhật 2026</a> ·
+        <a class="link" href="/resources#reference-architecture">Reference Architecture</a> ·
+        <a class="link" href="/resources#resource-hub">Resource Hub</a> ·
+        <a class="link" href="https://cloudsecop.net/tag/cloudflare/" target="_blank" rel="noopener noreferrer">CloudSecOp</a>
       </span>
       <span class="lang-en">
-        See the <a class="link" href="/first-week#platform-2026">2026 snapshot</a>, <a class="link" href="/resources#reference-architecture">Reference Architecture</a>, the <a class="link" href="https://cloudsecop.net/tag/cloudflare/" target="_blank" rel="noopener noreferrer">CloudSecOp</a> blog, and <a class="link" href="/resources#cloudsecop">Resources</a>.
+        <a class="link" href="/first-week#platform-2026">2026 snapshot</a> ·
+        <a class="link" href="/resources#reference-architecture">Reference Architecture</a> ·
+        <a class="link" href="/resources#resource-hub">Resource Hub</a> ·
+        <a class="link" href="https://cloudsecop.net/tag/cloudflare/" target="_blank" rel="noopener noreferrer">CloudSecOp</a>
       </span>
     </p>
   </section>
 
   <CTASection
     title={{ vi: 'Chọn lộ trình học', en: 'Choose your learning path' }}
-    description={{ vi: 'Trả lời một câu hỏi đơn giản để chọn track phù hợp.', en: 'Answer one simple question to pick your track.' }}
+    description={{
+      vi: 'Sau khi nắm bản đồ sản phẩm, chọn track Application Services, Developer Platform hoặc Cloudflare One.',
+      en: 'Once you know the product map, pick Application Services, Developer Platform, or Cloudflare One.',
+    }}
     cta={{ href: '/choose-your-path', label: { vi: 'Chọn lộ trình', en: 'Choose your path' } }}
   />
 </BaseLayout>
-
