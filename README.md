@@ -215,7 +215,7 @@ Admin auth header: `Authorization: Bearer <WORKSHOP_ADMIN_KEY>` or `X-Cfhub-Admi
 - **`.env`, `wrangler.toml`, and `.dev.vars` are gitignored** — use `.env.example` and `wrangler.toml.example` only.  
 - Do not commit API tokens, admin keys, or Turnstile secrets.  
 - `wrangler.toml` in this workspace may exist locally with your resource IDs; keep it local or use dashboard bindings only.  
-- Workshop signup uses `turnstileToken: 'dev-bypass'` in dev — replace with real Turnstile in production.  
+- Workshop signup sends `turnstileToken: 'dev-bypass'` only when **no** `TURNSTILE_SECRET_KEY` is bound; production must set the secret and embed Turnstile on the form. See [PRODUCTION_CHECKLIST.md](PRODUCTION_CHECKLIST.md).  
 - Rate limiting uses KV when `SITE_CONFIG` is bound.
 
 ---
@@ -227,7 +227,7 @@ Admin auth header: `Authorization: Bearer <WORKSHOP_ADMIN_KEY>` or `X-Cfhub-Admi
 | `/` | Homepage |
 | `/start-here` | 30-minute intro |
 | `/first-week` | 7-day beginner plan |
-| `/cloudflare-101` | Core concepts |
+| `/cloudflare-101` | Product map (Compute, AI, Storage, Media, App Security, Cloudflare One) |
 | `/choose-your-path` | Path selector |
 | `/tracks`, `/tracks/*` | Learning tracks |
 | `/use-cases/*` | Practical scenarios |

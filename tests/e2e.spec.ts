@@ -31,7 +31,7 @@ test.describe('Cloudflare Starter Hub E2E', () => {
     await page.goto(`${BASE}/cloudflare-101`);
     await waitForIslands(page);
     await expect(page.locator('html')).toHaveAttribute('data-lang', 'vi');
-    await page.getByRole('button', { name: 'Language switcher' }).click();
+    await page.getByRole('button', { name: /English only|Tiếng Việt|^EN$|^VI$/i }).click();
     await expect(page.locator('html')).toHaveAttribute('data-lang', 'en');
     await expect(page.locator('.lang-en').first()).toBeVisible();
   });
@@ -88,11 +88,11 @@ test.describe('Cloudflare Starter Hub E2E', () => {
   test('mobile menu opens', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(`${BASE}/`);
-    const menuBtn = page.getByRole('button', { name: /menu|Menu|mở/i });
-    if ((await menuBtn.count()) > 0) {
-      await menuBtn.first().click();
-      await expect(page.getByRole('link', { name: /Tuần đầu|First week|Bắt đầu/i }).first()).toBeVisible();
-    }
+    await waitForIslands(page);
+    await page.getByRole('button', { name: /^Menu$/i }).click();
+    await expect(page.getByRole('link', { name: /^Bắt đầu$|^Start$/i }).first()).toBeVisible();
+    await page.getByRole('button', { name: /^Thêm$|^More$/i }).click();
+    await expect(page.getByRole('link', { name: /Tuần đầu|First week/i }).first()).toBeVisible();
   });
 
   test('resources anchors exist', async ({ page }) => {

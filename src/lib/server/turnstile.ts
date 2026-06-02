@@ -1,11 +1,20 @@
 import { jsonResponse } from './json';
 
+const DEV_BYPASS_TOKEN = 'dev-bypass';
+
 export async function verifyTurnstile(opts: {
   secret: string | undefined;
   token: string;
   ip?: string | null;
 }) {
-  if (!opts.secret) return { ok: false as const, error: 'missing_secret' as const };
+  if (!opts.secret) {
+    if (opts.token === DEV_BYPASS_TOKEN) return { ok: true as const, data: { success: true, dev: true } };
+    return { ok: false as const, error: 'missing_secret' as const };
+  }
+
+  if (opts.token === DEV_BYPASS_TOKEN) {
+    return { ok: false as const, error: 'invalid_token' as const };
+  }
 
   const form = new URLSearchParams();
   form.set('secret', opts.secret);
