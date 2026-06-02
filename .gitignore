@@ -12,6 +12,8 @@ pnpm-debug.log*
 # Raw docx extracts (regenerate locally)
 scripts/demo-scripts-extract.json
 scripts/plans-full.json
+scripts/proposals-extract.json
+scripts/proposals-slices.json
 
 # Secrets & local env (never commit)
 .env

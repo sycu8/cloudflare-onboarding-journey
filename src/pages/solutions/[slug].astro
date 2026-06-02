@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/chrome/Breadcrumbs.astro';
+import SolutionProposalView from '../../components/content/SolutionProposalView.astro';
+import LangText from '../../components/ui/LangText.astro';
+import { allSolutionProposals, getSolutionBySlug, solutionsDisclaimer } from '../../data/solutionProposals';
+
+export function getStaticPaths() {
+  return allSolutionProposals.map((s) => ({ params: { slug: s.slug } }));
+}
+
+const { slug } = Astro.params;
+const proposal = getSolutionBySlug(slug!);
+if (!proposal) throw new Error('Solution not found');
+---
+
+<BaseLayout
+  title={proposal.title}
+  description={proposal.executiveSummary}
+  canonicalPath={`/solutions/${proposal.slug}`}
+  showProgressBar
+>
+  <Breadcrumbs
+    items={[
+      { href: '/resources', label: { vi: 'Tài nguyên', en: 'Resources' } },
+      { href: '/solutions', label: { vi: 'Bộ giải pháp', en: 'Solutions' } },
+      { href: `/solutions/${proposal.slug}`, label: proposal.title },
+    ]}
+  />
+
+  <SolutionProposalView proposal={proposal} />
+
+  <aside class="card mt-10 border-dashed p-4 text-xs leading-relaxed" style="border-color: var(--cf-border)">
+    <LangText as="p" class="text-muted" text={solutionsDisclaimer} />
+  </aside>
+</BaseLayout>

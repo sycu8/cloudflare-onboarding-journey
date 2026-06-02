@@ -1,0 +1,129 @@
+---
+import LangText from '../ui/LangText.astro';
+import type { SolutionProposal } from '../../data/solutionProposals';
+
+type Props = {
+  proposal: SolutionProposal;
+};
+
+const { proposal } = Astro.props;
+---
+
+<article>
+  <header class="mb-8">
+    <span class="badge-accent mb-2 inline-block">
+      <LangText text={proposal.tag} />
+    </span>
+    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={proposal.title} />
+    <LangText as="p" class="text-muted mt-2 text-sm md:text-base" text={proposal.subtitle} />
+  </header>
+
+  <section class="card mb-6">
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Tóm tắt điều hành', en: 'Executive summary' }} />
+    <LangText as="p" class="text-muted mt-3 text-sm leading-relaxed" text={proposal.executiveSummary} />
+  </section>
+
+  <section class="card mb-6">
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Mục tiêu kinh doanh', en: 'Business objectives' }} />
+    <ul class="text-muted mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed">
+      {proposal.businessObjectives.map((item) => (
+        <li>
+          <span class="lang-vi">{item.vi}</span>
+          <span class="lang-en">{item.en}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="card mb-6">
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Cách tiếp cận', en: 'Our approach' }} />
+    <ul class="text-muted mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed">
+      {proposal.approachPillars.map((item) => (
+        <li>
+          <span class="lang-vi">{item.vi}</span>
+          <span class="lang-en">{item.en}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="mb-8">
+    <LangText
+      as="h2"
+      class="mb-4 text-xl font-semibold"
+      text={{ vi: 'Thành phần giải pháp & dashboard', en: 'Solution components & dashboard' }}
+    />
+    <div class="space-y-4">
+      {
+        proposal.components.map((comp) => (
+          <div class="card p-4">
+            <LangText as="h3" class="text-base font-semibold" text={comp.title} />
+            <LangText as="p" class="text-muted mt-2 text-sm leading-relaxed" text={comp.summary} />
+            {comp.dashboardHint ? (
+              <p class="mt-2 font-mono text-xs text-[var(--cf-accent)]">{comp.dashboardHint}</p>
+            ) : null}
+            <ul class="text-muted mt-3 list-disc space-y-1 pl-5 text-sm">
+              {comp.capabilities.map((cap) => (
+                <li>
+                  <span class="lang-vi">{cap.vi}</span>
+                  <span class="lang-en">{cap.en}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <div class="grid gap-6 md:grid-cols-2 mb-8">
+    <section class="card p-4">
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Điểm khác biệt', en: 'Differentiators' }} />
+      <ul class="text-muted mt-3 list-disc space-y-2 pl-5 text-sm">
+        {proposal.differentiators.map((d) => (
+          <li>
+            <span class="lang-vi">{d.vi}</span>
+            <span class="lang-en">{d.en}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+    <section class="card p-4">
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Triển khai', en: 'Implementation' }} />
+      <ul class="text-muted mt-3 list-disc space-y-2 pl-5 text-sm">
+        {proposal.implementation.map((step) => (
+          <li>
+            <span class="lang-vi">{step.vi}</span>
+            <span class="lang-en">{step.en}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </div>
+
+  <section class="card mb-8">
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Hỗ trợ & dịch vụ', en: 'Support services' }} />
+    <ul class="text-muted mt-3 list-disc space-y-2 pl-5 text-sm">
+      {proposal.support.map((s) => (
+        <li>
+          <span class="lang-vi">{s.vi}</span>
+          <span class="lang-en">{s.en}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="card">
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Tiếp tục trong hub', en: 'Continue in this hub' }} />
+    <ul class="mt-3 space-y-2 text-sm">
+      {proposal.hubLinks.map((link) => (
+        <li>
+          <a class="link" href={link.href} target={link.href.startsWith('http') ? '_blank' : undefined} rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}>
+            <LangText text={link.label} />
+            {link.href.startsWith('http') ? ' ↗' : ''}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</article>

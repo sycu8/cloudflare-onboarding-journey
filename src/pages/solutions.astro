@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/chrome/Breadcrumbs.astro';
+import LangText from '../components/ui/LangText.astro';
+import {
+  allSolutionProposals,
+  solutionsHubIntro,
+  solutionsDisclaimer,
+} from '../data/solutionProposals';
+---
+
+<BaseLayout
+  title={{
+    vi: 'Bộ giải pháp Cloudflare — Proposal tóm tắt',
+    en: 'Cloudflare solution bundles — Proposal summaries',
+  }}
+  description={{
+    vi: 'Application Security, Cloudflare One SASE, Email Security — nội dung proposal song ngữ Anh–Việt cho SME.',
+    en: 'Application Security, Cloudflare One SASE, Email Security — bilingual proposal content for SMEs.',
+  }}
+  canonicalPath="/solutions"
+  showProgressBar
+>
+  <Breadcrumbs
+    items={[
+      { href: '/resources', label: { vi: 'Tài nguyên', en: 'Resources' } },
+      { href: '/solutions', label: { vi: 'Bộ giải pháp', en: 'Solutions' } },
+    ]}
+  />
+
+  <header class="mb-8">
+    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: 'Bộ giải pháp (proposal)', en: 'Solution bundles (proposals)' }} />
+    <LangText as="p" class="text-muted mt-2 max-w-3xl text-sm leading-relaxed md:text-base" text={solutionsHubIntro} />
+    <p class="text-muted mt-3 text-xs">
+      <span class="lang-vi">Bật </span>
+      <span class="lang-en">Toggle </span>
+      <strong class="lang-vi">English only</strong>
+      <strong class="lang-en">English only</strong>
+      <span class="lang-vi"> trên thanh menu để xem toàn bộ nội dung tiếng Anh.</span>
+      <span class="lang-en"> in the top bar to view all content in English.</span>
+    </p>
+  </header>
+
+  <div class="grid gap-6 md:grid-cols-3">
+    {
+      allSolutionProposals.map((sol) => (
+        <a href={`/solutions/${sol.slug}`} class="card group flex h-full flex-col p-5 transition-colors hover:border-[var(--cf-accent)]">
+          <span class="badge-accent text-xs">
+            <LangText text={sol.tag} />
+          </span>
+          <LangText as="h2" class="mt-3 text-lg font-semibold group-hover:text-[var(--cf-accent)]" text={sol.title} />
+          <LangText as="p" class="text-muted mt-2 flex-1 text-sm leading-relaxed" text={sol.executiveSummary} />
+          <span class="mt-4 text-sm font-medium text-[var(--cf-accent)]">
+            <span class="lang-vi">Xem proposal →</span>
+            <span class="lang-en">View proposal →</span>
+          </span>
+        </a>
+      ))
+    }
+  </div>
+
+  <aside class="card mt-10 border-dashed p-4 text-xs leading-relaxed" style="border-color: var(--cf-border)">
+    <LangText as="p" class="text-muted" text={solutionsDisclaimer} />
+  </aside>
+</BaseLayout>

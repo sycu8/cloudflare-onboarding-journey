@@ -11,6 +11,17 @@ export type ResourceCard = {
 
 export const resources: ResourceCard[] = [
   {
+    slug: 'solution-proposals',
+    title: { vi: 'Proposal bộ giải pháp', en: 'Solution proposals' },
+    description: {
+      vi: 'App Services, Cloudflare One SASE, Email Security — executive summary và thành phần giải pháp (EN/VI).',
+      en: 'App Services, Cloudflare One SASE, Email Security — executive summaries and components (EN/VI).',
+    },
+    type: 'external',
+    href: '/solutions',
+    status: 'available',
+  },
+  {
     slug: 'demo-guides',
     title: { vi: 'Script demo dashboard', en: 'Dashboard demo scripts' },
     description: {

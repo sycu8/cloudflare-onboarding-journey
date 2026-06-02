@@ -179,10 +179,30 @@ const trackDemoVignettes =
           en: 'Configure to customer needs — menu paths, showcase steps, and SE playbook tips. Full library on the Demo guides page.',
         }}
       />
-      <a class="link mt-2 inline-block text-sm" href="/demo-guides">
-        <span class="lang-vi">Xem tất cả script (kèm phần nền tảng) →</span>
-        <span class="lang-en">View all scripts (including platform) →</span>
-      </a>
+      <div class="mt-2 flex flex-wrap gap-3 text-sm">
+        <a class="link" href="/demo-guides">
+          <span class="lang-vi">Script demo →</span>
+          <span class="lang-en">Demo scripts →</span>
+        </a>
+        {track.slug === 'application-services' ? (
+          <a class="link" href="/solutions/application-security">
+            <span class="lang-vi">Proposal App Services →</span>
+            <span class="lang-en">App Services proposal →</span>
+          </a>
+        ) : null}
+        {track.slug === 'cloudflare-one' ? (
+          <>
+            <a class="link" href="/solutions/cloudflare-one-sase">
+              <span class="lang-vi">Proposal SASE →</span>
+              <span class="lang-en">SASE proposal →</span>
+            </a>
+            <a class="link" href="/solutions/email-security">
+              <span class="lang-vi">Proposal Email →</span>
+              <span class="lang-en">Email proposal →</span>
+            </a>
+          </>
+        ) : null}
+      </div>
       <div class="mt-6">
         <DemoVignetteList client:load vignettes={trackDemoVignettes} />
       </div>
