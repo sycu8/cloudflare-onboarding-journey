@@ -23,6 +23,7 @@ const ROUTES = [
   '/quiz/beginner-readiness',
   '/glossary',
   '/resources',
+  '/plans',
   '/workshop',
   '/workshop/admin',
   '/privacy',

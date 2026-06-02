@@ -235,6 +235,7 @@ Admin auth header: `Authorization: Bearer <WORKSHOP_ADMIN_KEY>` or `X-Cfhub-Admi
 | `/quiz/beginner-readiness` | 12-question knowledge check |
 | `/glossary` | Searchable glossary |
 | `/resources` | Resource Hub, GitHub, Ref Arch, CloudSecOp, Learning Center |
+| `/plans` | Plan comparison (Free/Pro/Business/Enterprise) for SMEs |
 | `/workshop` | Events + signup |
 | `/workshop/admin` | Event management (noindex) |
 | `/privacy` | Privacy |

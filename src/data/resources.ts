@@ -11,6 +11,17 @@ export type ResourceCard = {
 
 export const resources: ResourceCard[] = [
   {
+    slug: 'plan-comparison',
+    title: { vi: 'So sánh gói Cloudflare (SME)', en: 'Cloudflare plan comparison (SME)' },
+    description: {
+      vi: 'Business vs Enterprise: bảng 124 tính năng và gợi ý chọn gói cho doanh nghiệp vừa và nhỏ.',
+      en: 'Business vs Enterprise: 124-feature matrix and SME buying guidance.',
+    },
+    type: 'external',
+    href: '/plans',
+    status: 'available',
+  },
+  {
     slug: 'beginner-checklist',
     title: { vi: 'Beginner Cloudflare Checklist', en: 'Beginner Cloudflare Checklist' },
     description: {

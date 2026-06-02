@@ -1,0 +1,2750 @@
+{
+  "categories": [
+    {
+      "id": "performance",
+      "title": {
+        "vi": "Hiệu năng & CDN",
+        "en": "Performance & CDN"
+      },
+      "features": [
+        {
+          "id": "globally-load-balanced-cdn",
+          "name": {
+            "vi": "Globally Load Balanced CDN",
+            "en": "Globally Load Balanced CDN"
+          },
+          "free": "yes",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "- 320 cities in 120+ countries, including mainland China\n- 13,000 networks directly connect to Cloudflare, including every major ISP, cloud provider, and enterprise\n- 280 Tbps global network edge capacity, consisting of transit connections, peering and private network interconnects\n- ~50 ms from about 95% of the world’s Internet-connected population\nLink: https://www.cloudflare.com/en-gb/network/ ",
+            "en": "- 320 cities in 120+ countries, including mainland China\n- 13,000 networks directly connect to Cloudflare, including every major ISP, cloud provider, and enterprise\n- 280 Tbps global network edge capacity, consisting of transit connections, peering and private network interconnects\n- ~50 ms from about 95% of the world’s Internet-connected population\nLink: https://www.cloudflare.com/en-gb/network/ "
+          }
+        },
+        {
+          "id": "static-content-caching",
+          "name": {
+            "vi": "Static Content Caching",
+            "en": "Static Content Caching"
+          },
+          "free": "yes",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Cloudflare only caches based on file extension and not by MIME type. The Cloudflare CDN does not cache HTML by default. Additionally, Cloudflare caches a website’s robots.txt.\nhttps://developers.cloudflare.com/cache/concepts/default-cache-behavior/\nIf you want to customize: https://developers.cloudflare.com/cache/troubleshooting/customize-caching/\nReview cache performance and analytics: https://de",
+            "en": "Cloudflare only caches based on file extension and not by MIME type. The Cloudflare CDN does not cache HTML by default. Additionally, Cloudflare caches a website’s robots.txt.\nhttps://developers.cloudflare.com/cache/concepts/default-cache-behavior/\nIf you want to customize: https://developers.cloudflare.com/cache/troubleshooting/customize-caching/\nReview cache performance and analytics: https://de"
+          }
+        },
+        {
+          "id": "cache-bypass-on-cookie",
+          "name": {
+            "vi": "Cache Bypass On Cookie",
+            "en": "Cache Bypass On Cookie"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Migrated to Cache Rules: https://developers.cloudflare.com/rules/reference/page-rules-migration/#migrate-bypass-cache-on-cookie/",
+            "en": "Migrated to Cache Rules: https://developers.cloudflare.com/rules/reference/page-rules-migration/#migrate-bypass-cache-on-cookie/"
+          }
+        },
+        {
+          "id": "custom-cache-keys",
+          "name": {
+            "vi": "Custom Cache Keys",
+            "en": "Custom Cache Keys"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "yes",
+          "note": {
+            "vi": "A Cache Key is an identifier that Cloudflare uses for a file in our cache, and the Cache Key Template defines the identifier for a given HTTP request: https://developers.cloudflare.com/cache/how-to/cache-keys/#create-custom-cache-keys",
+            "en": "A Cache Key is an identifier that Cloudflare uses for a file in our cache, and the Cache Key Template defines the identifier for a given HTTP request: https://developers.cloudflare.com/cache/how-to/cache-keys/#create-custom-cache-keys"
+          }
+        },
+        {
+          "id": "min-cache-ttl-expiry-edge",
+          "name": {
+            "vi": "Min Cache TTL Expiry (Edge)",
+            "en": "Min Cache TTL Expiry (Edge)"
+          },
+          "free": "2h",
+          "pro": "1h",
+          "business": "1s",
+          "enterprise": "1s",
+          "note": {
+            "vi": "Edge Cache TTL (Time to Live) specifies the maximum time to cache a resource in the Cloudflare global network. Edge Cache TTL is not visible in response headers and the minimum Edge Cache TTL depends on plan type.",
+            "en": "Edge Cache TTL (Time to Live) specifies the maximum time to cache a resource in the Cloudflare global network. Edge Cache TTL is not visible in response headers and the minimum Edge Cache TTL depends on plan type."
+          }
+        },
+        {
+          "id": "min-cache-ttl-expiry-browser",
+          "name": {
+            "vi": "Min Cache TTL Expiry (Browser)",
+            "en": "Min Cache TTL Expiry (Browser)"
+          },
+          "free": "4h (default), 2h",
+          "pro": "4h (default), 1h",
+          "business": "4h (default), 1s",
+          "enterprise": "4h (default), 1s",
+          "note": {
+            "vi": "The Browser Cache TTL sets the expiration for resources cached in a visitor’s browser. By default, Cloudflare honors the cache expiration set in your Expires and Cache-Control headers but overrides those headers if:\n\n- The value of the Expires or Cache-Control header from the origin web server is less than the Browser Cache TTL Cloudflare setting.\n- The origin web server does not send a Cache-Cont",
+            "en": "The Browser Cache TTL sets the expiration for resources cached in a visitor’s browser. By default, Cloudflare honors the cache expiration set in your Expires and Cache-Control headers but overrides those headers if:\n\n- The value of the Expires or Cache-Control header from the origin web server is less than the Browser Cache TTL Cloudflare setting.\n- The origin web server does not send a Cache-Cont"
+          }
+        },
+        {
+          "id": "client-max-upload-size-mb",
+          "name": {
+            "vi": "Client Max Upload Size (MB)",
+            "en": "Client Max Upload Size (MB)"
+          },
+          "free": "100.0",
+          "pro": "100.0",
+          "business": "200.0",
+          "enterprise": "500+",
+          "note": {
+            "vi": "The upload limit for the Cloudflare API depends on your plan. If you exceed this limit, your API call will receive a 413 Request Entity Too Large error.",
+            "en": "The upload limit for the Cloudflare API depends on your plan. If you exceed this limit, your API call will receive a 413 Request Entity Too Large error."
+          }
+        },
+        {
+          "id": "tcp-turbo",
+          "name": {
+            "vi": "TCP Turbo",
+            "en": "TCP Turbo"
+          },
+          "free": "no",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "“TCP Turbo”(enabled automatically) automatically chooses the TCP settings to further accelerate your website.\nAccelerate latency with custom-tuned TCP optimizations",
+            "en": "“TCP Turbo”(enabled automatically) automatically chooses the TCP settings to further accelerate your website.\nAccelerate latency with custom-tuned TCP optimizations"
+          }
+        },
+        {
+          "id": "instant-full-cache-purge",
+          "name": {
+            "vi": "Instant Full Cache Purge",
+            "en": "Instant Full Cache Purge"
+          },
+          "free": "yes",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Cloudflare offers different options to purge your content. Although single-file cache purging (purge by URL) is recommended, the following options are also available:\nhttps://developers.cloudflare.com/cache/how-to/purge-cache/\n​Purge by single-file / Purge everything / Purge cache by cache-tags / Purge cache by hostname / Purge cache by prefix (URL) / Purge cache key resources / P​urge varied imag",
+            "en": "Cloudflare offers different options to purge your content. Although single-file cache purging (purge by URL) is recommended, the following options are also available:\nhttps://developers.cloudflare.com/cache/how-to/purge-cache/\n​Purge by single-file / Purge everything / Purge cache by cache-tags / Purge cache by hostname / Purge cache by prefix (URL) / Purge cache key resources / P​urge varied imag"
+          }
+        },
+        {
+          "id": "cache-purge-by-tag",
+          "name": {
+            "vi": "Cache Purge - By Tag",
+            "en": "Cache Purge - By Tag"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "yes"
+        },
+        {
+          "id": "cache-purge-by-host",
+          "name": {
+            "vi": "Cache Purge - By Host",
+            "en": "Cache Purge - By Host"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "yes"
+        },
+        {
+          "id": "prioritized-ip-ranges",
+          "name": {
+            "vi": "Prioritized IP Ranges",
+            "en": "Prioritized IP Ranges"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Enterprise Internet assets are placed on Cloudflare dedicated IP ranges, providing prioritized routing and protection to ensure maximum speed and availability. Enterprise customers get better traffic routing, it’s less likely for Enterprise customers to face routing issues compared to Business, Pro and Free.",
+            "en": "Enterprise Internet assets are placed on Cloudflare dedicated IP ranges, providing prioritized routing and protection to ensure maximum speed and availability. Enterprise customers get better traffic routing, it’s less likely for Enterprise customers to face routing issues compared to Business, Pro and Free."
+          }
+        },
+        {
+          "id": "prefetching-urls",
+          "name": {
+            "vi": "Prefetching URLs",
+            "en": "Prefetching URLs"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "yes",
+          "note": {
+            "vi": "URL prefetching means that Cloudflare pre-populates the cache with content a visitor is likely to request next. This setting — when combined with additional setup — leads to a higher cache hit rate and thus a faster experience for the user: https://developers.cloudflare.com/speed/optimization/content/prefetch-urls/",
+            "en": "URL prefetching means that Cloudflare pre-populates the cache with content a visitor is likely to request next. This setting — when combined with additional setup — leads to a higher cache hit rate and thus a faster experience for the user: https://developers.cloudflare.com/speed/optimization/content/prefetch-urls/"
+          }
+        },
+        {
+          "id": "argo-smart-routing",
+          "name": {
+            "vi": "Argo Smart Routing",
+            "en": "Argo Smart Routing"
+          },
+          "free": "Paid Add-on",
+          "pro": "Paid Add-on",
+          "business": "Paid Add-on",
+          "enterprise": "Paid Add-on",
+          "note": {
+            "vi": "Argo Smart Routing detects real-time network issues and routes traffic across the most efficient network path. These benefits are most apparent for users farthest from your origin server: https://developers.cloudflare.com/argo-smart-routing/#cloudflare-argo-smart-routing \n\nArgo for Packets dynamically chooses the best possible path through Cloudflare’s network and looks at every path back from eve",
+            "en": "Argo Smart Routing detects real-time network issues and routes traffic across the most efficient network path. These benefits are most apparent for users farthest from your origin server: https://developers.cloudflare.com/argo-smart-routing/#cloudflare-argo-smart-routing \n\nArgo for Packets dynamically chooses the best possible path through Cloudflare’s network and looks at every path back from eve"
+          }
+        },
+        {
+          "id": "tiered-caching",
+          "name": {
+            "vi": "Tiered Caching",
+            "en": "Tiered Caching"
+          },
+          "free": "Included with Argo",
+          "pro": "Included with Argo",
+          "business": "Included with Argo",
+          "enterprise": "Included with Argo",
+          "note": {
+            "vi": "Tiered Cache works by dividing Cloudflare’s data centers into a hierarchy of lower-tiers and upper-tiers. If content is not cached in lower-tier data centers (generally the ones closest to a visitor), the lower-tier must ask an upper-tier to see if it has the content. If the upper-tier does not have the content, only the upper-tier can ask the origin for content. This practice improves bandwidth e",
+            "en": "Tiered Cache works by dividing Cloudflare’s data centers into a hierarchy of lower-tiers and upper-tiers. If content is not cached in lower-tier data centers (generally the ones closest to a visitor), the lower-tier must ask an upper-tier to see if it has the content. If the upper-tier does not have the content, only the upper-tier can ask the origin for content. This practice improves bandwidth e"
+          }
+        },
+        {
+          "id": "load-balancing",
+          "name": {
+            "vi": "Load Balancing",
+            "en": "Load Balancing"
+          },
+          "free": "Paid Add-on",
+          "pro": "Paid Add-on",
+          "business": "Paid Add-on",
+          "enterprise": "Custom Pricing",
+          "note": {
+            "vi": "Cloudflare Load Balancing distributes traffic across your servers, which reduces server strain and latency and improves the experience for end users: https://developers.cloudflare.com/load-balancing/understand-basics/",
+            "en": "Cloudflare Load Balancing distributes traffic across your servers, which reduces server strain and latency and improves the experience for end users: https://developers.cloudflare.com/load-balancing/understand-basics/"
+          }
+        },
+        {
+          "id": "global-load-balancing-geo-based-routing",
+          "name": {
+            "vi": "Global Load Balancing (Geo-based Routing)",
+            "en": "Global Load Balancing (Geo-based Routing)"
+          },
+          "free": "Paid Add-on",
+          "pro": "Paid Add-on",
+          "business": "Paid Add-on",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Geo steering directs traffic to pools tied to specific countries, regions, or — for Enterprise customers only — data centers. This option is extremely useful when you want site visitors to access the origin server closest to them, which improves page-loading performance.",
+            "en": "Geo steering directs traffic to pools tied to specific countries, regions, or — for Enterprise customers only — data centers. This option is extremely useful when you want site visitors to access the origin server closest to them, which improves page-loading performance."
+          }
+        },
+        {
+          "id": "load-balancing-health-checks",
+          "name": {
+            "vi": "Load Balancing Health Checks",
+            "en": "Load Balancing Health Checks"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "Custom Pricing",
+          "note": {
+            "vi": "Check for healthy or unhealthy origins: https://developers.cloudflare.com/load-balancing/understand-basics/health-details/",
+            "en": "Check for healthy or unhealthy origins: https://developers.cloudflare.com/load-balancing/understand-basics/health-details/"
+          }
+        },
+        {
+          "id": "china-network",
+          "name": {
+            "vi": "China Network",
+            "en": "China Network"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "Paid Add-on"
+        },
+        {
+          "id": "stream",
+          "name": {
+            "vi": "Stream",
+            "en": "Stream"
+          },
+          "free": "Paid Add-on",
+          "pro": "Paid Add-on",
+          "business": "Paid Add-on",
+          "enterprise": "Custom Pricing",
+          "note": {
+            "vi": "Cloudflare Stream lets you or your end users upload, store, encode, and deliver live and on-demand video with one API, without configuring or maintaining infrastructure. You can use Stream to build your own video features in websites and native apps, from simple playback to an entire video platform: https://developers.cloudflare.com/stream/#cloudflare-stream",
+            "en": "Cloudflare Stream lets you or your end users upload, store, encode, and deliver live and on-demand video with one API, without configuring or maintaining infrastructure. You can use Stream to build your own video features in websites and native apps, from simple playback to an entire video platform: https://developers.cloudflare.com/stream/#cloudflare-stream"
+          }
+        },
+        {
+          "id": "stream-delivery",
+          "name": {
+            "vi": "Stream Delivery",
+            "en": "Stream Delivery"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "Custom Pricing",
+          "note": {
+            "vi": "You run any regular HLS or DASH hosting server and CF intelligently caches video parts. This allows you to keep using regular video infrastructure without depending on Cloudflare too much, while still using the powerful gloabal datacenter network of Cloudflare: https://www.cloudflare.com/en-gb/products/stream-delivery/",
+            "en": "You run any regular HLS or DASH hosting server and CF intelligently caches video parts. This allows you to keep using regular video infrastructure without depending on Cloudflare too much, while still using the powerful gloabal datacenter network of Cloudflare: https://www.cloudflare.com/en-gb/products/stream-delivery/"
+          }
+        },
+        {
+          "id": "customization",
+          "name": {
+            "vi": "Customization",
+            "en": "Customization"
+          },
+          "free": "",
+          "pro": "",
+          "business": "",
+          "enterprise": ""
+        },
+        {
+          "id": "accelerated-mobile-links-amp",
+          "name": {
+            "vi": "Accelerated Mobile Links (AMP)",
+            "en": "Accelerated Mobile Links (AMP)"
+          },
+          "free": "yes",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Accelerated Mobile Links automatically identifies links on a Cloudflare customer's site to content with an AMP version (Google technology) available. If a link is clicked from a mobile device, the AMP content will be loaded nearly instantly.",
+            "en": "Accelerated Mobile Links automatically identifies links on a Cloudflare customer's site to content with an AMP version (Google technology) available. If a link is clicked from a mobile device, the AMP content will be loaded nearly instantly."
+          }
+        },
+        {
+          "id": "ipv6-http-2-spdy",
+          "name": {
+            "vi": "IPv6, HTTP/2, SPDY",
+            "en": "IPv6, HTTP/2, SPDY"
+          },
+          "free": "yes",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "SPDY is the core part of HTTP/2 protocol, many of the http/2 protocol techniques are part SPDY. SPDY(speedy) is a network protocol which manipulates http protocol by compressing headers, predicting clients requests(example discussed below) and other techniques, to fasten web experience.\n\nCloudflare leverages these protocols to speed up the website and application on Internet",
+            "en": "SPDY is the core part of HTTP/2 protocol, many of the http/2 protocol techniques are part SPDY. SPDY(speedy) is a network protocol which manipulates http protocol by compressing headers, predicting clients requests(example discussed below) and other techniques, to fasten web experience.\n\nCloudflare leverages these protocols to speed up the website and application on Internet"
+          }
+        },
+        {
+          "id": "websockets",
+          "name": {
+            "vi": "WebSockets",
+            "en": "WebSockets"
+          },
+          "free": "yes",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "WebSockets are used for real-time, event-driven communication between clients and servers. They are particularly useful for building software applications requiring instant updates, such as real-time chat, messaging, and multiplayer games.",
+            "en": "WebSockets are used for real-time, event-driven communication between clients and servers. They are particularly useful for building software applications requiring instant updates, such as real-time chat, messaging, and multiplayer games."
+          }
+        },
+        {
+          "id": "async-javascript-loading-with-rocket-loader",
+          "name": {
+            "vi": "Async JavaScript Loading with Rocket Loader",
+            "en": "Async JavaScript Loading with Rocket Loader"
+          },
+          "free": "yes",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Rocket Loader prioritizes your website’s content (text, images, fonts, and more) by deferring the loading of all of your JavaScript until after rendering. This type of loading (known as asynchronous loading) leads to earlier rendering of your page content. Rocket Loader handles both inline and external scripts, while maintaining order of execution. Cloudflare will detect incompatible browsers and ",
+            "en": "Rocket Loader prioritizes your website’s content (text, images, fonts, and more) by deferring the loading of all of your JavaScript until after rendering. This type of loading (known as asynchronous loading) leads to earlier rendering of your page content. Rocket Loader handles both inline and external scripts, while maintaining order of execution. Cloudflare will detect incompatible browsers and "
+          }
+        },
+        {
+          "id": "image-optimization-with-polish",
+          "name": {
+            "vi": "Image Optimization with Polish",
+            "en": "Image Optimization with Polish"
+          },
+          "free": "no",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Cloudflare Polish is a one-click image optimization product that automatically optimizes images in your site. Polish strips metadata from images and reduces image size through lossy or lossless compression to accelerate the speed of image downloads. When an image is fetched from your origin, our systems automatically optimize it in Cloudflare’s cache. Subsequent requests for the same image will ge",
+            "en": "Cloudflare Polish is a one-click image optimization product that automatically optimizes images in your site. Polish strips metadata from images and reduces image size through lossy or lossless compression to accelerate the speed of image downloads. When an image is fetched from your origin, our systems automatically optimize it in Cloudflare’s cache. Subsequent requests for the same image will ge"
+          }
+        },
+        {
+          "id": "image-resizing",
+          "name": {
+            "vi": "Image Resizing",
+            "en": "Image Resizing"
+          },
+          "free": "no",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Belongs to Image Transformation:  Transformations let you optimize and manipulate images stored outside of the Cloudflare Images product. Transformed images are served from one of your zones on Cloudflare: https://developers.cloudflare.com/images/transform-images/",
+            "en": "Belongs to Image Transformation:  Transformations let you optimize and manipulate images stored outside of the Cloudflare Images product. Transformed images are served from one of your zones on Cloudflare: https://developers.cloudflare.com/images/transform-images/"
+          }
+        },
+        {
+          "id": "mobile-optimization-cloudflare-mirage",
+          "name": {
+            "vi": "Mobile Optimization (Cloudflare Mirage)",
+            "en": "Mobile Optimization (Cloudflare Mirage)"
+          },
+          "free": "no",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Cloudflare Mirage reduces bandwidth used by images in mobile browsers. It can accelerate loading of image-heavy websites on very slow mobile connections and HTTP/1.\nhttps://developers.cloudflare.com/speed/optimization/images/mirage/#cloudflare-mirage \nIt does this by:\n- Replacing images with low-resolution thumbnails, which are bundled together into one file.\n- Acting as a lazy loader, deferring l",
+            "en": "Cloudflare Mirage reduces bandwidth used by images in mobile browsers. It can accelerate loading of image-heavy websites on very slow mobile connections and HTTP/1.\nhttps://developers.cloudflare.com/speed/optimization/images/mirage/#cloudflare-mirage \nIt does this by:\n- Replacing images with low-resolution thumbnails, which are bundled together into one file.\n- Acting as a lazy loader, deferring l"
+          }
+        },
+        {
+          "id": "cname-setup",
+          "name": {
+            "vi": "CNAME Setup",
+            "en": "CNAME Setup"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "CNAME flattening speeds up CNAME resolution and allows you to use a CNAME record at your root/apex domain (example.com): https://developers.cloudflare.com/dns/cname-flattening/set-up-cname-flattening/",
+            "en": "CNAME flattening speeds up CNAME resolution and allows you to use a CNAME record at your root/apex domain (example.com): https://developers.cloudflare.com/dns/cname-flattening/set-up-cname-flattening/"
+          }
+        },
+        {
+          "id": "subdomain-zones-ltz",
+          "name": {
+            "vi": "Subdomain Zones (LTZ)",
+            "en": "Subdomain Zones (LTZ)"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Allow to create different zone with subdomain",
+            "en": "Allow to create different zone with subdomain"
+          }
+        },
+        {
+          "id": "header-rewrites",
+          "name": {
+            "vi": "Header Rewrites",
+            "en": "Header Rewrites"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Used to rewrite headers if customers don’t have a way of controlling their headers. For example, if your Amazon S3 bucket requires a specific host header set in order to fetch assets. Need to migrate to Cloudflare Rules\nhttps://developers.cloudflare.com/rules/reference/page-rules-migration/#migrate-host-header-override",
+            "en": "Used to rewrite headers if customers don’t have a way of controlling their headers. For example, if your Amazon S3 bucket requires a specific host header set in order to fetch assets. Need to migrate to Cloudflare Rules\nhttps://developers.cloudflare.com/rules/reference/page-rules-migration/#migrate-host-header-override"
+          }
+        },
+        {
+          "id": "key-value-storage-with-workers",
+          "name": {
+            "vi": "Key-value Storage with Workers",
+            "en": "Key-value Storage with Workers"
+          },
+          "free": "Paid Add-on",
+          "pro": "Paid Add-on",
+          "business": "Paid Add-on",
+          "enterprise": "Custom Pricing",
+          "note": {
+            "vi": "Workers KV is a data storage that allows you to store and retrieve data globally. With Workers KV, you can build dynamic and performant APIs and websites that support high read volumes with low latency: https://developers.cloudflare.com/kv/",
+            "en": "Workers KV is a data storage that allows you to store and retrieve data globally. With Workers KV, you can build dynamic and performant APIs and websites that support high read volumes with low latency: https://developers.cloudflare.com/kv/"
+          }
+        }
+      ]
+    },
+    {
+      "id": "security",
+      "title": {
+        "vi": "Bảo mật",
+        "en": "Security"
+      },
+      "features": [
+        {
+          "id": "unmetered-ddos-mitigation",
+          "name": {
+            "vi": "Unmetered DDoS Mitigation",
+            "en": "Unmetered DDoS Mitigation"
+          },
+          "free": "yes",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Cloudflare’s unmetered mitigation of DDoS stops illegitimate volumetric traffic at the Cloudflare edge. All Cloudflare plans include unmetered mitigation without fear of being dropped. (Cloudflare protects its own edge locations and infrastructure)",
+            "en": "Cloudflare’s unmetered mitigation of DDoS stops illegitimate volumetric traffic at the Cloudflare edge. All Cloudflare plans include unmetered mitigation without fear of being dropped. (Cloudflare protects its own edge locations and infrastructure)"
+          }
+        },
+        {
+          "id": "enterprise-ddos-mitigation",
+          "name": {
+            "vi": "Enterprise DDoS Mitigation",
+            "en": "Enterprise DDoS Mitigation"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Cloudflare’s enterprise-grade mitigation of DDoS attacks against layers 3, 4, & 7 includes prioritized IP ranges and routing, ensuring maximum speed and availability. Available for ENT plan",
+            "en": "Cloudflare’s enterprise-grade mitigation of DDoS attacks against layers 3, 4, & 7 includes prioritized IP ranges and routing, ensuring maximum speed and availability. Available for ENT plan"
+          }
+        },
+        {
+          "id": "true-client-ip-header",
+          "name": {
+            "vi": "True Client IP Header",
+            "en": "True Client IP Header"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "yes",
+          "note": {
+            "vi": "True-Client-IP provides the original client IP address to the origin web server. True-Client-IP is only available on an Enterprise plan.",
+            "en": "True-Client-IP provides the original client IP address to the origin web server. True-Client-IP is only available on an Enterprise plan."
+          }
+        },
+        {
+          "id": "cloudflare-access-basic",
+          "name": {
+            "vi": "Cloudflare Access - Basic",
+            "en": "Cloudflare Access - Basic"
+          },
+          "free": "50 Users Included",
+          "pro": "50 Users Included",
+          "business": "50 Users Included",
+          "enterprise": "Custom Pricing",
+          "note": {
+            "vi": "Zero Trust access for all of your applications, replace traditional VPN: https://developers.cloudflare.com/learning-paths/replace-vpn/concepts/ \n- Authenticate users on our global network\n- Onboard third-party users seamlessly\n- Log every event and request",
+            "en": "Zero Trust access for all of your applications, replace traditional VPN: https://developers.cloudflare.com/learning-paths/replace-vpn/concepts/ \n- Authenticate users on our global network\n- Onboard third-party users seamlessly\n- Log every event and request"
+          }
+        },
+        {
+          "id": "cloudflare-access-premium",
+          "name": {
+            "vi": "Cloudflare Access - Premium",
+            "en": "Cloudflare Access - Premium"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "Custom Pricing"
+        },
+        {
+          "id": "mutual-tls",
+          "name": {
+            "vi": "Mutual TLS",
+            "en": "Mutual TLS"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "Custom Pricing",
+          "note": {
+            "vi": "Mutual TLS (mTLS) authentication uses client certificates to ensure traffic between client and server is bidirectionally secure and trusted. mTLS also allows requests that do not authenticate via an identity provider — such as Internet-of-things (IoT) devices — to demonstrate they can reach a given resource: https://developers.cloudflare.com/learning-paths/application-security/default-traffic-secu",
+            "en": "Mutual TLS (mTLS) authentication uses client certificates to ensure traffic between client and server is bidirectionally secure and trusted. mTLS also allows requests that do not authenticate via an identity provider — such as Internet-of-things (IoT) devices — to demonstrate they can reach a given resource: https://developers.cloudflare.com/learning-paths/application-security/default-traffic-secu"
+          }
+        },
+        {
+          "id": "spectrum-for-tcp-udp",
+          "name": {
+            "vi": "Spectrum (for TCP/UDP)",
+            "en": "Spectrum (for TCP/UDP)"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "Custom Pricing",
+          "note": {
+            "vi": "Spectrum allows you to route MQTT, email, file transfer, version control, games, and more over TCP or UDP through Cloudflare to mask the origin and protect it from DDoS attacks: https://developers.cloudflare.com/spectrum/#cloudflare-spectrum",
+            "en": "Spectrum allows you to route MQTT, email, file transfer, version control, games, and more over TCP or UDP through Cloudflare to mask the origin and protect it from DDoS attacks: https://developers.cloudflare.com/spectrum/#cloudflare-spectrum"
+          }
+        },
+        {
+          "id": "static-ips-anycast-your-own-ip",
+          "name": {
+            "vi": "Static IPs, Anycast Your Own IP",
+            "en": "Static IPs, Anycast Your Own IP"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "Paid Add-on",
+          "note": {
+            "vi": "Protect your own IP with Cloudflare, but need assessment from Cloudflare before the IP is propagated",
+            "en": "Protect your own IP with Cloudflare, but need assessment from Cloudflare before the IP is propagated"
+          }
+        },
+        {
+          "id": "deploy-intelligence-to-identify-new-threats",
+          "name": {
+            "vi": "Deploy Intelligence to Identify New Threats",
+            "en": "Deploy Intelligence to Identify New Threats"
+          },
+          "free": "yes",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Cloudflare handles millions of HTTP requests each second and blocks billions of cyber threats each day. Cloudflare uses that data to detect malicious actors on the Internet and turns that information into a list of known malicious IP addresses. Cloudflare also integrates with a number of third-party vendors to augment the coverage.",
+            "en": "Cloudflare handles millions of HTTP requests each second and blocks billions of cyber threats each day. Cloudflare uses that data to detect malicious actors on the Internet and turns that information into a list of known malicious IP addresses. Cloudflare also integrates with a number of third-party vendors to augment the coverage."
+          }
+        },
+        {
+          "id": "reputation-based-threat-protection",
+          "name": {
+            "vi": "Reputation-based Threat Protection",
+            "en": "Reputation-based Threat Protection"
+          },
+          "free": "yes",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "The threat score is a score from 0 (zero risk) to 100 (high risk) classifying the IP reputation of a visitor. IP reputation is calculated based on Project Honeypot, external public IP information, as well as internal threat intelligence from WAF managed rules and DDoS: https://developers.cloudflare.com/waf/custom-rules/use-cases/block-ip-reputation/#block-requests-by-threat-score",
+            "en": "The threat score is a score from 0 (zero risk) to 100 (high risk) classifying the IP reputation of a visitor. IP reputation is calculated based on Project Honeypot, external public IP information, as well as internal threat intelligence from WAF managed rules and DDoS: https://developers.cloudflare.com/waf/custom-rules/use-cases/block-ip-reputation/#block-requests-by-threat-score"
+          }
+        },
+        {
+          "id": "comment-spam-protection",
+          "name": {
+            "vi": "Comment Spam Protection",
+            "en": "Comment Spam Protection"
+          },
+          "free": "yes",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Block spam to your website",
+            "en": "Block spam to your website"
+          }
+        },
+        {
+          "id": "content-scraping-protection",
+          "name": {
+            "vi": "Content Scraping Protection",
+            "en": "Content Scraping Protection"
+          },
+          "free": "yes",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Protect website from scrapping content",
+            "en": "Protect website from scrapping content"
+          }
+        },
+        {
+          "id": "api-protection-api-shield",
+          "name": {
+            "vi": "API Protection - API Shield",
+            "en": "API Protection - API Shield"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "Custom Pricing",
+          "note": {
+            "vi": "Cloudflare offers a range of products to help identify and address API vulnerabilities. Cloudflare offers the following features to help secure, management and monitoring your APIs: API Discovery / Volumetric Abuse Detection / Sequence Analytics / Sequence Mitigation / GraphQL malicious query protection / JSON Web Tokens Validation / Mutual TLS (mTLS) / Schema Validation: https://developers.cloudf",
+            "en": "Cloudflare offers a range of products to help identify and address API vulnerabilities. Cloudflare offers the following features to help secure, management and monitoring your APIs: API Discovery / Volumetric Abuse Detection / Sequence Analytics / Sequence Mitigation / GraphQL malicious query protection / JSON Web Tokens Validation / Mutual TLS (mTLS) / Schema Validation: https://developers.cloudf"
+          }
+        },
+        {
+          "id": "page-shield",
+          "name": {
+            "vi": "Page Shield",
+            "en": "Page Shield"
+          },
+          "free": "no",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Ensures the safety of your website visitors’ browser environment. Page Shield simplifies external script management by tracking loaded resources like scripts and providing alerts when it detects new resources or malicious scripts. Page Shield also tracks the connections made by scripts on your domain’s pages and checks if they are malicious based on their destination: https://developers.cloudflare",
+            "en": "Ensures the safety of your website visitors’ browser environment. Page Shield simplifies external script management by tracking loaded resources like scripts and providing alerts when it detects new resources or malicious scripts. Page Shield also tracks the connections made by scripts on your domain’s pages and checks if they are malicious based on their destination: https://developers.cloudflare"
+          }
+        },
+        {
+          "id": "domain-protection",
+          "name": {
+            "vi": "Domain Protection",
+            "en": "Domain Protection"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "Paid Add-on",
+          "note": {
+            "vi": "Custom Domain Protection for Cloudflare Registrar, available on the Enterprise Plan, protects your organization from domain hijacking with exclusively out-of-band verification of any changes to your Registrar account. Cloudflare is an ICANN accredited registrar providing secure domain registration for high-profile domains.",
+            "en": "Custom Domain Protection for Cloudflare Registrar, available on the Enterprise Plan, protects your organization from domain hijacking with exclusively out-of-band verification of any changes to your Registrar account. Cloudflare is an ICANN accredited registrar providing secure domain registration for high-profile domains."
+          }
+        },
+        {
+          "id": "ddos-alerts",
+          "name": {
+            "vi": "DDoS Alerts",
+            "en": "DDoS Alerts"
+          },
+          "free": "no",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Cloudflare will send you a real-time alert when our systems automatically detect and mitigate a DDoS attack: https://developers.cloudflare.com/ddos-protection/reference/alerts/#ddos-alerts",
+            "en": "Cloudflare will send you a real-time alert when our systems automatically detect and mitigate a DDoS attack: https://developers.cloudflare.com/ddos-protection/reference/alerts/#ddos-alerts"
+          }
+        },
+        {
+          "id": "spectrum-ddos-protection-for-ssh-minecraft",
+          "name": {
+            "vi": "Spectrum DDoS Protection for SSH / Minecraft",
+            "en": "Spectrum DDoS Protection for SSH / Minecraft"
+          },
+          "free": "no",
+          "pro": "5GB monthly data allowance $1/GB overage fees",
+          "business": "10GB monthly data allowance $1/GB overage fees",
+          "enterprise": "yes"
+        },
+        {
+          "id": "spectrum-ddos-protection-for-rdp",
+          "name": {
+            "vi": "Spectrum DDoS Protection for RDP",
+            "en": "Spectrum DDoS Protection for RDP"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "10GB monthly data allowance $1/GB overage fees",
+          "enterprise": "yes"
+        },
+        {
+          "id": "advanced-bot-management",
+          "name": {
+            "vi": "Advanced Bot Management",
+            "en": "Advanced Bot Management"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "Custom Pricing",
+          "note": {
+            "vi": "Stop bad bots from Credential Stuffing, Content Scraping/Spamming, Inventory Hoarding and Credit Card Stuffing types of attacks by leveraging smart data. Bot Management for Enterprise is a paid add-on that provides sophisticated bot protection for your domain. Customers can identify automated traffic, take appropriate action, and view detailed analytics within the dashboard: https://developers.clo",
+            "en": "Stop bad bots from Credential Stuffing, Content Scraping/Spamming, Inventory Hoarding and Credit Card Stuffing types of attacks by leveraging smart data. Bot Management for Enterprise is a paid add-on that provides sophisticated bot protection for your domain. Customers can identify automated traffic, take appropriate action, and view detailed analytics within the dashboard: https://developers.clo"
+          }
+        },
+        {
+          "id": "captcha-js-challenge",
+          "name": {
+            "vi": "Captcha/JS Challenge",
+            "en": "Captcha/JS Challenge"
+          },
+          "free": "no",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "When a website is protected by Cloudflare, there are several occasions when it will challenge visitor traffic:\n- The visitor’s IP address has shown suspicious behavior online (as tracked by Project Honeypot).\n- The website owner has blocked the country associated with the visitor’s IP address.\n- The visitor’s actions have activated a WAF custom rule enabled by the website owner.\nIf the visitor pas",
+            "en": "When a website is protected by Cloudflare, there are several occasions when it will challenge visitor traffic:\n- The visitor’s IP address has shown suspicious behavior online (as tracked by Project Honeypot).\n- The website owner has blocked the country associated with the visitor’s IP address.\n- The visitor’s actions have activated a WAF custom rule enabled by the website owner.\nIf the visitor pas"
+          }
+        },
+        {
+          "id": "bot-fight-mode",
+          "name": {
+            "vi": "Bot Fight Mode",
+            "en": "Bot Fight Mode"
+          },
+          "free": "yes",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Bot Fight Mode is a simple, free product that helps detect and mitigate bot traffic on your domain. When enabled, the product:\n- Identifies traffic matching patterns of known bots\n- Issues computationally expensive challenges in response to these bots\n- Notifies Bandwidth Alliance partners (if applicable) to disable bots\nhttps://developers.cloudflare.com/bots/get-started/free/",
+            "en": "Bot Fight Mode is a simple, free product that helps detect and mitigate bot traffic on your domain. When enabled, the product:\n- Identifies traffic matching patterns of known bots\n- Issues computationally expensive challenges in response to these bots\n- Notifies Bandwidth Alliance partners (if applicable) to disable bots\nhttps://developers.cloudflare.com/bots/get-started/free/"
+          }
+        },
+        {
+          "id": "super-bot-fight-mode",
+          "name": {
+            "vi": "Super Bot Fight Mode",
+            "en": "Super Bot Fight Mode"
+          },
+          "free": "no",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Super Bot Fight Mode (Pro) is included in your Pro subscription. When enabled, the product:\n- Identifies traffic matching patterns of known bots\n- Can challenge or block bots\n- Offers protection for static resources\n- Provides limited analytics to help you understand bot traffic\nhttps://developers.cloudflare.com/bots/get-started/pro/ \n\nSuper Bot Fight Mode (Business) is included in your Business o",
+            "en": "Super Bot Fight Mode (Pro) is included in your Pro subscription. When enabled, the product:\n- Identifies traffic matching patterns of known bots\n- Can challenge or block bots\n- Offers protection for static resources\n- Provides limited analytics to help you understand bot traffic\nhttps://developers.cloudflare.com/bots/get-started/pro/ \n\nSuper Bot Fight Mode (Business) is included in your Business o"
+          }
+        },
+        {
+          "id": "dns-firewall",
+          "name": {
+            "vi": "DNS Firewall",
+            "en": "DNS Firewall"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "Custom Pricing",
+          "note": {
+            "vi": "Cloudflare DNS Firewall proxies all DNS queries to your nameservers through Cloudflare’s global network. This action protects upstream nameservers from DDoS attacks and reduces load by caching DNS responses: https://developers.cloudflare.com/dns/dns-firewall/#dns-firewall",
+            "en": "Cloudflare DNS Firewall proxies all DNS queries to your nameservers through Cloudflare’s global network. This action protects upstream nameservers from DDoS attacks and reduces load by caching DNS responses: https://developers.cloudflare.com/dns/dns-firewall/#dns-firewall"
+          }
+        },
+        {
+          "id": "certificate-management",
+          "name": {
+            "vi": "Certificate Management",
+            "en": "Certificate Management"
+          },
+          "free": "",
+          "pro": "",
+          "business": "",
+          "enterprise": ""
+        },
+        {
+          "id": "universal-ssl-certificate",
+          "name": {
+            "vi": "Universal SSL Certificate",
+            "en": "Universal SSL Certificate"
+          },
+          "free": "yes",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "By default, Cloudflare issues — and renews — free, unshared, publicly trusted SSL certificates to all domains added to and activated on Cloudflare.\nThe process for activating a Universal SSL certificate depends on your domain’s DNS setup: https://developers.cloudflare.com/ssl/edge-certificates/universal-ssl/enable-universal-ssl/#enable-universal-ssl-certificates",
+            "en": "By default, Cloudflare issues — and renews — free, unshared, publicly trusted SSL certificates to all domains added to and activated on Cloudflare.\nThe process for activating a Universal SSL certificate depends on your domain’s DNS setup: https://developers.cloudflare.com/ssl/edge-certificates/universal-ssl/enable-universal-ssl/#enable-universal-ssl-certificates"
+          }
+        },
+        {
+          "id": "keyless-ssl",
+          "name": {
+            "vi": "Keyless SSL",
+            "en": "Keyless SSL"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "Custom Pricing",
+          "note": {
+            "vi": "Keyless SSL allows security-conscious clients to upload their own custom certificates and benefit from Cloudflare, but without exposing their TLS private keys. Keyless SSL is only available to Enterprise customers that maintain their own SSL certificate purchased from a valid Certificate Authority. Cloudflare does not supply any certificates for use with Keyless SSL: https://developers.cloudflare.",
+            "en": "Keyless SSL allows security-conscious clients to upload their own custom certificates and benefit from Cloudflare, but without exposing their TLS private keys. Keyless SSL is only available to Enterprise customers that maintain their own SSL certificate purchased from a valid Certificate Authority. Cloudflare does not supply any certificates for use with Keyless SSL: https://developers.cloudflare."
+          }
+        },
+        {
+          "id": "bring-your-own-ssl-certificate-custom-ssl",
+          "name": {
+            "vi": "Bring Your Own SSL Certificate (Custom SSL)",
+            "en": "Bring Your Own SSL Certificate (Custom SSL)"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "1 (Modern)\n1 (Legacy)",
+          "enterprise": "1 (Modern) (can purchase more)\n1 (Legacy) (can purchase more)",
+          "note": {
+            "vi": "Custom certificates are meant for Business and Enterprise customers who want to use their own SSL certificates.\nUnlike Universal SSL or advanced certificates, Cloudflare does not manage issuance and renewal for custom certificates: https://developers.cloudflare.com/ssl/edge-certificates/custom-certificates/",
+            "en": "Custom certificates are meant for Business and Enterprise customers who want to use their own SSL certificates.\nUnlike Universal SSL or advanced certificates, Cloudflare does not manage issuance and renewal for custom certificates: https://developers.cloudflare.com/ssl/edge-certificates/custom-certificates/"
+          }
+        },
+        {
+          "id": "cloudflare-for-saas",
+          "name": {
+            "vi": "Cloudflare For SaaS",
+            "en": "Cloudflare For SaaS"
+          },
+          "free": "<100 hostnames free, $.10 per additional",
+          "pro": "<100 hostnames free, $.10 per additional",
+          "business": "<100 hostnames free, $.10 per additional",
+          "enterprise": "Custom Pricing",
+          "note": {
+            "vi": "Cloudflare for SaaS allows you to extend the security and performance benefits of Cloudflare’s network to your customers via their own custom or vanity domains: https://developers.cloudflare.com/cloudflare-for-platforms/cloudflare-for-saas/ \n\nAs a SaaS provider, you may want to support subdomains under your own zone in addition to letting your customers use their own domain names with your service",
+            "en": "Cloudflare for SaaS allows you to extend the security and performance benefits of Cloudflare’s network to your customers via their own custom or vanity domains: https://developers.cloudflare.com/cloudflare-for-platforms/cloudflare-for-saas/ \n\nAs a SaaS provider, you may want to support subdomains under your own zone in addition to letting your customers use their own domain names with your service"
+          }
+        },
+        {
+          "id": "advanced-certificate-manager",
+          "name": {
+            "vi": "Advanced Certificate Manager",
+            "en": "Advanced Certificate Manager"
+          },
+          "free": "$10/zone/mo",
+          "pro": "$10/zone/mo",
+          "business": "$10/zone/mo",
+          "enterprise": "Custom Pricing",
+          "note": {
+            "vi": "Advanced Certificate Manager is a flexible and customizable way to issue and manage certificates in Cloudflare. Use Advanced Certificate Manager when you want something more customizable than Universal SSL but still want the convenience of SSL certificate issuance and renewal. For example, use Advanced Certificate Manager to cover more than one level of subdomain, remove Cloudflare branding from t",
+            "en": "Advanced Certificate Manager is a flexible and customizable way to issue and manage certificates in Cloudflare. Use Advanced Certificate Manager when you want something more customizable than Universal SSL but still want the convenience of SSL certificate issuance and renewal. For example, use Advanced Certificate Manager to cover more than one level of subdomain, remove Cloudflare branding from t"
+          }
+        },
+        {
+          "id": "web-application-firewall-waf",
+          "name": {
+            "vi": "Web Application Firewall (WAF)",
+            "en": "Web Application Firewall (WAF)"
+          },
+          "free": "",
+          "pro": "",
+          "business": "",
+          "enterprise": ""
+        },
+        {
+          "id": "does-waf-need-to-be-contracted-separately-to-receive-access-to-waf-fea",
+          "name": {
+            "vi": "Does WAF need to be contracted separately to receive access to WAF features and benefits?",
+            "en": "Does WAF need to be contracted separately to receive access to WAF features and benefits?"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "yes",
+          "note": {
+            "vi": "WAF is a separated features so must be contracted separately or the features you receive are only belong to Free plan",
+            "en": "WAF is a separated features so must be contracted separately or the features you receive are only belong to Free plan"
+          }
+        },
+        {
+          "id": "number-of-custom-waf-rules",
+          "name": {
+            "vi": "Number of Custom WAF Rules",
+            "en": "Number of Custom WAF Rules"
+          },
+          "free": "5.0",
+          "pro": "20.0",
+          "business": "100.0",
+          "enterprise": "1000.0",
+          "note": {
+            "vi": "Custom rules allow you to control incoming traffic by filtering requests to a zone. You can perform actions like Block or Managed Challenge on incoming requests according to rules you define : https://developers.cloudflare.com/waf/custom-rules/",
+            "en": "Custom rules allow you to control incoming traffic by filtering requests to a zone. You can perform actions like Block or Managed Challenge on incoming requests according to rules you define : https://developers.cloudflare.com/waf/custom-rules/"
+          }
+        },
+        {
+          "id": "security-analytics",
+          "name": {
+            "vi": "Security Analytics",
+            "en": "Security Analytics"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Security Analytics displays information about all incoming HTTP requests for your domain, including requests not handled by Cloudflare security products: https://developers.cloudflare.com/waf/analytics/security-analytics/ \n\nUse the Security Analytics dashboard to:\n- View the traffic distribution for your domain.\n- Understand which traffic is being mitigated by Cloudflare security products, and whe",
+            "en": "Security Analytics displays information about all incoming HTTP requests for your domain, including requests not handled by Cloudflare security products: https://developers.cloudflare.com/waf/analytics/security-analytics/ \n\nUse the Security Analytics dashboard to:\n- View the traffic distribution for your domain.\n- Understand which traffic is being mitigated by Cloudflare security products, and whe"
+          }
+        },
+        {
+          "id": "free-managed-ruleset",
+          "name": {
+            "vi": "Free Managed Ruleset",
+            "en": "Free Managed Ruleset"
+          },
+          "free": "yes",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Available on all Cloudflare plans. Designed to provide mitigation against high and wide impacting vulnerabilities. The rules are safe to deploy on most applications. If you deployed the Cloudflare Managed Ruleset for your site, you do not need to deploy this managed ruleset: https://developers.cloudflare.com/waf/managed-rules/",
+            "en": "Available on all Cloudflare plans. Designed to provide mitigation against high and wide impacting vulnerabilities. The rules are safe to deploy on most applications. If you deployed the Cloudflare Managed Ruleset for your site, you do not need to deploy this managed ruleset: https://developers.cloudflare.com/waf/managed-rules/"
+          }
+        },
+        {
+          "id": "cloudflare-managed-ruleset",
+          "name": {
+            "vi": "Cloudflare Managed Ruleset",
+            "en": "Cloudflare Managed Ruleset"
+          },
+          "free": "no",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Created by the Cloudflare security team, this ruleset provides fast and effective protection for all of your applications. The ruleset is updated frequently to cover new vulnerabilities and reduce false positives: https://developers.cloudflare.com/waf/managed-rules/reference/cloudflare-managed-ruleset/",
+            "en": "Created by the Cloudflare security team, this ruleset provides fast and effective protection for all of your applications. The ruleset is updated frequently to cover new vulnerabilities and reduce false positives: https://developers.cloudflare.com/waf/managed-rules/reference/cloudflare-managed-ruleset/"
+          }
+        },
+        {
+          "id": "owasp-core-ruleset",
+          "name": {
+            "vi": "OWASP Core Ruleset",
+            "en": "OWASP Core Ruleset"
+          },
+          "free": "no",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "The Cloudflare OWASP Core Ruleset is Cloudflare’s implementation of the OWASP ModSecurity Core Rule Set (CRS). Cloudflare routinely monitors for updates from OWASP based on the latest version available from the official code repository: https://developers.cloudflare.com/waf/managed-rules/reference/owasp-core-ruleset/",
+            "en": "The Cloudflare OWASP Core Ruleset is Cloudflare’s implementation of the OWASP ModSecurity Core Rule Set (CRS). Cloudflare routinely monitors for updates from OWASP based on the latest version available from the official code repository: https://developers.cloudflare.com/waf/managed-rules/reference/owasp-core-ruleset/"
+          }
+        },
+        {
+          "id": "waf-attack-score-machine-learning-detection",
+          "name": {
+            "vi": "WAF Attack Score - Machine Learning Detection",
+            "en": "WAF Attack Score - Machine Learning Detection"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "Lite",
+          "enterprise": "Full",
+          "note": {
+            "vi": "WAF attack score allows you to identify these attack variations and their malicious payloads. It classifies each request using a machine learning algorithm, assigning an attack score from 1 to 99 based on the likelihood that the request is malicious: https://developers.cloudflare.com/waf/about/waf-attack-score/#waf-attack-score",
+            "en": "WAF attack score allows you to identify these attack variations and their malicious payloads. It classifies each request using a machine learning algorithm, assigning an attack score from 1 to 99 based on the likelihood that the request is malicious: https://developers.cloudflare.com/waf/about/waf-attack-score/#waf-attack-score"
+          }
+        },
+        {
+          "id": "exposed-credentials-check",
+          "name": {
+            "vi": "Exposed Credentials Check",
+            "en": "Exposed Credentials Check"
+          },
+          "free": "no",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "The WAF provides two mechanisms for this check: https://developers.cloudflare.com/waf/managed-rules/check-for-exposed-credentials/#check-for-exposed-credentials \n- The Exposed Credentials Check Managed Ruleset, which contains predefined rules for popular CMS applications. By enabling this ruleset for a given zone, you immediately enable checks for exposed credentials for these well-known applicati",
+            "en": "The WAF provides two mechanisms for this check: https://developers.cloudflare.com/waf/managed-rules/check-for-exposed-credentials/#check-for-exposed-credentials \n- The Exposed Credentials Check Managed Ruleset, which contains predefined rules for popular CMS applications. By enabling this ruleset for a given zone, you immediately enable checks for exposed credentials for these well-known applicati"
+          }
+        },
+        {
+          "id": "sensitive-data-detection",
+          "name": {
+            "vi": "Sensitive Data Detection",
+            "en": "Sensitive Data Detection"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "Add-on",
+          "note": {
+            "vi": "The Cloudflare Sensitive Data Detection managed ruleset helps identify data leaks generated by your origin servers. Its rules run on the body of the response looking for patterns of common sensitive data, including:\n- Personal identifiable information (PII) — for example, passport numbers\n- Financial information — for example, credit card numbers\n- Secrets — for example, API keys\nhttps://developer",
+            "en": "The Cloudflare Sensitive Data Detection managed ruleset helps identify data leaks generated by your origin servers. Its rules run on the body of the response looking for patterns of common sensitive data, including:\n- Personal identifiable information (PII) — for example, passport numbers\n- Financial information — for example, credit card numbers\n- Secrets — for example, API keys\nhttps://developer"
+          }
+        },
+        {
+          "id": "waf-content-scanning",
+          "name": {
+            "vi": "WAF Content Scanning",
+            "en": "WAF Content Scanning"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "Add-on",
+          "note": {
+            "vi": "When enabled, content scanning attempts to detect content objects, such as uploaded files, and scans them for malicious signatures like malware. The scan results, along with additional metadata, are exposed as fields available in WAF custom rules, allowing you to implement fine-grained mitigation rules: https://developers.cloudflare.com/waf/about/content-scanning/",
+            "en": "When enabled, content scanning attempts to detect content objects, such as uploaded files, and scans them for malicious signatures like malware. The scan results, along with additional metadata, are exposed as fields available in WAF custom rules, allowing you to implement fine-grained mitigation rules: https://developers.cloudflare.com/waf/about/content-scanning/"
+          }
+        },
+        {
+          "id": "number-of-custom-lists-account-level",
+          "name": {
+            "vi": "Number of Custom Lists (account level)",
+            "en": "Number of Custom Lists (account level)"
+          },
+          "free": "1.0",
+          "pro": "2.0",
+          "business": "5.0",
+          "enterprise": "10.0",
+          "note": {
+            "vi": "Create custom lists of IP addresses, hostnames, and ASNs to use and reference in your custom WAF rules: https://developers.cloudflare.com/waf/tools/lists/custom-lists/#custom-lists",
+            "en": "Create custom lists of IP addresses, hostnames, and ASNs to use and reference in your custom WAF rules: https://developers.cloudflare.com/waf/tools/lists/custom-lists/#custom-lists"
+          }
+        },
+        {
+          "id": "managed-ip-lists",
+          "name": {
+            "vi": "Managed IP lists",
+            "en": "Managed IP lists"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "yes"
+        },
+        {
+          "id": "rate-limiting-ip-based",
+          "name": {
+            "vi": "Rate Limiting (IP-based)",
+            "en": "Rate Limiting (IP-based)"
+          },
+          "free": "yes",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "With IP-based rate limiting, you can limit the number of requests a certain IP address can make, and prevent abuse from \"repeat offender\" IP addresses. Enterprise customers can negotiate a reduced rate through custom pricing.",
+            "en": "With IP-based rate limiting, you can limit the number of requests a certain IP address can make, and prevent abuse from \"repeat offender\" IP addresses. Enterprise customers can negotiate a reduced rate through custom pricing."
+          }
+        },
+        {
+          "id": "rate-limiting-rules",
+          "name": {
+            "vi": "Rate Limiting Rules",
+            "en": "Rate Limiting Rules"
+          },
+          "free": "1.0",
+          "pro": "2.0",
+          "business": "5.0",
+          "enterprise": "100 (Add-on) - default 5",
+          "note": {
+            "vi": "Rate limiting rules allow you to define rate limits for requests matching an expression, and the action to perform when those rate limits are reached.: https://developers.cloudflare.com/waf/rate-limiting-rules/#rate-limiting-rules",
+            "en": "Rate limiting rules allow you to define rate limits for requests matching an expression, and the action to perform when those rate limits are reached.: https://developers.cloudflare.com/waf/rate-limiting-rules/#rate-limiting-rules"
+          }
+        },
+        {
+          "id": "advanced-rate-limiting",
+          "name": {
+            "vi": "Advanced Rate Limiting",
+            "en": "Advanced Rate Limiting"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "Add-on",
+          "note": {
+            "vi": "With advanced rate limiting, you can write rate limiting rules using all the fields of the HTTP request to protect against denial-of-service attacks, brute-force login attempts, API traffic surges and other types of abuse targeting APIs and applications. With Advanced Rate Limiting, you can:\n- Define the rule filter using all HTTP request characteristics, such as URI, method, headers, cookies and ",
+            "en": "With advanced rate limiting, you can write rate limiting rules using all the fields of the HTTP request to protect against denial-of-service attacks, brute-force login attempts, API traffic surges and other types of abuse targeting APIs and applications. With Advanced Rate Limiting, you can:\n- Define the rule filter using all HTTP request characteristics, such as URI, method, headers, cookies and "
+          }
+        },
+        {
+          "id": "rate-limiting-counting-periods",
+          "name": {
+            "vi": "Rate Limiting Counting Periods",
+            "en": "Rate Limiting Counting Periods"
+          },
+          "free": "10 s",
+          "pro": "10 s, 1 min",
+          "business": "10 s, 1 min, 10 min",
+          "enterprise": "10 s, 1 min, 2 min, 5 min, 10 min, 1h (ENT with Advanced Rate Limiting)",
+          "note": {
+            "vi": "A maximum number of requests that a user or client can make within a given time period: https://developers.cloudflare.com/waf/rate-limiting-rules/#rate-limiting-rules",
+            "en": "A maximum number of requests that a user or client can make within a given time period: https://developers.cloudflare.com/waf/rate-limiting-rules/#rate-limiting-rules"
+          }
+        },
+        {
+          "id": "rate-limiting-timeout-periods",
+          "name": {
+            "vi": "Rate Limiting Timeout Periods",
+            "en": "Rate Limiting Timeout Periods"
+          },
+          "free": "10 s",
+          "pro": "10 s, 1 min, 1 h",
+          "business": "10 s, 1 min, 1 h, 1 day",
+          "enterprise": "10 s, 1 min, 2 min, 5 min, 10 min, 1 h, 1 day",
+          "note": {
+            "vi": "A maximum number of interval that a user or client can make: https://developers.cloudflare.com/waf/rate-limiting-rules/#rate-limiting-rules",
+            "en": "A maximum number of interval that a user or client can make: https://developers.cloudflare.com/waf/rate-limiting-rules/#rate-limiting-rules"
+          }
+        },
+        {
+          "id": "account-level-waf",
+          "name": {
+            "vi": "Account Level WAF",
+            "en": "Account Level WAF"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "Add-on",
+          "note": {
+            "vi": "Manage WAF configurations for all of your domains",
+            "en": "Manage WAF configurations for all of your domains"
+          }
+        },
+        {
+          "id": "user-agent-blocking-rules",
+          "name": {
+            "vi": "User Agent Blocking Rules",
+            "en": "User Agent Blocking Rules"
+          },
+          "free": "10.0",
+          "pro": "50.0",
+          "business": "250.0",
+          "enterprise": "1000.0",
+          "note": {
+            "vi": "User Agent Blocking rules block specific browser or web application  User-Agent request headers. These rules apply to the entire domain instead of individual subdomains. User Agent Blocking rules are applied after Zone Lockdown rules. If you allow an IP address via Zone Lockdown, it will skip any User Agent Blocking rules: https://developers.cloudflare.com/waf/tools/user-agent-blocking/#create-a-u",
+            "en": "User Agent Blocking rules block specific browser or web application  User-Agent request headers. These rules apply to the entire domain instead of individual subdomains. User Agent Blocking rules are applied after Zone Lockdown rules. If you allow an IP address via Zone Lockdown, it will skip any User Agent Blocking rules: https://developers.cloudflare.com/waf/tools/user-agent-blocking/#create-a-u"
+          }
+        },
+        {
+          "id": "zone-lockdown-rules",
+          "name": {
+            "vi": "Zone Lockdown Rules",
+            "en": "Zone Lockdown Rules"
+          },
+          "free": "0.0",
+          "pro": "3.0",
+          "business": "10.0",
+          "enterprise": "200.0",
+          "note": {
+            "vi": "Zone Lockdown specifies a list of one or more IP addresses, CIDR ranges, or networks that are the only IPs allowed to access a domain, subdomain, or URL. You can configure multiple destinations, including IPv4/IPv6 addresses, in a single Zone Lockdown rule. All IP addresses not specified in the Zone Lockdown rule will not have access to the specified resources. Requests from those IP addresses wil",
+            "en": "Zone Lockdown specifies a list of one or more IP addresses, CIDR ranges, or networks that are the only IPs allowed to access a domain, subdomain, or URL. You can configure multiple destinations, including IPv4/IPv6 addresses, in a single Zone Lockdown rule. All IP addresses not specified in the Zone Lockdown rule will not have access to the specified resources. Requests from those IP addresses wil"
+          }
+        },
+        {
+          "id": "payload-inspection",
+          "name": {
+            "vi": "Payload inspection",
+            "en": "Payload inspection"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "Custom Pricing",
+          "note": {
+            "vi": "The WAF allows you to log the request information that triggered a specific rule of a managed ruleset. This information is known as the payload. Payload logging is especially useful when diagnosing the behavior of WAF rules. Since the values that triggered a rule may contain sensitive data, they are encrypted with a customer-provided public key so that only you can examine them later: https://deve",
+            "en": "The WAF allows you to log the request information that triggered a specific rule of a managed ruleset. This information is known as the payload. Payload logging is especially useful when diagnosing the behavior of WAF rules. Since the values that triggered a rule may contain sensitive data, they are encrypted with a customer-provided public key so that only you can examine them later: https://deve"
+          }
+        },
+        {
+          "id": "log-simulate-traffic-before-execute-testing-purpose",
+          "name": {
+            "vi": "Log/Simulate traffic before execute (testing purpose)",
+            "en": "Log/Simulate traffic before execute (testing purpose)"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "yes",
+          "note": {
+            "vi": "To test for false positives, set WAF managed rules to Simulate mode. This mode allows you to record the response to possible attacks without challenging or blocking incoming requests. Also, use the Firewall Analytics Activity log to determine which managed rules caused false positives: https://developers.cloudflare.com/waf/reference/legacy/old-waf-managed-rules/troubleshooting/#troubleshoot-false-",
+            "en": "To test for false positives, set WAF managed rules to Simulate mode. This mode allows you to record the response to possible attacks without challenging or blocking incoming requests. Also, use the Firewall Analytics Activity log to determine which managed rules caused false positives: https://developers.cloudflare.com/waf/reference/legacy/old-waf-managed-rules/troubleshooting/#troubleshoot-false-"
+          }
+        }
+      ]
+    },
+    {
+      "id": "reliability",
+      "title": {
+        "vi": "Độ tin cậy",
+        "en": "Reliability"
+      },
+      "features": [
+        {
+          "id": "global-anycast-dns",
+          "name": {
+            "vi": "Global Anycast DNS",
+            "en": "Global Anycast DNS"
+          },
+          "free": "yes",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Powered by CF infrastrustrure:\n- 320 cities in 120+ countries, including mainland China\n- 13,000 networks directly connect to Cloudflare, including every major ISP, cloud provider, and enterprise\n- 280 Tbps global network edge capacity, consisting of transit connections, peering and private network interconnects\n- ~50 ms from about 95% of the world’s Internet-connected population\nLink: https://www",
+            "en": "Powered by CF infrastrustrure:\n- 320 cities in 120+ countries, including mainland China\n- 13,000 networks directly connect to Cloudflare, including every major ISP, cloud provider, and enterprise\n- 280 Tbps global network edge capacity, consisting of transit connections, peering and private network interconnects\n- ~50 ms from about 95% of the world’s Internet-connected population\nLink: https://www"
+          }
+        },
+        {
+          "id": "dnssec",
+          "name": {
+            "vi": "DNSSEC",
+            "en": "DNSSEC"
+          },
+          "free": "yes",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "DNS Security Extensions (DNSSEC) adds an extra layer of authentication to DNS, ensuring requests are not routed to a spoofed domain.\nhttps://developers.cloudflare.com/dns/dnssec/#dnssec",
+            "en": "DNS Security Extensions (DNSSEC) adds an extra layer of authentication to DNS, ensuring requests are not routed to a spoofed domain.\nhttps://developers.cloudflare.com/dns/dnssec/#dnssec"
+          }
+        },
+        {
+          "id": "custom-nameservers",
+          "name": {
+            "vi": "Custom Nameservers",
+            "en": "Custom Nameservers"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "With custom (or vanity) nameservers, a domain can use Cloudflare DNS without using Cloudflare-branded nameservers. For instance, you can configure ns1.example.com and ns2.example.com as nameservers for example.com: https://developers.cloudflare.com/dns/nameservers/custom-nameservers/#custom-nameservers",
+            "en": "With custom (or vanity) nameservers, a domain can use Cloudflare DNS without using Cloudflare-branded nameservers. For instance, you can configure ns1.example.com and ns2.example.com as nameservers for example.com: https://developers.cloudflare.com/dns/nameservers/custom-nameservers/#custom-nameservers"
+          }
+        },
+        {
+          "id": "wildcard-dns-record",
+          "name": {
+            "vi": "Wildcard DNS Record",
+            "en": "Wildcard DNS Record"
+          },
+          "free": "yes",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Wildcard DNS records allow you to have a many-to-many mapping, for example if you had hundreds or thousands of subdomains you wanted to point to the same resources. Wildcard records are used as the response for all subdomains that are not specifically covered by another DNS record: https://developers.cloudflare.com/dns/manage-dns-records/reference/wildcard-dns-records/#wildcard-dns-records",
+            "en": "Wildcard DNS records allow you to have a many-to-many mapping, for example if you had hundreds or thousands of subdomains you wanted to point to the same resources. Wildcard records are used as the response for all subdomains that are not specifically covered by another DNS record: https://developers.cloudflare.com/dns/manage-dns-records/reference/wildcard-dns-records/#wildcard-dns-records"
+          }
+        },
+        {
+          "id": "wildcard-dns-record-proxy",
+          "name": {
+            "vi": "Wildcard DNS Record Proxy",
+            "en": "Wildcard DNS Record Proxy"
+          },
+          "free": "yes",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Cloudflare supports proxied wildcard DNS records at all plan levels. A proxied wildcard DNS record allows you to proxy non-existing subdomains providing security and performance for all subdomains covered by the proxied wildcard DNS record.",
+            "en": "Cloudflare supports proxied wildcard DNS records at all plan levels. A proxied wildcard DNS record allows you to proxy non-existing subdomains providing security and performance for all subdomains covered by the proxied wildcard DNS record."
+          }
+        },
+        {
+          "id": "secondary-dns",
+          "name": {
+            "vi": "Secondary DNS",
+            "en": "Secondary DNS"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "Custom Pricing",
+          "note": {
+            "vi": "With incoming zone transfers, you can keep your primary DNS provider and use Cloudflare as a secondary DNS provider: https://developers.cloudflare.com/dns/zone-setups/zone-transfers/cloudflare-as-secondary/#secondary-dns---incoming-zone-transfers",
+            "en": "With incoming zone transfers, you can keep your primary DNS provider and use Cloudflare as a secondary DNS provider: https://developers.cloudflare.com/dns/zone-setups/zone-transfers/cloudflare-as-secondary/#secondary-dns---incoming-zone-transfers"
+          }
+        },
+        {
+          "id": "waiting-room",
+          "name": {
+            "vi": "Waiting Room",
+            "en": "Waiting Room"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "One Waiting Room included",
+          "enterprise": "Custom Pricing",
+          "note": {
+            "vi": "Cloudflare Waiting Room allows you to route excess users of your website to a customized waiting room, helping preserve customer experience and protect origin servers from being overwhelmed with requests: https://developers.cloudflare.com/waiting-room/#cloudflare-waiting-room",
+            "en": "Cloudflare Waiting Room allows you to route excess users of your website to a customized waiting room, helping preserve customer experience and protect origin servers from being overwhelmed with requests: https://developers.cloudflare.com/waiting-room/#cloudflare-waiting-room"
+          }
+        },
+        {
+          "id": "dashboard-user-and-api",
+          "name": {
+            "vi": "Dashboard, User and API",
+            "en": "Dashboard, User and API"
+          },
+          "free": "",
+          "pro": "",
+          "business": "",
+          "enterprise": ""
+        },
+        {
+          "id": "multi-user-administrative-access",
+          "name": {
+            "vi": "Multi-User Administrative Access",
+            "en": "Multi-User Administrative Access"
+          },
+          "free": "yes",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Can invite or administrator and set permissions/roles for them",
+            "en": "Can invite or administrator and set permissions/roles for them"
+          }
+        },
+        {
+          "id": "role-based-access-control",
+          "name": {
+            "vi": "Role-based Access Control",
+            "en": "Role-based Access Control"
+          },
+          "free": "yes",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Role-based access for Cloudflare accounts enables organizations to collaborate across one Cloudflare account, and use roles-based permissions to control access. Each user is assigned an individual API key and can use two-factor authentication to protect their own account: https://developers.cloudflare.com/fundamentals/setup/manage-members/roles/",
+            "en": "Role-based access for Cloudflare accounts enables organizations to collaborate across one Cloudflare account, and use roles-based permissions to control access. Each user is assigned an individual API key and can use two-factor authentication to protect their own account: https://developers.cloudflare.com/fundamentals/setup/manage-members/roles/"
+          }
+        },
+        {
+          "id": "read-only-user-access",
+          "name": {
+            "vi": "Read-only User Access",
+            "en": "Read-only User Access"
+          },
+          "free": "yes",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes"
+        },
+        {
+          "id": "multi-org-setup",
+          "name": {
+            "vi": "Multi-Org Setup",
+            "en": "Multi-Org Setup"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "yes",
+          "note": {
+            "vi": "https://developers.cloudflare.com/fundamentals/setup/accounts-and-zones/#accounts",
+            "en": "https://developers.cloudflare.com/fundamentals/setup/accounts-and-zones/#accounts"
+          }
+        },
+        {
+          "id": "sso-support",
+          "name": {
+            "vi": "SSO support",
+            "en": "SSO support"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "yes",
+          "note": {
+            "vi": "https://developers.cloudflare.com/cloudflare-one/applications/configure-apps/dash-sso-apps/",
+            "en": "https://developers.cloudflare.com/cloudflare-one/applications/configure-apps/dash-sso-apps/"
+          }
+        },
+        {
+          "id": "cloudflare-api-access",
+          "name": {
+            "vi": "Cloudflare API Access",
+            "en": "Cloudflare API Access"
+          },
+          "free": "yes",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "https://developers.cloudflare.com/cloudflare-one/api-terraform/access-api-examples/#access-api-examples",
+            "en": "https://developers.cloudflare.com/cloudflare-one/api-terraform/access-api-examples/#access-api-examples"
+          }
+        },
+        {
+          "id": "terraform-integration",
+          "name": {
+            "vi": "Terraform Integration",
+            "en": "Terraform Integration"
+          },
+          "free": "yes",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "https://blog.cloudflare.com/getting-started-with-terraform-and-cloudflare-part-1/",
+            "en": "https://blog.cloudflare.com/getting-started-with-terraform-and-cloudflare-part-1/"
+          }
+        },
+        {
+          "id": "insights-analytics",
+          "name": {
+            "vi": "Insights & Analytics",
+            "en": "Insights & Analytics"
+          },
+          "free": "",
+          "pro": "",
+          "business": "",
+          "enterprise": ""
+        },
+        {
+          "id": "site-dns-analytics",
+          "name": {
+            "vi": "Site, DNS Analytics",
+            "en": "Site, DNS Analytics"
+          },
+          "free": "yes",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "https://developers.cloudflare.com/dns/additional-options/analytics/#analytics-and-logs",
+            "en": "https://developers.cloudflare.com/dns/additional-options/analytics/#analytics-and-logs"
+          }
+        },
+        {
+          "id": "cache-analytics",
+          "name": {
+            "vi": "Cache Analytics",
+            "en": "Cache Analytics"
+          },
+          "free": "no",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes"
+        },
+        {
+          "id": "site-analytics-resolution",
+          "name": {
+            "vi": "Site Analytics (resolution)",
+            "en": "Site Analytics (resolution)"
+          },
+          "free": "1h",
+          "pro": "15m",
+          "business": "15m",
+          "enterprise": "1m",
+          "note": {
+            "vi": "The Cloudflare analytics dashboard provides all customers with 30 days of data and the ability to magnify your data by time range scopes of 1 hour, 15 minutes, or 1 minute, depending on your plan type. - Free customers can magnify down to a 1 hour scope, for the last 24 hours - Pro and Business customers can magnify down to a 15 minute scope, for the last 6 hours - Enterprise customers can magnify",
+            "en": "The Cloudflare analytics dashboard provides all customers with 30 days of data and the ability to magnify your data by time range scopes of 1 hour, 15 minutes, or 1 minute, depending on your plan type. - Free customers can magnify down to a 1 hour scope, for the last 24 hours - Pro and Business customers can magnify down to a 15 minute scope, for the last 6 hours - Enterprise customers can magnify"
+          }
+        },
+        {
+          "id": "dns-analytics-historical-time",
+          "name": {
+            "vi": "DNS Analytics (historical time)",
+            "en": "DNS Analytics (historical time)"
+          },
+          "free": "6h",
+          "pro": "24h",
+          "business": "7d",
+          "enterprise": "30d",
+          "note": {
+            "vi": "View the history of your DNS queries by up to a certain amount of time.",
+            "en": "View the history of your DNS queries by up to a certain amount of time."
+          }
+        },
+        {
+          "id": "firewall-analytics-historical-time",
+          "name": {
+            "vi": "Firewall Analytics (historical time)",
+            "en": "Firewall Analytics (historical time)"
+          },
+          "free": "no",
+          "pro": "3d",
+          "business": "30d",
+          "enterprise": "30d",
+          "note": {
+            "vi": "Visualise and analyze all Firewall Events in one place to better understand your threat landscape. Identify, mitigate, and review attacks more effectively.",
+            "en": "Visualise and analyze all Firewall Events in one place to better understand your threat landscape. Identify, mitigate, and review attacks more effectively."
+          }
+        },
+        {
+          "id": "load-balancing-analytics-historical-time",
+          "name": {
+            "vi": "Load Balancing Analytics (historical time)",
+            "en": "Load Balancing Analytics (historical time)"
+          },
+          "free": "no",
+          "pro": "3d",
+          "business": "30d",
+          "enterprise": "30d",
+          "note": {
+            "vi": "Overview metrics show the number of requests routed to specific pools within a load balancer, helping you:\n- Evaluate the effects of adding or removing a pool.\n- Decide when to create new origin pools.\n- Plan for peak traffic demands and future infrastructure needs.\n- Add additional filters for specific pools, times, regions, and origins.\nhttps://developers.cloudflare.com/load-balancing/reference/",
+            "en": "Overview metrics show the number of requests routed to specific pools within a load balancer, helping you:\n- Evaluate the effects of adding or removing a pool.\n- Decide when to create new origin pools.\n- Plan for peak traffic demands and future infrastructure needs.\n- Add additional filters for specific pools, times, regions, and origins.\nhttps://developers.cloudflare.com/load-balancing/reference/"
+          }
+        },
+        {
+          "id": "audit-logs",
+          "name": {
+            "vi": "Audit Logs",
+            "en": "Audit Logs"
+          },
+          "free": "Downloadable CSV",
+          "pro": "Downloadable CSV",
+          "business": "Downloadable CSV",
+          "enterprise": "Available over Logpush",
+          "note": {
+            "vi": "View and download the most recent changes made within your account via UI or API.",
+            "en": "View and download the most recent changes made within your account via UI or API."
+          }
+        },
+        {
+          "id": "request-logs",
+          "name": {
+            "vi": "Request Logs",
+            "en": "Request Logs"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Cloudflare Enterprise customers have access to detailed logs of HTTP requests for their domains. These logs can be helpful for debugging, identifying configuration adjustments, or creating analytics, especially when combined with other data sources, such as application server logs: https://developers.cloudflare.com/logs/logpull/requesting-logs/#request-logs",
+            "en": "Cloudflare Enterprise customers have access to detailed logs of HTTP requests for their domains. These logs can be helpful for debugging, identifying configuration adjustments, or creating analytics, especially when combined with other data sources, such as application server logs: https://developers.cloudflare.com/logs/logpull/requesting-logs/#request-logs"
+          }
+        },
+        {
+          "id": "waiting-room-analytics",
+          "name": {
+            "vi": "Waiting Room Analytics",
+            "en": "Waiting Room Analytics"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "30d",
+          "enterprise": "30d",
+          "note": {
+            "vi": "Waiting Room Analytics gives you historical insights into the traffic going through your waiting room compared to your waiting room settings. Data is stored for the past 30 days.\nhttps://developers.cloudflare.com/waiting-room/waiting-room-analytics/#waiting-room-analytics \nUsing Waiting Room Analytics, you can:\n- Evaluate peak traffic flow through your waiting room and onto your site.\n- Determine ",
+            "en": "Waiting Room Analytics gives you historical insights into the traffic going through your waiting room compared to your waiting room settings. Data is stored for the past 30 days.\nhttps://developers.cloudflare.com/waiting-room/waiting-room-analytics/#waiting-room-analytics \nUsing Waiting Room Analytics, you can:\n- Evaluate peak traffic flow through your waiting room and onto your site.\n- Determine "
+          }
+        },
+        {
+          "id": "compliance",
+          "name": {
+            "vi": "Compliance",
+            "en": "Compliance"
+          },
+          "free": "",
+          "pro": "",
+          "business": "",
+          "enterprise": ""
+        },
+        {
+          "id": "iso-27001",
+          "name": {
+            "vi": "ISO 27001",
+            "en": "ISO 27001"
+          },
+          "free": "yes",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "https://www.cloudflare.com/en-gb/trust-hub/compliance-resources/ \nhttps://developers.cloudflare.com/fundamentals/reference/policies-compliances/compliance-docs/ \nhttps://docs.google.com/document/d/1FcJVUGPCmeOv5dX5H2mHg2JcL_wMbSuNr4CSaE1_-34/edit?usp=sharing \nDownload certificates here: https://drive.google.com/drive/folders/1JAsiuppqgR1MvzO1OjSqcc9MDAI09fsV?usp=sharing",
+            "en": "https://www.cloudflare.com/en-gb/trust-hub/compliance-resources/ \nhttps://developers.cloudflare.com/fundamentals/reference/policies-compliances/compliance-docs/ \nhttps://docs.google.com/document/d/1FcJVUGPCmeOv5dX5H2mHg2JcL_wMbSuNr4CSaE1_-34/edit?usp=sharing \nDownload certificates here: https://drive.google.com/drive/folders/1JAsiuppqgR1MvzO1OjSqcc9MDAI09fsV?usp=sharing"
+          }
+        },
+        {
+          "id": "soc-2-type-ii-soc-3",
+          "name": {
+            "vi": "SOC 2 Type II, SOC 3",
+            "en": "SOC 2 Type II, SOC 3"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "yes",
+          "enterprise": "yes"
+        },
+        {
+          "id": "pci-dss-4-0-1",
+          "name": {
+            "vi": "PCI DSS 4.0.1",
+            "en": "PCI DSS 4.0.1"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "yes",
+          "enterprise": "yes"
+        }
+      ]
+    },
+    {
+      "id": "support",
+      "title": {
+        "vi": "Hỗ trợ",
+        "en": "Support"
+      },
+      "features": [
+        {
+          "id": "ticket-support",
+          "name": {
+            "vi": "Ticket Support",
+            "en": "Ticket Support"
+          },
+          "free": "no",
+          "pro": "yes",
+          "business": "yes",
+          "enterprise": "yes",
+          "note": {
+            "vi": "https://www.cloudflare.com/en-gb/enterprise-support-sla/",
+            "en": "https://www.cloudflare.com/en-gb/enterprise-support-sla/"
+          }
+        },
+        {
+          "id": "initial-ticket-support-response-time",
+          "name": {
+            "vi": "Initial Ticket Support Response Time",
+            "en": "Initial Ticket Support Response Time"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "1hr (urgent issues)"
+        },
+        {
+          "id": "chat-support",
+          "name": {
+            "vi": "Chat Support",
+            "en": "Chat Support"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "yes",
+          "enterprise": "yes"
+        },
+        {
+          "id": "24x7x365-emergency-phone-support",
+          "name": {
+            "vi": "24x7x365 Emergency Phone Support",
+            "en": "24x7x365 Emergency Phone Support"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "yes"
+        },
+        {
+          "id": "under-attack-support-engineer-for-magic-transit",
+          "name": {
+            "vi": "Under Attack Support Engineer For Magic Transit",
+            "en": "Under Attack Support Engineer For Magic Transit"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "With Premium Only"
+        },
+        {
+          "id": "uptime-sla",
+          "name": {
+            "vi": "Uptime SLA",
+            "en": "Uptime SLA"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "1.0",
+          "enterprise": "1.0"
+        },
+        {
+          "id": "uptime-service-credits",
+          "name": {
+            "vi": "Uptime Service Credits",
+            "en": "Uptime Service Credits"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "1x",
+          "enterprise": "10x (Standard) ; \n25x (Premium)"
+        },
+        {
+          "id": "customer-success-manager-led-onboarding-assistance",
+          "name": {
+            "vi": "Customer Success Manager Led Onboarding Assistance",
+            "en": "Customer Success Manager Led Onboarding Assistance"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "yes"
+        },
+        {
+          "id": "designated-customer-success-manager-and-solutions-engineer",
+          "name": {
+            "vi": "Designated Customer Success Manager and Solutions Engineer",
+            "en": "Designated Customer Success Manager and Solutions Engineer"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "yes"
+        },
+        {
+          "id": "cloudflare-success-offering",
+          "name": {
+            "vi": "Cloudflare Success Offering",
+            "en": "Cloudflare Success Offering"
+          },
+          "free": "no",
+          "pro": "no",
+          "business": "no",
+          "enterprise": "yes"
+        }
+      ]
+    }
+  ],
+  "highlights": [
+    {
+      "id": "custom-cache-keys",
+      "name": {
+        "vi": "Custom Cache Keys",
+        "en": "Custom Cache Keys"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "yes",
+      "note": {
+        "vi": "A Cache Key is an identifier that Cloudflare uses for a file in our cache, and the Cache Key Template defines the identifier for a given HTTP request: https://developers.cloudflare.com/cache/how-to/cache-keys/#create-custom-cache-keys",
+        "en": "A Cache Key is an identifier that Cloudflare uses for a file in our cache, and the Cache Key Template defines the identifier for a given HTTP request: https://developers.cloudflare.com/cache/how-to/cache-keys/#create-custom-cache-keys"
+      },
+      "categoryId": "performance"
+    },
+    {
+      "id": "client-max-upload-size-mb",
+      "name": {
+        "vi": "Client Max Upload Size (MB)",
+        "en": "Client Max Upload Size (MB)"
+      },
+      "free": "100.0",
+      "pro": "100.0",
+      "business": "200.0",
+      "enterprise": "500+",
+      "note": {
+        "vi": "The upload limit for the Cloudflare API depends on your plan. If you exceed this limit, your API call will receive a 413 Request Entity Too Large error.",
+        "en": "The upload limit for the Cloudflare API depends on your plan. If you exceed this limit, your API call will receive a 413 Request Entity Too Large error."
+      },
+      "categoryId": "performance"
+    },
+    {
+      "id": "cache-purge-by-tag",
+      "name": {
+        "vi": "Cache Purge - By Tag",
+        "en": "Cache Purge - By Tag"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "yes",
+      "categoryId": "performance"
+    },
+    {
+      "id": "cache-purge-by-host",
+      "name": {
+        "vi": "Cache Purge - By Host",
+        "en": "Cache Purge - By Host"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "yes",
+      "categoryId": "performance"
+    },
+    {
+      "id": "prioritized-ip-ranges",
+      "name": {
+        "vi": "Prioritized IP Ranges",
+        "en": "Prioritized IP Ranges"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "yes",
+      "note": {
+        "vi": "Enterprise Internet assets are placed on Cloudflare dedicated IP ranges, providing prioritized routing and protection to ensure maximum speed and availability. Enterprise customers get better traffic routing, it’s less likely for Enterprise customers to face routing issues compared to Business, Pro and Free.",
+        "en": "Enterprise Internet assets are placed on Cloudflare dedicated IP ranges, providing prioritized routing and protection to ensure maximum speed and availability. Enterprise customers get better traffic routing, it’s less likely for Enterprise customers to face routing issues compared to Business, Pro and Free."
+      },
+      "categoryId": "performance"
+    },
+    {
+      "id": "prefetching-urls",
+      "name": {
+        "vi": "Prefetching URLs",
+        "en": "Prefetching URLs"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "yes",
+      "note": {
+        "vi": "URL prefetching means that Cloudflare pre-populates the cache with content a visitor is likely to request next. This setting — when combined with additional setup — leads to a higher cache hit rate and thus a faster experience for the user: https://developers.cloudflare.com/speed/optimization/content/prefetch-urls/",
+        "en": "URL prefetching means that Cloudflare pre-populates the cache with content a visitor is likely to request next. This setting — when combined with additional setup — leads to a higher cache hit rate and thus a faster experience for the user: https://developers.cloudflare.com/speed/optimization/content/prefetch-urls/"
+      },
+      "categoryId": "performance"
+    },
+    {
+      "id": "load-balancing",
+      "name": {
+        "vi": "Load Balancing",
+        "en": "Load Balancing"
+      },
+      "free": "Paid Add-on",
+      "pro": "Paid Add-on",
+      "business": "Paid Add-on",
+      "enterprise": "Custom Pricing",
+      "note": {
+        "vi": "Cloudflare Load Balancing distributes traffic across your servers, which reduces server strain and latency and improves the experience for end users: https://developers.cloudflare.com/load-balancing/understand-basics/",
+        "en": "Cloudflare Load Balancing distributes traffic across your servers, which reduces server strain and latency and improves the experience for end users: https://developers.cloudflare.com/load-balancing/understand-basics/"
+      },
+      "categoryId": "performance"
+    },
+    {
+      "id": "global-load-balancing-geo-based-routing",
+      "name": {
+        "vi": "Global Load Balancing (Geo-based Routing)",
+        "en": "Global Load Balancing (Geo-based Routing)"
+      },
+      "free": "Paid Add-on",
+      "pro": "Paid Add-on",
+      "business": "Paid Add-on",
+      "enterprise": "yes",
+      "note": {
+        "vi": "Geo steering directs traffic to pools tied to specific countries, regions, or — for Enterprise customers only — data centers. This option is extremely useful when you want site visitors to access the origin server closest to them, which improves page-loading performance.",
+        "en": "Geo steering directs traffic to pools tied to specific countries, regions, or — for Enterprise customers only — data centers. This option is extremely useful when you want site visitors to access the origin server closest to them, which improves page-loading performance."
+      },
+      "categoryId": "performance"
+    },
+    {
+      "id": "load-balancing-health-checks",
+      "name": {
+        "vi": "Load Balancing Health Checks",
+        "en": "Load Balancing Health Checks"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "Custom Pricing",
+      "note": {
+        "vi": "Check for healthy or unhealthy origins: https://developers.cloudflare.com/load-balancing/understand-basics/health-details/",
+        "en": "Check for healthy or unhealthy origins: https://developers.cloudflare.com/load-balancing/understand-basics/health-details/"
+      },
+      "categoryId": "performance"
+    },
+    {
+      "id": "china-network",
+      "name": {
+        "vi": "China Network",
+        "en": "China Network"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "Paid Add-on",
+      "categoryId": "performance"
+    },
+    {
+      "id": "stream",
+      "name": {
+        "vi": "Stream",
+        "en": "Stream"
+      },
+      "free": "Paid Add-on",
+      "pro": "Paid Add-on",
+      "business": "Paid Add-on",
+      "enterprise": "Custom Pricing",
+      "note": {
+        "vi": "Cloudflare Stream lets you or your end users upload, store, encode, and deliver live and on-demand video with one API, without configuring or maintaining infrastructure. You can use Stream to build your own video features in websites and native apps, from simple playback to an entire video platform: https://developers.cloudflare.com/stream/#cloudflare-stream",
+        "en": "Cloudflare Stream lets you or your end users upload, store, encode, and deliver live and on-demand video with one API, without configuring or maintaining infrastructure. You can use Stream to build your own video features in websites and native apps, from simple playback to an entire video platform: https://developers.cloudflare.com/stream/#cloudflare-stream"
+      },
+      "categoryId": "performance"
+    },
+    {
+      "id": "stream-delivery",
+      "name": {
+        "vi": "Stream Delivery",
+        "en": "Stream Delivery"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "Custom Pricing",
+      "note": {
+        "vi": "You run any regular HLS or DASH hosting server and CF intelligently caches video parts. This allows you to keep using regular video infrastructure without depending on Cloudflare too much, while still using the powerful gloabal datacenter network of Cloudflare: https://www.cloudflare.com/en-gb/products/stream-delivery/",
+        "en": "You run any regular HLS or DASH hosting server and CF intelligently caches video parts. This allows you to keep using regular video infrastructure without depending on Cloudflare too much, while still using the powerful gloabal datacenter network of Cloudflare: https://www.cloudflare.com/en-gb/products/stream-delivery/"
+      },
+      "categoryId": "performance"
+    },
+    {
+      "id": "subdomain-zones-ltz",
+      "name": {
+        "vi": "Subdomain Zones (LTZ)",
+        "en": "Subdomain Zones (LTZ)"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "yes",
+      "note": {
+        "vi": "Allow to create different zone with subdomain",
+        "en": "Allow to create different zone with subdomain"
+      },
+      "categoryId": "performance"
+    },
+    {
+      "id": "header-rewrites",
+      "name": {
+        "vi": "Header Rewrites",
+        "en": "Header Rewrites"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "yes",
+      "note": {
+        "vi": "Used to rewrite headers if customers don’t have a way of controlling their headers. For example, if your Amazon S3 bucket requires a specific host header set in order to fetch assets. Need to migrate to Cloudflare Rules\nhttps://developers.cloudflare.com/rules/reference/page-rules-migration/#migrate-host-header-override",
+        "en": "Used to rewrite headers if customers don’t have a way of controlling their headers. For example, if your Amazon S3 bucket requires a specific host header set in order to fetch assets. Need to migrate to Cloudflare Rules\nhttps://developers.cloudflare.com/rules/reference/page-rules-migration/#migrate-host-header-override"
+      },
+      "categoryId": "performance"
+    },
+    {
+      "id": "key-value-storage-with-workers",
+      "name": {
+        "vi": "Key-value Storage with Workers",
+        "en": "Key-value Storage with Workers"
+      },
+      "free": "Paid Add-on",
+      "pro": "Paid Add-on",
+      "business": "Paid Add-on",
+      "enterprise": "Custom Pricing",
+      "note": {
+        "vi": "Workers KV is a data storage that allows you to store and retrieve data globally. With Workers KV, you can build dynamic and performant APIs and websites that support high read volumes with low latency: https://developers.cloudflare.com/kv/",
+        "en": "Workers KV is a data storage that allows you to store and retrieve data globally. With Workers KV, you can build dynamic and performant APIs and websites that support high read volumes with low latency: https://developers.cloudflare.com/kv/"
+      },
+      "categoryId": "performance"
+    },
+    {
+      "id": "enterprise-ddos-mitigation",
+      "name": {
+        "vi": "Enterprise DDoS Mitigation",
+        "en": "Enterprise DDoS Mitigation"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "yes",
+      "note": {
+        "vi": "Cloudflare’s enterprise-grade mitigation of DDoS attacks against layers 3, 4, & 7 includes prioritized IP ranges and routing, ensuring maximum speed and availability. Available for ENT plan",
+        "en": "Cloudflare’s enterprise-grade mitigation of DDoS attacks against layers 3, 4, & 7 includes prioritized IP ranges and routing, ensuring maximum speed and availability. Available for ENT plan"
+      },
+      "categoryId": "security"
+    },
+    {
+      "id": "true-client-ip-header",
+      "name": {
+        "vi": "True Client IP Header",
+        "en": "True Client IP Header"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "yes",
+      "note": {
+        "vi": "True-Client-IP provides the original client IP address to the origin web server. True-Client-IP is only available on an Enterprise plan.",
+        "en": "True-Client-IP provides the original client IP address to the origin web server. True-Client-IP is only available on an Enterprise plan."
+      },
+      "categoryId": "security"
+    },
+    {
+      "id": "cloudflare-access-basic",
+      "name": {
+        "vi": "Cloudflare Access - Basic",
+        "en": "Cloudflare Access - Basic"
+      },
+      "free": "50 Users Included",
+      "pro": "50 Users Included",
+      "business": "50 Users Included",
+      "enterprise": "Custom Pricing",
+      "note": {
+        "vi": "Zero Trust access for all of your applications, replace traditional VPN: https://developers.cloudflare.com/learning-paths/replace-vpn/concepts/ \n- Authenticate users on our global network\n- Onboard third-party users seamlessly\n- Log every event and request",
+        "en": "Zero Trust access for all of your applications, replace traditional VPN: https://developers.cloudflare.com/learning-paths/replace-vpn/concepts/ \n- Authenticate users on our global network\n- Onboard third-party users seamlessly\n- Log every event and request"
+      },
+      "categoryId": "security"
+    },
+    {
+      "id": "cloudflare-access-premium",
+      "name": {
+        "vi": "Cloudflare Access - Premium",
+        "en": "Cloudflare Access - Premium"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "Custom Pricing",
+      "categoryId": "security"
+    },
+    {
+      "id": "mutual-tls",
+      "name": {
+        "vi": "Mutual TLS",
+        "en": "Mutual TLS"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "Custom Pricing",
+      "note": {
+        "vi": "Mutual TLS (mTLS) authentication uses client certificates to ensure traffic between client and server is bidirectionally secure and trusted. mTLS also allows requests that do not authenticate via an identity provider — such as Internet-of-things (IoT) devices — to demonstrate they can reach a given resource: https://developers.cloudflare.com/learning-paths/application-security/default-traffic-secu",
+        "en": "Mutual TLS (mTLS) authentication uses client certificates to ensure traffic between client and server is bidirectionally secure and trusted. mTLS also allows requests that do not authenticate via an identity provider — such as Internet-of-things (IoT) devices — to demonstrate they can reach a given resource: https://developers.cloudflare.com/learning-paths/application-security/default-traffic-secu"
+      },
+      "categoryId": "security"
+    },
+    {
+      "id": "spectrum-for-tcp-udp",
+      "name": {
+        "vi": "Spectrum (for TCP/UDP)",
+        "en": "Spectrum (for TCP/UDP)"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "Custom Pricing",
+      "note": {
+        "vi": "Spectrum allows you to route MQTT, email, file transfer, version control, games, and more over TCP or UDP through Cloudflare to mask the origin and protect it from DDoS attacks: https://developers.cloudflare.com/spectrum/#cloudflare-spectrum",
+        "en": "Spectrum allows you to route MQTT, email, file transfer, version control, games, and more over TCP or UDP through Cloudflare to mask the origin and protect it from DDoS attacks: https://developers.cloudflare.com/spectrum/#cloudflare-spectrum"
+      },
+      "categoryId": "security"
+    },
+    {
+      "id": "static-ips-anycast-your-own-ip",
+      "name": {
+        "vi": "Static IPs, Anycast Your Own IP",
+        "en": "Static IPs, Anycast Your Own IP"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "Paid Add-on",
+      "note": {
+        "vi": "Protect your own IP with Cloudflare, but need assessment from Cloudflare before the IP is propagated",
+        "en": "Protect your own IP with Cloudflare, but need assessment from Cloudflare before the IP is propagated"
+      },
+      "categoryId": "security"
+    },
+    {
+      "id": "api-protection-api-shield",
+      "name": {
+        "vi": "API Protection - API Shield",
+        "en": "API Protection - API Shield"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "Custom Pricing",
+      "note": {
+        "vi": "Cloudflare offers a range of products to help identify and address API vulnerabilities. Cloudflare offers the following features to help secure, management and monitoring your APIs: API Discovery / Volumetric Abuse Detection / Sequence Analytics / Sequence Mitigation / GraphQL malicious query protection / JSON Web Tokens Validation / Mutual TLS (mTLS) / Schema Validation: https://developers.cloudf",
+        "en": "Cloudflare offers a range of products to help identify and address API vulnerabilities. Cloudflare offers the following features to help secure, management and monitoring your APIs: API Discovery / Volumetric Abuse Detection / Sequence Analytics / Sequence Mitigation / GraphQL malicious query protection / JSON Web Tokens Validation / Mutual TLS (mTLS) / Schema Validation: https://developers.cloudf"
+      },
+      "categoryId": "security"
+    },
+    {
+      "id": "domain-protection",
+      "name": {
+        "vi": "Domain Protection",
+        "en": "Domain Protection"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "Paid Add-on",
+      "note": {
+        "vi": "Custom Domain Protection for Cloudflare Registrar, available on the Enterprise Plan, protects your organization from domain hijacking with exclusively out-of-band verification of any changes to your Registrar account. Cloudflare is an ICANN accredited registrar providing secure domain registration for high-profile domains.",
+        "en": "Custom Domain Protection for Cloudflare Registrar, available on the Enterprise Plan, protects your organization from domain hijacking with exclusively out-of-band verification of any changes to your Registrar account. Cloudflare is an ICANN accredited registrar providing secure domain registration for high-profile domains."
+      },
+      "categoryId": "security"
+    },
+    {
+      "id": "spectrum-ddos-protection-for-ssh-minecraft",
+      "name": {
+        "vi": "Spectrum DDoS Protection for SSH / Minecraft",
+        "en": "Spectrum DDoS Protection for SSH / Minecraft"
+      },
+      "free": "no",
+      "pro": "5GB monthly data allowance $1/GB overage fees",
+      "business": "10GB monthly data allowance $1/GB overage fees",
+      "enterprise": "yes",
+      "categoryId": "security"
+    },
+    {
+      "id": "spectrum-ddos-protection-for-rdp",
+      "name": {
+        "vi": "Spectrum DDoS Protection for RDP",
+        "en": "Spectrum DDoS Protection for RDP"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "10GB monthly data allowance $1/GB overage fees",
+      "enterprise": "yes",
+      "categoryId": "security"
+    },
+    {
+      "id": "advanced-bot-management",
+      "name": {
+        "vi": "Advanced Bot Management",
+        "en": "Advanced Bot Management"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "Custom Pricing",
+      "note": {
+        "vi": "Stop bad bots from Credential Stuffing, Content Scraping/Spamming, Inventory Hoarding and Credit Card Stuffing types of attacks by leveraging smart data. Bot Management for Enterprise is a paid add-on that provides sophisticated bot protection for your domain. Customers can identify automated traffic, take appropriate action, and view detailed analytics within the dashboard: https://developers.clo",
+        "en": "Stop bad bots from Credential Stuffing, Content Scraping/Spamming, Inventory Hoarding and Credit Card Stuffing types of attacks by leveraging smart data. Bot Management for Enterprise is a paid add-on that provides sophisticated bot protection for your domain. Customers can identify automated traffic, take appropriate action, and view detailed analytics within the dashboard: https://developers.clo"
+      },
+      "categoryId": "security"
+    },
+    {
+      "id": "dns-firewall",
+      "name": {
+        "vi": "DNS Firewall",
+        "en": "DNS Firewall"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "Custom Pricing",
+      "note": {
+        "vi": "Cloudflare DNS Firewall proxies all DNS queries to your nameservers through Cloudflare’s global network. This action protects upstream nameservers from DDoS attacks and reduces load by caching DNS responses: https://developers.cloudflare.com/dns/dns-firewall/#dns-firewall",
+        "en": "Cloudflare DNS Firewall proxies all DNS queries to your nameservers through Cloudflare’s global network. This action protects upstream nameservers from DDoS attacks and reduces load by caching DNS responses: https://developers.cloudflare.com/dns/dns-firewall/#dns-firewall"
+      },
+      "categoryId": "security"
+    },
+    {
+      "id": "keyless-ssl",
+      "name": {
+        "vi": "Keyless SSL",
+        "en": "Keyless SSL"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "Custom Pricing",
+      "note": {
+        "vi": "Keyless SSL allows security-conscious clients to upload their own custom certificates and benefit from Cloudflare, but without exposing their TLS private keys. Keyless SSL is only available to Enterprise customers that maintain their own SSL certificate purchased from a valid Certificate Authority. Cloudflare does not supply any certificates for use with Keyless SSL: https://developers.cloudflare.",
+        "en": "Keyless SSL allows security-conscious clients to upload their own custom certificates and benefit from Cloudflare, but without exposing their TLS private keys. Keyless SSL is only available to Enterprise customers that maintain their own SSL certificate purchased from a valid Certificate Authority. Cloudflare does not supply any certificates for use with Keyless SSL: https://developers.cloudflare."
+      },
+      "categoryId": "security"
+    },
+    {
+      "id": "bring-your-own-ssl-certificate-custom-ssl",
+      "name": {
+        "vi": "Bring Your Own SSL Certificate (Custom SSL)",
+        "en": "Bring Your Own SSL Certificate (Custom SSL)"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "1 (Modern)\n1 (Legacy)",
+      "enterprise": "1 (Modern) (can purchase more)\n1 (Legacy) (can purchase more)",
+      "note": {
+        "vi": "Custom certificates are meant for Business and Enterprise customers who want to use their own SSL certificates.\nUnlike Universal SSL or advanced certificates, Cloudflare does not manage issuance and renewal for custom certificates: https://developers.cloudflare.com/ssl/edge-certificates/custom-certificates/",
+        "en": "Custom certificates are meant for Business and Enterprise customers who want to use their own SSL certificates.\nUnlike Universal SSL or advanced certificates, Cloudflare does not manage issuance and renewal for custom certificates: https://developers.cloudflare.com/ssl/edge-certificates/custom-certificates/"
+      },
+      "categoryId": "security"
+    },
+    {
+      "id": "cloudflare-for-saas",
+      "name": {
+        "vi": "Cloudflare For SaaS",
+        "en": "Cloudflare For SaaS"
+      },
+      "free": "<100 hostnames free, $.10 per additional",
+      "pro": "<100 hostnames free, $.10 per additional",
+      "business": "<100 hostnames free, $.10 per additional",
+      "enterprise": "Custom Pricing",
+      "note": {
+        "vi": "Cloudflare for SaaS allows you to extend the security and performance benefits of Cloudflare’s network to your customers via their own custom or vanity domains: https://developers.cloudflare.com/cloudflare-for-platforms/cloudflare-for-saas/ \n\nAs a SaaS provider, you may want to support subdomains under your own zone in addition to letting your customers use their own domain names with your service",
+        "en": "Cloudflare for SaaS allows you to extend the security and performance benefits of Cloudflare’s network to your customers via their own custom or vanity domains: https://developers.cloudflare.com/cloudflare-for-platforms/cloudflare-for-saas/ \n\nAs a SaaS provider, you may want to support subdomains under your own zone in addition to letting your customers use their own domain names with your service"
+      },
+      "categoryId": "security"
+    },
+    {
+      "id": "advanced-certificate-manager",
+      "name": {
+        "vi": "Advanced Certificate Manager",
+        "en": "Advanced Certificate Manager"
+      },
+      "free": "$10/zone/mo",
+      "pro": "$10/zone/mo",
+      "business": "$10/zone/mo",
+      "enterprise": "Custom Pricing",
+      "note": {
+        "vi": "Advanced Certificate Manager is a flexible and customizable way to issue and manage certificates in Cloudflare. Use Advanced Certificate Manager when you want something more customizable than Universal SSL but still want the convenience of SSL certificate issuance and renewal. For example, use Advanced Certificate Manager to cover more than one level of subdomain, remove Cloudflare branding from t",
+        "en": "Advanced Certificate Manager is a flexible and customizable way to issue and manage certificates in Cloudflare. Use Advanced Certificate Manager when you want something more customizable than Universal SSL but still want the convenience of SSL certificate issuance and renewal. For example, use Advanced Certificate Manager to cover more than one level of subdomain, remove Cloudflare branding from t"
+      },
+      "categoryId": "security"
+    },
+    {
+      "id": "does-waf-need-to-be-contracted-separately-to-receive-access-to-waf-fea",
+      "name": {
+        "vi": "Does WAF need to be contracted separately to receive access to WAF features and benefits?",
+        "en": "Does WAF need to be contracted separately to receive access to WAF features and benefits?"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "yes",
+      "note": {
+        "vi": "WAF is a separated features so must be contracted separately or the features you receive are only belong to Free plan",
+        "en": "WAF is a separated features so must be contracted separately or the features you receive are only belong to Free plan"
+      },
+      "categoryId": "security"
+    },
+    {
+      "id": "number-of-custom-waf-rules",
+      "name": {
+        "vi": "Number of Custom WAF Rules",
+        "en": "Number of Custom WAF Rules"
+      },
+      "free": "5.0",
+      "pro": "20.0",
+      "business": "100.0",
+      "enterprise": "1000.0",
+      "note": {
+        "vi": "Custom rules allow you to control incoming traffic by filtering requests to a zone. You can perform actions like Block or Managed Challenge on incoming requests according to rules you define : https://developers.cloudflare.com/waf/custom-rules/",
+        "en": "Custom rules allow you to control incoming traffic by filtering requests to a zone. You can perform actions like Block or Managed Challenge on incoming requests according to rules you define : https://developers.cloudflare.com/waf/custom-rules/"
+      },
+      "categoryId": "security"
+    },
+    {
+      "id": "waf-attack-score-machine-learning-detection",
+      "name": {
+        "vi": "WAF Attack Score - Machine Learning Detection",
+        "en": "WAF Attack Score - Machine Learning Detection"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "Lite",
+      "enterprise": "Full",
+      "note": {
+        "vi": "WAF attack score allows you to identify these attack variations and their malicious payloads. It classifies each request using a machine learning algorithm, assigning an attack score from 1 to 99 based on the likelihood that the request is malicious: https://developers.cloudflare.com/waf/about/waf-attack-score/#waf-attack-score",
+        "en": "WAF attack score allows you to identify these attack variations and their malicious payloads. It classifies each request using a machine learning algorithm, assigning an attack score from 1 to 99 based on the likelihood that the request is malicious: https://developers.cloudflare.com/waf/about/waf-attack-score/#waf-attack-score"
+      },
+      "categoryId": "security"
+    },
+    {
+      "id": "sensitive-data-detection",
+      "name": {
+        "vi": "Sensitive Data Detection",
+        "en": "Sensitive Data Detection"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "Add-on",
+      "note": {
+        "vi": "The Cloudflare Sensitive Data Detection managed ruleset helps identify data leaks generated by your origin servers. Its rules run on the body of the response looking for patterns of common sensitive data, including:\n- Personal identifiable information (PII) — for example, passport numbers\n- Financial information — for example, credit card numbers\n- Secrets — for example, API keys\nhttps://developer",
+        "en": "The Cloudflare Sensitive Data Detection managed ruleset helps identify data leaks generated by your origin servers. Its rules run on the body of the response looking for patterns of common sensitive data, including:\n- Personal identifiable information (PII) — for example, passport numbers\n- Financial information — for example, credit card numbers\n- Secrets — for example, API keys\nhttps://developer"
+      },
+      "categoryId": "security"
+    },
+    {
+      "id": "waf-content-scanning",
+      "name": {
+        "vi": "WAF Content Scanning",
+        "en": "WAF Content Scanning"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "Add-on",
+      "note": {
+        "vi": "When enabled, content scanning attempts to detect content objects, such as uploaded files, and scans them for malicious signatures like malware. The scan results, along with additional metadata, are exposed as fields available in WAF custom rules, allowing you to implement fine-grained mitigation rules: https://developers.cloudflare.com/waf/about/content-scanning/",
+        "en": "When enabled, content scanning attempts to detect content objects, such as uploaded files, and scans them for malicious signatures like malware. The scan results, along with additional metadata, are exposed as fields available in WAF custom rules, allowing you to implement fine-grained mitigation rules: https://developers.cloudflare.com/waf/about/content-scanning/"
+      },
+      "categoryId": "security"
+    },
+    {
+      "id": "number-of-custom-lists-account-level",
+      "name": {
+        "vi": "Number of Custom Lists (account level)",
+        "en": "Number of Custom Lists (account level)"
+      },
+      "free": "1.0",
+      "pro": "2.0",
+      "business": "5.0",
+      "enterprise": "10.0",
+      "note": {
+        "vi": "Create custom lists of IP addresses, hostnames, and ASNs to use and reference in your custom WAF rules: https://developers.cloudflare.com/waf/tools/lists/custom-lists/#custom-lists",
+        "en": "Create custom lists of IP addresses, hostnames, and ASNs to use and reference in your custom WAF rules: https://developers.cloudflare.com/waf/tools/lists/custom-lists/#custom-lists"
+      },
+      "categoryId": "security"
+    },
+    {
+      "id": "managed-ip-lists",
+      "name": {
+        "vi": "Managed IP lists",
+        "en": "Managed IP lists"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "yes",
+      "categoryId": "security"
+    },
+    {
+      "id": "rate-limiting-rules",
+      "name": {
+        "vi": "Rate Limiting Rules",
+        "en": "Rate Limiting Rules"
+      },
+      "free": "1.0",
+      "pro": "2.0",
+      "business": "5.0",
+      "enterprise": "100 (Add-on) - default 5",
+      "note": {
+        "vi": "Rate limiting rules allow you to define rate limits for requests matching an expression, and the action to perform when those rate limits are reached.: https://developers.cloudflare.com/waf/rate-limiting-rules/#rate-limiting-rules",
+        "en": "Rate limiting rules allow you to define rate limits for requests matching an expression, and the action to perform when those rate limits are reached.: https://developers.cloudflare.com/waf/rate-limiting-rules/#rate-limiting-rules"
+      },
+      "categoryId": "security"
+    },
+    {
+      "id": "advanced-rate-limiting",
+      "name": {
+        "vi": "Advanced Rate Limiting",
+        "en": "Advanced Rate Limiting"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "Add-on",
+      "note": {
+        "vi": "With advanced rate limiting, you can write rate limiting rules using all the fields of the HTTP request to protect against denial-of-service attacks, brute-force login attempts, API traffic surges and other types of abuse targeting APIs and applications. With Advanced Rate Limiting, you can:\n- Define the rule filter using all HTTP request characteristics, such as URI, method, headers, cookies and ",
+        "en": "With advanced rate limiting, you can write rate limiting rules using all the fields of the HTTP request to protect against denial-of-service attacks, brute-force login attempts, API traffic surges and other types of abuse targeting APIs and applications. With Advanced Rate Limiting, you can:\n- Define the rule filter using all HTTP request characteristics, such as URI, method, headers, cookies and "
+      },
+      "categoryId": "security"
+    },
+    {
+      "id": "rate-limiting-counting-periods",
+      "name": {
+        "vi": "Rate Limiting Counting Periods",
+        "en": "Rate Limiting Counting Periods"
+      },
+      "free": "10 s",
+      "pro": "10 s, 1 min",
+      "business": "10 s, 1 min, 10 min",
+      "enterprise": "10 s, 1 min, 2 min, 5 min, 10 min, 1h (ENT with Advanced Rate Limiting)",
+      "note": {
+        "vi": "A maximum number of requests that a user or client can make within a given time period: https://developers.cloudflare.com/waf/rate-limiting-rules/#rate-limiting-rules",
+        "en": "A maximum number of requests that a user or client can make within a given time period: https://developers.cloudflare.com/waf/rate-limiting-rules/#rate-limiting-rules"
+      },
+      "categoryId": "security"
+    },
+    {
+      "id": "rate-limiting-timeout-periods",
+      "name": {
+        "vi": "Rate Limiting Timeout Periods",
+        "en": "Rate Limiting Timeout Periods"
+      },
+      "free": "10 s",
+      "pro": "10 s, 1 min, 1 h",
+      "business": "10 s, 1 min, 1 h, 1 day",
+      "enterprise": "10 s, 1 min, 2 min, 5 min, 10 min, 1 h, 1 day",
+      "note": {
+        "vi": "A maximum number of interval that a user or client can make: https://developers.cloudflare.com/waf/rate-limiting-rules/#rate-limiting-rules",
+        "en": "A maximum number of interval that a user or client can make: https://developers.cloudflare.com/waf/rate-limiting-rules/#rate-limiting-rules"
+      },
+      "categoryId": "security"
+    },
+    {
+      "id": "account-level-waf",
+      "name": {
+        "vi": "Account Level WAF",
+        "en": "Account Level WAF"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "Add-on",
+      "note": {
+        "vi": "Manage WAF configurations for all of your domains",
+        "en": "Manage WAF configurations for all of your domains"
+      },
+      "categoryId": "security"
+    },
+    {
+      "id": "user-agent-blocking-rules",
+      "name": {
+        "vi": "User Agent Blocking Rules",
+        "en": "User Agent Blocking Rules"
+      },
+      "free": "10.0",
+      "pro": "50.0",
+      "business": "250.0",
+      "enterprise": "1000.0",
+      "note": {
+        "vi": "User Agent Blocking rules block specific browser or web application  User-Agent request headers. These rules apply to the entire domain instead of individual subdomains. User Agent Blocking rules are applied after Zone Lockdown rules. If you allow an IP address via Zone Lockdown, it will skip any User Agent Blocking rules: https://developers.cloudflare.com/waf/tools/user-agent-blocking/#create-a-u",
+        "en": "User Agent Blocking rules block specific browser or web application  User-Agent request headers. These rules apply to the entire domain instead of individual subdomains. User Agent Blocking rules are applied after Zone Lockdown rules. If you allow an IP address via Zone Lockdown, it will skip any User Agent Blocking rules: https://developers.cloudflare.com/waf/tools/user-agent-blocking/#create-a-u"
+      },
+      "categoryId": "security"
+    },
+    {
+      "id": "zone-lockdown-rules",
+      "name": {
+        "vi": "Zone Lockdown Rules",
+        "en": "Zone Lockdown Rules"
+      },
+      "free": "0.0",
+      "pro": "3.0",
+      "business": "10.0",
+      "enterprise": "200.0",
+      "note": {
+        "vi": "Zone Lockdown specifies a list of one or more IP addresses, CIDR ranges, or networks that are the only IPs allowed to access a domain, subdomain, or URL. You can configure multiple destinations, including IPv4/IPv6 addresses, in a single Zone Lockdown rule. All IP addresses not specified in the Zone Lockdown rule will not have access to the specified resources. Requests from those IP addresses wil",
+        "en": "Zone Lockdown specifies a list of one or more IP addresses, CIDR ranges, or networks that are the only IPs allowed to access a domain, subdomain, or URL. You can configure multiple destinations, including IPv4/IPv6 addresses, in a single Zone Lockdown rule. All IP addresses not specified in the Zone Lockdown rule will not have access to the specified resources. Requests from those IP addresses wil"
+      },
+      "categoryId": "security"
+    },
+    {
+      "id": "payload-inspection",
+      "name": {
+        "vi": "Payload inspection",
+        "en": "Payload inspection"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "Custom Pricing",
+      "note": {
+        "vi": "The WAF allows you to log the request information that triggered a specific rule of a managed ruleset. This information is known as the payload. Payload logging is especially useful when diagnosing the behavior of WAF rules. Since the values that triggered a rule may contain sensitive data, they are encrypted with a customer-provided public key so that only you can examine them later: https://deve",
+        "en": "The WAF allows you to log the request information that triggered a specific rule of a managed ruleset. This information is known as the payload. Payload logging is especially useful when diagnosing the behavior of WAF rules. Since the values that triggered a rule may contain sensitive data, they are encrypted with a customer-provided public key so that only you can examine them later: https://deve"
+      },
+      "categoryId": "security"
+    },
+    {
+      "id": "log-simulate-traffic-before-execute-testing-purpose",
+      "name": {
+        "vi": "Log/Simulate traffic before execute (testing purpose)",
+        "en": "Log/Simulate traffic before execute (testing purpose)"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "yes",
+      "note": {
+        "vi": "To test for false positives, set WAF managed rules to Simulate mode. This mode allows you to record the response to possible attacks without challenging or blocking incoming requests. Also, use the Firewall Analytics Activity log to determine which managed rules caused false positives: https://developers.cloudflare.com/waf/reference/legacy/old-waf-managed-rules/troubleshooting/#troubleshoot-false-",
+        "en": "To test for false positives, set WAF managed rules to Simulate mode. This mode allows you to record the response to possible attacks without challenging or blocking incoming requests. Also, use the Firewall Analytics Activity log to determine which managed rules caused false positives: https://developers.cloudflare.com/waf/reference/legacy/old-waf-managed-rules/troubleshooting/#troubleshoot-false-"
+      },
+      "categoryId": "security"
+    },
+    {
+      "id": "secondary-dns",
+      "name": {
+        "vi": "Secondary DNS",
+        "en": "Secondary DNS"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "Custom Pricing",
+      "note": {
+        "vi": "With incoming zone transfers, you can keep your primary DNS provider and use Cloudflare as a secondary DNS provider: https://developers.cloudflare.com/dns/zone-setups/zone-transfers/cloudflare-as-secondary/#secondary-dns---incoming-zone-transfers",
+        "en": "With incoming zone transfers, you can keep your primary DNS provider and use Cloudflare as a secondary DNS provider: https://developers.cloudflare.com/dns/zone-setups/zone-transfers/cloudflare-as-secondary/#secondary-dns---incoming-zone-transfers"
+      },
+      "categoryId": "reliability"
+    },
+    {
+      "id": "waiting-room",
+      "name": {
+        "vi": "Waiting Room",
+        "en": "Waiting Room"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "One Waiting Room included",
+      "enterprise": "Custom Pricing",
+      "note": {
+        "vi": "Cloudflare Waiting Room allows you to route excess users of your website to a customized waiting room, helping preserve customer experience and protect origin servers from being overwhelmed with requests: https://developers.cloudflare.com/waiting-room/#cloudflare-waiting-room",
+        "en": "Cloudflare Waiting Room allows you to route excess users of your website to a customized waiting room, helping preserve customer experience and protect origin servers from being overwhelmed with requests: https://developers.cloudflare.com/waiting-room/#cloudflare-waiting-room"
+      },
+      "categoryId": "reliability"
+    },
+    {
+      "id": "multi-org-setup",
+      "name": {
+        "vi": "Multi-Org Setup",
+        "en": "Multi-Org Setup"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "yes",
+      "note": {
+        "vi": "https://developers.cloudflare.com/fundamentals/setup/accounts-and-zones/#accounts",
+        "en": "https://developers.cloudflare.com/fundamentals/setup/accounts-and-zones/#accounts"
+      },
+      "categoryId": "reliability"
+    },
+    {
+      "id": "sso-support",
+      "name": {
+        "vi": "SSO support",
+        "en": "SSO support"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "yes",
+      "note": {
+        "vi": "https://developers.cloudflare.com/cloudflare-one/applications/configure-apps/dash-sso-apps/",
+        "en": "https://developers.cloudflare.com/cloudflare-one/applications/configure-apps/dash-sso-apps/"
+      },
+      "categoryId": "reliability"
+    },
+    {
+      "id": "site-analytics-resolution",
+      "name": {
+        "vi": "Site Analytics (resolution)",
+        "en": "Site Analytics (resolution)"
+      },
+      "free": "1h",
+      "pro": "15m",
+      "business": "15m",
+      "enterprise": "1m",
+      "note": {
+        "vi": "The Cloudflare analytics dashboard provides all customers with 30 days of data and the ability to magnify your data by time range scopes of 1 hour, 15 minutes, or 1 minute, depending on your plan type. - Free customers can magnify down to a 1 hour scope, for the last 24 hours - Pro and Business customers can magnify down to a 15 minute scope, for the last 6 hours - Enterprise customers can magnify",
+        "en": "The Cloudflare analytics dashboard provides all customers with 30 days of data and the ability to magnify your data by time range scopes of 1 hour, 15 minutes, or 1 minute, depending on your plan type. - Free customers can magnify down to a 1 hour scope, for the last 24 hours - Pro and Business customers can magnify down to a 15 minute scope, for the last 6 hours - Enterprise customers can magnify"
+      },
+      "categoryId": "reliability"
+    },
+    {
+      "id": "dns-analytics-historical-time",
+      "name": {
+        "vi": "DNS Analytics (historical time)",
+        "en": "DNS Analytics (historical time)"
+      },
+      "free": "6h",
+      "pro": "24h",
+      "business": "7d",
+      "enterprise": "30d",
+      "note": {
+        "vi": "View the history of your DNS queries by up to a certain amount of time.",
+        "en": "View the history of your DNS queries by up to a certain amount of time."
+      },
+      "categoryId": "reliability"
+    },
+    {
+      "id": "audit-logs",
+      "name": {
+        "vi": "Audit Logs",
+        "en": "Audit Logs"
+      },
+      "free": "Downloadable CSV",
+      "pro": "Downloadable CSV",
+      "business": "Downloadable CSV",
+      "enterprise": "Available over Logpush",
+      "note": {
+        "vi": "View and download the most recent changes made within your account via UI or API.",
+        "en": "View and download the most recent changes made within your account via UI or API."
+      },
+      "categoryId": "reliability"
+    },
+    {
+      "id": "request-logs",
+      "name": {
+        "vi": "Request Logs",
+        "en": "Request Logs"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "yes",
+      "note": {
+        "vi": "Cloudflare Enterprise customers have access to detailed logs of HTTP requests for their domains. These logs can be helpful for debugging, identifying configuration adjustments, or creating analytics, especially when combined with other data sources, such as application server logs: https://developers.cloudflare.com/logs/logpull/requesting-logs/#request-logs",
+        "en": "Cloudflare Enterprise customers have access to detailed logs of HTTP requests for their domains. These logs can be helpful for debugging, identifying configuration adjustments, or creating analytics, especially when combined with other data sources, such as application server logs: https://developers.cloudflare.com/logs/logpull/requesting-logs/#request-logs"
+      },
+      "categoryId": "reliability"
+    },
+    {
+      "id": "initial-ticket-support-response-time",
+      "name": {
+        "vi": "Initial Ticket Support Response Time",
+        "en": "Initial Ticket Support Response Time"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "1hr (urgent issues)",
+      "categoryId": "support"
+    },
+    {
+      "id": "24x7x365-emergency-phone-support",
+      "name": {
+        "vi": "24x7x365 Emergency Phone Support",
+        "en": "24x7x365 Emergency Phone Support"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "yes",
+      "categoryId": "support"
+    },
+    {
+      "id": "under-attack-support-engineer-for-magic-transit",
+      "name": {
+        "vi": "Under Attack Support Engineer For Magic Transit",
+        "en": "Under Attack Support Engineer For Magic Transit"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "With Premium Only",
+      "categoryId": "support"
+    },
+    {
+      "id": "uptime-service-credits",
+      "name": {
+        "vi": "Uptime Service Credits",
+        "en": "Uptime Service Credits"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "1x",
+      "enterprise": "10x (Standard) ; \n25x (Premium)",
+      "categoryId": "support"
+    },
+    {
+      "id": "customer-success-manager-led-onboarding-assistance",
+      "name": {
+        "vi": "Customer Success Manager Led Onboarding Assistance",
+        "en": "Customer Success Manager Led Onboarding Assistance"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "yes",
+      "categoryId": "support"
+    },
+    {
+      "id": "designated-customer-success-manager-and-solutions-engineer",
+      "name": {
+        "vi": "Designated Customer Success Manager and Solutions Engineer",
+        "en": "Designated Customer Success Manager and Solutions Engineer"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "yes",
+      "categoryId": "support"
+    },
+    {
+      "id": "cloudflare-success-offering",
+      "name": {
+        "vi": "Cloudflare Success Offering",
+        "en": "Cloudflare Success Offering"
+      },
+      "free": "no",
+      "pro": "no",
+      "business": "no",
+      "enterprise": "yes",
+      "categoryId": "support"
+    }
+  ]
+}

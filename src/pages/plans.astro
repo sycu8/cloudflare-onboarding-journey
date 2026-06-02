@@ -1,0 +1,180 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/chrome/Breadcrumbs.astro';
+import LangText from '../components/ui/LangText.astro';
+import CTASection from '../components/content/CTASection.astro';
+import PlanComparisonTable from '../components/interactive/PlanComparisonTable';
+import {
+  planCategories,
+  planTierCards,
+  plansPageIntro,
+  PLANS_SOURCE_NOTE,
+  smeDecisionGuide,
+  smeKeyDifferentiators,
+  OFFICIAL_PLANS_URL,
+  CONTACT_SALES_URL,
+} from '../data/cloudflarePlans';
+---
+
+<BaseLayout
+  title={{
+    vi: 'So sánh gói Cloudflare: Free, Pro, Business, Enterprise cho SME',
+    en: 'Cloudflare plan comparison: Free, Pro, Business, Enterprise for SMEs',
+  }}
+  description={{
+    vi: 'Bảng so sánh 124 tính năng và hướng chọn Business hoặc Enterprise cho doanh nghiệp vừa và nhỏ.',
+    en: '124-feature comparison matrix and guidance for SMEs choosing Business or Enterprise.',
+  }}
+  canonicalPath="/plans"
+  showProgressBar
+>
+  <Breadcrumbs
+    items={[
+      { href: '/resources', label: { vi: 'Tài nguyên', en: 'Resources' } },
+      { href: '/plans', label: { vi: 'So sánh gói', en: 'Plan comparison' } },
+    ]}
+  />
+
+  <header class="mb-8">
+    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: 'So sánh gói Cloudflare cho SME', en: 'Cloudflare plans for SMEs' }} />
+    <LangText as="p" class="text-muted mt-2 max-w-3xl text-sm leading-relaxed md:text-base" text={plansPageIntro} />
+    <p class="mt-3 flex flex-wrap gap-3 text-sm">
+      <a class="link" href={OFFICIAL_PLANS_URL} target="_blank" rel="noopener noreferrer">
+        <span class="lang-vi">Giá & gói chính thức ↗</span>
+        <span class="lang-en">Official plans & pricing ↗</span>
+      </a>
+      <a class="link" href={CONTACT_SALES_URL} target="_blank" rel="noopener noreferrer">
+        <span class="lang-vi">Liên hệ Enterprise Sales ↗</span>
+        <span class="lang-en">Contact Enterprise Sales ↗</span>
+      </a>
+    </p>
+  </header>
+
+  <section class="mb-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    {
+      planTierCards.map((tier) => (
+        <article class="card flex h-full flex-col p-4">
+          <div class="flex items-baseline justify-between gap-2">
+            <LangText as="h2" class="text-lg font-semibold" text={tier.name} />
+            <span class="badge-accent text-xs">
+              <span class="lang-vi">{tier.pricingHint.vi}</span>
+              <span class="lang-en">{tier.pricingHint.en}</span>
+            </span>
+          </div>
+          <LangText as="p" class="text-muted mt-1 text-xs font-medium" text={tier.tagline} />
+          <LangText as="p" class="text-muted mt-3 flex-1 text-sm leading-relaxed" text={tier.typicalBuyer} />
+          {(tier.id === 'business' || tier.id === 'enterprise') && (
+            <p class="mt-3 text-xs font-medium text-[var(--cf-accent)]">
+              <span class="lang-vi">{tier.id === 'business' ? '← Thường là bước đầu cho SME' : '← Khi cần scale & hợp đồng'}</span>
+              <span class="lang-en">{tier.id === 'business' ? '← Often the first SME upgrade' : '← When you need scale & contracts'}</span>
+            </p>
+          )}
+        </article>
+      ))
+    }
+  </section>
+
+  <section class="mb-10 grid gap-6 lg:grid-cols-2">
+    {
+      smeDecisionGuide.map((block) => (
+        <div class="card p-5">
+          <LangText as="h2" class="text-lg font-semibold" text={block.title} />
+          <ul class="text-muted mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed">
+            {block.bullets.map((b) => (
+              <li>
+                <span class="lang-vi">{b.vi}</span>
+                <span class="lang-en">{b.en}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </section>
+
+  <section id="key-differences" class="mb-10 scroll-mt-24">
+    <LangText
+      as="h2"
+      class="mb-4 text-xl font-semibold"
+      text={{ vi: 'Khác biệt then chốt: Business vs Enterprise', en: 'Key differences: Business vs Enterprise' }}
+    />
+    <div class="overflow-x-auto rounded-xl border" style="border-color: var(--cf-border)">
+      <table class="w-full min-w-[640px] border-collapse text-sm">
+        <thead>
+          <tr class="border-b text-left text-xs uppercase tracking-wide" style="border-color: var(--cf-border); background: var(--cf-surface)">
+            <th class="px-4 py-3">
+              <span class="lang-vi">Tính năng</span>
+              <span class="lang-en">Feature</span>
+            </th>
+            <th class="px-4 py-3">Business</th>
+            <th class="px-4 py-3">Enterprise</th>
+            <th class="px-4 py-3">
+              <span class="lang-vi">Vì sao SME quan tâm</span>
+              <span class="lang-en">Why SMEs care</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            smeKeyDifferentiators.map((row) => (
+              <tr class="border-b align-top" style="border-color: var(--cf-border)">
+                <td class="px-4 py-3 font-medium">
+                  <span class="lang-vi">{row.feature.vi}</span>
+                  <span class="lang-en">{row.feature.en}</span>
+                </td>
+                <td class="text-muted px-4 py-3">
+                  <span class="lang-vi">{row.business.vi}</span>
+                  <span class="lang-en">{row.business.en}</span>
+                </td>
+                <td class="px-4 py-3">
+                  <span class="lang-vi">{row.enterprise.vi}</span>
+                  <span class="lang-en">{row.enterprise.en}</span>
+                </td>
+                <td class="text-muted px-4 py-3 text-xs leading-relaxed">
+                  <span class="lang-vi">{row.whyItMatters.vi}</span>
+                  <span class="lang-en">{row.whyItMatters.en}</span>
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="full-comparison" class="scroll-mt-24">
+    <LangText
+      as="h2"
+      class="mb-2 text-xl font-semibold"
+      text={{ vi: 'Bảng so sánh đầy đủ (124 tính năng)', en: 'Full comparison (124 features)' }}
+    />
+    <LangText
+      as="p"
+      class="text-muted mb-4 max-w-3xl text-sm"
+      text={{
+        vi: 'Mặc định lọc các dòng khác nhau giữa Business và Enterprise. Bấm tên tính năng để xem ghi chú (nếu có).',
+        en: 'Defaults to rows where Business and Enterprise differ. Click a feature name to expand notes when available.',
+      }}
+    />
+    <PlanComparisonTable client:load categories={planCategories} />
+  </section>
+
+  <aside class="card mt-8 border-dashed p-4 text-xs leading-relaxed" style="border-color: var(--cf-border)">
+    <LangText as="p" class="text-muted" text={PLANS_SOURCE_NOTE} />
+  </aside>
+
+  <CTASection
+    title={{ vi: 'Cần tư vấn lộ trình triển khai?', en: 'Need a deployment learning path?' }}
+    description={{
+      vi: 'Chọn track Application Services, Developer Platform hoặc Cloudflare One — hoặc đăng ký workshop để trao đổi trực tiếp.',
+      en: 'Pick Application Services, Developer Platform, or Cloudflare One — or register for a workshop.',
+    }}
+    cta={{ href: '/choose-your-path', label: { vi: 'Chọn lộ trình', en: 'Choose your path' } }}
+  />
+  <p class="mt-4 text-center text-sm">
+    <a class="link" href="/workshop">
+      <span class="lang-vi">Đăng ký hội thảo →</span>
+      <span class="lang-en">Workshop signup →</span>
+    </a>
+  </p>
+</BaseLayout>
