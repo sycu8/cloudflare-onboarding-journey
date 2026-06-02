@@ -160,6 +160,64 @@ export const platformDemoVignettes: DemoVignette[] = [
     ],
     docsLinks: [{ label: 'WAF', href: 'https://developers.cloudflare.com/waf/' }],
   },
+  {
+    id: 'core-performance-route',
+    track: 'platform',
+    title: { vi: 'Dashboard: Caching & Speed', en: 'Dashboard: Caching & Speed' },
+    personas: ['Web Ops', 'Marketing', 'CTO'],
+    valueDriver: {
+      vi: 'Giảm latency và origin load — showcase sau Security route.',
+      en: 'Lower latency and origin load — showcase after the Security route.',
+    },
+    opening: {
+      vi: 'Application route: Caching overview → Cache Rules → Speed optimizations → (tuỳ chọn) Argo / Images.',
+      en: 'Application route: Caching overview → Cache Rules → Speed optimizations → (optional) Argo / Images.',
+    },
+    whenToUse: {
+      vi: 'Khách hỏi “làm sao tăng tốc website” sau khi đã proxy domain.',
+      en: 'Customer asks how to speed up the website after the domain is proxied.',
+    },
+    dashboardPaths: ['Caching > Overview', 'Caching > Cache Rules', 'Speed > Optimization'],
+    steps: [
+      {
+        title: { vi: 'Cache Analytics', en: 'Cache Analytics' },
+        detail: {
+          vi: 'Hit ratio, bandwidth saved, top colos — so sánh trước/sau rule.',
+          en: 'Hit ratio, bandwidth saved, top colos — compare before/after rules.',
+        },
+        dashboardPath: 'Caching > Analytics',
+      },
+      {
+        title: { vi: 'Demo Cache Rule', en: 'Demo Cache Rule' },
+        detail: {
+          vi: 'Bypass /admin; cache /assets/* với TTL; show purge on deploy.',
+          en: 'Bypass /admin; cache /assets/* with TTL; show purge on deploy.',
+        },
+        dashboardPath: 'Caching > Cache Rules > Create rule',
+      },
+      {
+        title: { vi: 'Speed tab', en: 'Speed tab' },
+        detail: {
+          vi: 'Brotli, Early Hints, minify — link tới /content-delivery trong hub.',
+          en: 'Brotli, Early Hints, minify — link to /content-delivery in this hub.',
+        },
+        dashboardPath: 'Speed > Optimization',
+      },
+    ],
+    demoTips: [
+      {
+        vi: 'Chuẩn bị screenshot hit ratio tăng sau 1 tuần pilot.',
+        en: 'Prepare a screenshot of improved hit ratio after a one-week pilot.',
+      },
+    ],
+    keyTakeaways: [
+      {
+        vi: 'Performance và Security cùng orange cloud — một dashboard.',
+        en: 'Performance and Security share the orange cloud — one dashboard.',
+      },
+    ],
+    docsLinks: [{ label: 'Cache', href: 'https://developers.cloudflare.com/cache/' }],
+  },
 ];
 
 /** Advanced Security demo vignettes → Application Services track */

@@ -25,6 +25,7 @@ const ROUTES = [
   '/resources',
   '/plans',
   '/demo-guides',
+  '/content-delivery',
   '/solutions',
   '/solutions/application-security',
   '/solutions/cloudflare-one-sase',

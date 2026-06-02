@@ -11,6 +11,17 @@ export type ResourceCard = {
 
 export const resources: ResourceCard[] = [
   {
+    slug: 'content-delivery',
+    title: { vi: 'Content delivery & hiệu năng web', en: 'Content delivery & web performance' },
+    description: {
+      vi: 'Tăng tốc website: CDN, cache rules, Speed, đo LCP — checklist tương tác.',
+      en: 'Speed up websites: CDN, cache rules, Speed, LCP measurement — interactive checklist.',
+    },
+    type: 'external',
+    href: '/content-delivery',
+    status: 'available',
+  },
+  {
     slug: 'solution-proposals',
     title: { vi: 'Proposal bộ giải pháp', en: 'Solution proposals' },
     description: {

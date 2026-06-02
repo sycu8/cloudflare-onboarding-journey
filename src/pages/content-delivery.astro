@@ -1,0 +1,141 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/chrome/Breadcrumbs.astro';
+import LangText from '../components/ui/LangText.astro';
+import CTASection from '../components/content/CTASection.astro';
+import DeliveryChecklist from '../components/interactive/DeliveryChecklist';
+import {
+  contentDeliveryIntro,
+  contentDeliveryMentalModel,
+  deliveryTopics,
+  deliveryChecklist,
+  deliveryMistakes,
+} from '../data/contentDelivery';
+---
+
+<BaseLayout
+  title={{
+    vi: 'Tối ưu Content Delivery & tăng tốc website',
+    en: 'Optimize content delivery & speed up your website',
+  }}
+  description={{
+    vi: 'CDN, Cache Rules, Tiered Cache, Argo, Speed, Images và đo lường — hướng dẫn thực hành trên dashboard Cloudflare.',
+    en: 'CDN, Cache Rules, Tiered Cache, Argo, Speed, Images, and measurement — hands-on Cloudflare dashboard guide.',
+  }}
+  canonicalPath="/content-delivery"
+  showProgressBar
+>
+  <Breadcrumbs
+    items={[
+      { href: '/tracks/application-services', label: { vi: 'Application Services', en: 'Application Services' } },
+      { href: '/content-delivery', label: { vi: 'Content delivery', en: 'Content delivery' } },
+    ]}
+  />
+
+  <header class="mb-8">
+    <LangText
+      as="h1"
+      class="text-2xl font-semibold md:text-3xl"
+      text={{ vi: 'Tối ưu content delivery & tăng tốc website', en: 'Optimize content delivery & speed up your website' }}
+    />
+    <LangText as="p" class="text-muted mt-2 max-w-3xl text-sm leading-relaxed md:text-base" text={contentDeliveryIntro} />
+  </header>
+
+  <section class="card mb-8">
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Mô hình tư duy', en: 'Mental model' }} />
+    <LangText as="p" class="text-muted mt-2 font-mono text-sm leading-relaxed" text={contentDeliveryMentalModel} />
+  </section>
+
+  <nav class="card mb-8 flex flex-wrap gap-2 p-4 text-sm" aria-label="Topics">
+    <span class="text-muted w-full text-xs font-medium uppercase tracking-wide">
+      <span class="lang-vi">Chủ đề</span>
+      <span class="lang-en">Topics</span>
+    </span>
+    {deliveryTopics.map((t) => (
+      <a href={`#${t.id}`} class="badge hover:border-[var(--cf-accent)]">
+        <span class="lang-vi">{t.title.vi}</span>
+        <span class="lang-en">{t.title.en}</span>
+      </a>
+    ))}
+  </nav>
+
+  <div class="grid gap-8 lg:grid-cols-3">
+    <div class="space-y-8 lg:col-span-2">
+      {
+        deliveryTopics.map((topic) => (
+          <section id={topic.id} class="scroll-mt-24">
+            <LangText as="h2" class="text-xl font-semibold" text={topic.title} />
+            <LangText as="p" class="text-muted mt-2 text-sm leading-relaxed" text={topic.summary} />
+            {topic.dashboardPath ? (
+              <p class="mt-2 font-mono text-xs text-[var(--cf-accent)]">{topic.dashboardPath}</p>
+            ) : null}
+            <ol class="text-muted mt-4 list-decimal space-y-2 pl-5 text-sm leading-relaxed">
+              {topic.steps.map((step) => (
+                <li>
+                  <span class="lang-vi">{step.vi}</span>
+                  <span class="lang-en">{step.en}</span>
+                </li>
+              ))}
+            </ol>
+            <p class="mt-3 text-sm">
+              <a class="link" href={topic.docsHref} target="_blank" rel="noopener noreferrer">
+                <span class="lang-vi">Tài liệu chính thức ↗</span>
+                <span class="lang-en">Official docs ↗</span>
+              </a>
+            </p>
+          </section>
+        ))
+      }
+
+      <section id="mistakes" class="scroll-mt-24">
+        <LangText as="h2" class="text-xl font-semibold" text={{ vi: 'Sai lầm thường gặp', en: 'Common mistakes' }} />
+        <ul class="mt-4 space-y-3">
+          {deliveryMistakes.map((m) => (
+            <li class="card p-4">
+              <LangText as="h3" class="font-medium" text={m.title} />
+              <LangText as="p" class="text-muted mt-1 text-sm" text={m.detail} />
+            </li>
+          ))}
+        </ul>
+      </section>
+    </div>
+
+    <aside class="lg:col-span-1">
+      <div class="sticky top-20 space-y-4">
+        <DeliveryChecklist client:load items={deliveryChecklist} />
+        <div class="card p-4 text-sm">
+          <LangText as="h3" class="font-semibold" text={{ vi: 'Liên quan', en: 'Related' }} />
+          <ul class="text-muted mt-3 space-y-2">
+            <li>
+              <a class="link" href="/solutions/application-security">
+                <span class="lang-vi">Proposal App Services</span>
+                <span class="lang-en">App Services proposal</span>
+              </a>
+            </li>
+            <li>
+              <a class="link" href="/use-cases/protect-website">
+                <span class="lang-vi">Tình huống: Bảo vệ website</span>
+                <span class="lang-en">Use case: Protect a website</span>
+              </a>
+            </li>
+            <li>
+              <a class="link" href="/demo-guides#platform">
+                <span class="lang-vi">Script demo nền tảng</span>
+                <span class="lang-en">Platform demo script</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <CTASection
+    title={{ vi: 'Áp dụng trên track Application Services', en: 'Apply on the Application Services track' }}
+    description={{
+      vi: 'Phần 4 của track đi sâu cache và analytics — kết hợp với WAF ở phần 3.',
+      en: 'Track part 4 goes deeper on cache and analytics — combine with WAF in part 3.',
+    }}
+    cta={{ href: '/tracks/application-services', label: { vi: 'Mở lộ trình', en: 'Open track' } }}
+  />
+</BaseLayout>

@@ -169,27 +169,44 @@ export const tracks: Track[] = [
       },
       {
         id: 'as-4',
-        title: { vi: 'Phần 4: Performance và cache', en: 'Part 4: Performance and caching' },
+        title: { vi: 'Phần 4: Content delivery & tăng tốc website', en: 'Part 4: Content delivery & website speed' },
         description: {
-          vi: 'Tăng tốc static, giữ dynamic an toàn.',
-          en: 'Speed up static assets while keeping dynamic routes safe.',
+          vi: 'CDN, cache rules, Speed, Argo/Tiered Cache và đo lường — giảm tải origin, cải thiện LCP.',
+          en: 'CDN, cache rules, Speed, Argo/Tiered Cache, and measurement — less origin load, better LCP.',
         },
-        duration: { vi: '~35 phút', en: '~35 min' },
+        duration: { vi: '~45 phút', en: '~45 min' },
         lessons: [
           {
-            title: { vi: 'Cache rules cho static assets', en: 'Cache rules for static assets' },
+            title: { vi: 'CDN & cache hit/miss', en: 'CDN & cache hit/miss' },
             body: {
-              vi: 'Cache CSS/JS/images với TTL hợp lý. Bypass cache cho trang có cookie session, cart, personalized content.',
-              en: 'Cache CSS/JS/images with sensible TTL. Bypass cache for session cookies, cart, and personalized pages.',
+              vi: 'Hiểu HIT tại PoP vs MISS về origin. Cache static assets; không cache HTML có session.',
+              en: 'Understand PoP HIT vs MISS to origin. Cache static assets; do not cache HTML with sessions.',
             },
-            hubLink: '/use-cases/protect-website',
+            hubLink: '/content-delivery#cdn-basics',
           },
           {
-            title: { vi: 'Theo dõi analytics và logs', en: 'Monitor analytics and logs' },
+            title: { vi: 'Cache Rules & purge', en: 'Cache Rules & purge' },
             body: {
-              vi: 'Xem top paths, status code, country, bot score. Thiết lập alert khi traffic tăng đột biến hoặc 5xx tăng.',
-              en: 'Review top paths, status codes, countries, bot scores. Set alerts for traffic spikes or rising 5xx.',
+              vi: 'Bypass /admin, /checkout; TTL cho /assets/*; purge sau mỗi release frontend.',
+              en: 'Bypass /admin, /checkout; TTL for /assets/*; purge after each frontend release.',
             },
+            hubLink: '/content-delivery#cache-rules',
+          },
+          {
+            title: { vi: 'Speed & Images', en: 'Speed & Images' },
+            body: {
+              vi: 'Brotli, Early Hints, HTTP/3; resize ảnh WebP/AVIF tại edge.',
+              en: 'Brotli, Early Hints, HTTP/3; resize images to WebP/AVIF at the edge.',
+            },
+            hubLink: '/content-delivery#speed-optimization',
+          },
+          {
+            title: { vi: 'Đo hit ratio & Core Web Vitals', en: 'Measure hit ratio & Core Web Vitals' },
+            body: {
+              vi: 'Caching Analytics + Web Analytics — báo cáo trước/sau cho stakeholder.',
+              en: 'Caching Analytics + Web Analytics — before/after reports for stakeholders.',
+            },
+            hubLink: '/content-delivery#measure',
           },
         ],
       },

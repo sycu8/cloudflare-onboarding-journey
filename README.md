@@ -237,6 +237,7 @@ Admin auth header: `Authorization: Bearer <WORKSHOP_ADMIN_KEY>` or `X-Cfhub-Admi
 | `/resources` | Resource Hub, GitHub, Ref Arch, CloudSecOp, Learning Center |
 | `/plans` | Plan comparison (Free/Pro/Business/Enterprise) for SMEs |
 | `/demo-guides` | SE demo scripts — Application Security & Cloudflare One |
+| `/content-delivery` | CDN, cache, Speed — speed up websites guide |
 | `/solutions` | Solution proposal summaries (App Security, SASE, Email) — EN/VI |
 | `/workshop` | Events + signup |
 | `/workshop/admin` | Event management (noindex) |

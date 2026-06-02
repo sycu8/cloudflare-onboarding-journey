@@ -91,7 +91,7 @@ export const useCases: UseCase[] = [
       ],
     },
     relatedTrack: 'application-services',
-    nextCta: { href: '/checklists/beginner-cloudflare-checklist', label: { vi: 'Làm checklist', en: 'Complete checklist' } },
+    nextCta: { href: '/content-delivery', label: { vi: 'Tối ưu tốc độ website', en: 'Speed up your website' } },
   },
   {
     slug: 'secure-api',

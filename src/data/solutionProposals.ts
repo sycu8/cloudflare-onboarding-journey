@@ -225,6 +225,7 @@ export const applicationServicesProposal: SolutionProposal = {
     },
   ],
   hubLinks: [
+    { href: '/content-delivery', label: { vi: 'Tối ưu content delivery', en: 'Content delivery guide' } },
     { href: '/demo-guides#application-security', label: { vi: 'Script demo dashboard', en: 'Dashboard demo scripts' } },
     { href: '/plans', label: { vi: 'So sánh gói Business / Enterprise', en: 'Business / Enterprise plan comparison' } },
     { href: '/tracks/application-services', label: { vi: 'Lộ trình Application Services', en: 'Application Services track' } },
