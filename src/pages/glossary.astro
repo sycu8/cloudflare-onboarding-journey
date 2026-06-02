@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/chrome/Breadcrumbs.astro';
+import LangText from '../components/ui/LangText.astro';
+import GlossarySearch from '../components/interactive/GlossarySearch';
+import { glossary } from '../data/glossary';
+---
+
+<BaseLayout
+  title={{ vi: 'Glossary Cloudflare cho người mới', en: 'Cloudflare glossary for beginners' }}
+  description={{
+    vi: 'Tra cứu thuật ngữ Cloudflare cho người mới: DNS, proxy, WAF, Workers, D1, R2, Zero Trust, Tunnel — lọc theo track và phân trang.',
+    en: 'Beginner Cloudflare glossary: DNS, proxy, WAF, Workers, D1, R2, Zero Trust, Tunnel — filter by track with pagination.',
+  }}
+  canonicalPath="/glossary"
+  showProgressBar
+>
+  <Breadcrumbs items={[{ href: '/glossary', label: { vi: 'Glossary', en: 'Glossary' } }]} />
+
+  <header class="mb-6">
+    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: 'Glossary Cloudflare cho người mới', en: 'Cloudflare glossary for beginners' }} />
+    <p class="text-muted mt-2 text-sm">
+      <span class="lang-vi">Thuật ngữ được tổng hợp từ Learning Center và lộ trình hub.</span>
+      <span class="lang-en">Terms curated from the Learning Center and this hub’s tracks.</span>
+    </p>
+  </header>
+
+  <GlossarySearch client:load terms={glossary} />
+</BaseLayout>

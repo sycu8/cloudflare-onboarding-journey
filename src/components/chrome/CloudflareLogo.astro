@@ -1,0 +1,29 @@
+---
+type Props = {
+  size?: 'sm' | 'md';
+  showWordmark?: boolean;
+  class?: string;
+};
+
+const { size = 'md', showWordmark = true, class: className = '' } = Astro.props;
+const icon = size === 'sm' ? 'h-8 w-8' : 'h-9 w-9';
+const wordmark = size === 'sm' ? 'h-6' : 'h-7';
+---
+
+<span class:list={['inline-flex min-w-0 items-center gap-2', className]}>
+  <img
+    src="/favicon.svg"
+    alt=""
+    width={size === 'sm' ? 32 : 36}
+    height={size === 'sm' ? 32 : 36}
+    class:list={[icon, 'shrink-0 rounded-lg']}
+    loading="eager"
+    decoding="async"
+  />
+  {showWordmark ? (
+    <span class="truncate text-sm font-semibold tracking-tight sm:text-base">
+      <span class="lang-vi">Starter Hub</span>
+      <span class="lang-en">Starter Hub</span>
+    </span>
+  ) : null}
+</span>

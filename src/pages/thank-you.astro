@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LangText from '../components/ui/LangText.astro';
+import CTASection from '../components/content/CTASection.astro';
+---
+
+<BaseLayout
+  title={{ vi: 'Cảm ơn bạn', en: 'Thank you' }}
+  description={{ vi: 'Đăng ký workshop đã được ghi nhận.', en: 'Your workshop registration was received.' }}
+  canonicalPath="/thank-you"
+>
+  <div class="card card-hero-glow p-8 text-center md:p-12">
+    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: 'Cảm ơn bạn!', en: 'Thank you!' }} />
+    <LangText
+      as="p"
+      class="text-muted mx-auto mt-3 max-w-lg text-sm"
+      text={{
+        vi: 'Thông tin đăng ký workshop đã được ghi nhận. Tiếp tục hành trình học của bạn bên dưới.',
+        en: 'Your workshop registration has been received. Continue your learning journey below.',
+      }}
+    />
+  </div>
+
+  <div class="mt-8 grid gap-4 sm:grid-cols-3">
+    <a class="card text-center hover:brightness-105" href="/checklists/beginner-cloudflare-checklist">
+      <LangText text={{ vi: 'Checklist', en: 'Checklist' }} />
+    </a>
+    <a class="card text-center hover:brightness-105" href="/quiz/beginner-readiness">
+      <LangText text={{ vi: 'Quiz', en: 'Quiz' }} />
+    </a>
+    <a class="card text-center hover:brightness-105" href="/glossary">
+      <LangText text={{ vi: 'Glossary', en: 'Glossary' }} />
+    </a>
+  </div>
+
+  <CTASection
+    title={{ vi: 'Chọn lộ trình học', en: 'Choose your learning path' }}
+    description={{ vi: 'Bắt đầu track phù hợp với mục tiêu của bạn.', en: 'Start the track that fits your goal.' }}
+    cta={{ href: '/choose-your-path', label: { vi: 'Chọn lộ trình', en: 'Choose your path' } }}
+  />
+</BaseLayout>

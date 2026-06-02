@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/chrome/Breadcrumbs.astro';
+import LangText from '../../components/ui/LangText.astro';
+import { tracks } from '../../data/tracks';
+---
+
+<BaseLayout
+  title={{ vi: 'Lộ trình học Cloudflare', en: 'Cloudflare learning tracks' }}
+  description={{
+    vi: 'Ba lộ trình: Application Services, Developer Platform và Cloudflare One — nội dung cụ thể từng phần.',
+    en: 'Three tracks: Application Services, Developer Platform, and Cloudflare One — with detailed modules.',
+  }}
+  canonicalPath="/tracks"
+  showProgressBar
+>
+  <Breadcrumbs items={[{ href: '/tracks', label: { vi: 'Lộ trình học', en: 'Tracks' } }]} />
+
+  <header class="mb-8">
+    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: 'Lộ trình học', en: 'Learning tracks' }} />
+    <LangText
+      as="p"
+      class="text-muted mt-2 max-w-3xl text-sm leading-relaxed"
+      text={{
+        vi: 'Chọn một trong ba hướng phù hợp vai trò của bạn. Mỗi lộ trình có phần học chi tiết, trình tự gợi ý và liên kết tình huống thực tế.',
+        en: 'Pick one of three directions that fits your role. Each track has detailed modules, a suggested order, and links to practical use cases.',
+      }}
+    />
+  </header>
+
+  <div class="grid gap-6 md:grid-cols-1 lg:grid-cols-3">
+    {tracks.map((track) => (
+      <article class="card flex flex-col">
+        <LangText as="h2" class="text-lg font-semibold" text={track.title} />
+        <LangText as="p" class="text-muted mt-2 flex-1 text-sm leading-relaxed" text={track.headline} />
+        <p class="text-muted mt-3 text-xs">
+          <span class="lang-vi">{track.modules.length} phần · {track.modules.reduce((n, m) => n + m.lessons.length, 0)} bài</span>
+          <span class="lang-en">{track.modules.length} parts · {track.modules.reduce((n, m) => n + m.lessons.length, 0)} lessons</span>
+        </p>
+        <ul class="mt-3 flex flex-wrap gap-1.5">
+          {track.keyConcepts.slice(0, 4).map((k) => (
+            <li class="badge text-xs">{k}</li>
+          ))}
+        </ul>
+        <a class="btn btn-primary mt-4 w-full justify-center" href={`/tracks/${track.slug}`}>
+          <LangText text={{ vi: 'Xem lộ trình chi tiết', en: 'View full track' }} />
+        </a>
+      </article>
+    ))}
+  </div>
+
+  <p class="text-muted mt-8 text-center text-sm">
+    <LangText
+      text={{
+        vi: 'Chưa chắc chọn hướng nào?',
+        en: 'Not sure which direction?',
+      }}
+    />
+    {' '}
+    <a class="link" href="/choose-your-path">
+      <LangText text={{ vi: 'Làm bài chọn lộ trình', en: 'Use the path selector' }} />
+    </a>
+  </p>
+</BaseLayout>

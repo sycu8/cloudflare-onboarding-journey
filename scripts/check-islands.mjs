@@ -1,0 +1,10 @@
+const url = process.argv[2] || 'https://cloudflare-starter-hub.pages.dev/choose-your-path';
+const html = await (await fetch(url)).text();
+const srcScripts = [...html.matchAll(/<script[^>]*src="([^"]+)"/g)].map((m) => m[1]);
+const moduleScripts = [...html.matchAll(/<script[^>]*type="module"[^>]*>/g)];
+console.log('URL:', url);
+console.log('src scripts:', srcScripts.length);
+srcScripts.slice(0, 10).forEach((s) => console.log(' ', s));
+console.log('module script tags:', moduleScripts.length);
+console.log('has _astro:', html.includes('/_astro/'));
+console.log('has island:', /astro-island|data-astro-cid/i.test(html));

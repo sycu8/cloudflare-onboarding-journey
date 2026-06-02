@@ -1,0 +1,26 @@
+---
+import LangText from '../ui/LangText.astro';
+import type { GitHubLearningPath } from '../../data/githubRepos';
+import { getGitHubRepo } from '../../data/githubRepos';
+
+type Props = { path: GitHubLearningPath };
+const { path } = Astro.props;
+const repos = path.repoNames.map((n) => getGitHubRepo(n)).filter(Boolean);
+---
+
+<article class="card border-l-4 border-l-[var(--cf-accent)]">
+  <LangText as="h3" class="text-lg font-semibold" text={path.title} />
+  <LangText as="p" class="text-muted mt-2 text-sm leading-relaxed" text={path.description} />
+  <ul class="mt-4 space-y-2">
+    {repos.map((repo) =>
+      repo ? (
+        <li class="flex flex-wrap items-center gap-2 text-sm">
+          <a class="link font-mono" href={repo.href} target="_blank" rel="noopener noreferrer">
+            {repo.name}
+          </a>
+          <span class="text-muted text-xs">★ {repo.stars.toLocaleString('en-US')}</span>
+        </li>
+      ) : null,
+    )}
+  </ul>
+</article>

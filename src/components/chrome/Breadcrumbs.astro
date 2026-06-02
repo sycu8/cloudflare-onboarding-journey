@@ -1,0 +1,28 @@
+---
+import LangText from '../ui/LangText.astro';
+
+type Crumb = { href: string; label: { vi: string; en: string } };
+type Props = { items: Crumb[] };
+const { items } = Astro.props;
+---
+
+<nav aria-label="Breadcrumb" class="mb-6">
+  <ol class="text-muted flex flex-wrap items-center gap-2 text-sm">
+    <li>
+      <a class="link" href="/">
+        <LangText text={{ vi: 'Trang chủ', en: 'Home' }} />
+      </a>
+    </li>
+    {items.map((c) => (
+      <>
+        <li aria-hidden="true" class="opacity-50">/</li>
+        <li>
+          <a class="link" href={c.href}>
+            <LangText text={c.label} />
+          </a>
+        </li>
+      </>
+    ))}
+  </ol>
+</nav>
+

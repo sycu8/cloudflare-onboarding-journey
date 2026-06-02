@@ -1,0 +1,39 @@
+---
+import LangText from '../ui/LangText.astro';
+import type { ResourceHubItem } from '../../data/resourceHub';
+import { resourceHubCategoryLabels } from '../../data/resourceHub';
+
+type Props = { item: ResourceHubItem };
+const { item } = Astro.props;
+const categoryLabel = resourceHubCategoryLabels[item.category];
+const external = item.href.startsWith('http');
+---
+
+<article class="card flex h-full flex-col">
+  <div class="flex flex-wrap items-center gap-2">
+    <span class="badge badge-accent"><LangText text={categoryLabel} /></span>
+    {item.internal ? (
+      <span class="badge">
+        <span class="lang-vi">Trong hub</span>
+        <span class="lang-en">In this hub</span>
+      </span>
+    ) : null}
+    {item.featured ? (
+      <span class="badge">
+        <span class="lang-vi">Gợi ý</span>
+        <span class="lang-en">Recommended</span>
+      </span>
+    ) : null}
+  </div>
+  <LangText as="h3" class="mt-3 text-lg font-semibold leading-snug" text={item.title} />
+  <LangText as="p" class="text-muted mt-2 flex-1 text-sm leading-relaxed" text={item.description} />
+  <a
+    class="btn btn-secondary mt-4 w-full justify-center"
+    href={item.href}
+    target={external ? '_blank' : undefined}
+    rel={external ? 'noopener noreferrer' : undefined}
+  >
+    <LangText text={{ vi: external ? 'Mở trên Cloudflare' : 'Xem trong hub', en: external ? 'Open on Cloudflare' : 'View in hub' }} />
+    <span aria-hidden="true">{external ? '↗' : '→'}</span>
+  </a>
+</article>

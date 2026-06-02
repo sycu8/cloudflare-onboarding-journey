@@ -1,0 +1,51 @@
+---
+import LangText from '../ui/LangText.astro';
+import type { ReferenceArchitectureItem } from '../../data/referenceArchitecture';
+import { referenceDocTypeLabels } from '../../data/referenceArchitecture';
+
+type Props = { item: ReferenceArchitectureItem };
+const { item } = Astro.props;
+const typeLabel = referenceDocTypeLabels[item.docType];
+---
+
+<article class="card flex h-full flex-col">
+  <div class="flex flex-wrap items-center gap-2">
+    <span class="badge badge-accent"><LangText text={typeLabel} /></span>
+    {item.featured ? (
+      <span class="badge">
+        <span class="lang-vi">Nổi bật</span>
+        <span class="lang-en">Featured</span>
+      </span>
+    ) : null}
+    <span class="badge">
+      <span class="lang-vi">Track:</span>
+      <span class="lang-en">Track:</span>
+      {' '}
+      {item.relatedTrack === 'application-services'
+        ? 'Application Services'
+        : item.relatedTrack === 'developer-platform'
+          ? 'Developer Platform'
+          : item.relatedTrack === 'cloudflare-one'
+            ? 'Cloudflare One'
+            : 'Cross-cutting'}
+    </span>
+  </div>
+  <LangText as="h3" class="mt-3 text-lg font-semibold leading-snug" text={item.title} />
+  <LangText as="p" class="text-muted mt-2 flex-1 text-sm leading-relaxed" text={item.summary} />
+  <div class="mt-4 flex flex-col gap-2 sm:flex-row">
+    <a
+      class="btn btn-secondary flex-1 justify-center"
+      href={item.officialPath}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <LangText text={{ vi: 'Đọc trên Cloudflare', en: 'Read on Cloudflare' }} />
+      <span aria-hidden="true">↗</span>
+    </a>
+    {item.relatedTrack !== 'cross-cutting' ? (
+      <a class="btn btn-ghost flex-1 justify-center" href={`/tracks/${item.relatedTrack}`}>
+        <LangText text={{ vi: 'Xem lộ trình', en: 'View track' }} />
+      </a>
+    ) : null}
+  </div>
+</article>

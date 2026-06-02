@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/chrome/Breadcrumbs.astro';
+import LangText from '../components/ui/LangText.astro';
+import PathSelector from '../components/interactive/PathSelector';
+---
+
+<BaseLayout
+  title={{ vi: 'Chọn lộ trình Cloudflare phù hợp', en: 'Choose your Cloudflare learning path' }}
+  description={{
+    vi: 'Trả lời một câu hỏi đơn giản để chọn track hoặc use case phù hợp.',
+    en: 'Answer one simple question to pick the right track or use case.',
+  }}
+  canonicalPath="/choose-your-path"
+  showProgressBar
+>
+  <Breadcrumbs items={[{ href: '/choose-your-path', label: { vi: 'Chọn lộ trình', en: 'Choose your path' } }]} />
+
+  <header class="mb-6">
+    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: 'Chọn lộ trình Cloudflare phù hợp', en: 'Choose your Cloudflare learning path' }} />
+    <LangText
+      as="p"
+      class="text-muted mt-2 max-w-2xl text-sm"
+      text={{
+        vi: 'Trả lời một câu hỏi đơn giản: bạn đang muốn cải thiện điều gì trước?',
+        en: 'Answer one simple question: what are you trying to improve first?',
+      }}
+    />
+  </header>
+
+  <PathSelector client:load />
+</BaseLayout>

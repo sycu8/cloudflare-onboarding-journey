@@ -1,0 +1,23 @@
+---
+import LangText from '../ui/LangText.astro';
+import type { CloudsecopSeries } from '../../data/cloudsecop';
+
+type Props = { series: CloudsecopSeries };
+const { series } = Astro.props;
+---
+
+<article class="card border-[var(--cf-accent)]/30 bg-gradient-to-br from-[var(--cf-surface)] to-[var(--cf-bg-elevated)]">
+  <span class="badge badge-accent">
+    <LangText text={{ vi: 'Chuỗi bài học', en: 'Article series' }} />
+  </span>
+  <LangText as="h3" class="mt-3 text-lg font-semibold" text={series.title} />
+  <LangText as="p" class="text-muted mt-2 text-sm leading-relaxed" text={series.description} />
+  <p class="text-muted mt-3 text-xs">
+    <span class="lang-vi">{series.partCount} bài · kinh nghiệm triển khai thực tế</span>
+    <span class="lang-en">{series.partCount} posts · real deployment experience</span>
+  </p>
+  <a class="btn btn-primary mt-4 w-full justify-center" href={series.href} target="_blank" rel="noopener noreferrer">
+    <LangText text={{ vi: 'Xem toàn bộ chuỗi', en: 'View full series' }} />
+    <span aria-hidden="true">↗</span>
+  </a>
+</article>

@@ -1,0 +1,46 @@
+---
+import LangText from '../ui/LangText.astro';
+
+type Props = {
+  eyebrow?: { vi: string; en: string };
+  badge?: { vi: string; en: string };
+  title: { vi: string; en: string };
+  subtitle: { vi: string; en: string };
+  primaryCta: { href: string; label: { vi: string; en: string } };
+  secondaryCta?: { href: string; label: { vi: string; en: string } };
+};
+
+const { eyebrow, badge, title, subtitle, primaryCta, secondaryCta } = Astro.props;
+---
+
+<section class="card card-hero-glow p-8 md:p-10">
+  <div class="relative">
+    {eyebrow ? (
+      <div class="eyebrow">
+        {badge ? (
+          <span class="badge badge-accent">
+            <span class="lang-vi">{badge.vi}</span>
+            <span class="lang-en">{badge.en}</span>
+          </span>
+        ) : null}
+        <LangText text={eyebrow} />
+      </div>
+    ) : null}
+    <LangText
+      as="h1"
+      class:list={['text-balance font-semibold tracking-tight', eyebrow ? 'mt-4 text-3xl sm:text-4xl md:text-6xl' : 'text-3xl md:text-5xl']}
+      text={title}
+    />
+    <LangText as="p" class="text-muted mt-4 max-w-2xl text-pretty text-base md:text-lg" text={subtitle} />
+    <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+      <a class="btn btn-primary w-full justify-center sm:w-auto" href={primaryCta.href}>
+        <LangText text={primaryCta.label} />
+      </a>
+      {secondaryCta ? (
+        <a class="btn btn-secondary w-full justify-center sm:w-auto" href={secondaryCta.href}>
+          <LangText text={secondaryCta.label} />
+        </a>
+      ) : null}
+    </div>
+  </div>
+</section>

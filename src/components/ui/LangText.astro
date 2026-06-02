@@ -1,0 +1,18 @@
+---
+import type { LocalizedString } from '../../i18n/types';
+
+type Props = {
+  text: LocalizedString;
+  as?: 'span' | 'div' | 'p' | 'h1' | 'h2' | 'h3';
+  class?: string;
+};
+
+const { text, as = 'span', class: className } = Astro.props;
+const Tag = as;
+---
+
+<Tag class={className}>
+  <span class="lang-vi">{text.vi}</span>
+  <span class="lang-en">{text.en}</span>
+</Tag>
+

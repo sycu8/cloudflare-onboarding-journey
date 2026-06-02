@@ -1,0 +1,98 @@
+---
+import '../styles/global.css';
+import Navbar from '../components/chrome/Navbar.astro';
+import Footer from '../components/chrome/Footer.astro';
+import ProgressBar from '../components/ui/ProgressBar';
+import { siteSeo, formatTitle } from '../lib/seo';
+
+type Props = {
+  title: { vi: string; en: string };
+  description: { vi: string; en: string };
+  canonicalPath?: string;
+  showProgressBar?: boolean;
+  /** Override default OG image for this page */
+  ogImage?: string;
+  noindex?: boolean;
+};
+
+const { title, description, canonicalPath, showProgressBar = false, ogImage, noindex = false } = Astro.props;
+const siteName = siteSeo.name;
+const siteOrigin = Astro.site ?? siteSeo.origin;
+const canonical = new URL(canonicalPath ?? Astro.url.pathname, siteOrigin);
+const titleVi = formatTitle(title.vi, siteName);
+const titleEn = formatTitle(title.en, siteName);
+const imageUrl = new URL(ogImage ?? siteSeo.defaultImage, siteOrigin).href;
+---
+
+<html
+  lang="vi"
+  data-lang="vi"
+  data-seo-title-vi={titleVi}
+  data-seo-title-en={titleEn}
+  data-seo-desc-vi={description.vi}
+  data-seo-desc-en={description.en}
+>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content={siteSeo.themeColor} />
+
+    <title>{titleVi}</title>
+    <meta name="description" content={description.vi} />
+
+    <link rel="canonical" href={canonical.href} />
+    {noindex ? <meta name="robots" content="noindex, nofollow" /> : <meta name="robots" content="index, follow" />}
+
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={siteSeo.locale} />
+    <meta property="og:locale:alternate" content={siteSeo.localeAlternate} />
+    <meta property="og:title" content={titleVi} />
+    <meta property="og:description" content={description.vi} />
+    <meta property="og:url" content={canonical.href} />
+    <meta property="og:image" content={imageUrl} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content={siteSeo.twitterHandle} />
+    <meta name="twitter:title" content={titleVi} />
+    <meta name="twitter:description" content={description.vi} />
+    <meta name="twitter:image" content={imageUrl} />
+
+    <script is:inline define:vars={{ titleVi, titleEn, descriptionVi: description.vi, descriptionEn: description.en }}>
+      (function () {
+        var pageTitle = { vi: titleVi, en: titleEn };
+        var pageDesc = { vi: descriptionVi, en: descriptionEn };
+        try {
+          var lang = localStorage.getItem('cfhub_language');
+          if (lang !== 'en') lang = 'vi';
+          document.documentElement.dataset.lang = lang;
+          document.documentElement.lang = lang;
+          document.title = pageTitle[lang] || pageTitle.vi;
+          var meta = document.querySelector('meta[name="description"]');
+          if (meta) meta.setAttribute('content', pageDesc[lang] || pageDesc.vi);
+        } catch (e) {}
+        try {
+          var theme = localStorage.getItem('cfhub_theme');
+          if (!theme) {
+            theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          if (theme === 'dark') document.documentElement.classList.add('dark');
+          else document.documentElement.classList.remove('dark');
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="min-h-dvh bg-hero">
+      <Navbar />
+      {showProgressBar ? <ProgressBar client:load /> : null}
+      <main class="container py-10">
+        <slot />
+      </main>
+      <Footer />
+    </div>
+  </body>
+</html>

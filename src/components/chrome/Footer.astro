@@ -1,0 +1,60 @@
+---
+import LangText from '../ui/LangText.astro';
+import CloudflareLogo from './CloudflareLogo.astro';
+---
+
+<footer class="site-footer py-12">
+  <div class="container grid gap-8 md:grid-cols-4">
+    <div class="md:col-span-2">
+      <CloudflareLogo size="sm" />
+      <p class="text-muted mt-2 max-w-prose text-sm">
+        <span class="lang-vi">
+          Learning hub thân thiện cho người mới: Application Services, Developer Platform và Cloudflare One.
+        </span>
+        <span class="lang-en">
+          A beginner-friendly learning hub for Application Services, Developer Platform, and Cloudflare One.
+        </span>
+      </p>
+      <p class="text-muted mt-4 text-xs opacity-80">
+        <span class="lang-vi">Hosted on Cloudflare Pages</span>
+        <span class="lang-en">Hosted on Cloudflare Pages</span>
+      </p>
+    </div>
+
+    <div class="space-y-3 text-sm">
+      <div class="font-semibold">
+        <LangText text={{ vi: 'Lộ trình học', en: 'Learning tracks' }} />
+      </div>
+      <ul class="space-y-2">
+        <li><a class="link" href="/tracks/application-services">Application Services</a></li>
+        <li><a class="link" href="/tracks/developer-platform">Developer Platform</a></li>
+        <li><a class="link" href="/tracks/cloudflare-one">Cloudflare One</a></li>
+      </ul>
+    </div>
+
+    <div class="space-y-3 text-sm">
+      <div class="font-semibold">
+        <LangText text={{ vi: 'Tình huống thực tế', en: 'Use cases' }} />
+      </div>
+      <ul class="space-y-2">
+        <li><a class="link" href="/use-cases/protect-website"><LangText text={{ vi: 'Bảo vệ website', en: 'Protect a website' }} /></a></li>
+        <li><a class="link" href="/use-cases/secure-api"><LangText text={{ vi: 'Bảo vệ API', en: 'Secure an API' }} /></a></li>
+        <li><a class="link" href="/use-cases/build-serverless-app"><LangText text={{ vi: 'Build serverless app', en: 'Build a serverless app' }} /></a></li>
+      </ul>
+      <div class="pt-2">
+        <a class="btn btn-secondary w-full" href="/workshop">
+          <LangText text={{ vi: 'Tham gia workshop', en: 'Join workshop' }} />
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-muted container mt-10 flex flex-col gap-2 border-t border-[var(--cf-border)] pt-6 text-xs md:flex-row md:items-center md:justify-between">
+    <div>© {new Date().getFullYear()} Cloudflare Starter Hub</div>
+    <div class="flex gap-4">
+      <a class="link" href="/resources"><LangText text={{ vi: 'Tài nguyên', en: 'Resources' }} /></a>
+      <a class="link" href="/glossary"><LangText text={{ vi: 'Thuật ngữ', en: 'Glossary' }} /></a>
+      <a class="link" href="/privacy"><LangText text={{ vi: 'Quyền riêng tư', en: 'Privacy' }} /></a>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,22 @@
+# Copy to wrangler.toml and fill in your Cloudflare account resource IDs.
+# Do NOT commit wrangler.toml if it contains production-only bindings you want private.
+
+name = "cloudflare-starter-hub"
+compatibility_date = "2026-06-02"
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "cloudflare-starter-hub-db"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+
+[[kv_namespaces]]
+binding = "SITE_CONFIG"
+id = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
+
+[[r2_buckets]]
+binding = "RESOURCES_BUCKET"
+bucket_name = "cloudflare-starter-hub-resources"
+
+[ai]
+binding = "AI"

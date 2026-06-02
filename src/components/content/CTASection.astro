@@ -1,0 +1,25 @@
+---
+import LangText from '../ui/LangText.astro';
+
+type Props = {
+  title: { vi: string; en: string };
+  description: { vi: string; en: string };
+  cta: { href: string; label: { vi: string; en: string } };
+};
+const { title, description, cta } = Astro.props;
+---
+
+<section class="card mt-10 overflow-hidden">
+  <div class="grid gap-6 md:grid-cols-3 md:items-center">
+    <div class="md:col-span-2">
+      <LangText as="h2" class="text-xl font-semibold md:text-2xl" text={title} />
+      <LangText as="p" class="text-muted mt-2 text-sm" text={description} />
+    </div>
+    <div class="md:justify-self-end">
+      <a class="btn btn-primary w-full md:w-auto" href={cta.href}>
+        <LangText text={cta.label} />
+      </a>
+    </div>
+  </div>
+</section>
+

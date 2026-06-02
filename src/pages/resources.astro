@@ -1,0 +1,343 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/chrome/Breadcrumbs.astro';
+import LangText from '../components/ui/LangText.astro';
+import ResourceCard from '../components/content/ResourceCard.astro';
+import CloudsecopSeriesCard from '../components/content/CloudsecopSeriesCard.astro';
+import CloudsecopArticleGrid from '../components/interactive/CloudsecopArticleGrid';
+import LearningTopicGrid from '../components/interactive/LearningTopicGrid';
+import GitHubRepoCard from '../components/content/GitHubRepoCard.astro';
+import GitHubLearningPathCard from '../components/content/GitHubLearningPathCard.astro';
+import ReferenceArchitectureCard from '../components/content/ReferenceArchitectureCard.astro';
+import ResourceHubCard from '../components/content/ResourceHubCard.astro';
+import { resources } from '../data/resources';
+import {
+  resourceHubIntro,
+  resourceHubItems,
+  CLOUDFLARE_RESOURCE_HUB_URL,
+  getFeaturedResourceHubItems,
+  getResourceHubByCategory,
+  resourceHubCategoryLabels,
+  type ResourceHubCategory,
+} from '../data/resourceHub';
+import {
+  referenceArchitectureIntro,
+  referenceArchitectureItems,
+  REFERENCE_ARCHITECTURE_HUB_URL,
+  REFERENCE_ARCHITECTURE_DOCS_URL,
+  getFeaturedReferenceItems,
+  getReferenceItemsByType,
+  type ReferenceDocType,
+} from '../data/referenceArchitecture';
+import {
+  githubRepos,
+  githubIntro,
+  githubLearningPaths,
+  githubCategories,
+  CLOUDFLARE_GITHUB_ORG,
+  getGitHubReposByCategory,
+  type GitHubRepoCategory,
+} from '../data/githubRepos';
+import { learningTopics, learningCenterIntro } from '../data/learningCenter';
+import {
+  cloudsecopArticles,
+  cloudsecopSeries,
+  cloudsecopIntro,
+  CLOUDSECOP_TAG_URL,
+} from '../data/cloudsecop';
+
+---
+
+<BaseLayout
+  title={{ vi: 'Tài nguyên học Cloudflare', en: 'Cloudflare learning resources' }}
+  description={{
+    vi: 'Tài nguyên học Cloudflare: Resource Hub, Reference Architecture, GitHub, Learning Center, CloudSecOp — có lọc và phân trang cho danh sách dài.',
+    en: 'Cloudflare learning resources: Resource Hub, Reference Architecture, GitHub, Learning Center, CloudSecOp — with filters and pagination.',
+  }}
+  canonicalPath="/resources"
+  showProgressBar
+>
+  <Breadcrumbs items={[{ href: '/resources', label: { vi: 'Tài nguyên', en: 'Resources' } }]} />
+
+  <header class="mb-8">
+    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: 'Tài nguyên học Cloudflare', en: 'Cloudflare learning resources' }} />
+    <LangText as="p" class="text-muted mt-2 max-w-3xl text-sm md:text-base" text={resourceHubIntro} />
+    <p class="text-muted mt-2 text-xs">
+      <a class="link" href={CLOUDFLARE_RESOURCE_HUB_URL} target="_blank" rel="noopener noreferrer">
+        <span class="lang-vi">Cloudflare Resource Hub (chính thức) ↗</span>
+        <span class="lang-en">Official Cloudflare Resource Hub ↗</span>
+      </a>
+    </p>
+  </header>
+
+  <section class="card mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Tuần đầu & cập nhật 2026', en: 'First week & 2026 updates' }} />
+      <LangText
+        as="p"
+        class="text-muted mt-1 text-sm"
+        text={{
+          vi: 'Lộ trình 7 ngày, sai lầm thường gặp và snapshot sản phẩm mới — đối chiếu trước khi học tên cũ.',
+          en: '7-day path, common mistakes, and new product snapshot — cross-check before learning outdated names.',
+        }}
+      />
+    </div>
+    <a class="btn btn-primary shrink-0" href="/first-week">
+      <LangText text={{ vi: 'Mở lộ trình tuần đầu', en: 'Open first-week plan' }} />
+    </a>
+  </section>
+
+  <section id="resource-hub" class="mb-10">
+    <LangText
+      as="h2"
+      class="text-xl font-semibold"
+      text={{ vi: 'Cloudflare Resource Hub', en: 'Cloudflare Resource Hub' }}
+    />
+    <LangText
+      as="p"
+      class="text-muted mt-2 max-w-3xl text-sm leading-relaxed"
+      text={{
+        vi: 'Bản đồ tài nguyên chính thức — dưới đây là các mục quan trọng nhất cho người mới, có link trực tiếp hoặc trỏ về phần tương ứng trong Starter Hub.',
+        en: 'The official resource map — below are the most important items for beginners, with direct links or pointers to matching sections in this Starter Hub.',
+      }}
+    />
+
+    <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {getFeaturedResourceHubItems(6).map((item) => (
+        <ResourceHubCard item={item} />
+      ))}
+    </div>
+
+    {
+      (['learn', 'build', 'community', 'operations', 'explore'] as ResourceHubCategory[]).map((category) => {
+        const items = getResourceHubByCategory(category).filter((i) => !i.featured);
+        if (items.length === 0) return null;
+        return (
+          <div class="mt-10">
+            <LangText as="h3" class="text-lg font-semibold" text={resourceHubCategoryLabels[category]} />
+            <div class="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {items.map((item) => (
+                <ResourceHubCard item={item} />
+              ))}
+            </div>
+          </div>
+        );
+      })
+    }
+
+    <p class="text-muted mt-6 text-sm">
+      <span class="lang-vi">{resourceHubItems.length} mục được tổ chức lại tại đây. </span>
+      <span class="lang-en">{resourceHubItems.length} items reorganized here. </span>
+      <a class="link" href={CLOUDFLARE_RESOURCE_HUB_URL} target="_blank" rel="noopener noreferrer">
+        <LangText text={{ vi: 'Xem toàn bộ Resource Hub', en: 'View full Resource Hub' }} /> ↗
+      </a>
+    </p>
+  </section>
+
+  <section class="mb-10">
+    <LangText as="h2" class="text-xl font-semibold" text={{ vi: 'Công cụ tương tác trong hub', en: 'Interactive tools in this hub' }} />
+    <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {resources.map((r) => (
+        <ResourceCard title={r.title} description={r.description} type={r.type} href={r.href} status={r.status} />
+      ))}
+    </div>
+  </section>
+
+  <section id="github" class="mb-10">
+    <LangText
+      as="h2"
+      class="text-xl font-semibold"
+      text={{ vi: 'Open source trên GitHub', en: 'Open source on GitHub' }}
+    />
+    <LangText as="p" class="text-muted mt-2 max-w-3xl text-sm leading-relaxed" text={githubIntro} />
+    <p class="text-muted mt-2 text-xs">
+      <a class="link" href={CLOUDFLARE_GITHUB_ORG} target="_blank" rel="noopener noreferrer">
+        <span class="lang-vi">Tổ chức cloudflare trên GitHub (560+ repo) ↗</span>
+        <span class="lang-en">cloudflare organization on GitHub (560+ repos) ↗</span>
+      </a>
+    </p>
+
+    <LangText
+      as="h3"
+      class="mt-8 text-lg font-semibold"
+      text={{ vi: 'Lộ trình ví dụ — học qua repo', en: 'Example paths — learn from repos' }}
+    />
+    <div class="mt-4 grid gap-4 md:grid-cols-2">
+      {githubLearningPaths.map((path) => (
+        <GitHubLearningPathCard path={path} />
+      ))}
+    </div>
+
+    {
+      (['workers', 'zero-trust', 'ai', 'docs', 'infrastructure', 'examples'] as GitHubRepoCategory[]).map(
+        (category) => {
+          const repos = getGitHubReposByCategory(category);
+          if (repos.length === 0) return null;
+          const meta = githubCategories[category];
+          return (
+            <div class="mt-10" id={category}>
+              <LangText as="h3" class="text-lg font-semibold" text={meta.label} />
+              <LangText as="p" class="text-muted mt-1 text-sm" text={meta.description} />
+              <div class="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {repos.map((repo) => (
+                  <GitHubRepoCard repo={repo} />
+                ))}
+              </div>
+            </div>
+          );
+        },
+      )
+    }
+
+    <p class="text-muted mt-6 text-sm">
+      <span class="lang-vi">Đang hiển thị {githubRepos.length} repo được chọn lọc. </span>
+      <span class="lang-en">Showing {githubRepos.length} curated repos. </span>
+      <a class="link" href={CLOUDFLARE_GITHUB_ORG} target="_blank" rel="noopener noreferrer">
+        <LangText text={{ vi: 'Khám phá thêm trên GitHub', en: 'Explore more on GitHub' }} /> ↗
+      </a>
+    </p>
+  </section>
+
+  <section id="reference-architecture" class="mb-10">
+    <LangText
+      as="h2"
+      class="text-xl font-semibold"
+      text={{ vi: 'Reference Architecture', en: 'Reference Architecture' }}
+    />
+    <LangText as="p" class="text-muted mt-2 max-w-3xl text-sm leading-relaxed" text={referenceArchitectureIntro} />
+    <p class="text-muted mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs">
+      <a class="link" href={REFERENCE_ARCHITECTURE_HUB_URL} target="_blank" rel="noopener noreferrer">
+        <span class="lang-vi">Architecture Center ↗</span>
+        <span class="lang-en">Architecture Center ↗</span>
+      </a>
+      <a class="link" href={REFERENCE_ARCHITECTURE_DOCS_URL} target="_blank" rel="noopener noreferrer">
+        <span class="lang-vi">Tài liệu kỹ thuật (developers) ↗</span>
+        <span class="lang-en">Technical docs (developers) ↗</span>
+      </a>
+    </p>
+
+    <LangText
+      as="h3"
+      class="mt-8 text-lg font-semibold"
+      text={{ vi: 'Bắt đầu từ đây', en: 'Start here' }}
+    />
+    <div class="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {getFeaturedReferenceItems(6).map((item) => (
+        <ReferenceArchitectureCard item={item} />
+      ))}
+    </div>
+
+    {
+      (
+        ['reference-architecture', 'diagram', 'design-guide', 'implementation-guide'] as ReferenceDocType[]
+      ).map((docType) => {
+        const items = getReferenceItemsByType(docType).filter((i) => !i.featured);
+        if (items.length === 0) return null;
+        return (
+          <div class="mt-10">
+            <LangText
+              as="h3"
+              class="text-lg font-semibold"
+              text={
+                docType === 'reference-architecture'
+                  ? { vi: 'Kiến trúc tham chiếu', en: 'Reference architectures' }
+                  : docType === 'diagram'
+                    ? { vi: 'Sơ đồ kiến trúc', en: 'Architecture diagrams' }
+                    : docType === 'design-guide'
+                      ? { vi: 'Hướng dẫn thiết kế', en: 'Design guides' }
+                      : { vi: 'Hướng dẫn triển khai', en: 'Implementation guides' }
+              }
+            />
+            <div class="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {items.map((item) => (
+                <ReferenceArchitectureCard item={item} />
+              ))}
+            </div>
+          </div>
+        );
+      })
+    }
+
+    <p class="text-muted mt-6 text-sm">
+      <span class="lang-vi">Đang hiển thị {referenceArchitectureItems.length} tài liệu chọn lọc. </span>
+      <span class="lang-en">Showing {referenceArchitectureItems.length} curated documents. </span>
+      <a class="link" href={REFERENCE_ARCHITECTURE_HUB_URL} target="_blank" rel="noopener noreferrer">
+        <LangText text={{ vi: 'Duyệt toàn bộ trên Cloudflare', en: 'Browse all on Cloudflare' }} /> ↗
+      </a>
+    </p>
+  </section>
+
+  <section id="cloudsecop" class="mb-10">
+    <LangText
+      as="h2"
+      class="text-xl font-semibold"
+      text={{ vi: 'Bài viết thực chiến (CloudSecOp)', en: 'Field notes (CloudSecOp)' }}
+    />
+    <LangText as="p" class="text-muted mt-2 max-w-3xl text-sm leading-relaxed" text={cloudsecopIntro} />
+    <p class="text-muted mt-2 text-xs">
+      <a class="link" href={CLOUDSECOP_TAG_URL} target="_blank" rel="noopener noreferrer">
+        <span class="lang-vi">Xem tất cả {cloudsecopArticles.length}+ bài trên cloudsecop.net ↗</span>
+        <span class="lang-en">Browse all {cloudsecopArticles.length}+ posts on cloudsecop.net ↗</span>
+      </a>
+    </p>
+
+    <div class="mt-6 grid gap-4 md:grid-cols-2">
+      {cloudsecopSeries.map((series) => (
+        <CloudsecopSeriesCard series={series} />
+      ))}
+    </div>
+
+    <div class="mt-8">
+      <CloudsecopArticleGrid client:load articles={cloudsecopArticles} />
+    </div>
+  </section>
+
+  <section id="learning-center">
+    <LangText
+      as="h2"
+      class="text-xl font-semibold"
+      text={{ vi: 'Chủ đề từ Cloudflare Learning Center', en: 'Topics from Cloudflare Learning Center' }}
+    />
+    <p class="text-muted mt-2 text-sm">
+      <span class="lang-vi">17 chủ đề phổ biến — mỗi chủ đề gắn với lộ trình trong hub.</span>
+      <span class="lang-en">17 popular topics — each mapped to a track in this hub.</span>
+      {' '}
+      <a class="link" href="https://www.cloudflare.com/learning/" target="_blank" rel="noopener noreferrer">cloudflare.com/learning ↗</a>
+    </p>
+    <div class="mt-4">
+      <LearningTopicGrid client:load topics={learningTopics} />
+    </div>
+  </section>
+
+  <section id="labs" class="mt-10 card">
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Hands-on labs (sắp có)', en: 'Hands-on labs (coming soon)' }} />
+    <LangText
+      as="p"
+      class="text-muted mt-2 text-sm"
+      text={{
+        vi: 'Lab thực hành Pages, Workers và Zero Trust sẽ được bổ sung. Trong lúc chờ, hãy đọc chuỗi CloudSecOp, làm checklist và kiểm tra kiến thức.',
+        en: 'Labs for Pages, Workers, and Zero Trust are coming soon. Meanwhile, read the CloudSecOp series, complete the checklist, and take the knowledge check.',
+      }}
+    />
+    <div class="mt-4 flex flex-wrap gap-3">
+      <a class="btn btn-primary" href="/checklists/beginner-cloudflare-checklist">
+        <LangText text={{ vi: 'Mở checklist', en: 'Open checklist' }} />
+      </a>
+      <a class="btn btn-secondary" href="#resource-hub">
+        <LangText text={{ vi: 'Resource Hub', en: 'Resource Hub' }} />
+      </a>
+      <a class="btn btn-secondary" href="/quiz/beginner-readiness">
+        <LangText text={{ vi: 'Kiểm tra kiến thức', en: 'Knowledge check' }} />
+      </a>
+      <a class="btn btn-secondary" href="#reference-architecture">
+        <LangText text={{ vi: 'Reference Architecture', en: 'Reference Architecture' }} />
+      </a>
+      <a class="btn btn-secondary" href="#github">
+        <LangText text={{ vi: 'Repo GitHub', en: 'GitHub repos' }} />
+      </a>
+      <a class="btn btn-secondary" href="#cloudsecop">
+        <LangText text={{ vi: 'Bài CloudSecOp', en: 'CloudSecOp articles' }} />
+      </a>
+    </div>
+  </section>
+</BaseLayout>

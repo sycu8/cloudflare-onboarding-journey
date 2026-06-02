@@ -1,0 +1,42 @@
+---
+import LangText from '../ui/LangText.astro';
+import type { CloudsecopArticle } from '../../data/cloudsecop';
+import { cloudsecopArticleUrl } from '../../data/cloudsecop';
+
+type Props = { article: CloudsecopArticle };
+const { article } = Astro.props;
+const url = cloudsecopArticleUrl(article.slug);
+---
+
+<article class="card flex h-full flex-col">
+  <div class="flex flex-wrap items-center gap-2">
+    {article.seriesPart ? (
+      <span class="badge badge-accent">
+        <span class="lang-vi">Phần {article.seriesPart}</span>
+        <span class="lang-en">Part {article.seriesPart}</span>
+      </span>
+    ) : null}
+    <span class="badge">
+      <span class="lang-vi">{article.readMinutes} phút đọc</span>
+      <span class="lang-en">{article.readMinutes} min read</span>
+    </span>
+  </div>
+  <LangText as="h3" class="mt-3 text-base font-semibold leading-snug" text={article.title} />
+  <LangText as="p" class="text-muted mt-2 flex-1 text-sm leading-relaxed" text={article.excerpt} />
+  {article.tags.length > 0 ? (
+    <ul class="mt-3 flex flex-wrap gap-1">
+      {article.tags.slice(0, 3).map((tag) => (
+        <li class="badge text-xs">{tag}</li>
+      ))}
+    </ul>
+  ) : null}
+  <a
+    class="btn btn-secondary mt-4 w-full justify-center"
+    href={url}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <LangText text={{ vi: 'Đọc trên CloudSecOp', en: 'Read on CloudSecOp' }} />
+    <span aria-hidden="true">↗</span>
+  </a>
+</article>

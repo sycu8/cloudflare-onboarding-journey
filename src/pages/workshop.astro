@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/chrome/Breadcrumbs.astro';
+import LangText from '../components/ui/LangText.astro';
+import WorkshopSection from '../components/interactive/WorkshopSection';
+---
+
+<BaseLayout
+  title={{ vi: 'Tham gia beginner Cloudflare workshop', en: 'Join a beginner Cloudflare workshop' }}
+  description={{
+    vi: 'Xem lịch workshop sắp tới và đăng ký: Application Services, Developer Platform, Cloudflare One.',
+    en: 'View upcoming workshops and register: Application Services, Developer Platform, Cloudflare One.',
+  }}
+  canonicalPath="/workshop"
+  showProgressBar
+>
+  <Breadcrumbs items={[{ href: '/workshop', label: { vi: 'Hội thảo', en: 'Workshop' } }]} />
+
+  <header class="mb-6">
+    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: 'Tham gia beginner Cloudflare workshop', en: 'Join a beginner Cloudflare workshop' }} />
+    <LangText
+      as="p"
+      class="text-muted mt-2 max-w-2xl text-sm"
+      text={{
+        vi: 'Chọn sự kiện sắp tới (nếu có), sau đó gửi form đăng ký.',
+        en: 'Pick an upcoming event (if available), then submit the registration form.',
+      }}
+    />
+    <p class="text-muted mt-3 text-xs">
+      <a class="link" href="/workshop/admin">
+        <LangText text={{ vi: 'Admin: thêm sự kiện', en: 'Admin: add events' }} />
+      </a>
+    </p>
+  </header>
+
+  <WorkshopSection client:load />
+</BaseLayout>

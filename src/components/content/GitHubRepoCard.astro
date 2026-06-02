@@ -1,0 +1,47 @@
+---
+import LangText from '../ui/LangText.astro';
+import type { GitHubRepo } from '../../data/githubRepos';
+import { githubCategories } from '../../data/githubRepos';
+
+type Props = { repo: GitHubRepo; showExample?: boolean };
+const { repo, showExample = true } = Astro.props;
+const cat = githubCategories[repo.category];
+---
+
+<article class="card flex h-full flex-col">
+  <div class="flex flex-wrap items-center gap-2">
+    {repo.pinned ? (
+      <span class="badge badge-accent">
+        <LangText text={{ vi: 'Pinned', en: 'Pinned' }} />
+      </span>
+    ) : null}
+    <span class="badge">
+      <LangText text={cat.label} />
+    </span>
+    {repo.language ? <span class="badge text-xs">{repo.language}</span> : null}
+    <span class="badge text-xs">★ {repo.stars.toLocaleString('en-US')}</span>
+  </div>
+
+  <h3 class="mt-3 font-mono text-base font-semibold">
+    <a class="link" href={repo.href} target="_blank" rel="noopener noreferrer">
+      cloudflare/{repo.name}
+    </a>
+  </h3>
+
+  <LangText as="p" class="text-muted mt-2 flex-1 text-sm leading-relaxed" text={repo.description} />
+
+  {showExample ? (
+    <div class="mt-3 rounded-xl border border-[var(--cf-border)] bg-[var(--cf-bg-elevated)]/50 p-3">
+      <p class="text-xs font-medium text-[var(--cf-accent)]">
+        <span class="lang-vi">Gợi ý học / thử:</span>
+        <span class="lang-en">Try this:</span>
+      </p>
+      <LangText as="p" class="text-muted mt-1 text-xs leading-relaxed" text={repo.exampleUse} />
+    </div>
+  ) : null}
+
+  <a class="btn btn-secondary mt-4 w-full justify-center" href={repo.href} target="_blank" rel="noopener noreferrer">
+    <LangText text={{ vi: 'Mở trên GitHub', en: 'Open on GitHub' }} />
+    <span aria-hidden="true">↗</span>
+  </a>
+</article>

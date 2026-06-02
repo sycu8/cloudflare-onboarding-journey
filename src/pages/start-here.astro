@@ -1,0 +1,117 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/chrome/Breadcrumbs.astro';
+import LangText from '../components/ui/LangText.astro';
+import CTASection from '../components/content/CTASection.astro';
+---
+
+<BaseLayout
+  title={{ vi: 'Bắt đầu tại đây: hiểu Cloudflare trong 30 phút', en: 'Start here: understand Cloudflare in 30 minutes' }}
+  description={{
+    vi: 'Bắt đầu học Cloudflare trong 30 phút: mental model user → edge → origin, 3 câu hỏi chọn track, lộ trình 7 ngày và Resource Hub.',
+    en: 'Start learning Cloudflare in 30 minutes: user → edge → origin mental model, three questions to pick a track, 7-day path, and Resource Hub.',
+  }}
+  canonicalPath="/start-here"
+  showProgressBar
+>
+  <Breadcrumbs items={[{ href: '/start-here', label: { vi: 'Bắt đầu', en: 'Start Here' } }]} />
+
+  <header class="mb-6">
+    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: 'Bắt đầu tại đây: hiểu Cloudflare trong 30 phút', en: 'Start here: understand Cloudflare in 30 minutes' }} />
+    <LangText
+      as="p"
+      class="text-muted mt-2 max-w-3xl text-sm"
+      text={{
+        vi: 'Cloudflare có rất nhiều sản phẩm, nhưng người mới không nên bắt đầu bằng cách học thuộc từng tên sản phẩm. Hãy bắt đầu bằng việc hiểu các vấn đề Cloudflare giải quyết: giúp application nhanh hơn và an toàn hơn, giúp developer build trên edge, và giúp doanh nghiệp bảo vệ users, devices, SaaS apps và private networks.',
+        en: 'Cloudflare has many products, but beginners should not start by memorizing product names. Start by understanding the problems Cloudflare solves: making applications faster and safer, helping developers build on the edge, and securing users, devices, SaaS apps, and private networks.',
+      }}
+    />
+  </header>
+
+  <section class="grid gap-4 md:grid-cols-3">
+    <div class="card md:col-span-2">
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Mental model', en: 'Mental model' }} />
+      <div class="text-muted mt-3 space-y-3 text-sm">
+        <p>
+          <span class="lang-vi">• “Với public apps: User → Cloudflare edge → website/app/API origin”</span>
+          <span class="lang-en">• “For public apps: User → Cloudflare edge → website/app/API origin”</span>
+        </p>
+        <p>
+          <span class="lang-vi">• “Với developer apps: User → Cloudflare edge → Worker/Pages/R2/D1/KV”</span>
+          <span class="lang-en">• “For developer apps: User → Cloudflare edge → Worker/Pages/R2/D1/KV”</span>
+        </p>
+        <p>
+          <span class="lang-vi">• “Với workforce security: User/device → Cloudflare Zero Trust → SaaS/private app/Internet”</span>
+          <span class="lang-en">• “For workforce security: User/device → Cloudflare Zero Trust → SaaS/private app/Internet”</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="card">
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Ba câu hỏi cho người mới', en: 'Three beginner questions' }} />
+      <ul class="text-muted mt-3 space-y-3 text-sm">
+        <li>
+          <span class="lang-vi">1) Bạn đã có website, app hoặc API chưa? → Application Services</span>
+          <span class="lang-en">1) Do you already have a website, app, or API? → Application Services</span>
+        </li>
+        <li>
+          <span class="lang-vi">2) Bạn muốn build app, API hoặc backend mới? → Developer Platform</span>
+          <span class="lang-en">2) Do you want to build a new app, API, or backend? → Developer Platform</span>
+        </li>
+        <li>
+          <span class="lang-vi">3) Bạn muốn bảo vệ nhân viên, SaaS, VPN hoặc private access? → Cloudflare One</span>
+          <span class="lang-en">3) Do you want to secure employees, SaaS, VPN, or private access? → Cloudflare One</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="mt-6 card">
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'What not to do first', en: 'What not to do first' }} />
+    <LangText
+      as="p"
+      class="text-muted mt-2 text-sm"
+      text={{
+        vi: 'Không nên bắt đầu bằng việc học từng product rời rạc như WAF, Workers, R2, D1, Access, Gateway hay Magic WAN. Người mới nên bắt đầu từ use case và vấn đề thực tế.',
+        en: 'Do not start by learning isolated product names such as WAF, Workers, R2, D1, Access, Gateway, or Magic WAN. Beginners should start with use cases and practical problems.',
+      }}
+    />
+  </section>
+
+  <section class="mt-6 card">
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Lộ trình 7 ngày (gợi ý)', en: 'Suggested 7-day path' }} />
+    <LangText
+      as="p"
+      class="text-muted mt-2 text-sm"
+      text={{
+        vi: 'Nếu bạn muốn kế hoạch cụ thể từng ngày — checklist, sai lầm thường gặp và cập nhật sản phẩm 2026.',
+        en: 'If you want a day-by-day plan — checklists, common mistakes, and a 2026 product snapshot.',
+      }}
+    />
+    <a class="btn btn-secondary mt-4" href="/first-week">
+      <LangText text={{ vi: 'Mở tuần đầu', en: 'Open first-week plan' }} />
+    </a>
+  </section>
+
+  <section class="mt-6 card">
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Tài nguyên chính thức', en: 'Official resources' }} />
+    <LangText
+      as="p"
+      class="text-muted mt-2 text-sm"
+      text={{
+        vi: 'Cloudflare có chỉ mục tài nguyên tập trung — docs, blog, community, case studies. Hub này tổ chức lại theo lộ trình beginner.',
+        en: 'Cloudflare maintains a central resource index — docs, blog, community, case studies. This hub reorganizes them for a beginner journey.',
+      }}
+    />
+    <a class="btn btn-secondary mt-4" href="/resources#resource-hub">
+      <LangText text={{ vi: 'Mở Resource Hub', en: 'Open Resource Hub' }} />
+    </a>
+  </section>
+
+  <CTASection
+    title={{ vi: 'Tiếp tục đến Cloudflare 101', en: 'Continue to Cloudflare 101' }}
+    description={{ vi: 'Nắm các khái niệm nền tảng để đọc tiếp toàn bộ hub.', en: 'Learn the foundational concepts for the rest of the hub.' }}
+    cta={{ href: '/cloudflare-101', label: { vi: 'Đi đến Cloudflare 101', en: 'Go to Cloudflare 101' } }}
+  />
+</BaseLayout>
+

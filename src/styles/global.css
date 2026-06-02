@@ -1,0 +1,268 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* --- Bilingual (static-first) --- */
+html[data-lang="en"] .lang-vi {
+  display: none !important;
+}
+html:not([data-lang="en"]) .lang-en {
+  display: none !important;
+}
+
+/* --- Design tokens --- */
+:root {
+  color-scheme: light;
+
+  --cf-bg: #f8fafc;
+  --cf-bg-elevated: #ffffff;
+  --cf-surface: rgba(255, 255, 255, 0.72);
+  --cf-border: rgba(148, 163, 184, 0.35);
+  --cf-text: #0f172a;
+  --cf-text-muted: #475569;
+  --cf-accent: #f6821a;
+  --cf-accent-hover: #e56f0f;
+  --cf-glow-orange: rgba(246, 130, 26, 0.2);
+  --cf-glow-amber: rgba(255, 200, 87, 0.14);
+  --cf-glow-blue: rgba(59, 130, 246, 0.1);
+  --cf-nav-bg: rgba(255, 255, 255, 0.75);
+  --cf-footer-bg: rgba(255, 255, 255, 0.6);
+  --cf-input-bg: #ffffff;
+  --cf-ring-offset: #ffffff;
+}
+
+html.dark {
+  color-scheme: dark;
+
+  --cf-bg: #07080c;
+  --cf-bg-elevated: #0f1117;
+  --cf-surface: #141820;
+  --cf-border: rgba(71, 85, 105, 0.45);
+  --cf-text: #f1f5f9;
+  --cf-text-muted: #94a3b8;
+  --cf-accent: #ff8c38;
+  --cf-accent-hover: #ffa04d;
+  --cf-glow-orange: rgba(255, 140, 56, 0.14);
+  --cf-glow-amber: rgba(255, 180, 80, 0.08);
+  --cf-glow-blue: rgba(56, 132, 255, 0.12);
+  --cf-nav-bg: rgba(7, 8, 12, 0.82);
+  --cf-footer-bg: rgba(10, 12, 18, 0.92);
+  --cf-input-bg: #0f1117;
+  --cf-ring-offset: #07080c;
+}
+
+body {
+  background-color: var(--cf-bg);
+  color: var(--cf-text);
+  @apply antialiased;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.container {
+  @apply mx-auto w-full max-w-6xl px-4;
+}
+
+/* Page shell background */
+.bg-hero {
+  min-height: 100dvh;
+  background-color: var(--cf-bg);
+  background-image:
+    radial-gradient(1100px 520px at 18% -5%, var(--cf-glow-orange), transparent 58%),
+    radial-gradient(800px 420px at 88% 8%, var(--cf-glow-amber), transparent 55%),
+    radial-gradient(900px 500px at 50% 105%, var(--cf-glow-blue), transparent 52%),
+    linear-gradient(180deg, transparent 0%, var(--cf-bg) 70%);
+}
+
+html.dark .bg-hero {
+  background-image:
+    radial-gradient(1000px 480px at 15% -8%, var(--cf-glow-orange), transparent 55%),
+    radial-gradient(700px 380px at 92% 5%, var(--cf-glow-amber), transparent 50%),
+    radial-gradient(800px 420px at 50% 100%, var(--cf-glow-blue), transparent 48%),
+    linear-gradient(180deg, #0c0e14 0%, var(--cf-bg) 45%);
+}
+
+/* Cards */
+.card {
+  @apply rounded-2xl p-6 shadow-sm;
+  background: var(--cf-surface);
+  border: 1px solid var(--cf-border);
+  backdrop-filter: blur(12px);
+}
+
+html.dark .card {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 12px 40px -12px rgba(0, 0, 0, 0.55);
+}
+
+.card-hero-glow {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-hero-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.55;
+  background:
+    radial-gradient(700px 320px at 8% 0%, var(--cf-glow-orange), transparent 62%),
+    radial-gradient(600px 280px at 95% 15%, var(--cf-glow-amber), transparent 58%);
+}
+
+html.dark .card-hero-glow::before {
+  opacity: 0.85;
+}
+
+/* Buttons */
+.btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium
+    transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cf-accent)]
+    focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--cf-ring-offset)];
+}
+
+.btn:disabled {
+  @apply cursor-not-allowed opacity-50;
+}
+
+.btn-primary {
+  background: var(--cf-accent);
+  color: #fff;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--cf-accent-hover);
+}
+
+html.dark .btn-primary {
+  box-shadow: 0 0 24px -4px rgba(255, 140, 56, 0.45);
+}
+
+.btn-secondary {
+  background: var(--cf-bg-elevated);
+  border: 1px solid var(--cf-border);
+  color: var(--cf-text);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  filter: brightness(1.06);
+}
+
+html.dark .btn-secondary:hover:not(:disabled) {
+  background: #1a1f2a;
+  border-color: rgba(148, 163, 184, 0.35);
+}
+
+.btn-ghost {
+  color: var(--cf-text-muted);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: rgba(148, 163, 184, 0.12);
+  color: var(--cf-text);
+}
+
+html.dark .btn-ghost:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Chrome */
+.site-header {
+  border-bottom: 1px solid var(--cf-border);
+  background: var(--cf-nav-bg);
+  backdrop-filter: blur(16px) saturate(1.2);
+}
+
+html.dark .site-header {
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.site-footer {
+  border-top: 1px solid var(--cf-border);
+  background: var(--cf-footer-bg);
+  backdrop-filter: blur(12px);
+}
+
+.nav-link-active {
+  background: rgba(148, 163, 184, 0.15);
+  color: var(--cf-text);
+}
+
+html.dark .nav-link-active {
+  background: rgba(255, 140, 56, 0.12);
+  color: var(--cf-text);
+}
+
+/* Typography helpers */
+.text-muted {
+  color: var(--cf-text-muted);
+}
+
+.badge {
+  @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+  border: 1px solid var(--cf-border);
+  background: var(--cf-bg-elevated);
+  color: var(--cf-text-muted);
+}
+
+.badge-accent {
+  border-color: transparent;
+  background: rgba(246, 130, 26, 0.15);
+  color: #c2410c;
+}
+
+html.dark .badge-accent {
+  background: rgba(255, 140, 56, 0.18);
+  color: #fdba74;
+}
+
+.eyebrow {
+  @apply inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium;
+  border: 1px solid var(--cf-border);
+  background: var(--cf-bg-elevated);
+  color: var(--cf-text-muted);
+}
+
+.prose-learn {
+  @apply leading-relaxed;
+  color: var(--cf-text-muted);
+}
+
+.link {
+  color: var(--cf-accent);
+  @apply underline-offset-4 hover:underline;
+}
+
+.link:hover {
+  color: var(--cf-accent-hover);
+}
+
+/* Form inputs (React islands) */
+.cf-input {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid var(--cf-border);
+  background: var(--cf-input-bg);
+  color: var(--cf-text);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.cf-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--cf-accent);
+}
+
+/* Progress bar */
+.cf-progress-track {
+  background: rgba(148, 163, 184, 0.2);
+}
+
+html.dark .cf-progress-track {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.cf-progress-bar {
+  background: var(--cf-accent);
+}

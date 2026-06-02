@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/chrome/Breadcrumbs.astro';
+import LangText from '../components/ui/LangText.astro';
+---
+
+<BaseLayout
+  title={{ vi: 'Privacy', en: 'Privacy' }}
+  description={{ vi: 'Thông tin thu thập và cách sử dụng dữ liệu trên Cloudflare Starter Hub.', en: 'What we collect and how data is used on Cloudflare Starter Hub.' }}
+  canonicalPath="/privacy"
+>
+  <Breadcrumbs items={[{ href: '/privacy', label: { vi: 'Privacy', en: 'Privacy' } }]} />
+
+  <header class="mb-6">
+    <LangText as="h1" class="text-2xl font-semibold" text={{ vi: 'Privacy', en: 'Privacy' }} />
+  </header>
+
+  <div class="card prose-learn space-y-4 text-sm">
+    <section>
+      <h2 class="font-semibold">
+        <span class="lang-vi">Dữ liệu thu thập</span>
+        <span class="lang-en">Data we collect</span>
+      </h2>
+      <ul class="mt-2 list-disc space-y-2 pl-5">
+        <li>
+          <span class="lang-vi">Workshop signup: tên, email, công ty, vai trò, mối quan tâm, câu hỏi.</span>
+          <span class="lang-en">Workshop signup: name, email, company, role, interest, question.</span>
+        </li>
+        <li>
+          <span class="lang-vi">Quiz analytics: điểm, quiz id, lộ trình gợi ý (ẩn danh).</span>
+          <span class="lang-en">Quiz analytics: score, quiz id, suggested path (anonymous).</span>
+        </li>
+        <li>
+          <span class="lang-vi">Feedback: tin nhắn và trang bạn gửi từ.</span>
+          <span class="lang-en">Feedback: message and page path.</span>
+        </li>
+      </ul>
+    </section>
+    <section>
+      <h2 class="font-semibold">localStorage</h2>
+      <p class="mt-2">
+        <span class="lang-vi">Checklist, quiz, ngôn ngữ và theme được lưu trên trình duyệt — không gửi lên server trừ khi bạn submit form/quiz.</span>
+        <span class="lang-en">Checklist, quiz, language, and theme are stored in your browser — not sent to the server unless you submit a form/quiz.</span>
+      </p>
+    </section>
+    <section>
+      <h2 class="font-semibold">
+        <span class="lang-vi">Không lưu IP thô</span>
+        <span class="lang-en">No raw IP storage</span>
+      </h2>
+      <p class="mt-2">
+        <span class="lang-vi">Server có thể hash IP/user-agent để rate limiting, không lưu địa chỉ IP trực tiếp.</span>
+        <span class="lang-en">The server may hash IP/user-agent for rate limiting; raw IPs are not stored.</span>
+      </p>
+    </section>
+  </div>
+</BaseLayout>

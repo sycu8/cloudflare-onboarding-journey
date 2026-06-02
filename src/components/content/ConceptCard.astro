@@ -1,0 +1,16 @@
+---
+import LangText from '../ui/LangText.astro';
+
+type Props = {
+  title: { vi: string; en: string };
+  description: { vi: string; en: string };
+};
+
+const { title, description } = Astro.props;
+---
+
+<div class="card h-full">
+  <LangText as="h3" class="text-lg font-semibold" text={title} />
+  <LangText as="p" class="text-muted mt-2 text-sm" text={description} />
+</div>
+

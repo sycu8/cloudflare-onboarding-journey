@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/chrome/Breadcrumbs.astro';
+import LangText from '../../components/ui/LangText.astro';
+import ChecklistBlock from '../../components/interactive/ChecklistBlock';
+import { beginnerChecklist } from '../../data/checklists';
+---
+
+<BaseLayout
+  title={{ vi: 'Beginner Cloudflare checklist', en: 'Beginner Cloudflare checklist' }}
+  description={{
+    vi: 'Checklist tương tác để tự đánh giá bạn đã sẵn sàng bước tiếp theo chưa.',
+    en: 'Interactive checklist to see if you are ready for the next step.',
+  }}
+  canonicalPath="/checklists/beginner-cloudflare-checklist"
+  showProgressBar
+>
+  <Breadcrumbs
+    items={[{ href: '/checklists/beginner-cloudflare-checklist', label: { vi: 'Checklist', en: 'Checklist' } }]}
+  />
+
+  <header class="mb-6">
+    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: 'Beginner Cloudflare checklist', en: 'Beginner Cloudflare checklist' }} />
+    <p class="text-muted mt-2 text-sm">
+      <span class="lang-vi">Tiến độ được lưu trên trình duyệt (localStorage).</span>
+      <span class="lang-en">Progress is saved in your browser (localStorage).</span>
+    </p>
+  </header>
+
+  <ChecklistBlock client:load sections={beginnerChecklist} />
+</BaseLayout>

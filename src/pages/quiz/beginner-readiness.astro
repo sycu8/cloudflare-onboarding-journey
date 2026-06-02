@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/chrome/Breadcrumbs.astro';
+import LangText from '../../components/ui/LangText.astro';
+import QuizBlock from '../../components/interactive/QuizBlock';
+import { beginnerReadinessQuiz } from '../../data/quiz';
+---
+
+<BaseLayout
+  title={beginnerReadinessQuiz.title}
+  description={beginnerReadinessQuiz.description}
+  canonicalPath="/quiz/beginner-readiness"
+  showProgressBar
+>
+  <Breadcrumbs
+    items={[{ href: '/quiz/beginner-readiness', label: { vi: 'Kiểm tra kiến thức', en: 'Knowledge check' } }]}
+  />
+
+  <header class="mb-6">
+    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={beginnerReadinessQuiz.title} />
+    <LangText as="p" class="text-muted mt-2 max-w-3xl text-sm" text={beginnerReadinessQuiz.subtitle} />
+    <LangText as="p" class="text-muted mt-2 max-w-3xl text-sm leading-relaxed" text={beginnerReadinessQuiz.description} />
+  </header>
+
+  <section class="card mb-6">
+    <LangText as="h2" class="text-base font-semibold" text={{ vi: 'Nên làm quiz khi nào?', en: 'When should you take this quiz?' }} />
+    <ul class="text-muted mt-3 list-disc space-y-2 pl-5 text-sm">
+      <li>
+        <span class="lang-vi">Sau <a class="link" href="/cloudflare-101">Cloudflare 101</a> hoặc <a class="link" href="/first-week">lộ trình 7 ngày</a></span>
+        <span class="lang-en">After <a class="link" href="/cloudflare-101">Cloudflare 101</a> or the <a class="link" href="/first-week">7-day path</a></span>
+      </li>
+      <li>
+        <span class="lang-vi">Sau khi học ít nhất một <a class="link" href="/tracks">lộ trình</a> hoặc hoàn thành <a class="link" href="/checklists/beginner-cloudflare-checklist">checklist</a></span>
+        <span class="lang-en">After one <a class="link" href="/tracks">learning track</a> or the <a class="link" href="/checklists/beginner-cloudflare-checklist">checklist</a></span>
+      </li>
+      <li>
+        <span class="lang-vi">Trước khi chọn use case hoặc đăng ký workshop — để tự tin hơn với các khái niệm cơ bản</span>
+        <span class="lang-en">Before picking a use case or workshop — to confirm core concepts</span>
+      </li>
+    </ul>
+    <p class="text-muted mt-4 text-xs">
+      <span class="lang-vi">
+        Đạt từ {beginnerReadinessQuiz.passingScore}/{beginnerReadinessQuiz.questions.length} câu trở lên được coi là nắm cơ bản. Kết quả lưu trên trình duyệt; điểm gửi ẩn danh nếu API sẵn sàng.
+      </span>
+      <span class="lang-en">
+        {beginnerReadinessQuiz.passingScore}/{beginnerReadinessQuiz.questions.length} or more counts as a solid baseline. Results stay in your browser; score may be sent anonymously if the API is available.
+      </span>
+    </p>
+  </section>
+
+  <QuizBlock client:load />
+</BaseLayout>
