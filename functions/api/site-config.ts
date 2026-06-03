@@ -2,6 +2,8 @@ import { jsonResponse } from '../../src/lib/server/json';
 
 export const onRequestGet: PagesFunction<{
   SITE_CONFIG?: KVNamespace;
+  PUBLIC_TURNSTILE_SITE_KEY?: string;
+  TURNSTILE_SECRET_KEY?: string;
 }> = async ({ env }) => {
   const kv = env.SITE_CONFIG;
 
@@ -17,6 +19,8 @@ export const onRequestGet: PagesFunction<{
       ok: true,
       workshopEnabled,
       resourceDownloadsEnabled,
+      turnstileSiteKey: env.PUBLIC_TURNSTILE_SITE_KEY || null,
+      turnstileRequired: Boolean(env.TURNSTILE_SECRET_KEY),
       announcementBanner: announcementBannerRaw
         ? (() => {
             try {

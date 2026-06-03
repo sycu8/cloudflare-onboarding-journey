@@ -1,0 +1,35 @@
+{
+  "issuer": "https://onboarding.orangecloud.vn",
+  "authorization_endpoint": "https://onboarding.orangecloud.vn/.well-known/oauth/authorize",
+  "token_endpoint": "https://onboarding.orangecloud.vn/.well-known/oauth/token",
+  "jwks_uri": "https://onboarding.orangecloud.vn/.well-known/jwks.json",
+  "registration_endpoint": "https://onboarding.orangecloud.vn/.well-known/oauth/register",
+  "grant_types_supported": [
+    "client_credentials",
+    "urn:ietf:params:oauth:grant-type:token-exchange"
+  ],
+  "response_types_supported": [
+    "token"
+  ],
+  "token_endpoint_auth_methods_supported": [
+    "none",
+    "client_secret_post"
+  ],
+  "scopes_supported": [
+    "hub.read",
+    "workshop.admin"
+  ],
+  "agent_auth": {
+    "skill": "https://onboarding.orangecloud.vn/auth.md",
+    "register_uri": "https://onboarding.orangecloud.vn/.well-known/oauth/register",
+    "identity_types_supported": [
+      "anonymous"
+    ],
+    "anonymous": {
+      "credential_types_supported": [
+        "bearer"
+      ],
+      "claim_uri": "https://onboarding.orangecloud.vn/.well-known/oauth/agent-claim"
+    }
+  }
+}

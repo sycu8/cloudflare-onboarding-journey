@@ -1,0 +1,51 @@
+---
+import '../styles/global.css';
+import { assetUrl } from '../lib/assets';
+import { siteSeo, formatTitle } from '../lib/seo';
+
+const faviconHref = assetUrl('favicon.svg');
+const siteName = siteSeo.name;
+const siteOrigin = Astro.site ?? siteSeo.origin;
+const titleVi = formatTitle('Quản trị', siteName);
+const titleEn = formatTitle('Admin', siteName);
+---
+
+<html lang="vi" data-lang="vi" data-seo-title-vi={titleVi} data-seo-title-en={titleEn}>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href={faviconHref} />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content={siteSeo.themeColor} />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="stylesheet" href="/styles/site.css" />
+    <style is:inline>
+      html[data-lang='en'] .lang-vi{display:none!important}
+      html:not([data-lang='en']) .lang-en{display:none!important}
+    </style>
+    <title>{titleVi}</title>
+    <meta name="description" content="Khu vực quản trị workshop — Cloudflare Access." />
+    <link rel="canonical" href={new URL('/admin/', siteOrigin).href} />
+    <script is:inline>
+      (function () {
+        try {
+          var lang = localStorage.getItem('cfhub_language');
+          if (lang !== 'en') lang = 'vi';
+          document.documentElement.dataset.lang = lang;
+          document.documentElement.lang = lang;
+        } catch (_) {}
+        try {
+          var theme = localStorage.getItem('cfhub_theme');
+          if (!theme) {
+            theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          if (theme === 'dark') document.documentElement.classList.add('dark');
+          else document.documentElement.classList.remove('dark');
+        } catch (_) {}
+      })();
+    </script>
+  </head>
+  <body class="admin-body">
+    <slot />
+  </body>
+</html>

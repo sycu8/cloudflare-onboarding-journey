@@ -1,11 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
+import { adminFetch } from '../../lib/adminApi';
 import type { WorkshopEvent, WorkshopEventFormat, WorkshopEventStatus } from '../../types/workshop';
-import {
-  adminHeaders,
-  clearStoredAdminKey,
-  getStoredAdminKey,
-  setStoredAdminKey,
-} from '../../lib/workshop/adminKey';
 import { usePageLang } from '../../lib/usePageLang';
 
 type Interest = 'application-services' | 'developer-platform' | 'cloudflare-one' | 'not-sure';
@@ -16,10 +11,13 @@ function toIsoFromLocal(local: string) {
   return Number.isNaN(d.getTime()) ? '' : d.toISOString();
 }
 
-export default function WorkshopAdminPanel() {
-  const [adminKey, setAdminKey] = useState('');
-  const [authenticated, setAuthenticated] = useState(false);
-  const [events, setEvents] = useState<WorkshopEvent[]>([]);
+type Props = {
+  events: WorkshopEvent[];
+  onCreated: () => void;
+};
+
+export default function WorkshopEventsAdmin({ events, onCreated }: Props) {
+  const lang = usePageLang();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -38,57 +36,6 @@ export default function WorkshopAdminPanel() {
   const [capacity, setCapacity] = useState('');
   const [primaryInterest, setPrimaryInterest] = useState<Interest | ''>('');
   const [status, setStatus] = useState<WorkshopEventStatus>('published');
-
-  const lang = usePageLang();
-
-  const loadEvents = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await fetch('/api/workshop-events', { headers: adminHeaders() });
-      const data = await res.json();
-      if (!res.ok || !data.ok) {
-        if (res.status === 401) {
-          clearStoredAdminKey();
-          setAuthenticated(false);
-          throw new Error('unauthorized');
-        }
-        throw new Error(data.error || 'load_failed');
-      }
-      setEvents(data.events ?? []);
-      setAuthenticated(true);
-    } catch (e) {
-      if ((e as Error).message === 'unauthorized') {
-        setError(lang === 'en' ? 'Invalid admin key.' : 'Khóa admin không đúng.');
-      } else {
-        setError(lang === 'en' ? 'Could not load events.' : 'Không tải được danh sách sự kiện.');
-      }
-    } finally {
-      setLoading(false);
-    }
-  }, [lang]);
-
-  useEffect(() => {
-    const stored = getStoredAdminKey();
-    if (stored) {
-      setAdminKey(stored);
-      setAuthenticated(true);
-      void loadEvents();
-    }
-  }, [loadEvents]);
-
-  function saveKey(e: React.FormEvent) {
-    e.preventDefault();
-    setStoredAdminKey(adminKey.trim());
-    void loadEvents();
-  }
-
-  function logout() {
-    clearStoredAdminKey();
-    setAuthenticated(false);
-    setEvents([]);
-    setAdminKey('');
-  }
 
   async function createEvent(e: React.FormEvent) {
     e.preventDefault();
@@ -123,9 +70,9 @@ export default function WorkshopAdminPanel() {
     if (primaryInterest) body.primaryInterest = primaryInterest;
 
     try {
-      const res = await fetch('/api/workshop-events', {
+      const res = await adminFetch('/events', {
         method: 'POST',
-        headers: { 'content-type': 'application/json', 'x-cfhub-lang': lang, ...adminHeaders() },
+        headers: { 'content-type': 'application/json', 'x-cfhub-lang': lang },
         body: JSON.stringify(body),
       });
       const data = await res.json();
@@ -143,7 +90,7 @@ export default function WorkshopAdminPanel() {
       setLocationEn('');
       setMeetingUrl('');
       setCapacity('');
-      void loadEvents();
+      onCreated();
     } catch {
       setError(lang === 'en' ? 'Could not create event.' : 'Không tạo được sự kiện.');
     } finally {
@@ -151,62 +98,13 @@ export default function WorkshopAdminPanel() {
     }
   }
 
-  if (!authenticated) {
-    return (
-      <form className="card space-y-4" onSubmit={saveKey}>
-        <h2 className="text-lg font-semibold">
-          <span className="lang-vi">Admin — thêm sự kiện workshop</span>
-          <span className="lang-en">Admin — add workshop event</span>
-        </h2>
-        <p className="text-muted text-sm">
-          <span className="lang-vi">Nhập khóa admin (WORKSHOP_ADMIN_KEY trên Cloudflare). Khóa chỉ lưu trong phiên trình duyệt.</span>
-          <span className="lang-en">Enter the admin key (WORKSHOP_ADMIN_KEY on Cloudflare). Stored in session only.</span>
-        </p>
-        <label className="block text-sm">
-          <span className="lang-vi">Khóa admin</span>
-          <span className="lang-en">Admin key</span>
-          <input
-            className="cf-input mt-1 font-mono"
-            type="password"
-            required
-            value={adminKey}
-            onChange={(e) => setAdminKey(e.target.value)}
-            autoComplete="off"
-          />
-        </label>
-        {error ? <p className="text-sm text-red-400">{error}</p> : null}
-        <button type="submit" className="btn btn-primary w-full" disabled={loading}>
-          <span className="lang-vi">Đăng nhập admin</span>
-          <span className="lang-en">Sign in as admin</span>
-        </button>
-      </form>
-    );
-  }
-
   return (
     <div className="space-y-6">
-      <div className="card flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h2 className="text-lg font-semibold">
-            <span className="lang-vi">Quản lý sự kiện workshop</span>
-            <span className="lang-en">Workshop event admin</span>
-          </h2>
-          <p className="text-muted text-sm">
-            <span className="lang-vi">{events.length} sự kiện (gồm draft)</span>
-            <span className="lang-en">{events.length} events (including drafts)</span>
-          </p>
-        </div>
-        <button type="button" className="btn btn-secondary" onClick={logout}>
-          <span className="lang-vi">Đăng xuất</span>
-          <span className="lang-en">Sign out</span>
-        </button>
-      </div>
-
       <form className="card space-y-4" onSubmit={createEvent}>
-        <h3 className="font-semibold">
+        <h2 className="font-semibold">
           <span className="lang-vi">Thêm sự kiện mới</span>
           <span className="lang-en">Add new event</span>
-        </h3>
+        </h2>
 
         <div className="grid gap-4 md:grid-cols-2">
           <label className="block text-sm">
@@ -234,23 +132,12 @@ export default function WorkshopAdminPanel() {
           <label className="block text-sm">
             <span className="lang-vi">Bắt đầu</span>
             <span className="lang-en">Starts</span>
-            <input
-              className="cf-input mt-1"
-              type="datetime-local"
-              required
-              value={startsAtLocal}
-              onChange={(e) => setStartsAtLocal(e.target.value)}
-            />
+            <input className="cf-input mt-1" type="datetime-local" required value={startsAtLocal} onChange={(e) => setStartsAtLocal(e.target.value)} />
           </label>
           <label className="block text-sm">
             <span className="lang-vi">Kết thúc (tuỳ chọn)</span>
             <span className="lang-en">Ends (optional)</span>
-            <input
-              className="cf-input mt-1"
-              type="datetime-local"
-              value={endsAtLocal}
-              onChange={(e) => setEndsAtLocal(e.target.value)}
-            />
+            <input className="cf-input mt-1" type="datetime-local" value={endsAtLocal} onChange={(e) => setEndsAtLocal(e.target.value)} />
           </label>
         </div>
 
@@ -302,11 +189,7 @@ export default function WorkshopAdminPanel() {
           <label className="block text-sm">
             <span className="lang-vi">Track gợi ý</span>
             <span className="lang-en">Suggested track</span>
-            <select
-              className="cf-input mt-1"
-              value={primaryInterest}
-              onChange={(e) => setPrimaryInterest(e.target.value as Interest | '')}
-            >
+            <select className="cf-input mt-1" value={primaryInterest} onChange={(e) => setPrimaryInterest(e.target.value as Interest | '')}>
               <option value="">—</option>
               <option value="application-services">Application Services</option>
               <option value="developer-platform">Developer Platform</option>
@@ -319,7 +202,7 @@ export default function WorkshopAdminPanel() {
         {message ? <p className="text-sm text-[var(--cf-success,#16a34a)]">{message}</p> : null}
         {error ? <p className="text-sm text-red-400">{error}</p> : null}
 
-        <button type="submit" className="btn btn-primary w-full" disabled={loading}>
+        <button type="submit" className="btn btn-primary w-full sm:w-auto" disabled={loading}>
           <span className="lang-vi">{loading ? 'Đang lưu…' : 'Tạo sự kiện'}</span>
           <span className="lang-en">{loading ? 'Saving…' : 'Create event'}</span>
         </button>
@@ -327,6 +210,10 @@ export default function WorkshopAdminPanel() {
 
       {events.length > 0 ? (
         <div className="card overflow-x-auto">
+          <h2 className="mb-3 font-semibold">
+            <span className="lang-vi">Tất cả sự kiện</span>
+            <span className="lang-en">All events</span>
+          </h2>
           <table className="w-full text-left text-sm">
             <thead>
               <tr className="text-muted border-b border-[var(--cf-border)]">
@@ -350,7 +237,12 @@ export default function WorkshopAdminPanel() {
             </tbody>
           </table>
         </div>
-      ) : null}
+      ) : (
+        <div className="card text-muted text-sm">
+          <span className="lang-vi">Chưa có sự kiện nào.</span>
+          <span className="lang-en">No events yet.</span>
+        </div>
+      )}
     </div>
   );
 }

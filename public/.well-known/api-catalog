@@ -1,0 +1,25 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://onboarding.orangecloud.vn/api",
+      "service-desc": [
+        {
+          "href": "https://onboarding.orangecloud.vn/.well-known/openapi.json",
+          "type": "application/vnd.oai.openapi+json;version=3.1"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://onboarding.orangecloud.vn/docs/api/",
+          "type": "text/html"
+        }
+      ],
+      "status": [
+        {
+          "href": "https://onboarding.orangecloud.vn/api/site-config",
+          "type": "application/json"
+        }
+      ]
+    }
+  ]
+}

@@ -1,4 +1,6 @@
-# Cloudflare Pages — trailing slashes (match astro trailingSlash: always)
+/workshop/admin /admin/ 302
+/workshop/admin/ /admin/ 302
+
 /use-cases /use-cases/ 301
 /use-cases/application-services /use-cases/application-services/ 301
 /use-cases/developer-platform /use-cases/developer-platform/ 301

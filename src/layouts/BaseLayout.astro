@@ -19,6 +19,7 @@ type Props = {
 };
 
 const { title, description, canonicalPath, showProgressBar = false, ogImage, noindex = false } = Astro.props;
+const enableWebMcp = canonicalPath === '/' || Astro.url.pathname === '/';
 const siteName = siteSeo.name;
 const siteOrigin = Astro.site ?? siteSeo.origin;
 const canonical = new URL(canonicalPath ?? Astro.url.pathname, siteOrigin);
@@ -42,6 +43,12 @@ const imageUrl = new URL(ogImage ?? siteSeo.defaultImage, siteOrigin).href;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <meta name="theme-color" content={siteSeo.themeColor} />
+
+    <link rel="stylesheet" href="/styles/site.css" />
+    <style is:inline>
+      html[data-lang='en'] .lang-vi{display:none!important}
+      html:not([data-lang='en']) .lang-en{display:none!important}
+    </style>
 
     <title>{titleVi}</title>
     <meta name="description" content={description.vi} />
@@ -87,6 +94,7 @@ const imageUrl = new URL(ogImage ?? siteSeo.defaultImage, siteOrigin).href;
         } catch (e) {}
       })();
     </script>
+    {enableWebMcp ? <script is:inline src="/scripts/webmcp-bootstrap.js"></script> : null}
   </head>
   <body>
     <div class="min-h-dvh bg-hero">

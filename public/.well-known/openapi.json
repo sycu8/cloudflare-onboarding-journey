@@ -1,0 +1,120 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Cloudflare Starter Hub API",
+    "version": "1.0.0",
+    "description": "Public read APIs and form submission endpoints for the Cloudflare Starter Hub learning site."
+  },
+  "servers": [
+    {
+      "url": "https://onboarding.orangecloud.vn/api"
+    }
+  ],
+  "paths": {
+    "/site-config": {
+      "get": {
+        "operationId": "getSiteConfig",
+        "summary": "Site feature flags and announcement banner",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    },
+                    "workshopEnabled": {
+                      "type": "boolean"
+                    },
+                    "resourceDownloadsEnabled": {
+                      "type": "boolean"
+                    },
+                    "announcementBanner": {
+                      "nullable": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/workshop-events": {
+      "get": {
+        "operationId": "listWorkshopEvents",
+        "summary": "List published workshop events",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "operationId": "createWorkshopEvent",
+        "summary": "Create event (requires Bearer admin key)",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/workshop-signup": {
+      "post": {
+        "operationId": "workshopSignup",
+        "summary": "Register for a workshop (Turnstile + rate limit)",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/feedback": {
+      "post": {
+        "operationId": "submitFeedback",
+        "summary": "Submit site feedback",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/quiz-submission": {
+      "post": {
+        "operationId": "submitQuiz",
+        "summary": "Submit beginner quiz answers",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "WORKSHOP_ADMIN_KEY for admin writes"
+      }
+    }
+  }
+}

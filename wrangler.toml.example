@@ -20,3 +20,11 @@ bucket_name = "cloudflare-starter-hub-resources"
 
 [ai]
 binding = "AI"
+
+# Workshop email — Cloudflare Email Service REST API (no send_email binding on Pages)
+[vars]
+CLOUDFLARE_ACCOUNT_ID = "REPLACE_WITH_ACCOUNT_ID"
+
+# Pages secret: CLOUDFLARE_EMAIL_API_TOKEN (Email Sending permission)
+# Optional vars: WORKSHOP_EMAIL_FROM, PUBLIC_SITE_URL
+# Domain orangecloud.vn must be onboarded in Email Service (SPF/DKIM)

@@ -4,8 +4,12 @@ import Breadcrumbs from '../components/chrome/Breadcrumbs.astro';
 import LangText from '../components/ui/LangText.astro';
 import CTASection from '../components/content/CTASection.astro';
 import Cloudflare101Catalog from '../components/content/Cloudflare101Catalog.astro';
+import Cloudflare101PracticalGuides from '../components/content/Cloudflare101PracticalGuides';
+import Cloudflare101Terminology from '../components/content/Cloudflare101Terminology.astro';
 import ReferenceDiagramFigure from '../components/content/ReferenceDiagramFigure.astro';
 import { cf101Categories, cf101Foundations, developerDocsHome, docsUrl } from '../data/cloudflare101';
+import { basicConfigurationSections, wafBestPractices } from '../data/cf101PracticalGuides';
+import { cf101TerminologySections } from '../data/cf101Terminology';
 import { getDiagramsForHubPage } from '../data/referenceDiagrams';
 
 const cf101Diagrams = getDiagramsForHubPage('/cloudflare-101');
@@ -63,6 +67,8 @@ const cf101Diagrams = getDiagramsForHubPage('/cloudflare-101');
   {
     [
       { id: 'foundations', vi: 'Nền tảng', en: 'Foundations' },
+      { id: 'terminology', vi: 'Thuật ngữ', en: 'Terminology' },
+      { id: 'practical-guides', vi: 'Cấu hình & WAF', en: 'Config & WAF' },
       ...cf101Categories.map((c) => ({ id: c.id, vi: c.title.vi, en: c.title.en })),
     ].map((s) => (
       <a href={`#${s.id}`} class="badge hover:border-[var(--cf-accent)]">
@@ -130,6 +136,36 @@ const cf101Diagrams = getDiagramsForHubPage('/cloudflare-101');
     </ul>
   </section>
 
+  <section id="terminology" class="mt-10 scroll-mt-24 border-t pt-10" style="border-color: var(--cf-border)">
+    <LangText
+      as="h2"
+      class="mb-2 text-xl font-semibold md:text-2xl"
+      text={{ vi: 'Thuật ngữ Cloudflare', en: 'Cloudflare terminology' }}
+    />
+    <LangText
+      as="p"
+      class="text-muted mb-6 max-w-3xl text-sm leading-relaxed"
+      text={{
+        vi: 'Từ điển thuật ngữ từ tài liệu đào tạo nội bộ — bổ sung cho phần Nền tảng và bản đồ sản phẩm.',
+        en: 'Terminology from internal training material — complements Foundations and the product map.',
+      }}
+    />
+    <Cloudflare101Terminology sections={cf101TerminologySections} />
+  </section>
+
+  <section id="practical-guides" class="mt-10 scroll-mt-24 border-t pt-10" style="border-color: var(--cf-border)">
+    <LangText
+      as="h2"
+      class="mb-2 text-xl font-semibold md:text-2xl"
+      text={{ vi: 'Hướng dẫn thực hành', en: 'Practical guides' }}
+    />
+    <Cloudflare101PracticalGuides
+      client:load
+      configSections={basicConfigurationSections}
+      wafPractices={wafBestPractices}
+    />
+  </section>
+
   <div class="mt-10 border-t pt-10" style="border-color: var(--cf-border)">
     <Cloudflare101Catalog categories={cf101Categories} />
   </div>
@@ -138,6 +174,8 @@ const cf101Diagrams = getDiagramsForHubPage('/cloudflare-101');
     <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Đọc sâu hơn', en: 'Go deeper' }} />
     <p class="text-muted mt-2 text-sm leading-relaxed">
       <span class="lang-vi">
+        <a class="link" href="/glossary">Glossary</a> ·
+        <a class="link" href="#terminology">Thuật ngữ CF101</a> ·
         <a class="link" href="/first-week#platform-2026">Cập nhật 2026</a> ·
         <a class="link" href="/resources#reference-diagrams">Reference Diagrams</a> ·
         <a class="link" href="/resources#reference-architecture">Reference Architecture</a> ·
@@ -145,6 +183,8 @@ const cf101Diagrams = getDiagramsForHubPage('/cloudflare-101');
         <a class="link" href="https://cloudsecop.net/tag/cloudflare/" target="_blank" rel="noopener noreferrer">CloudSecOp</a>
       </span>
       <span class="lang-en">
+        <a class="link" href="/glossary">Glossary</a> ·
+        <a class="link" href="#terminology">CF101 terminology</a> ·
         <a class="link" href="/first-week#platform-2026">2026 snapshot</a> ·
         <a class="link" href="/resources#reference-diagrams">Reference Diagrams</a> ·
         <a class="link" href="/resources#reference-architecture">Reference Architecture</a> ·

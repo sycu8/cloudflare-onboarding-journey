@@ -305,5 +305,68 @@ export const glossary: GlossaryTerm[] = [
       en: 'The Agents SDK builds stateful assistants (chat, tools) on Workers + Durable Objects.',
     },
   },
+  {
+    term: 'TTL',
+    category: 'Core',
+    relatedTrack: 'application-services',
+    definition: {
+      vi: 'Time To Live — thời gian resolver hoặc cache giữ bản ghi/nội dung trước khi hết hạn.',
+      en: 'Time To Live — how long a resolver or cache keeps a record or object before expiry.',
+    },
+  },
+  {
+    term: 'Orange Cloud',
+    category: 'Core',
+    relatedTrack: 'application-services',
+    definition: {
+      vi: 'DNS record được proxy — traffic đi qua Cloudflare (bảo mật, cache, WAF).',
+      en: 'Proxied DNS record — traffic flows through Cloudflare for security, cache, and WAF.',
+    },
+  },
+  {
+    term: 'Gray Cloud',
+    category: 'Core',
+    relatedTrack: 'application-services',
+    definition: {
+      vi: 'DNS only — Cloudflare chỉ phân giải DNS, traffic không qua proxy.',
+      en: 'DNS-only — Cloudflare resolves DNS but traffic bypasses the proxy.',
+    },
+  },
+  {
+    term: 'Anycast',
+    category: 'Core',
+    relatedTrack: 'application-services',
+    definition: {
+      vi: 'Một IP được quảng bá từ nhiều POP — routing tới edge gần người dùng nhất.',
+      en: 'One IP announced from many POPs — routes to the nearest edge.',
+    },
+  },
+  {
+    term: 'Bot Score',
+    category: 'App Security',
+    relatedTrack: 'application-services',
+    definition: {
+      vi: 'Điểm 1–99 đánh giá khả năng request là bot: 1 = chắc chắn bot, 30–99 = likely human.',
+      en: 'Score 1–99 estimating automation: 1 = definitely bot, 30–99 = likely human.',
+    },
+  },
+  {
+    term: 'Managed Challenge',
+    category: 'App Security',
+    relatedTrack: 'application-services',
+    definition: {
+      vi: 'Cloudflare tự chọn cơ chế xác minh (JS, interactive) và cấp cookie cf_clearance khi pass.',
+      en: 'Cloudflare picks verification (JS, interactive) and sets cf_clearance when passed.',
+    },
+  },
+  {
+    term: 'Managed Ruleset',
+    category: 'App Security',
+    relatedTrack: 'application-services',
+    definition: {
+      vi: 'Bộ rule WAF do Cloudflare duy trì và cập nhật — chặn OWASP, CVE, path nhạy cảm.',
+      en: 'Cloudflare-maintained WAF rules — blocks OWASP patterns, CVEs, sensitive paths.',
+    },
+  },
 ];
 

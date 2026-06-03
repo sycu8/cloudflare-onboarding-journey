@@ -10,12 +10,20 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
+const site = (process.env.PUBLIC_SITE_URL || 'https://onboarding.orangecloud.vn').replace(/\/$/, '');
+
 export default defineConfig({
-  site: process.env.PUBLIC_SITE_URL || 'https://cloudflare-starter-hub.pages.dev',
+  site,
   trailingSlash: 'always',
   vite: {
     plugins: [tailwindcss()]
   },
 
-  integrations: [react(), mdx(), sitemap()]
+  integrations: [
+    react(),
+    mdx(),
+    sitemap({
+      filter: (page) => !page.includes('/admin') && !page.includes('/workshop/admin'),
+    }),
+  ],
 });

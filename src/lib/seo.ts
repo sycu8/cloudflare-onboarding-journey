@@ -3,7 +3,7 @@ import { assetUrl } from './assets';
 /** Shared SEO defaults — page-level title/description passed via BaseLayout */
 export const siteSeo = {
   name: 'Cloudflare Starter Hub',
-  origin: 'https://cloudflare-starter-hub.pages.dev',
+  origin: 'https://onboarding.orangecloud.vn',
   themeColor: '#F6821F',
   twitterHandle: '@cloudflare',
   defaultImage: assetUrl('og-image.svg'),

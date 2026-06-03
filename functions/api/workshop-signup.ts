@@ -1,7 +1,8 @@
 import { jsonResponse, readJson } from '../../src/lib/server/json';
 import { hashIp, hashUserAgent, randomId } from '../../src/lib/server/crypto';
-import { rateLimitOrThrow, rateLimitedResponse } from '../../src/lib/server/rateLimit';
+import { rateLimitedResponse, checkRateLimit, recordRateLimitHit } from '../../src/lib/server/rateLimit';
 import { verifyTurnstile } from '../../src/lib/server/turnstile';
+import { sendSignupConfirmation } from '../../src/lib/server/workshopEmail';
 import { workshopSignupSchema } from '../../src/lib/validation/schemas';
 
 type Env = {
@@ -9,6 +10,10 @@ type Env = {
   SITE_CONFIG?: KVNamespace;
   TURNSTILE_SECRET_KEY?: string;
   RATE_LIMIT_SALT?: string;
+  CLOUDFLARE_ACCOUNT_ID?: string;
+  CLOUDFLARE_EMAIL_API_TOKEN?: string;
+  WORKSHOP_EMAIL_FROM?: string;
+  PUBLIC_SITE_URL?: string;
 };
 
 function validationError(lang: 'vi' | 'en') {
@@ -22,7 +27,7 @@ function validationError(lang: 'vi' | 'en') {
   );
 }
 
-export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
+export const onRequestPost: PagesFunction<Env> = async ({ request, env, waitUntil }) => {
   const lang = (request.headers.get('x-cfhub-lang') === 'en' ? 'en' : 'vi') as 'vi' | 'en';
 
   let payload: unknown;
@@ -42,14 +47,13 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const ipHash = await hashIp(ip, salt);
   const uaHash = await hashUserAgent(ua, salt);
 
-  // Rate limit (KV). Key is endpoint + ipHash + 10min bucket.
-  const bucket = Math.floor(Date.now() / (10 * 60 * 1000));
-  const rlKey = `rl:workshop:${ipHash || 'noip'}:${bucket}`;
-  const rl = await rateLimitOrThrow({
+  // Rate limit successful signups only (failed attempts / retries do not consume quota)
+  const bucket = Math.floor(Date.now() / (60 * 60 * 1000));
+  const rlKey = `rl:workshop:ok:${ipHash || 'noip'}:${bucket}`;
+  const rl = await checkRateLimit({
     kv: env.SITE_CONFIG,
     key: rlKey,
-    windowSeconds: 10 * 60,
-    max: 5,
+    max: 10,
   });
   if (!rl.allowed) return rateLimitedResponse(parsed.data.language);
 
@@ -71,12 +75,13 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   }
 
   let eventId: string | null = parsed.data.eventId || null;
+  let eventTitle: { vi: string; en: string } | null = null;
   if (eventId) {
     const event = await env.DB.prepare(
-      `SELECT id, status, starts_at FROM workshop_events WHERE id = ?`,
+      `SELECT id, status, starts_at, title_vi, title_en FROM workshop_events WHERE id = ?`,
     )
       .bind(eventId)
-      .first<{ id: string; status: string; starts_at: string }>();
+      .first<{ id: string; status: string; starts_at: string; title_vi: string; title_en: string }>();
 
     if (!event || event.status !== 'published') {
       return jsonResponse(
@@ -105,6 +110,8 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
         { status: 400 },
       );
     }
+
+    eventTitle = { vi: event.title_vi, en: event.title_en };
   }
 
   // Duplicate email guard: 1 signup per email per 12h (best-effort, not transactional)
@@ -167,6 +174,21 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       { status: 500 },
     );
   }
+
+  await recordRateLimitHit({
+    kv: env.SITE_CONFIG,
+    key: rlKey,
+    windowSeconds: 60 * 60,
+  });
+
+  waitUntil(
+    sendSignupConfirmation(env, {
+      name: parsed.data.name,
+      email: parsed.data.email,
+      language: parsed.data.language,
+      eventTitle,
+    }),
+  );
 
   return jsonResponse({ ok: true, message: 'registered', id }, { status: 200 });
 };

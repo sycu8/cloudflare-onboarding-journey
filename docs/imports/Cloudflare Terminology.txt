@@ -1,0 +1,190 @@
+CÁC THUẬT NGỮ LIÊN QUAN 
+KHI SỬ DỤNG CLOUDFLARE
+Mục lục
+I. CÁC THUẬT NGỮ CƠ BẢN3
+II. THUẬT NGỮ VỀ DNS & TRAFFIC ROUTING3
+III. PERFORMANCE & CDN4
+IV. SECURITY – WAF & PROTECTION5
+V. BOT MANAGEMENT6
+VI. ZTNA - ZERO TRUST NETWORK ACCESS7
+I. CÁC THUẬT NGỮ CƠ BẢN
+Thuật ngữ
+Diễn giải ngắn gọn
+Session
+Phiên kết nối
+Congestion
+Nghẽn mạng
+Failover
+Chuyển sang hệ thống dự phòng
+Redundancy
+Dự phòng
+High Availability (HA)
+Hệ thống có tính sẵn sàng cao
+Scalability
+Khả năng mở rộng
+Horizontal Scaling
+Mở rộng bằng thêm node
+Vertical Scaling
+Tăng tài nguyên server
+SLA
+Cam kết dịch vụ
+Multi-region
+Hệ thống nhiều khu vực
+Socket
+Kết nối logic giữa 2 endpoint
+Edge
+Rìa mạng, điểm Cloudflare xử lý traffic trước server
+POP (Point of Presence)
+Điểm truy cập hoặc vị trí vật lý chứa cơ sở hạ tầng viễn thông, Internet (hay gọi cách khác là Data Center của Cloudflare)
+II. THUẬT NGỮ VỀ DNS & TRAFFIC ROUTING
+Thuật ngữ
+Diễn giải ngắn gọn
+Authoritative DNS
+Nơi quản lý chính thức domain
+Recursive DNS
+Nhiệm vụ truy vấn giúp user
+Resolver
+Máy chủ phân giải DNS
+NS Record
+Khai báo nameserver
+MX Record
+Mail server
+TXT Record
+Xác thực domain/text
+SRV Record
+Khai báo service
+DNSSEC
+Xác thực DNS chống giả mạo
+Geo Routing
+Điều hướng theo vị trí
+Traffic Steering
+Điều hướng traffic thông minh (dynamic, geo, random, weighted) 
+Split Horizon DNS
+DNS trả kết quả khác nhau theo vùng
+A/AAAA
+Trỏ IPv4/IPv6
+CNAME
+Trỏ tên miền
+TTL
+Time To Live - trình duyệt hoặc máy chủ DNS trung gian sẽ lưu cache bản ghi đó trong bao lâu.
+Orange Cloud
+Traffic đi qua Cloudflare
+Gray Cloud
+Traffic không đi qua Cloudflare
+Anycast
+1IP -> nhiều edge
+III. PERFORMANCE & CDN
+Thuật ngữ
+Diễn giải ngắn gọn
+Purge Cache
+Xóa cache thủ công
+Compression
+Nén dữ liệu
+Brotli
+Chuẩn nén hiện đại
+Gzip
+Chuẩn nén phổ biến
+Minification
+Rút gọn JS/CSS/HTML
+Prefetch
+Tải trước nội dung
+Preload
+Ưu tiên tài nguyên để tải
+TTFB
+Time To First Byte - Thời gian nhận byte đầu tiên từ server.
+HTTP/2
+Tải nhiều dữ liệu cùng lúc, nhanh hơn HTTP/1.1
+HTTP/3
+Phiên bản mới dùng QUIC, giảm trễ, ổn định hơn.
+QUIC
+Giao thức truyền nhanh trên UDP, thay vì TCP
+Smart Tiered Cache
+Cache nhiều tầng
+Cache Danamic
+Cloudflare vẫn proxy traffic, Nhưng file/page đó không nằm trong cache. Mỗi request sẽ forward về origin để lấy dữ liệu mới
+Cache HIT
+Cache còn hạn, trả luôn
+Cache MISS
+Không có cache, fetch full từ origin
+Cache Revalidated
+Có cache, check lại origin rồi mới trả
+IV. SECURITY – WAF & PROTECTION
+Thuật ngữ
+Diễn giải ngắn gọn
+Behavioral Analysis
+Phân tích hành vi
+Exploit
+Khai thác lỗ hổng
+Vulnerability
+Điểm yếu bảo mật (lỗ hỏng)
+SQL Injection (SQLi)
+Tấn công bằng cách chèn mã SQL độc hại để truy cập dữ liệu trái phép.
+XSS (Cross-Site Scripting)
+Một loại tấn công bằng cách chèn mã JavaScript độc hại vào trang web.
+CSRF (Cross-Site Request Forgery)
+Lỗ hổng bảo mật - lợi dụng niềm tin của website vào trình duyệt của người dùng.
+RCE (Remote Code Execution) 
+Cho phép kẻ tấn công chạy mã từ xa trên máy chủ.
+CVE (Common Vulnerabilities and Exposures)
+Mã định danh cho lỗ hổng bảo mật đã được công bố.
+Mitigation
+Giảm thiểu tấn công
+False Positive
+Thường dùng trong hoàn cảnh block nhầm người dùng thực
+V. BOT MANAGEMENT
+Thuật ngữ
+Diễn giải ngắn gọn
+Headless Browser
+Trình duyệt không giao diện, dùng để tự động hóa kiểm thử hoặc thu thập dữ liệu web. 
+Scraping
+Phương thức tấn công cào dữ liệu 
+Credential Stuffing
+Tấn công bằng các dùng tài khoản rò rỉ để login
+Abuse
+Dùng để chỉ phương thức lạm dụng  hoặc khai tác hệ thống trái phép.
+Phân loại BOT
+Academic research
+Thu thập dữ liệu phục vụ cho nghiên cứu học thuật hoặc các mục đích giáo dục – nghiên cứu trong môi trường học thuật.
+Accessibility
+Quét các trang web để xác định khả năng truy cập của chúng.
+Advertising or marketing
+Tự động hóa các nhiệm vụ tiếp thị bao gồm nhưng không giới hạn ở vị trí đặt quảng cáo và theo dõi hiệu suất.
+Aggregators
+Thu thập nội dung từ nhiều nguồn trực tuyến khác nhau và hợp nhất nó ở một nơi.
+AI Assistant
+Bot AI tự động được điều khiển bởi hành động của người dùng.
+AI Crawler
+Thu thập dữ liệu các trang web để tìm nội dung được sử dụng để đào tạo các mô hình AI.
+AI Search
+Hỗ trợ tìm kiếm dựa trên Ai
+Archiver
+Lưu ảnh chụp nhanh của các trang web để lưu giữ nội dung kỹ thuật số cho các hồ sơ lịch sử.
+Feed Fetcher
+Truy xuất các bản cập nhật từ nguồn cấp dữ liệu để cung cấp năng lượng cho trình đọc hoặc các ứng dụng khác.
+Monitoring or analytics
+Theo dõi thời gian hoạt động, hiệu suất và lưu lượng người dùng của trang web để thu thập các số liệu giám sát chính.
+Page preview
+Tạo bản xem trước cho các liên kết được chia sẻ trên phương tiện truyền thông xã hội hoặc trong ứng dụng nhắn tin.
+Search engine crawler
+Một bot phát hiện và lập chỉ mục các trang web cho kết quả tìm kiếm.
+Search engine optimization
+Phân tích các trang web để cải thiện vị trí của chúng trong các trang kết quả của công cụ tìm kiếm.
+Security
+Quét các trang web để phát hiện các lỗ hổng bảo mật và các mối đe dọa tiềm ẩn.
+Social media marketing
+Quản lý và tự động hóa các hoạt động trên nền tảng xã hội.
+Webhooks
+Một trình nhắn tin tự động gửi dữ liệu từ ứng dụng này sang ứng dụng khác cho các sự kiện cụ thể.
+VI. ZTNA - ZERO TRUST NETWORK ACCESS
+Thuật ngữ
+Diễn giải ngắn gọn
+Federation
+Liên kết hệ thống xác thực giữa các tổ chức hoặc dịch vụ.
+SCIM (System for Cross-domain Identity Management)
+Chuẩn tự động hóa việc tạo, cập nhật, xóa tài khoản người dùng giữa các hệ thống.
+CASB (Cloud Access Security Broker)
+Lớp bảo mật trung gian giám sát và kiểm soát truy cập vào dịch vụ đám mây
+SSO (Single Sign-On)
+Đăng nhập một lần, truy cập nhiều ứng dụng.
+MFA (Multi-Factor Authentication)
+Xác thực đa yếu tố, thêm lớp bảo mật ngoài mật khẩu.

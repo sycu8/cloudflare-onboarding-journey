@@ -7,13 +7,19 @@ Runbook for **Cloudflare Starter Hub** — static Astro site + Pages Functions o
 | URL | Role |
 |-----|------|
 | https://cloudflare-starter-hub.pages.dev | Pages default domain |
-| https://onboarding.orangecloud.vn | Custom domain |
+| https://onboarding.orangecloud.vn | Custom domain (production) |
+| https://uat.onboarding.orangecloud.vn | UAT custom domain (optional) |
+
+UAT + production deploy gates: [docs/UAT-DEPLOYMENT.md](docs/UAT-DEPLOYMENT.md)
 
 ---
 
 ## Phase 1 — Infrastructure (one-time)
 
-- [x] Pages project: `cloudflare-starter-hub`
+- [x] Pages project: `cloudflare-starter-hub` (production)
+- [ ] Pages project: `cloudflare-starter-hub-uat` (UAT)
+- [ ] GitHub Environments: `uat`, `production` with required reviewers
+- [ ] GitHub Secrets: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`
 - [x] D1: `cloudflare-starter-hub-db` — migrations applied (`0001`, `0002`)
 - [x] KV: `SITE_CONFIG` — rate limits, feature flags
 - [x] R2: `cloudflare-starter-hub-resources` — favicon, OG image via `/assets/*`
@@ -42,7 +48,7 @@ Build-time (Pages build env or local `.env`):
 
 | Variable | Purpose |
 |----------|---------|
-| `PUBLIC_SITE_URL` | Canonical + sitemap (default: `https://cloudflare-starter-hub.pages.dev`) |
+| `PUBLIC_SITE_URL` | Canonical + sitemap (default: `https://onboarding.orangecloud.vn`) |
 
 ---
 

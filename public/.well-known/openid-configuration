@@ -1,0 +1,24 @@
+{
+  "issuer": "https://onboarding.orangecloud.vn",
+  "authorization_endpoint": "https://onboarding.orangecloud.vn/.well-known/oauth/authorize",
+  "token_endpoint": "https://onboarding.orangecloud.vn/.well-known/oauth/token",
+  "jwks_uri": "https://onboarding.orangecloud.vn/.well-known/jwks.json",
+  "registration_endpoint": "https://onboarding.orangecloud.vn/.well-known/oauth/register",
+  "response_types_supported": [
+    "token"
+  ],
+  "grant_types_supported": [
+    "client_credentials"
+  ],
+  "subject_types_supported": [
+    "public"
+  ],
+  "id_token_signing_alg_values_supported": [
+    "none"
+  ],
+  "scopes_supported": [
+    "openid",
+    "hub.read",
+    "workshop.admin"
+  ]
+}

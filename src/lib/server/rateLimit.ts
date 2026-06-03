@@ -22,6 +22,31 @@ export async function rateLimitOrThrow(opts: {
   return { allowed: true as const, current: next };
 }
 
+/** Read-only check — does not increment the counter. */
+export async function checkRateLimit(opts: {
+  kv: KVNamespaceLike | undefined;
+  key: string;
+  max: number;
+}) {
+  if (!opts.kv) return { allowed: true as const };
+  const current = Number((await opts.kv.get(opts.key)) || '0');
+  if (Number.isFinite(current) && current >= opts.max) {
+    return { allowed: false as const, current };
+  }
+  return { allowed: true as const, current };
+}
+
+/** Increment after a successful action (e.g. signup saved). */
+export async function recordRateLimitHit(opts: {
+  kv: KVNamespaceLike | undefined;
+  key: string;
+  windowSeconds: number;
+}) {
+  if (!opts.kv) return;
+  const current = Number((await opts.kv.get(opts.key)) || '0');
+  await opts.kv.put(opts.key, String(current + 1), { expirationTtl: opts.windowSeconds });
+}
+
 export function rateLimitedResponse(lang: 'vi' | 'en') {
   return jsonResponse(
     {

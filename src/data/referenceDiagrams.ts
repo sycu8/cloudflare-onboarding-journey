@@ -182,7 +182,20 @@ export const trackDiagramSlugs: Record<
 export const useCaseDiagramSlugs: Record<string, string[]> = {
   'protect-website': ['bot-management', 'distributed-web-performance-architecture'],
   'secure-api': ['api-shield-workflow'],
+  'defend-ddos-attacks': ['bot-management', 'distributed-web-performance-architecture'],
+  'accelerate-content-delivery': [
+    'distributed-web-performance-architecture',
+    'optimizing-image-delivery-with-cloudflare-image-resizing-and-r2',
+  ],
+  'ecommerce-security-performance': ['bot-management', 'distributed-web-performance-architecture'],
+  'media-streaming-delivery': [
+    'serverless-image-content-management',
+    'optimizing-image-delivery-with-cloudflare-image-resizing-and-r2',
+  ],
   'build-serverless-app': ['fullstack-application', 'serverless-global-apis'],
+  'deploy-static-site': ['fullstack-application', 'serverless-global-apis'],
+  'build-ai-applications': ['ai-rag', 'ai-multivendor-observability-control'],
+  'build-saas-platform': ['programmable-platforms', 'fullstack-application'],
   'replace-vpn': [
     'secure-access-to-saas-applications-with-sase',
     'sase-clientless-access-private-dns',
@@ -191,11 +204,13 @@ export const useCaseDiagramSlugs: Record<string, string[]> = {
     'cloudflare-one-appliance-deployment',
     'zero-trust-and-virtual-desktop-infrastructure',
   ],
-  'defend-ddos-attacks': ['bot-management', 'distributed-web-performance-architecture'],
-  'deploy-static-site': ['fullstack-application', 'serverless-global-apis'],
   'secure-saas-access': [
     'secure-access-to-saas-applications-with-sase',
     'sase-clientless-access-private-dns',
+  ],
+  'company-wide-security': [
+    'secure-access-to-saas-applications-with-sase',
+    'gateway-for-protective-dns',
   ],
 };
 

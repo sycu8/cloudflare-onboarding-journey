@@ -6,10 +6,13 @@
 
 **Cloudflare Starter Hub** — a bilingual (Vietnamese-first) learning site that helps beginners go from *“I don’t know where to start”* to a clear path across **Application Services**, **Developer Platform**, and **Cloudflare One**.
 
-Live demos:
+Live sites:
 
-- [cloudflare-starter-hub.pages.dev](https://cloudflare-starter-hub.pages.dev)
-- [onboarding.orangecloud.vn](https://onboarding.orangecloud.vn) (custom domain, if configured)
+| Environment | URL |
+|-------------|-----|
+| **Production** | [onboarding.orangecloud.vn](https://onboarding.orangecloud.vn) |
+| **Production (Pages)** | [cloudflare-starter-hub.pages.dev](https://cloudflare-starter-hub.pages.dev) |
+| **UAT** | [onboarding-uat.orangecloud.vn](https://onboarding-uat.orangecloud.vn) |
 
 Source: [github.com/sycu8/cloudflare-onboarding-journey](https://github.com/sycu8/cloudflare-onboarding-journey)
 
@@ -21,13 +24,13 @@ Source: [github.com/sycu8/cloudflare-onboarding-journey](https://github.com/sycu
 
 | Area | What’s new |
 |------|------------|
-| **Learning tracks** | Per-lesson pages (`/tracks/{track}/{lessonId}`), deep dives, **Lưu ý (best practices)** from official docs, **Ví dụ triển khai** (curated developer docs), **Lỗi thường gặp** |
-| **Track isolation** | Each track is self-contained (banner, switcher, filtered resources); less cross-noise between paths |
-| **Use cases** | Hub at [`/use-cases`](https://cloudflare-starter-hub.pages.dev/use-cases) — 5 scenarios across Application Services, Developer Platform, and Cloudflare One |
-| **Products** | [`/products`](https://cloudflare-starter-hub.pages.dev/products) catalog + per-product pages linked from Cloudflare 101 |
-| **Resources** | Synced Cloudflare developer catalog (`npm run resources:sync`), Reference Architecture diagram gallery (`npm run diagrams:sync`) |
-| **Ops & trust** | [`/changelog`](https://cloudflare-starter-hub.pages.dev/changelog), [`/status`](https://cloudflare-starter-hub.pages.dev/status) (live Statuspage) |
-| **Contributions** | PR template, CI verify workflow, `npm run review:pr`, [CONTRIBUTION_MAP](docs/CONTRIBUTION_MAP.md) for safe reviews |
+| **Cloudflare 101** | **Terminology** tabs + **practical guides** (DNS, TLS, WAF, Bot, Cache, LB) from internal training docs — [`/cloudflare-101#terminology`](https://onboarding.orangecloud.vn/cloudflare-101/#terminology) |
+| **Learning tracks** | Per-lesson pages (`/tracks/{track}/{lessonId}`), deep dives, **Lưu ý (best practices)**, **Ví dụ triển khai**, **Lỗi thường gặp** |
+| **Use cases** | Hub at [`/use-cases`](https://onboarding.orangecloud.vn/use-cases/) — scenarios across Application Services, Developer Platform, and Cloudflare One |
+| **Workshop admin** | Dedicated UI at **`/admin/`** (Cloudflare Access on `/admin` only) — events, signups export; legacy `/workshop/admin` redirects — [WORKSHOP-ADMIN-ACCESS.md](docs/WORKSHOP-ADMIN-ACCESS.md) |
+| **Agent discovery** | `/.well-known/*`, OpenAPI, WebMCP bootstrap, `/docs/api` — [DNS-AID.md](docs/DNS-AID.md) for DNS records |
+| **Deploy** | `npm run deploy:uat` then `npm run deploy`; stable CSS at `/styles/site.css`; GitHub Actions gates — [UAT-DEPLOYMENT.md](docs/UAT-DEPLOYMENT.md) |
+| **Contributions** | PR template, CI verify, `npm run review:pr`, [CONTRIBUTION_MAP](docs/CONTRIBUTION_MAP.md) |
 
 ---
 
@@ -40,7 +43,7 @@ Source: [github.com/sycu8/cloudflare-onboarding-journey](https://github.com/sycu
 | Practice retention | Checklist (localStorage), 12-question knowledge check |
 | Go deeper officially | Curated links: [Resource Hub](https://www.cloudflare.com/resource-hub/), Reference Architecture, GitHub, Learning Center |
 | Field context | CloudSecOp reading lists (external blog) |
-| Workshop interest | Signup form + optional admin-managed events (D1) |
+| Workshop interest | Signup form + admin-managed events at `/admin/` (D1, Cloudflare Access) |
 
 ### Learning journey
 
@@ -60,6 +63,7 @@ Optional: [**First week (7 days)**](/first-week) — day-by-day plan, common mis
 - **3 learning tracks** — Application Services, Developer Platform, Cloudflare One (modules, outcomes, **lesson pages** with best practices & deployment examples)
 - **Use cases hub** — [`/use-cases`](/use-cases): protect website, secure API, serverless app, VPN replacement, remote users (grouped by track)
 - **Product pages** — searchable catalog at `/products` (Workers, WAF, Zero Trust, D1, R2, …)
+- **Cloudflare 101 extras** — terminology dictionary (6 categories, CSS tabs, search) + lab-style config/WAF guides
 - **Interactive** — glossary search + pagination, quiz with explanations, checklist progress, path selector
 - **Resources hub** — official docs grid (synced), Reference Architecture **diagrams**, Resource Hub, GitHub, CloudSecOp, Learning Center
 - **Solutions & demos** — bilingual solution proposals, SE demo guides, content-delivery guide, plan comparison
@@ -100,9 +104,10 @@ cloudflare-onboarding-journey/
 │   └── pages/              # routes (tracks, lessons, products, use-cases, …)
 ├── functions/              # Pages Functions (api/, assets/)
 ├── migrations/             # D1 SQL migrations
-├── docs/                   # CONTRIBUTION_MAP, MAINTAINER_REVIEW
-├── .github/                # CONTRIBUTING, PR template, CI workflow
-├── scripts/                # smoke-test, sync, review-contribution
+├── docs/                   # UAT-DEPLOYMENT, WORKSHOP-ADMIN-ACCESS, DNS-AID, imports/
+├── agent-discovery/        # source for /.well-known (built to public/ + dist)
+├── .github/                # CONTRIBUTING, PR template, verify + deploy workflows
+├── scripts/                # build.mjs, smoke-test, sync, access setup
 ├── tests/                  # Playwright E2E
 ├── wrangler.toml.example   # copy → wrangler.toml (not committed)
 ├── .env.example            # secrets template (not committed)
@@ -132,8 +137,10 @@ npm run build      # production static output → dist/
 npm run preview    # serve dist/
 npm run test:smoke # HTTP smoke (optional URL arg)
 npm run test:e2e   # Playwright — local preview on :4321 (uses E2E_BASE_URL, not BASE_URL)
-npm run deploy          # build + wrangler pages deploy (maintainer)
-npm run deploy:verify   # smoke both production domains
+npm run deploy:uat      # build + deploy to UAT Pages project (maintainer)
+npm run deploy          # build + deploy production (maintainer)
+npm run deploy:verify   # smoke production domains
+npm run access:workshop-admin  # optional: create Access apps for /admin
 npm run resources:sync  # refresh developers.cloudflare.com link catalog
 npm run diagrams:sync   # refresh Reference Architecture diagram metadata
 npm run assets:sync     # upload public SVGs → R2 (needs Wrangler credentials)
@@ -186,13 +193,28 @@ npm run assets:sync   # uploads public/*.svg, favicon.ico → R2 static/*
 
 Production serves them at `/assets/<file>` (immutable cache). Source files stay in `public/` for local `astro dev` and as the upload source.
 
+**Cache & security headers** (`public/_headers`, deployed with Pages):
+
+| Path | Policy |
+|------|--------|
+| HTML (`/*`) | Browser 5m + SWR 24h; CDN 1h (`CDN-Cache-Control`) — fast deploy pickup at edge, good Core Web Vitals on repeat visits |
+| `/_astro/*`, `/assets/*` | 1 year `immutable` (hashed or versioned static) |
+| `/styles/site.css` | 1h + SWR — stable global stylesheet |
+| `robots.txt` / sitemaps | 24h / 1h — crawlers see updates without hammering origin |
+| `/api/*`, `/admin/*` | `no-store` — never cache dynamic or admin UI |
+
+Security headers (`X-Frame-Options`, `nosniff`, `Referrer-Policy`, etc.) apply to all pages via `/*`.
+
+**Agent discovery** (RFC 8288, RFC 9727, WebMCP): generated before build via `npm run agent-discovery:build` using `PUBLIC_SITE_URL`. Serves `/.well-known/api-catalog`, OpenAPI, OAuth metadata, MCP/A2A cards, agent skills index, `/auth.md`, and homepage `Link` headers. DNS-AID records are documented in `docs/DNS-AID.md` (requires DNS zone changes on `orangecloud.vn`).
+
 ### 5. Pages secrets (dashboard or CLI)
 
 Set in **Pages → Settings → Environment variables** (production). **Never commit these values.**
 
 | Variable | Purpose |
 |----------|---------|
-| `WORKSHOP_ADMIN_KEY` | Bearer token for `POST /api/workshop-events` and admin UI |
+| `WORKSHOP_ADMIN_EMAILS` | Comma-separated emails allowed via Cloudflare Access (admin UI + `/admin/api/*`) |
+| `WORKSHOP_ADMIN_KEY` | Optional Bearer token for legacy `/api/workshop-admin/*` automation |
 | `TURNSTILE_SECRET_KEY` | Server-side Turnstile verification |
 | `RATE_LIMIT_SALT` | Salt for IP hashing in rate limits |
 | `CLOUDFLARE_API_TOKEN` | Only if using CI deploy (not stored in repo) |
@@ -219,10 +241,12 @@ Ensure bindings match `wrangler.toml.example`:
 
 ### 7. Workshop admin
 
-1. Set `WORKSHOP_ADMIN_KEY` in the Cloudflare dashboard.  
-2. Visit `/workshop/admin` on your deployment.  
-3. Enter the key in the UI to create published events.  
-4. Events appear on `/workshop` via `GET /api/workshop-events`.
+1. Create a **Cloudflare Access** app with path **`/admin`** only (not the whole hostname) — see [docs/WORKSHOP-ADMIN-ACCESS.md](docs/WORKSHOP-ADMIN-ACCESS.md) or `npm run access:workshop-admin`.  
+2. Set `WORKSHOP_ADMIN_EMAILS` in Pages (e.g. `you@example.com`).  
+3. Visit **`/admin/`** → sign in with Access → manage events and view signups.  
+4. Public workshop page: `/workshop` lists events via `GET /api/workshop-events`.
+
+Legacy `/workshop/admin` redirects to `/admin/`.
 
 ---
 
@@ -230,8 +254,11 @@ Ensure bindings match `wrangler.toml.example`:
 
 | Route | Methods | Description |
 |-------|---------|-------------|
-| `/api/workshop-events` | GET, POST | List/create workshop events (POST requires admin key) |
+| `/api/workshop-events` | GET, POST | List/create workshop events (POST requires admin) |
 | `/api/workshop-signup` | POST | Workshop registration (Turnstile + D1) |
+| `/admin/api/me` | GET | Admin session (Cloudflare Access email) |
+| `/admin/api/events` | GET, POST | List/create events (Access-protected) |
+| `/admin/api/signups` | GET | Export signups (Access-protected) |
 | `/api/quiz-submission` | POST | Anonymous quiz score logging |
 | `/api/site-config` | GET | Feature flags from KV |
 | `/api/feedback` | POST | Feedback messages |
@@ -258,7 +285,7 @@ Admin auth header: `Authorization: Bearer <WORKSHOP_ADMIN_KEY>` or `X-Cfhub-Admi
 | `/` | Homepage |
 | `/start-here` | 30-minute intro |
 | `/first-week` | 7-day beginner plan |
-| `/cloudflare-101` | Product map (Compute, AI, Storage, Media, App Security, Cloudflare One) |
+| `/cloudflare-101` | Product map + **terminology** (`#terminology`) + **practical guides** (`#practical-guides`) |
 | `/choose-your-path` | Path selector |
 | `/tracks`, `/tracks/{track}` | Track overview + track-scoped resources |
 | `/tracks/{track}/{lessonId}` | Lesson: deep dive, best practices, deployment examples, common mistakes |
@@ -276,7 +303,9 @@ Admin auth header: `Authorization: Bearer <WORKSHOP_ADMIN_KEY>` or `X-Cfhub-Admi
 | `/content-delivery` | CDN, cache, Speed — speed up websites guide |
 | `/solutions` | Solution proposal summaries (App Security, SASE, Email) — EN/VI |
 | `/workshop` | Events + signup |
-| `/workshop/admin` | Event management (noindex) |
+| `/admin/` | Workshop admin (Cloudflare Access, noindex) |
+| `/workshop/admin` | Redirect → `/admin/` |
+| `/docs/api` | API catalog for agents (WebMCP / OpenAPI) |
 | `/privacy` | Privacy |
 
 ---
@@ -312,7 +341,8 @@ We are open to contributions — thank you for improving the hub for learners.
 |------|-----|----------------|
 | Review | **Maintainer** ([@sycu8](https://github.com/sycu8)) | Reads the PR, CI results, and optional agent review; may request changes |
 | **Approve** | **Maintainer** | Merges only after explicit approval — contributors do not merge to `main` by default |
-| Deploy | **Maintainer** | `git pull` → `npm run deploy` → `npm run deploy:verify` to Pages |
+| Deploy UAT | **Maintainer** | Approve GitHub env `uat` on PR, or `npm run deploy:uat` locally |
+| Deploy prod | **Maintainer** | After UAT OK: merge → approve `production` or `npm run deploy` → `npm run deploy:verify` |
 
 **You will be notified in the PR** when it is approved, needs changes, or is merged. Production URLs update only after maintainer deploy.
 

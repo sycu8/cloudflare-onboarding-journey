@@ -218,14 +218,17 @@ html.dark .nav-link-active {
 }
 
 .badge-accent {
-  border-color: transparent;
-  background: rgba(246, 130, 26, 0.15);
+  border-color: var(--cf-accent);
+  background: rgba(246, 130, 26, 0.18);
   color: #c2410c;
+  box-shadow: 0 0 0 1px rgba(246, 130, 26, 0.12);
 }
 
 html.dark .badge-accent {
-  background: rgba(255, 140, 56, 0.18);
-  color: #fdba74;
+  border-color: var(--cf-accent);
+  background: rgba(255, 140, 56, 0.28);
+  color: #ffb380;
+  box-shadow: 0 0 12px rgba(255, 140, 56, 0.2);
 }
 
 .eyebrow {
@@ -274,6 +277,202 @@ html.dark .cf-progress-track {
   background: rgba(255, 255, 255, 0.08);
 }
 
-.cf-progress-bar {
-  background: var(--cf-accent);
+
+/* --- Admin shell (/admin/) --- */
+.admin-body {
+  background: var(--cf-bg);
+  color: var(--cf-text);
+  min-height: 100dvh;
 }
+
+.admin-loading {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background:
+    radial-gradient(900px 420px at 10% -10%, var(--cf-glow-orange), transparent 55%),
+    var(--cf-bg);
+}
+
+.admin-shell {
+  display: grid;
+  min-height: 100dvh;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 1024px) {
+  .admin-shell {
+    grid-template-columns: 16.5rem minmax(0, 1fr);
+  }
+}
+
+.admin-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border-bottom: 1px solid var(--cf-border);
+  background: var(--cf-bg-elevated);
+  padding: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .admin-sidebar {
+    border-bottom: none;
+    border-right: 1px solid var(--cf-border);
+    padding: 1.25rem 1rem;
+  }
+}
+
+.admin-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.admin-brand-mark {
+  display: inline-flex;
+  height: 2.25rem;
+  width: 2.25rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  background: var(--cf-accent);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.admin-brand-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.admin-brand-sub {
+  font-size: 0.75rem;
+  color: var(--cf-text-muted);
+}
+
+.admin-nav {
+  display: flex;
+  flex-direction: row;
+  gap: 0.35rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+}
+
+@media (min-width: 1024px) {
+  .admin-nav {
+    flex-direction: column;
+    overflow: visible;
+    padding-bottom: 0;
+  }
+}
+
+.admin-nav-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid transparent;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--cf-text-muted);
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.admin-nav-item:hover {
+  background: rgba(148, 163, 184, 0.12);
+  color: var(--cf-text);
+}
+
+.admin-nav-item-active {
+  background: rgba(246, 130, 26, 0.12);
+  border-color: rgba(246, 130, 26, 0.35);
+  color: var(--cf-text);
+}
+
+.admin-nav-icon {
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+.admin-sidebar-foot {
+  margin-top: auto;
+  display: none;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.5rem;
+}
+
+@media (min-width: 1024px) {
+  .admin-sidebar-foot {
+    display: flex;
+  }
+}
+
+.admin-foot-link {
+  font-size: 0.8rem;
+  color: var(--cf-text-muted);
+}
+
+.admin-foot-link:hover {
+  color: var(--cf-accent);
+}
+
+.admin-main-wrap {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.admin-topbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--cf-border);
+  background: var(--cf-nav-bg);
+  backdrop-filter: blur(12px);
+  padding: 1rem 1.25rem;
+}
+
+.admin-page-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.admin-page-sub {
+  margin-top: 0.25rem;
+  font-size: 0.8rem;
+  color: var(--cf-text-muted);
+}
+
+.admin-main {
+  flex: 1;
+  padding: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .admin-main {
+    padding: 1.5rem 1.75rem;
+  }
+}
+
+.admin-stat-label {
+  font-size: 0.8rem;
+  color: var(--cf-text-muted);
+}
+
+.admin-stat-value {
+  margin-top: 0.35rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+

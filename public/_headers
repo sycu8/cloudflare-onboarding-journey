@@ -1,21 +1,111 @@
+/
+  Link: </.well-known/api-catalog>; rel="api-catalog", </.well-known/openapi.json>; rel="service-desc", </docs/api/>; rel="service-doc", </.well-known/agent-skills/index.json>; rel="describedby", </auth.md>; rel="describedby", </.well-known/mcp/server-card.json>; rel="describedby", </.well-known/agent-card.json>; rel="describedby"
+
 /*
-  Cache-Control: public, max-age=600, stale-while-revalidate=86400
-
-/_astro/*
-  Cache-Control: public, max-age=31536000, immutable
-
-/*.svg
-  Cache-Control: public, max-age=604800
-
-/*.ico
-  Cache-Control: public, max-age=604800
-
-/assets/*
-  Cache-Control: public, max-age=31536000, immutable
-
+  Cache-Control: public, max-age=300, stale-while-revalidate=86400, stale-if-error=86400
+  CDN-Cache-Control: max-age=3600, stale-while-revalidate=86400
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
   Cross-Origin-Opener-Policy: same-origin
 
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+  CDN-Cache-Control: max-age=31536000, immutable
+
+/styles/*
+  Content-Type: text/css; charset=utf-8
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+  CDN-Cache-Control: max-age=3600, stale-while-revalidate=86400
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+  CDN-Cache-Control: max-age=31536000, immutable
+
+/images/*
+  Cache-Control: public, max-age=604800, immutable
+  CDN-Cache-Control: public, max-age=604800, immutable
+
+/*.svg
+  Cache-Control: public, max-age=604800, immutable
+  CDN-Cache-Control: public, max-age=604800, immutable
+
+/*.ico
+  Cache-Control: public, max-age=604800, immutable
+  CDN-Cache-Control: max-age=604800, immutable
+
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+  CDN-Cache-Control: max-age=31536000, immutable
+
+/*.woff
+  Cache-Control: public, max-age=31536000, immutable
+  CDN-Cache-Control: max-age=31536000, immutable
+
+/robots.txt
+  Cache-Control: public, max-age=86400
+
+/.well-known/api-catalog
+  Content-Type: application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"
+  Cache-Control: public, max-age=3600
+
+/.well-known/openapi.json
+  Content-Type: application/vnd.oai.openapi+json;version=3.1
+  Cache-Control: public, max-age=3600
+
+/.well-known/oauth-authorization-server
+  Content-Type: application/json
+  Cache-Control: public, max-age=3600
+
+/.well-known/openid-configuration
+  Content-Type: application/json
+  Cache-Control: public, max-age=3600
+
+/.well-known/oauth-protected-resource
+  Content-Type: application/json
+  Cache-Control: public, max-age=3600
+
+/.well-known/jwks.json
+  Content-Type: application/json
+  Cache-Control: public, max-age=3600
+
+/.well-known/agent-skills/index.json
+  Content-Type: application/json
+  Cache-Control: public, max-age=3600
+
+/.well-known/agent-skills/*
+  Content-Type: text/markdown; charset=utf-8
+  Cache-Control: public, max-age=86400
+
+/.well-known/mcp/server-card.json
+  Content-Type: application/json
+  Cache-Control: public, max-age=3600
+
+/.well-known/agent-card.json
+  Content-Type: application/a2a+json
+  Cache-Control: public, max-age=3600
+
+/auth.md
+  Content-Type: text/markdown; charset=utf-8
+  Cache-Control: public, max-age=3600
+
+/scripts/*
+  Cache-Control: public, max-age=3600
+
+/sitemap-index.xml
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
+/sitemap-0.xml
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
+/api/*
+  Cache-Control: no-store, private
+
+/admin/*
+  Cache-Control: private, no-store
+  X-Robots-Tag: noindex, nofollow
+
+/workshop/admin/*
+  Cache-Control: private, no-store
+  X-Robots-Tag: noindex, nofollow

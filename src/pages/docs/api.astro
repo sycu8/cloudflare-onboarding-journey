@@ -1,0 +1,73 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/chrome/Breadcrumbs.astro';
+import LangText from '../../components/ui/LangText.astro';
+
+const origin = Astro.site?.href.replace(/\/$/, '') ?? 'https://onboarding.orangecloud.vn';
+---
+
+<BaseLayout
+  title={{ vi: 'API cho agent & tích hợp', en: 'API for agents & integrations' }}
+  description={{
+    vi: 'Tài liệu REST API, OpenAPI, api-catalog và OAuth discovery cho Cloudflare Starter Hub.',
+    en: 'REST API docs, OpenAPI, api-catalog, and OAuth discovery for Cloudflare Starter Hub.',
+  }}
+  canonicalPath="/docs/api"
+>
+  <Breadcrumbs
+    items={[
+      { href: '/docs/api/', label: { vi: 'API', en: 'API' } },
+    ]}
+  />
+
+  <header class="mb-8">
+    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: 'Hub API', en: 'Hub API' }} />
+    <LangText
+      as="p"
+      class="text-muted mt-2 max-w-3xl text-sm leading-relaxed"
+      text={{
+        vi: 'Các endpoint Pages Functions cho site học — phần lớn đọc công khai; ghi workshop cần Bearer admin.',
+        en: 'Pages Functions endpoints for the learning site — mostly public reads; workshop writes need admin Bearer.',
+      }}
+    />
+  </header>
+
+  <section class="card mb-6">
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Machine discovery', en: 'Machine discovery' }} />
+    <ul class="text-muted mt-3 list-disc space-y-2 pl-5 text-sm">
+      <li>
+        <a class="link" href={`${origin}/.well-known/api-catalog`}>/.well-known/api-catalog</a>
+        <span class="lang-vi"> — RFC 9727 linkset</span>
+        <span class="lang-en"> — RFC 9727 linkset</span>
+      </li>
+      <li>
+        <a class="link" href={`${origin}/.well-known/openapi.json`}>/.well-known/openapi.json</a>
+        — OpenAPI 3.1
+      </li>
+      <li>
+        <a class="link" href={`${origin}/auth.md`}>/auth.md</a>
+        — agent registration
+      </li>
+      <li>
+        <a class="link" href={`${origin}/.well-known/agent-skills/index.json`}>/.well-known/agent-skills/index.json</a>
+      </li>
+    </ul>
+  </section>
+
+  <section class="card mb-6">
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'REST endpoints', en: 'REST endpoints' }} />
+    <ul class="text-muted mt-3 space-y-2 font-mono text-sm">
+      <li>GET /api/site-config</li>
+      <li>GET /api/workshop-events</li>
+      <li>POST /api/workshop-signup</li>
+      <li>POST /api/feedback</li>
+      <li>POST /api/quiz-submission</li>
+    </ul>
+  </section>
+
+  <p class="text-muted text-sm">
+    <a class="link" href="/">
+      <LangText text={{ vi: '← Về trang chủ', en: '← Back to home' }} />
+    </a>
+  </p>
+</BaseLayout>

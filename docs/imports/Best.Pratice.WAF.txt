@@ -1,0 +1,132 @@
+CÁC RULES - BEST PRACTICE
+Mục lục
+Cloudflare Rules For Various Needs4
+1. Security Custom Rule To Protect API Endpoint_No LONGER Needed4
+2. Security Custom Rule To Block bad file types.4
+3. Security Custom Rule To Block Suspicious File Access.5
+4. Security Custom Rule To Block SQL Injection Attempts.5
+5. Security Custom Rule To Block PHP Uploads.6
+6. Security Custom Rule To Stop Directory Traversal.6
+7. Security Custom Rule To Block EXE Uploads.7
+8. Security Custom Rule To Challenge Old Browsers or the bots acting like one.8
+9. Security Custom Rule To Stop Fake Social Logins.9
+10. Security Custom Rule To Stop Crypto API Abuse.10
+11. Security Custom Rule To Stop Image Hotlinking.11
+12. Security Custom Rule Challenge CAPTCHA Bypass13
+13. Security Custom Rule Stop PHP Error Exploits13
+14. Security Custom Rule Stop XMLRPC Attacks14
+15. Security Custom Rule Stop Sensitive Configuration Access14
+16. Security Custom Rule Stop Malicious Query Parameters15
+17. Security Custom Rule Stop Common Exploit Paths16
+18. Security Custom Rule Stop Suspicious Query Strings17
+19. Security Custom Rule Stop Executable File Types18
+20. Security Custom Rule Stop Backup File Access18
+21. Security Custom Rule To Stop or Block Empty User Agents19
+Cloudflare Rules For Various Needs
+Security Custom Rule To Protect API Endpoint_No LONGER Needed
+Thay vì  manual block traffic dựa trên một con số threat score như 10, thì giờ Cloudflare tự động xử lý luôn → để chặn traffic xấu, kể cả với free plan.
+Security Custom Rule To Block bad file types.
+Rule này giúp bảo vệ website khỏi các request chứa những URL có file type / extension nguy hiểm, có thể gây rò rỉ dữ liệu từ database.
+Ở gói Free hoặc Pro, số lượng rule bị giới hạn → nên phải chọn lọc rule nào thật sự cần. 
+Ngoài ra:
+Rule restrictive (chặn mạnh) → đặt ở trên cùng
+Rule ít restrictive hơn → đặt ở bên dưới
+Lý do:
+Cloudflare xử lý rule từ trên xuống dưới.
+Khi một rule match và thực hiện action (block / allow), thì Cloudflare dừng luôn, không check các rule phía dưới nữa.
+Ví dụ:
+Nếu có rule: allow toàn bộ traffic từ IP A đặt ở trên
+Và rule: block request có pattern nguy hiểm đặt ở dưới → thì rule block sẽ không bao giờ chạy, vì request đã được allow từ trước rồi.
+Nguyên tắc:
+Rule chặn mạnh -> đặt trên
+Rule nới lỏng -> đặt dưới
+Security Custom Rule To Block Suspicious File Access.
+Rule này giúp bảo vệ website khỏi hacker hoặc bot cố truy cập vào password hoặc dữ liệu nhạy cảm.
+Security Custom Rule To Block SQL Injection Attempts.
+Rule này giúp bảo vệ website khỏi các cuộc tấn công SQL injection
+Chuỗi 1=1-- là một dạng payload phổ biến mà attacker (bot hoặc người) dùng để inject vào database nhằm khai thác lỗ hổng và gây ra các vấn đề nghiêm trọng. Vì vậy, chúng ta cần chặn các request chứa những pattern này.
+Security Custom Rule To Block PHP Uploads.
+Rule này giúp bảo vệ website khỏi các request URL cố gắng upload file PHP.
+Security Custom Rule To Stop Directory Traversal.
+Rule này dùng để chặn các yêu cầu truy cập vào thư mục cha (parent directories) – những thư mục không được phép truy cập.
+Trong giới kỹ thuật, kiểu tấn công này gọi là Directory Traversal, và chúng ta sẽ sử dụng Cloudflare để ngăn chặn nó.
+%2e = dấu .
+%2f = dấu /
+→ %2e%2e%2f = .. + / = ../
+Security Custom Rule To Block EXE Uploads.
+Rule này dùng để ngăn người dùng upload các file thực thi (executable files) có thể chứa:
+Malware
+Trojan
+hoặc các mã độc khác
+Security Custom Rule To Challenge Old Browsers or the bots acting like one.
+Rule này dùng để challenge (đưa ra thử thách) đối với các request truy cập website từ trình duyệt cũ (old browsers).
+Trình duyệt cũ không còn được cập nhật security
+Thường tồn tại lỗ hổng đã biết (known vulnerabilities)
+→ attacker có thể khai thác
+Cách hoạt động của rule
+Rule này không block, mà chỉ challenge
+Nghĩa là:
+Nếu là user thật → vượt qua challenge → truy cập bình thường
+Nếu là bot / attacker → thường không vượt qua được
+Best practice là “Manage Challenge”
+Security Custom Rule To Stop Fake Social Logins.
+Rule này giúp ngăn chặn các truy cập trái phép thông qua việc giả mạo xác thực từ mạng xã hội (spoofed social login).
+Cụ thể:
+Rule sẽ kiểm tra request đăng nhập có thực sự đến từ các nền tảng mạng xã hội hợp lệ hay không
+Từ đó ngăn chặn việc đánh cắp thông tin đăng nhập (credential theft)
+Security Custom Rule To Stop Crypto API Abuse.
+Rule này dùng để bảo vệ các endpoint liên quan đến cryptocurrency khỏi:
+truy cập trái phép
+hoặc hành vi thao túng (manipulation)
+Vì sao cần rule này?
+Các endpoint crypto là mục tiêu tấn công phổ biến, bao gồm:
+đánh cắp tài sản (theft)
+cryptojacking (lợi dụng tài nguyên để đào coin)
+Rule sẽ match các request tới:
+/api/coinbase
+/api/binance
+→ Đây là các endpoint liên quan đến crypto exchange
+Security Custom Rule To Stop Image Hotlinking.
+Rule này dùng để ngăn các website bên ngoài sử dụng trực tiếp tài nguyên (ảnh) từ server của mình
+Hành vi này gọi là hotlinking (ăn cắp băng thông bằng cách nhúng trực tiếp URL ảnh).
+→ Rule này giúp:
+bảo vệ bandwidth
+giảm tải server
+giữ quyền kiểm soát nội dung
+Expression:
+(http.referer ne "" and not (http.referer contains "abdf5.com"))
+and
+(
+ends_with(http.request.uri.path, ".webp")
+or ends_with(http.request.uri.path, ".jpg")
+or ends_with(http.request.uri.path, ".jpeg")
+or ends_with(http.request.uri.path, ".png")
+or ends_with(http.request.uri.path, ".gif")
+or ends_with(http.request.uri.path, ".svg")
+or ends_with(http.request.uri.path, ".avif")
+)
+Hoặc Cách 2:
+Truy cập vào Security > Setting > Turn on Hotlink Protection
+Security Custom Rule Challenge CAPTCHA Bypass
+Rule này xác định và đưa ra thử thách (challenge) đối với các công cụ tự động đang cố gắng vượt qua hệ thống Captcha.
+Điều này giúp duy trì tính toàn vẹn của hệ thống xác minh con người, bảo vệ các form và trang đăng nhập.
+Security Custom Rule Stop PHP Error Exploits
+Rule này ngăn chặn các attacker thu thập thông tin hệ thống thông qua các thông báo lỗi bị lộ, những thông tin này có thể tiết lộ cấu hình server của bạn và các điểm yếu.
+Security Custom Rule Stop XMLRPC Attacks
+Rule này bảo vệ các cài đặt WordPress khỏi các cuộc tấn công brute force và các nổ lực DDoS khai thác giao diện XML-RPC, đây là một vector tấn công phổ biến đối với các website WordPress.
+Security Custom Rule Stop Sensitive Configuration Access
+Rule này ngăn chặn truy cập đến các file cấu hình server quan trọng, những file kiểm soát quyền thư mục và thiết lập của CMS.
+Nói đơn giản, nó chặn các vector tấn công phổ biến nhắm vào cấu hình web server.
+Security Custom Rule Stop Malicious Query Parameters
+Rule này chặn các nổ lực tấn công command injection phổ biến thông qua tham số URL, nhắm vào việc thực thi code phía server.
+Security Custom Rule Stop Common Exploit Paths
+Rule này ngăn chặn các nỗ lực truy cập vào các file hệ thống quan trọng thông qua kỹ thuật path traversal.
+Security Custom Rule Stop Suspicious Query Strings
+Rule này ngăn chặn các cuộc tấn công command injection nhắm vào các tham số query.
+Security Custom Rule Stop Executable File Types
+Rule này chặn truy cập trực tiếp đến các file thực thi phía server thông qua các request web.
+Security Custom Rule Stop Backup File Access
+Rule này bảo vệ các file backup cơ sở dữ liệu hoặc file nén (zip) bị lộ ngoài ý muốn khỏi việc bị tải xuống.
+Security Custom Rule To Stop or Block Empty User Agents
+Rule này sẽ chặn các user agent rỗng vì các trình duyệt hợp lệ luôn gửi header user agent.
+Các giá trị rỗng thường là dấu hiệu của bot độc hại, và chúng ta không muốn điều đó.

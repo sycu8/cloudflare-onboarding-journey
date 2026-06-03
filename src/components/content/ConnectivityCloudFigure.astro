@@ -1,0 +1,54 @@
+---
+import LangText from '../ui/LangText.astro';
+
+const src = '/images/cloudflare-connectivity-cloud.png';
+---
+
+<figure class="card mt-6 overflow-hidden p-0">
+  <div class="border-b border-[var(--cf-border)] bg-[var(--cf-surface)] px-4 py-3 sm:px-5">
+    <LangText
+      as="figcaption"
+      class="text-sm font-semibold"
+      text={{
+        vi: 'Cloudflare connectivity cloud — Connect · Protect · Build',
+        en: "Cloudflare's connectivity cloud — Connect · Protect · Build",
+      }}
+    />
+    <LangText
+      as="p"
+      class="text-muted mt-1 text-xs leading-relaxed"
+      text={{
+        vi: 'Sơ đồ chính thức: một nền tảng thống nhất (70+ dịch vụ) trên mạng lưới edge toàn cầu. Ba cột tương ứng ba lớp học trên hub — Application Services (Connect + Protect app), Developer Platform (Build), Cloudflare One (Protect user/SASE).',
+        en: 'Official view: one unified platform (70+ services) on a global edge network. Three columns map to hub tracks — Application Services (Connect + Protect apps), Developer Platform (Build), Cloudflare One (Protect users / SASE).',
+      }}
+    />
+  </div>
+  <div class="bg-white p-3 dark:bg-zinc-950 sm:p-4">
+    <img
+      src={src}
+      width={1200}
+      height={675}
+      loading="lazy"
+      decoding="async"
+      class="mx-auto h-auto w-full max-w-4xl rounded-md"
+      alt="Cloudflare connectivity cloud diagram with three columns Connect, Protect, and Build, on a foundation of unified platform and global network"
+    />
+  </div>
+  <div class="grid gap-2 border-t border-[var(--cf-border)] px-4 py-3 text-xs sm:grid-cols-3 sm:px-5">
+    <p>
+      <span class="font-semibold text-[var(--cf-accent)]">Connect</span>
+      <span class="lang-vi"> — CDN, DNS, SASE, routing</span>
+      <span class="lang-en"> — CDN, DNS, SASE, routing</span>
+    </p>
+    <p>
+      <span class="font-semibold text-[var(--cf-accent)]">Protect</span>
+      <span class="lang-vi"> — WAF, API, bot, Zero Trust</span>
+      <span class="lang-en"> — WAF, API, bot, Zero Trust</span>
+    </p>
+    <p>
+      <span class="font-semibold text-[var(--cf-accent)]">Build</span>
+      <span class="lang-vi"> — Workers, AI, storage, media</span>
+      <span class="lang-en"> — Workers, AI, storage, media</span>
+    </p>
+  </div>
+</figure>

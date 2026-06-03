@@ -1,0 +1,16 @@
+{
+  "serverInfo": {
+    "name": "Cloudflare Starter Hub",
+    "version": "1.0.0"
+  },
+  "transport": {
+    "type": "streamable-http",
+    "endpoint": "https://onboarding.orangecloud.vn/api/mcp"
+  },
+  "capabilities": {
+    "tools": true,
+    "resources": false,
+    "prompts": false
+  },
+  "documentation": "https://onboarding.orangecloud.vn/docs/api/"
+}

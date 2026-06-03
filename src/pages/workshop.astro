@@ -8,8 +8,8 @@ import WorkshopSection from '../components/interactive/WorkshopSection';
 <BaseLayout
   title={{ vi: 'Tham gia beginner Cloudflare workshop', en: 'Join a beginner Cloudflare workshop' }}
   description={{
-    vi: 'Xem lịch workshop sắp tới và đăng ký: Application Services, Developer Platform, Cloudflare One.',
-    en: 'View upcoming workshops and register: Application Services, Developer Platform, Cloudflare One.',
+    vi: 'Sự kiện cộng đồng Cloudflare (PeerPoint) và đăng ký workshop qua hub.',
+    en: 'Cloudflare community events (PeerPoint) and hub workshop registration.',
   }}
   canonicalPath="/workshop"
   showProgressBar
@@ -22,15 +22,10 @@ import WorkshopSection from '../components/interactive/WorkshopSection';
       as="p"
       class="text-muted mt-2 max-w-2xl text-sm"
       text={{
-        vi: 'Chọn sự kiện sắp tới (nếu có), sau đó gửi form đăng ký.',
-        en: 'Pick an upcoming event (if available), then submit the registration form.',
+        vi: 'Xem sự kiện sắp tới / đã qua và đăng ký qua Luma hoặc form hub bên dưới.',
+        en: 'Browse upcoming and past events, register on Luma, or use the hub form below.',
       }}
     />
-    <p class="text-muted mt-3 text-xs">
-      <a class="link" href="/workshop/admin">
-        <LangText text={{ vi: 'Admin: thêm sự kiện', en: 'Admin: add events' }} />
-      </a>
-    </p>
   </header>
 
   <WorkshopSection client:load />

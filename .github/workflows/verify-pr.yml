@@ -25,6 +25,8 @@ jobs:
         run: npm ci
 
       - name: Build
+        env:
+          PUBLIC_SITE_URL: https://onboarding.orangecloud.vn
         run: npm run build
 
       - name: Start preview

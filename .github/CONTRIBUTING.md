@@ -48,9 +48,10 @@ If you change `scripts/sync-*.mjs` or catalog scrapers, mention it in the PR and
 
 - Every PR is **reviewed and approved by the maintainer** ([@sycu8](https://github.com/sycu8)) before merge.
 - You may get **request changes** comments — please update the branch and re-run CI.
-- **Only the maintainer** merges to `main` and deploys to Cloudflare Pages.
+- **Stage 1 (UAT):** maintainer approves GitHub Environment `uat` → PR deploys to UAT for preview.
+- **Stage 2 (production):** after UAT OK and merge to `main`, maintainer approves environment `production` → live site updates.
 
-See [MAINTAINER_REVIEW.md](../docs/MAINTAINER_REVIEW.md).
+See [UAT-DEPLOYMENT.md](../docs/UAT-DEPLOYMENT.md) and [MAINTAINER_REVIEW.md](../docs/MAINTAINER_REVIEW.md).
 
 ## Questions
 

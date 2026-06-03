@@ -1,0 +1,333 @@
+              Basic Configuration Guide
+Mục lục
+I. CẤU HÌNH DNS3
+II. CẤU HÌNH TLS (SSL)7
+III. CẤU HÌNH WAF13
+IV. CẤU HÌNH BOT MANAGEMENT26
+1. Bật tính năng  JavaScript Detection26
+2. Triển khai cấu hình theo Template27
+3. Cấu hình custom rule29
+3.1 Allow traffic from search engine bots29
+3.2 Bảo vệ chống lại các bot độc hại30
+3.3 Bảo vệ chống lại Scrapping34
+4. Test rule35
+V. CẤU HÌNH CACHE TUNING37
+1. Analyze default behavior37
+2. Create a cache rule for /services/luggages38
+VI. CẤU HÌNH LOAD BALANCER43
+1. Create load balancer43
+2. Create origin pool43
+3. Create monitors45
+4. Traffic steering46
+5. Test Load balancer46
+6. Re-test49
+8. Configure session affinity50
+VII. CẤU HÌNH RULES51
+1. Create a transform rule that adds a header to all responses51
+2. Xác nhận header khi phản hồi53
+3. Thêm nhiều Security Headers và Managed Transforms53
+I. CẤU HÌNH DNS
+Công dụng:
+DNS cho phép truy cập các dịch vụ web bằng tên miền dễ nhớ thay vì địa chỉ IP.
+Dịch vụ ứng dụng Cloudflare đều hoạt động thông qua proxy ngược (reverse proxy), được bật trên bản ghi DNS (DNS record).
+Bước 1: Mở zone để cấu hình
+Bước 2: Thêm một bản ghi DNS 
+Tại thanh menu bên trái dashboard, chọn DSN > Records > chọn Add record
+Tạo một bản ghi A mới trỏ về zone root. Đảm bảo luôn giữ nút chuyển đổi Proxy BẬT để Cloudflare thực hiện proxy ngược trên miền này. Điền các thông tin tương tự như sau (có thể thay đổi theo thông tin mà chúng ta cần thiết lập, vì đây là bài lab có sẵn):
+Type: A
+Name: @
+IPv4 address: 20.88.188.200
+Proxy: yes
+Comment: Lab origin server
+ 
+Bước 3: Kiểm tra bằng cách mở terminal và truy vấn đến bản ghi DNS
+Có thể thấy rằng mặc dù địa chỉ của server gốc là 20.88.188.200 nhưng kết quả truy vấn trả về là hai địa chỉ IP của Cloudflare (104.18.4.167 và 104.18.5.167).
+Chúng ta thử tắt nút Proxy và truy vấn lại bản ghi, xem chuyện gì sẽ diễn ra:
+Địa chỉ của server gốc là 20.88.188.200 đã bị lộ, do không bật nút proxy
+Điều này chứng minh rằng Cloudflare đang hoạt động như một reverse proxy cho tất cả các yêu cầu đến tên miền mới - nó chấm dứt HTTP session từ người dùng và sau đó thiết lập một phiên mới cho server gốc. 
+Bây giờ, chúng ta thử sử dụng trình duyệt web để gõ tên bản ghi DNS vừa thiết lập, kết quả trang web sẽ hiển thị giao diện như hình bên dưới.
+II. CẤU HÌNH TLS (SSL)
+Công dụng: để mã hóa kết nối giữa người dùng, Cloudflare và server gốc.
+Cloudflare tự động cấp Universal Certificate cho tất cả domain được thêm vào Cloudflare.
+Universal Certificate bảo vệ apex domain và 1 cấp subdomain thông qua wildcard (ví dụ *.example.com - www.example.com - mail.example.com ).
+Nếu hệ thống dùng subdomain nhiều cấp hơn, cần đăng ký Advanced Certificate.
+Advanced Certificate cho phép tùy chỉnh nâng cao, như cấu hình cipher suites và các tham số TLS khác. 
+Cipher suites: bộ thuật toán mã hóa được dùng trong quá trình TLS handshake ( trao đổi khóa, mã hóa dữ liệu, kiểm tra toàn vẹn)
+Demo:
+Trước tiên, hãy đảm bảo tắt mọi dịch vụ đang chạy trên máy có thể chặn lưu lượng HTTPS (VPN, Cloudflare WARP, v.v.).
+Bước 1: 
+Luôn luôn bật https (Always use https)
+Điều này sẽ giúp ngăn chặn các yêu cầu vô tình qua HTTP không sử dụng TLS.
+Chọn SSL/TLS > Edge Certificates > bật Always Use Https
+Thay đổi phiên bản TLS tối thiểu (Change minimum TLS Version)
+Thông số mặc định là TLS 1.0, tuy nhiên đây là phiên bản khá cũ nên cần thiết lập TLS 1.2 để đáp ứng các tiêu chuẩn bảo mật hiện nay như PCI, DSS, tài chính, ngân hàng)
+PCI (payment card industry), DSS (data security standard) tiêu chuẩn bảo mật bắt buộc cho mọi hệ thống lưu trữ, xử lý hoặc truyền dữ liệu thẻ thanh toán
+Bước 2: Thêm một subdomain (add a subdomain)
+Tiếp tục truy cập vào DNS > records và điền vào mục Name sub1 
+Sau đó mở trình duyệt truy cập URL https://sub1.precise-voyager.sxplab.com
+Như kỳ vọng, giao diện của trang web vẫn hiện thị, và nó cũng được bảo vệ bởi universal certificate của Cloudflare.
+Ngoài ra còn có thể sử dụng openssl để truy suất và thấy rõ rằng Universal certificate từ Cloudflare tự động cấp cho miền apex và các subdomain trực tiếp của nó 
+DNS:precise-voyager.sxplab.com 
+DNS:*.precise-voyager.sxplab.com
+Bước 3: Thêm subdomain cấp 2  (Add a subdomain to that subdomain)
+Chúng ta tiếp tục tạo thêm một subdomain cấp hai và thử xem ở subdomain này có được cấp chứng chỉ không
+Tương tự các bước trên, chúng ta điền đầy đủ thông tin như hình bên dưới
+Có thể thấy ngay thông báo cảnh báo của giao diện Cloudflare rằng subdomain này không được bảo vệ bằng chứng chỉ nào cả.
+Và khi sử dụng trình duyệt để truy cập https://sub2.sub1.precise-voyager.sxplab.com/, chúng ta cũng sẽ nhận một nội dung thông báo tương tự rằng kết nối này không an toàn
+Khi sử dụng Openssl truy vấn chắc chắn cũng sẽ nhận một thông báo lỗi như vậy
+No peer certificate available (tạm dịch là Không có chứng chỉ nào từ phía đối tác)
+Bước 4: Mua chứng chỉ nâng cao (Order Advanced Certificate)
+Đi đến SSL/TLS > Edge Certificates > chọn Order Advanced Certificate
+Có thể chọn bất cứ tổ chức Certificate Authority (xác thực danh tính và ký phát hành chứng chỉ số) có trong lựa chọn (bao gồm Google Trust Services, SSL.com, Let’s encrypt), ở bài lab này chúng ta sẽ sử dụng Google Trust Services.
+Điền sub2.sub1.precise-voyager.sxplab.com  vào mục Certificate Hostnames
+Chúng ta có thể thấy rằng một chứng chỉ mới đang được khởi tạo (initializing)
+Quá trình xác nhận có thể mất vài phút để hoàn tất
+Chúng ta hãy thử sử dụng openssl để truy vấn hoặc trình duyệt để truy cập lại lần nữa, và kết quả là subdomain lớp 2 đã được cấp chứng chỉ an toàn.
+III. CẤU HÌNH WAF
+Công dụng: 
+Managed Ruleset của Cloudflare là một bộ quy tắc bảo mật
+Cung cấp khả năng bảo vệ nhanh chóng và hiệu quả cho tất cả các loại ứng dụng
+Cập nhật thường xuyên để bảo vệ trước các lỗ hỏng mới và giảm các false positives.
+Demo:
+Bước 1: Trước khi triển khai WAF, chúng ta sẽ thấy những gì sẽ diễn ra?
+Hãy thử truy cập đường link https://precise-voyager.sxplab.com/.git/secrets.txt
+Trình duyệt hiển thị nội dung file secrets.txt bao gồm thông tin username và password
+Bước 2: Triển khai Managed Ruleset của Cloudflare
+Truy cập vào mục Security -> Settings -> Detection Tools và bật Cloudflare Managed Ruleset 
+Giao diện cấu hình sẽ được hiển thị, chúng ta có thể cấu hình:
+Ruleset configuration
+Ruleset action:
+Managed Challenge: Cloudflare tự chọn cách kiểm tra phù hợp để phân biệt người dùng thật và hành vi đáng ngờ.
+Block: Chặn ngay yêu cầu truy cập, không cho vào hệ thống.
+JS Challenge: Trình duyệt phải chạy kiểm tra đơn giản bằng JavaScript để chứng minh là người dùng thật.
+Interactive Challenge: Người dùng phải thao tác xác minh trực tiếp (ví dụ xác nhận “tôi không phải robot”).
+Log: Chỉ ghi nhận và theo dõi, không chặn truy cập.
+Ruleset status:
+Enable: bật 
+Disable: tắt
+Mọi cấu hình đều để default và deploy, chúng ta có thể định nghĩa theo mong muốn tùy biến các rule.
+Chúng ta thấy bộ quy tắc của Cloudflare đã được bật (active) 
+Bước 3: Kiểm tra tính năng Managed Ruleset của Cloudflare
+Thử truy cập lại https://precise-voyager.sxplab.com/.git/secrets.txt xem có gì khác không.
+Có thể thấy rằng, không thể thu thập thông tin từ file secrets.txt như lúc chưa bật WAF, mà lúc này truy cập đã bị chặn.
+Bước 4: Phân tích các thông tin đãngăn chặn
+Nào, bây giờ chúng ta hãy xem phần thông tin được phân tích bằng cách truy cập Security > Analytics -> Events tab.
+Sẽ thấy một vài ngăn chặn gần đây do các bước trong lab đã test trước đó.
+Ngoài bảng biểu để quan sát trực quan thì còn có các thông tin chi tiết về các sự kiện đã được ngăn chặn như hình bên dưới như source IP, Hosts, Countries,...
+Ví dụ đối với bài lab này có thể thấy rằng có 5 truy cập được ngăn chặn đến từ Việt Nam và Netherlands đều sử dụng phương thức HTTP Methods
+GET
+Bên cạnh đó, chúng ta còn có thể lọc các event theo mong muốn, nhằm tinh gọn lại báo cáo bằng nút add filter trên cùng
+Hoặc tại mỗi mục của từng event có nút filter để chúng ta lọc ra các thông tin cần thiết để xem (tham khảo như hình bên dưới)
+Bước 5: Tạo một rule tự quy ước
+Truy cập đến Security > Security rules > Create rule > Custom rules.
+Điền vào các thông tin như hình bên dưới > Deploy , để xem Managed Challenge sẽ là gì khi có các truy cập gửi đến
+Rule đã được bật, và bất cứ yêu cầu nào liên lạc đến trang đều được kích hoạt Managed Challenge
+Thử truy cập đến https://precise-voyager.sxplab.com/contact/ chúng ta sẽ thấy một giao diện hiển thị yêu cầu truy cập đang được xem xét bởi Managed Challenge 
+Sau khi xác thực thành công, truy cập sẽ được điều hướng đến trang web được yêu cầu
+Hãy mở inspect của trang web để xem điều gì xảy ra trong trình duyệt khi chúng ta vượt qua thử thách.
+Trong mục Developers Console > Network tab > contact/ >Cookies
+Khi một client vượt qua Managed Challenge, cookie cf_clearance sẽ được cấp cho trình duyệt trong phản hồi, sau đó có thể truy cập được trang web
+Ngoài ra, các lần truy cập tiếp theo sẽ không bị challenge lại
+Bước 6: Tạo một Rate limiting rule
+Để tăng cường quyền truy cập, chúng ta hãy chuyển đến Advanced Rate Limiting.
+Chọn Security > Security rules > Create Rule và chọn Rate limiting rules.
+Nhiệm vụ của chúng ta lúc này là sẽ giới hạn số lần yêu cầu ở mức 5 lần mỗi phút để ngăn chặn các cuộc tấn công brute force (thử đi thử lại hàng loạt mật khẩu).
+Điền vào từng mục với các thông số sau:
+Field -> URI Path
+Operator -> Contains
+Value -> /services/safes/
+With the same characteristics -> IP
+When Rate exceeds… 5 requests và 1 minute period
+Then take action -> Block và Response Type -> Default
+With the following behaviour -> Block for the selected duration -> 1 minute
+Sau khi điền đầy đủ các thông số trên -> Deploy
+Rule đã được bật
+Thử chạy một vòng lặp yêu cầu trên powershell và nhận kết quả như sau
+Có thể thấy ở 5 lần yêu cầu truy cập đầu tiên đều được phản hồi về status code 200 (có nghĩa truy cập thành công), nhưng đến lần thứ 6 thì sẽ bị chặn do đã vượt ngưỡng quy tắc chúng ta thiết lập trước đó nên nhận về phản hồi Status code 429 (gửi quá nhiều yêu cầu - too many request).
+Sau 1 phút, chúng ta tiến hành truy cập lại trang web thì phản hồi sẽ trở lại bình thường.
+Thử điều chỉnh số lần request giảm xuống còn 3 lần trên mỗi phút xem như thế nào
+Chúng ta dễ dàng nhận thấy, kể từ yêu cầu thứ 4 đều bị chặn trong vòng 1 phút
+Ngoài ra, chúng ta còn có thể custome error page bằng cách chọn With response type
+Custom HTML
+Custom Text
+Custom JSON
+Custom XML
+Sau đó chèn đoạn mã html hoặc json vào mục Response body
+IV. CẤU HÌNH BOT MANAGEMENT
+Công dụng: 
+Ngăn chặn các cuộc tấn công tự động làm tiêu tốn tài nguyên và doanh thu, bao gồm credential stuffing, scalping và content scraping.
+Gán điểm bot (bot score) cho mỗi request dựa trên machine learning, huấn luyện trên hơn 25 triệu website, giúp phân biệt chính xác bot hợp lệ và bot độc hại.
+Triển khai tức thì thông qua WAF rule template như Define Bots và Likely Bots — chỉ cần bật rule và chọn hành động phản hồi.
+Bật tính năng  JavaScript Detection
+Tham khảo tại: JavaScript Detections · Cloudflare challenges docs 
+Phát hiện JavaScript (JavaScript Detection) là một cơ chế xác thực độc lập, tách biệt với Challenge Pages và Turnstile của Cloudflare. Tính năng này hỗ trợ các giải pháp Bot Management của Cloudflare trong việc nhận diện và phân loại các yêu cầu truy cập tự động (automated requests).
+Khác với Challenge Pages hoặc Turnstile, vốn chỉ thu thập tín hiệu từ phía trình duyệt tại thời điểm xác thực, JavaScript Detection hoạt động liên tục trên mọi yêu cầu gửi đến website. Cơ chế này thực thi mã JavaScript phía máy khách để thu thập thêm các tín hiệu hành vi và môi trường truy cập, từ đó tăng độ chính xác trong việc xác định lưu lượng hợp lệ và phát hiện bot.
+Để bật tính năng này, tại giao diện dashboard, chọn Security > Settings > Bot Traffic > Biểu tượng chỉnh sửa (JS Detections) > Bật Javascript Detections
+Triển khai cấu hình theo Template
+Bước 1: Đăng nhập vào dashboard Cloudflare, chọn Account và chọn zone (domain)
+Bước 2: Trong mục Security > Security rules > Templates
+Bước 3: Trong mục Rules template  tìm kiếm bản mẫu với từ khóa “bots” và chọn Mitigate definite bot traffic > Create from template
+Bước 4: Tại mục New custom rule ,  điền các thông số cần thiết vào các mục như URI path, Opertator, Value, Action,... tham khảo như hình bên dưới:
+Cấu hình custom rule
+Dưới đây là một số tình huống cấu hình phổ biến liên quan đến bot để tham khảo:
+3.1 Allow traffic from search engine bots
+Ví dụ về quy tắc này sẽ áp dụng cơ chế thử thách (challenge) đối với các yêu cầu truy cập đến từ danh sách quốc gia được chỉ định, đồng thời vẫn cho phép lưu lượng từ các bot công cụ tìm kiếm như Googlebot, Bingbot và các bot đã được xác minh khác (theo danh sách từ cloudflare) tiếp tục truy cập.
+Bước 01: Tại dashboard chọn mục Security > Security rules > Create rule > Custom rules
+Bước 02: Nhập tên rule hiện tại và điền đầy đủ các thông tin theo hình bên dưới. Sau đó chọn vào nút Deploy để triển khai rule đã cấu hình.
+3.2 Bảo vệ chống lại các bot độc hại
+Để giảm thiểu và ngăn chặn lưu lượng bot độc hại, cần cấu hình tuần tự 03 rule như sau:
+Rule 01: Skip verified bots
+Bước 01: Tại dashboard chọn mục Security > Security rules > Create rule > Custom rules
+Bước 02:  Nhập tên rule hiện tại và điền đầy đủ các thông tin theo hình bên dưới. Sau đó chọn vào nút Deploy để triển khai rule đã cấu hình.
+Khi chọn All remaining custom rules có nghĩa là cho phép bỏ qua toàn bộ các Custom Rules còn lại đối với những bot đã được Cloudflare xác minh là hợp lệ. Điều này giúp tránh việc các bot tin cậy bị áp dụng nhầm cơ chế kiểm soát hoặc challenge.
+Rule 02: Block definitely automated
+Bước 01: Tại dashboard chọn mục Security > Security rules > Create rule > Custom rules
+Bước 02:  Nhập tên rule hiện tại và điền đầy đủ các thông tin theo hình bên dưới. Sau đó chọn vào nút Deploy để triển khai rule đã cấu hình.
+Mục đích của rule này là sẽ chặn toàn bộ các request có Bot Score = 1.
+Trong đó, Bot Score là điểm đánh giá của Cloudflare để xác định mức độ một request có phải bot hay không (thang điểm tính từ 1–99):
+Automated (bot score = 1): Cloudflare đánh giá gần như chắc chắn là lưu lượng tự động.
+Likely automated (bot scores 2 - 29): khả năng cao là bot tự động hoặc độc hại.
+Likely human (bot scores 30-99): được đánh giá khả năng cao là người dùng thật.
+Dựa vào cách đánh giá trên nên mức độ tin cậy rất cao, do đó việc áp dụng Action = Block thường có rủi ro chặn nhầm (false positive) không đáng kể, đồng thời giúp giảm lưu lượng bot độc hại trước khi vào hệ thống phía sau.
+Rule 03: Challenge likely automated
+Bước 01: Tại dashboard chọn mục Security > Security rules > Create rule > Custom rules
+Bước 02:  Nhập tên rule hiện tại và điền đầy đủ các thông tin theo hình bên dưới. Sau đó chọn vào nút Deploy để triển khai rule đã cấu hình.
+Ở rule này, khi thiết lập các thông số như hình bên trên thì Cloudflare sẽ áp dụng Managed Challenge đối với các request có Bot Score từ 2 đến 29. Khoảng điểm này thể hiện lưu lượng có dấu hiệu giống hành vi tự động (likely automated behavior), tuy nhiên chưa đủ chắc chắn để chặn hoàn toàn. Do đó, với Managed Challenge, Cloudflare sẽ tự động áp dụng cơ chế xác thực phù hợp (có thể không hiện CAPTCHA nếu không cần thiết) để cho phép người dùng hợp lệ tiếp tục truy cập và ngăn chặn bot hoặc truy cập tự động.
+Cách xử lý này giúp cân bằng giữa bảo mật và trải nghiệm người dùng, đồng thời giảm rủi ro chặn nhầm so với việc block trực tiếp.
+3.3 Bảo vệ chống lại Scrapping
+Ở rule này, mục đích chủ yếu là phát hiện và giảm thiểu hành vi thu thập dữ liệu tự động (web scraping) từ bot. Rule thường dựa trên các tiêu chí như Bot Score, tần suất truy cập hoặc đặc điểm request để thực hiện Log, Challenge hoặc Block nhằm bảo vệ nội dung và giảm truy cập không mong muốn.
+Hãy điền các thông số sau để tạo một rule chống lại scraping.
+Bước 01: Tại dashboard chọn mục Security > Security rules > Create rule > Custom rules
+Bước 02:  Nhập tên rule hiện tại và điền đầy đủ các thông tin theo hình bên dưới. Sau đó chọn vào nút Deploy để triển khai rule đã cấu hình.
+Khuyến nghị: chúng ta nên để cấu hình “then take action” là Log/Manage Challenge khi bắt đầu nhằm theo dõi rule có hoạt động đúng ý và nhu cầu mong muốn không, sau đó chúng ta thay đổi action thành Block để ràng buộc chặt chẽ hơn,
+Test rule
+Mở powershell và nhập lệnh để kiểm tra
+Các lệnh Powershell được nhận dạng là bot/automated tool, do đó yêu cầu của chúng ta đã kích hoạt rule và quá trình kiểm tra bị chặn.
+Bước 3: Bây giờ, chúng ta thử xem phân tích các ngăn chặn (analyze the block)
+Security > Analytics
+Nhìn sơ các thông tin được phân tích, thì thấy truy cập này đến từ Việt Nam và đã được ngăn chặn. Chúng vi phạm bộ quy tắc Mitigate definite bot traffic [Template]
+V. CẤU HÌNH CACHE TUNING
+Công dụng: 
+Tăng tốc phân phối nội dung bằng cách phục vụ dữ liệu từ 300+ edge toàn cầu, giúp giảm tải cho origin, giảm độ trễ và tiết kiệm băng thông
+Kiểm soát hành vi cache rất chi tiết thông qua Cache Rules (TTL, cache key, cách xử lý response từ origin) mà không cần chỉnh code
+Vẫn phục vụ nội dung cũ (stale) khi origin gặp lỗi, nhờ cơ chế grace period, giúp hệ thống luôn sẵn sàng ngay cả khi backend có sự cố
+Demo:
+1. Analyze default behavior
+cf-cache-status = DYNAMIC → không cache
+Request đi thẳng về origin
+Khi nào một nội dung được cache?
+Một resource được Cloudflare cache khi đủ các điều kiện sau (ít nhất về mặt logic):
+① Nội dung static / ổn định
+JS, CSS, image, font
+HTML giống nhau cho mọi user
+② Origin cho phép cache
+Có header hợp lệ, ví dụ:
+Cache-Control: public
+Cache-Control: max-age=...
+Không có private, no-store, no-cache
+③ Method phù hợp
+GET hoặc HEAD
+Không cache POST (mặc định)
+④ Có TTL rõ ràng
+Origin trả TTL
+hoặc
+Cloudflare Cache Rule gán TTL
+⑤ Không phụ thuộc dữ liệu cá nhân
+Không cần cookie để render nội dung
+Không dựa vào header riêng của user (Authorization, JWT…)
+2. Create a cache rule for /services/luggages
+In the Cloudflare Dashboard go to Caching ‣ Cache Rules and select Create rule
+Enter a descriptive name for the rule, such as “Cache HTML on Luggages Page”
+Set the Field to URI Path
+Set the Operator to equals
+Set the Value to /services/luggages/
+Set Cache status to Eligible for cache
+You can customize additional cache settings such as:
+Edge TTL: → Thời gian Cloudflare lưu nội dung trên edge. TTL càng dài thì cache hit càng cao, origin càng nhẹ.
+Browser TTL:  → Thời gian trình duyệt của người dùng lưu cache. Giúp user load lại nhanh hơn, giảm request quay lại Cloudflare.
+Cache Key:  → Quyết định Cloudflare coi hai request có giống nhau hay không (URL, query string, header…). Cache key đúng giúp tránh cache sai nội dung.
+Serve Stale Content:  → Khi cache hết hạn, Cloudflare vẫn tạm trả nội dung cũ trong lúc âm thầm lấy bản mới từ origin → không gián đoạn trải nghiệm.
+Respect Strong ETags:  → Cloudflare dùng ETag mạnh từ origin để kiểm tra nội dung có thay đổi hay chưa → tiết kiệm bandwidth mà vẫn đúng dữ liệu.
+Origin Error Page Pass-thru: → Khi origin lỗi, Cloudflare trả nguyên trang lỗi từ origin thay vì trang lỗi mặc định của Cloudflare.
+To the right of where you see Edge TTL, Click + Add Setting
+Choose Ignore cache-control header and use this TTL and set the duration to 30 seconds
+cf-cache-status with a value of MISS
+Có nghĩa là đã đủ điều kiện để cache, tuy nhiên chưa có sẵn trong cache nên cần phải gọi về origin.
+Thử gọi lại lần nữa,...
+HIT → cache còn hạn, trả luôn
+MISS → không có cache, fetch full từ origin
+REVALIDATED → có cache, check lại origin rồi mới trả
+DYNAMIC: Cloudflare vẫn proxy traffic, Nhưng file/page đó không nằm trong cache. Mỗi request sẽ forward về origin để lấy dữ liệu mới
+cf-cache-status with a value of REVALIDATED
+Có cache, check lại origin rồi mới trả
+Thử gọi lại thêm lần nữa,...
+cf-cache-status with a value of HIT
+Cache còn hạn, trả luôn
+Ngoài ra cần lưu ý thông số age: 17 Thể hiện thời gian tồn tại của cache. Việc chờ cache hết TTL là cần thiết để đánh giá chính xác hành vi cache sau khi cấu hình thay đổi.
+Thử gọi lại thêm lần nữa,...
+-> Có thể thấy rằng, sau khi gọi lại nhiều lần đến khi age đạt 29, thì qua lần tiếp theo cf-cache-status : REVALIDATED để đảm bảo dữ liệu trả về luôn mới (vì cấu hình bên trên TTL:30 seconds)
+VI. CẤU HÌNH LOAD BALANCER
+Công dụng: 
+Resource optimization: bằng cách phân phối lưu lượng truy cập web trên nhiều máy chủ, tối đa hóa thông lượng và giảm thiểu độ trễ.
+High availability: bằng cách chỉ định tuyến lưu lượng truy cập đến các máy chủ đang hoạt động và bỏ qua những máy chủ bị lỗi.
+Scalability: bằng cách tạo điều kiện thích ứng nhanh với sự thay đổi về lưu lượng truy cập bằng cách giúp việc thêm máy chủ hoặc sức mạnh điện toán trở nên dễ dàng hơn.
+Demo:
+1. Create load balancer
+Traffic ‣ Load Balancing. Here, create a new Load Balancer (LB):
+Tạo tên máy chủ mới cho bộ cân bằng tải bằng cách thêm tiền tố lb vào vùng hiện có của bạn. Tạm thời tắt Session Affinity và Adaptive Routing:
+2. Create origin pool
+Ở bước tiếp theo, bạn sẽ được yêu cầu thêm một Origin Pool. Vì chúng ta chưa có, hãy chọn Create a pool.
+Đặt tên cho pool của bạn, đảm bảo Endpoint Steering được đặt thành Random và thêm hai origin sau:
+Name          IP                    Weight
+origin-1      52.191.5.18          1
+origin-2      52.170.37.97        1
+3. Create monitors
+Ở trang tiếp theo, chọn.Attach monitor and Create a Monitor.
+Sau đó, khi kết nối màn hình, hãy giữ nguyên các cài đặt mặc định và chỉ cần nhấp vào Save  để tiếp tục sang trang tiếp theo.
+4. Traffic steering
+Hãy tắt tính năng điều hướng lưu lượng truy cập vì chúng ta chỉ sử dụng một nhóm máy chủ. (Keep Traffic steering Off)
+Bỏ qua các bước thiết lập còn lại và Lưu rồi Triển khai.
+5. Test Load balancer
+Linux: curl -s --head https://lb.insightful-web.sxplab.com
+WIndows: Invoke-WebRequest -Uri https://lb.insightful-web.sxplab.com -Method Head
+-> Origin-1
+-> Origin-2
+Chạy dòng lệnh 
+Linux: while true; do curl -s --head https://lb.insightful-web.sxplab.com | grep -i x-origin; done
+Windows -cmd: for /L %i in (0,0,1) do curl -s -I https://lb.insightful-web.sxplab.com | findstr /i x-origin
+Hoặc nếu bạn không có curl, hãy sử dụng công cụ dành cho nhà phát triển trong trình duyệt của mình. Tải lại trang một vài lần và bạn sẽ thấy trang được phục vụ bởi một nguồn gốc khác.
+Head back to the main Load Balancing page, select Manage Pools, expand the origin pool you have created and disable one of the origin servers. This simulates an outage of one of your origins.
+Quay lại trang Cân bằng tải chính, chọn Manage Pools, mở rộng nhóm nguồn bạn đã tạo và vô hiệu hóa một trong các máy chủ nguồn. Thao tác này mô phỏng sự cố ngừng hoạt động của một trong các máy chủ nguồn của bạn.
+6. Re-test
+Chạy dòng lệnh 
+Linux: while true; do curl -s --head https://lb.insightful-web.sxplab.com | grep -i x-origin; done
+Windows -cmd: for /L %i in (0,0,1) do curl -s -I https://lb.insightful-web.sxplab.com | findstr /i x-origin
+-> Khi tắt origin-1 bị tắt,thì test lại chỉ trả origin-2
+8. Configure session affinity
+Bật Session Affinity và chọn  By Cloudflare cookie and Client IP fallback.
+Edge Browser:
+Chrome:
+VII. CẤU HÌNH RULES
+Công dụng: 
+Người ta thường mong muốn thay đổi các giá trị mặc định và có các cài đặt tùy chỉnh phù hợp nhất với ứng dụng của mình. Quy tắc Cloudflare cho phép bạn điều chỉnh các yêu cầu và phản hồi, định cấu hình cài đặt tùy chỉnh và kích hoạt các hành động cụ thể để khớp yêu cầu.
+Có nhiều tùy chọn có thể được cấu hình, vì vậy vui lòng khám phá các cài đặt ngoài các bài tập này. Trước khi tiếp tục các nhiệm vụ, vui lòng làm quen nhanh với tài liệu Quy tắc ở trên.
+Demo:
+1. Create a transform rule that adds a header to all responses
+Trong bài lab này, chúng ta sẽ tạo một rule để thêm security header phổ biến X-Frame-Options vào tất cả các phản hồi (responses). Sau đó, chúng ta sẽ tìm hiểu cách đơn giản hóa việc này bằng cách sử dụng Managed Transforms.
+Trên Cloudflare Dashboard, truy cập Rules → Overview, sau đó cuộn xuống mục Response Header Transform Rules và nhấn Create rule.
+Cài đặt Rule name với mô tả “Add X-Frame-Options”
+Cài đặt If incoming requests match… to All incoming requests
+Cài đặt  Then… criteria to…
+Add
+Thiết lập  Header name to X-Frame-Options
+Thiết lập Value to SAMEORIGIN
+2. Xác nhận header khi phản hồi
+Sử dụng câu lệnh 
+linux:  curl -I "https://insightful-web.sxplab.com/services/luggages/"
+Sử dụng browser:
+Some-other-header: Hello
+X-frame-options: SAMEORIGIN
+X-origin: origin-2
+3. Thêm nhiều Security Headers và Managed Transforms
+Đầu tiên, Disable rule vừa triển khai. Sau đó đi đến Rules ‣ Overview ‣ Response Header Transform Rules và chọn  Manage Response Header Transform Rules.
+Chuyển sang giao diện Managed Transforms. Như bạn thấy, có một số tùy chọn để lựa chọn ở đây, dựa trên các tình huống phổ biến. Hãy tiến hành và kích hoạt  “Add security headers” với phiên  HTTP response headers 

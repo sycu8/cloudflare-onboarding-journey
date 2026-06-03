@@ -17,3 +17,18 @@ export type WorkshopEvent = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type WorkshopSignup = {
+  id: string;
+  name: string;
+  email: string;
+  company: string | null;
+  jobTitle: string | null;
+  primaryInterest: string;
+  question: string | null;
+  language: string;
+  sourcePath: string | null;
+  eventId: string | null;
+  eventTitle: { vi: string; en: string } | null;
+  createdAt: string;
+};

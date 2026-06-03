@@ -1,0 +1,227 @@
+---
+import type { Cf101TermSection } from '../../data/cf101Terminology';
+import { docsUrl } from '../../data/cloudflare101';
+
+type Props = {
+  sections: Cf101TermSection[];
+};
+
+const { sections } = Astro.props;
+
+const tabPanelCss = sections
+  .map(
+    (s) => `
+#term-${s.id}:checked ~ #panel-${s.id} {
+  display: block;
+}
+#term-${s.id}:checked ~ .cf101-term-labels label[for="term-${s.id}"] {
+  border-color: var(--cf-accent);
+  background: rgba(246, 130, 26, 0.18);
+  color: #c2410c;
+  box-shadow: 0 0 0 1px rgba(246, 130, 26, 0.12);
+}
+html.dark #term-${s.id}:checked ~ .cf101-term-labels label[for="term-${s.id}"] {
+  background: rgba(255, 140, 56, 0.28);
+  color: #ffb380;
+  box-shadow: 0 0 12px rgba(255, 140, 56, 0.2);
+}
+`,
+  )
+  .join('\n');
+
+---
+
+<div class="cf101-terms space-y-4">
+  {
+    sections.map((s, i) => (
+      <input
+        type="radio"
+        name="cf101-term-section"
+        id={`term-${s.id}`}
+        class="cf101-term-radio sr-only"
+        checked={i === 0 ? true : undefined}
+      />
+    ))
+  }
+
+  <div class="cf101-term-labels flex flex-wrap gap-2">
+    {
+      sections.map((s) => (
+        <label for={`term-${s.id}`} class="badge cf101-term-label">
+          <span class="lang-vi">{s.title.vi}</span>
+          <span class="lang-en">{s.title.en}</span>
+        </label>
+      ))
+    }
+  </div>
+
+  {
+    sections.map((s) => (
+      <div id={`panel-${s.id}`} class="cf101-term-panel space-y-4">
+        <div class="card space-y-3">
+          <label class="block text-sm">
+            <span class="lang-vi">Tìm trong chuyên mục</span>
+            <span class="lang-en">Search in section</span>
+            <input
+              type="search"
+              class="cf-input cf101-term-search mt-1"
+              placeholder="TTL, Bot Score, Orange Cloud…"
+              autocomplete="off"
+              data-section={s.id}
+            />
+          </label>
+          <p class="text-muted text-xs">
+            <span class="lang-vi">
+              <span data-count-vi={s.id}>{s.terms.length}</span> thuật ngữ
+            </span>
+            <span class="lang-en">
+              <span data-count-en={s.id}>{s.terms.length}</span> terms
+            </span>
+          </p>
+        </div>
+
+        {
+          s.terms.length === 0 ? (
+            <div class="card text-muted text-sm">
+              <span class="lang-vi">Không có kết quả.</span>
+              <span class="lang-en">No results.</span>
+            </div>
+          ) : (
+            <dl class="grid gap-2 sm:grid-cols-2">
+              {
+                s.terms.map((t) => (
+                  <div
+                    class="card cf101-term-card p-4"
+                    data-term={t.term.toLowerCase()}
+                    data-text-vi={t.definition.vi.toLowerCase()}
+                    data-text-en={t.definition.en.toLowerCase()}
+                  >
+                    <dt class="font-semibold">{t.term}</dt>
+                    <dd class="text-muted mt-1 text-sm leading-relaxed">
+                      <span class="lang-vi">{t.definition.vi}</span>
+                      <span class="lang-en">{t.definition.en}</span>
+                    </dd>
+                  </div>
+                ))
+              }
+            </dl>
+          )
+        }
+      </div>
+    ))
+  }
+
+  <p class="text-muted text-sm">
+    <span class="lang-vi">
+      Tra cứu thêm tại{' '}
+      <a class="link" href="/glossary">
+        Glossary
+      </a>{' '}
+      hoặc{' '}
+      <a class="link" href={docsUrl('/glossary/')} target="_blank" rel="noopener noreferrer">
+        Cloudflare Docs Glossary
+      </a>
+      .
+    </span>
+    <span class="lang-en">
+      See also{' '}
+      <a class="link" href="/glossary">
+        Glossary
+      </a>{' '}
+      or{' '}
+      <a class="link" href={docsUrl('/glossary/')} target="_blank" rel="noopener noreferrer">
+        Cloudflare Docs Glossary
+      </a>
+      .
+    </span>
+  </p>
+</div>
+
+<style is:global>
+  .cf101-terms .cf101-term-panel {
+    display: none;
+  }
+
+  .cf101-terms .cf101-term-label {
+    cursor: pointer;
+    user-select: none;
+    transition:
+      background-color 0.15s ease,
+      border-color 0.15s ease,
+      color 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+
+  .cf101-terms .cf101-term-label:hover {
+    border-color: var(--cf-accent);
+  }
+
+  .cf101-terms .cf101-term-card.hidden {
+    display: none;
+  }
+</style>
+
+<style is:global set:html={tabPanelCss} />
+
+<script>
+  document.querySelectorAll('.cf101-terms').forEach((root) => {
+    root.querySelectorAll('.cf101-term-search').forEach((input) => {
+      if (!(input instanceof HTMLInputElement)) return;
+      const sectionId = input.dataset.section;
+      if (!sectionId) return;
+
+      const panel = root.querySelector(`#panel-${sectionId}`);
+      const cards = panel?.querySelectorAll('.cf101-term-card') ?? [];
+      const countVi = root.querySelector(`[data-count-vi="${sectionId}"]`);
+      const countEn = root.querySelector(`[data-count-en="${sectionId}"]`);
+
+      const applyFilter = () => {
+        const q = input.value.trim().toLowerCase();
+        let visible = 0;
+        cards.forEach((card) => {
+          if (!(card instanceof HTMLElement)) return;
+          const term = card.dataset.term ?? '';
+          const textVi = card.dataset.textVi ?? '';
+          const textEn = card.dataset.textEn ?? '';
+          const match = !q || term.includes(q) || textVi.includes(q) || textEn.includes(q);
+          card.classList.toggle('hidden', !match);
+          if (match) visible += 1;
+        });
+        if (countVi) countVi.textContent = String(visible);
+        if (countEn) countEn.textContent = String(visible);
+      };
+
+      input.addEventListener('input', applyFilter);
+
+      root.querySelectorAll('.cf101-term-radio').forEach((radio) => {
+        radio.addEventListener('change', () => {
+          if (radio instanceof HTMLInputElement && radio.checked && radio.id === `term-${sectionId}`) {
+            applyFilter();
+          }
+        });
+      });
+    });
+
+    root.querySelectorAll('.cf101-term-radio').forEach((radio) => {
+      radio.addEventListener('change', () => {
+        if (!(radio instanceof HTMLInputElement) || !radio.checked) return;
+        root.querySelectorAll('.cf101-term-search').forEach((el) => {
+          if (el instanceof HTMLInputElement) el.value = '';
+        });
+        root.querySelectorAll('.cf101-term-card').forEach((card) => {
+          card.classList.remove('hidden');
+        });
+        root.querySelectorAll('[data-count-vi]').forEach((el) => {
+          const sid = el.getAttribute('data-count-vi');
+          const total = root.querySelectorAll(`#panel-${sid} .cf101-term-card`).length;
+          el.textContent = String(total);
+        });
+        root.querySelectorAll('[data-count-en]').forEach((el) => {
+          const sid = el.getAttribute('data-count-en');
+          const total = root.querySelectorAll(`#panel-${sid} .cf101-term-card`).length;
+          el.textContent = String(total);
+        });
+      });
+    });
+  });
+</script>

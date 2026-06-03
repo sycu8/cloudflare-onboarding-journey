@@ -3,14 +3,14 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/chrome/Breadcrumbs.astro';
 import LangText from '../../components/ui/LangText.astro';
 import UseCaseCatalog from '../../components/content/UseCaseCatalog.astro';
-import { useCases } from '../../data/useCases';
+import { useCases, OFFICIAL_USE_CASES_HUB } from '../../data/useCases';
 ---
 
 <BaseLayout
   title={{ vi: 'Tình huống thực tế', en: 'Practical use cases' }}
   description={{
-    vi: 'Các tình huống thực tế Cloudflare: bảo vệ website, API, VPN replacement, kết nối user an toàn, serverless, SaaS access — theo lộ trình học.',
-    en: 'Practical Cloudflare scenarios: protect websites, APIs, VPN replacement, secure user connections, serverless, SaaS access — aligned with learning tracks.',
+    vi: 'Tình huống Cloudflare: build web/AI/SaaS mới, bảo vệ & tăng tốc app hiện có — theo nhóm Use cases chính thức và lộ trình học.',
+    en: 'Cloudflare scenarios: build new web/AI/SaaS apps, secure and accelerate existing apps — aligned with official Use cases and learning tracks.',
   }}
   canonicalPath="/use-cases"
   showProgressBar
@@ -23,10 +23,15 @@ import { useCases } from '../../data/useCases';
       as="p"
       class="text-muted mt-2 max-w-3xl text-sm leading-relaxed"
       text={{
-        vi: `Danh sách ${useCases.length} kịch bản phổ biến — mỗi tình huống gắn một lộ trình học (Application Services, Developer Platform, Cloudflare One). Chọn tình huống gần nhu cầu của bạn nhất.`,
-        en: `${useCases.length} common scenarios — each maps to a learning track (Application Services, Developer Platform, Cloudflare One). Pick the scenario closest to your need.`,
+        vi: `${useCases.length} kịch bản theo hai nhóm như tài liệu Cloudflare: Build mới (web, AI, SaaS) và Bảo vệ & tăng tốc (security, CDN, Zero Trust, e-commerce, media). Mỗi tình huống gắn lộ trình học nội bộ.`,
+        en: `${useCases.length} scenarios in two groups like Cloudflare docs: Build something new (web, AI, SaaS) and Secure and accelerate (security, CDN, Zero Trust, e-commerce, media). Each maps to a learning track.`,
       }}
     />
+    <p class="text-muted mt-2 text-sm">
+      <a class="link" href={OFFICIAL_USE_CASES_HUB} rel="noopener noreferrer" target="_blank">
+        <LangText text={{ vi: 'Tham chiếu: Cloudflare Use cases →', en: 'Reference: Cloudflare Use cases →' }} />
+      </a>
+    </p>
     <p class="text-muted mt-3 text-sm">
       <a class="link" href="/choose-your-path">
         <LangText text={{ vi: 'Chưa chắc nhóm nào? Làm bài chọn lộ trình →', en: 'Not sure? Use the path selector →' }} />

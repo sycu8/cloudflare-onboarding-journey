@@ -1,0 +1,14 @@
+{
+  "resource": "https://onboarding.orangecloud.vn/api",
+  "authorization_servers": [
+    "https://onboarding.orangecloud.vn"
+  ],
+  "scopes_supported": [
+    "hub.read",
+    "workshop.admin"
+  ],
+  "bearer_methods_supported": [
+    "header"
+  ],
+  "resource_documentation": "https://onboarding.orangecloud.vn/docs/api/"
+}

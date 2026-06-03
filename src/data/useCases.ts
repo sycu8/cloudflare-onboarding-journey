@@ -1,20 +1,32 @@
 import type { LocalizedString } from '../i18n/types';
 
+export type UseCaseHubCategory = 'build-new' | 'secure-accelerate';
+
 export type UseCaseSlug =
   | 'protect-website'
   | 'secure-api'
   | 'defend-ddos-attacks'
+  | 'accelerate-content-delivery'
+  | 'ecommerce-security-performance'
+  | 'media-streaming-delivery'
   | 'build-serverless-app'
   | 'deploy-static-site'
+  | 'build-ai-applications'
+  | 'build-saas-platform'
   | 'replace-vpn'
   | 'secure-remote-users'
-  | 'secure-saas-access';
+  | 'secure-saas-access'
+  | 'company-wide-security';
 
 export type UseCase = {
   slug: UseCaseSlug;
   title: LocalizedString;
   problem: LocalizedString;
   architecture: LocalizedString;
+  /** Aligns with categories on developers.cloudflare.com/use-cases/ */
+  hubCategory: UseCaseHubCategory;
+  /** Official Cloudflare use-case hub page */
+  officialUrl: string;
   steps?: { vi: string[]; en: string[] };
   bullets?: { vi: string[]; en: string[] };
   commonMistakes?: { vi: { title: string; detail: string }[]; en: { title: string; detail: string }[] };
@@ -22,9 +34,35 @@ export type UseCase = {
   nextCta: { href: string; label: LocalizedString };
 };
 
+export const OFFICIAL_USE_CASES_HUB = 'https://developers.cloudflare.com/use-cases/';
+
+export const useCaseHubCategoryMeta: Record<
+  UseCaseHubCategory,
+  { title: LocalizedString; headline: LocalizedString }
+> = {
+  'build-new': {
+    title: { vi: 'Build mới (Build something new)', en: 'Build something new' },
+    headline: {
+      vi: 'Deploy website, API, AI và nền tảng SaaS trên Cloudflare từ đầu.',
+      en: 'Deploy websites, APIs, AI apps, and SaaS platforms on Cloudflare from the ground up.',
+    },
+  },
+  'secure-accelerate': {
+    title: { vi: 'Bảo vệ & tăng tốc (Secure and accelerate)', en: 'Secure and accelerate' },
+    headline: {
+      vi: 'Thêm Cloudflare vào app hoặc hạ tầng hiện có — bảo mật, performance, Zero Trust, media.',
+      en: 'Add Cloudflare to existing apps or infrastructure — security, performance, Zero Trust, media.',
+    },
+  },
+};
+
+export const useCaseHubCategoryOrder: UseCaseHubCategory[] = ['build-new', 'secure-accelerate'];
+
 export const useCases: UseCase[] = [
   {
     slug: 'protect-website',
+    hubCategory: 'secure-accelerate',
+    officialUrl: 'https://developers.cloudflare.com/use-cases/application-security/',
     title: { vi: 'Bảo vệ website với Cloudflare', en: 'Protect a website with Cloudflare' },
     problem: {
       vi: 'Bạn có public website và muốn giảm downtime, chặn các tấn công phổ biến, cải thiện tốc độ tải trang và hiểu traffic tốt hơn.',
@@ -105,6 +143,8 @@ export const useCases: UseCase[] = [
   },
   {
     slug: 'secure-api',
+    hubCategory: 'secure-accelerate',
+    officialUrl: 'https://developers.cloudflare.com/use-cases/apis/',
     title: { vi: 'Bảo vệ API với Cloudflare', en: 'Secure an API with Cloudflare' },
     problem: {
       vi: 'API thường bị abuse bởi bots, scrapers, credential stuffing, excessive requests và broken clients.',
@@ -140,6 +180,8 @@ export const useCases: UseCase[] = [
   },
   {
     slug: 'defend-ddos-attacks',
+    hubCategory: 'secure-accelerate',
+    officialUrl: 'https://developers.cloudflare.com/use-cases/application-security/ddos/',
     title: { vi: 'Chống DDoS và giữ site online', en: 'Defend against DDoS and stay online' },
     problem: {
       vi: 'Website hoặc API bị flood traffic, dễ sập origin hoặc tốn chi phí bandwidth khi không có lớp bảo vệ L3/L7.',
@@ -172,7 +214,114 @@ export const useCases: UseCase[] = [
     },
   },
   {
+    slug: 'accelerate-content-delivery',
+    hubCategory: 'secure-accelerate',
+    officialUrl: 'https://developers.cloudflare.com/use-cases/performance/',
+    title: { vi: 'Tăng tốc phân phối nội dung (CDN)', en: 'Accelerate content delivery' },
+    problem: {
+      vi: 'Người dùng toàn cầu trải nghiệm chậm vì origin xa, cache chưa tối ưu và routing chưa thông minh.',
+      en: 'Global users see slow experiences because the origin is far away, caching is not tuned, and routing is not optimized.',
+    },
+    architecture: {
+      vi: 'User → Cloudflare CDN (cache, image optimization, smart routing) → Origin',
+      en: 'User → Cloudflare CDN (cache, image optimization, smart routing) → Origin',
+    },
+    bullets: {
+      vi: [
+        'Cache static và dynamic tại edge',
+        'Image optimization (WebP/AVIF, resize)',
+        'Argo Smart Routing / HTTP/3 (tuỳ plan)',
+        'Load balancing giữa nhiều origin',
+        'Web Analytics / RUM để đo trải nghiệm thật',
+      ],
+      en: [
+        'Cache static and dynamic content at the edge',
+        'Image optimization (WebP/AVIF, resize)',
+        'Argo Smart Routing / HTTP/3 (plan-dependent)',
+        'Load balancing across origins',
+        'Web Analytics / RUM for real user metrics',
+      ],
+    },
+    relatedTrack: 'application-services',
+    nextCta: {
+      href: '/content-delivery',
+      label: { vi: 'Hướng dẫn Content delivery', en: 'Content delivery guide' },
+    },
+  },
+  {
+    slug: 'ecommerce-security-performance',
+    hubCategory: 'secure-accelerate',
+    officialUrl: 'https://developers.cloudflare.com/use-cases/e-commerce/',
+    title: { vi: 'E-commerce: bảo mật & performance', en: 'E-commerce security and performance' },
+    problem: {
+      vi: 'Cửa hàng online cần checkout nhanh, chống bot/card testing và bảo vệ form nhạy cảm trong mùa cao điểm.',
+      en: 'Online stores need fast checkout, protection from bots/card testing, and secure forms during peak traffic.',
+    },
+    architecture: {
+      vi: 'Shopper → CDN + WAF + Bot/Turnstile → Checkout API / Origin',
+      en: 'Shopper → CDN + WAF + Bot/Turnstile → Checkout API / Origin',
+    },
+    bullets: {
+      vi: [
+        'Cache catalog & static assets; bypass cache cho cart/checkout',
+        'WAF + rate limit trên login/payment paths',
+        'Bot Management / Turnstile cho form nhạy cảm',
+        'SSL/TLS full strict; PCI-aware origin config',
+        'Load balancing khi scale campaign',
+      ],
+      en: [
+        'Cache catalog and static assets; bypass cache for cart/checkout',
+        'WAF + rate limits on login and payment paths',
+        'Bot Management / Turnstile on sensitive forms',
+        'Full strict SSL/TLS; PCI-aware origin configuration',
+        'Load balancing when scaling campaigns',
+      ],
+    },
+    relatedTrack: 'application-services',
+    nextCta: {
+      href: '/use-cases/protect-website/',
+      label: { vi: 'Tình huống bảo vệ website', en: 'Protect a website scenario' },
+    },
+  },
+  {
+    slug: 'media-streaming-delivery',
+    hubCategory: 'secure-accelerate',
+    officialUrl: 'https://developers.cloudflare.com/use-cases/media-streaming/',
+    title: { vi: 'Stream video & media tại scale', en: 'Deliver images and stream video at scale' },
+    problem: {
+      vi: 'Bạn cần phân phối video, ảnh hoặc rich media toàn cầu với encode, tối ưu và chi phí egress hợp lý.',
+      en: 'You need to deliver video, images, or rich media globally with encoding, optimization, and sensible egress cost.',
+    },
+    architecture: {
+      vi: 'Creator/Origin → Cloudflare Images / Stream → CDN → End user',
+      en: 'Creator/Origin → Cloudflare Images / Stream → CDN → End user',
+    },
+    bullets: {
+      vi: [
+        'Cloudflare Stream cho video on-demand / live',
+        'Images / Image Resizing cho thumbnail & poster',
+        'R2 cho lưu trữ asset (tuỳ kiến trúc)',
+        'Cache rules cho segment & manifest',
+        'Bảo vệ origin và signed URLs khi cần',
+      ],
+      en: [
+        'Cloudflare Stream for on-demand / live video',
+        'Images / Image Resizing for thumbnails and posters',
+        'R2 for asset storage (architecture-dependent)',
+        'Cache rules for segments and manifests',
+        'Protect origin and use signed URLs when needed',
+      ],
+    },
+    relatedTrack: 'application-services',
+    nextCta: {
+      href: '/products/stream',
+      label: { vi: 'Xem Cloudflare Stream', en: 'Explore Cloudflare Stream' },
+    },
+  },
+  {
     slug: 'build-serverless-app',
+    hubCategory: 'build-new',
+    officialUrl: 'https://developers.cloudflare.com/use-cases/web-apps/',
     title: { vi: 'Build serverless app trên Cloudflare', en: 'Build a serverless app on Cloudflare' },
     problem: {
       vi: 'Bạn muốn deploy app nhanh mà không cần quản lý server.',
@@ -237,6 +386,8 @@ export const useCases: UseCase[] = [
   },
   {
     slug: 'deploy-static-site',
+    hubCategory: 'build-new',
+    officialUrl: 'https://developers.cloudflare.com/use-cases/web-apps/deploy-frontend/',
     title: { vi: 'Deploy static site với Pages', en: 'Deploy a static site with Pages' },
     problem: {
       vi: 'Bạn có frontend tĩnh (marketing site, docs, landing) và muốn deploy nhanh, HTTPS, preview PR mà không quản lý server.',
@@ -269,7 +420,79 @@ export const useCases: UseCase[] = [
     },
   },
   {
+    slug: 'build-ai-applications',
+    hubCategory: 'build-new',
+    officialUrl: 'https://developers.cloudflare.com/use-cases/ai/',
+    title: { vi: 'Build ứng dụng AI trên Cloudflare', en: 'Build AI applications on Cloudflare' },
+    problem: {
+      vi: 'Bạn muốn thêm inference, RAG hoặc gateway tới nhiều model mà không tự vận hành GPU cluster.',
+      en: 'You want inference, RAG, or multi-model gateways without operating your own GPU clusters.',
+    },
+    architecture: {
+      vi: 'User → Worker/Pages → AI Gateway / Workers AI → Vectorize + R2/KV',
+      en: 'User → Worker/Pages → AI Gateway / Workers AI → Vectorize + R2/KV',
+    },
+    bullets: {
+      vi: [
+        'Workers AI cho inference tại edge',
+        'AI Gateway: routing, cache, observability tới LLM providers',
+        'Vectorize cho RAG embeddings',
+        'Durable Objects cho session/stateful chat',
+        'R2/KV cho documents & config',
+      ],
+      en: [
+        'Workers AI for edge inference',
+        'AI Gateway: routing, caching, observability to LLM providers',
+        'Vectorize for RAG embeddings',
+        'Durable Objects for session/stateful chat',
+        'R2/KV for documents and configuration',
+      ],
+    },
+    relatedTrack: 'developer-platform',
+    nextCta: {
+      href: '/tracks/developer-platform/dp-4-l1',
+      label: { vi: 'Bài học Workers AI', en: 'Workers AI lesson' },
+    },
+  },
+  {
+    slug: 'build-saas-platform',
+    hubCategory: 'build-new',
+    officialUrl: 'https://developers.cloudflare.com/use-cases/saas/',
+    title: { vi: 'Build nền tảng SaaS multi-tenant', en: 'Build a multi-tenant SaaS platform' },
+    problem: {
+      vi: 'SaaS cần custom domain cho khách hàng, SSL tự động, compute/storage tách tenant và quan sát usage.',
+      en: 'SaaS needs customer custom domains, automatic SSL, isolated tenant compute/storage, and usage visibility.',
+    },
+    architecture: {
+      vi: 'Tenant traffic → SSL for SaaS / Workers for Platforms → per-tenant D1/KV/R2',
+      en: 'Tenant traffic → SSL for SaaS / Workers for Platforms → per-tenant D1/KV/R2',
+    },
+    bullets: {
+      vi: [
+        'SSL for SaaS: certificate cho customer domains',
+        'Workers for Platforms: isolated user code',
+        'Per-tenant D1, KV, R2 buckets',
+        'Access policies cho admin vs tenant users',
+        'Analytics & billing hooks per tenant',
+      ],
+      en: [
+        'SSL for SaaS: certificates for customer domains',
+        'Workers for Platforms: isolated user code',
+        'Per-tenant D1, KV, and R2 buckets',
+        'Access policies for admin vs tenant users',
+        'Analytics and billing hooks per tenant',
+      ],
+    },
+    relatedTrack: 'developer-platform',
+    nextCta: {
+      href: '/products/workers-for-platforms',
+      label: { vi: 'Workers for Platforms', en: 'Workers for Platforms' },
+    },
+  },
+  {
     slug: 'replace-vpn',
+    hubCategory: 'secure-accelerate',
+    officialUrl: 'https://developers.cloudflare.com/use-cases/company-security/employee-access/',
     title: { vi: 'Thay thế VPN bằng Zero Trust access', en: 'Replace VPN with Zero Trust access' },
     problem: {
       vi: 'VPN truyền thống thường cấp quyền truy cập mạng quá rộng, gây friction và không phù hợp cho SaaS/remote work/app-specific access.',
@@ -317,7 +540,44 @@ export const useCases: UseCase[] = [
     nextCta: { href: '/tracks/cloudflare-one', label: { vi: 'Xem track Cloudflare One', en: 'View Cloudflare One track' } },
   },
   {
+    slug: 'company-wide-security',
+    hubCategory: 'secure-accelerate',
+    officialUrl: 'https://developers.cloudflare.com/use-cases/company-security/',
+    title: { vi: 'Bảo mật toàn doanh nghiệp (Zero Trust)', en: 'Company-wide security (Zero Trust)' },
+    problem: {
+      vi: 'Tổ chức cần bảo vệ nhân viên, thiết bị, SaaS, email và dữ liệu — không chỉ một ứng dụng public.',
+      en: 'Organizations must protect employees, devices, SaaS, email, and data — not just one public application.',
+    },
+    architecture: {
+      vi: 'Users/devices → Cloudflare One (Access, Gateway, CASB, DLP, Email) → Apps & Internet',
+      en: 'Users/devices → Cloudflare One (Access, Gateway, CASB, DLP, Email) → Apps & Internet',
+    },
+    bullets: {
+      vi: [
+        'ZTNA / Access cho app nội bộ & SaaS',
+        'Secure Web Gateway + DNS filtering',
+        'CASB + DLP cho data exfiltration',
+        'Email security chống phishing',
+        'Device posture qua WARP/MDM',
+      ],
+      en: [
+        'ZTNA / Access for internal and SaaS apps',
+        'Secure Web Gateway + DNS filtering',
+        'CASB + DLP for data exfiltration',
+        'Email security against phishing',
+        'Device posture via WARP/MDM',
+      ],
+    },
+    relatedTrack: 'cloudflare-one',
+    nextCta: {
+      href: '/tracks/cloudflare-one',
+      label: { vi: 'Lộ trình Cloudflare One', en: 'Cloudflare One track' },
+    },
+  },
+  {
     slug: 'secure-remote-users',
+    hubCategory: 'secure-accelerate',
+    officialUrl: 'https://developers.cloudflare.com/use-cases/company-security/internet-access/',
     title: {
       vi: 'Kết nối user an toàn (remote & hybrid)',
       en: 'Secure user connections (remote & hybrid)',
@@ -383,6 +643,8 @@ export const useCases: UseCase[] = [
   },
   {
     slug: 'secure-saas-access',
+    hubCategory: 'secure-accelerate',
+    officialUrl: 'https://developers.cloudflare.com/use-cases/company-security/employee-access/',
     title: { vi: 'Truy cập SaaS an toàn với Access', en: 'Secure SaaS access with Access' },
     problem: {
       vi: 'Team dùng Salesforce, Google Workspace, internal tools — cần SSO, policy theo group và không mở toàn bộ mạng như VPN.',
@@ -456,6 +718,10 @@ export const useCaseTrackOrder: UseCaseTrack[] = [
 
 export function getUseCasesByTrack(track: UseCaseTrack): UseCase[] {
   return useCases.filter((u) => u.relatedTrack === track);
+}
+
+export function getUseCasesByHubCategory(category: UseCaseHubCategory): UseCase[] {
+  return useCases.filter((u) => u.hubCategory === category);
 }
 
 export function getUseCase(slug: UseCaseSlug) {

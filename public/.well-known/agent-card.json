@@ -1,0 +1,41 @@
+{
+  "name": "Cloudflare Starter Hub",
+  "description": "Bilingual learning hub for Cloudflare Application Services, Developer Platform, and Cloudflare One.",
+  "version": "1.0.0",
+  "documentationUrl": "https://onboarding.orangecloud.vn/docs/api/",
+  "supportedInterfaces": [
+    {
+      "url": "https://onboarding.orangecloud.vn/api/mcp",
+      "protocolBinding": "HTTP+JSON",
+      "protocolVersion": "1.0"
+    }
+  ],
+  "capabilities": {},
+  "defaultInputModes": [
+    "text/plain"
+  ],
+  "defaultOutputModes": [
+    "text/plain"
+  ],
+  "skills": [
+    {
+      "id": "navigate-learning-hub",
+      "name": "Navigate learning hub",
+      "description": "List tracks, use cases, products, and official resource links.",
+      "tags": [
+        "cloudflare",
+        "education",
+        "navigation"
+      ]
+    },
+    {
+      "id": "hub-public-api",
+      "name": "Hub public API",
+      "description": "Read site config and workshop events via documented REST endpoints.",
+      "tags": [
+        "cloudflare",
+        "api"
+      ]
+    }
+  ]
+}

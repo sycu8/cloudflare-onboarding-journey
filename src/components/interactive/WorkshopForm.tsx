@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import TurnstileField from './TurnstileField';
 
 type Interest = 'application-services' | 'developer-platform' | 'cloudflare-one' | 'not-sure';
 
@@ -7,11 +8,20 @@ type Props = {
   requireEvent?: boolean;
 };
 
+type SiteConfig = {
+  workshopEnabled?: boolean;
+  turnstileSiteKey?: string | null;
+  turnstileRequired?: boolean;
+};
+
 export default function WorkshopForm({ eventId = '', requireEvent = false }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [enabled, setEnabled] = useState(true);
+  const [turnstileSiteKey, setTurnstileSiteKey] = useState<string | null>(null);
+  const [turnstileRequired, setTurnstileRequired] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState('');
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -20,11 +30,18 @@ export default function WorkshopForm({ eventId = '', requireEvent = false }: Pro
   const [interest, setInterest] = useState<Interest>('not-sure');
   const [question, setQuestion] = useState('');
 
+  const onTurnstileToken = useCallback((token: string) => {
+    setTurnstileToken(token);
+    if (token) setError(null);
+  }, []);
+
   useEffect(() => {
     fetch('/api/site-config')
       .then((r) => r.json())
-      .then((d) => {
+      .then((d: SiteConfig) => {
         if (d?.workshopEnabled === false) setEnabled(false);
+        if (d?.turnstileSiteKey) setTurnstileSiteKey(d.turnstileSiteKey);
+        if (d?.turnstileRequired) setTurnstileRequired(true);
       })
       .catch(() => {});
   }, []);
@@ -36,6 +53,15 @@ export default function WorkshopForm({ eventId = '', requireEvent = false }: Pro
     if (requireEvent && !eventId) {
       setError(
         lang === 'en' ? 'Please select a workshop event above.' : 'Vui lòng chọn một sự kiện workshop ở trên.',
+      );
+      return;
+    }
+    const token = turnstileRequired || turnstileSiteKey ? turnstileToken : 'dev-bypass';
+    if ((turnstileRequired || turnstileSiteKey) && !token) {
+      setError(
+        lang === 'en'
+          ? 'Complete the verification check before submitting.'
+          : 'Vui lòng hoàn tất bước xác minh trước khi gửi.',
       );
       return;
     }
@@ -54,17 +80,32 @@ export default function WorkshopForm({ eventId = '', requireEvent = false }: Pro
           question,
           language: lang,
           sourcePath: window.location.pathname,
-          turnstileToken: 'dev-bypass',
+          turnstileToken: token,
         }),
       });
-      const data = await res.json();
-      if (!res.ok || !data.ok) {
-        throw new Error(data.error || 'submit_failed');
+      const data = (await res.json().catch(() => null)) as {
+        ok?: boolean;
+        error?: string;
+        message?: string;
+      } | null;
+      if (!res.ok || !data?.ok) {
+        setError(
+          data?.message ||
+            (lang === 'en'
+              ? 'We could not submit your information right now. Please try again.'
+              : 'Không thể gửi thông tin lúc này. Vui lòng thử lại.'),
+        );
+        if (turnstileSiteKey) setTurnstileToken('');
+        return;
       }
       setSuccess(true);
       window.location.href = '/thank-you';
     } catch {
-      setError(lang === 'en' ? 'We could not submit your information right now. Please try again.' : 'Không thể gửi thông tin lúc này. Vui lòng thử lại.');
+      setError(
+        lang === 'en'
+          ? 'We could not submit your information right now. Please try again.'
+          : 'Không thể gửi thông tin lúc này. Vui lòng thử lại.',
+      );
     } finally {
       setLoading(false);
     }
@@ -91,12 +132,13 @@ export default function WorkshopForm({ eventId = '', requireEvent = false }: Pro
         </p>
       ) : null}
       <label className="block text-sm">
-        <span className="lang-vi">Họ và tên</span>
-        <span className="lang-en">Name</span>
+        <span className="lang-vi">Họ và tên (bắt buộc)</span>
+        <span className="lang-en">Name (required)</span>
         <input className="cf-input mt-1" required value={name} onChange={(e) => setName(e.target.value)} />
       </label>
       <label className="block text-sm">
-        Email
+        <span className="lang-vi">Email (bắt buộc)</span>
+        <span className="lang-en">Email (required)</span>
         <input className="cf-input mt-1" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
       </label>
       <label className="block text-sm">
@@ -105,8 +147,8 @@ export default function WorkshopForm({ eventId = '', requireEvent = false }: Pro
         <input className="cf-input mt-1" value={company} onChange={(e) => setCompany(e.target.value)} />
       </label>
       <label className="block text-sm">
-        <span className="lang-vi">Vai trò</span>
-        <span className="lang-en">Role</span>
+        <span className="lang-vi">Vị trí làm việc</span>
+        <span className="lang-en">Job title</span>
         <input className="cf-input mt-1" value={role} onChange={(e) => setRole(e.target.value)} />
       </label>
       <label className="block text-sm">
@@ -124,19 +166,24 @@ export default function WorkshopForm({ eventId = '', requireEvent = false }: Pro
         <span className="lang-en">Your question</span>
         <textarea className="cf-input mt-1 min-h-[100px]" value={question} onChange={(e) => setQuestion(e.target.value)} />
       </label>
+      {turnstileSiteKey ? (
+        <TurnstileField siteKey={turnstileSiteKey} onToken={onTurnstileToken} onExpire={() => setTurnstileToken('')} />
+      ) : null}
       <p className="text-muted text-xs">
-        <span className="lang-vi">Chúng tôi chỉ thu thập thông tin cần thiết cho workshop. Xem </span>
-        <span className="lang-en">We only collect information needed for the workshop. See </span>
+        <span className="lang-vi">
+          Sau khi đăng ký, bạn sẽ nhận email xác nhận. Khi có workshop mới, chúng tôi gửi thông tin tới email đã đăng ký.
+          Xem{' '}
+        </span>
+        <span className="lang-en">
+          After signing up, you will receive a confirmation email. When new workshops are scheduled, we will email you
+          with details. See{' '}
+        </span>
         <a className="link" href="/privacy">Privacy</a>.
       </p>
       {error ? <div className="rounded-xl border border-red-500/40 bg-red-500/10 p-3 text-sm text-red-400">{error}</div> : null}
       <button type="submit" className="btn btn-primary w-full" disabled={loading}>
         {loading ? '…' : <><span className="lang-vi">Gửi đăng ký</span><span className="lang-en">Submit</span></>}
       </button>
-      <p className="text-muted text-xs">
-        <span className="lang-vi">Production: bật Turnstile + D1. Dev: token bypass nếu chưa cấu hình Turnstile.</span>
-        <span className="lang-en">Production: enable Turnstile + D1. Dev: bypass token if Turnstile is not configured.</span>
-      </p>
     </form>
   );
 }

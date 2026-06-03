@@ -55,3 +55,4 @@ coverage/
 # Cursor / agent
 .cursor/
 agent-transcripts/
+tmp-uat-home.html

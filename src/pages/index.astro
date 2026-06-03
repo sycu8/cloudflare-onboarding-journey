@@ -2,10 +2,16 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HeroSection from '../components/content/HeroSection.astro';
 import ConceptCard from '../components/content/ConceptCard.astro';
+import ConnectivityCloudFigure from '../components/content/ConnectivityCloudFigure.astro';
 import PathCard from '../components/content/PathCard.astro';
 import JourneyStepper from '../components/content/JourneyStepper.astro';
 import LangText from '../components/ui/LangText.astro';
 import CTASection from '../components/content/CTASection.astro';
+import { useCases, getUseCasesByTrack } from '../data/useCases';
+
+const asCount = getUseCasesByTrack('application-services').length;
+const dpCount = getUseCasesByTrack('developer-platform').length;
+const c1Count = getUseCasesByTrack('cloudflare-one').length;
 ---
 
 <BaseLayout
@@ -53,6 +59,7 @@ import CTASection from '../components/content/CTASection.astro';
         }}
       />
     </div>
+    <ConnectivityCloudFigure />
   </section>
 
   <section class="mt-10">
@@ -105,8 +112,8 @@ import CTASection from '../components/content/CTASection.astro';
           as="p"
           class="text-muted mt-1 max-w-2xl text-sm"
           text={{
-            vi: 'Năm tình huống theo ba lộ trình — Application Services, Developer Platform và Cloudflare One.',
-            en: 'Five scenarios across three tracks — Application Services, Developer Platform, and Cloudflare One.',
+            vi: `${useCases.length} tình huống theo ba lộ trình — Application Services, Developer Platform và Cloudflare One.`,
+            en: `${useCases.length} scenarios across three tracks — Application Services, Developer Platform, and Cloudflare One.`,
           }}
         />
       </div>
@@ -121,7 +128,10 @@ import CTASection from '../components/content/CTASection.astro';
           vi: 'Bảo vệ website public và API — DNS, CDN, WAF, SSL/TLS.',
           en: 'Protect public websites and APIs — DNS, CDN, WAF, SSL/TLS.',
         }}
-        cta={{ href: '/use-cases/application-services', label: { vi: '2 tình huống', en: '2 scenarios' } }}
+        cta={{
+          href: '/use-cases/application-services',
+          label: { vi: `${asCount} tình huống`, en: `${asCount} scenarios` },
+        }}
       />
       <PathCard
         title={{ vi: 'Developer Platform', en: 'Developer Platform' }}
@@ -129,7 +139,10 @@ import CTASection from '../components/content/CTASection.astro';
           vi: 'Build và deploy app serverless — Pages, Workers, D1, KV, R2.',
           en: 'Build and deploy serverless apps — Pages, Workers, D1, KV, R2.',
         }}
-        cta={{ href: '/use-cases/developer-platform', label: { vi: '1 tình huống', en: '1 scenario' } }}
+        cta={{
+          href: '/use-cases/developer-platform',
+          label: { vi: `${dpCount} tình huống`, en: `${dpCount} scenarios` },
+        }}
       />
       <PathCard
         title={{ vi: 'Cloudflare One', en: 'Cloudflare One' }}
@@ -137,7 +150,10 @@ import CTASection from '../components/content/CTASection.astro';
           vi: 'Zero Trust cho remote users — thay VPN, SWG, Access.',
           en: 'Zero Trust for remote users — VPN replacement, SWG, Access.',
         }}
-        cta={{ href: '/use-cases/cloudflare-one', label: { vi: '2 tình huống', en: '2 scenarios' } }}
+        cta={{
+          href: '/use-cases/cloudflare-one',
+          label: { vi: `${c1Count} tình huống`, en: `${c1Count} scenarios` },
+        }}
       />
     </div>
   </section>

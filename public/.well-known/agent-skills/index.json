@@ -1,0 +1,26 @@
+{
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "navigate-learning-hub",
+      "type": "skill-md",
+      "description": "Find tracks, use cases, products, and glossary terms on the Cloudflare Starter Hub.",
+      "url": "https://onboarding.orangecloud.vn/.well-known/agent-skills/navigate-learning-hub.md",
+      "digest": "sha256:1e65c78121e84004531c407a651916bbdf1b6a78707d520ae3f54c63ca5b3587"
+    },
+    {
+      "name": "hub-public-api",
+      "type": "skill-md",
+      "description": "Call read-only Hub APIs (site config, workshop events) with documented rate limits.",
+      "url": "https://onboarding.orangecloud.vn/.well-known/agent-skills/hub-public-api.md",
+      "digest": "sha256:8c8ef0f60727c8d778f8b338c335e68080c81af9cc98cacd7ad0ee4a09f567c7"
+    },
+    {
+      "name": "hub-agent-auth",
+      "type": "skill-md",
+      "description": "Register anonymous agent identity and use Bearer credentials for workshop admin APIs.",
+      "url": "https://onboarding.orangecloud.vn/.well-known/agent-skills/hub-agent-auth.md",
+      "digest": "sha256:c74106e4ae912f218dd0c42c46372d785852c5fb41618227e8453e04b715f1dc"
+    }
+  ]
+}
