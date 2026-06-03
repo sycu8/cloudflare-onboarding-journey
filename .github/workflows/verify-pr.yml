@@ -1,0 +1,52 @@
+name: Verify PR
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: verify-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Start preview
+        run: |
+          npx astro preview --host 127.0.0.1 --port 4321 &
+          echo $! > preview.pid
+          for i in $(seq 1 30); do
+            if curl -sf http://127.0.0.1:4321/ >/dev/null; then
+              echo "Preview ready"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Preview failed to start"
+          exit 1
+
+      - name: Smoke test
+        run: npm run test:smoke
+
+      - name: Stop preview
+        if: always()
+        run: |
+          if [ -f preview.pid ]; then
+            kill "$(cat preview.pid)" 2>/dev/null || true
+          fi

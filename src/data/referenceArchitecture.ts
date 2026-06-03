@@ -29,8 +29,8 @@ export type ReferenceArchitectureItem = {
 };
 
 export const referenceArchitectureIntro: LocalizedString = {
-  vi: 'Sơ đồ và tài liệu kiến trúc chính thức từ Cloudflare Architecture Center — giúp bạn thiết kế Cloudflare vào hạ tầng hiện có (SASE, CDN, Workers, Zero Trust…).',
-  en: 'Official diagrams and reference docs from the Cloudflare Architecture Center — design Cloudflare into your existing infrastructure (SASE, CDN, Workers, Zero Trust…).',
+  vi: 'Sơ đồ và tài liệu kiến trúc chính thức từ Cloudflare Architecture Center — kèm hình ảnh từ Reference Diagrams (developers.cloudflare.com/reference-architecture/diagrams).',
+  en: 'Official diagrams and reference docs from the Cloudflare Architecture Center — with figures from Reference Diagrams (developers.cloudflare.com/reference-architecture/diagrams).',
 };
 
 export const referenceDocTypeLabels: Record<ReferenceDocType, LocalizedString> = {

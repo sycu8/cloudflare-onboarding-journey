@@ -14,12 +14,12 @@ import {
 
 <BaseLayout
   title={{
-    vi: 'Script demo dashboard — Application Security & Cloudflare One',
-    en: 'Dashboard demo scripts — Application Security & Cloudflare One',
+    vi: 'Dashboard overview — Application Security & Cloudflare One',
+    en: 'Dashboard overview — Application Security & Cloudflare One',
   }}
   description={{
-    vi: 'Script demo thực chiến: cấu hình, showcase dashboard WAF, Bot, API Shield, Access, Gateway, WARP cho SME.',
-    en: 'Field demo scripts: configuration and dashboard walkthroughs for WAF, Bot, API Shield, Access, Gateway, WARP for SMEs.',
+    vi: 'Overview dashboard cho khách hàng: Account, Security, Cache, WAF, Bot, API Shield, Access, Gateway, WARP — biết từng mục dùng để làm gì.',
+    en: 'Customer-facing dashboard overviews: Account, Security, Cache, WAF, Bot, API Shield, Access, Gateway, WARP — what each area is for.',
   }}
   canonicalPath="/demo-guides"
   showProgressBar
@@ -27,14 +27,14 @@ import {
   <Breadcrumbs
     items={[
       { href: '/resources', label: { vi: 'Tài nguyên', en: 'Resources' } },
-      { href: '/demo-guides', label: { vi: 'Script demo', en: 'Demo guides' } },
+      { href: '/demo-guides', label: { vi: 'Dashboard overview', en: 'Dashboard overview' } },
     ]}
   />
 
   <header class="mb-8">
-    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: 'Script demo dashboard', en: 'Dashboard demo scripts' }} />
+    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: 'Dashboard overview', en: 'Dashboard overview' }} />
     <LangText as="p" class="text-muted mt-2 max-w-3xl text-sm leading-relaxed md:text-base" text={demoScriptsIntro} />
-    <nav class="mt-4 flex flex-wrap gap-2 text-sm" aria-label="Demo guide sections">
+    <nav class="mt-4 flex flex-wrap gap-2 text-sm" aria-label="Dashboard overview sections">
       <a class="badge hover:border-[var(--cf-accent)]" href="#platform">
         <span class="lang-vi">Nền tảng</span>
         <span class="lang-en">Platform</span>
@@ -58,14 +58,14 @@ import {
     <LangText
       as="h2"
       class="mb-2 text-xl font-semibold"
-      text={{ vi: 'Nền tảng — discovery & security route', en: 'Platform — discovery & security route' }}
+      text={{ vi: 'Nền tảng — Account, zone & luồng request', en: 'Platform — Account, zone & request flow' }}
     />
     <LangText
       as="p"
       class="text-muted mb-4 max-w-3xl text-sm"
       text={{
-        vi: 'Bắt đầu mọi buổi demo: pitch reverse proxy, vòng đời request, tour Account Home và Security overview.',
-        en: 'Start every demo: reverse proxy pitch, request lifecycle, Account Home and Security overview tour.',
+        vi: 'Bắt đầu từ Account Home và zone Overview: reverse proxy là gì, request đi qua PoP thế nào, rồi vào Security và Caching khi cần.',
+        en: 'Start at Account Home and zone Overview: what the reverse proxy does, how requests hit PoPs, then Security and Caching as needed.',
       }}
     />
     <DemoVignetteList client:load vignettes={platformDemoVignettes} />
@@ -87,8 +87,8 @@ import {
       as="p"
       class="text-muted mb-4 max-w-3xl text-sm"
       text={{
-        vi: 'Payload inspection, Advanced Rate Limiting, Bot Management, API Shield, Account WAF — gắn track Application Services.',
-        en: 'Payload inspection, Advanced Rate Limiting, Bot Management, API Shield, Account WAF — tied to the Application Services track.',
+        vi: 'Overview WAF, rate limiting, Bot, API Shield, Account WAF — đọc trước khi chỉnh rule trên zone/account.',
+        en: 'Overviews for WAF, rate limiting, Bot, API Shield, Account WAF — read before changing zone or account rules.',
       }}
     />
     <p class="mb-4 text-sm">
@@ -110,8 +110,8 @@ import {
       as="p"
       class="text-muted mb-4 max-w-3xl text-sm"
       text={{
-        vi: 'WARP, Access, Tunnel, Gateway, RBI, DLP, CASB, Logs — cho SME thay VPN và kiểm soát Internet egress.',
-        en: 'WARP, Access, Tunnel, Gateway, RBI, DLP, CASB, Logs — for SMEs replacing VPN and controlling Internet egress.',
+        vi: 'Overview WARP, Access, Tunnel, Gateway, RBI, DLP, CASB, Logs — thay VPN và kiểm soát traffic ra Internet.',
+        en: 'Overviews for WARP, Access, Tunnel, Gateway, RBI, DLP, CASB, Logs — VPN replacement and Internet egress control.',
       }}
     />
     <p class="mb-4 text-sm">

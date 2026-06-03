@@ -1,0 +1,51 @@
+---
+import LangText from '../ui/LangText.astro';
+import type { Track } from '../../data/tracks';
+import { getOtherTracks } from '../../data/tracks';
+
+type Props = { current: Track };
+const { current } = Astro.props;
+const others = getOtherTracks(current.slug);
+---
+
+<section class="card mb-6" aria-labelledby="track-switcher-heading">
+  <LangText
+    id="track-switcher-heading"
+    as="h2"
+    class="text-lg font-semibold"
+    text={{ vi: 'Học xong hoặc muốn đổi hướng?', en: 'Finished or want a different path?' }}
+  />
+  <LangText
+    as="p"
+    class="text-muted mt-2 text-sm leading-relaxed"
+    text={{
+      vi: 'Ba lộ trình độc lập — mỗi lộ trình chỉ gồm bài học và tài liệu trong phạm vi đó. Chọn lộ trình khác khi sẵn sàng, không cần học song song.',
+      en: 'Three independent paths — each includes only lessons and materials for that scope. Switch when you are ready; no need to study paths in parallel.',
+    }}
+  />
+
+  <div class="mt-4 grid gap-3 sm:grid-cols-2">
+    {others.map((t) => (
+      <a
+        class="rounded-xl border border-[var(--cf-border)] bg-[var(--cf-bg-elevated)]/50 p-4 transition hover:border-[var(--cf-accent)]"
+        href={`/tracks/${t.slug}`}
+      >
+        <LangText as="h3" class="font-semibold" text={t.title} />
+        <LangText as="p" class="text-muted mt-2 text-sm leading-relaxed" text={t.headline} />
+        <span class="link mt-3 inline-block text-sm">
+          <LangText text={{ vi: 'Vào lộ trình này →', en: 'Enter this path →' }} />
+        </span>
+      </a>
+    ))}
+  </div>
+
+  <p class="text-muted mt-4 text-sm">
+    <a class="link" href="/choose-your-path">
+      <LangText text={{ vi: 'Chưa chắc — làm bài chọn lộ trình', en: 'Not sure — use the path selector' }} />
+    </a>
+    <span class="mx-2 opacity-40">·</span>
+    <a class="link" href="/tracks">
+      <LangText text={{ vi: 'So sánh cả ba lộ trình', en: 'Compare all three paths' }} />
+    </a>
+  </p>
+</section>

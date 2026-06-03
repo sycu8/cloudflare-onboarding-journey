@@ -11,6 +11,28 @@ export type ResourceCard = {
 
 export const resources: ResourceCard[] = [
   {
+    slug: 'system-status',
+    title: { vi: 'System status & incidents', en: 'System status & incidents' },
+    description: {
+      vi: 'Live từ new.cloudflarestatus.com — sự cố active, maintenance, lịch sử gần đây.',
+      en: 'Live from new.cloudflarestatus.com — active incidents, maintenance, recent history.',
+    },
+    type: 'external',
+    href: '/status',
+    status: 'available',
+  },
+  {
+    slug: 'changelog',
+    title: { vi: 'Changelog sản phẩm', en: 'Product changelog' },
+    description: {
+      vi: 'Cập nhật từ developers.cloudflare.com/changelog — lọc theo sản phẩm và lộ trình hub.',
+      en: 'Updates from developers.cloudflare.com/changelog — filter by product and hub track.',
+    },
+    type: 'external',
+    href: '/changelog',
+    status: 'available',
+  },
+  {
     slug: 'content-delivery',
     title: { vi: 'Content delivery & hiệu năng web', en: 'Content delivery & web performance' },
     description: {
@@ -34,10 +56,10 @@ export const resources: ResourceCard[] = [
   },
   {
     slug: 'demo-guides',
-    title: { vi: 'Script demo dashboard', en: 'Dashboard demo scripts' },
+    title: { vi: 'Dashboard overview', en: 'Dashboard overview' },
     description: {
-      vi: 'Demo Application Security & Cloudflare One — cấu hình, menu dashboard, bước showcase cho SME.',
-      en: 'Application Security & Cloudflare One demos — config paths and SME showcase steps.',
+      vi: 'Overview Application Security & Cloudflare One — từng mục dashboard dùng để làm gì, không phải sales kit.',
+      en: 'Application Security & Cloudflare One overviews — what each dashboard area is for, not a sales kit.',
     },
     type: 'external',
     href: '/demo-guides',
@@ -106,7 +128,7 @@ export const resources: ResourceCard[] = [
       en: 'Request flow and use case architecture diagrams (being expanded).',
     },
     type: 'diagram',
-    href: '/use-cases/protect-website',
+    href: '/use-cases',
     status: 'available',
   },
   {

@@ -29,6 +29,7 @@ export type Track = {
   recommendedSequence: { vi: string[]; en: string[] };
   relatedUseCases: { href: string; label: LocalizedString }[];
   cta: { href: string; label: LocalizedString };
+  commonMistakes?: { vi: { title: string; detail: string }[]; en: { title: string; detail: string }[] };
 };
 
 export const tracks: Track[] = [
@@ -414,6 +415,52 @@ export const tracks: Track[] = [
     relatedUseCases: [
       { href: '/use-cases/build-serverless-app', label: { vi: 'Build serverless app', en: 'Build a serverless app' } },
     ],
+    commonMistakes: {
+      vi: [
+        {
+          title: 'Sai thư mục build output trên Pages',
+          detail: 'Astro dùng `dist`, Create React App dùng `build` — sai output khiến site trắng hoặc 404. Kiểm tra build log trước khi merge.',
+        },
+        {
+          title: 'Chọn nhầm storage (KV cho dữ liệu quan hệ)',
+          detail: 'KV không phù hợp giao dịch cần consistency. Dùng D1 cho bảng SQL; R2 cho file; KV cho flags/config.',
+        },
+        {
+          title: 'Secret/API key lộ ở client',
+          detail: 'Chỉ `PUBLIC_*` được embed build. Token Turnstile secret, DB credentials phải ở Pages Functions/Worker env.',
+        },
+        {
+          title: 'Không verify Turnstile server-side',
+          detail: 'Chỉ embed widget chưa đủ — attacker gửi POST trực tiếp tới API. Luôn verify token trước khi ghi D1.',
+        },
+        {
+          title: 'Bỏ qua observability khi debug edge',
+          detail: 'Worker/Pages Function lỗi khó thấy trên server truyền thống. Dùng `wrangler tail`, logs và error handling rõ ràng.',
+        },
+      ],
+      en: [
+        {
+          title: 'Wrong Pages build output directory',
+          detail: 'Astro uses `dist`, CRA uses `build` — wrong output causes blank sites or 404s. Check build logs before merging.',
+        },
+        {
+          title: 'Wrong storage choice (KV for relational data)',
+          detail: 'KV is wrong for consistency-critical transactions. Use D1 for SQL tables; R2 for files; KV for flags/config.',
+        },
+        {
+          title: 'Secrets/API keys exposed in the client',
+          detail: 'Only `PUBLIC_*` belongs in the build. Turnstile secrets and DB credentials belong in Pages Functions/Worker env.',
+        },
+        {
+          title: 'No server-side Turnstile verification',
+          detail: 'Embedding the widget is not enough — attackers POST directly to your API. Always verify tokens before writing to D1.',
+        },
+        {
+          title: 'Skipping observability when debugging edge code',
+          detail: 'Worker/Pages Function errors are invisible like traditional servers. Use `wrangler tail`, logs, and explicit error handling.',
+        },
+      ],
+    },
     cta: { href: '/use-cases/build-serverless-app', label: { vi: 'Đọc tình huống: Build serverless app', en: 'Read use case: Build a serverless app' } },
   },
   {
@@ -455,7 +502,7 @@ export const tracks: Track[] = [
         'Have a checklist to expand DLP/CASB after pilot',
       ],
     },
-    keyConcepts: ['Zero Trust', 'ZTNA', 'SWG', 'CASB', 'DLP', 'Email security', 'Remote Browser Isolation', 'Magic WAN'],
+    keyConcepts: ['Zero Trust', 'ZTNA', 'SWG', 'CASB', 'DLP', 'Email security', 'Remote Browser Isolation', 'Cloudflare WAN'],
     modules: [
       {
         id: 'c1-1',
@@ -586,6 +633,60 @@ export const tracks: Track[] = [
       { href: '/use-cases/replace-vpn', label: { vi: 'Thay thế VPN', en: 'Replace VPN' } },
       { href: '/use-cases/secure-remote-users', label: { vi: 'Bảo vệ remote users', en: 'Secure remote users' } },
     ],
+    commonMistakes: {
+      vi: [
+        {
+          title: 'Cutover VPN big-bang không pilot',
+          detail: 'Rollout toàn công ty một đêm dễ gây outage. Pilot 1 app + 1 nhóm nhỏ; giữ VPN read-only song song vài tuần.',
+        },
+        {
+          title: 'Access policy quá rộng (Allow Everyone)',
+          detail: 'Zero Trust thất bại nếu policy như VPN cũ. Gắn quyền theo IdP group + app cụ thể; review policy hàng quý.',
+        },
+        {
+          title: 'Bỏ qua MFA tại Identity Provider',
+          detail: 'Access chỉ mạnh bằng IdP. Bật MFA bắt buộc ở Google/Azure/Okta trước khi enforce Cloudflare policy.',
+        },
+        {
+          title: 'Bật CASB/DLP trước khi ZTNA ổn định',
+          detail: 'Thêm quá nhiều lớp cùng lúc làm support quá tải. Xong Access + WARP pilot trước; CASB/DLP ở wave 2.',
+        },
+        {
+          title: 'Không triển khai WARP trên mọi thiết bị user',
+          detail: 'SWG/DNS policy không áp dụng nếu traffic không qua Cloudflare One client. MDM hoặc onboarding checklist cho laptop.',
+        },
+        {
+          title: 'Tunnel inbound thay vì outbound `cloudflared`',
+          detail: 'Mở port inbound vào datacenter tăng attack surface. Ưu tiên Tunnel outbound; firewall chỉ cho Cloudflare.',
+        },
+      ],
+      en: [
+        {
+          title: 'Big-bang VPN cutover without a pilot',
+          detail: 'Company-wide overnight cutovers cause outages. Pilot one app + small group; keep VPN read-only in parallel for weeks.',
+        },
+        {
+          title: 'Overly broad Access policies (Allow Everyone)',
+          detail: 'Zero Trust fails if policies mirror old VPN. Tie access to IdP groups + specific apps; review policies quarterly.',
+        },
+        {
+          title: 'Skipping MFA at the Identity Provider',
+          detail: 'Access is only as strong as your IdP. Require MFA in Google/Azure/Okta before enforcing Cloudflare policies.',
+        },
+        {
+          title: 'Enabling CASB/DLP before ZTNA is stable',
+          detail: 'Too many layers at once overwhelms support. Finish Access + WARP pilot first; CASB/DLP in wave 2.',
+        },
+        {
+          title: 'Not deploying WARP on all user devices',
+          detail: 'SWG/DNS policies do not apply if traffic bypasses the Cloudflare One client. Use MDM or a laptop onboarding checklist.',
+        },
+        {
+          title: 'Inbound tunnels instead of outbound `cloudflared`',
+          detail: 'Opening inbound ports into the datacenter increases attack surface. Prefer outbound Tunnel; firewall allow Cloudflare only.',
+        },
+      ],
+    },
     cta: { href: '/use-cases/replace-vpn', label: { vi: 'Đọc tình huống: Thay thế VPN', en: 'Read use case: Replace VPN' } },
   },
 ];
@@ -595,3 +696,9 @@ export function getTrack(slug: Track['slug']) {
   if (!t) throw new Error(`Unknown track: ${slug}`);
   return t;
 }
+
+export function getOtherTracks(slug: Track['slug']): Track[] {
+  return tracks.filter((t) => t.slug !== slug);
+}
+
+export const ACTIVE_TRACK_STORAGE_KEY = 'cfhub_active_track';

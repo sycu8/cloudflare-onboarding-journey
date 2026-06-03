@@ -93,6 +93,19 @@ export const resourceHubItems: ResourceHubItem[] = [
     featured: true,
   },
   {
+    id: 'developer-changelog',
+    title: { vi: 'Developer Changelog', en: 'Developer Changelog' },
+    description: {
+      vi: 'Cập nhật sản phẩm theo ngày — Agents, Workers, Cloudflare One, R2, security. Hub có bản tóm tắt chọn lọc.',
+      en: 'Daily product updates — Agents, Workers, Cloudflare One, R2, security. This hub includes a curated summary.',
+    },
+    href: '/changelog',
+    category: 'community',
+    relatedTrack: 'cross-cutting',
+    internal: true,
+    featured: true,
+  },
+  {
     id: 'blog',
     title: { vi: 'Cloudflare Blog', en: 'Cloudflare Blog' },
     description: {
@@ -172,14 +185,16 @@ export const resourceHubItems: ResourceHubItem[] = [
   },
   {
     id: 'status',
-    title: { vi: 'Status', en: 'Status' },
+    title: { vi: 'System status', en: 'System status' },
     description: {
-      vi: 'Trạng thái dịch vụ Cloudflare và sự cố đang diễn ra.',
-      en: 'Cloudflare service status and ongoing incidents.',
+      vi: 'Trạng thái dịch vụ và incident — live từ new.cloudflarestatus.com.',
+      en: 'Service status and incidents — live from new.cloudflarestatus.com.',
     },
-    href: 'https://www.cloudflarestatus.com/',
+    href: '/status',
     category: 'operations',
     relatedTrack: 'cross-cutting',
+    internal: true,
+    featured: true,
   },
   {
     id: 'global-network',

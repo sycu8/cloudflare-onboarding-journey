@@ -4,7 +4,11 @@ import Breadcrumbs from '../components/chrome/Breadcrumbs.astro';
 import LangText from '../components/ui/LangText.astro';
 import CTASection from '../components/content/CTASection.astro';
 import Cloudflare101Catalog from '../components/content/Cloudflare101Catalog.astro';
+import ReferenceDiagramFigure from '../components/content/ReferenceDiagramFigure.astro';
 import { cf101Categories, cf101Foundations, developerDocsHome, docsUrl } from '../data/cloudflare101';
+import { getDiagramsForHubPage } from '../data/referenceDiagrams';
+
+const cf101Diagrams = getDiagramsForHubPage('/cloudflare-101');
 ---
 
 <BaseLayout
@@ -38,12 +42,13 @@ import { cf101Categories, cf101Foundations, developerDocsHome, docsUrl } from '.
         en: 'Grouped like Cloudflare Developer Docs: each section lists sub-products with short explanations (toggle English only if needed).',
       }}
     />
-    <p class="mt-3 text-sm">
+    <p class="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm">
       <a class="link font-medium" href={developerDocsHome} target="_blank" rel="noopener noreferrer">
         developers.cloudflare.com
       </a>
-      <span class="text-muted lang-vi"> — nguồn chính thức khi triển khai thật.</span>
-      <span class="text-muted lang-en"> — the canonical source for production work.</span>
+      <a class="link" href="/products">
+        <LangText text={{ vi: 'Trang giải thích từng sản phẩm →', en: 'Per-product explainers →' }} />
+      </a>
     </p>
   </header>
 
@@ -68,6 +73,21 @@ import { cf101Categories, cf101Foundations, developerDocsHome, docsUrl } from '.
   }
   </nav>
 
+  {cf101Diagrams.length > 0 ? (
+    <section id="reference-diagrams" class="mb-8 scroll-mt-24">
+      <LangText
+        as="h2"
+        class="mb-4 text-lg font-semibold"
+        text={{ vi: 'Sơ đồ kiến trúc nền', en: 'Foundational architecture diagrams' }}
+      />
+      <div class="grid gap-6 lg:grid-cols-3">
+        {cf101Diagrams.map((d) => (
+          <ReferenceDiagramFigure diagram={d} compact />
+        ))}
+      </div>
+    </section>
+  ) : null}
+
   <section id="foundations" class="scroll-mt-24">
     <LangText
       as="h2"
@@ -89,7 +109,9 @@ import { cf101Categories, cf101Foundations, developerDocsHome, docsUrl } from '.
           return (
             <li class="card p-4">
               <div class="flex items-start justify-between gap-2">
-                <LangText as="h3" class="text-base font-semibold" text={p.name} />
+                <a href={`/products/${p.id}`} class="group flex-1">
+                  <LangText as="h3" class="text-base font-semibold group-hover:text-[var(--cf-accent)]" text={p.name} />
+                </a>
                 {href ? (
                   <a href={href} class="link shrink-0 text-xs" target="_blank" rel="noopener noreferrer">
                     Docs
@@ -97,6 +119,10 @@ import { cf101Categories, cf101Foundations, developerDocsHome, docsUrl } from '.
                 ) : null}
               </div>
               <LangText as="p" class="text-muted mt-2 text-sm leading-relaxed" text={p.summary} />
+              <a href={`/products/${p.id}`} class="link mt-3 inline-block text-xs">
+                <span class="lang-vi">Giải thích chi tiết →</span>
+                <span class="lang-en">Detailed explainer →</span>
+              </a>
             </li>
           );
         })
@@ -113,12 +139,14 @@ import { cf101Categories, cf101Foundations, developerDocsHome, docsUrl } from '.
     <p class="text-muted mt-2 text-sm leading-relaxed">
       <span class="lang-vi">
         <a class="link" href="/first-week#platform-2026">Cập nhật 2026</a> ·
+        <a class="link" href="/resources#reference-diagrams">Reference Diagrams</a> ·
         <a class="link" href="/resources#reference-architecture">Reference Architecture</a> ·
         <a class="link" href="/resources#resource-hub">Resource Hub</a> ·
         <a class="link" href="https://cloudsecop.net/tag/cloudflare/" target="_blank" rel="noopener noreferrer">CloudSecOp</a>
       </span>
       <span class="lang-en">
         <a class="link" href="/first-week#platform-2026">2026 snapshot</a> ·
+        <a class="link" href="/resources#reference-diagrams">Reference Diagrams</a> ·
         <a class="link" href="/resources#reference-architecture">Reference Architecture</a> ·
         <a class="link" href="/resources#resource-hub">Resource Hub</a> ·
         <a class="link" href="https://cloudsecop.net/tag/cloudflare/" target="_blank" rel="noopener noreferrer">CloudSecOp</a>

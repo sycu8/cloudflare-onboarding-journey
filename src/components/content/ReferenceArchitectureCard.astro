@@ -2,13 +2,32 @@
 import LangText from '../ui/LangText.astro';
 import type { ReferenceArchitectureItem } from '../../data/referenceArchitecture';
 import { referenceDocTypeLabels } from '../../data/referenceArchitecture';
+import { getDiagramForRefArchItem } from '../../data/referenceDiagrams';
 
 type Props = { item: ReferenceArchitectureItem };
 const { item } = Astro.props;
 const typeLabel = referenceDocTypeLabels[item.docType];
+const diagram = getDiagramForRefArchItem(item.slug);
 ---
 
-<article class="card flex h-full flex-col">
+<article class="card flex h-full flex-col overflow-hidden p-0">
+  {diagram ? (
+    <a
+      href={diagram.pageUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="block overflow-hidden border-b border-[var(--cf-border)] bg-[var(--cf-bg-elevated)]"
+    >
+      <img
+        src={diagram.primaryImageUrl}
+        alt={diagram.images[0]?.alt.en ?? diagram.title.en}
+        loading="lazy"
+        decoding="async"
+        class="h-36 w-full object-contain object-center p-2"
+      />
+    </a>
+  ) : null}
+  <div class="flex flex-1 flex-col p-6">
   <div class="flex flex-wrap items-center gap-2">
     <span class="badge badge-accent"><LangText text={typeLabel} /></span>
     {item.featured ? (
@@ -47,5 +66,6 @@ const typeLabel = referenceDocTypeLabels[item.docType];
         <LangText text={{ vi: 'Xem lộ trình', en: 'View track' }} />
       </a>
     ) : null}
+  </div>
   </div>
 </article>

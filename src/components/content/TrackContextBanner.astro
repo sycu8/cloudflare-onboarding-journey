@@ -1,0 +1,31 @@
+---
+import LangText from '../ui/LangText.astro';
+import type { Track } from '../../data/tracks';
+import { ACTIVE_TRACK_STORAGE_KEY } from '../../data/tracks';
+
+type Props = { track: Track };
+const { track } = Astro.props;
+---
+
+<div
+  class="card mb-6 flex flex-col gap-3 border-l-4 border-[var(--cf-accent)] sm:flex-row sm:items-center sm:justify-between"
+  data-track-context={track.slug}
+>
+  <div>
+    <p class="text-muted text-xs font-medium uppercase tracking-wide">
+      <span class="lang-vi">Lộ trình đang học</span>
+      <span class="lang-en">Current learning path</span>
+    </p>
+    <LangText as="p" class="mt-1 font-semibold" text={track.title} />
+    <LangText as="p" class="text-muted mt-1 text-sm" text={track.promise} />
+  </div>
+  <a class="btn btn-secondary shrink-0" href={`/tracks/${track.slug}`}>
+    <LangText text={{ vi: 'Về trang lộ trình', en: 'Track home' }} />
+  </a>
+</div>
+
+<script define:vars={{ storageKey: ACTIVE_TRACK_STORAGE_KEY, trackSlug: track.slug }}>
+  try {
+    localStorage.setItem(storageKey, trackSlug);
+  } catch {}
+</script>

@@ -1,10 +1,12 @@
+import { assetUrl } from './assets';
+
 /** Shared SEO defaults — page-level title/description passed via BaseLayout */
 export const siteSeo = {
   name: 'Cloudflare Starter Hub',
   origin: 'https://cloudflare-starter-hub.pages.dev',
   themeColor: '#F6821F',
   twitterHandle: '@cloudflare',
-  defaultImage: '/og-image.svg',
+  defaultImage: assetUrl('og-image.svg'),
   locale: 'vi_VN',
   localeAlternate: 'en_US',
 } as const;

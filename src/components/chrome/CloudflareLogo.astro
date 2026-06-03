@@ -1,4 +1,6 @@
 ---
+import { assetUrl } from '../../lib/assets';
+
 type Props = {
   size?: 'sm' | 'md';
   showWordmark?: boolean;
@@ -6,13 +8,14 @@ type Props = {
 };
 
 const { size = 'md', showWordmark = true, class: className = '' } = Astro.props;
+const iconSrc = assetUrl('favicon.svg');
 const icon = size === 'sm' ? 'h-8 w-8' : 'h-9 w-9';
 const wordmark = size === 'sm' ? 'h-6' : 'h-7';
 ---
 
 <span class:list={['inline-flex min-w-0 items-center gap-2', className]}>
   <img
-    src="/favicon.svg"
+    src={iconSrc}
     alt=""
     width={size === 'sm' ? 32 : 36}
     height={size === 'sm' ? 32 : 36}

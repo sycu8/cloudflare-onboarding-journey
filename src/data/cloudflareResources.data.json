@@ -1,0 +1,1954 @@
+[
+  {
+    "slug": "a-b-testing-using-workers",
+    "title": "A/B-testing using Workers",
+    "path": "/reference-architecture/diagrams/serverless/a-b-testing-using-workers",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/serverless/a-b-testing-using-workers/",
+    "contentType": "Reference architecture diagram",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "clientless-access-private-dns",
+    "title": "Access a web application via its private hostname without the Cloudflare One Client",
+    "path": "/cloudflare-one/tutorials/clientless-access-private-dns",
+    "url": "https://developers.cloudflare.com/cloudflare-one/tutorials/clientless-access-private-dns/",
+    "contentType": "Tutorial",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "mysql-network-policy",
+    "title": "Access and secure a MySQL database using Cloudflare Tunnel and network policies",
+    "path": "/cloudflare-one/tutorials/mysql-network-policy",
+    "url": "https://developers.cloudflare.com/cloudflare-one/tutorials/mysql-network-policy/",
+    "contentType": "Tutorial",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "sase-clientless-access-private-dns",
+    "title": "Access to private apps without having to deploy client agents",
+    "path": "/reference-architecture/diagrams/sase/sase-clientless-access-private-dns",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/sase/sase-clientless-access-private-dns/",
+    "contentType": "Reference architecture diagram",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "account-security",
+    "title": "Account security",
+    "path": "/learning-paths/application-security/account-security/",
+    "url": "https://developers.cloudflare.com/learning-paths/application-security/account-security/",
+    "contentType": "Learning path",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "add-a-react-form-with-formspree",
+    "title": "Add a React form with Formspree",
+    "path": "/pages/tutorials/add-a-react-form-with-formspree",
+    "url": "https://developers.cloudflare.com/pages/tutorials/add-a-react-form-with-formspree/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "add-site",
+    "title": "Add a site",
+    "path": "/pulumi/tutorial/add-site",
+    "url": "https://developers.cloudflare.com/pulumi/tutorial/add-site/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "add-an-html-form-with-formspree",
+    "title": "Add an HTML form with Formspree",
+    "path": "/pages/tutorials/add-an-html-form-with-formspree",
+    "url": "https://developers.cloudflare.com/pages/tutorials/add-an-html-form-with-formspree/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "add-page-rules",
+    "title": "Add exceptions with Page Rules",
+    "path": "/terraform/tutorial/add-page-rules",
+    "url": "https://developers.cloudflare.com/terraform/tutorial/add-page-rules/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "add-multiple-sites-automation",
+    "title": "Add multiple sites via automation",
+    "path": "/fundamentals/manage-domains/add-multiple-sites-automation",
+    "url": "https://developers.cloudflare.com/fundamentals/manage-domains/add-multiple-sites-automation/",
+    "contentType": "Tutorial",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "image-generator-flux-newmodels",
+    "title": "Add New AI Models to your Playground (Part 2)",
+    "path": "/workers-ai/guides/tutorials/image-generation-playground/image-generator-flux-newmodels",
+    "url": "https://developers.cloudflare.com/workers-ai/guides/tutorials/image-generation-playground/image-generator-flux-newmodels/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "ai-security-for-apps",
+    "title": "AI Security for Apps Reference Architecture",
+    "path": "/reference-architecture/architectures/ai-security-for-apps",
+    "url": "https://developers.cloudflare.com/reference-architecture/architectures/ai-security-for-apps/",
+    "contentType": "Reference architecture",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "ai-vibe-coding-platform",
+    "title": "AI Vibe Coding Platform",
+    "path": "/reference-architecture/diagrams/ai/ai-vibe-coding-platform",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/ai/ai-vibe-coding-platform/",
+    "contentType": "Reference architecture diagram",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "analyze-data-with-ai",
+    "title": "Analyze data with AI",
+    "path": "/sandbox/tutorials/analyze-data-with-ai",
+    "url": "https://developers.cloudflare.com/sandbox/tutorials/analyze-data-with-ai/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "automated-testing-pipeline",
+    "title": "Automated testing pipeline",
+    "path": "/sandbox/tutorials/automated-testing-pipeline",
+    "url": "https://developers.cloudflare.com/sandbox/tutorials/automated-testing-pipeline/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "ai-video-caption",
+    "title": "Automatic captioning for video uploads",
+    "path": "/reference-architecture/diagrams/ai/ai-video-caption",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/ai/ai-video-caption/",
+    "contentType": "Reference architecture diagram",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "aws-cloud-hsm",
+    "title": "AWS cloud HSM",
+    "path": "/ssl/keyless-ssl/hardware-security-modules/aws-cloud-hsm",
+    "url": "https://developers.cloudflare.com/ssl/keyless-ssl/hardware-security-modules/aws-cloud-hsm/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "azure-dedicated-hsm",
+    "title": "Azure Dedicated HSM",
+    "path": "/ssl/keyless-ssl/hardware-security-modules/azure-dedicated-hsm",
+    "url": "https://developers.cloudflare.com/ssl/keyless-ssl/hardware-security-modules/azure-dedicated-hsm/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "azure-managed-hsm",
+    "title": "Azure Managed HSM",
+    "path": "/ssl/keyless-ssl/hardware-security-modules/azure-managed-hsm",
+    "url": "https://developers.cloudflare.com/ssl/keyless-ssl/hardware-security-modules/azure-managed-hsm/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "bot-management",
+    "title": "Bot management",
+    "path": "/reference-architecture/diagrams/bots/bot-management",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/bots/bot-management/",
+    "contentType": "Reference architecture diagram",
+    "track": "application-services"
+  },
+  {
+    "slug": "bring-your-own-ip-space-to-cloudflare",
+    "title": "Bring your own IP space to Cloudflare",
+    "path": "/reference-architecture/diagrams/network/bring-your-own-ip-space-to-cloudflare",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/network/bring-your-own-ip-space-to-cloudflare/",
+    "contentType": "Reference architecture diagram",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "build-a-blog-using-nuxt-and-sanity",
+    "title": "Build a blog using Nuxt.js and Sanity.io on Cloudflare Pages",
+    "path": "/pages/tutorials/build-a-blog-using-nuxt-and-sanity",
+    "url": "https://developers.cloudflare.com/pages/tutorials/build-a-blog-using-nuxt-and-sanity/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "build-a-chat-agent",
+    "title": "Build a chat agent",
+    "path": "/agents/getting-started/build-a-chat-agent",
+    "url": "https://developers.cloudflare.com/agents/getting-started/build-a-chat-agent/",
+    "contentType": "Tutorial",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "code-review-bot",
+    "title": "Build a code review bot",
+    "path": "/sandbox/tutorials/code-review-bot",
+    "url": "https://developers.cloudflare.com/sandbox/tutorials/code-review-bot/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "build-a-comments-api",
+    "title": "Build a Comments API",
+    "path": "/d1/tutorials/build-a-comments-api",
+    "url": "https://developers.cloudflare.com/d1/tutorials/build-a-comments-api/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "build-a-qr-code-generator",
+    "title": "Build a QR code generator",
+    "path": "/workers/tutorials/build-a-qr-code-generator",
+    "url": "https://developers.cloudflare.com/workers/tutorials/build-a-qr-code-generator/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "build-a-retrieval-augmented-generation-ai",
+    "title": "Build a Retrieval Augmented Generation (RAG) AI",
+    "path": "/workers-ai/guides/tutorials/build-a-retrieval-augmented-generation-ai",
+    "url": "https://developers.cloudflare.com/workers-ai/guides/tutorials/build-a-retrieval-augmented-generation-ai/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "build-a-seat-booking-app",
+    "title": "Build a seat booking app with SQLite in Durable Objects",
+    "path": "/durable-objects/tutorials/build-a-seat-booking-app",
+    "url": "https://developers.cloudflare.com/durable-objects/tutorials/build-a-seat-booking-app/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "build-a-slackbot",
+    "title": "Build a Slackbot",
+    "path": "/workers/tutorials/build-a-slackbot",
+    "url": "https://developers.cloudflare.com/workers/tutorials/build-a-slackbot/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "build-a-staff-directory-app",
+    "title": "Build a Staff Directory Application",
+    "path": "/d1/tutorials/build-a-staff-directory-app",
+    "url": "https://developers.cloudflare.com/d1/tutorials/build-a-staff-directory-app/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "build-a-jamstack-app",
+    "title": "Build a todo list Jamstack application",
+    "path": "/workers/tutorials/build-a-jamstack-app",
+    "url": "https://developers.cloudflare.com/workers/tutorials/build-a-jamstack-app/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "build-a-voice-agent",
+    "title": "Build a voice agent",
+    "path": "/agents/guides/build-a-voice-agent",
+    "url": "https://developers.cloudflare.com/agents/guides/build-a-voice-agent/",
+    "contentType": "Tutorial",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "ai-code-executor",
+    "title": "Build an AI code executor",
+    "path": "/sandbox/tutorials/ai-code-executor",
+    "url": "https://developers.cloudflare.com/sandbox/tutorials/ai-code-executor/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "openai-agents",
+    "title": "Build an AI coding agent with OpenAI Agents SDK",
+    "path": "/sandbox/tutorials/openai-agents",
+    "url": "https://developers.cloudflare.com/sandbox/tutorials/openai-agents/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "image-generator-flux",
+    "title": "Build an AI Image Generator Playground (Part 1)",
+    "path": "/workers-ai/guides/tutorials/image-generation-playground/image-generator-flux",
+    "url": "https://developers.cloudflare.com/workers-ai/guides/tutorials/image-generation-playground/image-generator-flux/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "build-an-api-with-pages-functions",
+    "title": "Build an API for your front end using Pages Functions",
+    "path": "/pages/tutorials/build-an-api-with-pages-functions",
+    "url": "https://developers.cloudflare.com/pages/tutorials/build-an-api-with-pages-functions/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "build-an-api-to-access-d1",
+    "title": "Build an API to access D1 using a proxy Worker",
+    "path": "/d1/tutorials/build-an-api-to-access-d1",
+    "url": "https://developers.cloudflare.com/d1/tutorials/build-an-api-to-access-d1/",
+    "contentType": "Tutorial",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "end-to-end-pipeline",
+    "title": "Build an end to end data pipeline",
+    "path": "/r2-sql/tutorials/end-to-end-pipeline",
+    "url": "https://developers.cloudflare.com/r2-sql/tutorials/end-to-end-pipeline/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "chatgpt-app",
+    "title": "Build an Interactive ChatGPT App",
+    "path": "/agents/guides/chatgpt-app",
+    "url": "https://developers.cloudflare.com/agents/guides/chatgpt-app/",
+    "contentType": "Tutorial",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "zero-trust-for-startups",
+    "title": "Building zero trust architecture into your startup",
+    "path": "/reference-architecture/design-guides/zero-trust-for-startups",
+    "url": "https://developers.cloudflare.com/reference-architecture/design-guides/zero-trust-for-startups/",
+    "contentType": "Design guide",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "import-to-d1-with-rest-api",
+    "title": "Bulk import to D1 using REST API",
+    "path": "/d1/tutorials/import-to-d1-with-rest-api",
+    "url": "https://developers.cloudflare.com/d1/tutorials/import-to-d1-with-rest-api/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "domain-version",
+    "title": "Change your domain version",
+    "path": "/fundamentals/manage-domains/domain-version",
+    "url": "https://developers.cloudflare.com/fundamentals/manage-domains/domain-version/",
+    "contentType": "Tutorial",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "setup",
+    "title": "Change your nameservers (Full setup)",
+    "path": "/dns/zone-setups/full-setup/setup",
+    "url": "https://developers.cloudflare.com/dns/zone-setups/full-setup/setup/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "how-to-choose-the-right-text-generation-model",
+    "title": "Choose the Right Text Generation Model",
+    "path": "/workers-ai/guides/tutorials/how-to-choose-the-right-text-generation-model",
+    "url": "https://developers.cloudflare.com/workers-ai/guides/tutorials/how-to-choose-the-right-text-generation-model/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "community-mcp-server",
+    "title": "Cloudflare Community MCP Server",
+    "path": "/agents/community-mcp-server",
+    "url": "https://developers.cloudflare.com/agents/community-mcp-server/",
+    "contentType": "Tutorial",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "cloudflare-one-appliance-deployment",
+    "title": "Cloudflare One Appliance deployment options",
+    "path": "/reference-architecture/diagrams/sase/cloudflare-one-appliance-deployment",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/sase/cloudflare-one-appliance-deployment/",
+    "contentType": "Reference architecture diagram",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "web-crawler-with-browser-run",
+    "title": "Cloudflare Queues - Queues & Browser Run",
+    "path": "/queues/tutorials/web-crawler-with-browser-run",
+    "url": "https://developers.cloudflare.com/queues/tutorials/web-crawler-with-browser-run/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "handle-rate-limits",
+    "title": "Cloudflare Queues - Queues & Rate Limits",
+    "path": "/queues/tutorials/handle-rate-limits",
+    "url": "https://developers.cloudflare.com/queues/tutorials/handle-rate-limits/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "security",
+    "title": "Cloudflare Security Architecture",
+    "path": "/reference-architecture/architectures/security",
+    "url": "https://developers.cloudflare.com/reference-architecture/architectures/security/",
+    "contentType": "Reference architecture",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "workers-ai-code-interpreter",
+    "title": "Code interpreter with Workers AI",
+    "path": "/sandbox/tutorials/workers-ai-code-interpreter",
+    "url": "https://developers.cloudflare.com/sandbox/tutorials/workers-ai-code-interpreter/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "ai-composable",
+    "title": "Composable AI architecture",
+    "path": "/reference-architecture/diagrams/ai/ai-composable",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/ai/ai-composable/",
+    "contentType": "Reference architecture diagram",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "concepts",
+    "title": "Concepts",
+    "path": "/learning-paths/clientless-access/concepts/",
+    "url": "https://developers.cloudflare.com/learning-paths/clientless-access/concepts/",
+    "contentType": "Learning path",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "concepts",
+    "title": "Concepts",
+    "path": "/learning-paths/cybersafe/concepts/",
+    "url": "https://developers.cloudflare.com/learning-paths/cybersafe/concepts/",
+    "contentType": "Learning path",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "concepts",
+    "title": "Concepts",
+    "path": "/learning-paths/data-center-protection/concepts/",
+    "url": "https://developers.cloudflare.com/learning-paths/data-center-protection/concepts/",
+    "contentType": "Learning path",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "concepts",
+    "title": "Concepts",
+    "path": "/learning-paths/dns-best-practices/concepts/",
+    "url": "https://developers.cloudflare.com/learning-paths/dns-best-practices/concepts/",
+    "contentType": "Learning path",
+    "track": "application-services"
+  },
+  {
+    "slug": "concepts",
+    "title": "Concepts",
+    "path": "/learning-paths/holistic-ai-security/concepts/",
+    "url": "https://developers.cloudflare.com/learning-paths/holistic-ai-security/concepts/",
+    "contentType": "Learning path",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "concepts",
+    "title": "Concepts",
+    "path": "/learning-paths/load-balancing/concepts/",
+    "url": "https://developers.cloudflare.com/learning-paths/load-balancing/concepts/",
+    "contentType": "Learning path",
+    "track": "application-services"
+  },
+  {
+    "slug": "concepts",
+    "title": "Concepts",
+    "path": "/learning-paths/prevent-ddos-attacks/concepts/",
+    "url": "https://developers.cloudflare.com/learning-paths/prevent-ddos-attacks/concepts/",
+    "contentType": "Learning path",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "concepts",
+    "title": "Concepts",
+    "path": "/learning-paths/replace-vpn/concepts/",
+    "url": "https://developers.cloudflare.com/learning-paths/replace-vpn/concepts/",
+    "contentType": "Learning path",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "concepts",
+    "title": "Concepts",
+    "path": "/learning-paths/secure-internet-traffic/concepts/",
+    "url": "https://developers.cloudflare.com/learning-paths/secure-internet-traffic/concepts/",
+    "contentType": "Learning path",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "concepts",
+    "title": "Concepts",
+    "path": "/learning-paths/secure-your-email/concepts/",
+    "url": "https://developers.cloudflare.com/learning-paths/secure-your-email/concepts/",
+    "contentType": "Learning path",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "concepts",
+    "title": "Concepts",
+    "path": "/learning-paths/workers/concepts/",
+    "url": "https://developers.cloudflare.com/learning-paths/workers/concepts/",
+    "contentType": "Learning path",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "conditionally-enforcing-turnstile",
+    "title": "Conditionally enforce Turnstile",
+    "path": "/turnstile/tutorials/conditionally-enforcing-turnstile",
+    "url": "https://developers.cloudflare.com/turnstile/tutorials/conditionally-enforcing-turnstile/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "configure-https-settings",
+    "title": "Configure HTTPS settings",
+    "path": "/terraform/tutorial/configure-https-settings",
+    "url": "https://developers.cloudflare.com/terraform/tutorial/configure-https-settings/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "configure-your-mobile-app-or-iot-device",
+    "title": "Configure your mobile app or IoT device",
+    "path": "/ssl/client-certificates/configure-your-mobile-app-or-iot-device",
+    "url": "https://developers.cloudflare.com/ssl/client-certificates/configure-your-mobile-app-or-iot-device/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "cli",
+    "title": "Connect through Cloudflare Access using a CLI",
+    "path": "/cloudflare-one/tutorials/cli",
+    "url": "https://developers.cloudflare.com/cloudflare-one/tutorials/cli/",
+    "contentType": "Tutorial",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "kubectl",
+    "title": "Connect through Cloudflare Access using kubectl",
+    "path": "/cloudflare-one/tutorials/kubectl",
+    "url": "https://developers.cloudflare.com/cloudflare-one/tutorials/kubectl/",
+    "contentType": "Tutorial",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "mysql",
+    "title": "Connect to a MySQL database with Cloudflare Workers",
+    "path": "/workers/tutorials/mysql",
+    "url": "https://developers.cloudflare.com/workers/tutorials/mysql/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "postgres",
+    "title": "Connect to a PostgreSQL database with Cloudflare Workers",
+    "path": "/workers/tutorials/postgres",
+    "url": "https://developers.cloudflare.com/workers/tutorials/postgres/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "connect-mcp-client",
+    "title": "Connect to an MCP server",
+    "path": "/agents/guides/connect-mcp-client",
+    "url": "https://developers.cloudflare.com/agents/guides/connect-mcp-client/",
+    "contentType": "Tutorial",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "connect-to-turso-using-workers",
+    "title": "Connect to and query your Turso database using Workers",
+    "path": "/workers/tutorials/connect-to-turso-using-workers",
+    "url": "https://developers.cloudflare.com/workers/tutorials/connect-to-turso-using-workers/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "cdn",
+    "title": "Content Delivery Network (CDN) Reference Architecture",
+    "path": "/reference-architecture/architectures/cdn",
+    "url": "https://developers.cloudflare.com/reference-architecture/architectures/cdn/",
+    "contentType": "Reference architecture",
+    "track": "application-services"
+  },
+  {
+    "slug": "ai-asset-creation",
+    "title": "Content-based asset creation",
+    "path": "/reference-architecture/diagrams/ai/ai-asset-creation",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/ai/ai-asset-creation/",
+    "contentType": "Reference architecture diagram",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "durable-object-control-data-plane-pattern",
+    "title": "Control and data plane architectural pattern for Durable Objects",
+    "path": "/reference-architecture/diagrams/storage/durable-object-control-data-plane-pattern",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/storage/durable-object-control-data-plane-pattern/",
+    "contentType": "Reference architecture diagram",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "convert-full-to-partial",
+    "title": "Convert full setup to partial setup",
+    "path": "/dns/zone-setups/conversions/convert-full-to-partial",
+    "url": "https://developers.cloudflare.com/dns/zone-setups/conversions/convert-full-to-partial/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "convert-full-to-secondary",
+    "title": "Convert full setup to secondary setup",
+    "path": "/dns/zone-setups/conversions/convert-full-to-secondary",
+    "url": "https://developers.cloudflare.com/dns/zone-setups/conversions/convert-full-to-secondary/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "convert-partial-to-full",
+    "title": "Convert partial setup to full setup",
+    "path": "/dns/zone-setups/conversions/convert-partial-to-full",
+    "url": "https://developers.cloudflare.com/dns/zone-setups/conversions/convert-partial-to-full/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "convert-partial-to-secondary",
+    "title": "Convert partial setup to secondary setup",
+    "path": "/dns/zone-setups/conversions/convert-partial-to-secondary",
+    "url": "https://developers.cloudflare.com/dns/zone-setups/conversions/convert-partial-to-secondary/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "convert-secondary-to-full",
+    "title": "Convert secondary setup to full setup",
+    "path": "/dns/zone-setups/conversions/convert-secondary-to-full",
+    "url": "https://developers.cloudflare.com/dns/zone-setups/conversions/convert-secondary-to-full/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "convert-secondary-to-partial",
+    "title": "Convert secondary setup to partial setup",
+    "path": "/dns/zone-setups/conversions/convert-secondary-to-partial",
+    "url": "https://developers.cloudflare.com/dns/zone-setups/conversions/convert-secondary-to-partial/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "create-finetuned-chatgpt-ai-models-with-r2",
+    "title": "Create a fine-tuned OpenAI model with R2",
+    "path": "/workers/tutorials/create-finetuned-chatgpt-ai-models-with-r2",
+    "url": "https://developers.cloudflare.com/workers/tutorials/create-finetuned-chatgpt-ai-models-with-r2/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "forms",
+    "title": "Create a HTML form",
+    "path": "/pages/tutorials/forms",
+    "url": "https://developers.cloudflare.com/pages/tutorials/forms/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "serverless-timeseries-api-with-timescale",
+    "title": "Create a serverless, globally distributed time-series API with Timescale",
+    "path": "/hyperdrive/tutorials/serverless-timeseries-api-with-timescale",
+    "url": "https://developers.cloudflare.com/hyperdrive/tutorials/serverless-timeseries-api-with-timescale/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "ai-wrapper-tenant-control",
+    "title": "Create and secure an AI agent wrapper using AI Gateway and Zero Trust",
+    "path": "/cloudflare-one/tutorials/ai-wrapper-tenant-control",
+    "url": "https://developers.cloudflare.com/cloudflare-one/tutorials/ai-wrapper-tenant-control/",
+    "contentType": "Tutorial",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "access-workers",
+    "title": "Create custom headers for Cloudflare Access-protected origins with Workers",
+    "path": "/cloudflare-one/tutorials/access-workers",
+    "url": "https://developers.cloudflare.com/cloudflare-one/tutorials/access-workers/",
+    "contentType": "Tutorial",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "dynamic-provider-and-wrangler",
+    "title": "Create different resources using Pulumi and Wrangler",
+    "path": "/pulumi/tutorial/dynamic-provider-and-wrangler",
+    "url": "https://developers.cloudflare.com/pulumi/tutorial/dynamic-provider-and-wrangler/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "create-first-aig-workers",
+    "title": "Create your first AI Gateway using Workers AI",
+    "path": "/ai-gateway/tutorials/create-first-aig-workers",
+    "url": "https://developers.cloudflare.com/ai-gateway/tutorials/create-first-aig-workers/",
+    "contentType": "Tutorial",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "cloudflare-sase-with-crowdstrike",
+    "title": "CrowdStrike and Cloudflare - A unified security ecosystem for automated, risk-based protection",
+    "path": "/reference-architecture/architectures/cloudflare-sase-with-crowdstrike",
+    "url": "https://developers.cloudflare.com/reference-architecture/architectures/cloudflare-sase-with-crowdstrike/",
+    "contentType": "Reference architecture",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "persistent-storage",
+    "title": "Data persistence with R2",
+    "path": "/sandbox/tutorials/persistent-storage",
+    "url": "https://developers.cloudflare.com/sandbox/tutorials/persistent-storage/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "deploy-a-realtime-chat-app",
+    "title": "Deploy a real-time chat application",
+    "path": "/workers/tutorials/deploy-a-realtime-chat-app",
+    "url": "https://developers.cloudflare.com/workers/tutorials/deploy-a-realtime-chat-app/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "deploy-a-wordpress-site",
+    "title": "Deploy a static WordPress site",
+    "path": "/pages/how-to/deploy-a-wordpress-site",
+    "url": "https://developers.cloudflare.com/pages/how-to/deploy-a-wordpress-site/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "hello-world",
+    "title": "Deploy a Worker",
+    "path": "/pulumi/tutorial/hello-world",
+    "url": "https://developers.cloudflare.com/pulumi/tutorial/hello-world/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "deploy-an-express-app",
+    "title": "Deploy an Express.js application on Cloudflare Workers",
+    "path": "/workers/tutorials/deploy-an-express-app",
+    "url": "https://developers.cloudflare.com/workers/tutorials/deploy-an-express-app/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "deploying-self-hosted-voip-services-for-hybrid-users",
+    "title": "Deploy self-hosted VoIP services for hybrid users",
+    "path": "/reference-architecture/diagrams/sase/deploying-self-hosted-voip-services-for-hybrid-users",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/sase/deploying-self-hosted-voip-services-for-hybrid-users/",
+    "contentType": "Reference architecture diagram",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "deploy-client-headless-linux",
+    "title": "Deploy the Cloudflare One Client on headless Linux machines",
+    "path": "/cloudflare-one/tutorials/deploy-client-headless-linux",
+    "url": "https://developers.cloudflare.com/cloudflare-one/tutorials/deploy-client-headless-linux/",
+    "contentType": "Tutorial",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "distributed-web-performance-architecture",
+    "title": "Designing a distributed web performance architecture",
+    "path": "/reference-architecture/diagrams/content-delivery/distributed-web-performance-architecture",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/content-delivery/distributed-web-performance-architecture/",
+    "contentType": "Reference architecture diagram",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "designing-ztna-access-policies",
+    "title": "Designing ZTNA access policies for Cloudflare Access",
+    "path": "/reference-architecture/design-guides/designing-ztna-access-policies",
+    "url": "https://developers.cloudflare.com/reference-architecture/design-guides/designing-ztna-access-policies/",
+    "contentType": "Design guide",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "detect-mcp-traffic-gateway-logs",
+    "title": "Detect MCP traffic in Gateway logs",
+    "path": "/cloudflare-one/tutorials/detect-mcp-traffic-gateway-logs",
+    "url": "https://developers.cloudflare.com/cloudflare-one/tutorials/detect-mcp-traffic-gateway-logs/",
+    "contentType": "Tutorial",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "discover-secure-api-endpoints",
+    "title": "Discover and secure your API endpoints (Free, Pro, and Business)",
+    "path": "/use-cases/solutions/discover-secure-api-endpoints",
+    "url": "https://developers.cloudflare.com/use-cases/solutions/discover-secure-api-endpoints/",
+    "contentType": "Solution guide",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "gateway-dns-for-isp",
+    "title": "DNS filtering solution for Internet service providers",
+    "path": "/reference-architecture/diagrams/sase/gateway-dns-for-isp",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/sase/gateway-dns-for-isp/",
+    "contentType": "Reference architecture diagram",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "dns-persistence",
+    "title": "DNS persistence",
+    "path": "/load-balancing/additional-options/dns-persistence",
+    "url": "https://developers.cloudflare.com/load-balancing/additional-options/dns-persistence/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "dnssec-active-migration",
+    "title": "DNSSEC migration tutorial",
+    "path": "/dns/dnssec/dnssec-active-migration",
+    "url": "https://developers.cloudflare.com/dns/dnssec/dnssec-active-migration/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "egress-free-storage-multi-cloud",
+    "title": "Egress-free object storage in multi-cloud setups",
+    "path": "/reference-architecture/diagrams/storage/egress-free-storage-multi-cloud",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/storage/egress-free-storage-multi-cloud/",
+    "contentType": "Reference architecture diagram",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "encrypt-all-keep-site-secure",
+    "title": "Enforce HTTPS and encrypt all traffic (Free, Pro, and Business)",
+    "path": "/use-cases/solutions/encrypt-all-keep-site-secure",
+    "url": "https://developers.cloudflare.com/use-cases/solutions/encrypt-all-keep-site-secure/",
+    "contentType": "Solution guide",
+    "track": "application-services"
+  },
+  {
+    "slug": "cloudflare-sase-with-sentinelone",
+    "title": "Enhancing security posture with SentinelOne and Cloudflare One",
+    "path": "/reference-architecture/architectures/cloudflare-sase-with-sentinelone",
+    "url": "https://developers.cloudflare.com/reference-architecture/architectures/cloudflare-sase-with-sentinelone/",
+    "contentType": "Reference architecture",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "entrust-nshield-connect",
+    "title": "Entrust nShield Connect",
+    "path": "/ssl/keyless-ssl/hardware-security-modules/entrust-nshield-connect",
+    "url": "https://developers.cloudflare.com/ssl/keyless-ssl/hardware-security-modules/entrust-nshield-connect/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "event-notifications-for-storage",
+    "title": "Event notifications for storage",
+    "path": "/reference-architecture/diagrams/storage/event-notifications-for-storage",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/storage/event-notifications-for-storage/",
+    "contentType": "Reference architecture diagram",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "sase",
+    "title": "Evolving to a SASE architecture with Cloudflare",
+    "path": "/reference-architecture/architectures/sase",
+    "url": "https://developers.cloudflare.com/reference-architecture/architectures/sase/",
+    "contentType": "Reference architecture",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "excluding-turnstile-from-e2e-tests",
+    "title": "Exclude Turnstile from E2E tests",
+    "path": "/turnstile/tutorials/excluding-turnstile-from-e2e-tests",
+    "url": "https://developers.cloudflare.com/turnstile/tutorials/excluding-turnstile-from-e2e-tests/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "explore-code-generation-using-deepseek-coder-models",
+    "title": "Explore Code Generation Using DeepSeek Coder Models",
+    "path": "/workers-ai/guides/tutorials/explore-code-generation-using-deepseek-coder-models",
+    "url": "https://developers.cloudflare.com/workers-ai/guides/tutorials/explore-code-generation-using-deepseek-coder-models/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "explore-workers-ai-models-using-a-jupyter-notebook",
+    "title": "Explore Workers AI Models Using a Jupyter Notebook",
+    "path": "/workers-ai/guides/tutorials/explore-workers-ai-models-using-a-jupyter-notebook",
+    "url": "https://developers.cloudflare.com/workers-ai/guides/tutorials/explore-workers-ai-models-using-a-jupyter-notebook/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "extending-cloudflares-benefits-to-saas-providers-end-customers",
+    "title": "Extend Cloudflare's benefits to SaaS providers' end-customers",
+    "path": "/reference-architecture/design-guides/extending-cloudflares-benefits-to-saas-providers-end-customers",
+    "url": "https://developers.cloudflare.com/reference-architecture/design-guides/extending-cloudflares-benefits-to-saas-providers-end-customers/",
+    "contentType": "Design guide",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "augment-access-with-serverless",
+    "title": "Extend ZTNA with external authorization and serverless computing",
+    "path": "/reference-architecture/diagrams/sase/augment-access-with-serverless",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/sase/augment-access-with-serverless/",
+    "contentType": "Reference architecture diagram",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "fine-tune-models-with-autotrain",
+    "title": "Fine Tune Models With AutoTrain from HuggingFace",
+    "path": "/workers-ai/guides/tutorials/fine-tune-models-with-autotrain",
+    "url": "https://developers.cloudflare.com/workers-ai/guides/tutorials/fine-tune-models-with-autotrain/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "fips-140-3",
+    "title": "FIPS 140 level 3 compliance with Cloudflare Application Services",
+    "path": "/reference-architecture/diagrams/security/fips-140-3",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/security/fips-140-3/",
+    "contentType": "Reference architecture diagram",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "fraud-detection-with-ephemeral-ids",
+    "title": "Fraud detection with Ephemeral IDs",
+    "path": "/turnstile/tutorials/fraud-detection-with-ephemeral-ids",
+    "url": "https://developers.cloudflare.com/turnstile/tutorials/fraud-detection-with-ephemeral-ids/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "fullstack-application",
+    "title": "Fullstack applications",
+    "path": "/reference-architecture/diagrams/serverless/fullstack-application",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/serverless/fullstack-application/",
+    "contentType": "Reference architecture diagram",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "generate-youtube-thumbnails-with-workers-and-images",
+    "title": "Generate YouTube thumbnails with Workers and Cloudflare Image Resizing",
+    "path": "/workers/tutorials/generate-youtube-thumbnails-with-workers-and-images",
+    "url": "https://developers.cloudflare.com/workers/tutorials/generate-youtube-thumbnails-with-workers-and-images/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "get-started",
+    "title": "Get started",
+    "path": "/version-management/get-started",
+    "url": "https://developers.cloudflare.com/version-management/get-started/",
+    "contentType": "Tutorial",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "getting-started",
+    "title": "Getting started",
+    "path": "/agents/think/getting-started",
+    "url": "https://developers.cloudflare.com/agents/think/getting-started/",
+    "contentType": "Tutorial",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "r2-1",
+    "title": "Getting started with R2",
+    "path": "/learning-paths/r2-intro/series/r2-1/",
+    "url": "https://developers.cloudflare.com/learning-paths/r2-intro/series/r2-1/",
+    "contentType": "Learning path",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "github-sms-notifications-using-twilio",
+    "title": "GitHub SMS notifications using Twilio",
+    "path": "/workers/tutorials/github-sms-notifications-using-twilio",
+    "url": "https://developers.cloudflare.com/workers/tutorials/github-sms-notifications-using-twilio/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "google-cloud-hsm",
+    "title": "Google Cloud HSM",
+    "path": "/ssl/keyless-ssl/hardware-security-modules/google-cloud-hsm",
+    "url": "https://developers.cloudflare.com/ssl/keyless-ssl/hardware-security-modules/google-cloud-hsm/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "graphql-analytics",
+    "title": "GraphQL Analytics",
+    "path": "/cloudflare-network-firewall/tutorials/graphql-analytics",
+    "url": "https://developers.cloudflare.com/cloudflare-network-firewall/tutorials/graphql-analytics/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "graphql-analytics",
+    "title": "GraphQL Analytics",
+    "path": "/cloudflare-one/tutorials/graphql-analytics",
+    "url": "https://developers.cloudflare.com/cloudflare-one/tutorials/graphql-analytics/",
+    "contentType": "Tutorial",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "handle-form-submissions-with-airtable",
+    "title": "Handle form submissions with Airtable",
+    "path": "/workers/tutorials/handle-form-submissions-with-airtable",
+    "url": "https://developers.cloudflare.com/workers/tutorials/handle-form-submissions-with-airtable/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "image-generation-playground",
+    "title": "How to Build an Image Generator using Workers AI",
+    "path": "/workers-ai/guides/tutorials/image-generation-playground",
+    "url": "https://developers.cloudflare.com/workers-ai/guides/tutorials/image-generation-playground/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "china-network-main-features-1",
+    "title": "How to speed up your web traffic inside mainland China",
+    "path": "/learning-paths/china-network-overview/series/china-network-main-features-1/",
+    "url": "https://developers.cloudflare.com/learning-paths/china-network-overview/series/china-network-main-features-1/",
+    "contentType": "Learning path",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "ibm-cloud-hsm",
+    "title": "IBM Cloud HSM",
+    "path": "/ssl/keyless-ssl/hardware-security-modules/ibm-cloud-hsm",
+    "url": "https://developers.cloudflare.com/ssl/keyless-ssl/hardware-security-modules/ibm-cloud-hsm/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "regional-private-dns-resolver-policies",
+    "title": "Implement regional private DNS servers with Gateway resolver policies",
+    "path": "/cloudflare-one/tutorials/regional-private-dns-resolver-policies",
+    "url": "https://developers.cloudflare.com/cloudflare-one/tutorials/regional-private-dns-resolver-policies/",
+    "contentType": "Tutorial",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "import-cloudflare-resources",
+    "title": "Import Cloudflare resources",
+    "path": "/terraform/advanced-topics/import-cloudflare-resources",
+    "url": "https://developers.cloudflare.com/terraform/advanced-topics/import-cloudflare-resources/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "use-load-balancing",
+    "title": "Improve performance and reliability",
+    "path": "/terraform/tutorial/use-load-balancing",
+    "url": "https://developers.cloudflare.com/terraform/tutorial/use-load-balancing/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "bigquery-workers-ai",
+    "title": "Ingesting BigQuery Data into Workers AI",
+    "path": "/reference-architecture/diagrams/ai/bigquery-workers-ai",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/ai/bigquery-workers-ai/",
+    "contentType": "Reference architecture diagram",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "integrate-microsoft-mcas-teams",
+    "title": "Integrate Microsoft MCAS with Cloudflare Zero Trust",
+    "path": "/cloudflare-one/tutorials/integrate-microsoft-mcas-teams",
+    "url": "https://developers.cloudflare.com/cloudflare-one/tutorials/integrate-microsoft-mcas-teams/",
+    "contentType": "Tutorial",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "integrating-turnstile-waf-and-bot-management",
+    "title": "Integrate Turnstile, WAF, & Bot Management",
+    "path": "/turnstile/tutorials/integrating-turnstile-waf-and-bot-management",
+    "url": "https://developers.cloudflare.com/turnstile/tutorials/integrating-turnstile-waf-and-bot-management/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "concepts",
+    "title": "Introducing mTLS",
+    "path": "/learning-paths/mtls/concepts/",
+    "url": "https://developers.cloudflare.com/learning-paths/mtls/concepts/",
+    "contentType": "Learning path",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "initialize-terraform",
+    "title": "Introduction to Terraform init",
+    "path": "/terraform/tutorial/initialize-terraform",
+    "url": "https://developers.cloudflare.com/terraform/tutorial/initialize-terraform/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "introduction-to-series-1",
+    "title": "Introduction to the series",
+    "path": "/learning-paths/durable-objects-course/series/introduction-to-series-1/",
+    "url": "https://developers.cloudflare.com/learning-paths/durable-objects-course/series/introduction-to-series-1/",
+    "contentType": "Learning path",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "workflows-1",
+    "title": "Introduction to Workflows",
+    "path": "/learning-paths/workflows-course/series/workflows-1/",
+    "url": "https://developers.cloudflare.com/learning-paths/workflows-course/series/workflows-1/",
+    "contentType": "Learning path",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "entra-id-risky-users",
+    "title": "Isolate risky Entra ID users",
+    "path": "/cloudflare-one/tutorials/entra-id-risky-users",
+    "url": "https://developers.cloudflare.com/cloudflare-one/tutorials/entra-id-risky-users/",
+    "contentType": "Tutorial",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "kentik",
+    "title": "Kentik",
+    "path": "/magic-transit/partners/kentik",
+    "url": "https://developers.cloudflare.com/magic-transit/partners/kentik/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "leveraging-cloudflare-for-your-saas-applications",
+    "title": "Leveraging Cloudflare for your SaaS applications",
+    "path": "/reference-architecture/design-guides/leveraging-cloudflare-for-your-saas-applications",
+    "url": "https://developers.cloudflare.com/reference-architecture/design-guides/leveraging-cloudflare-for-your-saas-applications/",
+    "contentType": "Design guide",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "llama-vision-tutorial",
+    "title": "Llama 3.2 11B Vision Instruct model on Cloudflare Workers AI",
+    "path": "/workers-ai/guides/tutorials/llama-vision-tutorial",
+    "url": "https://developers.cloudflare.com/workers-ai/guides/tutorials/llama-vision-tutorial/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "load-balancing",
+    "title": "Load Balancing Reference Architecture",
+    "path": "/reference-architecture/architectures/load-balancing",
+    "url": "https://developers.cloudflare.com/reference-architecture/architectures/load-balancing/",
+    "contentType": "Reference architecture",
+    "track": "application-services"
+  },
+  {
+    "slug": "load-shedding",
+    "title": "Load shedding",
+    "path": "/load-balancing/additional-options/load-shedding",
+    "url": "https://developers.cloudflare.com/load-balancing/additional-options/load-shedding/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "localize-a-website",
+    "title": "Localize a website with HTMLRewriter",
+    "path": "/pages/tutorials/localize-a-website",
+    "url": "https://developers.cloudflare.com/pages/tutorials/localize-a-website/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "upload-logs-event-notifications",
+    "title": "Log and store upload events in R2 with event notifications",
+    "path": "/r2/tutorials/upload-logs-event-notifications",
+    "url": "https://developers.cloudflare.com/r2/tutorials/upload-logs-event-notifications/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "magic-transit",
+    "title": "Magic Transit Reference Architecture",
+    "path": "/reference-architecture/architectures/magic-transit",
+    "url": "https://developers.cloudflare.com/reference-architecture/architectures/magic-transit/",
+    "contentType": "Reference architecture",
+    "track": "application-services"
+  },
+  {
+    "slug": "manage-secrets",
+    "title": "Manage secrets with Pulumi ESC",
+    "path": "/pulumi/tutorial/manage-secrets",
+    "url": "https://developers.cloudflare.com/pulumi/tutorial/manage-secrets/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "mastodon",
+    "title": "Mastodon",
+    "path": "/r2/tutorials/mastodon",
+    "url": "https://developers.cloudflare.com/r2/tutorials/mastodon/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "netlify-to-workers",
+    "title": "Migrate from Netlify to Workers",
+    "path": "/workers/static-assets/migration-guides/netlify-to-workers",
+    "url": "https://developers.cloudflare.com/workers/static-assets/migration-guides/netlify-to-workers/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "vercel-to-workers",
+    "title": "Migrate from Vercel to Workers",
+    "path": "/workers/static-assets/migration-guides/vercel-to-workers",
+    "url": "https://developers.cloudflare.com/workers/static-assets/migration-guides/vercel-to-workers/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "migrating-jekyll-from-github-pages",
+    "title": "Migrating a Jekyll-based site from GitHub Pages",
+    "path": "/pages/migrations/migrating-jekyll-from-github-pages",
+    "url": "https://developers.cloudflare.com/pages/migrations/migrating-jekyll-from-github-pages/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "migrating-from-firebase",
+    "title": "Migrating from Firebase",
+    "path": "/pages/migrations/migrating-from-firebase",
+    "url": "https://developers.cloudflare.com/pages/migrations/migrating-from-firebase/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "migrating-from-netlify",
+    "title": "Migrating from Netlify to Pages",
+    "path": "/pages/migrations/migrating-from-netlify",
+    "url": "https://developers.cloudflare.com/pages/migrations/migrating-from-netlify/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "migrating-from-vercel",
+    "title": "Migrating from Vercel to Pages",
+    "path": "/pages/migrations/migrating-from-vercel",
+    "url": "https://developers.cloudflare.com/pages/migrations/migrating-from-vercel/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "migrating-from-workers",
+    "title": "Migrating from Workers Sites to Pages",
+    "path": "/pages/migrations/migrating-from-workers",
+    "url": "https://developers.cloudflare.com/pages/migrations/migrating-from-workers/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "minimize-downtime",
+    "title": "Minimize downtime",
+    "path": "/fundamentals/performance/minimize-downtime",
+    "url": "https://developers.cloudflare.com/fundamentals/performance/minimize-downtime/",
+    "contentType": "Tutorial",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "mongodb-tunnel",
+    "title": "MongoDB SSH",
+    "path": "/cloudflare-one/tutorials/mongodb-tunnel",
+    "url": "https://developers.cloudflare.com/cloudflare-one/tutorials/mongodb-tunnel/",
+    "contentType": "Tutorial",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "grafana",
+    "title": "Monitor Cloudflare Tunnel with Grafana",
+    "path": "/cloudflare-one/tutorials/grafana",
+    "url": "https://developers.cloudflare.com/cloudflare-one/tutorials/grafana/",
+    "contentType": "Tutorial",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "ai-multivendor-observability-control",
+    "title": "Multi-vendor AI observability and control",
+    "path": "/reference-architecture/diagrams/ai/ai-multivendor-observability-control",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/ai/ai-multivendor-observability-control/",
+    "contentType": "Reference architecture diagram",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "multi-vendor",
+    "title": "Multi-vendor Application Security and Performance Reference Architecture",
+    "path": "/reference-architecture/architectures/multi-vendor",
+    "url": "https://developers.cloudflare.com/reference-architecture/architectures/multi-vendor/",
+    "contentType": "Reference architecture",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "network-vpn-migration",
+    "title": "Network-focused migration from VPN concentrators to Zero Trust Network Access",
+    "path": "/reference-architecture/design-guides/network-vpn-migration",
+    "url": "https://developers.cloudflare.com/reference-architecture/design-guides/network-vpn-migration/",
+    "contentType": "Design guide",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "fundamentals",
+    "title": "New to Cloudflare?",
+    "path": "/fundamentals",
+    "url": "https://developers.cloudflare.com/fundamentals/",
+    "contentType": "Tutorial",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "on-demand-object-storage-migration",
+    "title": "On-demand Object Storage Data Migration",
+    "path": "/reference-architecture/diagrams/storage/on-demand-object-storage-migration",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/storage/on-demand-object-storage-migration/",
+    "contentType": "Reference architecture diagram",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "add-site",
+    "title": "Onboard a domain",
+    "path": "/fundamentals/manage-domains/add-site",
+    "url": "https://developers.cloudflare.com/fundamentals/manage-domains/add-site/",
+    "contentType": "Tutorial",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "openai-function-calls-workers",
+    "title": "OpenAI GPT function calling with JavaScript and Cloudflare Workers",
+    "path": "/workers/tutorials/openai-function-calls-workers",
+    "url": "https://developers.cloudflare.com/workers/tutorials/openai-function-calls-workers/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "optimize-mobile-viewing",
+    "title": "Optimize mobile viewing",
+    "path": "/images/tutorials/optimize-mobile-viewing",
+    "url": "https://developers.cloudflare.com/images/tutorials/optimize-mobile-viewing/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "optimizing-and-securing-connected-transportation-systems",
+    "title": "Optimizing and securing connected transportation systems",
+    "path": "/reference-architecture/diagrams/iot/optimizing-and-securing-connected-transportation-systems",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/iot/optimizing-and-securing-connected-transportation-systems/",
+    "contentType": "Reference architecture diagram",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "optimizing-roaming-experience-with-geolocated-ips",
+    "title": "Optimizing device roaming experience with geolocated IPs",
+    "path": "/reference-architecture/diagrams/network/optimizing-roaming-experience-with-geolocated-ips",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/network/optimizing-roaming-experience-with-geolocated-ips/",
+    "contentType": "Reference architecture diagram",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "optimizing-image-delivery-with-cloudflare-image-resizing-and-r2",
+    "title": "Optimizing image delivery with Cloudflare image resizing and R2",
+    "path": "/reference-architecture/diagrams/content-delivery/optimizing-image-delivery-with-cloudflare-image-resizing-and-r2",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/content-delivery/optimizing-image-delivery-with-cloudflare-image-resizing-and-r2/",
+    "contentType": "Reference architecture diagram",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "planned-maintenance",
+    "title": "Perform planned maintenance",
+    "path": "/load-balancing/additional-options/planned-maintenance",
+    "url": "https://developers.cloudflare.com/load-balancing/additional-options/planned-maintenance/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "postman",
+    "title": "Postman",
+    "path": "/r2/tutorials/postman",
+    "url": "https://developers.cloudflare.com/r2/tutorials/postman/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "concepts",
+    "title": "Prerequisites",
+    "path": "/learning-paths/surge-readiness/concepts/",
+    "url": "https://developers.cloudflare.com/learning-paths/surge-readiness/concepts/",
+    "contentType": "Learning path",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "programmable-platforms",
+    "title": "Programmable Platforms",
+    "path": "/reference-architecture/diagrams/serverless/programmable-platforms",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/serverless/programmable-platforms/",
+    "contentType": "Reference architecture diagram",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "s3-buckets",
+    "title": "Protect access to Amazon S3 buckets with Cloudflare Zero Trust",
+    "path": "/cloudflare-one/tutorials/s3-buckets",
+    "url": "https://developers.cloudflare.com/cloudflare-one/tutorials/s3-buckets/",
+    "contentType": "Tutorial",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "m365-dedicated-egress-ips",
+    "title": "Protect access to Microsoft 365 with dedicated egress IPs",
+    "path": "/cloudflare-one/tutorials/m365-dedicated-egress-ips",
+    "url": "https://developers.cloudflare.com/cloudflare-one/tutorials/m365-dedicated-egress-ips/",
+    "contentType": "Tutorial",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "cloudflare-access",
+    "title": "Protect an R2 Bucket with Cloudflare Access",
+    "path": "/r2/tutorials/cloudflare-access",
+    "url": "https://developers.cloudflare.com/r2/tutorials/cloudflare-access/",
+    "contentType": "Tutorial",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "protect-data-center-networks",
+    "title": "Protect data center networks",
+    "path": "/reference-architecture/diagrams/network/protect-data-center-networks",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/network/protect-data-center-networks/",
+    "contentType": "Reference architecture diagram",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "protect-hybrid-cloud-networks-with-cloudflare-magic-transit",
+    "title": "Protect hybrid cloud networks with Cloudflare Magic Transit",
+    "path": "/reference-architecture/diagrams/network/protect-hybrid-cloud-networks-with-cloudflare-magic-transit",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/network/protect-hybrid-cloud-networks-with-cloudflare-magic-transit/",
+    "contentType": "Reference architecture diagram",
+    "track": "application-services"
+  },
+  {
+    "slug": "protecting-sp-networks-from-ddos",
+    "title": "Protect ISP and telecommunications networks from DDoS attacks",
+    "path": "/reference-architecture/diagrams/network/protecting-sp-networks-from-ddos",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/network/protecting-sp-networks-from-ddos/",
+    "contentType": "Reference architecture diagram",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "protect-public-networks-with-cloudflare",
+    "title": "Protect public networks with Cloudflare",
+    "path": "/reference-architecture/diagrams/network/protect-public-networks-with-cloudflare",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/network/protect-public-networks-with-cloudflare/",
+    "contentType": "Reference architecture diagram",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "login-pages",
+    "title": "Protect your forms",
+    "path": "/turnstile/tutorials/login-pages",
+    "url": "https://developers.cloudflare.com/turnstile/tutorials/login-pages/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "protect-sensitive-forms-fraud-abuse",
+    "title": "Protect your forms from spam and abuse (Free, Pro, and Business)",
+    "path": "/use-cases/solutions/protect-sensitive-forms-fraud-abuse",
+    "url": "https://developers.cloudflare.com/use-cases/solutions/protect-sensitive-forms-fraud-abuse/",
+    "contentType": "Solution guide",
+    "track": "application-services"
+  },
+  {
+    "slug": "gateway-for-protective-dns",
+    "title": "Protective DNS for governments",
+    "path": "/reference-architecture/diagrams/sase/gateway-for-protective-dns",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/sase/gateway-for-protective-dns/",
+    "contentType": "Reference architecture diagram",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "d1-and-prisma-orm",
+    "title": "Query D1 using Prisma ORM",
+    "path": "/d1/tutorials/d1-and-prisma-orm",
+    "url": "https://developers.cloudflare.com/d1/tutorials/d1-and-prisma-orm/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "securing-data-in-transit",
+    "title": "Reference Architecture Diagram: Securing data in transit",
+    "path": "/reference-architecture/diagrams/security/securing-data-in-transit",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/security/securing-data-in-transit/",
+    "contentType": "Reference architecture diagram",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "cloudflare-sase-with-microsoft",
+    "title": "Reference Architecture using Cloudflare SASE with Microsoft",
+    "path": "/reference-architecture/architectures/cloudflare-sase-with-microsoft",
+    "url": "https://developers.cloudflare.com/reference-architecture/architectures/cloudflare-sase-with-microsoft/",
+    "contentType": "Reference architecture",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "okta-u2f",
+    "title": "Require U2F with Okta",
+    "path": "/cloudflare-one/tutorials/okta-u2f",
+    "url": "https://developers.cloudflare.com/cloudflare-one/tutorials/okta-u2f/",
+    "contentType": "Tutorial",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "ai-rag",
+    "title": "Retrieval Augmented Generation (RAG)",
+    "path": "/reference-architecture/diagrams/ai/ai-rag",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/ai/ai-rag/",
+    "contentType": "Reference architecture diagram",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "revert-configuration",
+    "title": "Revert configuration",
+    "path": "/terraform/tutorial/revert-configuration",
+    "url": "https://developers.cloudflare.com/terraform/tutorial/revert-configuration/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "claude-code",
+    "title": "Run Claude Code on a Sandbox",
+    "path": "/sandbox/tutorials/claude-code",
+    "url": "https://developers.cloudflare.com/sandbox/tutorials/claude-code/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "sdks",
+    "title": "SDKs",
+    "path": "/fundamentals/api/reference/sdks",
+    "url": "https://developers.cloudflare.com/fundamentals/api/reference/sdks/",
+    "contentType": "Tutorial",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "secure-access-to-saas-applications-with-sase",
+    "title": "Secure access to SaaS applications with SASE",
+    "path": "/reference-architecture/diagrams/sase/secure-access-to-saas-applications-with-sase",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/sase/secure-access-to-saas-applications-with-sase/",
+    "contentType": "Reference architecture diagram",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "upload-assets-with-r2",
+    "title": "Securely access and upload assets with Cloudflare R2",
+    "path": "/workers/tutorials/upload-assets-with-r2",
+    "url": "https://developers.cloudflare.com/workers/tutorials/upload-assets-with-r2/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "secure-application-delivery",
+    "title": "Securely deliver applications with Cloudflare",
+    "path": "/reference-architecture/design-guides/secure-application-delivery",
+    "url": "https://developers.cloudflare.com/reference-architecture/design-guides/secure-application-delivery/",
+    "contentType": "Design guide",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "securing-data-at-rest",
+    "title": "Securing data at rest",
+    "path": "/reference-architecture/diagrams/security/securing-data-at-rest",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/security/securing-data-at-rest/",
+    "contentType": "Reference architecture diagram",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "securing-data-in-use",
+    "title": "Securing data in use",
+    "path": "/reference-architecture/diagrams/security/securing-data-in-use",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/security/securing-data-in-use/",
+    "contentType": "Reference architecture diagram",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "securing-guest-wireless-networks",
+    "title": "Securing guest wireless networks",
+    "path": "/reference-architecture/design-guides/securing-guest-wireless-networks",
+    "url": "https://developers.cloudflare.com/reference-architecture/design-guides/securing-guest-wireless-networks/",
+    "contentType": "Design guide",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "send-emails-with-postmark",
+    "title": "Send Emails With Postmark",
+    "path": "/workers/tutorials/send-emails-with-postmark",
+    "url": "https://developers.cloudflare.com/workers/tutorials/send-emails-with-postmark/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "send-emails-with-resend",
+    "title": "Send Emails With Resend",
+    "path": "/workers/tutorials/send-emails-with-resend",
+    "url": "https://developers.cloudflare.com/workers/tutorials/send-emails-with-resend/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "extend-sso-with-workers",
+    "title": "Send SSO attributes to Access-protected origins with Workers",
+    "path": "/cloudflare-one/tutorials/extend-sso-with-workers",
+    "url": "https://developers.cloudflare.com/cloudflare-one/tutorials/extend-sso-with-workers/",
+    "contentType": "Tutorial",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "serverless-etl",
+    "title": "Serverless ETL pipelines",
+    "path": "/reference-architecture/diagrams/serverless/serverless-etl",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/serverless/serverless-etl/",
+    "contentType": "Reference architecture diagram",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "serverless-global-apis",
+    "title": "Serverless global APIs",
+    "path": "/reference-architecture/diagrams/serverless/serverless-global-apis",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/serverless/serverless-global-apis/",
+    "contentType": "Reference architecture diagram",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "serverless-image-content-management",
+    "title": "Serverless image content management",
+    "path": "/reference-architecture/diagrams/serverless/serverless-image-content-management",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/serverless/serverless-image-content-management/",
+    "contentType": "Reference architecture diagram",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "setup",
+    "title": "Set up a partial zone (CNAME setup)",
+    "path": "/dns/zone-setups/partial-setup/setup",
+    "url": "https://developers.cloudflare.com/dns/zone-setups/partial-setup/setup/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "set-up-via-cloudflare-wan",
+    "title": "Set up a private origin via Cloudflare WAN",
+    "path": "/dns/private-origins/set-up-via-cloudflare-wan",
+    "url": "https://developers.cloudflare.com/dns/private-origins/set-up-via-cloudflare-wan/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "using-prisma-postgres-with-workers",
+    "title": "Set up and use a Prisma Postgres database",
+    "path": "/workers/tutorials/using-prisma-postgres-with-workers",
+    "url": "https://developers.cloudflare.com/workers/tutorials/using-prisma-postgres-with-workers/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "claude-managed-agents",
+    "title": "Set up Claude Managed Agents",
+    "path": "/sandbox/tutorials/claude-managed-agents",
+    "url": "https://developers.cloudflare.com/sandbox/tutorials/claude-managed-agents/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "setup",
+    "title": "Set up incoming zone transfers (Cloudflare as Secondary)",
+    "path": "/dns/zone-setups/zone-transfers/cloudflare-as-secondary/setup",
+    "url": "https://developers.cloudflare.com/dns/zone-setups/zone-transfers/cloudflare-as-secondary/setup/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "dnssec-for-primary",
+    "title": "Set up multi-signer DNSSEC with outgoing zone transfers",
+    "path": "/dns/zone-setups/zone-transfers/cloudflare-as-primary/dnssec-for-primary",
+    "url": "https://developers.cloudflare.com/dns/zone-setups/zone-transfers/cloudflare-as-primary/dnssec-for-primary/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "setup",
+    "title": "Set up outgoing zone transfers (Cloudflare as Primary)",
+    "path": "/dns/zone-setups/zone-transfers/cloudflare-as-primary/setup",
+    "url": "https://developers.cloudflare.com/dns/zone-setups/zone-transfers/cloudflare-as-primary/setup/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "aig-workers-ai-binding",
+    "title": "Set up Workers AI with AI Gateway",
+    "path": "/ai-gateway/integrations/aig-workers-ai-binding",
+    "url": "https://developers.cloudflare.com/ai-gateway/integrations/aig-workers-ai-binding/",
+    "contentType": "Tutorial",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "softhsmv2",
+    "title": "SoftHSMv2",
+    "path": "/ssl/keyless-ssl/hardware-security-modules/softhsmv2",
+    "url": "https://developers.cloudflare.com/ssl/keyless-ssl/hardware-security-modules/softhsmv2/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "stop-account-takeover-attacks",
+    "title": "Stop account takeover attacks (Free, Pro, and Business)",
+    "path": "/use-cases/solutions/stop-account-takeover-attacks",
+    "url": "https://developers.cloudflare.com/use-cases/solutions/stop-account-takeover-attacks/",
+    "contentType": "Solution guide",
+    "track": "application-services"
+  },
+  {
+    "slug": "stop-malicious-bots",
+    "title": "Stop malicious bots while allowing legitimate traffic (Free, Pro, and Business)",
+    "path": "/use-cases/solutions/stop-malicious-bots",
+    "url": "https://developers.cloudflare.com/use-cases/solutions/stop-malicious-bots/",
+    "contentType": "Solution guide",
+    "track": "application-services"
+  },
+  {
+    "slug": "image-generator-store-and-catalog",
+    "title": "Store and Catalog AI Generated Images with R2 (Part 3)",
+    "path": "/workers-ai/guides/tutorials/image-generation-playground/image-generator-store-and-catalog",
+    "url": "https://developers.cloudflare.com/workers-ai/guides/tutorials/image-generation-playground/image-generator-store-and-catalog/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "storing-user-generated-content",
+    "title": "Storing user generated content",
+    "path": "/reference-architecture/diagrams/storage/storing-user-generated-content",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/storage/storing-user-generated-content/",
+    "contentType": "Reference architecture diagram",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "streamlined-waf-deployment-across-zones-and-applications",
+    "title": "Streamlined WAF deployment across zones and applications",
+    "path": "/reference-architecture/design-guides/streamlined-waf-deployment-across-zones-and-applications",
+    "url": "https://developers.cloudflare.com/reference-architecture/design-guides/streamlined-waf-deployment-across-zones-and-applications/",
+    "contentType": "Design guide",
+    "track": "application-services"
+  },
+  {
+    "slug": "test-waiting-room",
+    "title": "Test a waiting room",
+    "path": "/waiting-room/additional-options/test-waiting-room",
+    "url": "https://developers.cloudflare.com/waiting-room/additional-options/test-waiting-room/",
+    "contentType": "Tutorial",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "evolution-corporate-networks-1",
+    "title": "The evolution of corporate networks",
+    "path": "/learning-paths/sase-overview-course/series/evolution-corporate-networks-1/",
+    "url": "https://developers.cloudflare.com/learning-paths/sase-overview-course/series/evolution-corporate-networks-1/",
+    "contentType": "Learning path",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "track-history",
+    "title": "Track your history",
+    "path": "/terraform/tutorial/track-history",
+    "url": "https://developers.cloudflare.com/terraform/tutorial/track-history/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "optimize-user-uploaded-image",
+    "title": "Transform user-uploaded images before uploading to R2",
+    "path": "/images/tutorials/optimize-user-uploaded-image",
+    "url": "https://developers.cloudflare.com/images/tutorials/optimize-user-uploaded-image/",
+    "contentType": "Tutorial",
+    "track": "application-services"
+  },
+  {
+    "slug": "tutorial",
+    "title": "Tutorial - React SPA with an API",
+    "path": "/workers/vite-plugin/tutorial",
+    "url": "https://developers.cloudflare.com/workers/vite-plugin/tutorial/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "warp-basics-1",
+    "title": "Understand Cloudflare WARP basics",
+    "path": "/learning-paths/warp-overview-course/series/warp-basics-1/",
+    "url": "https://developers.cloudflare.com/learning-paths/warp-overview-course/series/warp-basics-1/",
+    "contentType": "Learning path",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "email-security-deployments",
+    "title": "Understanding Email Security Deployments",
+    "path": "/reference-architecture/architectures/email-security-deployments",
+    "url": "https://developers.cloudflare.com/reference-architecture/architectures/email-security-deployments/",
+    "contentType": "Reference architecture",
+    "track": "cross-cutting"
+  },
+  {
+    "slug": "r2-logs",
+    "title": "Use Cloudflare R2 as a Zero Trust log destination",
+    "path": "/cloudflare-one/tutorials/r2-logs",
+    "url": "https://developers.cloudflare.com/cloudflare-one/tutorials/r2-logs/",
+    "contentType": "Tutorial",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "tunnel-kubectl",
+    "title": "Use Cloudflare Tunnels with Kubernetes client-go credential plugins",
+    "path": "/cloudflare-one/tutorials/tunnel-kubectl",
+    "url": "https://developers.cloudflare.com/cloudflare-one/tutorials/tunnel-kubectl/",
+    "contentType": "Tutorial",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "summarize-pdf",
+    "title": "Use event notification to summarize PDF files on upload",
+    "path": "/r2/tutorials/summarize-pdf",
+    "url": "https://developers.cloudflare.com/r2/tutorials/summarize-pdf/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "entra-id-conditional-access",
+    "title": "Use Microsoft Entra ID Conditional Access policies in Cloudflare Access",
+    "path": "/cloudflare-one/tutorials/entra-id-conditional-access",
+    "url": "https://developers.cloudflare.com/cloudflare-one/tutorials/entra-id-conditional-access/",
+    "contentType": "Tutorial",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "cloudflare-pages-origin",
+    "title": "Use Pages as an origin for Load Balancing",
+    "path": "/load-balancing/pools/cloudflare-pages-origin",
+    "url": "https://developers.cloudflare.com/load-balancing/pools/cloudflare-pages-origin/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "pruna-p-video",
+    "title": "Use Pruna P-video through AI Gateway",
+    "path": "/ai-gateway/tutorials/pruna-p-video",
+    "url": "https://developers.cloudflare.com/ai-gateway/tutorials/pruna-p-video/",
+    "contentType": "Tutorial",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "use-r2-as-static-asset-storage-for-pages",
+    "title": "Use R2 as static asset storage with Cloudflare Pages",
+    "path": "/pages/tutorials/use-r2-as-static-asset-storage-for-pages",
+    "url": "https://developers.cloudflare.com/pages/tutorials/use-r2-as-static-asset-storage-for-pages/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "ssec",
+    "title": "Use SSE-C",
+    "path": "/r2/examples/ssec",
+    "url": "https://developers.cloudflare.com/r2/examples/ssec/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "user-selectable-egress-ips",
+    "title": "Use virtual networks to change user egress IPs",
+    "path": "/cloudflare-one/tutorials/user-selectable-egress-ips",
+    "url": "https://developers.cloudflare.com/cloudflare-one/tutorials/user-selectable-egress-ips/",
+    "contentType": "Tutorial",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "workers-kv-from-rust",
+    "title": "Use Workers KV directly from Rust",
+    "path": "/workers/tutorials/workers-kv-from-rust",
+    "url": "https://developers.cloudflare.com/workers/tutorials/workers-kv-from-rust/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "zero-trust-for-saas",
+    "title": "Using a zero trust framework to secure SaaS applications",
+    "path": "/reference-architecture/design-guides/zero-trust-for-saas",
+    "url": "https://developers.cloudflare.com/reference-architecture/design-guides/zero-trust-for-saas/",
+    "contentType": "Design guide",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "using-bigquery-with-workers-ai",
+    "title": "Using BigQuery with Workers AI",
+    "path": "/workers-ai/guides/tutorials/using-bigquery-with-workers-ai",
+    "url": "https://developers.cloudflare.com/workers-ai/guides/tutorials/using-bigquery-with-workers-ai/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "using-read-replication-for-e-com",
+    "title": "Using D1 Read Replication for your e-commerce website",
+    "path": "/d1/tutorials/using-read-replication-for-e-com",
+    "url": "https://developers.cloudflare.com/d1/tutorials/using-read-replication-for-e-com/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "fastapi",
+    "title": "Validate the Access token with FastAPI",
+    "path": "/cloudflare-one/tutorials/fastapi",
+    "url": "https://developers.cloudflare.com/cloudflare-one/tutorials/fastapi/",
+    "contentType": "Tutorial",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "build-a-workers-ai-whisper-with-chunking",
+    "title": "Whisper-large-v3-turbo with Cloudflare Workers AI",
+    "path": "/workers-ai/guides/tutorials/build-a-workers-ai-whisper-with-chunking",
+    "url": "https://developers.cloudflare.com/workers-ai/guides/tutorials/build-a-workers-ai-whisper-with-chunking/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "workers",
+    "title": "Workers integration",
+    "path": "/secrets-store/integrations/workers",
+    "url": "https://developers.cloudflare.com/secrets-store/integrations/workers/",
+    "contentType": "Tutorial",
+    "track": "developer-platform"
+  },
+  {
+    "slug": "zero-trust-and-virtual-desktop-infrastructure",
+    "title": "Zero Trust and Virtual Desktop Infrastructure",
+    "path": "/reference-architecture/diagrams/sase/zero-trust-and-virtual-desktop-infrastructure",
+    "url": "https://developers.cloudflare.com/reference-architecture/diagrams/sase/zero-trust-and-virtual-desktop-infrastructure/",
+    "contentType": "Reference architecture diagram",
+    "track": "cloudflare-one"
+  },
+  {
+    "slug": "gitlab",
+    "title": "Zero Trust GitLab SSH & HTTP",
+    "path": "/cloudflare-one/tutorials/gitlab",
+    "url": "https://developers.cloudflare.com/cloudflare-one/tutorials/gitlab/",
+    "contentType": "Tutorial",
+    "track": "cloudflare-one"
+  }
+]

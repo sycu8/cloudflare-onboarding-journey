@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-const BASE = process.env.BASE_URL || 'http://127.0.0.1:4321';
+const BASE = process.env.E2E_BASE_URL || 'http://127.0.0.1:4321';
 
 async function waitForIslands(page: import('@playwright/test').Page) {
   await page.waitForFunction(() => typeof customElements !== 'undefined' && !!customElements.get('astro-island'));
@@ -31,7 +31,9 @@ test.describe('Cloudflare Starter Hub E2E', () => {
     await page.goto(`${BASE}/cloudflare-101`);
     await waitForIslands(page);
     await expect(page.locator('html')).toHaveAttribute('data-lang', 'vi');
-    await page.getByRole('button', { name: /English only|Tiếng Việt|^EN$|^VI$/i }).click();
+    const langBtn = page.getByRole('button', { name: /Switch to English|Switch to Vietnamese/i });
+    await expect(langBtn).toBeVisible();
+    await langBtn.click();
     await expect(page.locator('html')).toHaveAttribute('data-lang', 'en');
     await expect(page.locator('.lang-en').first()).toBeVisible();
   });
@@ -57,6 +59,7 @@ test.describe('Cloudflare Starter Hub E2E', () => {
     await first.check();
     await expect(first).toBeChecked();
     await page.reload();
+    await waitForIslands(page);
     await expect(first).toBeChecked();
   });
 
@@ -98,8 +101,31 @@ test.describe('Cloudflare Starter Hub E2E', () => {
   test('resources anchors exist', async ({ page }) => {
     await page.goto(`${BASE}/resources#resource-hub`);
     await expect(page.locator('#resource-hub')).toBeVisible();
+    await page.goto(`${BASE}/resources#reference-diagrams`);
+    await expect(page.locator('#reference-diagrams')).toBeVisible();
     await page.goto(`${BASE}/resources#github`);
     await expect(page.locator('#github')).toBeVisible();
+  });
+
+  test('changelog and status pages load', async ({ page }) => {
+    await page.goto(`${BASE}/changelog`);
+    await expect(
+      page.getByRole('heading', { name: /Product changelog|Changelog sản phẩm/i }).first(),
+    ).toBeVisible();
+    await page.goto(`${BASE}/status`);
+    await waitForIslands(page);
+    await expect(
+      page.getByRole('heading', { name: /System status & incidents|Trạng thái hệ thống/i }).first(),
+    ).toBeVisible();
+  });
+
+  test('status refresh button works', async ({ page }) => {
+    await page.goto(`${BASE}/status`);
+    await waitForIslands(page);
+    const refresh = page.getByRole('button', { name: /Làm mới|Refresh/i });
+    await expect(refresh).toBeVisible();
+    await refresh.click();
+    await expect(refresh).toBeEnabled({ timeout: 15_000 });
   });
 
   test('navbar primary links', async ({ page }) => {

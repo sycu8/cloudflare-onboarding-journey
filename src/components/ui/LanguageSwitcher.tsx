@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { applyPageLang } from '../../lib/applyPageLang';
 import { getStoredLanguage, setStoredLanguage } from '../../i18n/storage';
 import type { Language } from '../../i18n/types';
+import LanguagesIcon from './LanguagesIcon';
 
 export default function LanguageSwitcher() {
   const [lang, setLang] = useState<Language>('vi');
@@ -17,21 +18,29 @@ export default function LanguageSwitcher() {
     setStoredLanguage(lang);
   }, [lang]);
 
-  const label = useMemo(() => {
-    return lang === 'en' ? 'Tiếng Việt' : 'English only';
+  const { ariaLabel, targetLabel } = useMemo(() => {
+    if (lang === 'en') {
+      return {
+        ariaLabel: 'Switch to Vietnamese',
+        targetLabel: 'VI',
+      };
+    }
+    return {
+      ariaLabel: 'Switch to English',
+      targetLabel: 'EN',
+    };
   }, [lang]);
-
-  const short = lang === 'en' ? 'VI' : 'EN';
 
   return (
     <button
       type="button"
-      className="btn btn-ghost min-h-10 min-w-10 px-2 sm:min-w-0 sm:px-3"
-      aria-label={label}
+      className="lang-switcher-btn btn btn-ghost min-h-10 gap-1.5 px-2.5 sm:px-3"
+      aria-label={ariaLabel}
+      title={ariaLabel}
       onClick={() => setLang((l) => (l === 'en' ? 'vi' : 'en'))}
     >
-      <span className="text-xs font-semibold tracking-wide sm:hidden">{short}</span>
-      <span className="hidden text-sm sm:inline">{label}</span>
+      <LanguagesIcon />
+      <span className="text-xs font-semibold tracking-wide">{targetLabel}</span>
     </button>
   );
 }

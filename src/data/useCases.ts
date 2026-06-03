@@ -157,6 +157,36 @@ export const useCases: UseCase[] = [
       ],
     },
     relatedTrack: 'developer-platform',
+    commonMistakes: {
+      vi: [
+        {
+          title: 'Deploy production trước khi test preview URL',
+          detail: 'Mỗi PR có preview Pages — dùng để QA trước khi merge vào branch production.',
+        },
+        {
+          title: 'Binding D1/KV/R2 thiếu trên production env',
+          detail: 'Binding có thể khác giữa preview và production trong Pages settings. Kiểm tra cả hai environment.',
+        },
+        {
+          title: 'Worker chạy logic nặng không phù hợp isolate',
+          detail: 'CPU-bound dài hoặc dependency lớn có thể cần Containers hoặc tách service — đừng nhồi hết vào một Worker.',
+        },
+      ],
+      en: [
+        {
+          title: 'Shipping production before testing preview URLs',
+          detail: 'Each PR gets a Pages preview — use it for QA before merging to the production branch.',
+        },
+        {
+          title: 'Missing D1/KV/R2 bindings on production env',
+          detail: 'Bindings can differ between preview and production in Pages settings. Verify both environments.',
+        },
+        {
+          title: 'Heavy logic unsuitable for Worker isolates',
+          detail: 'Long CPU-bound work or huge deps may need Containers or a split service — do not cram everything into one Worker.',
+        },
+      ],
+    },
     nextCta: { href: '/tracks/developer-platform', label: { vi: 'Xem track Developer Platform', en: 'View Developer Platform track' } },
   },
   {
@@ -175,6 +205,36 @@ export const useCases: UseCase[] = [
       en: ['List internal apps', 'Identify user groups', 'Connect identity provider', 'Define access policies', 'Test with one low-risk app', 'Monitor access logs', 'Expand gradually'],
     },
     relatedTrack: 'cloudflare-one',
+    commonMistakes: {
+      vi: [
+        {
+          title: 'Coi Zero Trust là “VPN mới” với full network access',
+          detail: 'ZTNA cấp quyền theo app, không phải subnet. User không nên thấy toàn bộ mạng nội bộ sau khi login.',
+        },
+        {
+          title: 'Không log và audit Access sessions',
+          detail: 'Thiếu log khiến không điều tra được sự cố. Bật logging và review định kỳ ai vào app nào.',
+        },
+        {
+          title: 'Policy không có owner và ngày review',
+          detail: 'Policy cũ tích tụ quyền thừa. Mỗi app policy cần owner và lịch review hàng quý.',
+        },
+      ],
+      en: [
+        {
+          title: 'Treating Zero Trust as a “new VPN” with full network access',
+          detail: 'ZTNA grants per-app access, not subnets. Users should not see the entire internal network after login.',
+        },
+        {
+          title: 'No Access session logging or audit',
+          detail: 'Missing logs make incidents hard to investigate. Enable logging and review who accessed which apps.',
+        },
+        {
+          title: 'Policies without owners or review dates',
+          detail: 'Stale policies accumulate excess access. Each app policy needs an owner and quarterly review.',
+        },
+      ],
+    },
     nextCta: { href: '/tracks/cloudflare-one', label: { vi: 'Xem track Cloudflare One', en: 'View Cloudflare One track' } },
   },
   {
@@ -207,9 +267,81 @@ export const useCases: UseCase[] = [
       ],
     },
     relatedTrack: 'cloudflare-one',
+    commonMistakes: {
+      vi: [
+        {
+          title: 'Chỉ bật SWG mà không có ZTNA cho app nội bộ',
+          detail: 'Remote user vẫn cần VPN nếu app private chưa publish qua Access. Kết hợp SWG + ZTNA theo use case.',
+        },
+        {
+          title: 'Block quá aggressive gây false positive',
+          detail: 'DNS/HTTP policy chặn domain hợp pháp (CDN, update server) làm user không làm việc được. Pilot log-only trước.',
+        },
+        {
+          title: 'Bỏ qua email security trong remote work',
+          detail: 'Phishing qua email vẫn là vector chính. Gateway email hoặc Area 1 bổ sung cho SWG browsing.',
+        },
+      ],
+      en: [
+        {
+          title: 'SWG only without ZTNA for internal apps',
+          detail: 'Remote users still need VPN if private apps are not published via Access. Combine SWG + ZTNA by use case.',
+        },
+        {
+          title: 'Over-aggressive blocking causing false positives',
+          detail: 'DNS/HTTP policies blocking legitimate domains (CDNs, update servers) block work. Pilot in log-only mode first.',
+        },
+        {
+          title: 'Ignoring email security for remote work',
+          detail: 'Phishing via email remains a top vector. Add Gateway email or Area 1 alongside SWG browsing.',
+        },
+      ],
+    },
     nextCta: { href: '/workshop', label: { vi: 'Tham gia workshop', en: 'Join workshop' } },
   },
 ];
+
+export type UseCaseTrack = UseCase['relatedTrack'];
+
+export const useCaseTrackLabels: Record<
+  UseCaseTrack,
+  { title: LocalizedString; headline: LocalizedString; trackHref: string }
+> = {
+  'application-services': {
+    title: { vi: 'Application Services', en: 'Application Services' },
+    headline: {
+      vi: 'Website, API public, CDN, WAF, SSL/TLS và performance.',
+      en: 'Websites, public APIs, CDN, WAF, SSL/TLS, and performance.',
+    },
+    trackHref: '/tracks/application-services',
+  },
+  'developer-platform': {
+    title: { vi: 'Developer Platform', en: 'Developer Platform' },
+    headline: {
+      vi: 'Pages, Workers, D1, KV, R2, Turnstile và deploy serverless.',
+      en: 'Pages, Workers, D1, KV, R2, Turnstile, and serverless deploy.',
+    },
+    trackHref: '/tracks/developer-platform',
+  },
+  'cloudflare-one': {
+    title: { vi: 'Cloudflare One', en: 'Cloudflare One' },
+    headline: {
+      vi: 'Zero Trust, ZTNA, SWG, remote users và thay thế VPN.',
+      en: 'Zero Trust, ZTNA, SWG, remote users, and VPN replacement.',
+    },
+    trackHref: '/tracks/cloudflare-one',
+  },
+};
+
+export const useCaseTrackOrder: UseCaseTrack[] = [
+  'application-services',
+  'developer-platform',
+  'cloudflare-one',
+];
+
+export function getUseCasesByTrack(track: UseCaseTrack): UseCase[] {
+  return useCases.filter((u) => u.relatedTrack === track);
+}
 
 export function getUseCase(slug: UseCase['slug']) {
   const found = useCases.find((u) => u.slug === slug);

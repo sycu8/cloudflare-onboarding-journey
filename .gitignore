@@ -9,6 +9,11 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# Scrape / sync cache (regenerate locally)
+scripts/cache/
+.ref-diagrams-scrape.json
+scripts/ref-diagrams-scrape.json
+
 # Raw docx extracts (regenerate locally)
 scripts/demo-scripts-extract.json
 scripts/plans-full.json
@@ -37,6 +42,9 @@ Thumbs.db
 .idea/
 .vscode/*
 !.vscode/extensions.json
+
+# PR review worktrees (review-contribution.mjs --verify)
+.worktrees/
 
 # Test artifacts
 test-results/

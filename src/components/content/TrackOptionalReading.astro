@@ -1,0 +1,40 @@
+---
+---
+
+<details class="track-optional-reading card mb-8 group">
+  <summary class="cursor-pointer list-none text-lg font-semibold marker:content-none [&::-webkit-details-marker]:hidden">
+    <span class="flex items-center justify-between gap-2">
+      <span>
+        <span class="lang-vi">Tài liệu mở rộng (tùy chọn)</span>
+        <span class="lang-en">Optional extended reading</span>
+      </span>
+      <span class="text-muted text-sm font-normal group-open:hidden">
+        <span class="lang-vi">Mở</span>
+        <span class="lang-en">Expand</span>
+      </span>
+      <span class="text-muted hidden text-sm font-normal group-open:inline">
+        <span class="lang-vi">Thu gọn</span>
+        <span class="lang-en">Collapse</span>
+      </span>
+    </span>
+    <span class="text-muted mt-2 block text-sm font-normal leading-relaxed">
+      <span class="lang-vi">
+        GitHub, Reference Architecture, CloudSecOp, demo script — không bắt buộc để hoàn thành lộ trình.
+      </span>
+      <span class="lang-en">
+        GitHub, Reference Architecture, CloudSecOp, demo scripts — not required to complete this path.
+      </span>
+    </span>
+  </summary>
+  <div class="mt-8 space-y-10 border-t border-[var(--cf-border)] pt-8">
+    <slot />
+  </div>
+</details>
+
+<style>
+  .track-optional-reading summary:focus-visible {
+    outline: 2px solid var(--cf-accent);
+    outline-offset: 2px;
+    border-radius: 0.5rem;
+  }
+</style>

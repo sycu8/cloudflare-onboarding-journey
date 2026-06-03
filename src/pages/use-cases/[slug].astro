@@ -3,7 +3,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/chrome/Breadcrumbs.astro';
 import LangText from '../../components/ui/LangText.astro';
 import CTASection from '../../components/content/CTASection.astro';
-import { useCases } from '../../data/useCases';
+import ReferenceDiagramFigure from '../../components/content/ReferenceDiagramFigure.astro';
+import { useCases, useCaseTrackLabels, getUseCasesByTrack } from '../../data/useCases';
+import { getDiagramsForUseCase } from '../../data/referenceDiagrams';
 
 export function getStaticPaths() {
   return useCases.map((u) => ({ params: { slug: u.slug } }));
@@ -12,15 +14,32 @@ export function getStaticPaths() {
 const { slug } = Astro.params;
 const uc = useCases.find((u) => u.slug === slug);
 if (!uc) throw new Error('Use case not found');
+const useCaseDiagrams = getDiagramsForUseCase(uc.slug);
+const trackMeta = useCaseTrackLabels[uc.relatedTrack];
+const siblingUseCases = getUseCasesByTrack(uc.relatedTrack).filter((u) => u.slug !== uc.slug);
 ---
 
 <BaseLayout title={uc.title} description={uc.problem} canonicalPath={`/use-cases/${uc.slug}`} showProgressBar>
   <Breadcrumbs
     items={[
-      { href: '/use-cases/protect-website', label: { vi: 'Tình huống thực tế', en: 'Use Cases' } },
+      { href: '/use-cases', label: { vi: 'Tình huống thực tế', en: 'Use cases' } },
+      { href: `/use-cases#${uc.relatedTrack}`, label: trackMeta.title },
       { href: `/use-cases/${uc.slug}`, label: uc.title },
     ]}
   />
+
+  <div class="card mb-6 flex flex-col gap-3 border-l-4 border-[var(--cf-accent)] sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <p class="text-muted text-xs font-medium uppercase tracking-wide">
+        <span class="lang-vi">Lộ trình liên quan</span>
+        <span class="lang-en">Related learning track</span>
+      </p>
+      <LangText as="p" class="mt-1 font-semibold" text={trackMeta.title} />
+    </div>
+    <a class="btn btn-secondary shrink-0" href={trackMeta.trackHref}>
+      <LangText text={{ vi: 'Học lộ trình này', en: 'Study this track' }} />
+    </a>
+  </div>
 
   <header class="mb-6">
     <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={uc.title} />
@@ -34,6 +53,21 @@ if (!uc) throw new Error('Use case not found');
       <span class="lang-en">{uc.architecture.en}</span>
     </p>
   </section>
+
+  {useCaseDiagrams.length > 0 ? (
+    <section class="mt-6">
+      <LangText
+        as="h2"
+        class="mb-4 text-lg font-semibold"
+        text={{ vi: 'Sơ đồ tham chiếu (Cloudflare Docs)', en: 'Reference diagrams (Cloudflare Docs)' }}
+      />
+      <div class="grid gap-6 lg:grid-cols-2">
+        {useCaseDiagrams.map((d) => (
+          <ReferenceDiagramFigure diagram={d} />
+        ))}
+      </div>
+    </section>
+  ) : null}
 
   {uc.steps ? (
     <section class="card mt-6">
@@ -65,7 +99,7 @@ if (!uc) throw new Error('Use case not found');
 
   {uc.commonMistakes ? (
     <section class="mt-6">
-      <LangText as="h2" class="text-xl font-semibold" text={{ vi: 'Common mistakes', en: 'Common mistakes' }} />
+      <LangText as="h2" class="text-xl font-semibold" text={{ vi: 'Lỗi thường gặp', en: 'Common mistakes' }} />
       <div class="mt-4 grid gap-4 md:grid-cols-2">
         {uc.commonMistakes.vi.map((m, i) => (
           <div class="card">
@@ -80,6 +114,34 @@ if (!uc) throw new Error('Use case not found');
           </div>
         ))}
       </div>
+    </section>
+  ) : null}
+
+  {siblingUseCases.length > 0 ? (
+    <section class="card mb-6">
+      <LangText
+        as="h2"
+        class="text-lg font-semibold"
+        text={{ vi: 'Tình huống khác (cùng lộ trình)', en: 'Other scenarios (same track)' }}
+      />
+      <ul class="mt-3 space-y-2 text-sm">
+        {siblingUseCases.map((other) => (
+          <li>
+            <a class="link" href={`/use-cases/${other.slug}`}>
+              <LangText text={other.title} />
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="text-muted mt-3 text-xs">
+        <a class="link" href={`/use-cases#${uc.relatedTrack}`}>
+          <LangText text={{ vi: '← Tất cả tình huống lộ trình này', en: '← All scenarios in this track' }} />
+        </a>
+        {' · '}
+        <a class="link" href="/use-cases">
+          <LangText text={{ vi: 'Ba nhóm tình huống', en: 'All three groups' }} />
+        </a>
+      </p>
     </section>
   ) : null}
 

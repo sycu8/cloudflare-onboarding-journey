@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { GlossaryTerm } from '../../data/glossary';
+import { getProductSlugForGlossaryTerm } from '../../data/productPages';
 import Pagination from '../ui/Pagination';
 
 const PAGE_SIZE = 12;
@@ -90,18 +91,32 @@ export default function GlossarySearch({ terms }: Props) {
       ) : (
         <>
           <ul className="mt-4 grid gap-3 md:grid-cols-2">
-            {paged.map((t) => (
+            {paged.map((t) => {
+              const productSlug = getProductSlugForGlossaryTerm(t.term);
+              return (
               <li key={t.term} className="card">
                 <div className="flex flex-wrap gap-2">
-                  <span className="badge badge-accent">{t.term}</span>
+                  {productSlug ? (
+                    <a href={`/products/${productSlug}`} className="badge badge-accent hover:opacity-90">
+                      {t.term}
+                    </a>
+                  ) : (
+                    <span className="badge badge-accent">{t.term}</span>
+                  )}
                   <span className="badge">{t.category}</span>
                 </div>
                 <p className="text-muted mt-3 text-sm">
                   <span className="lang-vi">{t.definition.vi}</span>
                   <span className="lang-en">{t.definition.en}</span>
                 </p>
+                {productSlug ? (
+                  <a href={`/products/${productSlug}`} className="link mt-3 inline-block text-xs">
+                    <span className="lang-vi">Đọc giải thích đầy đủ →</span>
+                    <span className="lang-en">Full explainer →</span>
+                  </a>
+                ) : null}
               </li>
-            ))}
+            );})}
           </ul>
           <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
         </>

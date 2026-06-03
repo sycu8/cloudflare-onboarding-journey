@@ -1,0 +1,111 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/chrome/Breadcrumbs.astro';
+import LangText from '../components/ui/LangText.astro';
+import StatusDashboard from '../components/interactive/StatusDashboard';
+import {
+  statusIntro,
+  statusSourceNote,
+  CLOUDFLARE_STATUS_URL,
+  CLOUDFLARE_STATUS_RSS_URL,
+  CLOUDFLARE_STATUS_LEGACY_URL,
+  STATUS_LAST_REVIEWED,
+} from '../data/systemStatus';
+---
+
+<BaseLayout
+  title={{ vi: 'Trạng thái hệ thống Cloudflare', en: 'Cloudflare system status' }}
+  description={{
+    vi: 'System status và incident Cloudflare — live từ new.cloudflarestatus.com, lọc theo lộ trình hub.',
+    en: 'Cloudflare system status and incidents — live from new.cloudflarestatus.com, filter by hub track.',
+  }}
+  canonicalPath="/status"
+  showProgressBar
+>
+  <Breadcrumbs
+    items={[
+      { href: '/resources', label: { vi: 'Tài nguyên', en: 'Resources' } },
+      { href: '/status', label: { vi: 'System status', en: 'System status' } },
+    ]}
+  />
+
+  <header class="mb-8">
+    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: 'Trạng thái hệ thống & sự cố', en: 'System status & incidents' }} />
+    <LangText as="p" class="text-muted mt-2 max-w-3xl text-sm md:text-base" text={statusIntro} />
+    <LangText as="p" class="text-muted mt-2 text-xs" text={statusSourceNote} />
+    <div class="mt-4 flex flex-wrap gap-2">
+      <a class="btn btn-primary" href={CLOUDFLARE_STATUS_URL} target="_blank" rel="noopener noreferrer">
+        <LangText text={{ vi: 'Mở new.cloudflarestatus.com ↗', en: 'Open new.cloudflarestatus.com ↗' }} />
+      </a>
+      <a class="btn btn-secondary" href={CLOUDFLARE_STATUS_RSS_URL} target="_blank" rel="noopener noreferrer">
+        <LangText text={{ vi: 'RSS incidents ↗', en: 'Incident RSS ↗' }} />
+      </a>
+      <a class="btn btn-secondary" href="/changelog">
+        <LangText text={{ vi: 'Changelog sản phẩm', en: 'Product changelog' }} />
+      </a>
+    </div>
+  </header>
+
+  <section class="card mb-10">
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Nguồn chính thức', en: 'Official source' }} />
+    <ul class="text-muted mt-3 list-inside list-disc space-y-1 text-sm">
+      <li>
+        <a class="link" href={CLOUDFLARE_STATUS_URL} target="_blank" rel="noopener noreferrer">
+          new.cloudflarestatus.com
+        </a>
+        <span class="lang-vi"> — trang status mới: active incidents, maintenance, subscribe to updates.</span>
+        <span class="lang-en"> — new status page: active incidents, maintenance, subscribe to updates.</span>
+      </li>
+      <li>
+        <a class="link" href={CLOUDFLARE_STATUS_RSS_URL} target="_blank" rel="noopener noreferrer">history.rss</a>
+        <span class="lang-vi"> — feed RSS lịch sử incident (Statuspage).</span>
+        <span class="lang-en"> — incident history RSS feed (Statuspage).</span>
+      </li>
+      <li>
+        <a class="link" href={CLOUDFLARE_STATUS_LEGACY_URL} target="_blank" rel="noopener noreferrer">
+          www.cloudflarestatus.com
+        </a>
+        <span class="lang-vi"> — domain legacy (có thể redirect); hub ưu tiên URL mới.</span>
+        <span class="lang-en"> — legacy domain (may redirect); this hub prefers the new URL.</span>
+      </li>
+    </ul>
+    <p class="text-muted mt-3 text-xs">
+      <span class="lang-vi">Hub review: {STATUS_LAST_REVIEWED} · API live khi trình duyệt cho phép fetch.</span>
+      <span class="lang-en">Hub review: {STATUS_LAST_REVIEWED} · Live API when the browser can fetch it.</span>
+    </p>
+  </section>
+
+  <section id="live-status">
+    <StatusDashboard client:load />
+  </section>
+
+  <section class="card mt-10">
+    <LangText
+      as="h2"
+      class="text-lg font-semibold"
+      text={{ vi: 'Status vs Changelog — khi nào dùng gì?', en: 'Status vs Changelog — when to use which?' }}
+    />
+    <ul class="text-muted mt-3 list-inside list-disc space-y-2 text-sm">
+      <li>
+        <span class="lang-vi"><strong>System status</strong> — sự cố, degradation, maintenance đang ảnh hưởng dịch vụ ngay bây giờ.</span>
+        <span class="lang-en"><strong>System status</strong> — outages, degradation, and maintenance affecting services right now.</span>
+      </li>
+      <li>
+        <span class="lang-vi"><strong>Developer changelog</strong> — tính năng mới, thay đổi API, ship sản phẩm theo ngày.</span>
+        <span class="lang-en"><strong>Developer changelog</strong> — new features, API changes, and product releases by date.</span>
+      </li>
+      <li>
+        <span class="lang-vi">Trước go-live: bookmark status + đăng ký email/RSS; sau deploy: đối chiếu 5xx spike với incident active.</span>
+        <span class="lang-en">Before go-live: bookmark status + subscribe via email/RSS; after deploy: correlate 5xx spikes with active incidents.</span>
+      </li>
+    </ul>
+    <div class="mt-4 flex flex-wrap gap-2">
+      <a class="btn btn-secondary" href="/resources">
+        <LangText text={{ vi: '← Tài nguyên', en: '← Resources' }} />
+      </a>
+      <a class="btn btn-secondary" href="/changelog">
+        <LangText text={{ vi: 'Changelog', en: 'Changelog' }} />
+      </a>
+    </div>
+  </section>
+</BaseLayout>

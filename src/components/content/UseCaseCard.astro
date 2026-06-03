@@ -1,0 +1,19 @@
+---
+import LangText from '../ui/LangText.astro';
+import type { UseCase } from '../../data/useCases';
+
+type Props = { useCase: UseCase };
+const { useCase } = Astro.props;
+---
+
+<article class="card flex h-full flex-col">
+  <LangText as="h3" class="text-lg font-semibold leading-snug" text={useCase.title} />
+  <LangText as="p" class="text-muted mt-2 flex-1 text-sm leading-relaxed" text={useCase.problem} />
+  <p class="mt-3 font-mono text-xs text-[var(--cf-accent)] opacity-90">
+    <span class="lang-vi">{useCase.architecture.vi}</span>
+    <span class="lang-en">{useCase.architecture.en}</span>
+  </p>
+  <a class="btn btn-secondary mt-4 w-full justify-center" href={`/use-cases/${useCase.slug}`}>
+    <LangText text={{ vi: 'Đọc tình huống →', en: 'Read use case →' }} />
+  </a>
+</article>

@@ -1,0 +1,257 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/chrome/Breadcrumbs.astro';
+import LangText from '../../../components/ui/LangText.astro';
+import ReferenceDiagramFigure from '../../../components/content/ReferenceDiagramFigure.astro';
+import CloudflareResourceCard from '../../../components/content/CloudflareResourceCard.astro';
+import {
+  getAllFlatTrackLessons,
+  getFlatTrackLesson,
+  getAdjacentLessons,
+  getLessonEnrichment,
+  getLessonDiagrams,
+  getLessonHeroImage,
+} from '../../../data/trackLessons';
+import { getDeploymentExamplesForLesson } from '../../../data/cloudflareResources';
+import { getProductBySlug } from '../../../data/productPages';
+import { tracks } from '../../../data/tracks';
+import TrackContextBanner from '../../../components/content/TrackContextBanner.astro';
+import TrackSwitcher from '../../../components/content/TrackSwitcher.astro';
+
+export function getStaticPaths() {
+  return getAllFlatTrackLessons().map((l) => ({
+    params: { slug: l.trackSlug, lessonId: l.id },
+  }));
+}
+
+const { slug, lessonId } = Astro.params;
+const lesson = getFlatTrackLesson(slug!, lessonId!);
+if (!lesson) throw new Error(`Lesson not found: ${slug}/${lessonId}`);
+
+const track = tracks.find((t) => t.slug === slug)!;
+const enrichment = getLessonEnrichment(lesson);
+const diagrams = getLessonDiagrams(lesson);
+const heroImage = getLessonHeroImage(lesson);
+const { prev, next } = getAdjacentLessons(track.slug, lesson.id);
+const relatedProducts = (enrichment.productSlugs ?? [])
+  .map((s) => getProductBySlug(s))
+  .filter((p): p is NonNullable<ReturnType<typeof getProductBySlug>> => !!p);
+const deploymentExamples = getDeploymentExamplesForLesson(lesson.id);
+---
+
+<BaseLayout
+  title={{
+    vi: `${lesson.title.vi} · ${track.title.vi}`,
+    en: `${lesson.title.en} · ${track.title.en}`,
+  }}
+  description={lesson.body}
+  canonicalPath={`/tracks/${track.slug}/${lesson.id}`}
+  showProgressBar
+>
+  <Breadcrumbs
+    items={[
+      { href: `/tracks/${track.slug}`, label: track.title },
+      { href: `/tracks/${track.slug}/${lesson.id}`, label: lesson.title },
+    ]}
+  />
+
+  <TrackContextBanner track={track} />
+
+  <header class="mb-6">
+    <p class="text-muted mb-2 text-xs font-medium uppercase tracking-wide">
+      <LangText text={lesson.moduleTitle} />
+      <span class="opacity-60">
+        ·
+        <span class="lang-vi"> Bài {lesson.lessonIndex + 1}/{lesson.totalLessonsInModule}</span>
+        <span class="lang-en"> Lesson {lesson.lessonIndex + 1}/{lesson.totalLessonsInModule}</span>
+      </span>
+    </p>
+    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={lesson.title} />
+    <LangText as="p" class="text-muted mt-3 max-w-3xl text-sm leading-relaxed" text={lesson.body} />
+  </header>
+
+  {heroImage ? (
+    <figure class="card mb-8 overflow-hidden p-0">
+      <img
+        src={heroImage}
+        alt={lesson.title.en}
+        loading="eager"
+        decoding="async"
+        class="w-full max-h-[20rem] object-contain bg-[var(--cf-bg-elevated)] p-4"
+      />
+      <figcaption class="text-muted border-t border-[var(--cf-border)] px-4 py-2 text-xs">
+        <span class="lang-vi">Minh họa từ Cloudflare Reference Architecture (developers.cloudflare.com)</span>
+        <span class="lang-en">Illustration from Cloudflare Reference Architecture (developers.cloudflare.com)</span>
+      </figcaption>
+    </figure>
+  ) : null}
+
+  <section class="card mb-6">
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Các bước thực hiện', en: 'Step-by-step' }} />
+    <ol class="text-muted mt-4 list-decimal space-y-3 pl-5 text-sm leading-relaxed">
+      {enrichment.steps.vi.map((step, i) => (
+        <li>
+          <span class="lang-vi">{step}</span>
+          <span class="lang-en">{enrichment.steps.en[i]}</span>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="card mb-6">
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Giải thích chi tiết', en: 'Detailed explanation' }} />
+    <LangText as="p" class="text-muted mt-3 text-sm leading-relaxed" text={enrichment.deepDive} />
+    {lesson.tip ? (
+      <p class="mt-4 rounded-lg border border-[var(--cf-border)] bg-[var(--cf-surface)] px-4 py-3 text-sm">
+        <span class="font-medium text-[var(--cf-accent)]">
+          <span class="lang-vi">Mẹo: </span>
+          <span class="lang-en">Tip: </span>
+        </span>
+        <span class="lang-vi">{lesson.tip.vi}</span>
+        <span class="lang-en">{lesson.tip.en}</span>
+      </p>
+    ) : null}
+  </section>
+
+  {enrichment.bestPracticeNote ? (
+    <section class="card mb-6 border-l-4 border-[var(--cf-accent)]">
+      <LangText
+        as="h2"
+        class="text-lg font-semibold"
+        text={{ vi: 'Lưu ý (best practices)', en: 'Note (best practices)' }}
+      />
+      <LangText as="p" class="text-muted mt-3 text-sm leading-relaxed" text={enrichment.bestPracticeNote.text} />
+      <p class="text-muted mt-3 text-xs">
+        <span class="lang-vi">Nguồn: </span>
+        <span class="lang-en">Source: </span>
+        <a
+          class="link"
+          href={enrichment.bestPracticeNote.sourceUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <LangText text={enrichment.bestPracticeNote.sourceTitle} /> ↗
+        </a>
+      </p>
+    </section>
+  ) : null}
+
+  {deploymentExamples.length > 0 ? (
+    <section class="card mb-6">
+      <LangText
+        as="h2"
+        class="text-lg font-semibold"
+        text={{ vi: 'Ví dụ triển khai (Cloudflare Resources)', en: 'Deployment examples (Cloudflare Resources)' }}
+      />
+      <p class="text-muted mt-2 text-xs">
+        <span class="lang-vi">Ví dụ chính thức từ Cloudflare Resources — gợi ý theo chủ đề bài học trong lộ trình này.</span>
+        <span class="lang-en">Official examples from Cloudflare Resources — matched to this lesson within this path.</span>
+      </p>
+      <div class="mt-4 grid gap-4 sm:grid-cols-2">
+        {deploymentExamples.map((resource) => (
+          <CloudflareResourceCard resource={resource} compact />
+        ))}
+      </div>
+      <p class="text-muted mt-4 text-xs">
+        <a class="link" href={`/tracks/${track.slug}#track-resources`}>
+          <LangText text={{ vi: 'Xem thêm ví dụ trong lộ trình →', en: 'More examples in this path →' }} />
+        </a>
+      </p>
+    </section>
+  ) : null}
+
+  {enrichment.docsLinks.length > 0 ? (
+    <section class="card mb-6">
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Tài liệu Cloudflare Developers', en: 'Cloudflare Developer docs' }} />
+      <ul class="mt-3 space-y-2 text-sm">
+        {enrichment.docsLinks.map((link) => (
+          <li>
+            <a class="link" href={link.url} target="_blank" rel="noopener noreferrer">
+              <LangText text={link.label} /> ↗
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ) : null}
+
+  {enrichment.apiLinks && enrichment.apiLinks.length > 0 ? (
+    <section class="card mb-6">
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Cloudflare API (tham khảo)', en: 'Cloudflare API (reference)' }} />
+      <p class="text-muted mt-2 text-xs">
+        <span class="lang-vi">Dùng khi tự động hóa bước này qua script hoặc Terraform — cần API token phù hợp.</span>
+        <span class="lang-en">Use when automating this step via script or Terraform — requires an appropriate API token.</span>
+      </p>
+      <ul class="mt-3 space-y-2 text-sm">
+        {enrichment.apiLinks.map((link) => (
+          <li class="flex flex-wrap items-center gap-2">
+            {link.method ? <span class="badge font-mono text-xs">{link.method}</span> : null}
+            <a class="link break-all" href={link.url} target="_blank" rel="noopener noreferrer">
+              <LangText text={link.label} /> ↗
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="text-muted mt-3 text-xs">
+        <a class="link" href="https://developers.cloudflare.com/api/" target="_blank" rel="noopener noreferrer">
+          developers.cloudflare.com/api ↗
+        </a>
+      </p>
+    </section>
+  ) : null}
+
+  {diagrams.length > 0 ? (
+    <section class="mb-6">
+      <LangText
+        as="h2"
+        class="mb-4 text-lg font-semibold"
+        text={{ vi: 'Sơ đồ kiến trúc (Cloudflare Docs)', en: 'Architecture diagrams (Cloudflare Docs)' }}
+      />
+      <div class="grid gap-6 lg:grid-cols-2">
+        {diagrams.map((d) => (
+          <ReferenceDiagramFigure diagram={d} />
+        ))}
+      </div>
+    </section>
+  ) : null}
+
+  {relatedProducts.length > 0 ? (
+    <section class="card mb-6">
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Sản phẩm liên quan', en: 'Related products' }} />
+      <ul class="mt-3 flex flex-wrap gap-2">
+        {relatedProducts.map((p) => (
+          <li>
+            <a class="badge badge-accent hover:opacity-90" href={`/products/${p.slug}`}>
+              <LangText text={p.name} />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ) : null}
+
+  <nav class="flex flex-wrap gap-3 border-t border-[var(--cf-border)] pt-6 mb-6" aria-label="Lesson navigation">
+    {prev ? (
+      <a class="btn btn-secondary" href={`/tracks/${track.slug}/${prev.id}`}>
+        <span class="lang-vi">← {prev.title.vi}</span>
+        <span class="lang-en">← {prev.title.en}</span>
+      </a>
+    ) : (
+      <a class="btn btn-secondary" href={`/tracks/${track.slug}`}>
+        <LangText text={{ vi: '← Về lộ trình', en: '← Back to track' }} />
+      </a>
+    )}
+    {next ? (
+      <a class="btn btn-primary ml-auto" href={`/tracks/${track.slug}/${next.id}`}>
+        <span class="lang-vi">{next.title.vi} →</span>
+        <span class="lang-en">{next.title.en} →</span>
+      </a>
+    ) : (
+      <a class="btn btn-primary ml-auto" href={track.cta.href}>
+        <LangText text={track.cta.label} />
+      </a>
+    )}
+  </nav>
+
+  <TrackSwitcher current={track} />
+</BaseLayout>

@@ -107,7 +107,7 @@ export const beginnerReadinessQuiz: Quiz = {
         { id: 'A', text: { vi: 'Developer Platform', en: 'Developer Platform' } },
         { id: 'B', text: { vi: 'Cloudflare One', en: 'Cloudflare One' } },
         { id: 'C', text: { vi: 'Email Security', en: 'Email Security' } },
-        { id: 'D', text: { vi: 'Magic WAN', en: 'Magic WAN' } },
+        { id: 'D', text: { vi: 'Cloudflare WAN', en: 'Cloudflare WAN' } },
       ],
       correct: 'A',
       explanation: {
@@ -248,7 +248,7 @@ export const beginnerReadinessQuiz: Quiz = {
       },
       options: [
         { id: 'A', text: { vi: 'Turnstile', en: 'Turnstile' } },
-        { id: 'B', text: { vi: 'Magic WAN', en: 'Magic WAN' } },
+        { id: 'B', text: { vi: 'Cloudflare WAN', en: 'Cloudflare WAN' } },
         { id: 'C', text: { vi: 'Cloudflare Tunnel only', en: 'Cloudflare Tunnel only' } },
         { id: 'D', text: { vi: 'Xóa zone', en: 'Delete the zone' } },
       ],

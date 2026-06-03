@@ -11,7 +11,7 @@ export const primaryNavItems: NavItem[] = [
   { href: '/start-here', label: { vi: 'Bắt đầu', en: 'Start' } },
   { href: '/cloudflare-101', label: { vi: '101', en: '101' } },
   { href: '/tracks', label: { vi: 'Lộ trình', en: 'Tracks' } },
-  { href: '/use-cases/protect-website', label: { vi: 'Tình huống', en: 'Use cases' } },
+  { href: '/use-cases', label: { vi: 'Tình huống', en: 'Use cases' } },
   { href: '/resources', label: { vi: 'Tài nguyên', en: 'Resources' } },
   { href: '/workshop', label: { vi: 'Hội thảo', en: 'Workshop' } },
 ];
@@ -29,10 +29,12 @@ export const mobileNavPrimary: NavItem[] = [
 export const mobileNavMore: NavItem[] = [
   { href: '/first-week', label: { vi: 'Tuần đầu (7 ngày)', en: 'First week' } },
   { href: '/choose-your-path', label: { vi: 'Chọn lộ trình', en: 'Choose path' } },
-  { href: '/use-cases/protect-website', label: { vi: 'Tình huống', en: 'Use cases' } },
+  { href: '/use-cases', label: { vi: 'Tình huống', en: 'Use cases' } },
   { href: '/checklists/beginner-cloudflare-checklist', label: { vi: 'Checklist', en: 'Checklist' } },
   { href: '/quiz/beginner-readiness', label: { vi: 'Bài kiểm tra', en: 'Quiz' } },
   { href: '/glossary', label: { vi: 'Thuật ngữ', en: 'Glossary' } },
+  { href: '/changelog', label: { vi: 'Changelog', en: 'Changelog' } },
+  { href: '/status', label: { vi: 'System status', en: 'System status' } },
 ];
 
 /** @deprecated Use primaryNavItems — kept for any legacy imports */

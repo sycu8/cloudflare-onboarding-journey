@@ -23,41 +23,41 @@ export type DemoVignette = {
 };
 
 export const demoScriptsIntro: LocalizedString = {
-  vi: 'Script demo thực chiến — cấu hình theo nhu cầu khách hàng, điều hướng dashboard Cloudflare thật. Nội dung tổng hợp từ tài liệu SE (Advanced Security, Zero Trust, Core Platform).',
-  en: 'Field demo scripts — configure to customer needs and walk through the real Cloudflare dashboard. Synthesized from SE playbooks (Advanced Security, Zero Trust, Core Platform).',
+  vi: 'Hướng dẫn overview dashboard Cloudflare — giúp khách hàng biết từng khu vực dùng để làm gì, đọc số liệu ra sao, và bước tiếp theo nên là gì. Không phải sales kit hay kịch bản demo.',
+  en: 'Cloudflare dashboard overviews — what each area is for, how to read the metrics, and sensible next steps. Not a sales kit or demo script.',
 };
 
 export const demoScriptsDisclaimer: LocalizedString = {
-  vi: 'Tài liệu nội bộ phục vụ học tập và workshop — không thay tài liệu chính thức. Tính năng và menu dashboard có thể đổi; luôn đối chiếu developers.cloudflare.com.',
-  en: 'Internal-style learning material for workshops — not a replacement for official docs. Features and dashboard labels may change; always cross-check developers.cloudflare.com.',
+  vi: 'Nội dung mang tính định hướng; menu và nhãn trên dashboard có thể thay đổi theo gói và phiên bản. Luôn đối chiếu developers.cloudflare.com và tài liệu chính thức trước khi cấu hình production.',
+  en: 'Orientation only — dashboard menus and labels vary by plan and release. Always cross-check developers.cloudflare.com and official docs before production changes.',
 };
 
-/** Core platform — discovery & request flow (shared before security / ZT demos) */
+/** Core platform — account, zone, and request flow overviews */
 export const platformDemoVignettes: DemoVignette[] = [
   {
     id: 'core-discovery',
     track: 'platform',
-    title: { vi: 'Discovery & pitch nền tảng', en: 'Platform discovery & pitch' },
+    title: { vi: 'Nền tảng: Account & zone', en: 'Platform: Account & zone' },
     personas: ['IT Manager', 'Dir of Engineering', 'CISO'],
     valueDriver: {
       vi: 'Reverse proxy toàn cầu — bảo mật & hiệu năng gần user, một dashboard.',
       en: 'Global reverse proxy — security and performance near users, single dashboard.',
     },
     opening: {
-      vi: 'Cloudflare là reverse proxy anycast giữa end-user và origin: request được xử lý tại PoP gần nhất (~330+ thành phố), rồi mới về origin nếu cần.',
-      en: 'Cloudflare is an anycast reverse proxy between users and origin: requests are handled at the nearest PoP (~330+ cities), then reach origin when needed.',
+      vi: 'Cloudflare là reverse proxy anycast giữa end-user và origin: request được xử lý tại PoP gần nhất (hơn 330 thành phố), rồi mới về origin nếu cần.',
+      en: 'Cloudflare is an anycast reverse proxy between users and origin: requests are handled at the nearest PoP (330+ cities), then reach origin when needed.',
     },
     whenToUse: {
-      vi: 'Đầu buổi demo — trước khi vào Security hoặc Zero Trust; khi khách hỏi “Cloudflare khác CDN thường thế nào?”.',
-      en: 'Start of any demo — before Security or Zero Trust; when the customer asks how Cloudflare differs from a basic CDN.',
+      vi: 'Khi mới onboard zone hoặc cần giải thích “Cloudflare khác CDN thường thế nào?” trước khi vào Security / Zero Trust.',
+      en: 'When a zone is newly onboarded or you need to explain how Cloudflare differs from a basic CDN before Security / Zero Trust.',
     },
     dashboardPaths: ['Account Home', 'Overview (zone)', 'Analytics > Traffic'],
     steps: [
       {
-        title: { vi: 'Câu hỏi discovery', en: 'Discovery questions' },
+        title: { vi: 'Thông tin zone cần nắm', en: 'Zone context to confirm' },
         detail: {
-          vi: 'Domain/zone nào? Origin ở đâu (cloud/on-prem)? Pain: DDoS, bot, API abuse, VPN, compliance? Ai vận hành DNS hôm nay?',
-          en: 'Which zones? Where is origin (cloud/on-prem)? Pain: DDoS, bots, API abuse, VPN, compliance? Who runs DNS today?',
+          vi: 'Domain/zone nào, origin ở đâu (cloud/on-prem), ai quản lý DNS, và mục tiêu chính (bảo mật, tốc độ, VPN/ZT, API).',
+          en: 'Which domain/zone, where origin lives (cloud/on-prem), who manages DNS, and primary goals (security, speed, VPN/ZT, APIs).',
         },
       },
       {
@@ -87,8 +87,8 @@ export const platformDemoVignettes: DemoVignette[] = [
     ],
     demoTips: [
       {
-        vi: 'Vẽ sơ đồ request flow trước khi click dashboard — khách hàng SME thường nhớ hình hơn menu.',
-        en: 'Draw the request flow before clicking the dashboard — SME buyers often remember diagrams over menus.',
+        vi: 'Sơ đồ luồng request (client → PoP → origin) giúp đọc Analytics và Security Events dễ hơn so với chỉ liệt kê menu.',
+        en: 'A simple request-flow diagram (client → PoP → origin) makes Analytics and Security Events easier to read than menu names alone.',
       },
     ],
     keyTakeaways: [
@@ -108,32 +108,32 @@ export const platformDemoVignettes: DemoVignette[] = [
     title: { vi: 'Dashboard: Security overview', en: 'Dashboard: Security overview' },
     personas: ['Security Engineer', 'CISO'],
     valueDriver: {
-      vi: 'Một nơi xem events, WAF, bot, rate limit — phù hợp showcase Application Security.',
-      en: 'One place for events, WAF, bots, rate limits — ideal Application Security showcase.',
+      vi: 'Một nơi xem events, WAF, bot và rate limiting — điểm vào Application Security trên zone.',
+      en: 'One place for events, WAF, bots, and rate limiting — the Application Security entry point per zone.',
     },
     opening: {
       vi: 'Sau khi onboard DNS/SSL, đi theo “Security route”: Events → WAF → Bots → Rate limiting.',
       en: 'After DNS/SSL onboarding, follow the “Security route”: Events → WAF → Bots → Rate limiting.',
     },
     whenToUse: {
-      vi: 'Chuyển tiếp sang demo Advanced Security; giải thích nơi SOC sẽ làm việc hàng ngày.',
-      en: 'Bridge into Advanced Security demo; show where the SOC works day to day.',
+      vi: 'Khi cần xem traffic bị chặn/cho phép, điều tra sự cố, hoặc trước khi chỉnh WAF/bot/rate limit.',
+      en: 'When reviewing blocked/allowed traffic, investigating incidents, or before changing WAF, bot, or rate limit settings.',
     },
-    dashboardPaths: ['Security > Events', 'Security > WAF', 'Security > Bots'],
+    dashboardPaths: ['Analytics > Events', 'Security > WAF', 'Security > Bots'],
     steps: [
       {
         title: { vi: 'Security Events / Activity log', en: 'Security Events / Activity log' },
         detail: {
-          vi: 'Mở event mẫu: rule nào match, action, country, bot score. Chuẩn bị 1–2 event thật (hoặc simulate) trước demo.',
-          en: 'Open a sample event: matched rule, action, country, bot score. Prepare 1–2 real (or simulated) events before the demo.',
+          vi: 'Mở một event: rule khớp, action, quốc gia, bot score (nếu có). Dùng bộ lọc thời gian và rule ID để thu hẹp.',
+          en: 'Open an event: matched rule, action, country, bot score (if present). Use time range and rule ID filters to narrow results.',
         },
-        dashboardPath: 'Security > Events',
+        dashboardPath: 'Analytics > Events',
       },
       {
         title: { vi: 'WAF managed & custom rules', en: 'WAF managed & custom rules' },
         detail: {
-          vi: 'Managed rulesets (OWASP, CF managed) + Custom rules / Firewall rules. Nói thứ tự: specific → general.',
-          en: 'Managed rulesets (OWASP, CF managed) + Custom rules / Firewall rules. Mention ordering: specific → general.',
+          vi: 'Managed rulesets (OWASP, Cloudflare Managed) + WAF custom rules. Nói thứ tự: specific → general.',
+          en: 'Managed rulesets (OWASP, Cloudflare Managed) + WAF custom rules. Mention ordering: specific → general.',
         },
         dashboardPath: 'Security > WAF',
       },
@@ -148,8 +148,8 @@ export const platformDemoVignettes: DemoVignette[] = [
     ],
     demoTips: [
       {
-        vi: 'Đừng bật Block ngay — show Log/Simulate trước nếu khách lo false positive.',
-        en: 'Do not jump to Block — show Log/Simulate first if the customer fears false positives.',
+        vi: 'Rule mới nên bắt đầu ở Log hoặc Simulate trước khi Block — giảm false positive trên traffic thật.',
+        en: 'New rules should start in Log or Simulate before Block — reduces false positives on live traffic.',
       },
     ],
     keyTakeaways: [
@@ -166,16 +166,16 @@ export const platformDemoVignettes: DemoVignette[] = [
     title: { vi: 'Dashboard: Caching & Speed', en: 'Dashboard: Caching & Speed' },
     personas: ['Web Ops', 'Marketing', 'CTO'],
     valueDriver: {
-      vi: 'Giảm latency và origin load — showcase sau Security route.',
-      en: 'Lower latency and origin load — showcase after the Security route.',
+      vi: 'Giảm latency và tải origin — theo dõi cache hit và tối ưu Speed sau khi đã proxy zone.',
+      en: 'Lower latency and origin load — track cache hits and Speed settings after the zone is proxied.',
     },
     opening: {
       vi: 'Application route: Caching overview → Cache Rules → Speed optimizations → (tuỳ chọn) Argo / Images.',
       en: 'Application route: Caching overview → Cache Rules → Speed optimizations → (optional) Argo / Images.',
     },
     whenToUse: {
-      vi: 'Khách hỏi “làm sao tăng tốc website” sau khi đã proxy domain.',
-      en: 'Customer asks how to speed up the website after the domain is proxied.',
+      vi: 'Khi cần cải thiện tốc độ website, giảm băng thông origin, hoặc đo hiệu quả cache.',
+      en: 'When improving site speed, reducing origin bandwidth, or measuring cache effectiveness.',
     },
     dashboardPaths: ['Caching > Overview', 'Caching > Cache Rules', 'Speed > Optimization'],
     steps: [
@@ -188,7 +188,7 @@ export const platformDemoVignettes: DemoVignette[] = [
         dashboardPath: 'Caching > Analytics',
       },
       {
-        title: { vi: 'Demo Cache Rule', en: 'Demo Cache Rule' },
+        title: { vi: 'Cache Rules', en: 'Cache Rules' },
         detail: {
           vi: 'Bypass /admin; cache /assets/* với TTL; show purge on deploy.',
           en: 'Bypass /admin; cache /assets/* with TTL; show purge on deploy.',
@@ -206,8 +206,8 @@ export const platformDemoVignettes: DemoVignette[] = [
     ],
     demoTips: [
       {
-        vi: 'Chuẩn bị screenshot hit ratio tăng sau 1 tuần pilot.',
-        en: 'Prepare a screenshot of improved hit ratio after a one-week pilot.',
+        vi: 'So sánh Cache Analytics trước/sau khi bật rule — hit ratio và bandwidth saved là chỉ số dễ theo dõi.',
+        en: 'Compare Cache Analytics before/after rule changes — hit ratio and bandwidth saved are easy metrics to track.',
       },
     ],
     keyTakeaways: [
@@ -220,7 +220,7 @@ export const platformDemoVignettes: DemoVignette[] = [
   },
 ];
 
-/** Advanced Security demo vignettes → Application Services track */
+/** Application Security dashboard overviews → Application Services track */
 export const applicationSecurityDemos: DemoVignette[] = [
   {
     id: 'payload-inspection',
@@ -232,8 +232,8 @@ export const applicationSecurityDemos: DemoVignette[] = [
       en: 'Block/allow based on POST body content — not only URL or IP.',
     },
     opening: {
-      vi: 'Firewall rules có thể inspect body (form, JSON) — cùng một capability: payload / POST body / request body matching.',
-      en: 'Firewall rules can inspect the body (forms, JSON) — same capability: payload / POST body / request body matching.',
+      vi: 'WAF custom rules có thể inspect body (form, JSON) — cùng một capability: payload / POST body / request body matching.',
+      en: 'WAF custom rules can inspect the body (forms, JSON) — same capability: payload / POST body / request body matching.',
     },
     whenToUse: {
       vi: 'Khách cần rule theo field form (SĐT, mã đơn), loại file upload, hoặc JSON key trong API.',
@@ -267,8 +267,8 @@ export const applicationSecurityDemos: DemoVignette[] = [
     ],
     demoTips: [
       {
-        vi: 'Chuẩn bị curl test 200 vs 403 trước khi share màn hình.',
-        en: 'Prepare curl tests for 200 vs 403 before sharing screen.',
+        vi: 'Sau khi tạo rule, kiểm tra Security Events để xác nhận match/block đúng ý (có thể dùng curl hoặc request thật).',
+        en: 'After creating a rule, check Security Events to confirm matches/blocks behave as expected (curl or real traffic).',
       },
     ],
     keyTakeaways: [
@@ -278,7 +278,7 @@ export const applicationSecurityDemos: DemoVignette[] = [
       },
     ],
     docsLinks: [
-      { label: 'Firewall rules', href: 'https://developers.cloudflare.com/waf/custom-rules/' },
+      { label: 'WAF custom rules', href: 'https://developers.cloudflare.com/waf/custom-rules/' },
       { label: 'Payload logging', href: 'https://developers.cloudflare.com/waf/managed-rules/payload-logging/' },
     ],
   },
@@ -358,14 +358,14 @@ export const applicationSecurityDemos: DemoVignette[] = [
       en: 'Bot score 1–99 — separates automation vs real browsers; not replaced by simple Bot Fight Mode.',
     },
     opening: {
-      vi: 'Bot score 1 = chắc chắn automated (TLS/header fingerprint, behavioral, JS detection). 2–99 dùng ML (MLv6). Score 0 = Bot Management không chạy trên request đó.',
-      en: 'Bot score 1 = certainly automated (TLS/header fingerprint, behavioral, JS detection). 2–99 uses ML (MLv6). Score 0 = Bot Management did not run on that request.',
+      vi: 'Bot score 1 = automated; 2–29 = likely automated; 30–99 = likely human. Score 0 = “not computed” (Bot Management không đánh giá request đó).',
+      en: 'Bot score 1 = automated; 2–29 = likely automated; 30–99 = likely human. Score 0 means “not computed” (Bot Management did not evaluate that request).',
     },
     whenToUse: {
-      vi: 'Scraping, credential stuffing, carding — khách hỏi downgrade Business có đủ Bot Management Enterprise không (thường là không).',
-      en: 'Scraping, credential stuffing, carding — customer asks if Business tier equals Enterprise Bot Management (usually no).',
+      vi: 'Khi có scraping, credential stuffing, hoặc cần phân biệt bot automation vs trình duyệt thật — xem gói có Bot Management đầy đủ hay không.',
+      en: 'When facing scraping, credential stuffing, or needing to separate automated bots from real browsers — check plan includes full Bot Management.',
     },
-    dashboardPaths: ['Security > Bots', 'Security > Events'],
+    dashboardPaths: ['Security > Settings (Bot traffic)', 'Analytics > Events'],
     steps: [
       {
         title: { vi: 'Rule theo score', en: 'Rules by score' },
@@ -373,7 +373,7 @@ export const applicationSecurityDemos: DemoVignette[] = [
           vi: 'Bắt đầu Log hoặc Managed Challenge cho score 1; theo dõi Challenge Success Rate (<3% CSR tốt). Score 2–9: cân nhắc challenge static assets.',
           en: 'Start with Log or Managed Challenge for score 1; monitor Challenge Success Rate (<3% CSR is good). Score 2–9: consider challenging static assets.',
         },
-        dashboardPath: 'Security > Bots > Configure Bot Management',
+        dashboardPath: 'Security > Settings (Bot traffic) > Bot Management',
       },
       {
         title: { vi: 'Verified bots', en: 'Verified bots' },
@@ -424,21 +424,21 @@ export const applicationSecurityDemos: DemoVignette[] = [
       vi: 'SME có mobile app / B2B API; cần sequential abuse detection hoặc schema validation.',
       en: 'SME with mobile app / B2B API; needs sequential abuse detection or schema validation.',
     },
-    dashboardPaths: ['Security > API Shield', 'Security > WAF > Rate limiting rules'],
+    dashboardPaths: ['Security > Web Assets (Discovery/Endpoints)', 'Security rules > Rate limiting rules'],
     steps: [
       {
         title: { vi: 'API Discovery', en: 'API Discovery' },
         detail: {
-          vi: 'Cấu hình session identifier (header/cookie). ~24h để populate; cần ≥50 session/endpoint. Unauthenticated discovery đang mở rộng.',
-          en: 'Configure session identifier (header/cookie). ~24h to populate; needs ≥50 sessions/endpoint. Unauthenticated discovery expanding.',
+          vi: 'API Discovery cần traffic “đủ điều kiện” (2xx tại edge, không phải từ Workers, và ~500 requests/10 ngày). Nếu dùng session identifier, hãy chờ ~24h để dữ liệu ổn định.',
+          en: 'API Discovery needs “valid” traffic (2xx at the edge, not from Workers, and ~500 requests within 10 days). If you use a session identifier, allow ~24 hours for data to stabilize.',
         },
-        dashboardPath: 'Security > API Shield > API Discovery',
+        dashboardPath: 'Security > Web Assets > Discovery',
       },
       {
         title: { vi: 'Rate limit từ recommendation', en: 'Rate limit from recommendation' },
         detail: {
-          vi: 'Click “Rate limit recommendation” trên endpoint → mở Advanced RL với ngưỡng P50/P90/P99 — chọn Block, không Challenge.',
-          en: 'Click “Rate limit recommendation” on endpoint → opens Advanced RL with P50/P90/P99 thresholds — choose Block, not Challenge.',
+          vi: 'Rate limit recommendation cần session identifier và đủ traffic; thường yêu cầu ≥50 distinct sessions/24h trong 7 ngày. Sau khi thêm identifier, chờ ~24h để recommendation xuất hiện.',
+          en: 'Rate limit recommendations require a session identifier and enough traffic; commonly ≥50 distinct sessions in a 24-hour period (within the last 7 days). After adding an identifier, wait ~24 hours for recommendations to appear.',
         },
       },
       {
@@ -447,13 +447,13 @@ export const applicationSecurityDemos: DemoVignette[] = [
           vi: 'Schema validation cho traffic không khớp contract; mTLS cho client tin cậy — phù hợp fintech SME.',
           en: 'Schema validation for out-of-contract traffic; mTLS for trusted clients — fits fintech SMEs.',
         },
-        dashboardPath: 'Security > API Shield > Schema validation',
+        dashboardPath: 'Security > Web Assets > Schema validation',
       },
     ],
     demoTips: [
       {
-        vi: 'Có sẵn 1 zone demo với API traffic thật hoặc staging — Discovery trống làm demo yếu.',
-        en: 'Use a demo zone with real or staging API traffic — empty Discovery weakens the demo.',
+        vi: 'Zone mới có thể chưa có endpoint trong vài ngày. Nếu production chưa đủ traffic, dùng staging hoặc chạy synthetic traffic để “seed” Discovery.',
+        en: 'New zones can stay empty for days. If production lacks traffic, use staging or synthetic traffic to “seed” Discovery.',
       },
     ],
     keyTakeaways: [
@@ -494,15 +494,15 @@ export const applicationSecurityDemos: DemoVignette[] = [
       {
         title: { vi: 'Custom rules account-wide', en: 'Account-wide custom rules' },
         detail: {
-          vi: 'Firewall rules account level áp cho mọi zone khớp scope — phù hợp chặn country/ASN chung.',
-          en: 'Account firewall rules apply to every zone in scope — good for global country/ASN blocks.',
+          vi: 'Account-level custom rulesets áp cho mọi zone khớp scope — phù hợp baseline chặn country/ASN chung và giảm drift giữa các zone.',
+          en: 'Account-level custom rulesets apply to every zone in scope — good for baseline country/ASN blocks and reducing drift across zones.',
         },
       },
     ],
     demoTips: [
       {
-        vi: 'So sánh với /plans — Account WAF thường gắn Enterprise; Business là zone-level.',
-        en: 'Cross-link to /plans — Account WAF is often Enterprise; Business is zone-level.',
+        vi: 'Account WAF thường có trên gói cao hơn; zone WAF vẫn áp dụng từng domain — xem /plans để đối chiếu gói.',
+        en: 'Account WAF is typically on higher tiers; zone WAF still applies per domain — see /plans for plan comparison.',
       },
     ],
     keyTakeaways: [
@@ -515,7 +515,7 @@ export const applicationSecurityDemos: DemoVignette[] = [
   },
 ];
 
-/** Zero Trust demo vignettes → Cloudflare One track */
+/** Cloudflare One dashboard overviews → Cloudflare One track */
 export const cloudflareOneDemos: DemoVignette[] = [
   {
     id: 'zt-overview-warp',
@@ -527,12 +527,12 @@ export const cloudflareOneDemos: DemoVignette[] = [
       en: 'Zero Trust on the same anycast network — ZTNA + SWG in one dashboard with core CF.',
     },
     opening: {
-      vi: 'Zero Trust chạy trên mạng Cloudflare; demo nên có sơ đồ request flow end-to-end trước khi vào từng product.',
-      en: 'Zero Trust runs on Cloudflare’s network; start with an end-to-end request flow diagram before each product.',
+      vi: 'Zero Trust chạy trên mạng Cloudflare — nên nắm luồng user/device → policy trước khi vào Access, Gateway, CASB.',
+      en: 'Zero Trust runs on Cloudflare’s network — understand user/device → policy flow before Access, Gateway, or CASB.',
     },
     whenToUse: {
-      vi: 'Đầu demo Cloudflare One; thiết lập team domain, IdP, device enrollment.',
-      en: 'Start of Cloudflare One demo; set up team domain, IdP, device enrollment.',
+      vi: 'Khi thiết lập Cloudflare One lần đầu: team domain, IdP, và đăng ký thiết bị (WARP).',
+      en: 'When setting up Cloudflare One for the first time: team domain, IdP, and device enrollment (WARP).',
     },
     dashboardPaths: ['Zero Trust > Settings', 'Zero Trust > My Team > Devices'],
     steps: [
@@ -563,15 +563,15 @@ export const cloudflareOneDemos: DemoVignette[] = [
       {
         title: { vi: 'ZT request routes', en: 'ZT request routes' },
         detail: {
-          vi: 'Chuẩn bị 3 “route”: Core → Access → Gateway — map slide/script với menu Zero Trust.',
-          en: 'Prepare three “routes”: Core → Access → Gateway — map slides/script to Zero Trust menu.',
+          vi: 'Ba khu vực thường gặp: Settings (team/IdP/WARP) → Access (ứng dụng) → Gateway (egress Internet).',
+          en: 'Three common areas: Settings (team/IdP/WARP) → Access (applications) → Gateway (Internet egress).',
         },
       },
     ],
     demoTips: [
       {
-        vi: 'Có device đã enroll sẵn — demo WARP live tránh timeout enrollment.',
-        en: 'Pre-enroll a device — live WARP demo avoids enrollment timeouts.',
+        vi: 'Enroll ít nhất một thiết bị thử trước khi triển khai rộng — enrollment và split tunnel cần kiểm tra trên mạng thật.',
+        en: 'Enroll at least one test device before wide rollout — enrollment and split tunnel should be validated on real networks.',
       },
     ],
     keyTakeaways: [
@@ -623,16 +623,16 @@ export const cloudflareOneDemos: DemoVignette[] = [
       {
         title: { vi: 'App Launcher', en: 'App Launcher' },
         detail: {
-          vi: 'User đăng nhập team domain → thấy tile app được phép — showcase UX cho lãnh đạo SME.',
-          en: 'User signs in on team domain → sees allowed app tiles — executive-friendly UX.',
+          vi: 'User đăng nhập team domain → thấy các ứng dụng được phép trên App Launcher — không cần VPN toàn mạng.',
+          en: 'User signs in on the team domain → sees allowed apps on App Launcher — no full-network VPN required.',
         },
         dashboardPath: 'Zero Trust > Access > App Launcher',
       },
     ],
     demoTips: [
       {
-        vi: 'Demo 1 app nội bộ qua Tunnel + 1 SaaS (ví dụ Salesforce) với policy khác nhau.',
-        en: 'Demo one internal app via Tunnel + one SaaS (e.g. Salesforce) with different policies.',
+        vi: 'Nên tách policy cho app nội bộ (Tunnel) và SaaS (OIDC/SAML) — điều kiện identity/device có thể khác nhau.',
+        en: 'Use separate policies for internal apps (Tunnel) vs SaaS (OIDC/SAML) — identity/device conditions often differ.',
       },
     ],
     keyTakeaways: [
@@ -698,8 +698,8 @@ export const cloudflareOneDemos: DemoVignette[] = [
     ],
     keyTakeaways: [
       {
-        vi: 'Gateway + Access = outbound (Internet) + inbound (private apps); pitch “single pane” cho CISO SME.',
-        en: 'Gateway + Access = outbound (Internet) + inbound (private apps); “single pane” pitch for SME CISOs.',
+        vi: 'Gateway (egress Internet) và Access (ứng dụng riêng/SaaS) bổ sung nhau — cùng dashboard Zero Trust.',
+        en: 'Gateway (Internet egress) and Access (private/SaaS apps) complement each other — both live in the Zero Trust dashboard.',
       },
     ],
     docsLinks: [
@@ -744,8 +744,8 @@ export const cloudflareOneDemos: DemoVignette[] = [
     ],
     demoTips: [
       {
-        vi: 'Dùng sandbox tenant SaaS — đừng quét production customer tenant trên demo công khai.',
-        en: 'Use a sandbox SaaS tenant — do not scan a customer production tenant in a public demo.',
+        vi: 'Kết nối CASB nên thử trên tenant sandbox hoặc môi trường thử — tránh quét production chưa được phê duyệt.',
+        en: 'Connect CASB to a sandbox or test tenant first — avoid scanning unapproved production tenants.',
       },
     ],
     keyTakeaways: [
@@ -766,14 +766,14 @@ export const cloudflareOneDemos: DemoVignette[] = [
       en: 'Audit Access/Gateway — send logs to SIEM (Logpush).',
     },
     opening: {
-      vi: 'Demo kết thúc bằng Logs: Access, Gateway, Audit — filter theo user, app, action, decision.',
-      en: 'Close the demo with Logs: Access, Gateway, Audit — filter by user, app, action, decision.',
+      vi: 'Logs gom Access, Gateway và Audit — lọc theo user, app, action, allow/deny để kiểm tra policy.',
+      en: 'Logs combine Access, Gateway, and Audit — filter by user, app, action, and allow/deny to verify policies.',
     },
     whenToUse: {
       vi: 'SME có yêu cầu compliance log 90 ngày hoặc tích hợp Splunk/Datadog.',
       en: 'SME requires 90-day compliance logs or Splunk/Datadog integration.',
     },
-    dashboardPaths: ['Zero Trust > Logs', 'Analytics & Logs > Logpush'],
+    dashboardPaths: ['Zero Trust > Insights > Logs', 'Zero Trust > Insights > Logs > Manage Logpush'],
     steps: [
       {
         title: { vi: 'Zero Trust Logs', en: 'Zero Trust Logs' },
@@ -781,7 +781,7 @@ export const cloudflareOneDemos: DemoVignette[] = [
           vi: 'Lọc deny/allow — chứng minh policy hoạt động sau khi tạo Access/Gateway rule.',
           en: 'Filter deny/allow — prove policies work after creating Access/Gateway rules.',
         },
-        dashboardPath: 'Zero Trust > Logs',
+        dashboardPath: 'Zero Trust > Insights > Logs',
       },
       {
         title: { vi: 'Logpush (nếu Enterprise)', en: 'Logpush (if Enterprise)' },
@@ -789,19 +789,19 @@ export const cloudflareOneDemos: DemoVignette[] = [
           vi: 'Cấu hình destination S3/R2/SIEM — nói rõ gói Business vs Enterprise cho retention.',
           en: 'Configure S3/R2/SIEM destination — clarify Business vs Enterprise for retention.',
         },
-        dashboardPath: 'Analytics & Logs > Logpush',
+        dashboardPath: 'Zero Trust > Insights > Logs > Manage Logpush',
       },
     ],
     demoTips: [
       {
-        vi: 'Tạo 1 policy deny cố ý trước demo để có log “deny” sống động.',
-        en: 'Create one intentional deny policy before the demo for a live “deny” log line.',
+        vi: 'Sau khi đổi policy, mở Logs và lọc decision=deny để xác nhận rule hoạt động như mong đợi.',
+        en: 'After policy changes, open Logs and filter decision=deny to confirm rules behave as expected.',
       },
     ],
     keyTakeaways: [
       {
-        vi: 'Visibility bán Enterprise: SOC + báo cáo cho ban lãnh đạo SME.',
-        en: 'Visibility sells Enterprise: SOC plus reports for SME leadership.',
+        vi: 'Logpush (nếu có trên gói) đưa log về SIEM — Zero Trust Logs vẫn dùng cho kiểm tra nhanh hàng ngày.',
+        en: 'Logpush (where available) feeds SIEMs — Zero Trust Logs remain useful for day-to-day checks.',
       },
     ],
     docsLinks: [{ label: 'Logpush', href: 'https://developers.cloudflare.com/logs/logpush/' }],

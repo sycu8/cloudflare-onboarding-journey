@@ -34,7 +34,9 @@ const { categories } = Astro.props;
             return (
               <li class="card flex h-full flex-col p-4">
                 <div class="flex items-start justify-between gap-2">
-                  <LangText as="h3" class="text-base font-semibold leading-snug" text={p.name} />
+                  <a href={`/products/${p.id}`} class="group flex-1">
+                    <LangText as="h3" class="text-base font-semibold leading-snug group-hover:text-[var(--cf-accent)]" text={p.name} />
+                  </a>
                   {href ? (
                     <a
                       href={href}
@@ -48,6 +50,10 @@ const { categories } = Astro.props;
                   ) : null}
                 </div>
                 <LangText as="p" class="text-muted mt-2 flex-1 text-sm leading-relaxed" text={p.summary} />
+                <a href={`/products/${p.id}`} class="link mt-3 inline-block text-xs">
+                  <span class="lang-vi">Giải thích chi tiết →</span>
+                  <span class="lang-en">Detailed explainer →</span>
+                </a>
               </li>
             );
           })}

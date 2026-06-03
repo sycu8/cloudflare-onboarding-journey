@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/chrome/Breadcrumbs.astro';
+import LangText from '../../components/ui/LangText.astro';
+import { productPages, productCategoryOrder } from '../../data/productPages';
+---
+
+<BaseLayout
+  title={{ vi: 'Sản phẩm Cloudflare — giải thích cho người mới', en: 'Cloudflare products — explained for beginners' }}
+  description={{
+    vi: 'Trang con cho từng sản phẩm và thuật ngữ: giải thích dễ hiểu, sơ đồ trực quan từ Cloudflare Docs.',
+    en: 'Sub-pages for each product and glossary term: plain-language explanations and visual diagrams from Cloudflare Docs.',
+  }}
+  canonicalPath="/products"
+  showProgressBar
+>
+  <Breadcrumbs
+    items={[
+      { href: '/cloudflare-101', label: { vi: 'Cloudflare 101', en: 'Cloudflare 101' } },
+      { href: '/products', label: { vi: 'Sản phẩm', en: 'Products' } },
+    ]}
+  />
+
+  <header class="mb-8">
+    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: 'Sản phẩm & thuật ngữ', en: 'Products & terms' }} />
+    <LangText
+      as="p"
+      class="text-muted mt-2 max-w-3xl text-sm md:text-base"
+      text={{
+        vi: `${productPages.length} trang giải thích cho người mới — từ DNS, Workers, WAF đến Zero Trust. Mỗi trang có sơ đồ minh họa từ tài liệu chính thức Cloudflare khi có.`,
+        en: `${productPages.length} beginner-friendly pages — from DNS, Workers, and WAF to Zero Trust. Each includes official Cloudflare diagrams when available.`,
+      }}
+    />
+  </header>
+
+  {
+    productCategoryOrder.map((cat) => {
+      const items = productPages.filter((p) => p.categoryId === cat.id);
+      if (items.length === 0) return null;
+      return (
+        <section id={cat.id} class="mb-10 scroll-mt-24">
+          <LangText as="h2" class="mb-4 text-xl font-semibold" text={cat.label} />
+          <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {items.map((p) => (
+              <li>
+                <a href={`/products/${p.slug}`} class="card flex h-full flex-col p-4 transition hover:border-[var(--cf-accent)]">
+                  <LangText as="span" class="font-semibold" text={p.name} />
+                  <LangText as="p" class="text-muted mt-2 line-clamp-3 flex-1 text-sm" text={p.summary} />
+                  <span class="link mt-3 text-xs">
+                    <span class="lang-vi">Đọc giải thích →</span>
+                    <span class="lang-en">Read explainer →</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      );
+    })
+  }
+</BaseLayout>

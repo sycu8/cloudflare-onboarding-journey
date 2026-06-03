@@ -26,22 +26,22 @@ export default function DemoVignetteList(props: { vignettes: DemoVignette[] }) {
     () =>
       lang === 'en'
         ? {
-            when: 'When to use',
-            dashboard: 'Dashboard paths',
-            steps: 'Demo steps',
-            tips: 'Demo tips',
+            when: 'When to open this section',
+            dashboard: 'Where in the dashboard',
+            steps: 'What to review',
+            tips: 'Notes',
             takeaways: 'Key takeaways',
             docs: 'Official docs',
-            personas: 'Personas',
+            personas: 'Typical roles',
           }
         : {
-            when: 'Khi nào dùng',
-            dashboard: 'Đường dẫn dashboard',
-            steps: 'Các bước demo',
-            tips: 'Mẹo demo',
+            when: 'Khi nào vào mục này',
+            dashboard: 'Vị trí trên dashboard',
+            steps: 'Nên xem gì',
+            tips: 'Lưu ý',
             takeaways: 'Điểm cần nhớ',
             docs: 'Tài liệu chính thức',
-            personas: 'Đối tượng',
+            personas: 'Vai trò thường gặp',
           },
     [lang],
   );

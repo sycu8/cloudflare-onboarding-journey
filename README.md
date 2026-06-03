@@ -11,7 +11,23 @@ Live demos:
 - [cloudflare-starter-hub.pages.dev](https://cloudflare-starter-hub.pages.dev)
 - [onboarding.orangecloud.vn](https://onboarding.orangecloud.vn) (custom domain, if configured)
 
-Source mirror: [github.com/sycu8/cloudflare-onboarding-journey](https://github.com/sycu8/cloudflare-onboarding-journey)
+Source: [github.com/sycu8/cloudflare-onboarding-journey](https://github.com/sycu8/cloudflare-onboarding-journey)
+
+> **Contributors:** we welcome PRs. Every contribution is **reviewed and approved by the maintainer** ([@sycu8](https://github.com/sycu8)) before merge; only the maintainer deploys to production. See [Contributing](#contributing).
+
+---
+
+## Recent updates (2026)
+
+| Area | What’s new |
+|------|------------|
+| **Learning tracks** | Per-lesson pages (`/tracks/{track}/{lessonId}`), deep dives, **Lưu ý (best practices)** from official docs, **Ví dụ triển khai** (curated developer docs), **Lỗi thường gặp** |
+| **Track isolation** | Each track is self-contained (banner, switcher, filtered resources); less cross-noise between paths |
+| **Use cases** | Hub at [`/use-cases`](https://cloudflare-starter-hub.pages.dev/use-cases) — 5 scenarios across Application Services, Developer Platform, and Cloudflare One |
+| **Products** | [`/products`](https://cloudflare-starter-hub.pages.dev/products) catalog + per-product pages linked from Cloudflare 101 |
+| **Resources** | Synced Cloudflare developer catalog (`npm run resources:sync`), Reference Architecture diagram gallery (`npm run diagrams:sync`) |
+| **Ops & trust** | [`/changelog`](https://cloudflare-starter-hub.pages.dev/changelog), [`/status`](https://cloudflare-starter-hub.pages.dev/status) (live Statuspage) |
+| **Contributions** | PR template, CI verify workflow, `npm run review:pr`, [CONTRIBUTION_MAP](docs/CONTRIBUTION_MAP.md) for safe reviews |
 
 ---
 
@@ -39,15 +55,17 @@ Optional: [**First week (7 days)**](/first-week) — day-by-day plan, common mis
 
 ## Features
 
-- **Bilingual UI** — Vietnamese default; “English only” toggle (`cfhub_language` in localStorage)
+- **Bilingual UI** — Vietnamese default; **EN/VI** language switcher (`cfhub_language` in localStorage)
 - **Dark mode** — `cfhub_theme` in localStorage
-- **3 learning tracks** — Application Services, Developer Platform, Cloudflare One (modules + outcomes)
-- **Use cases** — protect website, secure API, serverless app, VPN replacement, remote users
+- **3 learning tracks** — Application Services, Developer Platform, Cloudflare One (modules, outcomes, **lesson pages** with best practices & deployment examples)
+- **Use cases hub** — [`/use-cases`](/use-cases): protect website, secure API, serverless app, VPN replacement, remote users (grouped by track)
+- **Product pages** — searchable catalog at `/products` (Workers, WAF, Zero Trust, D1, R2, …)
 - **Interactive** — glossary search + pagination, quiz with explanations, checklist progress, path selector
-- **Resources hub** — Resource Hub index, Reference Architecture, GitHub repos, CloudSecOp grid (paginated), Learning Center topics (paginated)
+- **Resources hub** — official docs grid (synced), Reference Architecture **diagrams**, Resource Hub, GitHub, CloudSecOp, Learning Center
+- **Solutions & demos** — bilingual solution proposals, SE demo guides, content-delivery guide, plan comparison
 - **SEO** — per-page title/description, Open Graph, Twitter cards, canonical URLs
-- **Cloudflare branding** — orange cloud favicon and navbar logo
-- **Pages Functions** — workshop events, signups, quiz submissions, site config, optional Workers AI generate endpoint
+- **Cloudflare branding** — orange cloud favicon and navbar logo; static assets via R2 `/assets/*` in production
+- **Pages Functions** — workshop events, signups, quiz submissions, site config, asset proxy, optional Workers AI
 - **D1 + KV + R2** — production-ready bindings (configure in your account)
 
 ---
@@ -62,7 +80,7 @@ Optional: [**First week (7 days)**](/first-week) — day-by-day plan, common mis
 | API | [Pages Functions](https://developers.cloudflare.com/pages/functions/) |
 | Database | [D1](https://developers.cloudflare.com/d1/) (SQLite) |
 | Config / rate limit | [KV](https://developers.cloudflare.com/kv/) |
-| Files (future) | [R2](https://developers.cloudflare.com/r2/) |
+| Static images | [R2](https://developers.cloudflare.com/r2/) + `/assets/*` Pages Function |
 | Bot protection | [Turnstile](https://developers.cloudflare.com/turnstile/) (optional) |
 | AI (optional) | [Workers AI](https://developers.cloudflare.com/workers-ai/) |
 
@@ -79,10 +97,12 @@ cloudflare-onboarding-journey/
 │   ├── i18n/               # language helpers
 │   ├── layouts/            # BaseLayout (SEO, title, theme)
 │   ├── lib/                # SEO, applyPageLang, server helpers
-│   └── pages/              # routes (22 static pages)
-├── functions/api/          # Pages Functions (workshop, quiz, generate, …)
+│   └── pages/              # routes (tracks, lessons, products, use-cases, …)
+├── functions/              # Pages Functions (api/, assets/)
 ├── migrations/             # D1 SQL migrations
-├── scripts/                # smoke-test, check-hydration
+├── docs/                   # CONTRIBUTION_MAP, MAINTAINER_REVIEW
+├── .github/                # CONTRIBUTING, PR template, CI workflow
+├── scripts/                # smoke-test, sync, review-contribution
 ├── tests/                  # Playwright E2E
 ├── wrangler.toml.example   # copy → wrangler.toml (not committed)
 ├── .env.example            # secrets template (not committed)
@@ -110,8 +130,14 @@ Open [http://localhost:4321](http://localhost:4321).
 ```bash
 npm run build      # production static output → dist/
 npm run preview    # serve dist/
-npm run test:smoke # HTTP smoke (optional: BASE URL arg)
-npm run test:e2e   # Playwright (start preview on :4321 or set BASE_URL)
+npm run test:smoke # HTTP smoke (optional URL arg)
+npm run test:e2e   # Playwright — local preview on :4321 (uses E2E_BASE_URL, not BASE_URL)
+npm run deploy          # build + wrangler pages deploy (maintainer)
+npm run deploy:verify   # smoke both production domains
+npm run resources:sync  # refresh developers.cloudflare.com link catalog
+npm run diagrams:sync   # refresh Reference Architecture diagram metadata
+npm run assets:sync     # upload public SVGs → R2 (needs Wrangler credentials)
+npm run review:pr -- 12 # maintainer: fetch PR, diff, zone map (see Contributing)
 ```
 
 ---
@@ -123,8 +149,9 @@ npm run test:e2e   # Playwright (start preview on :4321 or set BASE_URL)
 1. Create a [Cloudflare Pages](https://developers.cloudflare.com/pages/) project connected to this repo, **or** deploy with Wrangler:
 
    ```bash
-   npm run build
-   npx wrangler pages deploy dist --project-name=cloudflare-starter-hub
+   npm run deploy
+   # or: npm run build && npx wrangler pages deploy dist --project-name=cloudflare-starter-hub
+   npm run deploy:verify
    ```
 
 2. **Build settings**
@@ -150,11 +177,14 @@ npx wrangler kv namespace create SITE_CONFIG
 # Put id into wrangler.toml
 ```
 
-### 4. R2 bucket (optional)
+### 4. R2 bucket (static images)
 
 ```bash
 npx wrangler r2 bucket create cloudflare-starter-hub-resources
+npm run assets:sync   # uploads public/*.svg, favicon.ico → R2 static/*
 ```
+
+Production serves them at `/assets/<file>` (immutable cache). Source files stay in `public/` for local `astro dev` and as the upload source.
 
 ### 5. Pages secrets (dashboard or CLI)
 
@@ -174,6 +204,7 @@ Public (safe in `.env` / Pages **plain** vars):
 | `PUBLIC_SITE_URL` | Canonical site URL for sitemap/OG |
 | `PUBLIC_TURNSTILE_SITE_KEY` | Turnstile widget site key |
 | `PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN` | Web Analytics (optional) |
+| `PUBLIC_ASSETS_BASE_URL` | Optional direct R2/public CDN URL (else `/assets/*`) |
 
 Copy from `.env.example` — fill locally in `.env` only.
 
@@ -229,12 +260,17 @@ Admin auth header: `Authorization: Bearer <WORKSHOP_ADMIN_KEY>` or `X-Cfhub-Admi
 | `/first-week` | 7-day beginner plan |
 | `/cloudflare-101` | Product map (Compute, AI, Storage, Media, App Security, Cloudflare One) |
 | `/choose-your-path` | Path selector |
-| `/tracks`, `/tracks/*` | Learning tracks |
-| `/use-cases/*` | Practical scenarios |
+| `/tracks`, `/tracks/{track}` | Track overview + track-scoped resources |
+| `/tracks/{track}/{lessonId}` | Lesson: deep dive, best practices, deployment examples, common mistakes |
+| `/use-cases` | Use case hub (3 tracks) |
+| `/use-cases/{slug}` | Single scenario (architecture, steps, mistakes) |
+| `/products`, `/products/{slug}` | Product catalog & detail pages |
 | `/checklists/beginner-cloudflare-checklist` | Interactive checklist |
 | `/quiz/beginner-readiness` | 12-question knowledge check |
 | `/glossary` | Searchable glossary |
-| `/resources` | Resource Hub, GitHub, Ref Arch, CloudSecOp, Learning Center |
+| `/resources` | Resource Hub, GitHub, Ref Arch, diagram gallery, CloudSecOp, Learning Center |
+| `/changelog` | Curated Cloudflare Developer Changelog |
+| `/status` | Live system status & incidents (Statuspage API) |
 | `/plans` | Plan comparison (Free/Pro/Business/Enterprise) for SMEs |
 | `/demo-guides` | SE demo scripts — Application Security & Cloudflare One |
 | `/content-delivery` | CDN, cache, Speed — speed up websites guide |
@@ -260,10 +296,37 @@ Curated links align with official Cloudflare materials:
 
 ## Contributing
 
-1. Fork the repo.  
-2. Create a branch (`feat/my-change`).  
-3. Run `npm run build` and `npm run test:e2e` when touching UI.  
-4. Open a PR — no secrets in commits.
+We are open to contributions — thank you for improving the hub for learners.
+
+### For contributors
+
+1. Read **[.github/CONTRIBUTING.md](.github/CONTRIBUTING.md)** and **[docs/CONTRIBUTION_MAP.md](docs/CONTRIBUTION_MAP.md)** (which folders are high-risk).
+2. **Fork** the repo, branch from `main` (`feat/…` or `fix/…`).
+3. Run locally: `npm run build`, and for UI changes `npm run test:smoke` / `npm run test:e2e`.
+4. **Open a pull request** into `main` and fill the [PR checklist](.github/pull_request_template.md).
+5. GitHub Actions **Verify PR** runs build + smoke on your branch automatically.
+
+### Approval & deploy (maintainer only)
+
+| Step | Who | What happens |
+|------|-----|----------------|
+| Review | **Maintainer** ([@sycu8](https://github.com/sycu8)) | Reads the PR, CI results, and optional agent review; may request changes |
+| **Approve** | **Maintainer** | Merges only after explicit approval — contributors do not merge to `main` by default |
+| Deploy | **Maintainer** | `git pull` → `npm run deploy` → `npm run deploy:verify` to Pages |
+
+**You will be notified in the PR** when it is approved, needs changes, or is merged. Production URLs update only after maintainer deploy.
+
+Questions or intent before coding? [Open an issue](https://github.com/sycu8/cloudflare-onboarding-journey/issues).
+
+### Maintainer — review a PR locally
+
+```bash
+gh auth login
+npm run review:pr -- 12          # fetch, diff, zone map
+npm run review:pr -- 12 --verify # + isolated build in .worktrees/
+```
+
+Details: [docs/MAINTAINER_REVIEW.md](docs/MAINTAINER_REVIEW.md). Cursor/agent: [AGENTS.md](AGENTS.md).
 
 ---
 

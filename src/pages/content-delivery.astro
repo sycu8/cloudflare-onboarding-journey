@@ -11,6 +11,10 @@ import {
   deliveryChecklist,
   deliveryMistakes,
 } from '../data/contentDelivery';
+import ReferenceDiagramFigure from '../components/content/ReferenceDiagramFigure.astro';
+import { getDiagramsForHubPage } from '../data/referenceDiagrams';
+
+const deliveryDiagrams = getDiagramsForHubPage('/content-delivery');
 ---
 
 <BaseLayout
@@ -45,6 +49,21 @@ import {
     <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Mô hình tư duy', en: 'Mental model' }} />
     <LangText as="p" class="text-muted mt-2 font-mono text-sm leading-relaxed" text={contentDeliveryMentalModel} />
   </section>
+
+  {deliveryDiagrams.length > 0 ? (
+    <section class="mb-8">
+      <LangText
+        as="h2"
+        class="mb-4 text-lg font-semibold"
+        text={{ vi: 'Sơ đồ kiến trúc chính thức', en: 'Official architecture diagrams' }}
+      />
+      <div class="grid gap-6 lg:grid-cols-2">
+        {deliveryDiagrams.map((d) => (
+          <ReferenceDiagramFigure diagram={d} />
+        ))}
+      </div>
+    </section>
+  ) : null}
 
   <nav class="card mb-8 flex flex-wrap gap-2 p-4 text-sm" aria-label="Topics">
     <span class="text-muted w-full text-xs font-medium uppercase tracking-wide">
@@ -88,7 +107,7 @@ import {
       }
 
       <section id="mistakes" class="scroll-mt-24">
-        <LangText as="h2" class="text-xl font-semibold" text={{ vi: 'Sai lầm thường gặp', en: 'Common mistakes' }} />
+        <LangText as="h2" class="text-xl font-semibold" text={{ vi: 'Lỗi thường gặp', en: 'Common mistakes' }} />
         <ul class="mt-4 space-y-3">
           {deliveryMistakes.map((m) => (
             <li class="card p-4">
@@ -120,8 +139,8 @@ import {
             </li>
             <li>
               <a class="link" href="/demo-guides#platform">
-                <span class="lang-vi">Script demo nền tảng</span>
-                <span class="lang-en">Platform demo script</span>
+                <span class="lang-vi">Dashboard overview nền tảng</span>
+                <span class="lang-en">Platform dashboard overview</span>
               </a>
             </li>
           </ul>

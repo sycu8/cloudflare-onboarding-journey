@@ -4,9 +4,10 @@ import type { TrackModule } from '../../data/tracks';
 
 type Props = {
   module: TrackModule;
+  trackSlug: string;
 };
 
-const { module } = Astro.props;
+const { module, trackSlug } = Astro.props;
 ---
 
 <article class="card">
@@ -22,12 +23,16 @@ const { module } = Astro.props;
   <LangText as="p" class="text-muted mt-2 text-sm" text={module.description} />
 
   <ol class="mt-4 space-y-4">
-    {module.lessons.map((lesson, li) => (
+    {module.lessons.map((lesson, li) => {
+      const lessonId = `${module.id}-l${li + 1}`;
+      return (
       <li class="rounded-xl border border-[var(--cf-border)] bg-[var(--cf-bg-elevated)]/50 p-4">
         <div class="flex gap-3">
           <span class="badge badge-accent mt-0.5 shrink-0">{li + 1}</span>
           <div class="min-w-0 flex-1">
-            <LangText as="h4" class="font-medium" text={lesson.title} />
+            <a href={`/tracks/${trackSlug}/${lessonId}`} class="group">
+              <LangText as="h4" class="font-medium group-hover:text-[var(--cf-accent)]" text={lesson.title} />
+            </a>
             <LangText as="p" class="text-muted mt-2 text-sm leading-relaxed" text={lesson.body} />
             {lesson.tip ? (
               <p class="mt-2 rounded-lg border border-[var(--cf-border)] bg-[var(--cf-surface)] px-3 py-2 text-xs">
@@ -39,15 +44,13 @@ const { module } = Astro.props;
                 <span class="lang-en">{lesson.tip.en}</span>
               </p>
             ) : null}
-            {lesson.hubLink ? (
-              <a class="link mt-2 inline-block text-sm" href={lesson.hubLink}>
-                <span class="lang-vi">Đọc thêm trong hub →</span>
-                <span class="lang-en">Read more in the hub →</span>
-              </a>
-            ) : null}
+            <a class="link mt-3 inline-block text-sm" href={`/tracks/${trackSlug}/${lessonId}`}>
+              <span class="lang-vi">Hướng dẫn chi tiết →</span>
+              <span class="lang-en">Detailed guide →</span>
+            </a>
           </div>
         </div>
       </li>
-    ))}
+    );})}
   </ol>
 </article>

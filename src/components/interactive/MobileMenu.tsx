@@ -63,7 +63,7 @@ export default function MobileMenu(props: {
     <>
       <button
         type="button"
-        className="btn btn-ghost min-h-10 min-w-10 px-2.5 lg:hidden"
+        className="btn btn-ghost min-h-10 min-w-10 px-2.5 md:hidden"
         aria-label={ui.menu}
         aria-haspopup="dialog"
         aria-expanded={open}
@@ -81,7 +81,7 @@ export default function MobileMenu(props: {
       </button>
 
       {open ? (
-        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label={ui.menu}>
+        <div className="fixed inset-0 z-50 md:hidden" role="dialog" aria-modal="true" aria-label={ui.menu}>
           <button
             type="button"
             className="absolute inset-0 bg-black/50"

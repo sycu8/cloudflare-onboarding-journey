@@ -167,6 +167,17 @@ html.dark .btn-ghost:hover:not(:disabled) {
   background: rgba(255, 255, 255, 0.06);
 }
 
+.lang-switcher-btn {
+  border: 1px solid var(--cf-border);
+  color: var(--cf-text);
+}
+
+.lang-switcher-btn:hover:not(:disabled) {
+  border-color: var(--cf-accent);
+  color: var(--cf-accent);
+  background: rgba(246, 130, 26, 0.08);
+}
+
 /* Chrome */
 .site-header {
   border-bottom: 1px solid var(--cf-border);

@@ -226,7 +226,7 @@ export const applicationServicesProposal: SolutionProposal = {
   ],
   hubLinks: [
     { href: '/content-delivery', label: { vi: 'Tối ưu content delivery', en: 'Content delivery guide' } },
-    { href: '/demo-guides#application-security', label: { vi: 'Script demo dashboard', en: 'Dashboard demo scripts' } },
+    { href: '/demo-guides#application-security', label: { vi: 'Dashboard overview', en: 'Dashboard overview' } },
     { href: '/plans', label: { vi: 'So sánh gói Business / Enterprise', en: 'Business / Enterprise plan comparison' } },
     { href: '/tracks/application-services', label: { vi: 'Lộ trình Application Services', en: 'Application Services track' } },
   ],
@@ -351,8 +351,8 @@ export const cloudflareOneSaseProposal: SolutionProposal = {
       id: 'network-warp',
       title: { vi: 'WARP & Network Services', en: 'WARP & Network Services' },
       summary: {
-        vi: 'WARP client, device enrollment, Magic WAN / on-ramp (theo phạm vi proposal), threat intelligence chung.',
-        en: 'WARP client, device enrollment, Magic WAN / on-ramp (per proposal scope), shared threat intelligence.',
+        vi: 'WARP client, device enrollment, Cloudflare WAN (trước đây là Magic WAN) / on-ramp (theo phạm vi proposal), threat intelligence chung.',
+        en: 'WARP client, device enrollment, Cloudflare WAN (formerly Magic WAN) / on-ramp (per proposal scope), shared threat intelligence.',
       },
       capabilities: [
         {
@@ -406,7 +406,7 @@ export const cloudflareOneSaseProposal: SolutionProposal = {
     },
   ],
   hubLinks: [
-    { href: '/demo-guides#cloudflare-one', label: { vi: 'Script demo Zero Trust', en: 'Zero Trust demo scripts' } },
+    { href: '/demo-guides#cloudflare-one', label: { vi: 'Dashboard overview Zero Trust', en: 'Zero Trust dashboard overview' } },
     { href: '/use-cases/replace-vpn', label: { vi: 'Tình huống thay VPN', en: 'Replace VPN use case' } },
     { href: '/tracks/cloudflare-one', label: { vi: 'Lộ trình Cloudflare One', en: 'Cloudflare One track' } },
   ],
@@ -558,7 +558,7 @@ export const emailSecurityProposal: SolutionProposal = {
   ],
   hubLinks: [
     { href: '/tracks/cloudflare-one', label: { vi: 'Lộ trình Cloudflare One', en: 'Cloudflare One track' } },
-    { href: '/demo-guides#cloudflare-one', label: { vi: 'Script demo ZT (Gateway/Access)', en: 'ZT demo scripts' } },
+    { href: '/demo-guides#cloudflare-one', label: { vi: 'Dashboard overview ZT', en: 'ZT dashboard overview' } },
     { href: 'https://developers.cloudflare.com/cloudflare-one/email-security/', label: { vi: 'Docs Email Security', en: 'Email Security docs' } },
   ],
 };

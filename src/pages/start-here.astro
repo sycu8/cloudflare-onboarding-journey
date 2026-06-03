@@ -3,6 +3,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumbs from '../components/chrome/Breadcrumbs.astro';
 import LangText from '../components/ui/LangText.astro';
 import CTASection from '../components/content/CTASection.astro';
+import ReferenceDiagramFigure from '../components/content/ReferenceDiagramFigure.astro';
+import { getDiagramsForHubPage, REF_ARCH_DIAGRAMS_URL } from '../data/referenceDiagrams';
+
+const startDiagrams = getDiagramsForHubPage('/start-here');
 ---
 
 <BaseLayout
@@ -66,14 +70,39 @@ import CTASection from '../components/content/CTASection.astro';
     </div>
   </section>
 
+  {startDiagrams.length > 0 ? (
+    <section class="mt-6">
+      <LangText
+        as="h2"
+        class="mb-4 text-lg font-semibold"
+        text={{ vi: 'Sơ đồ tham chiếu cho 3 hướng', en: 'Reference diagrams for three paths' }}
+      />
+      <p class="text-muted mb-4 max-w-3xl text-sm">
+        <span class="lang-vi">
+          Mỗi lộ trình có sơ đồ kiến trúc chính thức — bấm hình để mở bài gốc trên{' '}
+          <a class="link" href={REF_ARCH_DIAGRAMS_URL} target="_blank" rel="noopener noreferrer">Reference Diagrams</a>.
+        </span>
+        <span class="lang-en">
+          Each track has an official architecture diagram — click a figure to open the source on{' '}
+          <a class="link" href={REF_ARCH_DIAGRAMS_URL} target="_blank" rel="noopener noreferrer">Reference Diagrams</a>.
+        </span>
+      </p>
+      <div class="grid gap-6 lg:grid-cols-3">
+        {startDiagrams.map((d) => (
+          <ReferenceDiagramFigure diagram={d} compact />
+        ))}
+      </div>
+    </section>
+  ) : null}
+
   <section class="mt-6 card">
     <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'What not to do first', en: 'What not to do first' }} />
     <LangText
       as="p"
       class="text-muted mt-2 text-sm"
       text={{
-        vi: 'Không nên bắt đầu bằng việc học từng product rời rạc như WAF, Workers, R2, D1, Access, Gateway hay Magic WAN. Người mới nên bắt đầu từ use case và vấn đề thực tế.',
-        en: 'Do not start by learning isolated product names such as WAF, Workers, R2, D1, Access, Gateway, or Magic WAN. Beginners should start with use cases and practical problems.',
+        vi: 'Không nên bắt đầu bằng việc học từng product rời rạc như WAF, Workers, R2, D1, Access, Gateway hay Cloudflare WAN (trước đây là Magic WAN). Người mới nên bắt đầu từ use case và vấn đề thực tế.',
+        en: 'Do not start by learning isolated product names such as WAF, Workers, R2, D1, Access, Gateway, or Cloudflare WAN (formerly Magic WAN). Beginners should start with use cases and practical problems.',
       }}
     />
   </section>

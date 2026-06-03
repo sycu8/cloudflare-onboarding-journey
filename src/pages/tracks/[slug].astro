@@ -4,6 +4,11 @@ import Breadcrumbs from '../../components/chrome/Breadcrumbs.astro';
 import LangText from '../../components/ui/LangText.astro';
 import CTASection from '../../components/content/CTASection.astro';
 import TrackModuleCard from '../../components/content/TrackModuleCard.astro';
+import TrackContextBanner from '../../components/content/TrackContextBanner.astro';
+import TrackSwitcher from '../../components/content/TrackSwitcher.astro';
+import TrackOptionalReading from '../../components/content/TrackOptionalReading.astro';
+import CloudflareResourceGrid from '../../components/interactive/CloudflareResourceGrid';
+import { cloudflareResources } from '../../data/cloudflareResources';
 import CloudsecopArticleCard from '../../components/content/CloudsecopArticleCard.astro';
 import CloudsecopSeriesCard from '../../components/content/CloudsecopSeriesCard.astro';
 import GitHubRepoCard from '../../components/content/GitHubRepoCard.astro';
@@ -31,7 +36,9 @@ import {
   CLOUDFLARE_RESOURCE_HUB_URL,
 } from '../../data/resourceHub';
 import DemoVignetteList from '../../components/interactive/DemoVignetteList';
+import ReferenceDiagramFigure from '../../components/content/ReferenceDiagramFigure.astro';
 import { getDemosForTrack } from '../../data/demoScripts';
+import { getDiagramsForTrack } from '../../data/referenceDiagrams';
 
 export function getStaticPaths() {
   return tracks.map((t) => ({ params: { slug: t.slug } }));
@@ -62,6 +69,8 @@ const trackDemoVignettes =
   track.slug === 'application-services' || track.slug === 'cloudflare-one'
     ? getDemosForTrack(track.slug)
     : [];
+
+const trackDiagrams = getDiagramsForTrack(track.slug, 3);
 ---
 
 <BaseLayout
@@ -72,10 +81,11 @@ const trackDemoVignettes =
 >
   <Breadcrumbs
     items={[
-      { href: '/tracks', label: { vi: 'Lộ trình học', en: 'Tracks' } },
       { href: `/tracks/${track.slug}`, label: track.title },
     ]}
   />
+
+  <TrackContextBanner track={track} />
 
   <header class="mb-8">
     <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={track.title} />
@@ -92,6 +102,21 @@ const trackDemoVignettes =
     <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Mô hình tư duy', en: 'Mental model' }} />
     <LangText as="p" class="text-muted mt-2 font-mono text-sm leading-relaxed" text={track.mentalModel} />
   </section>
+
+  {trackDiagrams.length > 0 ? (
+    <section class="mb-8">
+      <LangText
+        as="h2"
+        class="mb-4 text-lg font-semibold"
+        text={{ vi: 'Sơ đồ kiến trúc tham chiếu', en: 'Reference architecture diagrams' }}
+      />
+      <div class="grid gap-6 lg:grid-cols-3">
+        {trackDiagrams.map((d) => (
+          <ReferenceDiagramFigure diagram={d} compact />
+        ))}
+      </div>
+    </section>
+  ) : null}
 
   <section class="card mb-6">
     <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Sau lộ trình bạn sẽ', en: 'What you will achieve' }} />
@@ -114,11 +139,31 @@ const trackDemoVignettes =
     </ul>
   </section>
 
+  {track.commonMistakes ? (
+    <section class="mb-8">
+      <LangText as="h2" class="text-xl font-semibold" text={{ vi: 'Lỗi thường gặp', en: 'Common mistakes' }} />
+      <div class="mt-4 grid gap-4 md:grid-cols-2">
+        {track.commonMistakes.vi.map((m, i) => (
+          <div class="card">
+            <h3 class="font-semibold">
+              <span class="lang-vi">{m.title}</span>
+              <span class="lang-en">{track.commonMistakes!.en[i].title}</span>
+            </h3>
+            <p class="text-muted mt-2 text-sm leading-relaxed">
+              <span class="lang-vi">{m.detail}</span>
+              <span class="lang-en">{track.commonMistakes!.en[i].detail}</span>
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
+  ) : null}
+
   <section class="mb-8">
     <LangText as="h2" class="mb-4 text-xl font-semibold" text={{ vi: 'Nội dung từng phần', en: 'Module-by-module content' }} />
     <div class="space-y-6">
       {track.modules.map((mod, i) => (
-        <TrackModuleCard module={mod} />
+        <TrackModuleCard module={mod} trackSlug={track.slug} />
       ))}
     </div>
   </section>
@@ -136,7 +181,7 @@ const trackDemoVignettes =
       </ol>
     </div>
     <div class="card">
-      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Tình huống liên quan', en: 'Related use cases' }} />
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Tình huống trong lộ trình', en: 'Use cases for this path' }} />
       <ul class="mt-3 space-y-2 text-sm">
         {track.relatedUseCases.map((uc) => (
           <li>
@@ -146,24 +191,34 @@ const trackDemoVignettes =
           </li>
         ))}
       </ul>
-      <LangText as="h3" class="mt-6 text-base font-semibold" text={{ vi: 'Chủ đề Learning Center', en: 'Learning Center topics' }} />
-      <ul class="text-muted mt-3 space-y-2 text-sm">
-        {relatedTopics.slice(0, 5).map((t) => (
-          <li>
-            <a class="link" href={t.officialPath} target="_blank" rel="noopener noreferrer">
-              <span class="lang-vi">{t.title.vi}</span>
-              <span class="lang-en">{t.title.en}</span>
-              {' '}↗
-            </a>
-          </li>
-        ))}
-      </ul>
-      <a class="link mt-3 inline-block text-sm" href="/resources#learning-center">
-        <LangText text={{ vi: 'Xem tất cả chủ đề', en: 'View all topics' }} />
-      </a>
     </div>
   </section>
 
+  <section id="track-resources" class="mb-8 scroll-mt-24">
+    <LangText
+      as="h2"
+      class="text-xl font-semibold"
+      text={{ vi: 'Ví dụ triển khai (trong lộ trình này)', en: 'Deployment examples (this path only)' }}
+    />
+    <p class="text-muted mt-2 max-w-3xl text-sm leading-relaxed">
+      <span class="lang-vi">
+        Tutorial và guide từ Cloudflare Resources — chỉ hiển thị nội dung phù hợp lộ trình {track.title.vi}. Mỗi bài học gợi ý 4 ví dụ riêng.
+      </span>
+      <span class="lang-en">
+        Tutorials and guides from Cloudflare Resources — only content matched to the {track.title.en} path. Each lesson suggests four examples.
+      </span>
+    </p>
+    <div class="mt-6">
+      <CloudflareResourceGrid
+        client:load
+        resources={cloudflareResources}
+        initialTrack={track.slug}
+        pageSize={9}
+      />
+    </div>
+  </section>
+
+  <TrackOptionalReading>
   {trackDemoVignettes.length > 0 ? (
     <section id="demo-guides" class="mb-8 scroll-mt-24">
       <LangText
@@ -181,27 +236,9 @@ const trackDemoVignettes =
       />
       <div class="mt-2 flex flex-wrap gap-3 text-sm">
         <a class="link" href="/demo-guides">
-          <span class="lang-vi">Script demo →</span>
-          <span class="lang-en">Demo scripts →</span>
+          <span class="lang-vi">Script demo (toàn hub) →</span>
+          <span class="lang-en">Demo scripts (full hub) →</span>
         </a>
-        {track.slug === 'application-services' ? (
-          <a class="link" href="/solutions/application-security">
-            <span class="lang-vi">Proposal App Services →</span>
-            <span class="lang-en">App Services proposal →</span>
-          </a>
-        ) : null}
-        {track.slug === 'cloudflare-one' ? (
-          <>
-            <a class="link" href="/solutions/cloudflare-one-sase">
-              <span class="lang-vi">Proposal SASE →</span>
-              <span class="lang-en">SASE proposal →</span>
-            </a>
-            <a class="link" href="/solutions/email-security">
-              <span class="lang-vi">Proposal Email →</span>
-              <span class="lang-en">Email proposal →</span>
-            </a>
-          </>
-        ) : null}
       </div>
       <div class="mt-6">
         <DemoVignetteList client:load vignettes={trackDemoVignettes} />
@@ -237,9 +274,23 @@ const trackDemoVignettes =
           <ResourceHubCard item={item} />
         ))}
       </div>
-      <a class="link mt-4 inline-block text-sm" href="/resources#resource-hub">
-        <LangText text={{ vi: 'Xem toàn bộ Resource Hub trong hub', en: 'View full Resource Hub in this hub' }} />
-      </a>
+    </section>
+  ) : null}
+
+  {relatedTopics.length > 0 ? (
+    <section class="mb-8">
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Chủ đề Learning Center', en: 'Learning Center topics' }} />
+      <ul class="text-muted mt-3 space-y-2 text-sm">
+        {relatedTopics.slice(0, 5).map((t) => (
+          <li>
+            <a class="link" href={t.officialPath} target="_blank" rel="noopener noreferrer">
+              <span class="lang-vi">{t.title.vi}</span>
+              <span class="lang-en">{t.title.en}</span>
+              {' '}↗
+            </a>
+          </li>
+        ))}
+      </ul>
     </section>
   ) : null}
 
@@ -271,9 +322,6 @@ const trackDemoVignettes =
           <ReferenceArchitectureCard item={item} />
         ))}
       </div>
-      <a class="link mt-4 inline-block text-sm" href="/resources#reference-architecture">
-        <LangText text={{ vi: 'Xem tất cả tài liệu kiến trúc', en: 'View all architecture docs' }} />
-      </a>
     </section>
   ) : null}
 
@@ -306,9 +354,6 @@ const trackDemoVignettes =
           ))}
         </div>
       ) : null}
-      <a class="link mt-4 inline-block text-sm" href="/resources#github">
-        <LangText text={{ vi: 'Xem tất cả repo gợi ý', en: 'View all suggested repos' }} />
-      </a>
     </section>
   ) : null}
 
@@ -338,14 +383,14 @@ const trackDemoVignettes =
         ))}
       </div>
     ) : null}
-    <a class="link mt-4 inline-block text-sm" href="/resources#cloudsecop">
-      <LangText text={{ vi: 'Xem tất cả bài gợi ý trong Tài nguyên', en: 'View all suggested posts in Resources' }} />
-    </a>
   </section>
+  </TrackOptionalReading>
 
   <CTASection
     title={{ vi: 'Bước tiếp theo', en: 'Next step' }}
     description={{ vi: 'Áp dụng ngay qua tình huống thực tế và checklist.', en: 'Apply what you learned via a use case and checklist.' }}
     cta={track.cta}
   />
+
+  <TrackSwitcher current={track} />
 </BaseLayout>

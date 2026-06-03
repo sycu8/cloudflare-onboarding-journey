@@ -58,10 +58,11 @@ export const firstWeekDays: FirstWeekDay[] = [
     tasks: [
       { vi: 'Đọc 2–3 lesson trong module 1', en: 'Read 2–3 lessons in module 1' },
       { vi: 'Ghi 3 thuật ngữ mới vào sổ (hoặc dùng glossary hub)', en: 'Note 3 new terms (or use the hub glossary)' },
-      { vi: 'Mở 1 link Developer Docs từ Resource Hub', en: 'Open one Developer Docs link from the Resource Hub' },
+      { vi: 'Mở 1 link Developer Docs hoặc 1 mục Changelog từ Resource Hub', en: 'Open one Developer Docs or Changelog entry from the Resource Hub' },
     ],
     hubLinks: [
       { href: '/glossary', label: { vi: 'Thuật ngữ', en: 'Glossary' } },
+      { href: '/changelog', label: { vi: 'Changelog', en: 'Changelog' } },
       { href: '/resources#resource-hub', label: { vi: 'Resource Hub', en: 'Resource Hub' } },
     ],
   },
@@ -78,7 +79,7 @@ export const firstWeekDays: FirstWeekDay[] = [
       { vi: 'Xem 1 Reference Architecture hoặc repo GitHub gợi ý', en: 'Skim one Reference Architecture doc or suggested GitHub repo' },
     ],
     hubLinks: [
-      { href: '/use-cases/protect-website', label: { vi: 'Use cases', en: 'Use cases' } },
+      { href: '/use-cases', label: { vi: 'Use cases', en: 'Use cases' } },
       { href: '/resources#reference-architecture', label: { vi: 'Reference Architecture', en: 'Reference Architecture' } },
     ],
   },
@@ -137,9 +138,11 @@ export const firstWeekDays: FirstWeekDay[] = [
       { vi: 'Viết “Definition of done” cho tuần tới (1 câu)', en: 'Write a one-sentence “definition of done” for next week' },
       { vi: 'Tham gia workshop hub hoặc bookmark Learning Center topic', en: 'Join a hub workshop or bookmark a Learning Center topic' },
       { vi: 'Đọc mục “Cập nhật nền tảng 2026” bên dưới — tránh học tên sản phẩm cũ', en: 'Read “Platform snapshot 2026” below — avoid outdated product names' },
+      { vi: 'Bookmark /status và đăng ký cập nhật trên trang status chính thức', en: 'Bookmark /status and subscribe on the official status page' },
     ],
     hubLinks: [
       { href: '/workshop', label: { vi: 'Workshop', en: 'Workshop' } },
+      { href: '/status', label: { vi: 'System status', en: 'System status' } },
       { href: '/resources#learning-center', label: { vi: 'Learning Center', en: 'Learning Center' } },
     ],
   },
@@ -157,8 +160,8 @@ export const beginnerMistakes: BeginnerMistake[] = [
   {
     id: 'product-soup',
     mistake: {
-      vi: 'Học lẫn lộn tên sản phẩm (WAF, Magic WAN, Vectorize…) trước khi có use case',
-      en: 'Memorizing product names (WAF, Magic WAN, Vectorize…) before having a use case',
+      vi: 'Học lẫn lộn tên sản phẩm (WAF, Cloudflare WAN/Magic WAN, Vectorize…) trước khi có use case',
+      en: 'Memorizing product names (WAF, Cloudflare WAN/Magic WAN, Vectorize…) before having a use case',
     },
     why: {
       vi: 'Dễ overwhelm và không biết bắt đầu từ đâu trên dashboard.',
@@ -344,6 +347,6 @@ export const platformSnapshot2026: PlatformSnapshotItem[] = [
 ];
 
 export const platformSnapshotNote: LocalizedString = {
-  vi: 'Danh sách này cập nhật theo hướng dẫn chính thức đầu 2026. Luôn đối chiếu developers.cloudflare.com trước khi triển khai production.',
-  en: 'This list aligns with official guidance as of early 2026. Always cross-check developers.cloudflare.com before production.',
+  vi: 'Danh sách này cập nhật theo hướng dẫn chính thức đầu 2026. Đối chiếu developers.cloudflare.com và /changelog (Developer Changelog) trước khi triển khai production.',
+  en: 'This list aligns with official guidance as of early 2026. Cross-check developers.cloudflare.com and /changelog (Developer Changelog) before production.',
 };

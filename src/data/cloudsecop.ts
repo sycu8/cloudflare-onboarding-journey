@@ -491,16 +491,16 @@ export const cloudsecopArticles: CloudsecopArticle[] = [
   },
   {
     slug: 'magic-wan-va-bgp-over-gre',
-    title: { vi: 'Magic WAN: kết nối site và cloud qua Cloudflare backbone', en: 'Magic WAN: site and cloud connectivity' },
+    title: { vi: 'Cloudflare WAN (Magic WAN): kết nối site và cloud qua Cloudflare backbone', en: 'Cloudflare WAN (Magic WAN): site and cloud connectivity' },
     excerpt: {
-      vi: 'IPsec, GRE, CNI, BGP — thay SD-WAN/MPLS, Magic Firewall.',
-      en: 'IPsec, GRE, CNI, BGP — SD-WAN/MPLS replacement, Magic Firewall.',
+      vi: 'IPsec, GRE, CNI, BGP — thay SD-WAN/MPLS, Cloudflare Network Firewall (Magic Firewall).',
+      en: 'IPsec, GRE, CNI, BGP — SD-WAN/MPLS replacement, Cloudflare Network Firewall (Magic Firewall).',
     },
     readMinutes: 15,
     relatedTrack: 'cloudflare-one',
     seriesId: 'cloudflare-one-handbook',
     seriesPart: 10,
-    tags: ['Magic WAN'],
+    tags: ['Cloudflare WAN'],
   },
   {
     slug: 'gateway-dns-filtering',

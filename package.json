@@ -7,10 +7,17 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/copy-dist-assets.mjs",
     "preview": "astro preview",
     "test:e2e": "playwright test",
     "test:smoke": "node scripts/smoke-test.mjs",
+    "test:prod": "node scripts/smoke-test.mjs https://cloudflare-starter-hub.pages.dev && node scripts/smoke-test.mjs https://onboarding.orangecloud.vn",
+    "deploy": "npm run build && npx wrangler pages deploy dist --project-name=cloudflare-starter-hub --commit-dirty=true",
+    "deploy:verify": "npm run test:prod",
+    "assets:sync": "node scripts/sync-static-assets-r2.mjs",
+    "diagrams:sync": "node scripts/scrape-ref-arch-diagrams.mjs",
+    "resources:sync": "node scripts/sync-cloudflare-resources.mjs",
+    "review:pr": "node scripts/review-contribution.mjs",
     "astro": "astro"
   },
   "dependencies": {

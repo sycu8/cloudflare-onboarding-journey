@@ -1,0 +1,152 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/chrome/Breadcrumbs.astro';
+import LangText from '../components/ui/LangText.astro';
+import ChangelogFeed from '../components/interactive/ChangelogFeed';
+import {
+  changelogEntries,
+  changelogIntro,
+  changelogSourceNote,
+  CLOUDFLARE_CHANGELOG_URL,
+  CLOUDFLARE_CHANGELOG_RSS_URL,
+  CLOUDFLARE_CHANGELOG_LLMS_URL,
+  CLOUDFLARE_RSS_FEEDS_URL,
+  CHANGELOG_LAST_REVIEWED,
+  getFeaturedChangelogEntries,
+} from '../data/changelog';
+
+const featured = getFeaturedChangelogEntries(4);
+---
+
+<BaseLayout
+  title={{ vi: 'Changelog sản phẩm Cloudflare', en: 'Cloudflare product changelog' }}
+  description={{
+    vi: 'Cập nhật sản phẩm từ Developer Changelog chính thức — Agents, Workers, Cloudflare One, R2, security và hơn nữa.',
+    en: 'Product updates from the official Developer Changelog — Agents, Workers, Cloudflare One, R2, security, and more.',
+  }}
+  canonicalPath="/changelog"
+  showProgressBar
+>
+  <Breadcrumbs
+    items={[
+      { href: '/resources', label: { vi: 'Tài nguyên', en: 'Resources' } },
+      { href: '/changelog', label: { vi: 'Changelog', en: 'Changelog' } },
+    ]}
+  />
+
+  <header class="mb-8">
+    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: 'Changelog sản phẩm', en: 'Product changelog' }} />
+    <LangText as="p" class="text-muted mt-2 max-w-3xl text-sm md:text-base" text={changelogIntro} />
+    <LangText as="p" class="text-muted mt-2 text-xs" text={changelogSourceNote} />
+    <div class="mt-4 flex flex-wrap gap-2">
+      <a class="btn btn-primary" href={CLOUDFLARE_CHANGELOG_URL} target="_blank" rel="noopener noreferrer">
+        <LangText text={{ vi: 'Mở changelog chính thức ↗', en: 'Open official changelog ↗' }} />
+      </a>
+      <a class="btn btn-secondary" href={CLOUDFLARE_CHANGELOG_RSS_URL} target="_blank" rel="noopener noreferrer">
+        <LangText text={{ vi: 'RSS ↗', en: 'RSS feed ↗' }} />
+      </a>
+      <a class="btn btn-secondary" href={CLOUDFLARE_RSS_FEEDS_URL} target="_blank" rel="noopener noreferrer">
+        <LangText text={{ vi: 'Tất cả RSS feeds ↗', en: 'All RSS feeds ↗' }} />
+      </a>
+      <a class="btn btn-secondary" href="/status">
+        <LangText text={{ vi: 'System status', en: 'System status' }} />
+      </a>
+    </div>
+  </header>
+
+  <section class="card mb-10">
+    <LangText
+      as="h2"
+      class="text-lg font-semibold"
+      text={{ vi: 'Nguồn chính thức', en: 'Official source' }}
+    />
+    <ul class="text-muted mt-3 list-inside list-disc space-y-1 text-sm">
+      <li>
+        <a class="link" href={CLOUDFLARE_CHANGELOG_URL} target="_blank" rel="noopener noreferrer">
+          developers.cloudflare.com/changelog
+        </a>
+        <span class="lang-vi"> — mọi bài ship theo sản phẩm, có lọc “All products”.</span>
+        <span class="lang-en"> — every product release post, with an “All products” filter.</span>
+      </li>
+      <li>
+        <a class="link" href={CLOUDFLARE_CHANGELOG_RSS_URL} target="_blank" rel="noopener noreferrer">RSS</a>
+        <span class="lang-vi"> — đăng ký trong reader hoặc automation nội bộ.</span>
+        <span class="lang-en"> — subscribe in your reader or internal automation.</span>
+      </li>
+      <li>
+        <a class="link" href={CLOUDFLARE_CHANGELOG_LLMS_URL} target="_blank" rel="noopener noreferrer">llms.txt</a>
+        <span class="lang-vi"> — chỉ mục đầy đủ cho agent/docs discovery.</span>
+        <span class="lang-en"> — full index for agent and docs discovery.</span>
+      </li>
+    </ul>
+    <p class="text-muted mt-3 text-xs">
+      <span class="lang-vi">Hub review: {CHANGELOG_LAST_REVIEWED} · {changelogEntries.length} mục chọn lọc.</span>
+      <span class="lang-en">Hub review: {CHANGELOG_LAST_REVIEWED} · {changelogEntries.length} curated entries.</span>
+    </p>
+  </section>
+
+  <section class="mb-10">
+    <LangText as="h2" class="mb-4 text-lg font-semibold" text={{ vi: 'Nổi bật gần đây', en: 'Recent highlights' }} />
+    <ul class="grid gap-4 md:grid-cols-2">
+      {featured.map((entry) => (
+        <li class="card">
+          <time class="text-muted text-xs font-medium tabular-nums" datetime={entry.date}>
+            {entry.date}
+          </time>
+          <h3 class="mt-2 text-sm font-semibold leading-snug">
+            <a class="link" href={entry.href} target="_blank" rel="noopener noreferrer">
+              <span class="lang-vi">{entry.title.vi}</span>
+              <span class="lang-en">{entry.title.en}</span>
+            </a>
+          </h3>
+          <p class="text-muted mt-2 text-xs leading-relaxed">
+            <span class="lang-vi">{entry.summary.vi}</span>
+            <span class="lang-en">{entry.summary.en}</span>
+          </p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section id="entries">
+    <LangText
+      as="h2"
+      class="mb-4 text-lg font-semibold"
+      text={{ vi: 'Danh sách chọn lọc', en: 'Curated entries' }}
+    />
+    <ChangelogFeed client:load entries={changelogEntries} />
+  </section>
+
+  <section class="card mt-10">
+    <LangText
+      as="h2"
+      class="text-lg font-semibold"
+      text={{ vi: 'Cách dùng trong lộ trình học', en: 'How to use this in your learning path' }}
+    />
+    <ul class="text-muted mt-3 list-inside list-disc space-y-2 text-sm">
+      <li>
+        <span class="lang-vi">Trước lab production: đọc 1–2 bài changelog cho sản phẩm bạn sắp bật (WAF, WARP, Workers…).</span>
+        <span class="lang-en">Before a production lab: read 1–2 changelog posts for the product you are about to enable (WAF, WARP, Workers, etc.).</span>
+      </li>
+      <li>
+        <span class="lang-vi">Khi docs trong hub có vẻ cũ: đối chiếu tên dashboard/menu với bài changelog cùng tháng.</span>
+        <span class="lang-en">When hub copy feels stale: cross-check dashboard names with a changelog post from the same month.</span>
+      </li>
+      <li>
+        <span class="lang-vi">Theo dõi RSS nếu bạn vận hành nhiều zone hoặc nhiều sản phẩm Cloudflare One + Workers.</span>
+        <span class="lang-en">Subscribe via RSS if you operate many zones or both Cloudflare One and Workers stacks.</span>
+      </li>
+    </ul>
+    <div class="mt-4 flex flex-wrap gap-2">
+      <a class="btn btn-secondary" href="/resources">
+        <LangText text={{ vi: '← Tài nguyên', en: '← Resources' }} />
+      </a>
+      <a class="btn btn-secondary" href="/first-week">
+        <LangText text={{ vi: 'Tuần đầu', en: 'First week' }} />
+      </a>
+      <a class="btn btn-secondary" href="/status">
+        <LangText text={{ vi: 'System status', en: 'System status' }} />
+      </a>
+    </div>
+  </section>
+</BaseLayout>

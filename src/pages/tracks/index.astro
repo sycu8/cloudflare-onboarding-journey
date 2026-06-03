@@ -22,8 +22,8 @@ import { tracks } from '../../data/tracks';
       as="p"
       class="text-muted mt-2 max-w-3xl text-sm leading-relaxed"
       text={{
-        vi: 'Chọn một trong ba hướng phù hợp vai trò của bạn. Mỗi lộ trình có phần học chi tiết, trình tự gợi ý và liên kết tình huống thực tế.',
-        en: 'Pick one of three directions that fits your role. Each track has detailed modules, a suggested order, and links to practical use cases.',
+        vi: 'Chọn một lộ trình và học tuần tự trong phạm vi đó — không cần mở chéo lộ trình khác. Khi xong hoặc đổi vai trò, bạn có thể chuyển sang lộ trình khác.',
+        en: 'Pick one path and learn sequentially within it — no need to cross into other paths. When you are done or your role changes, switch to another path.',
       }}
     />
   </header>
@@ -43,8 +43,12 @@ import { tracks } from '../../data/tracks';
           ))}
         </ul>
         <a class="btn btn-primary mt-4 w-full justify-center" href={`/tracks/${track.slug}`}>
-          <LangText text={{ vi: 'Xem lộ trình chi tiết', en: 'View full track' }} />
+          <LangText text={{ vi: 'Vào lộ trình này', en: 'Enter this path' }} />
         </a>
+        <p class="text-muted mt-2 text-center text-xs">
+          <span class="lang-vi">Lộ trình độc lập — không bắt buộc học song song</span>
+          <span class="lang-en">Self-contained path — no parallel study required</span>
+        </p>
       </article>
     ))}
   </div>

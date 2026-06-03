@@ -1,0 +1,61 @@
+---
+import LangText from '../ui/LangText.astro';
+import type { ReferenceDiagram } from '../../data/referenceDiagrams';
+
+type Props = {
+  diagram: ReferenceDiagram;
+  imageIndex?: number;
+  compact?: boolean;
+};
+
+const { diagram, imageIndex = 0, compact = false } = Astro.props;
+const image = diagram.images[imageIndex] ?? diagram.images[0];
+if (!image) return null;
+---
+
+<figure class:list={['ref-diagram', compact && 'ref-diagram-compact']}>
+  <a
+    href={diagram.pageUrl}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="ref-diagram-link block overflow-hidden rounded-xl border border-[var(--cf-border)] bg-[var(--cf-bg-elevated)]"
+  >
+    <img
+      src={image.url}
+      alt={image.alt.en}
+      title={image.alt.en}
+      loading="lazy"
+      decoding="async"
+      class="ref-diagram-img w-full"
+    />
+  </a>
+  <figcaption class="text-muted mt-2 space-y-1 text-xs leading-relaxed">
+    <LangText as="p" class="font-medium text-[var(--cf-text)]" text={diagram.title} />
+    <LangText as="p" text={diagram.summary} />
+    {diagram.concepts.length > 0 ? (
+      <p>
+        <span class="lang-vi">Thuật ngữ: </span>
+        <span class="lang-en">Concepts: </span>
+        {diagram.concepts.join(' · ')}
+      </p>
+    ) : null}
+    <p>
+      <a class="link" href={diagram.pageUrl} target="_blank" rel="noopener noreferrer">
+        <LangText text={{ vi: 'Sơ đồ chính thức ↗', en: 'Official diagram ↗' }} />
+      </a>
+      <span class="opacity-70"> · </span>
+      <LangText text={diagram.categoryLabel} />
+    </p>
+  </figcaption>
+</figure>
+
+<style>
+  .ref-diagram-img {
+    max-height: min(28rem, 70vh);
+    object-fit: contain;
+    object-position: center top;
+  }
+  .ref-diagram-compact .ref-diagram-img {
+    max-height: 14rem;
+  }
+</style>

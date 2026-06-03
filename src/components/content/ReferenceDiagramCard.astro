@@ -1,0 +1,51 @@
+---
+import LangText from '../ui/LangText.astro';
+import type { ReferenceDiagram } from '../../data/referenceDiagrams';
+import { diagramCategoryLabels } from '../../data/referenceDiagrams';
+
+type Props = { diagram: ReferenceDiagram };
+const { diagram } = Astro.props;
+---
+
+<article class="card flex h-full flex-col overflow-hidden p-0">
+  <a
+    href={diagram.pageUrl}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="block overflow-hidden border-b border-[var(--cf-border)] bg-[var(--cf-bg-elevated)]"
+  >
+    <img
+      src={diagram.primaryImageUrl}
+      alt={diagram.images[0]?.alt.en ?? diagram.title.en}
+      loading="lazy"
+      decoding="async"
+      class="h-40 w-full object-contain object-center p-2"
+    />
+  </a>
+  <div class="flex flex-1 flex-col p-4">
+    <div class="flex flex-wrap items-center gap-2">
+      <span class="badge badge-accent"><LangText text={diagram.categoryLabel} /></span>
+      {diagram.featured ? (
+        <span class="badge">
+          <span class="lang-vi">Nổi bật</span>
+          <span class="lang-en">Featured</span>
+        </span>
+      ) : null}
+    </div>
+    <LangText as="h3" class="mt-2 text-base font-semibold leading-snug" text={diagram.title} />
+    <LangText as="p" class="text-muted mt-2 flex-1 text-sm leading-relaxed" text={diagram.summary} />
+    {diagram.concepts.length > 0 ? (
+      <p class="text-muted mt-2 text-xs">
+        {diagram.concepts.slice(0, 4).join(' · ')}
+      </p>
+    ) : null}
+    <a
+      class="btn btn-secondary mt-4 w-full justify-center"
+      href={diagram.pageUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <LangText text={{ vi: 'Mở sơ đồ ↗', en: 'Open diagram ↗' }} />
+    </a>
+  </div>
+</article>

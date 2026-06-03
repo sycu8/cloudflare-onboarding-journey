@@ -15,7 +15,7 @@ const currentPath = Astro.url.pathname;
       <CloudflareLogo />
     </a>
 
-    <nav class="hidden items-center gap-0.5 lg:flex" aria-label="Primary">
+    <nav class="hidden items-center gap-0.5 md:flex" aria-label="Primary">
       {primaryNavItems.map((item) => {
         const active =
           currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href));
@@ -35,7 +35,7 @@ const currentPath = Astro.url.pathname;
       <MobileMenu client:load primary={[...mobileNavPrimary]} more={[...mobileNavMore]} />
       <ThemeToggle client:load />
       <LanguageSwitcher client:load />
-      <a href="/choose-your-path" class="btn btn-primary ml-1 hidden px-3 py-2 text-sm lg:inline-flex">
+      <a href="/choose-your-path" class="btn btn-primary ml-1 hidden px-3 py-2 text-sm md:inline-flex">
         <LangText text={{ vi: 'Chọn lộ trình', en: 'Choose path' }} />
       </a>
     </div>

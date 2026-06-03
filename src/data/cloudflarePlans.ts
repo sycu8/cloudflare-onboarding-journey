@@ -25,8 +25,8 @@ export const planCategories = plansData.categories as PlanCategory[];
 export const businessEnterpriseHighlights = plansData.highlights as (PlanFeature & { categoryId: string })[];
 
 export const PLANS_SOURCE_NOTE: LocalizedString = {
-  vi: 'Bảng tính năng trích từ tài liệu nội bộ so sánh gói 2025 (Free / Pro / Business / Enterprise). Giá và tên tính năng có thể thay đổi — xác nhận với Cloudflare Sales hoặc hợp đồng trước khi mua.',
-  en: 'Feature matrix from an internal 2025 plan comparison (Free / Pro / Business / Enterprise). Pricing and feature names may change — confirm with Cloudflare Sales or your contract before purchasing.',
+  vi: 'Bảng tính năng mang tính “snapshot”. Dữ liệu ban đầu dựa trên so sánh nội bộ 2025 (Free / Pro / Business / Enterprise) và được rà soát lại cách diễn giải trong 2026. Giá/tên tính năng thay đổi thường xuyên — luôn đối chiếu cloudflare.com/plans và developers.cloudflare.com trước khi ra quyết định.',
+  en: 'This feature matrix is a “snapshot”. The baseline originated from a 2025 internal comparison (Free / Pro / Business / Enterprise) and the wording was re-reviewed in 2026. Pricing and feature names change frequently — always cross-check cloudflare.com/plans and developers.cloudflare.com before purchasing decisions.',
 };
 
 export const plansPageIntro: LocalizedString = {

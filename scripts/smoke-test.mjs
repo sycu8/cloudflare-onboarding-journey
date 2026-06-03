@@ -12,8 +12,12 @@ const ROUTES = [
   '/choose-your-path',
   '/tracks',
   '/tracks/application-services',
+  '/tracks/application-services/as-1-l1',
+  '/tracks/developer-platform/dp-1-l1',
+  '/tracks/cloudflare-one/c1-2-l1',
   '/tracks/developer-platform',
   '/tracks/cloudflare-one',
+  '/use-cases',
   '/use-cases/protect-website',
   '/use-cases/secure-api',
   '/use-cases/build-serverless-app',
@@ -22,7 +26,13 @@ const ROUTES = [
   '/checklists/beginner-cloudflare-checklist',
   '/quiz/beginner-readiness',
   '/glossary',
+  '/products',
+  '/products/workers',
+  '/products/waf',
+  '/products/zero-trust',
   '/resources',
+  '/changelog',
+  '/status',
   '/plans',
   '/demo-guides',
   '/content-delivery',
@@ -37,6 +47,8 @@ const ROUTES = [
 ];
 
 const API_ROUTES = ['/api/workshop-events', '/api/site-config'];
+
+const ASSET_ROUTES = ['/assets/favicon.svg', '/assets/og-image.svg'];
 
 const FAIL_PATTERNS = [
   /Astro island hydration error/i,
@@ -82,6 +94,20 @@ for (const path of ROUTES) {
     }
     if (!text.includes('<main')) warnings.push(`${path} → missing <main>`);
     console.log(`✓ ${path}`);
+  } catch (e) {
+    errors.push(`${path} → ${e.message}`);
+  }
+}
+
+for (const path of ASSET_ROUTES) {
+  try {
+    const res = await fetch(`${BASE}${path}`, { redirect: 'follow' });
+    if (!res.ok) errors.push(`${path} → HTTP ${res.status}`);
+    else {
+      const ct = res.headers.get('content-type') || '';
+      if (!ct.includes('image/')) warnings.push(`${path} → unexpected content-type ${ct}`);
+      console.log(`✓ ${path}`);
+    }
   } catch (e) {
     errors.push(`${path} → ${e.message}`);
   }

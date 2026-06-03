@@ -243,12 +243,12 @@ export const glossary: GlossaryTerm[] = [
     },
   },
   {
-    term: 'Magic WAN',
+    term: 'Cloudflare WAN',
     category: 'Zero Trust',
     relatedTrack: 'cloudflare-one',
     definition: {
-      vi: 'Magic WAN hiện đại hoá kết nối WAN, kết hợp routing + security trên mạng Cloudflare.',
-      en: 'Magic WAN modernizes WAN connectivity with routing + security on Cloudflare’s network.',
+      vi: 'Cloudflare WAN (trước đây là Magic WAN) hiện đại hoá kết nối WAN, kết hợp routing + security trên mạng Cloudflare.',
+      en: 'Cloudflare WAN (formerly Magic WAN) modernizes WAN connectivity with routing + security on Cloudflare’s network.',
     },
   },
   {
