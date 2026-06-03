@@ -80,6 +80,15 @@ const conceptOverlay: Record<string, string[]> = {
   'augment-access-with-serverless': ['Access', 'External Evaluation', 'Workers', 'ZTNA'],
   'cloudflare-one-appliance-deployment': ['Cloudflare One Client', 'WARP', 'MDM', 'On-prem appliance'],
   'securing-data-in-transit': ['Gateway', 'DLP', 'TLS', 'CASB', 'Inline inspection'],
+  'api-shield-workflow': [
+    'API Shield',
+    'Endpoint discovery',
+    'Schema validation',
+    'mTLS',
+    'JWT validation',
+    'Rate limiting',
+    'Positive security model',
+  ],
   'securing-data-at-rest': ['CASB', 'SaaS API', 'Data at rest', 'DLP'],
   'protect-hybrid-cloud-networks-with-cloudflare-magic-transit': ['Magic Transit', 'DDoS', 'Anycast', 'Hybrid cloud'],
   'storing-user-generated-content': ['R2', 'Workers', 'UGC', 'Object storage'],
@@ -98,6 +107,8 @@ const viSummaryOverlay: Record<string, string> = {
     'Zero Trust cho SaaS: policy theo identity, device posture và network context qua Cloudflare One.',
   'securing-data-in-transit':
     'Bảo vệ data in transit với Gateway/DLP — inspect TLS traffic trước khi tới SaaS hoặc Internet.',
+  'api-shield-workflow':
+    'Luồng API Shield: discovery endpoint → review → positive security (schema, mTLS, JWT) → chống abuse → giám sát endpoint.',
 };
 
 const featuredSlugs = new Set([
@@ -170,7 +181,7 @@ export const trackDiagramSlugs: Record<
 
 export const useCaseDiagramSlugs: Record<string, string[]> = {
   'protect-website': ['bot-management', 'distributed-web-performance-architecture'],
-  'secure-api': ['securing-data-in-transit', 'bot-management'],
+  'secure-api': ['api-shield-workflow'],
   'build-serverless-app': ['fullstack-application', 'serverless-global-apis'],
   'replace-vpn': [
     'secure-access-to-saas-applications-with-sase',

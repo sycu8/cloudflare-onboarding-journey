@@ -116,24 +116,27 @@ export const useCases: UseCase[] = [
     },
     bullets: {
       vi: [
+        'API Shield: discovery endpoint, schema validation, sequence analytics',
         'WAF + managed rules cho pattern phổ biến',
         'Rate limiting theo endpoint (login, OTP, search, checkout)',
         'Bot protection cho traffic automation xấu',
-        'Schema validation cho request/response quan trọng',
-        'mTLS/token validation cho internal/auth endpoints',
+        'mTLS/JWT validation cho client và auth endpoints',
         'Logging/analytics để thấy top paths & top clients',
       ],
       en: [
+        'API Shield: endpoint discovery, schema validation, sequence analytics',
         'WAF + managed rules for common patterns',
         'Endpoint-based rate limiting (login, OTP, search, checkout)',
         'Bot protection for harmful automation',
-        'Schema validation for critical request/response',
-        'mTLS/token validation for internal/auth endpoints',
+        'mTLS/JWT validation for clients and auth endpoints',
         'Logging/analytics to see top paths & clients',
       ],
     },
     relatedTrack: 'application-services',
-    nextCta: { href: '/quiz/beginner-readiness', label: { vi: 'Làm quiz', en: 'Take quiz' } },
+    nextCta: {
+      href: '/products/api-shield',
+      label: { vi: 'Xem API Shield', en: 'Explore API Shield' },
+    },
   },
   {
     slug: 'defend-ddos-attacks',

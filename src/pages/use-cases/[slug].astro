@@ -17,6 +17,10 @@ if (!uc) throw new Error('Use case not found');
 const useCaseDiagrams = getDiagramsForUseCase(uc.slug);
 const trackMeta = useCaseTrackLabels[uc.relatedTrack];
 const siblingUseCases = getUseCasesByTrack(uc.relatedTrack).filter((u) => u.slug !== uc.slug);
+const diagramSectionTitle =
+  uc.slug === 'secure-api'
+    ? { vi: 'Sơ đồ tham chiếu — API Shield', en: 'Reference diagram — API Shield' }
+    : { vi: 'Sơ đồ tham chiếu (Cloudflare Docs)', en: 'Reference diagrams (Cloudflare Docs)' };
 ---
 
 <BaseLayout title={uc.title} description={uc.problem} canonicalPath={`/use-cases/${uc.slug}`} showProgressBar>
@@ -56,11 +60,7 @@ const siblingUseCases = getUseCasesByTrack(uc.relatedTrack).filter((u) => u.slug
 
   {useCaseDiagrams.length > 0 ? (
     <section class="mt-6">
-      <LangText
-        as="h2"
-        class="mb-4 text-lg font-semibold"
-        text={{ vi: 'Sơ đồ tham chiếu (Cloudflare Docs)', en: 'Reference diagrams (Cloudflare Docs)' }}
-      />
+      <LangText as="h2" class="mb-4 text-lg font-semibold" text={diagramSectionTitle} />
       <div class="grid gap-6 lg:grid-cols-2">
         {useCaseDiagrams.map((d) => (
           <ReferenceDiagramFigure diagram={d} />

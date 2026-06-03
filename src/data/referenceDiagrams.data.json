@@ -717,5 +717,18 @@
         "alt": "Use Case 2: AI-Generated Content Stored in R2"
       }
     ]
+  },
+  {
+    "slug": "api-shield-workflow",
+    "category": "security",
+    "title": "Common user workflow for API Shield",
+    "desc": "API Shield stages: endpoint discovery, review, positive security model (schema, mTLS, JWT), abuse protection, sensitive data detection, and endpoint monitoring — from Cloudflare Security Reference Architecture.",
+    "pageUrl": "https://developers.cloudflare.com/reference-architecture/architectures/security/#api-shield",
+    "images": [
+      {
+        "url": "https://developers.cloudflare.com/_astro/security-ref-arch-11.CCbosnqv_oq720.svg",
+        "alt": "API Shield has many stages: discovery, review, positive security model, abuse protection, data protection, and endpoint management/monitoring."
+      }
+    ]
   }
 ]
