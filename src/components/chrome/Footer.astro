@@ -1,6 +1,7 @@
 ---
 import LangText from '../ui/LangText.astro';
 import CloudflareLogo from './CloudflareLogo.astro';
+import { useCaseTrackOrder, getUseCasesByTrack } from '../../data/useCases';
 ---
 
 <footer class="site-footer py-12">
@@ -37,10 +38,28 @@ import CloudflareLogo from './CloudflareLogo.astro';
         <LangText text={{ vi: 'Tình huống thực tế', en: 'Use cases' }} />
       </div>
       <ul class="space-y-2">
-        <li><a class="link font-medium" href="/use-cases"><LangText text={{ vi: 'Tất cả tình huống', en: 'All use cases' }} /></a></li>
-        <li><a class="link" href="/use-cases/application-services">Application Services</a></li>
-        <li><a class="link" href="/use-cases/developer-platform">Developer Platform</a></li>
-        <li><a class="link" href="/use-cases/cloudflare-one">Cloudflare One</a></li>
+        <li><a class="link font-medium" href="/use-cases/"><LangText text={{ vi: 'Tất cả tình huống', en: 'All use cases' }} /></a></li>
+        {
+          useCaseTrackOrder.map((track) => {
+            const cases = getUseCasesByTrack(track);
+            return (
+              <li class="pt-1">
+                <a class="link text-xs font-medium uppercase tracking-wide" href={`/use-cases/${track}/`}>
+                  {track.replace(/-/g, ' ')}
+                </a>
+                <ul class="mt-1 space-y-1 pl-0">
+                  {cases.map((uc) => (
+                    <li>
+                      <a class="link text-[var(--cf-text-muted)]" href={`/use-cases/${uc.slug}/`}>
+                        <LangText text={uc.title} />
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            );
+          })
+        }
       </ul>
       <div class="pt-2">
         <a class="btn btn-secondary w-full" href="/workshop">

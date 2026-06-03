@@ -16,8 +16,8 @@ const cases = getUseCasesByTrack(track);
 
 <Breadcrumbs
   items={[
-    { href: '/use-cases', label: { vi: 'Tình huống thực tế', en: 'Use cases' } },
-    { href: `/use-cases/${track}`, label: meta.title },
+    { href: '/use-cases/', label: { vi: 'Tình huống thực tế', en: 'Use cases' } },
+    { href: `/use-cases/${track}/`, label: meta.title },
   ]}
 />
 
@@ -28,7 +28,7 @@ const cases = getUseCasesByTrack(track);
     <a class="btn btn-secondary" href={meta.trackHref}>
       <LangText text={{ vi: 'Vào lộ trình học', en: 'Open learning track' }} />
     </a>
-    <a class="link self-center text-sm" href="/use-cases">
+    <a class="link self-center text-sm" href="/use-cases/">
       <LangText text={{ vi: '← Ba nhóm tình huống', en: '← All three groups' }} />
     </a>
   </div>

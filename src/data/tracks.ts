@@ -235,8 +235,9 @@ export const tracks: Track[] = [
       ],
     },
     relatedUseCases: [
-      { href: '/use-cases/protect-website', label: { vi: 'Bảo vệ website', en: 'Protect a website' } },
-      { href: '/use-cases/secure-api', label: { vi: 'Bảo vệ API', en: 'Secure an API' } },
+      { href: '/use-cases/protect-website/', label: { vi: 'Bảo vệ website', en: 'Protect a website' } },
+      { href: '/use-cases/secure-api/', label: { vi: 'Bảo vệ API', en: 'Secure an API' } },
+      { href: '/use-cases/defend-ddos-attacks/', label: { vi: 'Chống DDoS', en: 'Defend DDoS' } },
     ],
     cta: { href: '/use-cases/application-services', label: { vi: 'Tình huống Application Services', en: 'Application Services use cases' } },
   },
@@ -413,7 +414,8 @@ export const tracks: Track[] = [
       ],
     },
     relatedUseCases: [
-      { href: '/use-cases/build-serverless-app', label: { vi: 'Build serverless app', en: 'Build a serverless app' } },
+      { href: '/use-cases/build-serverless-app/', label: { vi: 'Build serverless app', en: 'Build a serverless app' } },
+      { href: '/use-cases/deploy-static-site/', label: { vi: 'Deploy static site', en: 'Deploy static site' } },
     ],
     commonMistakes: {
       vi: [
@@ -630,8 +632,9 @@ export const tracks: Track[] = [
       ],
     },
     relatedUseCases: [
-      { href: '/use-cases/replace-vpn', label: { vi: 'Thay thế VPN', en: 'Replace VPN' } },
-      { href: '/use-cases/secure-remote-users', label: { vi: 'Bảo vệ remote users', en: 'Secure remote users' } },
+      { href: '/use-cases/replace-vpn/', label: { vi: 'Thay thế VPN', en: 'Replace VPN' } },
+      { href: '/use-cases/secure-remote-users/', label: { vi: 'Kết nối user an toàn', en: 'Secure user connections' } },
+      { href: '/use-cases/secure-saas-access/', label: { vi: 'Truy cập SaaS', en: 'Secure SaaS access' } },
     ],
     commonMistakes: {
       vi: [

@@ -12,6 +12,7 @@ import sitemap from '@astrojs/sitemap';
 // https://astro.build/config
 export default defineConfig({
   site: process.env.PUBLIC_SITE_URL || 'https://cloudflare-starter-hub.pages.dev',
+  trailingSlash: 'always',
   vite: {
     plugins: [tailwindcss()]
   },

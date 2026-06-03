@@ -22,9 +22,9 @@ const siblingUseCases = getUseCasesByTrack(uc.relatedTrack).filter((u) => u.slug
 <BaseLayout title={uc.title} description={uc.problem} canonicalPath={`/use-cases/${uc.slug}`} showProgressBar>
   <Breadcrumbs
     items={[
-      { href: '/use-cases', label: { vi: 'Tình huống thực tế', en: 'Use cases' } },
-      { href: `/use-cases/${uc.relatedTrack}`, label: trackMeta.title },
-      { href: `/use-cases/${uc.slug}`, label: uc.title },
+      { href: '/use-cases/', label: { vi: 'Tình huống thực tế', en: 'Use cases' } },
+      { href: `/use-cases/${uc.relatedTrack}/`, label: trackMeta.title },
+      { href: `/use-cases/${uc.slug}/`, label: uc.title },
     ]}
   />
 

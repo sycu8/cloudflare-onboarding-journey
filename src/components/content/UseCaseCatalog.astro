@@ -1,0 +1,64 @@
+---
+import LangText from '../ui/LangText.astro';
+import UseCaseCard from './UseCaseCard.astro';
+import {
+  useCaseTrackLabels,
+  useCaseTrackOrder,
+  getUseCasesByTrack,
+  useCases,
+} from '../../data/useCases';
+---
+
+<section class="mb-6 grid gap-3 sm:grid-cols-3">
+  {
+    useCaseTrackOrder.map((trackKey) => {
+      const meta = useCaseTrackLabels[trackKey];
+      const count = getUseCasesByTrack(trackKey).length;
+      return (
+        <a class="card block transition hover:border-[var(--cf-accent)]" href={`/use-cases/${trackKey}/`}>
+          <LangText as="h2" class="text-base font-semibold" text={meta.title} />
+          <LangText as="p" class="text-muted mt-1 text-xs" text={meta.headline} />
+          <p class="text-muted mt-2 text-xs">
+            <span class="lang-vi">{count} tình huống · Lộ trình học →</span>
+            <span class="lang-en">{count} scenarios · Learning track →</span>
+          </p>
+        </a>
+      );
+    })
+  }
+</section>
+
+{
+  useCaseTrackOrder.map((trackKey) => {
+    const meta = useCaseTrackLabels[trackKey];
+    const cases = getUseCasesByTrack(trackKey);
+    return (
+      <section id={trackKey} class="mb-10 scroll-mt-24">
+        <div class="mb-4 flex flex-col gap-3 border-b border-[var(--cf-border)] pb-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <LangText as="h2" class="text-xl font-semibold" text={meta.title} />
+            <LangText as="p" class="text-muted mt-1 text-sm" text={meta.headline} />
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <a class="btn btn-secondary shrink-0 text-sm" href={`/use-cases/${trackKey}/`}>
+              <LangText text={{ vi: 'Trang nhóm này', en: 'This group page' }} />
+            </a>
+            <a class="btn btn-ghost shrink-0 text-sm" href={meta.trackHref}>
+              <LangText text={{ vi: 'Lộ trình học', en: 'Learning track' }} />
+            </a>
+          </div>
+        </div>
+        <div class="grid gap-4 md:grid-cols-2">
+          {cases.map((uc) => (
+            <UseCaseCard useCase={uc} showTrack={false} />
+          ))}
+        </div>
+      </section>
+    );
+  })
+}
+
+<p class="text-muted text-center text-xs">
+  <span class="lang-vi">{useCases.length} tình huống — gắn với lộ trình Application Services, Developer Platform và Cloudflare One.</span>
+  <span class="lang-en">{useCases.length} scenarios — mapped to Application Services, Developer Platform, and Cloudflare One tracks.</span>
+</p>

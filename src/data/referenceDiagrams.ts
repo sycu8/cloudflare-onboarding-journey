@@ -180,6 +180,12 @@ export const useCaseDiagramSlugs: Record<string, string[]> = {
     'cloudflare-one-appliance-deployment',
     'zero-trust-and-virtual-desktop-infrastructure',
   ],
+  'defend-ddos-attacks': ['bot-management', 'distributed-web-performance-architecture'],
+  'deploy-static-site': ['fullstack-application', 'serverless-global-apis'],
+  'secure-saas-access': [
+    'secure-access-to-saas-applications-with-sase',
+    'sase-clientless-access-private-dns',
+  ],
 };
 
 /** Map Reference Architecture hub card slug → diagram slug (when paths differ). */

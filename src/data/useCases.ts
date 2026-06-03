@@ -1,7 +1,17 @@
 import type { LocalizedString } from '../i18n/types';
 
+export type UseCaseSlug =
+  | 'protect-website'
+  | 'secure-api'
+  | 'defend-ddos-attacks'
+  | 'build-serverless-app'
+  | 'deploy-static-site'
+  | 'replace-vpn'
+  | 'secure-remote-users'
+  | 'secure-saas-access';
+
 export type UseCase = {
-  slug: 'protect-website' | 'secure-api' | 'build-serverless-app' | 'replace-vpn' | 'secure-remote-users';
+  slug: UseCaseSlug;
   title: LocalizedString;
   problem: LocalizedString;
   architecture: LocalizedString;
@@ -126,6 +136,39 @@ export const useCases: UseCase[] = [
     nextCta: { href: '/quiz/beginner-readiness', label: { vi: 'Làm quiz', en: 'Take quiz' } },
   },
   {
+    slug: 'defend-ddos-attacks',
+    title: { vi: 'Chống DDoS và giữ site online', en: 'Defend against DDoS and stay online' },
+    problem: {
+      vi: 'Website hoặc API bị flood traffic, dễ sập origin hoặc tốn chi phí bandwidth khi không có lớp bảo vệ L3/L7.',
+      en: 'Your website or API faces traffic floods, risking origin overload or bandwidth cost without L3/L7 protection.',
+    },
+    architecture: {
+      vi: 'Attacker/bot → Cloudflare edge (DDoS + WAF + rate limit) → Origin',
+      en: 'Attacker/bot → Cloudflare edge (DDoS + WAF + rate limit) → Origin',
+    },
+    bullets: {
+      vi: [
+        'Bật proxy orange-cloud cho record public',
+        'DDoS protection tự động ở edge; theo dõi Security Events',
+        'WAF managed rules + custom rules cho pattern lạ',
+        'Rate limiting khi attack nhắm path cụ thể',
+        'Origin chỉ nhận traffic đã lọc — chặn bypass IP trực tiếp',
+      ],
+      en: [
+        'Proxy public DNS records (orange cloud)',
+        'Automatic edge DDoS protection; monitor Security Events',
+        'WAF managed + custom rules for unusual patterns',
+        'Rate limiting when attacks target specific paths',
+        'Origin accepts filtered traffic only — block direct IP bypass',
+      ],
+    },
+    relatedTrack: 'application-services',
+    nextCta: {
+      href: '/tracks/application-services/as-3-l1',
+      label: { vi: 'Bài học DDoS & WAF', en: 'DDoS & WAF lesson' },
+    },
+  },
+  {
     slug: 'build-serverless-app',
     title: { vi: 'Build serverless app trên Cloudflare', en: 'Build a serverless app on Cloudflare' },
     problem: {
@@ -190,6 +233,39 @@ export const useCases: UseCase[] = [
     nextCta: { href: '/tracks/developer-platform', label: { vi: 'Xem track Developer Platform', en: 'View Developer Platform track' } },
   },
   {
+    slug: 'deploy-static-site',
+    title: { vi: 'Deploy static site với Pages', en: 'Deploy a static site with Pages' },
+    problem: {
+      vi: 'Bạn có frontend tĩnh (marketing site, docs, landing) và muốn deploy nhanh, HTTPS, preview PR mà không quản lý server.',
+      en: 'You have a static frontend (marketing, docs, landing) and want fast deploy, HTTPS, and PR previews without servers.',
+    },
+    architecture: {
+      vi: 'Git push → Cloudflare Pages build → Global CDN → Visitor',
+      en: 'Git push → Cloudflare Pages build → Global CDN → Visitor',
+    },
+    steps: {
+      vi: [
+        'Kết nối repo Git (GitHub/GitLab)',
+        'Chọn framework preset và output directory (Astro: dist)',
+        'Deploy production branch',
+        'Dùng preview URL cho mỗi PR',
+        'Tùy chọn: custom domain + Web Analytics',
+      ],
+      en: [
+        'Connect a Git repo (GitHub/GitLab)',
+        'Pick framework preset and output directory (Astro: dist)',
+        'Deploy production branch',
+        'Use preview URLs per PR',
+        'Optional: custom domain + Web Analytics',
+      ],
+    },
+    relatedTrack: 'developer-platform',
+    nextCta: {
+      href: '/tracks/developer-platform/dp-1-l1',
+      label: { vi: 'Bài học Pages', en: 'Pages lesson' },
+    },
+  },
+  {
     slug: 'replace-vpn',
     title: { vi: 'Thay thế VPN bằng Zero Trust access', en: 'Replace VPN with Zero Trust access' },
     problem: {
@@ -239,7 +315,10 @@ export const useCases: UseCase[] = [
   },
   {
     slug: 'secure-remote-users',
-    title: { vi: 'Bảo vệ remote users với Cloudflare One', en: 'Secure remote users with Cloudflare One' },
+    title: {
+      vi: 'Kết nối user an toàn (remote & hybrid)',
+      en: 'Secure user connections (remote & hybrid)',
+    },
     problem: {
       vi: 'Users làm việc từ nhiều network, dùng SaaS tools, truy cập internal apps và duyệt Internet ngoài office perimeter.',
       en: 'Users work from many networks, use SaaS tools, access internal apps, and browse the Internet outside the office perimeter.',
@@ -299,6 +378,39 @@ export const useCases: UseCase[] = [
     },
     nextCta: { href: '/workshop', label: { vi: 'Tham gia workshop', en: 'Join workshop' } },
   },
+  {
+    slug: 'secure-saas-access',
+    title: { vi: 'Truy cập SaaS an toàn với Access', en: 'Secure SaaS access with Access' },
+    problem: {
+      vi: 'Team dùng Salesforce, Google Workspace, internal tools — cần SSO, policy theo group và không mở toàn bộ mạng như VPN.',
+      en: 'Teams use Salesforce, Google Workspace, internal tools — you need SSO, group policies, not full-network VPN access.',
+    },
+    architecture: {
+      vi: 'User + IdP → Cloudflare Access policy → SaaS / self-hosted app',
+      en: 'User + IdP → Cloudflare Access policy → SaaS / self-hosted app',
+    },
+    bullets: {
+      vi: [
+        'Kết nối identity provider (Google, Azure AD, Okta…)',
+        'Tạo Access application cho từng SaaS hoặc hostname',
+        'Policy: allow theo group, device posture (tuỳ plan)',
+        'Không cần VPN cho từng app SaaS',
+        'Audit log ai truy cập app nào',
+      ],
+      en: [
+        'Connect identity provider (Google, Azure AD, Okta…)',
+        'Create Access applications per SaaS or hostname',
+        'Policies: allow by group, device posture (plan-dependent)',
+        'No VPN required per SaaS app',
+        'Audit logs for app access',
+      ],
+    },
+    relatedTrack: 'cloudflare-one',
+    nextCta: {
+      href: '/tracks/cloudflare-one/c1-2-l1',
+      label: { vi: 'Bài học Access & ZTNA', en: 'Access & ZTNA lesson' },
+    },
+  },
 ];
 
 export type UseCaseTrack = UseCase['relatedTrack'];
@@ -343,7 +455,7 @@ export function getUseCasesByTrack(track: UseCaseTrack): UseCase[] {
   return useCases.filter((u) => u.relatedTrack === track);
 }
 
-export function getUseCase(slug: UseCase['slug']) {
+export function getUseCase(slug: UseCaseSlug) {
   const found = useCases.find((u) => u.slug === slug);
   if (!found) throw new Error(`Unknown use case: ${slug}`);
   return found;

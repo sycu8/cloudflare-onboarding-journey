@@ -17,8 +17,12 @@ const currentPath = Astro.url.pathname;
 
     <nav class="hidden items-center gap-0.5 md:flex" aria-label="Primary">
       {primaryNavItems.map((item) => {
+        const normalized = item.href.replace(/\/$/, '') || '/';
+        const pathNorm = currentPath.replace(/\/$/, '') || '/';
         const active =
-          currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href));
+          pathNorm === normalized ||
+          (normalized !== '/' && normalized !== '/use-cases' && pathNorm.startsWith(normalized)) ||
+          (normalized === '/use-cases' && pathNorm.startsWith('/use-cases'));
         return (
           <a
             href={item.href}
