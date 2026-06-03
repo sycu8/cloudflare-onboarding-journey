@@ -2,19 +2,15 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/chrome/Breadcrumbs.astro';
 import LangText from '../../components/ui/LangText.astro';
-import UseCaseCard from '../../components/content/UseCaseCard.astro';
-import {
-  useCaseTrackLabels,
-  useCaseTrackOrder,
-  getUseCasesByTrack,
-} from '../../data/useCases';
+import PathCard from '../../components/content/PathCard.astro';
+import { useCaseTrackLabels, useCaseTrackOrder, getUseCasesByTrack } from '../../data/useCases';
 ---
 
 <BaseLayout
   title={{ vi: 'Tình huống thực tế', en: 'Practical use cases' }}
   description={{
-    vi: 'Tình huống thực tế theo Application Services, Developer Platform và Cloudflare One — kiến trúc, bước triển khai và lỗi thường gặp.',
-    en: 'Practical scenarios for Application Services, Developer Platform, and Cloudflare One — architecture, steps, and common mistakes.',
+    vi: 'Chọn nhóm tình huống: Application Services, Developer Platform hoặc Cloudflare One.',
+    en: 'Pick a scenario group: Application Services, Developer Platform, or Cloudflare One.',
   }}
   canonicalPath="/use-cases"
   showProgressBar
@@ -27,8 +23,8 @@ import {
       as="p"
       class="text-muted mt-2 max-w-3xl text-sm leading-relaxed"
       text={{
-        vi: 'Mỗi tình huống gắn với một lộ trình học — chọn đúng nhóm trước khi đọc chi tiết. Không cần đọc hết mọi tình huống.',
-        en: 'Each scenario maps to one learning track — pick the right group before reading details. You do not need every scenario.',
+        vi: 'Chọn một trong ba nhóm — mỗi nhóm có trang riêng và các tình huống chi tiết bên trong.',
+        en: 'Choose one of three groups — each has its own page and detailed scenarios inside.',
       }}
     />
     <p class="text-muted mt-3 text-sm">
@@ -38,28 +34,25 @@ import {
     </p>
   </header>
 
-  {
-    useCaseTrackOrder.map((trackKey) => {
-      const meta = useCaseTrackLabels[trackKey];
-      const cases = getUseCasesByTrack(trackKey);
-      return (
-        <section id={trackKey} class="mb-10 scroll-mt-24">
-          <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <LangText as="h2" class="text-xl font-semibold" text={meta.title} />
-              <LangText as="p" class="text-muted mt-1 text-sm" text={meta.headline} />
-            </div>
-            <a class="btn btn-secondary shrink-0" href={meta.trackHref}>
-              <LangText text={{ vi: 'Vào lộ trình học', en: 'Open learning track' }} />
-            </a>
-          </div>
-          <div class="grid gap-4 md:grid-cols-2">
-            {cases.map((uc) => (
-              <UseCaseCard useCase={uc} />
-            ))}
-          </div>
-        </section>
-      );
-    })
-  }
+  <div class="grid gap-4 md:grid-cols-3">
+    {
+      useCaseTrackOrder.map((trackKey) => {
+        const meta = useCaseTrackLabels[trackKey];
+        const count = getUseCasesByTrack(trackKey).length;
+        return (
+          <PathCard
+            title={meta.title}
+            description={meta.headline}
+            cta={{
+              href: `/use-cases/${trackKey}`,
+              label: {
+                vi: `${count} tình huống →`,
+                en: `${count} scenarios →`,
+              },
+            }}
+          />
+        );
+      })
+    }
+  </div>
 </BaseLayout>

@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import UseCaseTrackHub from '../../../components/content/UseCaseTrackHub.astro';
+---
+
+<BaseLayout
+  title={{
+    vi: 'Tình huống — Developer Platform',
+    en: 'Use cases — Developer Platform',
+  }}
+  description={{
+    vi: 'Tình huống thực tế: build và deploy app serverless với Pages, Workers, D1, KV, R2.',
+    en: 'Practical scenarios: build and deploy serverless apps with Pages, Workers, D1, KV, R2.',
+  }}
+  canonicalPath="/use-cases/developer-platform"
+  showProgressBar
+>
+  <UseCaseTrackHub track="developer-platform" />
+</BaseLayout>

@@ -23,7 +23,7 @@ const siblingUseCases = getUseCasesByTrack(uc.relatedTrack).filter((u) => u.slug
   <Breadcrumbs
     items={[
       { href: '/use-cases', label: { vi: 'Tình huống thực tế', en: 'Use cases' } },
-      { href: `/use-cases#${uc.relatedTrack}`, label: trackMeta.title },
+      { href: `/use-cases/${uc.relatedTrack}`, label: trackMeta.title },
       { href: `/use-cases/${uc.slug}`, label: uc.title },
     ]}
   />
@@ -134,7 +134,7 @@ const siblingUseCases = getUseCasesByTrack(uc.relatedTrack).filter((u) => u.slug
         ))}
       </ul>
       <p class="text-muted mt-3 text-xs">
-        <a class="link" href={`/use-cases#${uc.relatedTrack}`}>
+        <a class="link" href={`/use-cases/${uc.relatedTrack}`}>
           <LangText text={{ vi: '← Tất cả tình huống lộ trình này', en: '← All scenarios in this track' }} />
         </a>
         {' · '}

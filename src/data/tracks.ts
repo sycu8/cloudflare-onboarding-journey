@@ -238,7 +238,7 @@ export const tracks: Track[] = [
       { href: '/use-cases/protect-website', label: { vi: 'Bảo vệ website', en: 'Protect a website' } },
       { href: '/use-cases/secure-api', label: { vi: 'Bảo vệ API', en: 'Secure an API' } },
     ],
-    cta: { href: '/use-cases/protect-website', label: { vi: 'Đọc tình huống: Bảo vệ website', en: 'Read use case: Protect a website' } },
+    cta: { href: '/use-cases/application-services', label: { vi: 'Tình huống Application Services', en: 'Application Services use cases' } },
   },
   {
     slug: 'developer-platform',
@@ -461,7 +461,7 @@ export const tracks: Track[] = [
         },
       ],
     },
-    cta: { href: '/use-cases/build-serverless-app', label: { vi: 'Đọc tình huống: Build serverless app', en: 'Read use case: Build a serverless app' } },
+    cta: { href: '/use-cases/developer-platform', label: { vi: 'Tình huống Developer Platform', en: 'Developer Platform use cases' } },
   },
   {
     slug: 'cloudflare-one',
@@ -687,7 +687,7 @@ export const tracks: Track[] = [
         },
       ],
     },
-    cta: { href: '/use-cases/replace-vpn', label: { vi: 'Đọc tình huống: Thay thế VPN', en: 'Read use case: Replace VPN' } },
+    cta: { href: '/use-cases/cloudflare-one', label: { vi: 'Tình huống Cloudflare One', en: 'Cloudflare One use cases' } },
   },
 ];
 

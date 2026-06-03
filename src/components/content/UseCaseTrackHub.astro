@@ -1,0 +1,41 @@
+---
+import Breadcrumbs from '../chrome/Breadcrumbs.astro';
+import LangText from '../ui/LangText.astro';
+import UseCaseCard from './UseCaseCard.astro';
+import type { UseCaseTrack } from '../../data/useCases';
+import { useCaseTrackLabels, getUseCasesByTrack } from '../../data/useCases';
+
+type Props = {
+  track: UseCaseTrack;
+};
+
+const { track } = Astro.props;
+const meta = useCaseTrackLabels[track];
+const cases = getUseCasesByTrack(track);
+---
+
+<Breadcrumbs
+  items={[
+    { href: '/use-cases', label: { vi: 'Tình huống thực tế', en: 'Use cases' } },
+    { href: `/use-cases/${track}`, label: meta.title },
+  ]}
+/>
+
+<header class="mb-8">
+  <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={meta.title} />
+  <LangText as="p" class="text-muted mt-2 max-w-3xl text-sm leading-relaxed" text={meta.headline} />
+  <div class="mt-4 flex flex-wrap gap-3">
+    <a class="btn btn-secondary" href={meta.trackHref}>
+      <LangText text={{ vi: 'Vào lộ trình học', en: 'Open learning track' }} />
+    </a>
+    <a class="link self-center text-sm" href="/use-cases">
+      <LangText text={{ vi: '← Ba nhóm tình huống', en: '← All three groups' }} />
+    </a>
+  </div>
+</header>
+
+<div class="grid gap-4 md:grid-cols-2">
+  {cases.map((uc) => (
+    <UseCaseCard useCase={uc} />
+  ))}
+</div>
