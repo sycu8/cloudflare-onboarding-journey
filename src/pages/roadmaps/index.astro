@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/chrome/Breadcrumbs.astro';
+import LangText from '../../components/ui/LangText.astro';
+import RoleRoadmapCard from '../../components/roadmap/RoleRoadmapCard.astro';
+import { roleRoadmaps } from '../../data/roleRoadmaps';
+---
+
+<BaseLayout
+  title={{ vi: 'Roadmap theo vai trò', en: 'Role-based roadmaps' }}
+  description={{
+    vi: 'Lộ trình học Cloudflare cho Sales, Solution Engineer, Developer, IT Admin, Founder và Student.',
+    en: 'Cloudflare learning roadmaps for Sales, Solution Engineers, Developers, IT Admins, Founders, and Students.',
+  }}
+  canonicalPath="/roadmaps"
+  showProgressBar
+>
+  <Breadcrumbs
+    items={[
+      { href: '/content-roadmap', label: { vi: 'Content Roadmap', en: 'Content Roadmap' } },
+      { href: '/roadmaps', label: { vi: 'Roadmap vai trò', en: 'Role roadmaps' } },
+    ]}
+  />
+
+  <header class="mb-8">
+    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: 'Tôi là…', en: 'I am a…' }} />
+    <LangText
+      as="p"
+      class="text-muted mt-2 max-w-3xl text-sm leading-relaxed"
+      text={{
+        vi: 'Chọn roadmap theo vai trò — mỗi lộ trình sắp xếp lại nội dung hub thành kế hoạch theo tuần, có bài tập và liên kết sẵn có.',
+        en: 'Pick a role roadmap — each reorganizes hub content into weekly plans with exercises and existing links.',
+      }}
+    />
+    <p class="mt-4">
+      <a class="link text-sm" href="/content-roadmap/">
+        <span class="lang-vi">Chưa rành mạng? Bắt đầu từ Content Roadmap</span>
+        <span class="lang-en">New to networking? Start with the Content Roadmap</span>
+      </a>
+    </p>
+  </header>
+
+  <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+    {roleRoadmaps.map((roadmap) => (
+      <RoleRoadmapCard roadmap={roadmap} />
+    ))}
+  </div>
+</BaseLayout>

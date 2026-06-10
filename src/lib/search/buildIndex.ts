@@ -6,6 +6,8 @@ import { productPages } from '../../data/productPages';
 import { resources } from '../../data/resources';
 import { tracks } from '../../data/tracks';
 import { useCases } from '../../data/useCases';
+import { roleRoadmaps } from '../../data/roleRoadmaps';
+import { getAllTutorialPreviews, getTutorialHubPath } from '../../data/tutorialPreviews';
 import type { SearchDocument } from '../../types/search';
 
 function doc(
@@ -83,6 +85,24 @@ export function buildSearchDocuments(): SearchDocument[] {
         en: 'Find pages, terms, and learning content on the hub.',
       },
       category: 'Hub',
+    },
+    {
+      href: '/content-roadmap/',
+      title: { vi: 'Content Roadmap', en: 'Content Roadmap' },
+      description: {
+        vi: 'Học từ Internet, DNS, CDN đến Cloudflare — lộ trình từ con số 0.',
+        en: 'Learn from Internet, DNS, CDN to Cloudflare — zero-to-hero path.',
+      },
+      category: 'Learning',
+    },
+    {
+      href: '/roadmaps/',
+      title: { vi: 'Roadmap theo vai trò', en: 'Role roadmaps' },
+      description: {
+        vi: 'Lộ trình cho Sales, SE, Developer, IT Admin, Founder, Student.',
+        en: 'Roadmaps for Sales, SE, Developer, IT Admin, Founder, Student.',
+      },
+      category: 'Learning',
     },
   ];
 
@@ -183,6 +203,19 @@ export function buildSearchDocuments(): SearchDocument[] {
     }
   }
 
+  for (const role of roleRoadmaps) {
+    out.push(
+      doc(
+        `role-roadmap-${role.roleId}`,
+        `/roadmaps/${role.roleId}/`,
+        { vi: `Roadmap ${role.roleNameVi}`, en: `${role.roleNameEn ?? role.roleNameVi} roadmap` },
+        { vi: role.descriptionVi, en: role.descriptionVi },
+        'Role roadmap',
+        role.primaryTrack,
+      ),
+    );
+  }
+
   for (const resource of resources) {
     if (resource.status !== 'available') continue;
     out.push(
@@ -193,6 +226,20 @@ export function buildSearchDocuments(): SearchDocument[] {
         resource.description,
         'Resource',
         resource.type,
+      ),
+    );
+  }
+
+  for (const preview of getAllTutorialPreviews()) {
+    const href = getTutorialHubPath({ path: preview.path });
+    out.push(
+      doc(
+        `tutorial-preview-${preview.path}`,
+        href,
+        { vi: preview.titleVi ?? preview.title, en: preview.title },
+        { vi: preview.summaryVi, en: preview.summaryEn || preview.summaryVi },
+        'Tutorial preview',
+        `${preview.track} ${preview.contentType}`,
       ),
     );
   }

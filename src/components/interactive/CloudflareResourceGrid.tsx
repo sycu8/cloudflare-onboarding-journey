@@ -8,6 +8,11 @@ import {
   cloudflareResourceContentTypeLabels,
   cloudflareResourceTrackLabels,
 } from '../../data/cloudflareResources';
+import {
+  getTutorialHubPath,
+  getTutorialPreviewForResource,
+  getTutorialTitleForResource,
+} from '../../data/tutorialPreviews';
 import Pagination from '../ui/Pagination';
 
 type TrackFilter = 'all' | CloudflareResourceTrack;
@@ -141,26 +146,45 @@ export default function CloudflareResourceGrid({
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {paged.map((r) => (
-          <article key={r.path} className="card flex h-full flex-col p-5">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="badge badge-accent text-xs">
-                {t(cloudflareResourceContentTypeLabels[r.contentType], lang)}
-              </span>
-              <span className="badge text-xs">{t(cloudflareResourceTrackLabels[r.track], lang)}</span>
-            </div>
-            <h3 className="mt-3 text-sm font-semibold leading-snug">{r.title}</h3>
-            <p className="text-muted mt-2 flex-1 break-all text-xs opacity-80">{r.path}</p>
-            <a
-              className="btn btn-secondary mt-4 w-full justify-center text-sm"
-              href={r.url}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {lang === 'en' ? 'Open on Cloudflare ↗' : 'Mở trên Cloudflare ↗'}
-            </a>
-          </article>
-        ))}
+        {paged.map((r) => {
+          const preview = getTutorialPreviewForResource(r);
+          const hubPath = getTutorialHubPath(r);
+          const isTutorialLike =
+            r.contentType === 'Tutorial' || r.contentType === 'Solution guide';
+          const summary =
+            lang === 'vi' ? preview?.summaryVi : preview?.summaryEn ?? preview?.summaryVi;
+
+          return (
+            <article key={r.path} className="card flex h-full flex-col p-5">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="badge badge-accent text-xs">
+                  {t(cloudflareResourceContentTypeLabels[r.contentType], lang)}
+                </span>
+                <span className="badge text-xs">{t(cloudflareResourceTrackLabels[r.track], lang)}</span>
+              </div>
+              <h3 className="mt-3 text-sm font-semibold leading-snug">
+                {isTutorialLike ? (
+                  <a className="link" href={hubPath}>
+                    <span className="lang-vi">{getTutorialTitleForResource(r, 'vi')}</span>
+                    <span className="lang-en">{getTutorialTitleForResource(r, 'en')}</span>
+                  </a>
+                ) : (
+                  r.title
+                )}
+              </h3>
+              <p className="text-muted mt-2 flex-1 text-xs leading-relaxed opacity-90 line-clamp-3">
+                {summary ?? r.path}
+              </p>
+              <a
+                className="btn btn-primary mt-4 w-full justify-center text-sm"
+                href={isTutorialLike ? hubPath : r.url}
+                {...(!isTutorialLike ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+              >
+                {lang === 'en' ? 'Learn more' : 'Tìm hiểu thêm'}
+              </a>
+            </article>
+          );
+        })}
       </div>
 
       {filtered.length === 0 ? (

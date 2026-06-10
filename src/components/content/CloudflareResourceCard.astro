@@ -5,11 +5,20 @@ import {
   cloudflareResourceContentTypeLabels,
   cloudflareResourceTrackLabels,
 } from '../../data/cloudflareResources';
+import {
+  getTutorialHubPath,
+  getTutorialPreviewForResource,
+  getTutorialTitleForResource,
+} from '../../data/tutorialPreviews';
 
 type Props = { resource: CloudflareResource; compact?: boolean };
 const { resource, compact = false } = Astro.props;
 const typeLabel = cloudflareResourceContentTypeLabels[resource.contentType];
 const trackLabel = cloudflareResourceTrackLabels[resource.track];
+const preview = getTutorialPreviewForResource(resource);
+const hubPath = getTutorialHubPath(resource);
+const isTutorialLike =
+  resource.contentType === 'Tutorial' || resource.contentType === 'Solution guide';
 ---
 
 <article class:list={['card flex h-full flex-col', compact ? 'p-4' : 'p-5']}>
@@ -18,15 +27,28 @@ const trackLabel = cloudflareResourceTrackLabels[resource.track];
     <span class="badge text-xs"><LangText text={trackLabel} /></span>
   </div>
   <h3 class:list={['mt-3 font-semibold leading-snug', compact ? 'text-sm' : 'text-base']}>
-    {resource.title}
+    {isTutorialLike ? (
+      <a class="link" href={hubPath}>
+        <span class="lang-vi">{getTutorialTitleForResource(resource, 'vi')}</span>
+        <span class="lang-en">{getTutorialTitleForResource(resource, 'en')}</span>
+      </a>
+    ) : (
+      resource.title
+    )}
   </h3>
-  <p class="text-muted mt-2 flex-1 text-xs break-all opacity-80">{resource.path}</p>
+  {preview?.summaryVi ? (
+    <p class="lang-vi mt-2 flex-1 text-xs leading-relaxed opacity-90 line-clamp-3">{preview.summaryVi}</p>
+  ) : null}
+  {preview?.summaryEn ? (
+    <p class="lang-en text-muted mt-2 flex-1 text-xs leading-relaxed opacity-80 line-clamp-3">{preview.summaryEn}</p>
+  ) : (
+    <p class="text-muted mt-2 flex-1 text-xs break-all opacity-80">{resource.path}</p>
+  )}
   <a
-    class="btn btn-secondary mt-4 w-full justify-center text-sm"
-    href={resource.url}
-    target="_blank"
-    rel="noopener noreferrer"
+    class="btn btn-primary mt-4 w-full justify-center text-sm"
+    href={isTutorialLike ? hubPath : resource.url}
+    {...(!isTutorialLike ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
   >
-    <LangText text={{ vi: 'Mở tutorial / guide ↗', en: 'Open tutorial / guide ↗' }} />
+    <LangText text={{ vi: 'Tìm hiểu thêm', en: 'Learn more' }} />
   </a>
 </article>

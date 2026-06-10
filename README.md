@@ -20,17 +20,68 @@ Source: [github.com/sycu8/cloudflare-onboarding-journey](https://github.com/sycu
 
 ---
 
-## Recent updates (2026)
+## Recent updates (June 2026)
+
+### Tutorial previews on the hub (major)
+
+Cloudflare **Tutorial** and **Solution guide** entries from [Cloudflare Resources](https://developers.cloudflare.com/resources/) are now **fully browsable on the hub** before opening official docs.
+
+| Change | Detail |
+|--------|--------|
+| **164 tutorial guides** | Crawled from `developers.cloudflare.com/.../index.md` → stored in `src/data/tutorialPreviews.data.json` |
+| **Hub pages** | [`/tutorials/{path}/`](https://onboarding.orangecloud.vn/tutorials/workers/tutorials/deploy-an-express-app/) — context (VI), notes, step sections, code blocks, per-section backlinks to the exact `#anchor` on the official page |
+| **Homepage teaser** | **Ví dụ triển khai** — 6 featured deployment examples with Vietnamese summaries |
+| **Lesson integration** | Track lesson pages show matched **Ví dụ triển khai (Cloudflare Resources)** cards |
+| **Search** | Tutorial previews indexed (~**419** documents total in `search-index.json`) |
+| **Regenerate data** | `npm run resources:crawl-previews` (`--force` re-parse cache, `--refetch` re-download markdown) |
+
+**Button UX (intentional):**
+
+| Where | Button | Goes to |
+|-------|--------|---------|
+| Homepage, `/resources`, track cards | **Tìm hiểu thêm** | Hub tutorial page `/tutorials/...` |
+| Bottom of tutorial page | **Tài liệu gốc ↗** | `developers.cloudflare.com` (full images/tabs) |
+| Each tutorial section | **Mở section docs gốc ↗** | Official doc at matching section anchor |
+
+Tutorial **body** (paragraphs, CLI, code) stays in **English** (source of truth from Cloudflare). **Titles, summaries, section headers, and UI** are **Vietnamese-first** with EN toggle.
+
+Example: [Triển khai Express.js trên Workers](https://onboarding.orangecloud.vn/tutorials/workers/tutorials/deploy-an-express-app/)
+
+### Content Roadmap & role roadmaps
+
+| Route | What it is |
+|-------|------------|
+| [`/content-roadmap`](https://onboarding.orangecloud.vn/content-roadmap/) | **9 stages** from Internet/DNS foundations → practical Cloudflare use cases; filters, topic checkboxes, `sourceUrls`, hub links |
+| [`/roadmaps`](https://onboarding.orangecloud.vn/roadmaps/) | **6 role paths** — Sales, Solution Engineer, Developer, IT Admin, Startup Founder, Student — weekly plans + localStorage progress |
+
+Stage titles and roadmap UI strings are localized (VI default, EN toggle).
+
+### Localization & quality pass
+
+- Content Roadmap stage titles translated to Vietnamese (e.g. *Nền tảng Internet & mạng*, *Lộ trình Developer Platform*).
+- Catalog cards: **Lộ trình** labels, bilingual badges on roadmap topic cards.
+- Crawl pipeline filters junk blocks (`Skip to content`, `llms.txt` index notes).
+- Improved VI section titles for tutorial steps (pattern + curated titles for featured tutorials).
+
+### Deploy status
+
+| Environment | URL | Pages project |
+|-------------|-----|---------------|
+| **Production** | [onboarding.orangecloud.vn](https://onboarding.orangecloud.vn) | `cloudflare-starter-hub` |
+| **UAT** | [onboarding-uat.orangecloud.vn](https://onboarding-uat.orangecloud.vn) | `cloudflare-starter-hub-uat` |
+
+Build uses `PUBLIC_SITE_URL` per environment (UAT vs prod) for sitemap, OG, and agent-discovery artifacts. See [UAT-DEPLOYMENT.md](docs/UAT-DEPLOYMENT.md).
+
+### Earlier 2026 highlights
 
 | Area | What’s new |
 |------|------------|
-| **Cloudflare 101** | **Terminology** tabs + **practical guides** (DNS, TLS, WAF, Bot, Cache, LB) from internal training docs — [`/cloudflare-101#terminology`](https://onboarding.orangecloud.vn/cloudflare-101/#terminology) |
-| **Learning tracks** | Per-lesson pages (`/tracks/{track}/{lessonId}`), deep dives, **Lưu ý (best practices)**, **Ví dụ triển khai**, **Lỗi thường gặp** |
-| **Use cases** | Hub at [`/use-cases`](https://onboarding.orangecloud.vn/use-cases/) — scenarios across Application Services, Developer Platform, and Cloudflare One |
-| **Workshop admin** | Dedicated UI at **`/admin/`** (Cloudflare Access on `/admin` only) — events, signups export; legacy `/workshop/admin` redirects — [WORKSHOP-ADMIN-ACCESS.md](docs/WORKSHOP-ADMIN-ACCESS.md) |
-| **Agent discovery** | `/.well-known/*`, OpenAPI, WebMCP bootstrap, `/docs/api` — [DNS-AID.md](docs/DNS-AID.md) for DNS records |
-| **Deploy** | `npm run deploy:uat` then `npm run deploy`; stable CSS at `/styles/site.css`; GitHub Actions gates — [UAT-DEPLOYMENT.md](docs/UAT-DEPLOYMENT.md) |
-| **Contributions** | PR template, CI verify, `npm run review:pr`, [CONTRIBUTION_MAP](docs/CONTRIBUTION_MAP.md) |
+| **Cloudflare 101** | Terminology tabs + practical guides — [`/cloudflare-101#terminology`](https://onboarding.orangecloud.vn/cloudflare-101/#terminology) |
+| **Learning tracks** | Per-lesson pages, best practices, deployment examples, common mistakes |
+| **Use cases** | Hub at [`/use-cases`](https://onboarding.orangecloud.vn/use-cases/) |
+| **Site search** | Ctrl+K instant search; optional [AI Search](docs/AI-SEARCH-SETUP.md) |
+| **Workshop admin** | `/admin/` (Access on `/admin` only) — [WORKSHOP-ADMIN-ACCESS.md](docs/WORKSHOP-ADMIN-ACCESS.md) |
+| **Agent discovery** | `/.well-known/*`, OpenAPI, WebMCP — [DNS-AID.md](docs/DNS-AID.md) |
 
 ---
 
@@ -64,9 +115,13 @@ Optional: [**First week (7 days)**](/first-week) — day-by-day plan, common mis
 - **Use cases hub** — [`/use-cases`](/use-cases): protect website, secure API, serverless app, VPN replacement, remote users (grouped by track)
 - **Product pages** — searchable catalog at `/products` (Workers, WAF, Zero Trust, D1, R2, …)
 - **Cloudflare 101 extras** — terminology dictionary (6 categories, CSS tabs, search) + lab-style config/WAF guides
-- **Search** — instant search (245+ indexed pages/terms) via Ctrl+K; optional [Cloudflare AI Search](docs/AI-SEARCH-SETUP.md) for semantic results
+- **Content Roadmap** — `/content-roadmap/` — 9 stages from Internet/DNS basics to Cloudflare use cases (with `sourceUrls` and hub links)
+- **Role roadmaps** — `/roadmaps/` — Sales, SE, Developer, IT Admin, Founder, Student (weekly plans + localStorage progress)
+- **Tutorial previews** — **164** Cloudflare tutorials/solution guides on hub at `/tutorials/{path}/` with VI summaries, section TOC, and doc backlinks (see [Recent updates](#recent-updates-june-2026))
+- **Deployment examples** — homepage + track lessons + `/resources#cloudflare-resources` catalog with filters (track, type, search)
+- **Search** — instant search (**419+** indexed pages/terms/tutorials) via Ctrl+K; optional [Cloudflare AI Search](docs/AI-SEARCH-SETUP.md) for semantic results
 - **Interactive** — glossary search + pagination, quiz with explanations, checklist progress, path selector
-- **Resources hub** — official docs grid (synced), Reference Architecture **diagrams**, Resource Hub, GitHub, CloudSecOp, Learning Center
+- **Resources hub** — official docs grid (synced), Reference Architecture **diagrams**, Resource Hub, GitHub, CloudSecOp, Learning Center, **Cloudflare Resources** catalog
 - **Solutions & demos** — bilingual solution proposals, SE demo guides, content-delivery guide, plan comparison
 - **SEO** — per-page title/description, Open Graph, Twitter cards, canonical URLs
 - **Cloudflare branding** — orange cloud favicon and navbar logo; static assets via R2 `/assets/*` in production
@@ -98,17 +153,18 @@ cloudflare-onboarding-journey/
 ├── public/                 # favicon, og-image, static assets
 ├── src/
 │   ├── components/         # Astro + React (chrome, content, interactive)
-│   ├── data/               # tracks, quiz, glossary, resources, cloudsecop, etc.
+│   ├── data/               # tracks, quiz, glossary, resources, tutorialPreviews, roadmaps, …
 │   ├── i18n/               # language helpers
 │   ├── layouts/            # BaseLayout (SEO, title, theme)
 │   ├── lib/                # SEO, applyPageLang, server helpers
-│   └── pages/              # routes (tracks, lessons, products, use-cases, …)
+│   └── pages/              # routes (tracks, lessons, tutorials, products, use-cases, …)
 ├── functions/              # Pages Functions (api/, assets/)
 ├── migrations/             # D1 SQL migrations
 ├── docs/                   # UAT-DEPLOYMENT, WORKSHOP-ADMIN-ACCESS, DNS-AID, imports/
 ├── agent-discovery/        # source for /.well-known (built to public/ + dist)
 ├── .github/                # CONTRIBUTING, PR template, verify + deploy workflows
-├── scripts/                # build.mjs, smoke-test, sync, access setup
+├── scripts/                # build.mjs, smoke-test, sync, crawl-tutorial-previews, lib/
+│   └── cache/tutorials/    # cached index.md from Cloudflare (gitignored)
 ├── tests/                  # Playwright E2E
 ├── wrangler.toml.example   # copy → wrangler.toml (not committed)
 ├── .env.example            # secrets template (not committed)
@@ -142,7 +198,8 @@ npm run deploy:uat      # build + deploy to UAT Pages project (maintainer)
 npm run deploy          # build + deploy production (maintainer)
 npm run deploy:verify   # smoke production domains
 npm run access:workshop-admin  # optional: create Access apps for /admin
-npm run resources:sync  # refresh developers.cloudflare.com link catalog
+npm run resources:sync  # refresh developers.cloudflare.com link catalog (JSON)
+npm run resources:crawl-previews  # crawl tutorials → tutorialPreviews.data.json
 npm run diagrams:sync   # refresh Reference Architecture diagram metadata
 npm run assets:sync     # upload public SVGs → R2 (needs Wrangler credentials)
 npm run review:pr -- 12 # maintainer: fetch PR, diff, zone map (see Contributing)
@@ -295,9 +352,12 @@ Admin auth header: `Authorization: Bearer <WORKSHOP_ADMIN_KEY>` or `X-Cfhub-Admi
 | `/products`, `/products/{slug}` | Product catalog & detail pages |
 | `/checklists/beginner-cloudflare-checklist` | Interactive checklist |
 | `/quiz/beginner-readiness` | 12-question knowledge check |
+| `/content-roadmap` | Zero-to-hero curriculum (Internet → Cloudflare use cases) |
+| `/roadmaps` | Role-based weekly roadmaps (Sales, SE, Dev, IT, Founder, Student) |
 | `/search` | Site search (instant + AI Search when configured) |
 | `/glossary` | Searchable glossary |
-| `/resources` | Resource Hub, GitHub, Ref Arch, diagram gallery, CloudSecOp, Learning Center |
+| `/resources` | Resource Hub, GitHub, Ref Arch, diagram gallery, CloudSecOp, Learning Center, **Cloudflare Resources** catalog |
+| `/tutorials/{path}/` | Full tutorial guide on hub (VI context + EN body + section doc links) — e.g. `/tutorials/workers/tutorials/deploy-an-express-app/` |
 | `/changelog` | Curated Cloudflare Developer Changelog |
 | `/status` | Live system status & incidents (Statuspage API) |
 | `/plans` | Plan comparison (Free/Pro/Business/Enterprise) for SMEs |
@@ -309,6 +369,31 @@ Admin auth header: `Authorization: Bearer <WORKSHOP_ADMIN_KEY>` or `X-Cfhub-Admi
 | `/workshop/admin` | Redirect → `/admin/` |
 | `/docs/api` | API catalog for agents (WebMCP / OpenAPI) |
 | `/privacy` | Privacy |
+
+---
+
+## Tutorial preview pipeline
+
+Maintainers can refresh hub tutorial content from official Cloudflare docs:
+
+```bash
+npm run resources:sync              # optional: refresh cloudflareResources.data.json catalog
+npm run resources:crawl-previews    # parse cached markdown → tutorialPreviews.data.json
+npm run resources:crawl-previews -- --force    # re-parse all (uses scripts/cache/tutorials/)
+npm run resources:crawl-previews -- --refetch  # re-download index.md from Cloudflare
+npm run build                       # rebuild static pages + search index
+```
+
+| File / folder | Role |
+|---------------|------|
+| `scripts/crawl-tutorial-previews.mjs` | Orchestrates crawl and writes JSON |
+| `scripts/lib/parse-tutorial-md.mjs` | Parses frontmatter, sections, code blocks |
+| `scripts/lib/markdown-blocks.mjs` | Markdown → HTML blocks (links preserved) |
+| `scripts/lib/docs-anchor.mjs` | Starlight-compatible `#section` slugs |
+| `scripts/lib/tutorial-preview-vi.mjs` | Vietnamese titles, summaries, notes |
+| `src/data/tutorialPreviews.data.json` | **164** previews (committed; ~8 MB) |
+| `src/pages/tutorials/[...path].astro` | Static tutorial guide pages |
+| `src/components/content/TutorialGuide.astro` | Section renderer + TOC |
 
 ---
 

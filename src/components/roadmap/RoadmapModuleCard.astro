@@ -1,0 +1,145 @@
+---
+import type { ContentRoadmapTopic } from '../../types/roadmap';
+
+type Props = {
+  topic: ContentRoadmapTopic;
+  stageIndex: number;
+  done?: boolean;
+};
+
+const { topic, stageIndex, done = false } = Astro.props;
+const levelLabels = {
+  foundation: { vi: 'Nền tảng', en: 'Foundation' },
+  beginner: { vi: 'Cơ bản', en: 'Beginner' },
+  intermediate: { vi: 'Trung cấp', en: 'Intermediate' },
+};
+---
+
+<article class="card space-y-3" id={topic.id} data-roadmap-topic={topic.id}>
+  <div class="flex flex-wrap items-center gap-2">
+    <span class="badge">{stageIndex}</span>
+    <span class="badge">
+      <span class="lang-vi">{levelLabels[topic.level].vi}</span>
+      <span class="lang-en">{levelLabels[topic.level].en}</span>
+    </span>
+    <span class="text-muted text-xs">
+      <span class="lang-vi">{topic.estimatedMinutes} phút</span>
+      <span class="lang-en">{topic.estimatedMinutes} min</span>
+    </span>
+    {topic.isGeneralKnowledge ? (
+      <span class="badge" title="Kiến thức Internet/mạng chung">
+        <span class="lang-vi">Kiến thức chung</span>
+        <span class="lang-en">General knowledge</span>
+      </span>
+    ) : null}
+    {done ? (
+      <span class="badge badge-accent">
+        <span class="lang-vi">Đã học</span>
+        <span class="lang-en">Done</span>
+      </span>
+    ) : null}
+  </div>
+
+  <div>
+    <h3 class="text-lg font-semibold">
+      <span class="lang-vi">{topic.titleVi}</span>
+      <span class="lang-en">{topic.titleEn ?? topic.titleVi}</span>
+    </h3>
+    <p class="text-muted mt-2 text-sm leading-relaxed">
+      <span class="lang-vi">{topic.summaryVi}</span>
+      <span class="lang-en">{topic.summaryVi}</span>
+    </p>
+  </div>
+
+  <div class="text-sm">
+    <p class="font-medium">
+      <span class="lang-vi">Vì sao cần biết?</span>
+      <span class="lang-en">Why it matters</span>
+    </p>
+    <p class="text-muted mt-1">
+      <span class="lang-vi">{topic.whyItMattersVi}</span>
+      <span class="lang-en">{topic.whyItMattersVi}</span>
+    </p>
+  </div>
+
+  {topic.prerequisites.length ? (
+    <p class="text-muted text-xs">
+      <span class="lang-vi">Tiên quyết: {topic.prerequisites.join(', ')}</span>
+      <span class="lang-en">Prerequisites: {topic.prerequisites.join(', ')}</span>
+    </p>
+  ) : null}
+
+  {topic.relatedCloudflareProducts.length ? (
+    <div>
+      <p class="text-xs font-medium">
+        <span class="lang-vi">Sản phẩm Cloudflare liên quan</span>
+        <span class="lang-en">Related Cloudflare products</span>
+      </p>
+      <ul class="mt-1 flex flex-wrap gap-1.5">
+        {topic.relatedCloudflareProducts.map((p) => (
+          <li class="badge text-xs">{p}</li>
+        ))}
+      </ul>
+    </div>
+  ) : null}
+
+  {topic.relatedExistingRoutes.length ? (
+    <div>
+      <p class="text-xs font-medium">
+        <span class="lang-vi">Trên hub</span>
+        <span class="lang-en">On this hub</span>
+      </p>
+      <ul class="mt-1 flex flex-wrap gap-2 text-xs">
+        {topic.relatedExistingRoutes.map((href) => (
+          <li>
+            <a class="link" href={href}>{href}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  ) : null}
+
+  {topic.suggestedExerciseVi ? (
+    <p class="text-sm">
+      <span class="font-medium lang-vi">Bài tập gợi ý: </span>
+      <span class="font-medium lang-en">Suggested exercise: </span>
+      <span class="text-muted">{topic.suggestedExerciseVi}</span>
+    </p>
+  ) : null}
+
+  {topic.commonMistakesVi?.length ? (
+    <div>
+      <p class="text-xs font-medium">
+        <span class="lang-vi">Lỗi newbie hay gặp</span>
+        <span class="lang-en">Common newbie mistakes</span>
+      </p>
+      <ul class="text-muted mt-1 list-disc space-y-1 pl-5 text-xs">
+        {topic.commonMistakesVi.map((m) => (
+          <li>{m}</li>
+        ))}
+      </ul>
+    </div>
+  ) : null}
+
+  {topic.sourceUrls.length ? (
+    <div>
+      <p class="text-xs font-medium">
+        <span class="lang-vi">Nguồn tham khảo</span>
+        <span class="lang-en">Sources</span>
+      </p>
+      <ul class="mt-1 space-y-1 text-xs">
+        {topic.sourceUrls.map((url) => (
+          <li>
+            <a class="link break-all" href={url} target="_blank" rel="noopener noreferrer">{url}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  ) : null}
+
+  <label class="flex cursor-pointer items-center gap-2 text-sm" data-topic-toggle={topic.id}>
+    <input type="checkbox" class="cf-checkbox" data-topic-checkbox={topic.id} checked={done} />
+    <span class="lang-vi">Đánh dấu đã học</span>
+    <span class="lang-en">Mark as complete</span>
+  </label>
+</article>

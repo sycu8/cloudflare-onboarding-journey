@@ -7,6 +7,7 @@ import PathCard from '../components/content/PathCard.astro';
 import JourneyStepper from '../components/content/JourneyStepper.astro';
 import LangText from '../components/ui/LangText.astro';
 import CTASection from '../components/content/CTASection.astro';
+import DeploymentExamplesHighlight from '../components/content/DeploymentExamplesHighlight.astro';
 import { useCases, getUseCasesByTrack } from '../data/useCases';
 
 const asCount = getUseCasesByTrack('application-services').length;
@@ -155,6 +156,31 @@ const c1Count = getUseCasesByTrack('cloudflare-one').length;
           label: { vi: `${c1Count} tình huống`, en: `${c1Count} scenarios` },
         }}
       />
+    </div>
+  </section>
+
+  <DeploymentExamplesHighlight />
+
+  <section class="mt-10">
+    <LangText as="h2" class="text-xl font-semibold md:text-2xl" text={{ vi: 'Học từ con số 0 hoặc theo vai trò', en: 'Learn from zero or by role' }} />
+    <div class="mt-4 grid gap-4 md:grid-cols-2">
+      <a class="card block hover:border-[var(--cf-accent)]" href="/content-roadmap/">
+        <p class="font-semibold">Content Roadmap</p>
+        <p class="text-muted mt-2 text-sm">
+          <span class="lang-vi">Internet → DNS → CDN → bảo mật → Cloudflare → use case thực tế.</span>
+          <span class="lang-en">Internet → DNS → CDN → security → Cloudflare → practical use cases.</span>
+        </p>
+      </a>
+      <a class="card block hover:border-[var(--cf-accent)]" href="/roadmaps/">
+        <p class="font-semibold">
+          <span class="lang-vi">Tôi là… (Sales / SE / Dev / IT / Founder / Student)</span>
+          <span class="lang-en">I am a… (Sales / SE / Dev / IT / Founder / Student)</span>
+        </p>
+        <p class="text-muted mt-2 text-sm">
+          <span class="lang-vi">Roadmap theo tuần — bài tập và liên kết hub có sẵn.</span>
+          <span class="lang-en">Weekly roadmaps with exercises and existing hub links.</span>
+        </p>
+      </a>
     </div>
   </section>
 

@@ -1,0 +1,195 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/chrome/Breadcrumbs.astro';
+import LangText from '../../components/ui/LangText.astro';
+import TutorialGuide from '../../components/content/TutorialGuide.astro';
+import { cloudflareResources } from '../../data/cloudflareResources';
+import {
+  cloudflareResourceContentTypeLabels,
+  cloudflareResourceTrackLabels,
+} from '../../data/cloudflareResources';
+import {
+  getAllTutorialPreviews,
+  getTutorialDisplayTitle,
+  getTutorialPreviewByPath,
+} from '../../data/tutorialPreviews';
+
+export function getStaticPaths() {
+  const fromPreviews = getAllTutorialPreviews().map((p) => ({
+    params: { path: p.path.replace(/^\//, '').replace(/\/$/, '') },
+  }));
+
+  const seen = new Set(fromPreviews.map((x) => x.params.path));
+  for (const r of cloudflareResources) {
+    if (r.contentType !== 'Tutorial' && r.contentType !== 'Solution guide') continue;
+    const path = r.path.replace(/^\//, '').replace(/\/$/, '');
+    if (!seen.has(path)) {
+      fromPreviews.push({ params: { path } });
+      seen.add(path);
+    }
+  }
+
+  return fromPreviews;
+}
+
+const pathParam = Astro.params.path ?? '';
+const docPath = `/${pathParam.replace(/\/$/, '')}`;
+const preview = getTutorialPreviewByPath(docPath);
+const resource = cloudflareResources.find((r) => r.path.replace(/\/$/, '') === docPath.replace(/\/$/, ''));
+
+const titleEn = preview?.title ?? resource?.title ?? pathParam;
+const titleVi = preview ? getTutorialDisplayTitle(preview, 'vi') : titleEn;
+const officialUrl = preview?.url ?? resource?.url ?? `https://developers.cloudflare.com${docPath}/`;
+const contentType = preview?.contentType ?? resource?.contentType ?? 'Tutorial';
+const track = preview?.track ?? resource?.track ?? 'cross-cutting';
+const typeLabel = cloudflareResourceContentTypeLabels[contentType as keyof typeof cloudflareResourceContentTypeLabels];
+const trackLabel = cloudflareResourceTrackLabels[track as keyof typeof cloudflareResourceTrackLabels];
+
+const pageTitle = { vi: titleVi, en: titleEn };
+const pageDesc = {
+  vi: preview?.summaryVi ?? `Hướng dẫn tutorial Cloudflare trên hub — có backlink tới docs gốc.`,
+  en: preview?.summaryEn ?? `Cloudflare tutorial guide on the hub with links to official docs.`,
+};
+
+const hasGuide = Boolean(preview?.sections && preview.sections.length > 0);
+---
+
+<BaseLayout title={pageTitle} description={pageDesc} canonicalPath={`/tutorials/${pathParam}/`}>
+  <Breadcrumbs
+    items={[
+      { href: '/resources', label: { vi: 'Tài nguyên', en: 'Resources' } },
+      { href: '/resources#cloudflare-resources', label: { vi: 'Cloudflare Resources', en: 'Cloudflare Resources' } },
+      { href: `/tutorials/${pathParam}/`, label: { vi: titleVi, en: titleEn } },
+    ]}
+  />
+
+  <article class="mx-auto max-w-5xl">
+    <header class="mb-8">
+      <div class="flex flex-wrap items-center gap-2">
+        {typeLabel ? (
+          <span class="badge badge-accent text-xs"><LangText text={typeLabel} /></span>
+        ) : null}
+        {trackLabel ? <span class="badge text-xs"><LangText text={trackLabel} /></span> : null}
+        {preview?.estimatedMinutes ? (
+          <span class="badge text-xs">
+            <span class="lang-vi">~{preview.estimatedMinutes} phút</span>
+            <span class="lang-en">~{preview.estimatedMinutes} min</span>
+          </span>
+        ) : null}
+        {preview?.crawledAt ? (
+          <span class="text-muted text-xs">
+            <span class="lang-vi">Đồng bộ {preview.crawledAt}</span>
+            <span class="lang-en">Synced {preview.crawledAt}</span>
+          </span>
+        ) : null}
+      </div>
+
+      <h1 class="mt-4 text-2xl font-bold leading-tight md:text-3xl">
+        <span class="lang-vi">{titleVi}</span>
+        <span class="lang-en">{titleEn}</span>
+      </h1>
+
+      <p class="text-muted mt-3 text-sm leading-relaxed">
+        <span class="lang-vi">
+          Hướng dẫn chi tiết đồng bộ từ docs Cloudflare — mỗi section có backlink tới đúng vị trí trên trang gốc.
+        </span>
+        <span class="lang-en">
+          Detailed guide synced from Cloudflare docs — each section links to the matching anchor on the official page.
+        </span>
+      </p>
+
+      <a class="btn btn-secondary mt-5" href="/resources#cloudflare-resources">
+        <LangText text={{ vi: '← Danh mục', en: '← Catalog' }} />
+      </a>
+    </header>
+
+    {preview ? (
+      <div class="space-y-8">
+        <section class="card border-[var(--cf-accent)]/25 bg-gradient-to-br from-[rgba(255,140,56,0.06)] to-transparent p-6">
+          <h2 class="text-lg font-semibold">
+            <LangText text={{ vi: 'Giải thích nhanh', en: 'Quick context' }} />
+          </h2>
+          <p class="lang-vi mt-3 text-sm leading-relaxed">{preview.explanationVi}</p>
+          <p class="lang-en mt-3 text-sm leading-relaxed text-[var(--text-muted)]">{preview.introEn}</p>
+        </section>
+
+        <section class="card p-6 border-amber-500/30 bg-amber-500/5">
+          <h2 class="text-lg font-semibold text-amber-700 dark:text-amber-300">
+            <LangText text={{ vi: 'Lưu ý trước khi làm', en: 'Notes before you start' }} />
+          </h2>
+          <ul class="mt-4 list-disc space-y-2 pl-5 text-sm">
+            {preview.notesVi.map((note) => (
+              <li class="lang-vi leading-relaxed">{note}</li>
+            ))}
+          </ul>
+          {preview.lastReviewed ? (
+            <p class="text-muted mt-4 text-xs">
+              <span class="lang-vi">Tài liệu gốc — rà soát lần cuối: {preview.lastReviewed}</span>
+              <span class="lang-en">Official docs — last reviewed: {preview.lastReviewed}</span>
+            </p>
+          ) : null}
+        </section>
+
+        {hasGuide ? (
+          <TutorialGuide sections={preview.sections!} />
+        ) : (
+          <section class="card p-6">
+            <p class="text-muted text-sm">
+              <LangText
+                text={{
+                  vi: 'Nội dung chi tiết chưa được đồng bộ — mở tài liệu gốc hoặc chạy lại resources:crawl-previews.',
+                  en: 'Detailed content not synced yet — open the official doc or re-run resources:crawl-previews.',
+                }}
+              />
+            </p>
+          </section>
+        )}
+
+        <section class="card flex flex-col items-center gap-3 p-6 text-center sm:flex-row sm:justify-between sm:text-left">
+          <p class="text-muted text-sm">
+            <LangText
+              text={{
+                vi: 'Xem bản đầy đủ trên developers.cloudflare.com (ảnh, tab cấu hình).',
+                en: 'View the full guide on developers.cloudflare.com (images, config tabs).',
+              }}
+            />
+          </p>
+          <a class="btn btn-primary shrink-0" href={officialUrl} target="_blank" rel="noopener noreferrer">
+            <LangText text={{ vi: 'Tài liệu gốc ↗', en: 'Official docs ↗' }} />
+          </a>
+        </section>
+      </div>
+    ) : (
+      <section class="card p-6">
+        <p class="text-muted text-sm leading-relaxed">
+          <span class="lang-vi">
+            Tutorial chưa được đồng bộ. Quay lại sau khi catalog được crawl hoặc mở tài liệu gốc bên dưới.
+          </span>
+          <span class="lang-en">
+            Tutorial not synced yet. Check back after the next catalog sync or open the official doc below.
+          </span>
+        </p>
+        <a class="btn btn-primary mt-4" href={officialUrl} target="_blank" rel="noopener noreferrer">
+          <LangText text={{ vi: 'Tài liệu gốc ↗', en: 'Official docs ↗' }} />
+        </a>
+      </section>
+    )}
+  </article>
+</BaseLayout>
+
+<style>
+  .tutorial-body :global(.tutorial-inline-code) {
+    font-size: 0.85em;
+    padding: 0.1em 0.35em;
+    border-radius: 0.25rem;
+    background: var(--cf-bg-elevated);
+    border: 1px solid var(--cf-border);
+  }
+
+  .tutorial-code {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+</style>

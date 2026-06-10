@@ -122,6 +122,37 @@ const startDiagrams = getDiagramsForHubPage('/start-here');
     </a>
   </section>
 
+  <section class="mt-6 grid gap-4 md:grid-cols-2">
+    <div class="card">
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Content Roadmap — từ con số 0', en: 'Content Roadmap — from zero' }} />
+      <LangText
+        as="p"
+        class="text-muted mt-2 text-sm"
+        text={{
+          vi: 'Chưa hiểu Internet, DNS hay CDN? Bắt đầu tại đây trước khi vào Cloudflare 101.',
+          en: 'Not sure how the Internet, DNS, or CDN work? Start here before Cloudflare 101.',
+        }}
+      />
+      <a class="btn btn-primary mt-4" href="/content-roadmap/">
+        <LangText text={{ vi: 'Mở Content Roadmap', en: 'Open Content Roadmap' }} />
+      </a>
+    </div>
+    <div class="card">
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Tôi là…', en: 'I am a…' }} />
+      <LangText
+        as="p"
+        class="text-muted mt-2 text-sm"
+        text={{
+          vi: 'Sales, SE, Developer, IT Admin, Founder hay Student — chọn roadmap theo vai trò.',
+          en: 'Sales, SE, Developer, IT Admin, Founder, or Student — pick a role roadmap.',
+        }}
+      />
+      <a class="btn btn-secondary mt-4" href="/roadmaps/">
+        <LangText text={{ vi: 'Xem roadmap vai trò', en: 'View role roadmaps' }} />
+      </a>
+    </div>
+  </section>
+
   <section class="mt-6 card">
     <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Tài nguyên chính thức', en: 'Official resources' }} />
     <LangText

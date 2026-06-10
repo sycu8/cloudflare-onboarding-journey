@@ -1,0 +1,144 @@
+---
+import LangText from '../ui/LangText.astro';
+import type { TutorialContentBlock, TutorialSection } from '../../data/tutorialPreviews';
+
+type Props = {
+  sections: TutorialSection[];
+};
+
+const { sections } = Astro.props;
+
+const toc = sections.filter((s) => s.blocks.length > 0);
+---
+
+<div class="tutorial-guide lg:grid lg:grid-cols-[minmax(0,1fr)_220px] lg:gap-10">
+  <div class="tutorial-sections min-w-0 space-y-6">
+    {
+      toc.map((section) => (
+        <section
+          id={`hub-${section.anchor}`}
+          class:list={[
+            'card scroll-mt-24 p-5 md:p-6',
+            section.level === 3 && 'ml-0 border-l-2 border-[var(--cf-accent)]/35 pl-4 md:ml-2 md:pl-5',
+          ]}
+        >
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div class="min-w-0">
+              {section.level === 2 ? (
+                <h2 class="text-lg font-semibold leading-snug md:text-xl">
+                  <span class="lang-vi">{section.titleVi ?? section.title}</span>
+                  <span class="lang-en">{section.title}</span>
+                </h2>
+              ) : (
+                <h3 class="text-base font-semibold leading-snug">
+                  <span class="lang-vi">{section.titleVi ?? section.title}</span>
+                  <span class="lang-en">{section.title}</span>
+                </h3>
+              )}
+              {section.summaryVi ? (
+                <p class="lang-vi mt-2 text-sm leading-relaxed text-[var(--cf-text)]">{section.summaryVi}</p>
+              ) : null}
+            </div>
+            <a
+              class="btn btn-secondary shrink-0 text-xs sm:text-sm"
+              href={section.docUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              title={section.title}
+            >
+              <LangText text={{ vi: 'Mở section docs gốc ↗', en: 'Open source section ↗' }} />
+            </a>
+          </div>
+
+          <div class="tutorial-body prose-learn mt-4 space-y-3 text-sm leading-relaxed">
+            {section.blocks.map((block) => {
+              if (block.type === 'paragraph') {
+                return <p set:html={block.html} />;
+              }
+              if (block.type === 'note') {
+                return (
+                  <aside class="rounded-lg border border-amber-500/30 bg-amber-500/5 px-4 py-3 text-amber-900 dark:text-amber-100">
+                    <p set:html={block.html} />
+                  </aside>
+                );
+              }
+              if (block.type === 'list') {
+                const Tag = block.ordered ? 'ol' : 'ul';
+                return (
+                  <Tag class:list={[block.ordered ? 'list-decimal' : 'list-disc', 'space-y-1 pl-5']}>
+                    {block.items.map((item) => (
+                      <li set:html={item} />
+                    ))}
+                  </Tag>
+                );
+              }
+              if (block.type === 'code') {
+                return (
+                  <div class="overflow-x-auto rounded-lg border border-[var(--cf-border)] bg-[var(--cf-bg)]">
+                    {block.language ? (
+                      <div class="border-b border-[var(--cf-border)] px-3 py-1 text-[10px] uppercase tracking-wide text-[var(--cf-text-muted)]">
+                        {block.language}
+                      </div>
+                    ) : null}
+                    <pre class="tutorial-code p-3 text-xs leading-relaxed"><code>{block.code}</code></pre>
+                  </div>
+                );
+              }
+              return null;
+            })}
+          </div>
+
+          {section.relatedLinks.length > 0 ? (
+            <div class="mt-5 rounded-lg border border-[var(--cf-border)] bg-[var(--cf-bg-elevated)]/50 p-4">
+              <p class="text-xs font-semibold uppercase tracking-wide text-[var(--cf-accent)]">
+                <LangText text={{ vi: 'Liên kết liên quan (docs Cloudflare)', en: 'Related links (Cloudflare docs)' }} />
+              </p>
+              <ul class="mt-2 space-y-1.5 text-sm">
+                {section.relatedLinks.map((link) => (
+                  <li>
+                    <a class="link break-all" href={link.href} target="_blank" rel="noopener noreferrer">
+                      {link.label} ↗
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+        </section>
+      ))
+    }
+
+  </div>
+
+  {toc.length > 2 ? (
+    <aside class="hidden lg:block">
+      <nav
+        class="sticky top-20 rounded-xl border border-[var(--cf-border)] bg-[var(--cf-bg-elevated)]/80 p-4 backdrop-blur-sm"
+        aria-label="Tutorial table of contents"
+      >
+        <p class="text-xs font-semibold uppercase tracking-wide text-[var(--cf-text-muted)]">
+          <LangText text={{ vi: 'Mục lục', en: 'On this page' }} />
+        </p>
+        <ol class="mt-3 max-h-[70vh] space-y-1 overflow-y-auto text-xs">
+          {toc.map((section) => (
+            <li class:list={[section.level === 3 && 'ml-3']}>
+              <a class="link block py-0.5 leading-snug" href={`#hub-${section.anchor}`}>
+                <span class="lang-vi">{section.titleVi ?? section.title}</span>
+                <span class="lang-en">{section.title}</span>
+              </a>
+              <a
+                class="text-muted mt-0.5 block text-[10px] opacity-70 hover:opacity-100"
+                href={section.docUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span class="lang-vi">↗ docs gốc</span>
+                <span class="lang-en">↗ docs</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    </aside>
+  ) : null}
+</div>

@@ -1,0 +1,118 @@
+---
+import type { RoleRoadmapStep } from '../../types/roadmap';
+
+type Props = {
+  step: RoleRoadmapStep;
+  done?: boolean;
+};
+
+const { step, done = false } = Astro.props;
+---
+
+<article class="card space-y-4" id={step.id} data-role-week={step.week}>
+  <div class="flex flex-wrap items-center gap-2">
+    <span class="badge badge-accent">
+      <span class="lang-vi">Tuần {step.week}</span>
+      <span class="lang-en">Week {step.week}</span>
+    </span>
+    {done ? (
+      <span class="badge">
+        <span class="lang-vi">Hoàn thành</span>
+        <span class="lang-en">Complete</span>
+      </span>
+    ) : null}
+  </div>
+
+  <div>
+    <h3 class="text-lg font-semibold">
+      <span class="lang-vi">{step.titleVi}</span>
+      <span class="lang-en">{step.titleEn ?? step.titleVi}</span>
+    </h3>
+    <p class="text-muted mt-2 text-sm">
+      <span class="lang-vi">{step.objectiveVi}</span>
+      <span class="lang-en">{step.objectiveVi}</span>
+    </p>
+  </div>
+
+  <div>
+    <p class="text-sm font-medium">
+      <span class="lang-vi">Chủ đề</span>
+      <span class="lang-en">Topics</span>
+    </p>
+    <ul class="mt-2 flex flex-wrap gap-1.5">
+      {step.topics.map((t) => (
+        <li class="badge text-xs">{t}</li>
+      ))}
+    </ul>
+  </div>
+
+  {step.existingRoutes.length ? (
+    <div>
+      <p class="text-sm font-medium">
+        <span class="lang-vi">Liên kết trên hub</span>
+        <span class="lang-en">Hub links</span>
+      </p>
+      <ul class="mt-2 flex flex-wrap gap-2 text-xs">
+        {step.existingRoutes.map((href) => (
+          <li>
+            <a class="link" href={href}>{href}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  ) : null}
+
+  {step.recommendedProducts.length ? (
+    <div>
+      <p class="text-sm font-medium">
+        <span class="lang-vi">Sản phẩm gợi ý</span>
+        <span class="lang-en">Recommended products</span>
+      </p>
+      <ul class="mt-2 flex flex-wrap gap-1.5">
+        {step.recommendedProducts.map((p) => (
+          <li class="badge text-xs">{p}</li>
+        ))}
+      </ul>
+    </div>
+  ) : null}
+
+  <div>
+    <p class="text-sm font-medium">
+      <span class="lang-vi">Bài tập</span>
+      <span class="lang-en">Exercises</span>
+    </p>
+    <ul class="text-muted mt-2 list-disc space-y-1 pl-5 text-sm">
+      {step.exercisesVi.map((ex) => (
+        <li>{ex}</li>
+      ))}
+    </ul>
+  </div>
+
+  <p class="text-sm">
+    <span class="font-medium lang-vi">Kết quả tuần: </span>
+    <span class="font-medium lang-en">Week outcome: </span>
+    <span class="text-muted">{step.expectedOutcomeVi}</span>
+  </p>
+
+  {step.sourceUrls.length ? (
+    <div>
+      <p class="text-xs font-medium">
+        <span class="lang-vi">Nguồn tham khảo</span>
+        <span class="lang-en">Sources</span>
+      </p>
+      <ul class="mt-1 space-y-1 text-xs">
+        {step.sourceUrls.map((url) => (
+          <li>
+            <a class="link break-all" href={url} target="_blank" rel="noopener noreferrer">{url}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  ) : null}
+
+  <label class="flex cursor-pointer items-center gap-2 text-sm" data-week-toggle={step.id}>
+    <input type="checkbox" class="cf-checkbox" data-week-checkbox={step.id} checked={done} />
+    <span class="lang-vi">Đánh dấu tuần hoàn thành</span>
+    <span class="lang-en">Mark week complete</span>
+  </label>
+</article>

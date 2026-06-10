@@ -10,7 +10,7 @@ const { topic } = Astro.props;
   <div class="flex flex-wrap items-center gap-2">
     <span class="badge">{topic.category}</span>
     <span class="badge">
-      <span class="lang-vi">Track:</span>
+      <span class="lang-vi">Lộ trình:</span>
       <span class="lang-en">Track:</span>
       {' '}
       {topic.relatedTrack === 'application-services'
@@ -36,7 +36,7 @@ const { topic } = Astro.props;
       class="btn btn-ghost flex-1 justify-center"
       href={`/tracks/${topic.relatedTrack}`}
     >
-      <LangText text={{ vi: 'Xem track', en: 'View track' }} />
+      <LangText text={{ vi: 'Xem lộ trình', en: 'View track' }} />
     </a>
   </div>
 </article>

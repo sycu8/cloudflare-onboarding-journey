@@ -1,0 +1,71 @@
+---
+import LangText from '../ui/LangText.astro';
+import CloudflareResourceCard from './CloudflareResourceCard.astro';
+import {
+  CLOUDFLARE_RESOURCES_URL,
+  RESOURCES_LAST_SYNCED,
+  cloudflareResources,
+  getFeaturedDeploymentExamples,
+} from '../../data/cloudflareResources';
+
+const featured = getFeaturedDeploymentExamples();
+---
+
+<section class="mt-10" id="deployment-examples">
+  <div class="card overflow-hidden border-[var(--cf-accent)]/30 bg-gradient-to-br from-[rgba(255,140,56,0.08)] to-transparent">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div class="max-w-2xl">
+        <p class="text-xs font-semibold uppercase tracking-wide text-[var(--cf-accent)]">
+          <span class="lang-vi">Thực hành ngay</span>
+          <span class="lang-en">Hands-on</span>
+        </p>
+        <LangText
+          as="h2"
+          class="mt-1 text-xl font-semibold md:text-2xl"
+          text={{
+            vi: 'Ví dụ triển khai (Cloudflare Resources)',
+            en: 'Deployment examples (Cloudflare Resources)',
+          }}
+        />
+        <LangText
+          as="p"
+          class="text-muted mt-2 text-sm leading-relaxed"
+          text={{
+            vi: `Tutorial được crawl đầy đủ trên hub (hướng dẫn + lệnh + backlink từng section) — mở docs gốc khi cần ảnh/tab. Catalog: ${cloudflareResources.length} mục (đồng bộ ${RESOURCES_LAST_SYNCED}).`,
+            en: `Tutorials are fully synced on the hub (steps, commands, per-section doc links) — open official docs for images/tabs. Catalog: ${cloudflareResources.length} items (synced ${RESOURCES_LAST_SYNCED}).`,
+          }}
+        />
+      </div>
+      <a class="btn btn-primary shrink-0" href="/resources#cloudflare-resources">
+        <LangText text={{ vi: 'Xem toàn bộ catalog', en: 'Browse full catalog' }} />
+      </a>
+    </div>
+
+    <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {featured.map((resource) => (
+        <CloudflareResourceCard resource={resource} compact />
+      ))}
+    </div>
+
+    <p class="text-muted mt-4 text-xs">
+      <span class="lang-vi">
+        Nguồn:{' '}
+        <a class="link" href={CLOUDFLARE_RESOURCES_URL} target="_blank" rel="noopener noreferrer">
+          Cloudflare Resources ↗
+        </a>
+        {' · '}
+        Gợi ý theo từng bài trong{' '}
+        <a class="link" href="/tracks/application-services/">lộ trình học</a>.
+      </span>
+      <span class="lang-en">
+        Source:{' '}
+        <a class="link" href={CLOUDFLARE_RESOURCES_URL} target="_blank" rel="noopener noreferrer">
+          Cloudflare Resources ↗
+        </a>
+        {' · '}
+        Per-lesson picks on{' '}
+        <a class="link" href="/tracks/application-services/">learning tracks</a>.
+      </span>
+    </p>
+  </div>
+</section>

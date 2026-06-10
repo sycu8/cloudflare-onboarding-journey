@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/chrome/Breadcrumbs.astro';
+import LangText from '../../components/ui/LangText.astro';
+import RoleWeekPlan from '../../components/roadmap/RoleWeekPlan.astro';
+import RoleRoadmapProgress from '../../components/roadmap/RoleRoadmapProgress';
+import RoleRoadmapStartButton from '../../components/roadmap/RoleRoadmapStartButton';
+import RoleWeekBinder from '../../components/roadmap/RoleWeekBinder';
+import { allRoleIds, getRoleRoadmap } from '../../data/roleRoadmaps';
+import type { RoleId } from '../../types/roadmap';
+
+export function getStaticPaths() {
+  return allRoleIds.map((role) => ({ params: { role } }));
+}
+
+const { role } = Astro.params;
+const roadmap = getRoleRoadmap(role!);
+if (!roadmap) throw new Error(`Role roadmap not found: ${role}`);
+
+const roleId = roadmap.roleId as RoleId;
+const firstStepId = roadmap.steps[0]?.id ?? '';
+---
+
+<BaseLayout
+  title={{
+    vi: `Roadmap ${roadmap.roleNameVi}`,
+    en: `${roadmap.roleNameEn ?? roadmap.roleNameVi} roadmap`,
+  }}
+  description={{
+    vi: roadmap.descriptionVi,
+    en: roadmap.descriptionVi,
+  }}
+  canonicalPath={`/roadmaps/${roadmap.roleId}`}
+  showProgressBar
+>
+  <Breadcrumbs
+    items={[
+      { href: '/roadmaps', label: { vi: 'Roadmap vai trò', en: 'Role roadmaps' } },
+      { href: `/roadmaps/${roadmap.roleId}`, label: { vi: roadmap.roleNameVi, en: roadmap.roleNameEn ?? roadmap.roleNameVi } },
+    ]}
+  />
+
+  <header class="mb-6">
+    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: roadmap.roleNameVi, en: roadmap.roleNameEn ?? roadmap.roleNameVi }} />
+    <p class="text-muted mt-2 max-w-3xl text-sm leading-relaxed">{roadmap.descriptionVi}</p>
+    <ul class="text-muted mt-3 space-y-1 text-sm">
+      {roadmap.bestForVi.map((item) => (
+        <li>• {item}</li>
+      ))}
+    </ul>
+    <p class="mt-4 text-sm">
+      <span class="font-medium lang-vi">Kết quả cuối: </span>
+      <span class="font-medium lang-en">Final outcome: </span>
+      <span class="text-muted">{roadmap.finalOutcomeVi}</span>
+    </p>
+    {firstStepId ? (
+      <div class="mt-4">
+        <RoleRoadmapStartButton client:load roleId={roleId} firstStepId={firstStepId} />
+      </div>
+    ) : null}
+  </header>
+
+  <div class="mb-8">
+    <RoleRoadmapProgress client:load roleId={roleId} totalWeeks={roadmap.totalWeeks} />
+  </div>
+
+  <div class="space-y-6">
+    {roadmap.steps.map((step) => (
+      <RoleWeekPlan step={step} />
+    ))}
+  </div>
+
+  <aside class="card mt-10 space-y-3">
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Liên kết học thêm', en: 'Keep learning' }} />
+    <ul class="flex flex-wrap gap-3 text-sm">
+      <li><a class="link" href="/content-roadmap/">Content Roadmap</a></li>
+      <li><a class="link" href="/cloudflare-101/">Cloudflare 101</a></li>
+      <li><a class="link" href="/glossary/">Glossary</a></li>
+      <li><a class="link" href="/quiz/beginner-readiness/">Quiz</a></li>
+      <li><a class="link" href="/checklists/beginner-cloudflare-checklist/">Checklist</a></li>
+    </ul>
+  </aside>
+
+  <RoleWeekBinder client:load roleId={roleId} />
+</BaseLayout>

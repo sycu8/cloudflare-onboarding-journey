@@ -1,0 +1,127 @@
+import type { ContentRoadmapStage } from '../../types/roadmap';
+import { topic, SRC } from './helpers';
+
+export const stage4: ContentRoadmapStage = {
+  id: 'stage-4',
+  titleVi: 'Mô hình tư duy Cloudflare',
+  titleEn: 'Cloudflare Mental Model',
+  descriptionVi:
+    'Cloudflare nằm ở đâu trong luồng traffic, orange vs gray cloud, ba họ sản phẩm và cách chọn đúng nhóm giải pháp.',
+  learnerOutcomeVi:
+    'Vẽ được sơ đồ User → Cloudflare → origin, giải thích zone/account và chọn Application Services vs Developer Platform vs Cloudflare One.',
+  filterTags: ['foundation', 'security', 'developer', 'zero-trust'],
+  topics: [
+    topic(
+      'cloudflare-in-traffic-flow',
+      'Cloudflare đứng ở đâu trong traffic flow?',
+      'Where does Cloudflare sit in traffic flow?',
+      'Với website/API proxied: visitor gửi request tới Cloudflare edge trước; Cloudflare kiểm tra, cache hoặc chuyển tiếp origin. Không proxied: chỉ DNS, traffic đi thẳng origin.',
+      'Câu trả lời đầu tiên mọi discovery call — nếu không vẽ được flow thì khó thiết kế kiến trúc.',
+      {
+        level: 'beginner',
+        filterTags: ['foundation'],
+        sourceUrls: [SRC.fundamentals, 'https://developers.cloudflare.com/fundamentals/concepts/how-cloudflare-works/'],
+        relatedExistingRoutes: ['/cloudflare-101', '/start-here', '/glossary/'],
+        relatedCloudflareProducts: ['Proxy', 'DNS'],
+        suggestedExerciseVi: 'Vẽ 3 hộp: User, Cloudflare edge, Origin và mũi tên request/response.',
+      },
+    ),
+    topic(
+      'reverse-proxy-model',
+      'Reverse proxy model',
+      'Reverse proxy model',
+      'Cloudflare là reverse proxy toàn cầu: terminate TLS, áp policy, cache, rồi forward tới origin. Origin IP có thể ẩn khỏi public.',
+      'Mọi tính năng App Services (WAF, cache, LB) bám model này — không phải plugin cài trên origin.',
+      {
+        level: 'beginner',
+        filterTags: ['foundation', 'security'],
+        sourceUrls: [SRC.fundamentals, 'https://www.cloudflare.com/learning/cdn/glossary/what-is-a-reverse-proxy/'],
+        relatedExistingRoutes: ['/glossary/', '/cloudflare-101'],
+        relatedCloudflareProducts: ['Proxy'],
+        prerequisites: ['cloudflare-in-traffic-flow'],
+      },
+    ),
+    topic(
+      'orange-vs-gray-cloud',
+      'Orange cloud vs gray cloud',
+      'Orange cloud vs gray cloud',
+      'Orange (proxied): traffic qua Cloudflare — bảo mật + performance. Gray (DNS only): chỉ DNS resolution. Chọn theo từng record, không phải cả zone một lần.',
+      'Lỗi proxy phổ biến nhất của newbie — liên kết trực tiếp checklist onboarding.',
+      {
+        level: 'beginner',
+        filterTags: ['foundation', 'dns'],
+        sourceUrls: ['https://developers.cloudflare.com/dns/proxy-status/'],
+        relatedExistingRoutes: ['/tracks/application-services', '/checklists/beginner-cloudflare-checklist'],
+        relatedCloudflareProducts: ['DNS', 'Proxy'],
+        prerequisites: ['reverse-proxy-model'],
+        commonMistakesVi: ['Proxy record mail hoặc service không hỗ trợ HTTP proxy.'],
+      },
+    ),
+    topic(
+      'zone-account-dashboard',
+      'Zone, account, dashboard',
+      'Zone, account, and dashboard',
+      'Account chứa nhiều zone (domain). Zone là không gian cấu hình DNS, SSL, rules cho một domain. Dashboard là UI quản trị — phân quyền theo account/zone role.',
+      'IT admin và founder cần map org structure → account để tránh mọi người dùng chung một login.',
+      {
+        filterTags: ['foundation'],
+        sourceUrls: [
+          'https://developers.cloudflare.com/fundamentals/setup/account/',
+          'https://developers.cloudflare.com/fundamentals/setup/manage-domains/',
+        ],
+        relatedExistingRoutes: ['/cloudflare-101', '/checklists/beginner-cloudflare-checklist'],
+        relatedCloudflareProducts: ['DNS'],
+      },
+    ),
+    topic(
+      'request-flow-through-cloudflare',
+      'Request flow through Cloudflare',
+      'Request flow through Cloudflare',
+      'Luồng điển hình: DNS resolve → TCP/TLS tới edge → WAF/bot check → cache lookup → (miss) origin fetch → response về client. Workers có thể chèn logic giữa các bước.',
+      'Debug latency và 5xx cần biết request dừng ở bước nào — trace và Logpush bám flow này.',
+      {
+        level: 'beginner',
+        estimatedMinutes: 12,
+        filterTags: ['foundation', 'performance', 'security'],
+        sourceUrls: [SRC.fundamentals, SRC.arch],
+        relatedExistingRoutes: ['/reference-architecture/secure-app-delivery', '/cloudflare-101'],
+        relatedCloudflareProducts: ['WAF', 'Cache', 'Workers'],
+        prerequisites: ['cloudflare-in-traffic-flow'],
+      },
+    ),
+    topic(
+      'product-families-overview',
+      'Cloudflare product families',
+      'Cloudflare product families',
+      'Ba họ chính: Application Services (bảo vệ/tăng tốc site & API đã có), Developer Platform (build/deploy trên Cloudflare), Cloudflare One (Zero Trust, Access, Gateway, WARP cho user và mạng).',
+      'Sales và learner chọn path — tránh cố nhét mọi sản phẩm vào một use case.',
+      {
+        level: 'beginner',
+        filterTags: ['foundation', 'developer', 'zero-trust'],
+        sourceUrls: [SRC.fundamentals, SRC.one, SRC.workers],
+        relatedExistingRoutes: ['/choose-your-path', '/tracks/', '/cloudflare-101'],
+        suggestedExerciseVi: 'Ghi 1 pain point và map thử vào họ sản phẩm nào.',
+      },
+    ),
+    topic(
+      'when-to-use-which-product',
+      'Khi nào dùng sản phẩm nào?',
+      'When to use which product?',
+      'Có website public → App Services trước. Build app mới serverless → Developer Platform. Bảo vệ nhân viên remote/SaaS → Cloudflare One. Nhiều org dùng kết hợp — không loại trừ nhau.',
+      'Outcome stage 4: chọn track và use case tiếp theo trên hub thay vì mua nhầm gói.',
+      {
+        level: 'beginner',
+        estimatedMinutes: 10,
+        filterTags: ['foundation'],
+        sourceUrls: [SRC.arch, 'https://developers.cloudflare.com/use-cases/'],
+        relatedExistingRoutes: ['/choose-your-path', '/use-cases/', '/tracks/'],
+        prerequisites: ['product-families-overview'],
+        commonMistakesVi: [
+          'Dùng Tunnel thay CDN cho website public static.',
+          'Chỉ Workers mà không có WAF cho API production.',
+        ],
+        suggestedExerciseVi: 'Làm quiz beginner readiness và xem track được gợi ý.',
+      },
+    ),
+  ],
+};

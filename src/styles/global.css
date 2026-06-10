@@ -243,6 +243,15 @@ html.dark .badge-accent {
   color: var(--cf-text-muted);
 }
 
+.prose-learn p {
+  color: var(--cf-text);
+}
+
+.tutorial-body :global(strong) {
+  color: var(--cf-text);
+  font-weight: 600;
+}
+
 .link {
   color: var(--cf-accent);
   @apply underline-offset-4 hover:underline;

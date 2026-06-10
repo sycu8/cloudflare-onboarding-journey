@@ -102,6 +102,23 @@ function scoreResourceForLesson(resource: CloudflareResource, lessonId: string):
   return score;
 }
 
+/** Curated tutorials for homepage — one mix per track, beginner-friendly. */
+const FEATURED_DEPLOYMENT_SLUGS = [
+  'add-multiple-sites-automation',
+  'protecting-sp-networks-from-ddos',
+  'deploy-an-express-app',
+  'build-a-jamstack-app',
+  'build-an-api-with-pages-functions',
+  'clientless-access-private-dns',
+] as const;
+
+export function getFeaturedDeploymentExamples(): CloudflareResource[] {
+  const bySlug = new Map(cloudflareResources.map((r) => [r.slug, r]));
+  return FEATURED_DEPLOYMENT_SLUGS.map((slug) => bySlug.get(slug)).filter(
+    (r): r is CloudflareResource => Boolean(r),
+  );
+}
+
 export function getDeploymentExamplesForLesson(
   lessonId: string,
   limit = 4,
