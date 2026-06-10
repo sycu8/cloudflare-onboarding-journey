@@ -4,6 +4,7 @@ import CloudflareLogo from './CloudflareLogo.astro';
 import LanguageSwitcher from '../ui/LanguageSwitcher';
 import ThemeToggle from '../ui/ThemeToggle';
 import MobileMenu from '../interactive/MobileMenu';
+import SiteSearch from '../interactive/SiteSearch';
 import { primaryNavItems, mobileNavPrimary, mobileNavMore } from '../../data/navigation';
 
 const currentPath = Astro.url.pathname;
@@ -36,6 +37,7 @@ const currentPath = Astro.url.pathname;
     </nav>
 
     <div class="flex shrink-0 items-center gap-0">
+      <SiteSearch client:load />
       <MobileMenu client:load primary={[...mobileNavPrimary]} more={[...mobileNavMore]} />
       <ThemeToggle client:load />
       <LanguageSwitcher client:load />

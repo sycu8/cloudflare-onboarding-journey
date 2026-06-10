@@ -74,7 +74,7 @@ const AGENT_JSON_ROUTES = [
   { path: '/.well-known/oauth-authorization-server', type: 'json' },
 ];
 
-const API_ROUTES = ['/api/workshop-events', '/api/site-config'];
+const API_ROUTES = ['/api/workshop-events', '/api/site-config', '/api/search'];
 
 const ASSET_ROUTES = ['/assets/favicon.svg', '/assets/og-image.svg'];
 const CSS_ROUTES = ['/styles/site.css'];

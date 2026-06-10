@@ -21,9 +21,21 @@ bucket_name = "cloudflare-starter-hub-resources"
 [ai]
 binding = "AI"
 
+# Cloudflare AI Search — semantic search over hub content (optional)
+# Create instance in dashboard: AI > AI Search > Website data source (sitemap-index.xml)
+[[ai_search]]
+binding = "HUB_SEARCH"
+instance_name = "cloudflare-starter-hub"
+
+# Alternative: namespace binding + runtime instance id
+# [[ai_search_namespaces]]
+# binding = "AI_SEARCH"
+# namespace = "default"
+
 # Workshop email — Cloudflare Email Service REST API (no send_email binding on Pages)
 [vars]
 CLOUDFLARE_ACCOUNT_ID = "REPLACE_WITH_ACCOUNT_ID"
+AI_SEARCH_INSTANCE = "cloudflare-starter-hub"
 
 # Pages secret: CLOUDFLARE_EMAIL_API_TOKEN (Email Sending permission)
 # Optional vars: WORKSHOP_EMAIL_FROM, PUBLIC_SITE_URL

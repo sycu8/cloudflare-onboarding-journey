@@ -9,6 +9,7 @@
     "dev": "astro dev",
     "build": "node scripts/build.mjs",
     "build:sitemap": "node scripts/build.mjs --sitemap-only",
+    "search:index": "npx astro build",
     "agent-discovery:build": "node scripts/build-agent-discovery.mjs",
     "dns-aid:setup": "node scripts/setup-dns-aid.mjs",
     "dns-aid:print-zone": "node scripts/setup-dns-aid.mjs --print-zone",

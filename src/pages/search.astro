@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/chrome/Breadcrumbs.astro';
+import LangText from '../components/ui/LangText.astro';
+import SearchPage from '../components/interactive/SearchPage';
+---
+
+<BaseLayout
+  title={{ vi: 'Tìm kiếm', en: 'Search' }}
+  description={{
+    vi: 'Tìm trang học, thuật ngữ, sản phẩm và use case trên Cloudflare Starter Hub — tìm nhanh hoặc AI Search.',
+    en: 'Find learning pages, glossary terms, products, and use cases on Cloudflare Starter Hub — instant or AI Search.',
+  }}
+  canonicalPath="/search"
+  showProgressBar
+>
+  <Breadcrumbs items={[{ href: '/search', label: { vi: 'Tìm kiếm', en: 'Search' } }]} />
+
+  <header class="mb-6">
+    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: 'Tìm kiếm', en: 'Search' }} />
+    <LangText
+      as="p"
+      class="text-muted mt-2 max-w-2xl text-sm"
+      text={{
+        vi: 'Tìm nhanh trong hub hoặc dùng Cloudflare AI Search khi đã cấu hình.',
+        en: 'Instant search across the hub, plus Cloudflare AI Search when configured.',
+      }}
+    />
+  </header>
+
+  <SearchPage client:load />
+</BaseLayout>

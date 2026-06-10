@@ -30,6 +30,7 @@ export const mobileNavMore: NavItem[] = [
   { href: '/first-week', label: { vi: 'Tuần đầu (7 ngày)', en: 'First week' } },
   { href: '/choose-your-path', label: { vi: 'Chọn lộ trình', en: 'Choose path' } },
   { href: '/workshop', label: { vi: 'Hội thảo', en: 'Workshop' } },
+  { href: '/search', label: { vi: 'Tìm kiếm', en: 'Search' } },
   { href: '/checklists/beginner-cloudflare-checklist', label: { vi: 'Checklist', en: 'Checklist' } },
   { href: '/quiz/beginner-readiness', label: { vi: 'Bài kiểm tra', en: 'Quiz' } },
   { href: '/glossary', label: { vi: 'Thuật ngữ', en: 'Glossary' } },

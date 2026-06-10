@@ -64,6 +64,7 @@ Optional: [**First week (7 days)**](/first-week) — day-by-day plan, common mis
 - **Use cases hub** — [`/use-cases`](/use-cases): protect website, secure API, serverless app, VPN replacement, remote users (grouped by track)
 - **Product pages** — searchable catalog at `/products` (Workers, WAF, Zero Trust, D1, R2, …)
 - **Cloudflare 101 extras** — terminology dictionary (6 categories, CSS tabs, search) + lab-style config/WAF guides
+- **Search** — instant search (245+ indexed pages/terms) via Ctrl+K; optional [Cloudflare AI Search](docs/AI-SEARCH-SETUP.md) for semantic results
 - **Interactive** — glossary search + pagination, quiz with explanations, checklist progress, path selector
 - **Resources hub** — official docs grid (synced), Reference Architecture **diagrams**, Resource Hub, GitHub, CloudSecOp, Learning Center
 - **Solutions & demos** — bilingual solution proposals, SE demo guides, content-delivery guide, plan comparison
@@ -294,6 +295,7 @@ Admin auth header: `Authorization: Bearer <WORKSHOP_ADMIN_KEY>` or `X-Cfhub-Admi
 | `/products`, `/products/{slug}` | Product catalog & detail pages |
 | `/checklists/beginner-cloudflare-checklist` | Interactive checklist |
 | `/quiz/beginner-readiness` | 12-question knowledge check |
+| `/search` | Site search (instant + AI Search when configured) |
 | `/glossary` | Searchable glossary |
 | `/resources` | Resource Hub, GitHub, Ref Arch, diagram gallery, CloudSecOp, Learning Center |
 | `/changelog` | Curated Cloudflare Developer Changelog |

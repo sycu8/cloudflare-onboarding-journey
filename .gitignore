@@ -1,6 +1,7 @@
 # Build & dependencies
 dist/
 .astro/
+public/search-index.json
 node_modules/
 
 # Logs

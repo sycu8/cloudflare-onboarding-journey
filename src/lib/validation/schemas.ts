@@ -49,6 +49,12 @@ export const workshopEventCreateSchema = z.object({
   status: workshopEventStatusSchema.default('published'),
 });
 
+export const searchQuerySchema = z.object({
+  q: z.string().trim().min(1).max(200),
+  lang: languageSchema.optional(),
+  mode: z.union([z.literal('instant'), z.literal('ai')]).default('ai'),
+});
+
 export const workshopSignupSchema = z.object({
   name: z.string().trim().min(2).max(80),
   email: z.string().trim().email().max(200),

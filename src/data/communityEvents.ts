@@ -28,16 +28,16 @@ export const communityEvents: CommunityEvent[] = [
       en: 'Da Nang – Cloudflare PeerPoint',
     },
     summary: {
-      vi: 'Meetup chào sân đầu tiên của cộng đồng Cloudflare tại Đà Nẵng — demo và hands-on Workers, Pages, R2, Durable Objects.',
-      en: 'The inaugural Cloudflare community meetup in Da Nang — demos and hands-on labs for Workers, Pages, R2, and Durable Objects.',
+      vi: 'Meetup đặc biệt tháng 6/2026 tại Đà Nẵng — buổi chào sân đầu tiên của cộng đồng Cloudflare Việt Nam: demo, hands-on Workers/Pages/R2/Durable Objects, networking và mini game quay số voucher Grab (tới 500.000đ).',
+      en: 'Special June 2026 meetup in Da Nang — the inaugural Vietnam Cloudflare community PeerPoint: demos, hands-on Workers/Pages/R2/Durable Objects, networking, and a lucky-draw for Grab vouchers (up to 500,000 VND).',
     },
-    startsAt: '2026-06-19T08:00:00.000Z',
-    endsAt: '2026-06-19T10:00:00.000Z',
+    startsAt: '2026-06-19T11:00:00.000Z',
+    endsAt: '2026-06-19T14:00:00.000Z',
     timezone: 'Asia/Ho_Chi_Minh',
     format: 'in-person',
     location: {
-      vi: 'Đà Nẵng (Hải Châu) — địa điểm sẽ cập nhật',
-      en: 'Da Nang (Hai Chau) — venue to be announced',
+      vi: 'Enouvo IT Solutions · 538 Ngô Quyền, An Hải, Đà Nẵng',
+      en: 'Enouvo IT Solutions · 538 Ngo Quyen, An Hai, Da Nang',
     },
     language: {
       vi: 'Tiếng Việt, lai tiếng Anh',
@@ -56,21 +56,31 @@ export const communityEvents: CommunityEvent[] = [
     ],
     highlights: {
       vi: [
-        'Khám phá Cloudflare Developer Platform và các dịch vụ cho developers',
+        'Khám phá Cloudflare Developer Platform và các dịch vụ hỗ trợ developers',
         'Demo và triển khai thực tế Workers, Pages, R2, Durable Objects',
-        'Chia sẻ từ đội ngũ product và diễn giả cộng đồng',
+        'Chia sẻ từ team product và diễn giả cộng đồng',
         'Networking với cộng đồng Cloudflare Việt Nam',
+        'Mini game quay số voucher Grab (tới 500.000đ)',
       ],
       en: [
         'Explore the Cloudflare Developer Platform and developer services',
         'Live demos and hands-on deployment of Workers, Pages, R2, and Durable Objects',
         'Talks from product practitioners and community speakers',
         'Networking with the Vietnam Cloudflare community',
+        'Lucky draw for Grab vouchers (up to 500,000 VND)',
       ],
     },
     notes: {
-      vi: ['Miễn phí tham dự', 'Nhớ mang laptop để làm hands-on lab'],
-      en: ['Free to attend', 'Bring your laptop for the hands-on lab'],
+      vi: [
+        'Thứ Sáu, 19/06/2026 · 18:00–21:00 (ICT)',
+        'Miễn phí tham dự',
+        'Nhớ mang laptop để làm hands-on lab',
+      ],
+      en: [
+        'Friday, 19 June 2026 · 6:00–9:00 PM (ICT)',
+        'Free to attend',
+        'Bring your laptop for the hands-on lab',
+      ],
     },
     contact: {
       vi: 'Liên hệ Mr. Cường (0369 161 494) hoặc Mr. Ý (0773 288 148)',
