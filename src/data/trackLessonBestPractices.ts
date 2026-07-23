@@ -202,6 +202,38 @@ export const trackLessonBestPractices: Record<string, BestPracticeNote> = {
     sourceTitle: { vi: 'Workers Best Practices', en: 'Workers Best Practices' },
     sourceUrl: WORKERS_BP,
   },
+  'dp-5-l1': {
+    text: {
+      vi: 'Giữ model call và binding trong Worker. Đừng expose provider credential, binding identifier hoặc logic chọn model cho client; dùng environment-specific config và test trên preview trước production.',
+      en: 'Keep model calls and bindings in the Worker. Do not expose provider credentials, binding identifiers, or model-selection logic to the client; use environment-specific configuration and test in preview before production.',
+    },
+    sourceTitle: { vi: 'Workers Best Practices', en: 'Workers Best Practices' },
+    sourceUrl: WORKERS_BP,
+  },
+  'dp-5-l3': {
+    text: {
+      vi: 'Mọi key/token dùng để gọi model hay tool phải là secret. Validate input ở server và chỉ cấp khả năng cần thiết cho từng request; model output không phải authorization signal.',
+      en: 'Every key or token used to call a model or tool must be a secret. Validate input on the server and grant only the capability needed for each request; model output is not an authorization signal.',
+    },
+    sourceTitle: { vi: 'Workers Best Practices', en: 'Workers Best Practices' },
+    sourceUrl: WORKERS_BP,
+  },
+  'dp-5-l4': {
+    text: {
+      vi: 'Dùng metadata tenant/ACL để filter retrieval và giữ source document tách khỏi vector index. Retrieval phù hợp không đồng nghĩa người gọi được phép đọc document đó.',
+      en: 'Use tenant or ACL metadata to filter retrieval and keep source documents separate from the vector index. A relevant retrieval does not mean the caller is allowed to read that document.',
+    },
+    sourceTitle: { vi: 'Vectorize — Get started', en: 'Vectorize — Get started' },
+    sourceUrl: 'https://developers.cloudflare.com/vectorize/get-started/',
+  },
+  'dp-5-l5': {
+    text: {
+      vi: 'Tool của agent nên nhỏ, typed và có authorization độc lập. Với action ghi, thanh toán hoặc external side effect, add confirmation/human approval thay vì để model tự thực thi.',
+      en: 'Agent tools should be small, typed, and independently authorized. For writes, payments, or external side effects, add confirmation or human approval instead of letting the model execute autonomously.',
+    },
+    sourceTitle: { vi: 'Agents — Get started', en: 'Agents — Get started' },
+    sourceUrl: 'https://developers.cloudflare.com/agents/getting-started/',
+  },
   // ── Cloudflare One ──
   'c1-1-l1': {
     text: {

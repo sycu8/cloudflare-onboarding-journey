@@ -450,8 +450,8 @@ export const useCases: UseCase[] = [
     },
     relatedTrack: 'developer-platform',
     nextCta: {
-      href: '/tracks/developer-platform/dp-4-l1',
-      label: { vi: 'Bài học Workers AI', en: 'Workers AI lesson' },
+      href: '/tracks/developer-platform/dp-5-l1',
+      label: { vi: 'Bắt đầu AI trên Developer Platform', en: 'Start AI on the Developer Platform' },
     },
   },
   {

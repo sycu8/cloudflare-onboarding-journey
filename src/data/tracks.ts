@@ -270,14 +270,16 @@ export const tracks: Track[] = [
         'Tạo API route bằng Pages Functions hoặc Worker',
         'Chọn đúng storage: KV vs D1 vs R2',
         'Xử lý lỗi và logging cơ bản trên edge',
-        'Hiểu khi nào dùng Workers AI (không bắt buộc ngay)',
+        'Build và bảo mật AI feature với Workers AI, AI Gateway và Vectorize',
+        'Thiết kế Agent với tools hẹp và credential theo least privilege',
       ],
       en: [
         'Deploy a static or full-stack site on Pages',
         'Create an API route with Pages Functions or a Worker',
         'Pick the right storage: KV vs D1 vs R2',
         'Handle errors and basic edge logging',
-        'Know when to use Workers AI (optional early on)',
+        'Build and secure an AI feature with Workers AI, AI Gateway, and Vectorize',
+        'Design an Agent with narrow tools and least-privilege credentials',
       ],
     },
     keyConcepts: ['Pages', 'Workers', 'KV', 'D1', 'R2', 'Durable Objects', 'Workers AI', 'AI Gateway', 'Vectorize'],
@@ -392,6 +394,53 @@ export const tracks: Track[] = [
           },
         ],
       },
+      {
+        id: 'dp-5',
+        title: { vi: 'Phần 5: AI trên Developer Platform', en: 'Part 5: AI on the Developer Platform' },
+        description: {
+          vi: 'Từ inference đầu tiên đến AI security, RAG và agent có tools/skills.',
+          en: 'From first inference to AI security, RAG, and agents with tools and skills.',
+        },
+        duration: { vi: '~110 phút', en: '~110 min' },
+        lessons: [
+          {
+            title: { vi: 'Inference đầu tiên với Workers AI', en: 'First inference with Workers AI' },
+            body: {
+              vi: 'Thêm AI binding vào Worker, gọi model từ server-side và trả response tối thiểu. Bắt đầu bằng một task rõ ràng trước khi thêm chat UI hoặc nhiều provider.',
+              en: 'Add an AI binding to a Worker, call a model server-side, and return a minimal response. Start with one clear task before adding a chat UI or multiple providers.',
+            },
+            hubLink: '/use-cases/build-ai-applications',
+          },
+          {
+            title: { vi: 'Adopt AI có kiểm soát với AI Gateway', en: 'Adopt AI deliberately with AI Gateway' },
+            body: {
+              vi: 'Đặt AI Gateway giữa app và model provider để quan sát request, cache khi phù hợp và thay provider mà không làm lộ credential ở client.',
+              en: 'Place AI Gateway between your app and model providers to observe requests, cache where appropriate, and change providers without exposing credentials in the client.',
+            },
+          },
+          {
+            title: { vi: 'Baseline bảo mật cho ứng dụng AI', en: 'AI application security baseline' },
+            body: {
+              vi: 'Giữ key ở Worker secrets, xác thực người dùng trước endpoint AI, rate limit input, validate tool input và áp dụng guardrails cho data/response nhạy cảm.',
+              en: 'Keep keys in Worker secrets, authenticate users before AI endpoints, rate-limit input, validate tool input, and apply guardrails to sensitive data and responses.',
+            },
+          },
+          {
+            title: { vi: 'RAG với Vectorize và storage', en: 'RAG with Vectorize and storage' },
+            body: {
+              vi: 'Tách luồng ingest và query: lưu tài liệu trong R2, tạo embeddings vào Vectorize, retrieve context có nguồn trước khi gọi model. Đừng coi vector search là quyền truy cập dữ liệu.',
+              en: 'Separate ingestion from queries: store documents in R2, create embeddings in Vectorize, and retrieve sourced context before calling the model. Do not treat vector search as data authorization.',
+            },
+          },
+          {
+            title: { vi: 'Agents: tools, skills và quyền hạn tối thiểu', en: 'Agents: tools, skills, and least privilege' },
+            body: {
+              vi: 'Dùng Agents SDK cho state/session khi cần. Mỗi tool cần schema input rõ ràng, authorization ở server và scope nhỏ; skill là hướng dẫn/versioned knowledge, không phải quyền truy cập bí mật.',
+              en: 'Use the Agents SDK for state and sessions when needed. Give every tool a clear input schema, server-side authorization, and narrow scope; skills are versioned guidance and knowledge, not secret access.',
+            },
+          },
+        ],
+      },
     ],
     recommendedSequence: {
       vi: [
@@ -401,7 +450,9 @@ export const tracks: Track[] = [
         'Lưu dữ liệu đơn giản trong KV hoặc D1',
         'Upload files lên R2',
         'Thêm basic analytics và error handling',
-        'Thử một AI API use case',
+        'Ship một Workers AI feature có mục tiêu rõ ràng',
+        'Thêm AI Gateway observability và security controls',
+        'Chỉ build RAG hoặc agent khi data/tool boundaries rõ ràng',
       ],
       en: [
         'Deploy a static site with Pages',
@@ -410,12 +461,15 @@ export const tracks: Track[] = [
         'Store simple data in KV or D1',
         'Upload files to R2',
         'Add basic analytics and error handling',
-        'Try an AI API use case',
+        'Ship one focused Workers AI feature',
+        'Add AI Gateway observability and security controls',
+        'Build RAG or an agent only when its data and tool boundaries are clear',
       ],
     },
     relatedUseCases: [
       { href: '/use-cases/build-serverless-app/', label: { vi: 'Build serverless app', en: 'Build a serverless app' } },
       { href: '/use-cases/deploy-static-site/', label: { vi: 'Deploy static site', en: 'Deploy static site' } },
+      { href: '/use-cases/build-ai-applications/', label: { vi: 'Build ứng dụng AI', en: 'Build AI applications' } },
     ],
     commonMistakes: {
       vi: [

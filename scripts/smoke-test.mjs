@@ -23,6 +23,8 @@ const ROUTES = [
   '/tracks/application-services',
   '/tracks/application-services/as-1-l1',
   '/tracks/developer-platform/dp-1-l1',
+  '/tracks/developer-platform/dp-5-l1',
+  '/tracks/developer-platform/dp-5-l5',
   '/tracks/cloudflare-one/c1-2-l1',
   '/tracks/developer-platform',
   '/tracks/cloudflare-one',
