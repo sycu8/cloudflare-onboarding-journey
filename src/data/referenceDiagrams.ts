@@ -122,10 +122,15 @@ const featuredSlugs = new Set([
   'augment-access-with-serverless',
 ]);
 
+function resolveDiagramImageUrl(image: { file?: string; sourceUrl?: string; url?: string }): string {
+  if (image.file) return `/ref-diagrams/${image.file}`;
+  return image.sourceUrl ?? image.url ?? '';
+}
+
 function toDiagram(raw: RawDiagram): ReferenceDiagram {
   const category = raw.category as DiagramCategory;
   const images = raw.images.map((img) => ({
-    url: img.url,
+    url: resolveDiagramImageUrl(img),
     alt: { vi: img.alt || raw.title, en: img.alt || raw.title },
   }));
   const viSummary = viSummaryOverlay[raw.slug];

@@ -2,7 +2,11 @@
  * Scrape reference architecture diagram images from developers.cloudflare.com
  * Usage: node scripts/scrape-ref-arch-diagrams.mjs
  */
-import { writeFileSync } from 'node:fs';
+import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+const OUTPUT_FILE = 'src/data/referenceDiagrams.data.json';
+const ASSET_DIR = 'public/ref-diagrams';
 
 function cleanImageEntry(raw) {
   const match = raw.match(/^(https:\/\/developers\.cloudflare\.com\/_astro\/[^\s"]+\.(?:svg|webp|png)[^\s"]*)/);
@@ -10,6 +14,18 @@ function cleanImageEntry(raw) {
   const altMatch = raw.match(/"([^"]+)"/);
   const alt = altMatch?.[1] ?? '';
   return { url, alt };
+}
+
+function imageFile(category, slug, index, sourceUrl) {
+  const extension = new URL(sourceUrl).pathname.match(/\.(svg|webp|png)$/i)?.[1]?.toLowerCase();
+  if (!extension) throw new Error(`Unsupported diagram image format: ${sourceUrl}`);
+  return `${category}/${slug}/${index}.${extension}`;
+}
+
+async function fetchBuffer(url) {
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`Could not download ${url}: HTTP ${response.status}`);
+  return Buffer.from(await response.arrayBuffer());
 }
 
 const llms = await fetch('https://developers.cloudflare.com/reference-architecture/llms.txt').then((r) =>
@@ -20,6 +36,7 @@ const mdUrls = [
 ].map((m) => m[1]);
 
 const out = [];
+const assets = [];
 for (const mdUrl of mdUrls) {
   const pageUrl = mdUrl.replace(/index\.md$/, '');
   const md = await fetch(mdUrl, { headers: { Accept: 'text/markdown' } }).then((r) => r.text());
@@ -36,11 +53,28 @@ for (const mdUrl of mdUrls) {
     .map(cleanImageEntry)
     .filter((image) => !/\/logo\.[^/]+$/.test(image.url));
   const category = pageUrl.split('/diagrams/')[1]?.split('/')[0] || '';
+  const slug = pageUrl.split('/').filter(Boolean).pop();
   if (images.length) {
-    out.push({ slug: pageUrl.split('/').filter(Boolean).pop(), category, title, desc, pageUrl, images });
+    const localImages = images.map((image, index) => {
+      const file = imageFile(category, slug, index, image.url);
+      assets.push({ file, sourceUrl: image.url });
+      return { sourceUrl: image.url, file, alt: image.alt };
+    });
+    out.push({ slug, category, title, desc, pageUrl, images: localImages });
   }
   await new Promise((r) => setTimeout(r, 80));
 }
 
-writeFileSync('src/data/referenceDiagrams.data.json', JSON.stringify(out, null, 2));
-console.log(`Wrote ${out.length} diagrams to src/data/referenceDiagrams.data.json`);
+const downloadedAssets = await Promise.all(
+  assets.map(async (asset) => ({ ...asset, body: await fetchBuffer(asset.sourceUrl) })),
+);
+
+rmSync(ASSET_DIR, { recursive: true, force: true });
+for (const asset of downloadedAssets) {
+  const path = join(ASSET_DIR, asset.file);
+  mkdirSync(join(path, '..'), { recursive: true });
+  writeFileSync(path, asset.body);
+}
+
+writeFileSync(OUTPUT_FILE, JSON.stringify(out, null, 2));
+console.log(`Wrote ${out.length} diagrams and ${downloadedAssets.length} local images`);
