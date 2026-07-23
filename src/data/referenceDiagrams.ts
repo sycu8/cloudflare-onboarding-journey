@@ -3,7 +3,7 @@ import rawData from './referenceDiagrams.data.json';
 
 export const REF_ARCH_DIAGRAMS_URL = 'https://developers.cloudflare.com/reference-architecture/diagrams/';
 export const REF_ARCH_DIAGRAMS_LLMS_URL = 'https://developers.cloudflare.com/reference-architecture/llms.txt';
-export const DIAGRAMS_LAST_SYNCED = '2026-06-02';
+export const DIAGRAMS_LAST_SYNCED = '2026-07-23';
 
 export type DiagramCategory =
   | 'ai'

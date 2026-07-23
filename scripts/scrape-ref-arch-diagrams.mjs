@@ -30,7 +30,11 @@ for (const mdUrl of mdUrls) {
       /!\[[^\]]*\]\((https:\/\/developers\.cloudflare\.com\/_astro\/[^)]+\.(?:svg|webp|png)[^)]*)\)/g,
     ),
   ].map((m) => m[1]);
-  const images = rawImgs.map(cleanImageEntry);
+  // The documentation footer includes the Cloudflare logo as a markdown image.
+  // It is not part of a reference architecture diagram.
+  const images = rawImgs
+    .map(cleanImageEntry)
+    .filter((image) => !/\/logo\.[^/]+$/.test(image.url));
   const category = pageUrl.split('/diagrams/')[1]?.split('/')[0] || '';
   if (images.length) {
     out.push({ slug: pageUrl.split('/').filter(Boolean).pop(), category, title, desc, pageUrl, images });
