@@ -8,6 +8,7 @@ const ROUTES = [
   '/',
   '/start-here',
   '/content-roadmap',
+  '/cheatsheets/ai-protection-portfolio',
   '/roadmaps',
   '/roadmaps/sales',
   '/roadmaps/solution-engineer',

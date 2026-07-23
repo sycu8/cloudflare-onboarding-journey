@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/chrome/Breadcrumbs.astro';
+import LangText from '../../components/ui/LangText.astro';
+import CTASection from '../../components/content/CTASection.astro';
+import {
+  aiProtectionChecklist,
+  aiProtectionIntro,
+  aiProtectionMentalModel,
+  aiProtectionPillars,
+} from '../../data/aiProtectionPortfolio';
+---
+
+<BaseLayout
+  title={{ vi: 'Cheatsheet bảo vệ AI', en: 'AI Protection Portfolio cheatsheet' }}
+  description={{ vi: 'Bản đồ Cloudflare One, AI Gateway và Application Security cho AI security, Shadow AI, prompt protection và bot controls.', en: 'A map of Cloudflare One, AI Gateway, and Application Security for AI security, Shadow AI, prompt protection, and bot controls.' }}
+  canonicalPath="/cheatsheets/ai-protection-portfolio"
+  showProgressBar
+>
+  <Breadcrumbs items={[{ href: '/resources', label: { vi: 'Tài nguyên', en: 'Resources' } }, { href: '/cheatsheets/ai-protection-portfolio', label: { vi: 'Cheatsheet bảo vệ AI', en: 'AI Protection cheatsheet' } }]} />
+  <header class="mb-8">
+    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: 'Cloudflare AI Protection Portfolio', en: 'Cloudflare AI Protection Portfolio' }} />
+    <LangText as="p" class="text-muted mt-2 max-w-3xl text-sm leading-relaxed md:text-base" text={aiProtectionIntro} />
+  </header>
+  <section class="card mb-8">
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Mô hình phòng thủ nhiều lớp', en: 'Layered defense model' }} />
+    <LangText as="p" class="text-muted mt-2 font-mono text-sm leading-relaxed" text={aiProtectionMentalModel} />
+  </section>
+  <nav class="card mb-8 flex flex-wrap gap-2 p-4 text-sm" aria-label="AI protection topics">
+    {aiProtectionPillars.map((pillar) => <a href={`#${pillar.id}`} class="badge hover:border-[var(--cf-accent)]"><span class="lang-vi">{pillar.title.vi}</span><span class="lang-en">{pillar.title.en}</span></a>)}
+  </nav>
+  <div class="grid gap-8 lg:grid-cols-3">
+    <div class="space-y-10 lg:col-span-2">
+      {aiProtectionPillars.map((pillar) => (
+        <section id={pillar.id} class="scroll-mt-24">
+          <LangText as="h2" class="text-xl font-semibold" text={pillar.title} />
+          <LangText as="p" class="text-muted mt-2 text-sm leading-relaxed" text={pillar.summary} />
+          <div class="mt-4 grid gap-4 md:grid-cols-2">
+            <div><h3 class="text-sm font-medium"><span class="lang-vi">Kiểm soát</span><span class="lang-en">Controls</span></h3><ul class="text-muted mt-2 list-disc space-y-1 pl-5 text-sm">{pillar.controls.map((item) => <li><span class="lang-vi">{item.vi}</span><span class="lang-en">{item.en}</span></li>)}</ul></div>
+            <div><h3 class="text-sm font-medium"><span class="lang-vi">Rủi ro được giảm thiểu</span><span class="lang-en">Risks addressed</span></h3><ul class="text-muted mt-2 list-disc space-y-1 pl-5 text-sm">{pillar.risks.map((item) => <li><span class="lang-vi">{item.vi}</span><span class="lang-en">{item.en}</span></li>)}</ul></div>
+          </div>
+          <p class="mt-3 text-sm"><a class="link" href={pillar.docsHref} target="_blank" rel="noopener noreferrer"><span class="lang-vi">Tài liệu chính thức ↗</span><span class="lang-en">Official docs ↗</span></a>{pillar.productSlugs.map((slug) => <><span class="text-muted"> · </span><a class="link" href={`/products/${slug}`}><code>{slug}</code></a></>)}</p>
+        </section>
+      ))}
+    </div>
+    <aside><div class="card sticky top-20 p-4"><LangText as="h2" class="font-semibold" text={{ vi: 'Checklist rollout', en: 'Rollout checklist' }} /><ol class="text-muted mt-3 list-decimal space-y-2 pl-5 text-sm">{aiProtectionChecklist.map((item) => <li><span class="lang-vi">{item.vi}</span><span class="lang-en">{item.en}</span></li>)}</ol><p class="text-muted mt-4 text-xs"><span class="lang-vi">Tính năng và enforcement có thể phụ thuộc plan, policy và cấu hình TLS inspection.</span><span class="lang-en">Features and enforcement can depend on plan, policy, and TLS-inspection configuration.</span></p></div></aside>
+  </div>
+  <CTASection title={{ vi: 'Áp dụng AI security trong lộ trình', en: 'Apply AI security in the learning path' }} description={{ vi: 'Bắt đầu với AI security baseline trên Developer Platform, sau đó mở rộng Zero Trust controls cho user và SaaS.', en: 'Start with the AI security baseline on Developer Platform, then extend Zero Trust controls to users and SaaS.' }} cta={{ href: '/tracks/developer-platform/dp-5-l3', label: { vi: 'Mở bài AI security', en: 'Open AI security lesson' } }} />
+</BaseLayout>

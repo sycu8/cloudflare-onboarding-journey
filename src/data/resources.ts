@@ -44,6 +44,17 @@ export const resources: ResourceCard[] = [
     status: 'available',
   },
   {
+    slug: 'ai-protection-portfolio',
+    title: { vi: 'Cheatsheet bảo vệ AI', en: 'AI Protection Portfolio cheatsheet' },
+    description: {
+      vi: 'CASB, SWG, RBI, AI Gateway, WAF/Bots và Radar — map rủi ro AI vào các lớp kiểm soát Cloudflare.',
+      en: 'CASB, SWG, RBI, AI Gateway, WAF/Bots, and Radar — map AI risks to Cloudflare control layers.',
+    },
+    type: 'external',
+    href: '/cheatsheets/ai-protection-portfolio',
+    status: 'available',
+  },
+  {
     slug: 'solution-proposals',
     title: { vi: 'Proposal bộ giải pháp', en: 'Solution proposals' },
     description: {
