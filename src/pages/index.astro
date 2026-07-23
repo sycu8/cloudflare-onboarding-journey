@@ -37,7 +37,7 @@ const aiCount = getUseCasesByTrack('ai-security-adoption').length;
   />
 
   <section class="mt-10">
-    <LangText as="h2" class="text-xl font-semibold md:text-2xl" text={{ vi: 'Hiểu Cloudflare theo 3 lớp đơn giản', en: 'Cloudflare in 3 simple layers' }} />
+    <LangText as="h2" class="text-xl font-semibold md:text-2xl" text={{ vi: 'Hiểu Cloudflare theo 4 lớp đơn giản', en: 'Cloudflare in 4 simple layers' }} />
     <div class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
       <ConceptCard
         title={{ vi: 'Protect applications', en: 'Protect applications' }}
@@ -58,6 +58,13 @@ const aiCount = getUseCasesByTrack('ai-security-adoption').length;
         description={{
           vi: 'Bảo vệ quyền truy cập vào SaaS, private apps, Internet browsing, users, devices và networks bằng Zero Trust.',
           en: 'Secure access to SaaS, private apps, Internet browsing, users, devices, and networks with Zero Trust.',
+        }}
+      />
+      <ConceptCard
+        title={{ vi: 'Adopt AI safely', en: 'Adopt AI safely' }}
+        description={{
+          vi: 'Quản trị Shadow AI, bảo vệ dữ liệu và kiểm soát AI application với CASB, SWG, AI Gateway và WAF.',
+          en: 'Govern Shadow AI, protect data, and control AI applications with CASB, SWG, AI Gateway, and WAF.',
         }}
       />
     </div>
