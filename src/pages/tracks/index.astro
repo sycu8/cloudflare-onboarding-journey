@@ -8,8 +8,8 @@ import { tracks } from '../../data/tracks';
 <BaseLayout
   title={{ vi: 'Lộ trình học Cloudflare', en: 'Cloudflare learning tracks' }}
   description={{
-    vi: 'Ba lộ trình: Application Services, Developer Platform và Cloudflare One — nội dung cụ thể từng phần.',
-    en: 'Three tracks: Application Services, Developer Platform, and Cloudflare One — with detailed modules.',
+    vi: 'Bốn lộ trình: Application Services, Developer Platform, Cloudflare One và AI Security & Adoption — nội dung cụ thể từng phần.',
+    en: 'Four tracks: Application Services, Developer Platform, Cloudflare One, and AI Security & Adoption — with detailed modules.',
   }}
   canonicalPath="/tracks"
   showProgressBar
@@ -28,7 +28,7 @@ import { tracks } from '../../data/tracks';
     />
   </header>
 
-  <div class="grid gap-6 md:grid-cols-1 lg:grid-cols-3">
+  <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
     {tracks.map((track) => (
       <article class="card flex flex-col">
         <LangText as="h2" class="text-lg font-semibold" text={track.title} />

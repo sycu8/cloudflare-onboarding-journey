@@ -13,13 +13,14 @@ import { useCases, getUseCasesByTrack } from '../data/useCases';
 const asCount = getUseCasesByTrack('application-services').length;
 const dpCount = getUseCasesByTrack('developer-platform').length;
 const c1Count = getUseCasesByTrack('cloudflare-one').length;
+const aiCount = getUseCasesByTrack('ai-security-adoption').length;
 ---
 
 <BaseLayout
   title={{ vi: 'Bắt đầu học Cloudflare từ con số 0', en: 'Start learning Cloudflare from zero' }}
   description={{
-    vi: 'Học Cloudflare từ con số 0: DNS, CDN, Workers, Zero Trust. Lộ trình 3 track, checklist, quiz 12 câu, tài nguyên chính thức và lộ trình 7 ngày — tiếng Việt & English.',
-    en: 'Learn Cloudflare from zero: DNS, CDN, Workers, Zero Trust. Three tracks, checklists, a 12-question quiz, official resources, and a 7-day path — Vietnamese & English.',
+    vi: 'Học Cloudflare từ con số 0: DNS, CDN, Workers, Zero Trust và AI Security. Bốn lộ trình, checklist, quiz, tài nguyên chính thức và lộ trình 7 ngày — tiếng Việt & English.',
+    en: 'Learn Cloudflare from zero: DNS, CDN, Workers, Zero Trust, and AI Security. Four tracks, checklists, quizzes, official resources, and a 7-day path — Vietnamese & English.',
   }}
   canonicalPath="/"
 >
@@ -28,8 +29,8 @@ const c1Count = getUseCasesByTrack('cloudflare-one').length;
     badge={{ vi: 'Người mới', en: 'Beginners' }}
     title={{ vi: 'Bắt đầu học Cloudflare từ con số 0.', en: 'Start learning Cloudflare from zero.' }}
     subtitle={{
-      vi: 'Một learning hub thân thiện cho người mới bắt đầu tìm hiểu Cloudflare Application Services, Developer Platform và Cloudflare One — không bị ngợp bởi quá nhiều tên sản phẩm.',
-      en: 'A beginner-friendly learning hub for understanding Cloudflare Application Services, Developer Platform, and Cloudflare One — without getting lost in product names.',
+      vi: 'Một learning hub thân thiện cho người mới bắt đầu tìm hiểu Application Services, Developer Platform, Cloudflare One và AI Security & Adoption.',
+      en: 'A beginner-friendly learning hub for Application Services, Developer Platform, Cloudflare One, and AI Security & Adoption.',
     }}
     primaryCta={{ href: '/start-here', label: { vi: 'Bắt đầu tại đây', en: 'Start here' } }}
     secondaryCta={{ href: '/first-week', label: { vi: 'Lộ trình 7 ngày', en: '7-day path' } }}
@@ -37,7 +38,7 @@ const c1Count = getUseCasesByTrack('cloudflare-one').length;
 
   <section class="mt-10">
     <LangText as="h2" class="text-xl font-semibold md:text-2xl" text={{ vi: 'Hiểu Cloudflare theo 3 lớp đơn giản', en: 'Cloudflare in 3 simple layers' }} />
-    <div class="mt-4 grid gap-4 md:grid-cols-3">
+    <div class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
       <ConceptCard
         title={{ vi: 'Protect applications', en: 'Protect applications' }}
         description={{
@@ -102,6 +103,11 @@ const c1Count = getUseCasesByTrack('cloudflare-one').length;
         }}
         cta={{ href: '/tracks/cloudflare-one', label: { vi: 'Bắt đầu với Cloudflare One', en: 'Start Cloudflare One' } }}
       />
+      <PathCard
+        title={{ vi: 'Tôi muốn adopt AI an toàn', en: 'I want to adopt AI safely' }}
+        description={{ vi: 'Học CASB, Shadow AI, SWG, RBI, AI Gateway, WAF và bảo mật RAG/agent.', en: 'Learn CASB, Shadow AI, SWG, RBI, AI Gateway, WAF, and RAG/agent security.' }}
+        cta={{ href: '/tracks/ai-security-adoption', label: { vi: 'Bắt đầu AI Security', en: 'Start AI Security' } }}
+      />
     </div>
   </section>
 
@@ -113,8 +119,8 @@ const c1Count = getUseCasesByTrack('cloudflare-one').length;
           as="p"
           class="text-muted mt-1 max-w-2xl text-sm"
           text={{
-            vi: `${useCases.length} tình huống theo ba lộ trình — Application Services, Developer Platform và Cloudflare One.`,
-            en: `${useCases.length} scenarios across three tracks — Application Services, Developer Platform, and Cloudflare One.`,
+            vi: `${useCases.length} tình huống theo bốn lộ trình, gồm AI Security & Adoption.`,
+            en: `${useCases.length} scenarios across four tracks, including AI Security & Adoption.`,
           }}
         />
       </div>
@@ -122,7 +128,7 @@ const c1Count = getUseCasesByTrack('cloudflare-one').length;
         <LangText text={{ vi: 'Xem tất cả', en: 'Browse all' }} />
       </a>
     </div>
-    <div class="grid gap-4 md:grid-cols-3">
+    <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
       <PathCard
         title={{ vi: 'Application Services', en: 'Application Services' }}
         description={{
@@ -133,6 +139,11 @@ const c1Count = getUseCasesByTrack('cloudflare-one').length;
           href: '/use-cases/application-services',
           label: { vi: `${asCount} tình huống`, en: `${asCount} scenarios` },
         }}
+      />
+      <PathCard
+        title={{ vi: 'AI Security & Adoption', en: 'AI Security & Adoption' }}
+        description={{ vi: 'Quản trị Shadow AI và bảo vệ AI application theo nhiều lớp.', en: 'Govern Shadow AI and protect AI applications in layers.' }}
+        cta={{ href: '/use-cases/', label: { vi: `${aiCount} tình huống`, en: `${aiCount} scenarios` } }}
       />
       <PathCard
         title={{ vi: 'Developer Platform', en: 'Developer Platform' }}
