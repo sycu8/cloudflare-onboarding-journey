@@ -4,6 +4,7 @@
  */
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
+import sharp from 'sharp';
 
 const OUTPUT_FILE = 'src/data/referenceDiagrams.data.json';
 const ASSET_DIR = 'public/ref-diagrams';
@@ -17,8 +18,11 @@ function cleanImageEntry(raw) {
 }
 
 function imageFile(category, slug, index, sourceUrl) {
-  const extension = new URL(sourceUrl).pathname.match(/\.(svg|webp|png)$/i)?.[1]?.toLowerCase();
-  if (!extension) throw new Error(`Unsupported diagram image format: ${sourceUrl}`);
+  const sourceExtension = new URL(sourceUrl).pathname.match(/\.(svg|webp|png)$/i)?.[1]?.toLowerCase();
+  if (!sourceExtension) throw new Error(`Unsupported diagram image format: ${sourceUrl}`);
+  // Some browsers reject the upstream SVG diagrams despite valid XML and image
+  // responses. WebP avoids that renderer-specific failure while remaining compact.
+  const extension = sourceExtension === 'svg' ? 'webp' : sourceExtension;
   return `${category}/${slug}/${index}.${extension}`;
 }
 
@@ -26,6 +30,14 @@ async function fetchBuffer(url) {
   const response = await fetch(url);
   if (!response.ok) throw new Error(`Could not download ${url}: HTTP ${response.status}`);
   return Buffer.from(await response.arrayBuffer());
+}
+
+async function downloadAsset(asset) {
+  const source = await fetchBuffer(asset.sourceUrl);
+  const body = asset.sourceUrl.endsWith('.svg')
+    ? await sharp(source).webp({ quality: 90 }).toBuffer()
+    : source;
+  return { ...asset, body };
 }
 
 const llms = await fetch('https://developers.cloudflare.com/reference-architecture/llms.txt').then((r) =>
@@ -66,7 +78,7 @@ for (const mdUrl of mdUrls) {
 }
 
 const downloadedAssets = await Promise.all(
-  assets.map(async (asset) => ({ ...asset, body: await fetchBuffer(asset.sourceUrl) })),
+  assets.map(downloadAsset),
 );
 
 rmSync(ASSET_DIR, { recursive: true, force: true });

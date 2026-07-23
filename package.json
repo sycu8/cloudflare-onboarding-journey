@@ -42,6 +42,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@playwright/test": "^1.52.0"
+    "@playwright/test": "^1.52.0",
+    "sharp": "^0.35.3"
   }
 }

@@ -90,8 +90,8 @@ const API_ROUTES = ['/api/workshop-events', '/api/site-config', '/api/search'];
 const ASSET_ROUTES = [
   '/assets/favicon.svg',
   '/assets/og-image.svg',
-  '/ref-diagrams/ai/ai-rag/0.svg',
-  '/ref-diagrams/serverless/fullstack-application/0.svg',
+  '/ref-diagrams/ai/ai-rag/0.webp',
+  '/ref-diagrams/serverless/fullstack-application/0.webp',
   '/ref-diagrams/content-delivery/distributed-web-performance-architecture/0.webp',
 ];
 const CSS_ROUTES = ['/styles/site.css'];
