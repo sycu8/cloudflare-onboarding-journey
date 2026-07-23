@@ -13,6 +13,7 @@ export type UseCaseSlug =
   | 'deploy-static-site'
   | 'build-ai-applications'
   | 'build-saas-platform'
+  | 'govern-enterprise-ai'
   | 'replace-vpn'
   | 'secure-remote-users'
   | 'secure-saas-access'
@@ -488,6 +489,17 @@ export const useCases: UseCase[] = [
       href: '/products/workers-for-platforms',
       label: { vi: 'Workers for Platforms', en: 'Workers for Platforms' },
     },
+  },
+  {
+    slug: 'govern-enterprise-ai',
+    hubCategory: 'secure-accelerate',
+    officialUrl: 'https://developers.cloudflare.com/cloudflare-one/',
+    title: { vi: 'Quản trị AI doanh nghiệp', en: 'Govern enterprise AI adoption' },
+    problem: { vi: 'Team dùng nhiều AI SaaS và LLM provider nhưng thiếu visibility, data controls và policy nhất quán cho user, prompt, tool và public AI app.', en: 'Teams use many AI SaaS tools and LLM providers but lack visibility, data controls, and consistent policy for users, prompts, tools, and public AI apps.' },
+    architecture: { vi: 'User/device → WARP + SWG → CASB/DLP → sanctioned AI (Access/RBI) → AI Gateway hoặc AI app (WAF + Bots)', en: 'User/device → WARP + SWG → CASB/DLP → sanctioned AI (Access/RBI) → AI Gateway or AI app (WAF + Bots)' },
+    bullets: { vi: ['CASB inventory Shadow AI và SaaS posture', 'SWG allow/block/steer AI destinations theo policy', 'RBI giảm rủi ro upload file vào AI web app', 'AI Gateway cho routing, guardrails và audit của app-owned AI', 'WAF/Firewall for AI, rate limiting và Bot controls cho public endpoint'], en: ['CASB inventories Shadow AI and SaaS posture', 'SWG allows, blocks, or steers AI destinations by policy', 'RBI reduces file-upload risk in AI web apps', 'AI Gateway provides routing, guardrails, and audit for app-owned AI', 'WAF/Firewall for AI, rate limiting, and bot controls protect public endpoints'] },
+    relatedTrack: 'cloudflare-one',
+    nextCta: { href: '/tracks/cloudflare-one/c1-5-l1', label: { vi: 'Bắt đầu SASE cho AI', en: 'Start SASE for AI' } },
   },
   {
     slug: 'replace-vpn',

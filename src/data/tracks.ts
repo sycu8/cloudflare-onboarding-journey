@@ -424,6 +424,7 @@ export const tracks: Track[] = [
               vi: 'Giữ key ở Worker secrets, xác thực người dùng trước endpoint AI, rate limit input, validate tool input và áp dụng guardrails cho data/response nhạy cảm.',
               en: 'Keep keys in Worker secrets, authenticate users before AI endpoints, rate-limit input, validate tool input, and apply guardrails to sensitive data and responses.',
             },
+            hubLink: '/cheatsheets/ai-protection-portfolio#ai-gateway',
           },
           {
             title: { vi: 'RAG với Vectorize và storage', en: 'RAG with Vectorize and storage' },
@@ -664,6 +665,17 @@ export const tracks: Track[] = [
           },
         ],
       },
+      {
+        id: 'c1-5',
+        title: { vi: 'Phần 5: Quản trị AI theo SASE', en: 'Part 5: Govern AI with SASE' },
+        description: { vi: 'Shadow AI, SWG/RBI, CASB/DLP và rollout theo rủi ro.', en: 'Shadow AI, SWG/RBI, CASB/DLP, and risk-based rollout.' },
+        duration: { vi: '~45 phút', en: '~45 min' },
+        lessons: [
+          { title: { vi: 'CASB: Shadow AI và SaaS posture', en: 'CASB: Shadow AI and SaaS posture' }, body: { vi: 'Inventory AI SaaS chưa được phê duyệt, review findings về token/user và ưu tiên remediation theo data sensitivity.', en: 'Inventory unsanctioned AI SaaS, review token/user findings, and prioritize remediation by data sensitivity.' }, hubLink: '/cheatsheets/ai-protection-portfolio#casb' },
+          { title: { vi: 'SWG + RBI: kiểm soát web AI', en: 'SWG + RBI: govern web AI' }, body: { vi: 'Dùng policy web để discover, allow/block hoặc steer AI destinations; dùng Browser Isolation cho browsing hoặc upload risk cao.', en: 'Use web policy to discover, allow/block, or steer AI destinations; use Browser Isolation for high-risk browsing or uploads.' }, hubLink: '/cheatsheets/ai-protection-portfolio#swg-rbi' },
+          { title: { vi: 'Radar, AI Gateway và rollout order', en: 'Radar, AI Gateway, and rollout order' }, body: { vi: 'Radar cung cấp intelligence, không enforce policy. Rollout identity/Access → SWG → CASB/DLP; app team dùng AI Gateway và WAF cho AI endpoint.', en: 'Radar provides intelligence, not policy enforcement. Roll out identity/Access → SWG → CASB/DLP; app teams use AI Gateway and WAF for AI endpoints.' }, hubLink: '/cheatsheets/ai-protection-portfolio#radar-sase' },
+        ],
+      },
     ],
     recommendedSequence: {
       vi: [
@@ -673,6 +685,7 @@ export const tracks: Track[] = [
         'Define access policies',
         'Test với một nhóm user nhỏ',
         'Mở rộng sang nhiều apps và users hơn',
+        'Inventory Shadow AI và pilot SWG policy cho AI destinations',
         'Bổ sung DLP, CASB, email security hoặc network modernization',
       ],
       en: [
@@ -682,6 +695,7 @@ export const tracks: Track[] = [
         'Define access policies',
         'Test with a small user group',
         'Expand to more apps and users',
+        'Inventory Shadow AI and pilot SWG policy for AI destinations',
         'Add DLP, CASB, email, or network modernization',
       ],
     },
@@ -689,6 +703,7 @@ export const tracks: Track[] = [
       { href: '/use-cases/replace-vpn/', label: { vi: 'Thay thế VPN', en: 'Replace VPN' } },
       { href: '/use-cases/secure-remote-users/', label: { vi: 'Kết nối user an toàn', en: 'Secure user connections' } },
       { href: '/use-cases/secure-saas-access/', label: { vi: 'Truy cập SaaS', en: 'Secure SaaS access' } },
+      { href: '/use-cases/govern-enterprise-ai/', label: { vi: 'Quản trị AI doanh nghiệp', en: 'Govern enterprise AI' } },
     ],
     commonMistakes: {
       vi: [

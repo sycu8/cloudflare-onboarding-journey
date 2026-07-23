@@ -939,6 +939,25 @@ export const trackLessonEnrichment: Record<string, TrackLessonEnrichment> = {
     ],
     productSlugs: ['zero-trust'],
   },
+  'c1-5-l1': {
+    steps: { vi: ['Inventory AI SaaS và owner/data type.', 'Review CASB findings cho token, user và posture.', 'Remediate theo sensitivity; không block mù không có sanctioned alternative.'], en: ['Inventory AI SaaS and owner/data type.', 'Review CASB findings for token, user, and posture.', 'Remediate by sensitivity; do not blindly block without a sanctioned alternative.'] },
+    deepDive: { vi: 'CASB giúp nhìn thấy Shadow AI và SaaS posture; DLP là control bổ sung cho sensitive data, không thay thế identity hay user training.', en: 'CASB provides Shadow AI and SaaS-posture visibility; DLP complements controls for sensitive data, not identity or user training.' },
+    docsLinks: [{ label: { vi: 'CASB', en: 'CASB' }, url: 'https://developers.cloudflare.com/cloudflare-one/casb/' }],
+    diagramSlugs: ['securing-data-at-rest'],
+    productSlugs: ['casb', 'dlp'],
+  },
+  'c1-5-l2': {
+    steps: { vi: ['Discover AI domain qua Gateway policy.', 'Tạo allow/block/steer policy theo identity.', 'Dùng RBI cho workflow upload risk cao và test user journey.'], en: ['Discover AI domains through Gateway policy.', 'Create allow/block/steer policy by identity.', 'Use RBI for high-risk upload workflows and test the user journey.'] },
+    deepDive: { vi: 'SWG kiểm soát egress web; RBI tách browsing session. Cả hai cần policy rõ và test để không chặn workflow hợp lệ.', en: 'SWG controls web egress; RBI isolates the browsing session. Both need clear policy and testing to avoid blocking valid workflows.' },
+    docsLinks: [{ label: { vi: 'Gateway policies', en: 'Gateway policies' }, url: 'https://developers.cloudflare.com/cloudflare-one/policies/gateway/' }, { label: { vi: 'Browser Isolation', en: 'Browser Isolation' }, url: 'https://developers.cloudflare.com/cloudflare-one/policies/browser-isolation/' }],
+    productSlugs: ['swg', 'browser-isolation', 'warp'],
+  },
+  'c1-5-l3': {
+    steps: { vi: ['Dùng Radar làm context cho AI crawler, không làm enforcement.', 'Pilot Access/identity rồi SWG.', 'Thêm CASB/DLP sau khi TLS inspection và support plan sẵn sàng; app team dùng AI Gateway/WAF riêng.'], en: ['Use Radar as AI-crawler context, not enforcement.', 'Pilot Access/identity, then SWG.', 'Add CASB/DLP after TLS inspection and support plans are ready; app teams use AI Gateway/WAF separately.'] },
+    deepDive: { vi: 'Phân biệt enterprise egress/SaaS governance với app-owned AI controls để ownership và audit không bị mơ hồ.', en: 'Separate enterprise egress/SaaS governance from app-owned AI controls so ownership and audit remain clear.' },
+    docsLinks: [{ label: { vi: 'Cloudflare Radar', en: 'Cloudflare Radar' }, url: 'https://radar.cloudflare.com/' }],
+    productSlugs: ['access', 'ai-gateway'],
+  },
 };
 
 function buildDefaultEnrichment(lesson: TrackLesson, track: Track): TrackLessonEnrichment {
