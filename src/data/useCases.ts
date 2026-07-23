@@ -31,7 +31,7 @@ export type UseCase = {
   steps?: { vi: string[]; en: string[] };
   bullets?: { vi: string[]; en: string[] };
   commonMistakes?: { vi: { title: string; detail: string }[]; en: { title: string; detail: string }[] };
-  relatedTrack: 'application-services' | 'developer-platform' | 'cloudflare-one';
+  relatedTrack: 'application-services' | 'developer-platform' | 'cloudflare-one' | 'ai-security-adoption';
   nextCta: { href: string; label: LocalizedString };
 };
 
@@ -498,8 +498,8 @@ export const useCases: UseCase[] = [
     problem: { vi: 'Team dùng nhiều AI SaaS và LLM provider nhưng thiếu visibility, data controls và policy nhất quán cho user, prompt, tool và public AI app.', en: 'Teams use many AI SaaS tools and LLM providers but lack visibility, data controls, and consistent policy for users, prompts, tools, and public AI apps.' },
     architecture: { vi: 'User/device → WARP + SWG → CASB/DLP → sanctioned AI (Access/RBI) → AI Gateway hoặc AI app (WAF + Bots)', en: 'User/device → WARP + SWG → CASB/DLP → sanctioned AI (Access/RBI) → AI Gateway or AI app (WAF + Bots)' },
     bullets: { vi: ['CASB inventory Shadow AI và SaaS posture', 'SWG allow/block/steer AI destinations theo policy', 'RBI giảm rủi ro upload file vào AI web app', 'AI Gateway cho routing, guardrails và audit của app-owned AI', 'WAF/Firewall for AI, rate limiting và Bot controls cho public endpoint'], en: ['CASB inventories Shadow AI and SaaS posture', 'SWG allows, blocks, or steers AI destinations by policy', 'RBI reduces file-upload risk in AI web apps', 'AI Gateway provides routing, guardrails, and audit for app-owned AI', 'WAF/Firewall for AI, rate limiting, and bot controls protect public endpoints'] },
-    relatedTrack: 'cloudflare-one',
-    nextCta: { href: '/tracks/cloudflare-one/c1-5-l1', label: { vi: 'Bắt đầu SASE cho AI', en: 'Start SASE for AI' } },
+    relatedTrack: 'ai-security-adoption',
+    nextCta: { href: '/tracks/ai-security-adoption/asa-1-l1', label: { vi: 'Bắt đầu AI Security & Adoption', en: 'Start AI Security & Adoption' } },
   },
   {
     slug: 'replace-vpn',
@@ -720,12 +720,18 @@ export const useCaseTrackLabels: Record<
     },
     trackHref: '/tracks/cloudflare-one',
   },
+  'ai-security-adoption': {
+    title: { vi: 'AI Security & Adoption', en: 'AI Security & Adoption' },
+    headline: { vi: 'Quản trị Shadow AI và bảo vệ AI application theo nhiều lớp.', en: 'Govern Shadow AI and protect AI applications in layers.' },
+    trackHref: '/tracks/ai-security-adoption',
+  },
 };
 
 export const useCaseTrackOrder: UseCaseTrack[] = [
   'application-services',
   'developer-platform',
   'cloudflare-one',
+  'ai-security-adoption',
 ];
 
 export function getUseCasesByTrack(track: UseCaseTrack): UseCase[] {

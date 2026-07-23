@@ -16,7 +16,7 @@ export type TrackModule = {
 };
 
 export type Track = {
-  slug: 'application-services' | 'developer-platform' | 'cloudflare-one';
+  slug: 'application-services' | 'developer-platform' | 'cloudflare-one' | 'ai-security-adoption';
   title: LocalizedString;
   headline: LocalizedString;
   promise: LocalizedString;
@@ -760,6 +760,34 @@ export const tracks: Track[] = [
       ],
     },
     cta: { href: '/use-cases/cloudflare-one', label: { vi: 'Tình huống Cloudflare One', en: 'Cloudflare One use cases' } },
+  },
+  {
+    slug: 'ai-security-adoption',
+    title: { vi: 'AI Security & Adoption', en: 'AI Security & Adoption' },
+    headline: { vi: 'Adopt AI an toàn từ user đến ứng dụng', en: 'Adopt AI safely from users to applications' },
+    promise: { vi: 'Quản trị Shadow AI, bảo vệ data và ship AI app có kiểm soát.', en: 'Govern Shadow AI, protect data, and ship controlled AI applications.' },
+    description: { vi: 'Lộ trình riêng cho AI adoption kết hợp SASE controls (CASB, SWG, RBI, DLP) với AI Gateway, WAF và agent/RAG security.', en: 'A dedicated AI-adoption path combining SASE controls (CASB, SWG, RBI, DLP) with AI Gateway, WAF, and agent/RAG security.' },
+    whoIsThisFor: { vi: 'Security, IT, platform và application teams cùng triển khai AI.', en: 'Security, IT, platform, and application teams rolling out AI together.' },
+    mentalModel: { vi: 'User/device → Zero Trust policy → sanctioned AI → AI Gateway/app controls → model/tool/data.', en: 'User/device → Zero Trust policy → sanctioned AI → AI Gateway/app controls → model/tool/data.' },
+    outcomes: { vi: ['Inventory Shadow AI và policy theo risk', 'Áp SWG/RBI/CASB/DLP cho AI SaaS', 'Bảo vệ AI app với Gateway, WAF và bot controls', 'Thiết kế RAG/agent có authorization rõ ràng'], en: ['Inventory Shadow AI and policy by risk', 'Apply SWG/RBI/CASB/DLP to AI SaaS', 'Protect AI apps with Gateway, WAF, and bot controls', 'Design RAG/agents with clear authorization'] },
+    keyConcepts: ['Shadow AI', 'CASB', 'SWG', 'RBI', 'DLP', 'AI Gateway', 'Firewall for AI', 'RAG', 'Agents'],
+    modules: [
+      { id: 'asa-1', title: { vi: 'Phần 1: Quản trị AI doanh nghiệp', en: 'Part 1: Enterprise AI governance' }, description: { vi: 'Visibility, policy và SaaS controls.', en: 'Visibility, policy, and SaaS controls.' }, lessons: [
+        { title: { vi: 'CASB: Shadow AI và posture', en: 'CASB: Shadow AI and posture' }, body: { vi: 'Inventory AI SaaS, review token/user findings và remediation theo data sensitivity.', en: 'Inventory AI SaaS, review token/user findings, and remediate by data sensitivity.' }, hubLink: '/cheatsheets/ai-protection-portfolio#casb' },
+        { title: { vi: 'SWG và RBI cho web AI', en: 'SWG and RBI for web AI' }, body: { vi: 'Discover, allow/block/steer AI destinations; isolate browsing/upload risk cao.', en: 'Discover, allow/block/steer AI destinations; isolate high-risk browsing/uploads.' }, hubLink: '/cheatsheets/ai-protection-portfolio#swg-rbi' },
+      ]},
+      { id: 'asa-2', title: { vi: 'Phần 2: AI application controls', en: 'Part 2: AI application controls' }, description: { vi: 'Gateway, WAF và security baseline.', en: 'Gateway, WAF, and the security baseline.' }, lessons: [
+        { title: { vi: 'AI Gateway: routing và audit', en: 'AI Gateway: routing and audit' }, body: { vi: 'Route provider, observe usage và apply guardrails mà không đưa credential ra client.', en: 'Route providers, observe usage, and apply guardrails without exposing credentials to clients.' }, hubLink: '/cheatsheets/ai-protection-portfolio#ai-gateway' },
+        { title: { vi: 'WAF, bots và prompt protection', en: 'WAF, bots, and prompt protection' }, body: { vi: 'Treat model output as untrusted; validate tools, rate limit endpoint và apply Firewall for AI policies.', en: 'Treat model output as untrusted; validate tools, rate-limit endpoints, and apply Firewall for AI policies.' }, hubLink: '/cheatsheets/ai-protection-portfolio#app-security' },
+      ]},
+      { id: 'asa-3', title: { vi: 'Phần 3: Build AI có trách nhiệm', en: 'Part 3: Build AI responsibly' }, description: { vi: 'RAG và agent với data/tool boundaries.', en: 'RAG and agents with data/tool boundaries.' }, lessons: [
+        { title: { vi: 'RAG với Vectorize và access scope', en: 'RAG with Vectorize and access scope' }, body: { vi: 'Authorize trước retrieval; metadata ACL và source citation không phải optional.', en: 'Authorize before retrieval; ACL metadata and source citation are not optional.' } },
+        { title: { vi: 'Agents, tools và least privilege', en: 'Agents, tools, and least privilege' }, body: { vi: 'Tool nhỏ, typed, auditable; model không được tự cấp quyền hay secret.', en: 'Tools should be small, typed, and auditable; a model must not grant itself access or secrets.' } },
+      ]},
+    ],
+    recommendedSequence: { vi: ['Inventory Shadow AI', 'Pilot Access/SWG', 'Add CASB/DLP', 'Govern app-owned AI with Gateway/WAF', 'Build RAG/agents with scoped tools'], en: ['Inventory Shadow AI', 'Pilot Access/SWG', 'Add CASB/DLP', 'Govern app-owned AI with Gateway/WAF', 'Build RAG/agents with scoped tools'] },
+    relatedUseCases: [{ href: '/use-cases/govern-enterprise-ai/', label: { vi: 'Quản trị AI doanh nghiệp', en: 'Govern enterprise AI' } }, { href: '/use-cases/build-ai-applications/', label: { vi: 'Build AI app', en: 'Build AI app' } }],
+    cta: { href: '/cheatsheets/ai-protection-portfolio', label: { vi: 'Mở AI protection cheatsheet', en: 'Open AI protection cheatsheet' } },
   },
 ];
 
