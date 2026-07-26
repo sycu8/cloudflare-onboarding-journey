@@ -195,6 +195,17 @@ html.dark .site-header {
   backdrop-filter: blur(12px);
 }
 
+.back-to-top {
+  border: 1px solid var(--cf-border);
+  background: var(--cf-bg-elevated);
+  color: var(--cf-text);
+}
+
+.back-to-top:hover {
+  border-color: var(--cf-accent);
+  color: var(--cf-accent);
+}
+
 .nav-link-active {
   background: rgba(148, 163, 184, 0.15);
   color: var(--cf-text);

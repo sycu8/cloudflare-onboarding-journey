@@ -3,6 +3,7 @@ import '../styles/global.css';
 import Navbar from '../components/chrome/Navbar.astro';
 import Footer from '../components/chrome/Footer.astro';
 import ProgressBar from '../components/ui/ProgressBar';
+import BackToTop from '../components/ui/BackToTop';
 import { assetUrl } from '../lib/assets';
 import { siteSeo, formatTitle } from '../lib/seo';
 
@@ -103,6 +104,7 @@ const imageUrl = new URL(ogImage ?? siteSeo.defaultImage, siteOrigin).href;
       <main class="container py-10">
         <slot />
       </main>
+      <BackToTop client:load />
       <Footer />
     </div>
   </body>
