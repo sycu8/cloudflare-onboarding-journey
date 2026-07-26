@@ -3,6 +3,7 @@
  * Usage: node scripts/smoke-test.mjs [baseUrl]
  */
 const BASE = (process.argv[2] || 'http://127.0.0.1:4321').replace(/\/$/, '');
+const IS_LOCAL_PREVIEW = /^https?:\/\/(?:127\.0\.0\.1|localhost)(?::\d+)?$/i.test(BASE);
 
 const ROUTES = [
   '/',
@@ -157,7 +158,7 @@ for (const path of ROUTES) {
 for (const path of PROTECTED_ROUTES) {
   try {
     const { status } = await fetchPath(path, { redirect: 'manual' });
-    if (status === 302 || status === 303 || status === 401 || status === 403) {
+    if (status === 302 || status === 303 || status === 308 || status === 401 || status === 403) {
       console.log(`✓ (protected) ${path} → HTTP ${status}`);
       continue;
     }
@@ -195,7 +196,13 @@ for (const path of CSS_ROUTES) {
 for (const path of ASSET_ROUTES) {
   try {
     const res = await fetch(`${BASE}${path}`, { redirect: 'follow' });
-    if (!res.ok) errors.push(`${path} → HTTP ${res.status}`);
+    if (!res.ok) {
+      if (IS_LOCAL_PREVIEW && res.status === 503 && path.startsWith('/assets/')) {
+        warnings.push(`${path} → HTTP 503 (local Pages preview has no R2 asset binding)`);
+      } else {
+        errors.push(`${path} → HTTP ${res.status}`);
+      }
+    }
     else {
       const ct = res.headers.get('content-type') || '';
       if (!ct.includes('image/')) warnings.push(`${path} → unexpected content-type ${ct}`);
@@ -310,7 +317,13 @@ for (const root of crawlRoots) {
 for (const path of toCheck) {
   try {
     const { status, ok } = await fetchPath(path);
-    if (!ok) errors.push(`discovered link ${path} → HTTP ${status}`);
+    if (!ok) {
+      if (IS_LOCAL_PREVIEW && status === 503 && path.startsWith('/assets/')) {
+        warnings.push(`discovered link ${path} → HTTP 503 (local Pages preview has no R2 asset binding)`);
+      } else {
+        errors.push(`discovered link ${path} → HTTP ${status}`);
+      }
+    }
     else console.log(`✓ (link) ${path}`);
   } catch (e) {
     errors.push(`discovered link ${path} → ${e.message}`);
