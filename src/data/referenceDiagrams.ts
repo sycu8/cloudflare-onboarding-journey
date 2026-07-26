@@ -3,7 +3,7 @@ import rawData from './referenceDiagrams.data.json';
 
 export const REF_ARCH_DIAGRAMS_URL = 'https://developers.cloudflare.com/reference-architecture/diagrams/';
 export const REF_ARCH_DIAGRAMS_LLMS_URL = 'https://developers.cloudflare.com/reference-architecture/llms.txt';
-export const DIAGRAMS_LAST_SYNCED = '2026-06-02';
+export const DIAGRAMS_LAST_SYNCED = '2026-07-23';
 
 export type DiagramCategory =
   | 'ai'
@@ -20,6 +20,8 @@ export type DiagramTrack =
   | 'application-services'
   | 'developer-platform'
   | 'cloudflare-one'
+  | 'ai-security-adoption'
+  | 'operational-excellence'
   | 'cross-cutting';
 
 type RawDiagram = (typeof rawData)[number];
@@ -122,10 +124,15 @@ const featuredSlugs = new Set([
   'augment-access-with-serverless',
 ]);
 
+function resolveDiagramImageUrl(image: { file?: string; sourceUrl?: string; url?: string }): string {
+  if (image.file) return `/ref-diagrams/${image.file}`;
+  return image.sourceUrl ?? image.url ?? '';
+}
+
 function toDiagram(raw: RawDiagram): ReferenceDiagram {
   const category = raw.category as DiagramCategory;
   const images = raw.images.map((img) => ({
-    url: img.url,
+    url: resolveDiagramImageUrl(img),
     alt: { vi: img.alt || raw.title, en: img.alt || raw.title },
   }));
   const viSummary = viSummaryOverlay[raw.slug];
@@ -176,6 +183,16 @@ export const trackDiagramSlugs: Record<
     'secure-access-to-saas-applications-with-sase',
     'augment-access-with-serverless',
     'cloudflare-one-appliance-deployment',
+  ],
+  'ai-security-adoption': [
+    'ai-multivendor-observability-control',
+    'secure-access-to-saas-applications-with-sase',
+    'ai-rag',
+  ],
+  'operational-excellence': [
+    'distributed-web-performance-architecture',
+    'bot-management',
+    'serverless-global-apis',
   ],
 };
 

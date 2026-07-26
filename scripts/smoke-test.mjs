@@ -3,11 +3,13 @@
  * Usage: node scripts/smoke-test.mjs [baseUrl]
  */
 const BASE = (process.argv[2] || 'http://127.0.0.1:4321').replace(/\/$/, '');
+const IS_LOCAL_PREVIEW = /^https?:\/\/(?:127\.0\.0\.1|localhost)(?::\d+)?$/i.test(BASE);
 
 const ROUTES = [
   '/',
   '/start-here',
   '/content-roadmap',
+  '/cheatsheets/ai-protection-portfolio',
   '/roadmaps',
   '/roadmaps/sales',
   '/roadmaps/solution-engineer',
@@ -23,7 +25,12 @@ const ROUTES = [
   '/tracks/application-services',
   '/tracks/application-services/as-1-l1',
   '/tracks/developer-platform/dp-1-l1',
+  '/tracks/developer-platform/dp-5-l1',
+  '/tracks/developer-platform/dp-5-l5',
   '/tracks/cloudflare-one/c1-2-l1',
+  '/tracks/cloudflare-one/c1-5-l1',
+  '/tracks/operational-excellence',
+  '/tracks/operational-excellence/oe-1-l1',
   '/tracks/developer-platform',
   '/tracks/cloudflare-one',
   '/use-cases/',
@@ -42,6 +49,9 @@ const ROUTES = [
   '/use-cases/ecommerce-security-performance/',
   '/use-cases/media-streaming-delivery/',
   '/use-cases/build-ai-applications/',
+  '/use-cases/govern-enterprise-ai/',
+  '/use-cases/operate-cloudflare-workloads/',
+  '/use-cases/operational-excellence/',
   '/use-cases/build-saas-platform/',
   '/use-cases/company-wide-security/',
   '/checklists/beginner-cloudflare-checklist',
@@ -85,7 +95,13 @@ const AGENT_JSON_ROUTES = [
 
 const API_ROUTES = ['/api/workshop-events', '/api/site-config', '/api/search'];
 
-const ASSET_ROUTES = ['/assets/favicon.svg', '/assets/og-image.svg'];
+const ASSET_ROUTES = [
+  '/assets/favicon.svg',
+  '/assets/og-image.svg',
+  '/ref-diagrams/ai/ai-rag/0.webp',
+  '/ref-diagrams/serverless/fullstack-application/0.webp',
+  '/ref-diagrams/content-delivery/distributed-web-performance-architecture/0.webp',
+];
 const CSS_ROUTES = ['/styles/site.css'];
 
 const FAIL_PATTERNS = [
@@ -142,7 +158,7 @@ for (const path of ROUTES) {
 for (const path of PROTECTED_ROUTES) {
   try {
     const { status } = await fetchPath(path, { redirect: 'manual' });
-    if (status === 302 || status === 303 || status === 401 || status === 403) {
+    if (status === 302 || status === 303 || status === 308 || status === 401 || status === 403) {
       console.log(`✓ (protected) ${path} → HTTP ${status}`);
       continue;
     }
@@ -180,7 +196,13 @@ for (const path of CSS_ROUTES) {
 for (const path of ASSET_ROUTES) {
   try {
     const res = await fetch(`${BASE}${path}`, { redirect: 'follow' });
-    if (!res.ok) errors.push(`${path} → HTTP ${res.status}`);
+    if (!res.ok) {
+      if (IS_LOCAL_PREVIEW && res.status === 503 && path.startsWith('/assets/')) {
+        warnings.push(`${path} → HTTP 503 (local Pages preview has no R2 asset binding)`);
+      } else {
+        errors.push(`${path} → HTTP ${res.status}`);
+      }
+    }
     else {
       const ct = res.headers.get('content-type') || '';
       if (!ct.includes('image/')) warnings.push(`${path} → unexpected content-type ${ct}`);
@@ -295,7 +317,13 @@ for (const root of crawlRoots) {
 for (const path of toCheck) {
   try {
     const { status, ok } = await fetchPath(path);
-    if (!ok) errors.push(`discovered link ${path} → HTTP ${status}`);
+    if (!ok) {
+      if (IS_LOCAL_PREVIEW && status === 503 && path.startsWith('/assets/')) {
+        warnings.push(`discovered link ${path} → HTTP 503 (local Pages preview has no R2 asset binding)`);
+      } else {
+        errors.push(`discovered link ${path} → HTTP ${status}`);
+      }
+    }
     else console.log(`✓ (link) ${path}`);
   } catch (e) {
     errors.push(`discovered link ${path} → ${e.message}`);

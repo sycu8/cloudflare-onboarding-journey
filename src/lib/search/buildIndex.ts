@@ -104,6 +104,15 @@ export function buildSearchDocuments(): SearchDocument[] {
       },
       category: 'Learning',
     },
+    {
+      href: '/cheatsheets/ai-protection-portfolio/',
+      title: { vi: 'Cheatsheet bảo vệ AI', en: 'AI Protection Portfolio cheatsheet' },
+      description: {
+        vi: 'CASB, SWG, RBI, AI Gateway, WAF/Bots và Radar cho AI security.',
+        en: 'CASB, SWG, RBI, AI Gateway, WAF/Bots, and Radar for AI security.',
+      },
+      category: 'Reference',
+    },
   ];
 
   for (const page of staticPages) {

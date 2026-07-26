@@ -11,6 +11,21 @@ import { extractLinksFromBlocks, parseBlocks } from './markdown-blocks.mjs';
 
 /** @param {string} md @param {string} [baseUrl] */
 export function parseTutorialMarkdown(md, baseUrl = '') {
+  // Some stale docs paths redirect `index.md` to an HTML document. Tutorial
+  // previews are plain-text/markdown only; never persist a full HTML page.
+  if (/^\s*(?:<!doctype html|<html\b)/i.test(md)) {
+    return {
+      titleEn: '',
+      descriptionEn: '',
+      introEn: '',
+      prerequisites: [],
+      stepTitles: [],
+      objectives: [],
+      lastReviewed: '',
+      stepCount: 0,
+      sections: [],
+    };
+  }
   const fm = parseFrontmatter(md);
   const body = fm.body;
 

@@ -46,9 +46,13 @@ const typeLabel = cloudflareResourceContentTypeLabels[contentType as keyof typeo
 const trackLabel = cloudflareResourceTrackLabels[track as keyof typeof cloudflareResourceTrackLabels];
 
 const pageTitle = { vi: titleVi, en: titleEn };
+function safeSeoDescription(value: string | undefined, fallback: string): string {
+  if (!value || /<\s*(?:!doctype|html|head|body|script|img|h[1-6])\b/i.test(value)) return fallback;
+  return value.replace(/\s+/g, ' ').trim().slice(0, 320);
+}
 const pageDesc = {
-  vi: preview?.summaryVi ?? `Hướng dẫn tutorial Cloudflare trên hub — có backlink tới docs gốc.`,
-  en: preview?.summaryEn ?? `Cloudflare tutorial guide on the hub with links to official docs.`,
+  vi: safeSeoDescription(preview?.summaryVi, `Hướng dẫn tutorial Cloudflare trên hub — có backlink tới docs gốc.`),
+  en: safeSeoDescription(preview?.summaryEn, `Cloudflare tutorial guide on the hub with links to official docs.`),
 };
 
 const hasGuide = Boolean(preview?.sections && preview.sections.length > 0);

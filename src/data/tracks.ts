@@ -16,7 +16,12 @@ export type TrackModule = {
 };
 
 export type Track = {
-  slug: 'application-services' | 'developer-platform' | 'cloudflare-one';
+  slug:
+    | 'application-services'
+    | 'developer-platform'
+    | 'cloudflare-one'
+    | 'ai-security-adoption'
+    | 'operational-excellence';
   title: LocalizedString;
   headline: LocalizedString;
   promise: LocalizedString;
@@ -270,14 +275,16 @@ export const tracks: Track[] = [
         'Tạo API route bằng Pages Functions hoặc Worker',
         'Chọn đúng storage: KV vs D1 vs R2',
         'Xử lý lỗi và logging cơ bản trên edge',
-        'Hiểu khi nào dùng Workers AI (không bắt buộc ngay)',
+        'Build và bảo mật AI feature với Workers AI, AI Gateway và Vectorize',
+        'Thiết kế Agent với tools hẹp và credential theo least privilege',
       ],
       en: [
         'Deploy a static or full-stack site on Pages',
         'Create an API route with Pages Functions or a Worker',
         'Pick the right storage: KV vs D1 vs R2',
         'Handle errors and basic edge logging',
-        'Know when to use Workers AI (optional early on)',
+        'Build and secure an AI feature with Workers AI, AI Gateway, and Vectorize',
+        'Design an Agent with narrow tools and least-privilege credentials',
       ],
     },
     keyConcepts: ['Pages', 'Workers', 'KV', 'D1', 'R2', 'Durable Objects', 'Workers AI', 'AI Gateway', 'Vectorize'],
@@ -392,6 +399,54 @@ export const tracks: Track[] = [
           },
         ],
       },
+      {
+        id: 'dp-5',
+        title: { vi: 'Phần 5: AI trên Developer Platform', en: 'Part 5: AI on the Developer Platform' },
+        description: {
+          vi: 'Từ inference đầu tiên đến AI security, RAG và agent có tools/skills.',
+          en: 'From first inference to AI security, RAG, and agents with tools and skills.',
+        },
+        duration: { vi: '~110 phút', en: '~110 min' },
+        lessons: [
+          {
+            title: { vi: 'Inference đầu tiên với Workers AI', en: 'First inference with Workers AI' },
+            body: {
+              vi: 'Thêm AI binding vào Worker, gọi model từ server-side và trả response tối thiểu. Bắt đầu bằng một task rõ ràng trước khi thêm chat UI hoặc nhiều provider.',
+              en: 'Add an AI binding to a Worker, call a model server-side, and return a minimal response. Start with one clear task before adding a chat UI or multiple providers.',
+            },
+            hubLink: '/use-cases/build-ai-applications',
+          },
+          {
+            title: { vi: 'Adopt AI có kiểm soát với AI Gateway', en: 'Adopt AI deliberately with AI Gateway' },
+            body: {
+              vi: 'Đặt AI Gateway giữa app và model provider để quan sát request, cache khi phù hợp và thay provider mà không làm lộ credential ở client.',
+              en: 'Place AI Gateway between your app and model providers to observe requests, cache where appropriate, and change providers without exposing credentials in the client.',
+            },
+          },
+          {
+            title: { vi: 'Baseline bảo mật cho ứng dụng AI', en: 'AI application security baseline' },
+            body: {
+              vi: 'Giữ key ở Worker secrets, xác thực người dùng trước endpoint AI, rate limit input, validate tool input và áp dụng guardrails cho data/response nhạy cảm.',
+              en: 'Keep keys in Worker secrets, authenticate users before AI endpoints, rate-limit input, validate tool input, and apply guardrails to sensitive data and responses.',
+            },
+            hubLink: '/cheatsheets/ai-protection-portfolio#ai-gateway',
+          },
+          {
+            title: { vi: 'RAG với Vectorize và storage', en: 'RAG with Vectorize and storage' },
+            body: {
+              vi: 'Tách luồng ingest và query: lưu tài liệu trong R2, tạo embeddings vào Vectorize, retrieve context có nguồn trước khi gọi model. Đừng coi vector search là quyền truy cập dữ liệu.',
+              en: 'Separate ingestion from queries: store documents in R2, create embeddings in Vectorize, and retrieve sourced context before calling the model. Do not treat vector search as data authorization.',
+            },
+          },
+          {
+            title: { vi: 'Agents: tools, skills và quyền hạn tối thiểu', en: 'Agents: tools, skills, and least privilege' },
+            body: {
+              vi: 'Dùng Agents SDK cho state/session khi cần. Mỗi tool cần schema input rõ ràng, authorization ở server và scope nhỏ; skill là hướng dẫn/versioned knowledge, không phải quyền truy cập bí mật.',
+              en: 'Use the Agents SDK for state and sessions when needed. Give every tool a clear input schema, server-side authorization, and narrow scope; skills are versioned guidance and knowledge, not secret access.',
+            },
+          },
+        ],
+      },
     ],
     recommendedSequence: {
       vi: [
@@ -401,7 +456,9 @@ export const tracks: Track[] = [
         'Lưu dữ liệu đơn giản trong KV hoặc D1',
         'Upload files lên R2',
         'Thêm basic analytics và error handling',
-        'Thử một AI API use case',
+        'Ship một Workers AI feature có mục tiêu rõ ràng',
+        'Thêm AI Gateway observability và security controls',
+        'Chỉ build RAG hoặc agent khi data/tool boundaries rõ ràng',
       ],
       en: [
         'Deploy a static site with Pages',
@@ -410,12 +467,15 @@ export const tracks: Track[] = [
         'Store simple data in KV or D1',
         'Upload files to R2',
         'Add basic analytics and error handling',
-        'Try an AI API use case',
+        'Ship one focused Workers AI feature',
+        'Add AI Gateway observability and security controls',
+        'Build RAG or an agent only when its data and tool boundaries are clear',
       ],
     },
     relatedUseCases: [
       { href: '/use-cases/build-serverless-app/', label: { vi: 'Build serverless app', en: 'Build a serverless app' } },
       { href: '/use-cases/deploy-static-site/', label: { vi: 'Deploy static site', en: 'Deploy static site' } },
+      { href: '/use-cases/build-ai-applications/', label: { vi: 'Build ứng dụng AI', en: 'Build AI applications' } },
     ],
     commonMistakes: {
       vi: [
@@ -610,6 +670,17 @@ export const tracks: Track[] = [
           },
         ],
       },
+      {
+        id: 'c1-5',
+        title: { vi: 'Phần 5: Quản trị AI theo SASE', en: 'Part 5: Govern AI with SASE' },
+        description: { vi: 'Shadow AI, SWG/RBI, CASB/DLP và rollout theo rủi ro.', en: 'Shadow AI, SWG/RBI, CASB/DLP, and risk-based rollout.' },
+        duration: { vi: '~45 phút', en: '~45 min' },
+        lessons: [
+          { title: { vi: 'CASB: Shadow AI và SaaS posture', en: 'CASB: Shadow AI and SaaS posture' }, body: { vi: 'Inventory AI SaaS chưa được phê duyệt, review findings về token/user và ưu tiên remediation theo data sensitivity.', en: 'Inventory unsanctioned AI SaaS, review token/user findings, and prioritize remediation by data sensitivity.' }, hubLink: '/cheatsheets/ai-protection-portfolio#casb' },
+          { title: { vi: 'SWG + RBI: kiểm soát web AI', en: 'SWG + RBI: govern web AI' }, body: { vi: 'Dùng policy web để discover, allow/block hoặc steer AI destinations; dùng Browser Isolation cho browsing hoặc upload risk cao.', en: 'Use web policy to discover, allow/block, or steer AI destinations; use Browser Isolation for high-risk browsing or uploads.' }, hubLink: '/cheatsheets/ai-protection-portfolio#swg-rbi' },
+          { title: { vi: 'Radar, AI Gateway và rollout order', en: 'Radar, AI Gateway, and rollout order' }, body: { vi: 'Radar cung cấp intelligence, không enforce policy. Rollout identity/Access → SWG → CASB/DLP; app team dùng AI Gateway và WAF cho AI endpoint.', en: 'Radar provides intelligence, not policy enforcement. Roll out identity/Access → SWG → CASB/DLP; app teams use AI Gateway and WAF for AI endpoints.' }, hubLink: '/cheatsheets/ai-protection-portfolio#radar-sase' },
+        ],
+      },
     ],
     recommendedSequence: {
       vi: [
@@ -619,6 +690,7 @@ export const tracks: Track[] = [
         'Define access policies',
         'Test với một nhóm user nhỏ',
         'Mở rộng sang nhiều apps và users hơn',
+        'Inventory Shadow AI và pilot SWG policy cho AI destinations',
         'Bổ sung DLP, CASB, email security hoặc network modernization',
       ],
       en: [
@@ -628,6 +700,7 @@ export const tracks: Track[] = [
         'Define access policies',
         'Test with a small user group',
         'Expand to more apps and users',
+        'Inventory Shadow AI and pilot SWG policy for AI destinations',
         'Add DLP, CASB, email, or network modernization',
       ],
     },
@@ -635,6 +708,7 @@ export const tracks: Track[] = [
       { href: '/use-cases/replace-vpn/', label: { vi: 'Thay thế VPN', en: 'Replace VPN' } },
       { href: '/use-cases/secure-remote-users/', label: { vi: 'Kết nối user an toàn', en: 'Secure user connections' } },
       { href: '/use-cases/secure-saas-access/', label: { vi: 'Truy cập SaaS', en: 'Secure SaaS access' } },
+      { href: '/use-cases/govern-enterprise-ai/', label: { vi: 'Quản trị AI doanh nghiệp', en: 'Govern enterprise AI' } },
     ],
     commonMistakes: {
       vi: [
@@ -691,6 +765,76 @@ export const tracks: Track[] = [
       ],
     },
     cta: { href: '/use-cases/cloudflare-one', label: { vi: 'Tình huống Cloudflare One', en: 'Cloudflare One use cases' } },
+  },
+  {
+    slug: 'ai-security-adoption',
+    title: { vi: 'AI Security & Adoption', en: 'AI Security & Adoption' },
+    headline: { vi: 'Adopt AI an toàn từ user đến ứng dụng', en: 'Adopt AI safely from users to applications' },
+    promise: { vi: 'Quản trị Shadow AI, bảo vệ data và ship AI app có kiểm soát.', en: 'Govern Shadow AI, protect data, and ship controlled AI applications.' },
+    description: { vi: 'Lộ trình riêng cho AI adoption kết hợp SASE controls (CASB, SWG, RBI, DLP) với AI Gateway, WAF và agent/RAG security.', en: 'A dedicated AI-adoption path combining SASE controls (CASB, SWG, RBI, DLP) with AI Gateway, WAF, and agent/RAG security.' },
+    whoIsThisFor: { vi: 'Security, IT, platform và application teams cùng triển khai AI.', en: 'Security, IT, platform, and application teams rolling out AI together.' },
+    mentalModel: { vi: 'User/device → Zero Trust policy → sanctioned AI → AI Gateway/app controls → model/tool/data.', en: 'User/device → Zero Trust policy → sanctioned AI → AI Gateway/app controls → model/tool/data.' },
+    outcomes: { vi: ['Inventory Shadow AI và policy theo risk', 'Áp SWG/RBI/CASB/DLP cho AI SaaS', 'Bảo vệ AI app với Gateway, WAF và bot controls', 'Thiết kế RAG/agent có authorization rõ ràng'], en: ['Inventory Shadow AI and policy by risk', 'Apply SWG/RBI/CASB/DLP to AI SaaS', 'Protect AI apps with Gateway, WAF, and bot controls', 'Design RAG/agents with clear authorization'] },
+    keyConcepts: ['Shadow AI', 'CASB', 'SWG', 'RBI', 'DLP', 'AI Gateway', 'Firewall for AI', 'RAG', 'Agents'],
+    modules: [
+      { id: 'asa-1', title: { vi: 'Phần 1: Quản trị AI doanh nghiệp', en: 'Part 1: Enterprise AI governance' }, description: { vi: 'Visibility, policy và SaaS controls.', en: 'Visibility, policy, and SaaS controls.' }, lessons: [
+        { title: { vi: 'CASB: Shadow AI và posture', en: 'CASB: Shadow AI and posture' }, body: { vi: 'Inventory AI SaaS, review token/user findings và remediation theo data sensitivity.', en: 'Inventory AI SaaS, review token/user findings, and remediate by data sensitivity.' }, hubLink: '/cheatsheets/ai-protection-portfolio#casb' },
+        { title: { vi: 'SWG và RBI cho web AI', en: 'SWG and RBI for web AI' }, body: { vi: 'Discover, allow/block/steer AI destinations; isolate browsing/upload risk cao.', en: 'Discover, allow/block/steer AI destinations; isolate high-risk browsing/uploads.' }, hubLink: '/cheatsheets/ai-protection-portfolio#swg-rbi' },
+      ]},
+      { id: 'asa-2', title: { vi: 'Phần 2: AI application controls', en: 'Part 2: AI application controls' }, description: { vi: 'Gateway, WAF và security baseline.', en: 'Gateway, WAF, and the security baseline.' }, lessons: [
+        { title: { vi: 'AI Gateway: routing và audit', en: 'AI Gateway: routing and audit' }, body: { vi: 'Route provider, observe usage và apply guardrails mà không đưa credential ra client.', en: 'Route providers, observe usage, and apply guardrails without exposing credentials to clients.' }, hubLink: '/cheatsheets/ai-protection-portfolio#ai-gateway' },
+        { title: { vi: 'WAF, bots và prompt protection', en: 'WAF, bots, and prompt protection' }, body: { vi: 'Treat model output as untrusted; validate tools, rate limit endpoint và apply Firewall for AI policies.', en: 'Treat model output as untrusted; validate tools, rate-limit endpoints, and apply Firewall for AI policies.' }, hubLink: '/cheatsheets/ai-protection-portfolio#app-security' },
+      ]},
+      { id: 'asa-3', title: { vi: 'Phần 3: Build AI có trách nhiệm', en: 'Part 3: Build AI responsibly' }, description: { vi: 'RAG và agent với data/tool boundaries.', en: 'RAG and agents with data/tool boundaries.' }, lessons: [
+        { title: { vi: 'RAG với Vectorize và access scope', en: 'RAG with Vectorize and access scope' }, body: { vi: 'Authorize trước retrieval; metadata ACL và source citation không phải optional.', en: 'Authorize before retrieval; ACL metadata and source citation are not optional.' } },
+        { title: { vi: 'Agents, tools và least privilege', en: 'Agents, tools, and least privilege' }, body: { vi: 'Tool nhỏ, typed, auditable; model không được tự cấp quyền hay secret.', en: 'Tools should be small, typed, and auditable; a model must not grant itself access or secrets.' } },
+      ]},
+    ],
+    recommendedSequence: { vi: ['Inventory Shadow AI', 'Pilot Access/SWG', 'Add CASB/DLP', 'Govern app-owned AI with Gateway/WAF', 'Build RAG/agents with scoped tools'], en: ['Inventory Shadow AI', 'Pilot Access/SWG', 'Add CASB/DLP', 'Govern app-owned AI with Gateway/WAF', 'Build RAG/agents with scoped tools'] },
+    relatedUseCases: [{ href: '/use-cases/govern-enterprise-ai/', label: { vi: 'Quản trị AI doanh nghiệp', en: 'Govern enterprise AI' } }, { href: '/use-cases/build-ai-applications/', label: { vi: 'Build AI app', en: 'Build AI app' } }],
+    cta: { href: '/cheatsheets/ai-protection-portfolio', label: { vi: 'Mở AI protection cheatsheet', en: 'Open AI protection cheatsheet' } },
+  },
+  {
+    slug: 'operational-excellence',
+    title: { vi: 'Operational Excellence', en: 'Operational Excellence' },
+    headline: { vi: 'Vận hành Cloudflare an toàn, ổn định và hiệu quả', en: 'Operate Cloudflare safely, reliably, and efficiently' },
+    promise: { vi: 'Biến signals thành quyết định: observe, respond, release, recover và improve.', en: 'Turn signals into decisions: observe, respond, release, recover, and improve.' },
+    description: { vi: 'Lộ trình cross-product cho DevOps, SRE, IT và platform teams: observability, incident response, release safety, resilience, performance và cost.', en: 'A cross-product path for DevOps, SRE, IT, and platform teams: observability, incident response, release safety, resilience, performance, and cost.' },
+    whoIsThisFor: { vi: 'DevOps/SRE, IT admin, platform engineer hoặc technical lead đã có workload trên Cloudflare.', en: 'DevOps/SRE, IT admins, platform engineers, or technical leads with workloads on Cloudflare.' },
+    mentalModel: { vi: 'Signals → triage → runbook → safe change → verify → learn. Dùng dashboard, logs và status để giảm thời gian phát hiện/phục hồi, không chỉ “xem metric”.', en: 'Signals → triage → runbook → safe change → verify → learn. Use dashboards, logs, and status to reduce detection/recovery time, not merely to “view metrics”.' },
+    outcomes: { vi: ['Thiết kế signals và logs hữu ích cho zone, Worker, Zero Trust và AI', 'Triage incident với status, Security Events và runbook', 'Release có preview, rollback, purge/cache plan và secret hygiene', 'Lập kế hoạch resilience, performance và cost review định kỳ'], en: ['Design useful signals and logs for zones, Workers, Zero Trust, and AI', 'Triage incidents with status, Security Events, and runbooks', 'Release with preview, rollback, purge/cache plans, and secret hygiene', 'Plan resilience, performance, and recurring cost reviews'] },
+    keyConcepts: ['Observability', 'Logpush', 'Runbooks', 'Rollback', 'Health checks', 'Core Web Vitals', 'SLOs', 'Cost'],
+    modules: [
+      { id: 'oe-1', title: { vi: 'Phần 1: Observability & logging', en: 'Part 1: Observability & logging' }, description: { vi: 'Signals từ traffic, application, security và AI.', en: 'Signals from traffic, applications, security, and AI.' }, duration: { vi: '~60 phút', en: '~60 min' }, lessons: [
+        { title: { vi: 'Zone và traffic analytics', en: 'Zone and traffic analytics' }, body: { vi: 'Chọn baseline cho traffic, cache hit/miss, 4xx/5xx và latency trước khi đặt alert.', en: 'Establish baselines for traffic, cache hit/miss, 4xx/5xx, and latency before creating alerts.' }, hubLink: '/content-delivery#measure' },
+        { title: { vi: 'Workers/Pages logs và traces', en: 'Workers/Pages logs and traces' }, body: { vi: 'Dùng structured logs, request ID và traces để nối lỗi user-facing với code path.', en: 'Use structured logs, request IDs, and traces to connect user-facing errors to code paths.' } },
+        { title: { vi: 'Security Events và Logpush', en: 'Security Events and Logpush' }, body: { vi: 'Triage WAF, DDoS và bot events; export log khi cần retention hoặc correlation bên ngoài.', en: 'Triage WAF, DDoS, and bot events; export logs when you need retention or external correlation.' } },
+        { title: { vi: 'AI Gateway usage signals', en: 'AI Gateway usage signals' }, body: { vi: 'Theo dõi model, latency, error và cost signal mà không log prompt nhạy cảm không cần thiết.', en: 'Track model, latency, error, and cost signals without unnecessarily logging sensitive prompts.' } },
+      ]},
+      { id: 'oe-2', title: { vi: 'Phần 2: Incident response', en: 'Part 2: Incident response' }, description: { vi: 'Triage có bằng chứng và giao tiếp rõ ràng.', en: 'Evidence-based triage and clear communication.' }, duration: { vi: '~50 phút', en: '~50 min' }, lessons: [
+        { title: { vi: 'Status và correlation', en: 'Status and correlation' }, body: { vi: 'Khi error spike, kiểm tra Cloudflare Status cùng metric và deployment timeline trước khi kết luận root cause.', en: 'When errors spike, check Cloudflare Status alongside metrics and deployment timelines before concluding root cause.' }, hubLink: '/status' },
+        { title: { vi: 'Triage security incident', en: 'Triage a security incident' }, body: { vi: 'Phân biệt attack, false positive và app regression; preserve evidence trước khi thay policy.', en: 'Separate attacks, false positives, and app regressions; preserve evidence before changing policy.' } },
+        { title: { vi: 'Runbook và stakeholder communication', en: 'Runbooks and stakeholder communication' }, body: { vi: 'Define owner, severity, update cadence, rollback criteria và post-incident actions trước incident tiếp theo.', en: 'Define owners, severity, update cadence, rollback criteria, and post-incident actions before the next incident.' } },
+      ]},
+      { id: 'oe-3', title: { vi: 'Phần 3: Release & deployment safety', en: 'Part 3: Release & deployment safety' }, description: { vi: 'Ship nhanh nhưng reversible.', en: 'Ship quickly while staying reversible.' }, duration: { vi: '~45 phút', en: '~45 min' }, lessons: [
+        { title: { vi: 'Preview → production → rollback', en: 'Preview → production → rollback' }, body: { vi: 'Test preview URL, define production checks và giữ rollback path rõ ràng trước release.', en: 'Test preview URLs, define production checks, and keep a clear rollback path before release.' } },
+        { title: { vi: 'Environment, secrets và change control', en: 'Environments, secrets, and change control' }, body: { vi: 'Tách config theo environment; secret không nằm trong source; log ai thay đổi gì và khi nào.', en: 'Separate configuration by environment; never place secrets in source; record who changed what and when.' } },
+        { title: { vi: 'Cache purge và coordinated release', en: 'Cache purge and coordinated release' }, body: { vi: 'Version asset, purge đúng scope và kiểm tra cache behavior sau frontend/API release.', en: 'Version assets, purge the right scope, and verify cache behavior after frontend/API releases.' } },
+      ]},
+      { id: 'oe-4', title: { vi: 'Phần 4: Resilience & availability', en: 'Part 4: Resilience & availability' }, description: { vi: 'Giảm blast radius và phục hồi nhanh.', en: 'Reduce blast radius and recover quickly.' }, duration: { vi: '~45 phút', en: '~45 min' }, lessons: [
+        { title: { vi: 'Health checks và load balancing', en: 'Health checks and load balancing' }, body: { vi: 'Định nghĩa health signal có ý nghĩa cho user và test failover trước khi cần dùng.', en: 'Define health signals meaningful to users and test failover before you need it.' } },
+        { title: { vi: 'DDoS và availability patterns', en: 'DDoS and availability patterns' }, body: { vi: 'Kết hợp proxy, DDoS protection, WAF/rate limit và origin hardening để giữ service available.', en: 'Combine proxying, DDoS protection, WAF/rate limiting, and origin hardening to keep services available.' } },
+        { title: { vi: 'Rollout theo wave', en: 'Wave-based rollout' }, body: { vi: 'Mở rộng policy hoặc Zero Trust deployment theo nhóm nhỏ, feedback loop và rollback plan.', en: 'Expand policy or Zero Trust deployments through small groups, feedback loops, and rollback plans.' } },
+      ]},
+      { id: 'oe-5', title: { vi: 'Phần 5: Performance & cost', en: 'Part 5: Performance & cost' }, description: { vi: 'Review liên tục thay vì tối ưu một lần.', en: 'Continuously review instead of optimizing once.' }, duration: { vi: '~40 phút', en: '~40 min' }, lessons: [
+        { title: { vi: 'Core Web Vitals và cache metrics', en: 'Core Web Vitals and cache metrics' }, body: { vi: 'Đo LCP/FCP/CLS, hit ratio và origin request để ưu tiên công việc performance.', en: 'Measure LCP/FCP/CLS, hit ratio, and origin requests to prioritize performance work.' }, hubLink: '/content-delivery#measure' },
+        { title: { vi: 'Plan sizing và cost drivers', en: 'Plan sizing and cost drivers' }, body: { vi: 'Review usage, product limits và cost driver trước khi scale workload hoặc bật add-on.', en: 'Review usage, product limits, and cost drivers before scaling workloads or enabling add-ons.' }, hubLink: '/plans' },
+        { title: { vi: 'Operational review cadence', en: 'Operational review cadence' }, body: { vi: 'Lập monthly review cho changelog, incidents, policy exceptions, SLO và backlog reliability.', en: 'Create a monthly review for changelog, incidents, policy exceptions, SLOs, and reliability backlog.' }, hubLink: '/changelog' },
+      ]},
+    ],
+    recommendedSequence: { vi: ['Thiết lập baseline signals', 'Viết runbook cho incident phổ biến', 'Chuẩn hóa preview/release/rollback', 'Test health/failover', 'Review performance và cost định kỳ'], en: ['Establish baseline signals', 'Write runbooks for common incidents', 'Standardize preview/release/rollback', 'Test health/failover', 'Review performance and cost regularly'] },
+    relatedUseCases: [{ href: '/use-cases/operate-cloudflare-workloads/', label: { vi: 'Vận hành workload Cloudflare', en: 'Operate Cloudflare workloads' } }, { href: '/use-cases/accelerate-content-delivery/', label: { vi: 'Tăng tốc content delivery', en: 'Accelerate content delivery' } }, { href: '/use-cases/defend-ddos-attacks/', label: { vi: 'Giữ service online khi DDoS', en: 'Keep services online during DDoS' } }],
+    cta: { href: '/status', label: { vi: 'Xem system status', en: 'View system status' } },
   },
 ];
 

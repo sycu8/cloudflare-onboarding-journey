@@ -13,6 +13,8 @@ export type UseCaseSlug =
   | 'deploy-static-site'
   | 'build-ai-applications'
   | 'build-saas-platform'
+  | 'govern-enterprise-ai'
+  | 'operate-cloudflare-workloads'
   | 'replace-vpn'
   | 'secure-remote-users'
   | 'secure-saas-access'
@@ -30,7 +32,7 @@ export type UseCase = {
   steps?: { vi: string[]; en: string[] };
   bullets?: { vi: string[]; en: string[] };
   commonMistakes?: { vi: { title: string; detail: string }[]; en: { title: string; detail: string }[] };
-  relatedTrack: 'application-services' | 'developer-platform' | 'cloudflare-one';
+  relatedTrack: 'application-services' | 'developer-platform' | 'cloudflare-one' | 'ai-security-adoption' | 'operational-excellence';
   nextCta: { href: string; label: LocalizedString };
 };
 
@@ -450,8 +452,8 @@ export const useCases: UseCase[] = [
     },
     relatedTrack: 'developer-platform',
     nextCta: {
-      href: '/tracks/developer-platform/dp-4-l1',
-      label: { vi: 'Bài học Workers AI', en: 'Workers AI lesson' },
+      href: '/tracks/developer-platform/dp-5-l1',
+      label: { vi: 'Bắt đầu AI trên Developer Platform', en: 'Start AI on the Developer Platform' },
     },
   },
   {
@@ -488,6 +490,17 @@ export const useCases: UseCase[] = [
       href: '/products/workers-for-platforms',
       label: { vi: 'Workers for Platforms', en: 'Workers for Platforms' },
     },
+  },
+  {
+    slug: 'govern-enterprise-ai',
+    hubCategory: 'secure-accelerate',
+    officialUrl: 'https://developers.cloudflare.com/cloudflare-one/',
+    title: { vi: 'Quản trị AI doanh nghiệp', en: 'Govern enterprise AI adoption' },
+    problem: { vi: 'Team dùng nhiều AI SaaS và LLM provider nhưng thiếu visibility, data controls và policy nhất quán cho user, prompt, tool và public AI app.', en: 'Teams use many AI SaaS tools and LLM providers but lack visibility, data controls, and consistent policy for users, prompts, tools, and public AI apps.' },
+    architecture: { vi: 'User/device → WARP + SWG → CASB/DLP → sanctioned AI (Access/RBI) → AI Gateway hoặc AI app (WAF + Bots)', en: 'User/device → WARP + SWG → CASB/DLP → sanctioned AI (Access/RBI) → AI Gateway or AI app (WAF + Bots)' },
+    bullets: { vi: ['CASB inventory Shadow AI và SaaS posture', 'SWG allow/block/steer AI destinations theo policy', 'RBI giảm rủi ro upload file vào AI web app', 'AI Gateway cho routing, guardrails và audit của app-owned AI', 'WAF/Firewall for AI, rate limiting và Bot controls cho public endpoint'], en: ['CASB inventories Shadow AI and SaaS posture', 'SWG allows, blocks, or steers AI destinations by policy', 'RBI reduces file-upload risk in AI web apps', 'AI Gateway provides routing, guardrails, and audit for app-owned AI', 'WAF/Firewall for AI, rate limiting, and bot controls protect public endpoints'] },
+    relatedTrack: 'ai-security-adoption',
+    nextCta: { href: '/tracks/ai-security-adoption/asa-1-l1', label: { vi: 'Bắt đầu AI Security & Adoption', en: 'Start AI Security & Adoption' } },
   },
   {
     slug: 'replace-vpn',
@@ -676,6 +689,17 @@ export const useCases: UseCase[] = [
       label: { vi: 'Bài học Access & ZTNA', en: 'Access & ZTNA lesson' },
     },
   },
+  {
+    slug: 'operate-cloudflare-workloads',
+    hubCategory: 'secure-accelerate',
+    officialUrl: 'https://developers.cloudflare.com/fundamentals/reference/',
+    title: { vi: 'Vận hành workload Cloudflare', en: 'Operate Cloudflare workloads' },
+    problem: { vi: 'Team cần phát hiện sự cố nhanh, release an toàn, giữ service available và tối ưu performance/cost khi workload tăng.', en: 'Teams need to detect incidents quickly, release safely, keep services available, and optimize performance/cost as workloads grow.' },
+    architecture: { vi: 'Signals (analytics, logs, Security Events) → triage/runbook → safe change/rollback → verify → operational review', en: 'Signals (analytics, logs, Security Events) → triage/runbook → safe change/rollback → verify → operational review' },
+    steps: { vi: ['Thiết lập baseline traffic, error, latency và security signals', 'Viết runbook cho outage, attack và bad release', 'Dùng preview + production verification + rollback criteria', 'Review status, incidents, performance và cost định kỳ'], en: ['Establish traffic, error, latency, and security baselines', 'Write runbooks for outages, attacks, and bad releases', 'Use preview + production verification + rollback criteria', 'Review status, incidents, performance, and cost regularly'] },
+    relatedTrack: 'operational-excellence',
+    nextCta: { href: '/tracks/operational-excellence/oe-1-l1', label: { vi: 'Bắt đầu Operational Excellence', en: 'Start Operational Excellence' } },
+  },
 ];
 
 export type UseCaseTrack = UseCase['relatedTrack'];
@@ -708,12 +732,24 @@ export const useCaseTrackLabels: Record<
     },
     trackHref: '/tracks/cloudflare-one',
   },
+  'ai-security-adoption': {
+    title: { vi: 'AI Security & Adoption', en: 'AI Security & Adoption' },
+    headline: { vi: 'Quản trị Shadow AI và bảo vệ AI application theo nhiều lớp.', en: 'Govern Shadow AI and protect AI applications in layers.' },
+    trackHref: '/tracks/ai-security-adoption',
+  },
+  'operational-excellence': {
+    title: { vi: 'Operational Excellence', en: 'Operational Excellence' },
+    headline: { vi: 'Vận hành workload Cloudflare an toàn, ổn định và hiệu quả.', en: 'Operate Cloudflare workloads safely, reliably, and efficiently.' },
+    trackHref: '/tracks/operational-excellence',
+  },
 };
 
 export const useCaseTrackOrder: UseCaseTrack[] = [
   'application-services',
   'developer-platform',
   'cloudflare-one',
+  'ai-security-adoption',
+  'operational-excellence',
 ];
 
 export function getUseCasesByTrack(track: UseCaseTrack): UseCase[] {

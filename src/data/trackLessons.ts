@@ -610,6 +610,137 @@ export const trackLessonEnrichment: Record<string, TrackLessonEnrichment> = {
     ],
     productSlugs: ['turnstile'],
   },
+  'dp-5-l1': {
+    steps: {
+      vi: [
+        'Tạo Worker bằng `wrangler init` hoặc dùng Worker hiện có từ dp-2.',
+        'Thêm Workers AI binding tên `AI` vào cấu hình Worker.',
+        'Gọi một model cho một task cụ thể (ví dụ classification hoặc text generation) từ handler server-side.',
+        'Log model, latency và lỗi; test input hợp lệ, input rỗng và input quá dài trước khi thêm UI.',
+      ],
+      en: [
+        'Create a Worker with `wrangler init` or use the Worker from dp-2.',
+        'Add a Workers AI binding named `AI` to the Worker configuration.',
+        'Call a model for one specific task (for example classification or text generation) from a server-side handler.',
+        'Log the model, latency, and errors; test valid, empty, and overlong input before adding a UI.',
+      ],
+    },
+    deepDive: {
+      vi: 'Adoption tốt bắt đầu bằng một capability đo được, không phải chatbot chung chung. Giữ inference trong Worker để client không có quyền gọi model/binding trực tiếp.',
+      en: 'Healthy adoption starts with one measurable capability, not a generic chatbot. Keep inference in the Worker so the client cannot call a model or binding directly.',
+    },
+    docsLinks: [
+      { label: { vi: 'Workers AI — Get started', en: 'Workers AI — Get started' }, url: 'https://developers.cloudflare.com/workers-ai/get-started/workers-wrangler/' },
+      { label: { vi: 'Chọn text generation model', en: 'Choose a text generation model' }, url: 'https://developers.cloudflare.com/workers-ai/guides/tutorials/how-to-choose-the-right-text-generation-model/' },
+    ],
+    diagramSlugs: ['ai-composable'],
+    productSlugs: ['workers-ai'],
+  },
+  'dp-5-l2': {
+    steps: {
+      vi: [
+        'Tạo AI Gateway và đặt tên theo environment (development, staging, production).',
+        'Route một model call từ Worker qua gateway thay vì gọi provider trực tiếp.',
+        'Gắn request metadata không nhạy cảm: feature, environment và authenticated user/tenant ID đã được pseudonymize nếu cần.',
+        'Review logs, cache behavior, lỗi và usage trước khi thêm provider hoặc fallback khác.',
+      ],
+      en: [
+        'Create an AI Gateway and name it for the environment (development, staging, production).',
+        'Route one model call from the Worker through the gateway instead of calling a provider directly.',
+        'Attach non-sensitive request metadata: feature, environment, and a pseudonymized authenticated user or tenant ID where needed.',
+        'Review logs, cache behavior, errors, and usage before adding another provider or fallback.',
+      ],
+    },
+    deepDive: {
+      vi: 'Gateway là control plane cho adoption: giúp team so sánh model và quan sát usage mà không copy provider logic hoặc credential khắp codebase. Không log prompt/response nhạy cảm chỉ để debug.',
+      en: 'A gateway is an adoption control plane: it helps teams compare models and observe usage without copying provider logic or credentials across the codebase. Do not log sensitive prompts or responses just for debugging.',
+    },
+    docsLinks: [
+      { label: { vi: 'AI Gateway — Get started', en: 'AI Gateway — Get started' }, url: 'https://developers.cloudflare.com/ai-gateway/get-started/' },
+      { label: { vi: 'Tạo AI Gateway đầu tiên với Workers', en: 'Create a first AI Gateway with Workers' }, url: 'https://developers.cloudflare.com/ai-gateway/tutorials/create-first-aig-workers/' },
+    ],
+    diagramSlugs: ['ai-multivendor-observability-control'],
+    productSlugs: ['ai-gateway', 'workers-ai'],
+  },
+  'dp-5-l3': {
+    steps: {
+      vi: [
+        'Lưu provider key, gateway token và credential tool bằng `wrangler secret put`; không đưa chúng vào client bundle hoặc repo.',
+        'Xác thực user/tenant trước AI endpoint và authorize mỗi action theo policy server-side.',
+        'Rate limit endpoint theo identity và cost/risk; bảo vệ form/chat public bằng Turnstile khi phù hợp.',
+        'Validate mọi tool argument theo schema; deny-by-default cho action ghi, external request hoặc truy cập dữ liệu nhạy cảm.',
+      ],
+      en: [
+        'Store provider keys, gateway tokens, and tool credentials with `wrangler secret put`; never put them in a client bundle or repository.',
+        'Authenticate the user or tenant before an AI endpoint and authorize every action with server-side policy.',
+        'Rate-limit the endpoint by identity and cost or risk; protect public chat or forms with Turnstile where appropriate.',
+        'Validate every tool argument against a schema; deny by default for writes, external requests, or sensitive-data access.',
+      ],
+    },
+    deepDive: {
+      vi: 'Prompt injection không được giải quyết chỉ bằng prompt. Treat model output là untrusted input: nó không thể tự cấp quyền, chọn tool unrestricted hay vượt qua authorization của app.',
+      en: 'Prompt injection is not solved by a prompt alone. Treat model output as untrusted input: it must not grant itself access, choose an unrestricted tool, or bypass application authorization.',
+    },
+    docsLinks: [
+      { label: { vi: 'Workers secrets', en: 'Workers secrets' }, url: 'https://developers.cloudflare.com/workers/configuration/secrets/' },
+      { label: { vi: 'AI Gateway guardrails', en: 'AI Gateway guardrails' }, url: 'https://developers.cloudflare.com/ai-gateway/features/guardrails/' },
+      { label: { vi: 'Turnstile server-side validation', en: 'Turnstile server-side validation' }, url: 'https://developers.cloudflare.com/turnstile/get-started/server-side-validation/' },
+    ],
+    productSlugs: ['ai-gateway', 'turnstile'],
+  },
+  'dp-5-l4': {
+    steps: {
+      vi: [
+        'Xác định document nào được ingest và ACL nào áp dụng cho từng user/tenant trước khi tạo embedding.',
+        'Lưu original documents trong R2; chunk document có metadata source, version và access scope.',
+        'Tạo embeddings và upsert vào Vectorize; tách ingestion job khỏi query path.',
+        'Ở query time: authorize user trước, retrieve only allowed chunks, đưa sources vào prompt và đánh giá grounded answer.',
+      ],
+      en: [
+        'Define which documents are ingested and which ACL applies to every user or tenant before creating embeddings.',
+        'Store original documents in R2; chunk documents with source, version, and access-scope metadata.',
+        'Create embeddings and upsert them to Vectorize; keep ingestion jobs separate from the query path.',
+        'At query time: authorize the user first, retrieve only allowed chunks, put sources in the prompt, and evaluate grounded answers.',
+      ],
+    },
+    deepDive: {
+      vi: 'RAG tăng chất lượng câu trả lời nhưng không thay thế authorization hoặc data lifecycle. Embedding có thể tiết lộ semantic information, nên enforce tenant/ACL filter trước retrieval và có retention/deletion plan.',
+      en: 'RAG improves answer quality but does not replace authorization or a data lifecycle. Embeddings can reveal semantic information, so enforce tenant or ACL filters before retrieval and have a retention and deletion plan.',
+    },
+    docsLinks: [
+      { label: { vi: 'Vectorize — Get started', en: 'Vectorize — Get started' }, url: 'https://developers.cloudflare.com/vectorize/get-started/' },
+      { label: { vi: 'Build a RAG AI', en: 'Build a RAG AI' }, url: 'https://developers.cloudflare.com/workers-ai/guides/tutorials/build-a-retrieval-augmented-generation-ai/' },
+    ],
+    diagramSlugs: ['ai-rag'],
+    productSlugs: ['vectorize', 'workers-ai', 'r2'],
+  },
+  'dp-5-l5': {
+    steps: {
+      vi: [
+        'Chọn một workflow stateful thật sự cần Agent (ví dụ conversation/session); nếu chỉ là API call stateless, bắt đầu bằng Worker thường.',
+        'Định nghĩa từng tool bằng input/output schema, timeout, audit log và permission tối thiểu.',
+        'Implement authorization bên trong tool/server; không tin model sẽ chọn user, tenant hay resource đúng.',
+        'Viết skills như knowledge/instructions có version, test tool failure path và add human approval cho action có tác động cao.',
+      ],
+      en: [
+        'Choose a workflow that truly needs an Agent (for example a conversation or session); if it is only a stateless API call, start with a regular Worker.',
+        'Define each tool with an input/output schema, timeout, audit log, and minimum permissions.',
+        'Implement authorization inside the tool or server; do not trust the model to select the correct user, tenant, or resource.',
+        'Write skills as versioned knowledge and instructions, test tool failure paths, and add human approval for high-impact actions.',
+      ],
+    },
+    deepDive: {
+      vi: 'Agent = model + state + tools + policy, không phải chỉ model call. Tool nhỏ, deterministic và auditable giảm blast radius; MCP/skills mở rộng capability nhưng không được mang secrets hoặc bypass permission.',
+      en: 'An agent is model + state + tools + policy, not merely a model call. Small, deterministic, auditable tools reduce blast radius; MCP and skills extend capability but must not carry secrets or bypass permissions.',
+    },
+    docsLinks: [
+      { label: { vi: 'Agents — Get started', en: 'Agents — Get started' }, url: 'https://developers.cloudflare.com/agents/getting-started/' },
+      { label: { vi: 'Build a chat agent', en: 'Build a chat agent' }, url: 'https://developers.cloudflare.com/agents/getting-started/build-a-chat-agent/' },
+      { label: { vi: 'Community MCP server', en: 'Community MCP server' }, url: 'https://developers.cloudflare.com/agents/community-mcp-server/' },
+    ],
+    diagramSlugs: ['enterprise-ai-agent-workspace'],
+    productSlugs: ['agents', 'durable-objects'],
+  },
   // ── Cloudflare One ──
   'c1-1-l1': {
     steps: {
@@ -807,6 +938,25 @@ export const trackLessonEnrichment: Record<string, TrackLessonEnrichment> = {
       { label: { vi: 'Zero Trust analytics', en: 'Zero Trust analytics' }, url: 'https://developers.cloudflare.com/cloudflare-one/insights/analytics/' },
     ],
     productSlugs: ['zero-trust'],
+  },
+  'c1-5-l1': {
+    steps: { vi: ['Inventory AI SaaS và owner/data type.', 'Review CASB findings cho token, user và posture.', 'Remediate theo sensitivity; không block mù không có sanctioned alternative.'], en: ['Inventory AI SaaS and owner/data type.', 'Review CASB findings for token, user, and posture.', 'Remediate by sensitivity; do not blindly block without a sanctioned alternative.'] },
+    deepDive: { vi: 'CASB giúp nhìn thấy Shadow AI và SaaS posture; DLP là control bổ sung cho sensitive data, không thay thế identity hay user training.', en: 'CASB provides Shadow AI and SaaS-posture visibility; DLP complements controls for sensitive data, not identity or user training.' },
+    docsLinks: [{ label: { vi: 'CASB', en: 'CASB' }, url: 'https://developers.cloudflare.com/cloudflare-one/casb/' }],
+    diagramSlugs: ['securing-data-at-rest'],
+    productSlugs: ['casb', 'dlp'],
+  },
+  'c1-5-l2': {
+    steps: { vi: ['Discover AI domain qua Gateway policy.', 'Tạo allow/block/steer policy theo identity.', 'Dùng RBI cho workflow upload risk cao và test user journey.'], en: ['Discover AI domains through Gateway policy.', 'Create allow/block/steer policy by identity.', 'Use RBI for high-risk upload workflows and test the user journey.'] },
+    deepDive: { vi: 'SWG kiểm soát egress web; RBI tách browsing session. Cả hai cần policy rõ và test để không chặn workflow hợp lệ.', en: 'SWG controls web egress; RBI isolates the browsing session. Both need clear policy and testing to avoid blocking valid workflows.' },
+    docsLinks: [{ label: { vi: 'Gateway policies', en: 'Gateway policies' }, url: 'https://developers.cloudflare.com/cloudflare-one/policies/gateway/' }, { label: { vi: 'Browser Isolation', en: 'Browser Isolation' }, url: 'https://developers.cloudflare.com/cloudflare-one/policies/browser-isolation/' }],
+    productSlugs: ['swg', 'browser-isolation', 'warp'],
+  },
+  'c1-5-l3': {
+    steps: { vi: ['Dùng Radar làm context cho AI crawler, không làm enforcement.', 'Pilot Access/identity rồi SWG.', 'Thêm CASB/DLP sau khi TLS inspection và support plan sẵn sàng; app team dùng AI Gateway/WAF riêng.'], en: ['Use Radar as AI-crawler context, not enforcement.', 'Pilot Access/identity, then SWG.', 'Add CASB/DLP after TLS inspection and support plans are ready; app teams use AI Gateway/WAF separately.'] },
+    deepDive: { vi: 'Phân biệt enterprise egress/SaaS governance với app-owned AI controls để ownership và audit không bị mơ hồ.', en: 'Separate enterprise egress/SaaS governance from app-owned AI controls so ownership and audit remain clear.' },
+    docsLinks: [{ label: { vi: 'Cloudflare Radar', en: 'Cloudflare Radar' }, url: 'https://radar.cloudflare.com/' }],
+    productSlugs: ['access', 'ai-gateway'],
   },
 };
 

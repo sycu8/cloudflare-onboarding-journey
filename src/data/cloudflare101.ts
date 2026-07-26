@@ -417,6 +417,18 @@ export const cf101Categories: Cf101Category[] = [
         },
         docsPath: '/cloudflare-one/connections/connect-devices/warp/',
       },
+      {
+        id: 'casb',
+        name: { vi: 'CASB & Shadow AI', en: 'CASB and Shadow AI' },
+        summary: { vi: 'Discover SaaS/AI chưa được phê duyệt, kiểm tra posture và findings về user/token để quản trị adoption.', en: 'Discover unsanctioned SaaS/AI, assess posture, and review user/token findings to govern adoption.' },
+        docsPath: '/cloudflare-one/casb/',
+      },
+      {
+        id: 'dlp',
+        name: { vi: 'Data Loss Prevention (DLP)', en: 'Data Loss Prevention (DLP)' },
+        summary: { vi: 'Detect sensitive data trên web/SaaS theo policy; rollout cùng TLS inspection, exception và support plan.', en: 'Detect sensitive data on web/SaaS by policy; roll out with TLS inspection, exceptions, and a support plan.' },
+        docsPath: '/cloudflare-one/policies/data-loss-prevention/',
+      },
     ],
   },
   {
