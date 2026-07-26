@@ -63,7 +63,7 @@ export default function MobileMenu(props: {
     <>
       <button
         type="button"
-        className="btn btn-ghost min-h-10 min-w-10 px-2.5 md:hidden"
+        className="btn btn-ghost min-h-10 min-w-10 px-2.5 lg:hidden"
         aria-label={ui.menu}
         aria-haspopup="dialog"
         aria-expanded={open}
@@ -81,7 +81,7 @@ export default function MobileMenu(props: {
       </button>
 
       {open ? (
-        <div className="fixed inset-0 z-50 md:hidden" role="dialog" aria-modal="true" aria-label={ui.menu}>
+        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label={ui.menu}>
           <button
             type="button"
             className="absolute inset-0 bg-black/50"
@@ -90,7 +90,7 @@ export default function MobileMenu(props: {
           />
 
           <div
-            className="absolute right-0 top-0 flex h-full w-[min(18rem,88vw)] flex-col shadow-2xl"
+            className="absolute right-0 top-0 flex h-dvh max-h-dvh w-[min(18rem,88vw)] flex-col shadow-2xl"
             style={{
               borderLeft: '1px solid var(--cf-border)',
               background: 'var(--cf-bg-elevated)',
@@ -114,7 +114,7 @@ export default function MobileMenu(props: {
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto px-3 py-3">
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 py-3">
               <a
                 href="/choose-your-path"
                 className="btn btn-primary mb-3 flex w-full justify-center py-2.5 text-sm"
