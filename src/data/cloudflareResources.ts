@@ -17,6 +17,7 @@ export type CloudflareResourceTrack =
   | 'application-services'
   | 'developer-platform'
   | 'cloudflare-one'
+  | 'operational-excellence'
   | 'cross-cutting';
 
 export type CloudflareResource = {
@@ -47,6 +48,7 @@ export const cloudflareResourceTrackLabels: Record<CloudflareResourceTrack, Loca
   'application-services': { vi: 'Application Services', en: 'Application Services' },
   'developer-platform': { vi: 'Developer Platform', en: 'Developer Platform' },
   'cloudflare-one': { vi: 'Cloudflare One', en: 'Cloudflare One' },
+  'operational-excellence': { vi: 'Operational Excellence', en: 'Operational Excellence' },
   'cross-cutting': { vi: 'Chung / đa lĩnh vực', en: 'Cross-cutting' },
 };
 
@@ -88,6 +90,20 @@ const LESSON_KEYWORDS: Record<string, string[]> = {
   'c1-5-l1': ['casb', 'shadow ai', 'saas posture', 'data loss prevention'],
   'c1-5-l2': ['secure web gateway', 'browser isolation', 'remote browser', 'warp'],
   'c1-5-l3': ['radar', 'ai gateway', 'zero trust deployment', 'ai crawler'],
+  'oe-1-l1': ['analytics', 'traffic', 'cache analytics', 'core web vitals'],
+  'oe-1-l2': ['observability', 'wrangler tail', 'logs', 'traces'],
+  'oe-1-l3': ['logpush', 'security events', 'waf', 'bot management'],
+  'oe-1-l4': ['ai gateway', 'observability', 'ai analytics'],
+  'oe-2-l1': ['status', 'incident', 'outage'],
+  'oe-2-l2': ['security events', 'ddos', 'waf', 'bot'],
+  'oe-3-l1': ['preview', 'deploy', 'pages', 'workers'],
+  'oe-3-l2': ['wrangler', 'secrets', 'environment'],
+  'oe-3-l3': ['purge', 'cache rule', 'release'],
+  'oe-4-l1': ['load balancing', 'health monitor', 'failover'],
+  'oe-4-l2': ['ddos', 'always online', 'waf'],
+  'oe-5-l1': ['core web vitals', 'cache analytics', 'performance review'],
+  'oe-5-l2': ['plans', 'cost', 'usage'],
+  'oe-5-l3': ['changelog', 'operational review', 'analytics'],
   'c1-1-l1': ['identity', 'idp', 'okta', 'entra', 'groups'],
   'c1-1-l2': ['access application', 'pilot', 'saas', 'self-hosted'],
   'c1-2-l1': ['identity provider', 'mfa', 'sso', 'saml', 'oauth'],
@@ -137,6 +153,8 @@ export function getDeploymentExamplesForLesson(
       ? 'developer-platform'
       : lessonId.startsWith('c1-')
         ? 'cloudflare-one'
+        : lessonId.startsWith('oe-')
+          ? 'operational-excellence'
         : null;
 
   return cloudflareResources

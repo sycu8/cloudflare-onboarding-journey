@@ -14,6 +14,7 @@ export type UseCaseSlug =
   | 'build-ai-applications'
   | 'build-saas-platform'
   | 'govern-enterprise-ai'
+  | 'operate-cloudflare-workloads'
   | 'replace-vpn'
   | 'secure-remote-users'
   | 'secure-saas-access'
@@ -31,7 +32,7 @@ export type UseCase = {
   steps?: { vi: string[]; en: string[] };
   bullets?: { vi: string[]; en: string[] };
   commonMistakes?: { vi: { title: string; detail: string }[]; en: { title: string; detail: string }[] };
-  relatedTrack: 'application-services' | 'developer-platform' | 'cloudflare-one' | 'ai-security-adoption';
+  relatedTrack: 'application-services' | 'developer-platform' | 'cloudflare-one' | 'ai-security-adoption' | 'operational-excellence';
   nextCta: { href: string; label: LocalizedString };
 };
 
@@ -688,6 +689,17 @@ export const useCases: UseCase[] = [
       label: { vi: 'Bài học Access & ZTNA', en: 'Access & ZTNA lesson' },
     },
   },
+  {
+    slug: 'operate-cloudflare-workloads',
+    hubCategory: 'secure-accelerate',
+    officialUrl: 'https://developers.cloudflare.com/fundamentals/reference/',
+    title: { vi: 'Vận hành workload Cloudflare', en: 'Operate Cloudflare workloads' },
+    problem: { vi: 'Team cần phát hiện sự cố nhanh, release an toàn, giữ service available và tối ưu performance/cost khi workload tăng.', en: 'Teams need to detect incidents quickly, release safely, keep services available, and optimize performance/cost as workloads grow.' },
+    architecture: { vi: 'Signals (analytics, logs, Security Events) → triage/runbook → safe change/rollback → verify → operational review', en: 'Signals (analytics, logs, Security Events) → triage/runbook → safe change/rollback → verify → operational review' },
+    steps: { vi: ['Thiết lập baseline traffic, error, latency và security signals', 'Viết runbook cho outage, attack và bad release', 'Dùng preview + production verification + rollback criteria', 'Review status, incidents, performance và cost định kỳ'], en: ['Establish traffic, error, latency, and security baselines', 'Write runbooks for outages, attacks, and bad releases', 'Use preview + production verification + rollback criteria', 'Review status, incidents, performance, and cost regularly'] },
+    relatedTrack: 'operational-excellence',
+    nextCta: { href: '/tracks/operational-excellence/oe-1-l1', label: { vi: 'Bắt đầu Operational Excellence', en: 'Start Operational Excellence' } },
+  },
 ];
 
 export type UseCaseTrack = UseCase['relatedTrack'];
@@ -725,6 +737,11 @@ export const useCaseTrackLabels: Record<
     headline: { vi: 'Quản trị Shadow AI và bảo vệ AI application theo nhiều lớp.', en: 'Govern Shadow AI and protect AI applications in layers.' },
     trackHref: '/tracks/ai-security-adoption',
   },
+  'operational-excellence': {
+    title: { vi: 'Operational Excellence', en: 'Operational Excellence' },
+    headline: { vi: 'Vận hành workload Cloudflare an toàn, ổn định và hiệu quả.', en: 'Operate Cloudflare workloads safely, reliably, and efficiently.' },
+    trackHref: '/tracks/operational-excellence',
+  },
 };
 
 export const useCaseTrackOrder: UseCaseTrack[] = [
@@ -732,6 +749,7 @@ export const useCaseTrackOrder: UseCaseTrack[] = [
   'developer-platform',
   'cloudflare-one',
   'ai-security-adoption',
+  'operational-excellence',
 ];
 
 export function getUseCasesByTrack(track: UseCaseTrack): UseCase[] {

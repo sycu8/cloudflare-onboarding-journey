@@ -16,7 +16,12 @@ export type TrackModule = {
 };
 
 export type Track = {
-  slug: 'application-services' | 'developer-platform' | 'cloudflare-one' | 'ai-security-adoption';
+  slug:
+    | 'application-services'
+    | 'developer-platform'
+    | 'cloudflare-one'
+    | 'ai-security-adoption'
+    | 'operational-excellence';
   title: LocalizedString;
   headline: LocalizedString;
   promise: LocalizedString;
@@ -788,6 +793,48 @@ export const tracks: Track[] = [
     recommendedSequence: { vi: ['Inventory Shadow AI', 'Pilot Access/SWG', 'Add CASB/DLP', 'Govern app-owned AI with Gateway/WAF', 'Build RAG/agents with scoped tools'], en: ['Inventory Shadow AI', 'Pilot Access/SWG', 'Add CASB/DLP', 'Govern app-owned AI with Gateway/WAF', 'Build RAG/agents with scoped tools'] },
     relatedUseCases: [{ href: '/use-cases/govern-enterprise-ai/', label: { vi: 'Quản trị AI doanh nghiệp', en: 'Govern enterprise AI' } }, { href: '/use-cases/build-ai-applications/', label: { vi: 'Build AI app', en: 'Build AI app' } }],
     cta: { href: '/cheatsheets/ai-protection-portfolio', label: { vi: 'Mở AI protection cheatsheet', en: 'Open AI protection cheatsheet' } },
+  },
+  {
+    slug: 'operational-excellence',
+    title: { vi: 'Operational Excellence', en: 'Operational Excellence' },
+    headline: { vi: 'Vận hành Cloudflare an toàn, ổn định và hiệu quả', en: 'Operate Cloudflare safely, reliably, and efficiently' },
+    promise: { vi: 'Biến signals thành quyết định: observe, respond, release, recover và improve.', en: 'Turn signals into decisions: observe, respond, release, recover, and improve.' },
+    description: { vi: 'Lộ trình cross-product cho DevOps, SRE, IT và platform teams: observability, incident response, release safety, resilience, performance và cost.', en: 'A cross-product path for DevOps, SRE, IT, and platform teams: observability, incident response, release safety, resilience, performance, and cost.' },
+    whoIsThisFor: { vi: 'DevOps/SRE, IT admin, platform engineer hoặc technical lead đã có workload trên Cloudflare.', en: 'DevOps/SRE, IT admins, platform engineers, or technical leads with workloads on Cloudflare.' },
+    mentalModel: { vi: 'Signals → triage → runbook → safe change → verify → learn. Dùng dashboard, logs và status để giảm thời gian phát hiện/phục hồi, không chỉ “xem metric”.', en: 'Signals → triage → runbook → safe change → verify → learn. Use dashboards, logs, and status to reduce detection/recovery time, not merely to “view metrics”.' },
+    outcomes: { vi: ['Thiết kế signals và logs hữu ích cho zone, Worker, Zero Trust và AI', 'Triage incident với status, Security Events và runbook', 'Release có preview, rollback, purge/cache plan và secret hygiene', 'Lập kế hoạch resilience, performance và cost review định kỳ'], en: ['Design useful signals and logs for zones, Workers, Zero Trust, and AI', 'Triage incidents with status, Security Events, and runbooks', 'Release with preview, rollback, purge/cache plans, and secret hygiene', 'Plan resilience, performance, and recurring cost reviews'] },
+    keyConcepts: ['Observability', 'Logpush', 'Runbooks', 'Rollback', 'Health checks', 'Core Web Vitals', 'SLOs', 'Cost'],
+    modules: [
+      { id: 'oe-1', title: { vi: 'Phần 1: Observability & logging', en: 'Part 1: Observability & logging' }, description: { vi: 'Signals từ traffic, application, security và AI.', en: 'Signals from traffic, applications, security, and AI.' }, duration: { vi: '~60 phút', en: '~60 min' }, lessons: [
+        { title: { vi: 'Zone và traffic analytics', en: 'Zone and traffic analytics' }, body: { vi: 'Chọn baseline cho traffic, cache hit/miss, 4xx/5xx và latency trước khi đặt alert.', en: 'Establish baselines for traffic, cache hit/miss, 4xx/5xx, and latency before creating alerts.' }, hubLink: '/content-delivery#measure' },
+        { title: { vi: 'Workers/Pages logs và traces', en: 'Workers/Pages logs and traces' }, body: { vi: 'Dùng structured logs, request ID và traces để nối lỗi user-facing với code path.', en: 'Use structured logs, request IDs, and traces to connect user-facing errors to code paths.' } },
+        { title: { vi: 'Security Events và Logpush', en: 'Security Events and Logpush' }, body: { vi: 'Triage WAF, DDoS và bot events; export log khi cần retention hoặc correlation bên ngoài.', en: 'Triage WAF, DDoS, and bot events; export logs when you need retention or external correlation.' } },
+        { title: { vi: 'AI Gateway usage signals', en: 'AI Gateway usage signals' }, body: { vi: 'Theo dõi model, latency, error và cost signal mà không log prompt nhạy cảm không cần thiết.', en: 'Track model, latency, error, and cost signals without unnecessarily logging sensitive prompts.' } },
+      ]},
+      { id: 'oe-2', title: { vi: 'Phần 2: Incident response', en: 'Part 2: Incident response' }, description: { vi: 'Triage có bằng chứng và giao tiếp rõ ràng.', en: 'Evidence-based triage and clear communication.' }, duration: { vi: '~50 phút', en: '~50 min' }, lessons: [
+        { title: { vi: 'Status và correlation', en: 'Status and correlation' }, body: { vi: 'Khi error spike, kiểm tra Cloudflare Status cùng metric và deployment timeline trước khi kết luận root cause.', en: 'When errors spike, check Cloudflare Status alongside metrics and deployment timelines before concluding root cause.' }, hubLink: '/status' },
+        { title: { vi: 'Triage security incident', en: 'Triage a security incident' }, body: { vi: 'Phân biệt attack, false positive và app regression; preserve evidence trước khi thay policy.', en: 'Separate attacks, false positives, and app regressions; preserve evidence before changing policy.' } },
+        { title: { vi: 'Runbook và stakeholder communication', en: 'Runbooks and stakeholder communication' }, body: { vi: 'Define owner, severity, update cadence, rollback criteria và post-incident actions trước incident tiếp theo.', en: 'Define owners, severity, update cadence, rollback criteria, and post-incident actions before the next incident.' } },
+      ]},
+      { id: 'oe-3', title: { vi: 'Phần 3: Release & deployment safety', en: 'Part 3: Release & deployment safety' }, description: { vi: 'Ship nhanh nhưng reversible.', en: 'Ship quickly while staying reversible.' }, duration: { vi: '~45 phút', en: '~45 min' }, lessons: [
+        { title: { vi: 'Preview → production → rollback', en: 'Preview → production → rollback' }, body: { vi: 'Test preview URL, define production checks và giữ rollback path rõ ràng trước release.', en: 'Test preview URLs, define production checks, and keep a clear rollback path before release.' } },
+        { title: { vi: 'Environment, secrets và change control', en: 'Environments, secrets, and change control' }, body: { vi: 'Tách config theo environment; secret không nằm trong source; log ai thay đổi gì và khi nào.', en: 'Separate configuration by environment; never place secrets in source; record who changed what and when.' } },
+        { title: { vi: 'Cache purge và coordinated release', en: 'Cache purge and coordinated release' }, body: { vi: 'Version asset, purge đúng scope và kiểm tra cache behavior sau frontend/API release.', en: 'Version assets, purge the right scope, and verify cache behavior after frontend/API releases.' } },
+      ]},
+      { id: 'oe-4', title: { vi: 'Phần 4: Resilience & availability', en: 'Part 4: Resilience & availability' }, description: { vi: 'Giảm blast radius và phục hồi nhanh.', en: 'Reduce blast radius and recover quickly.' }, duration: { vi: '~45 phút', en: '~45 min' }, lessons: [
+        { title: { vi: 'Health checks và load balancing', en: 'Health checks and load balancing' }, body: { vi: 'Định nghĩa health signal có ý nghĩa cho user và test failover trước khi cần dùng.', en: 'Define health signals meaningful to users and test failover before you need it.' } },
+        { title: { vi: 'DDoS và availability patterns', en: 'DDoS and availability patterns' }, body: { vi: 'Kết hợp proxy, DDoS protection, WAF/rate limit và origin hardening để giữ service available.', en: 'Combine proxying, DDoS protection, WAF/rate limiting, and origin hardening to keep services available.' } },
+        { title: { vi: 'Rollout theo wave', en: 'Wave-based rollout' }, body: { vi: 'Mở rộng policy hoặc Zero Trust deployment theo nhóm nhỏ, feedback loop và rollback plan.', en: 'Expand policy or Zero Trust deployments through small groups, feedback loops, and rollback plans.' } },
+      ]},
+      { id: 'oe-5', title: { vi: 'Phần 5: Performance & cost', en: 'Part 5: Performance & cost' }, description: { vi: 'Review liên tục thay vì tối ưu một lần.', en: 'Continuously review instead of optimizing once.' }, duration: { vi: '~40 phút', en: '~40 min' }, lessons: [
+        { title: { vi: 'Core Web Vitals và cache metrics', en: 'Core Web Vitals and cache metrics' }, body: { vi: 'Đo LCP/FCP/CLS, hit ratio và origin request để ưu tiên công việc performance.', en: 'Measure LCP/FCP/CLS, hit ratio, and origin requests to prioritize performance work.' }, hubLink: '/content-delivery#measure' },
+        { title: { vi: 'Plan sizing và cost drivers', en: 'Plan sizing and cost drivers' }, body: { vi: 'Review usage, product limits và cost driver trước khi scale workload hoặc bật add-on.', en: 'Review usage, product limits, and cost drivers before scaling workloads or enabling add-ons.' }, hubLink: '/plans' },
+        { title: { vi: 'Operational review cadence', en: 'Operational review cadence' }, body: { vi: 'Lập monthly review cho changelog, incidents, policy exceptions, SLO và backlog reliability.', en: 'Create a monthly review for changelog, incidents, policy exceptions, SLOs, and reliability backlog.' }, hubLink: '/changelog' },
+      ]},
+    ],
+    recommendedSequence: { vi: ['Thiết lập baseline signals', 'Viết runbook cho incident phổ biến', 'Chuẩn hóa preview/release/rollback', 'Test health/failover', 'Review performance và cost định kỳ'], en: ['Establish baseline signals', 'Write runbooks for common incidents', 'Standardize preview/release/rollback', 'Test health/failover', 'Review performance and cost regularly'] },
+    relatedUseCases: [{ href: '/use-cases/operate-cloudflare-workloads/', label: { vi: 'Vận hành workload Cloudflare', en: 'Operate Cloudflare workloads' } }, { href: '/use-cases/accelerate-content-delivery/', label: { vi: 'Tăng tốc content delivery', en: 'Accelerate content delivery' } }, { href: '/use-cases/defend-ddos-attacks/', label: { vi: 'Giữ service online khi DDoS', en: 'Keep services online during DDoS' } }],
+    cta: { href: '/status', label: { vi: 'Xem system status', en: 'View system status' } },
   },
 ];
 

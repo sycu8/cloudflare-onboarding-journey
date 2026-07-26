@@ -21,6 +21,7 @@ export type DiagramTrack =
   | 'developer-platform'
   | 'cloudflare-one'
   | 'ai-security-adoption'
+  | 'operational-excellence'
   | 'cross-cutting';
 
 type RawDiagram = (typeof rawData)[number];
@@ -187,6 +188,11 @@ export const trackDiagramSlugs: Record<
     'ai-multivendor-observability-control',
     'secure-access-to-saas-applications-with-sase',
     'ai-rag',
+  ],
+  'operational-excellence': [
+    'distributed-web-performance-architecture',
+    'bot-management',
+    'serverless-global-apis',
   ],
 };
 
