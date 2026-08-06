@@ -25,6 +25,7 @@
     "diagrams:sync": "node scripts/scrape-ref-arch-diagrams.mjs",
     "resources:sync": "node scripts/sync-cloudflare-resources.mjs",
     "resources:crawl-previews": "node scripts/crawl-tutorial-previews.mjs",
+    "check:diagrams": "node scripts/check-ref-diagram-assets.mjs",
     "review:pr": "node scripts/review-contribution.mjs",
     "astro": "astro"
   },

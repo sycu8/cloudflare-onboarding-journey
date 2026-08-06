@@ -10,7 +10,7 @@ type Props = {
 
 const { diagram, imageIndex = 0, compact = false } = Astro.props;
 const image = diagram.images[imageIndex] ?? diagram.images[0];
-if (!image) return null;
+if (!image || !image.url) return null;
 ---
 
 <figure class:list={['ref-diagram', compact && 'ref-diagram-compact']}>

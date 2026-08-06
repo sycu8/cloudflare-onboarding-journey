@@ -91,20 +91,22 @@ export default function ReferenceDiagramGrid({ diagrams, pageSize = PAGE_SIZE }:
         {paged.map((diagram) => (
           <li key={diagram.slug}>
             <article className="card flex h-full flex-col overflow-hidden p-0">
-              <a
-                href={diagram.pageUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block overflow-hidden border-b border-[var(--cf-border)] bg-[var(--cf-bg-elevated)]"
-              >
-                <img
-                  src={diagram.primaryImageUrl}
-                  alt={diagram.images[0]?.alt.en ?? diagram.title.en}
-                  loading="lazy"
-                  decoding="async"
-                  className="h-40 w-full object-contain object-center p-2"
-                />
-              </a>
+              {diagram.primaryImageUrl ? (
+                <a
+                  href={diagram.pageUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block overflow-hidden border-b border-[var(--cf-border)] bg-[var(--cf-bg-elevated)]"
+                >
+                  <img
+                    src={diagram.primaryImageUrl}
+                    alt={diagram.images[0]?.alt.en ?? diagram.title.en}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-40 w-full object-contain object-center p-2"
+                  />
+                </a>
+              ) : null}
               <div className="flex flex-1 flex-col p-4">
                 <span className="badge badge-accent w-fit text-xs">
                   {t(diagram.categoryLabel, lang)}
