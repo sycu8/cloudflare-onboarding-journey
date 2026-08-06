@@ -55,9 +55,10 @@ const imageUrl = new URL(ogImage ?? siteSeo.defaultImage, siteOrigin).href;
       /* Shareable section-heading anchors (added by /scripts none; see BaseLayout script) */
       [data-anchor-heading]{ scroll-margin-top: 5.5rem; }
       .heading-anchor{
+        position: relative;
         display: inline-flex;
         align-items: center;
-        margin-left: 0.4rem;
+        margin-right: 0.4rem;
         font-weight: 400;
         line-height: 1;
         color: var(--cf-accent);
@@ -74,10 +75,19 @@ const imageUrl = new URL(ogImage ?? siteSeo.defaultImage, siteOrigin).href;
       .heading-anchor.is-copied { opacity: 1; }
       .heading-anchor.is-copied::after {
         content: 'Đã copy';
-        margin-left: 0.35rem;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        margin-top: 0.25rem;
+        padding: 0.05rem 0.4rem;
+        white-space: nowrap;
         font-size: 0.7rem;
         font-weight: 500;
         color: var(--cf-accent);
+        background: var(--cf-bg-elevated);
+        border: 1px solid var(--cf-border);
+        border-radius: 0.25rem;
+        z-index: 20;
       }
       html[data-lang='en'] .heading-anchor.is-copied::after { content: 'Copied'; }
       @media (hover: none) { .heading-anchor { opacity: 0.5; } }
@@ -209,7 +219,7 @@ const imageUrl = new URL(ogImage ?? siteSeo.defaultImage, siteOrigin).href;
                 flash(anchor);
               }
             });
-            heading.appendChild(anchor);
+            heading.insertBefore(anchor, heading.firstChild);
           });
 
           // IDs are assigned at runtime, so resolve any incoming deep link manually.
