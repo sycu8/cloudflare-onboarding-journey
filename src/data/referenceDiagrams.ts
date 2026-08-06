@@ -124,9 +124,21 @@ const featuredSlugs = new Set([
   'augment-access-with-serverless',
 ]);
 
+/**
+ * Resolve the <img src> for a reference diagram.
+ *
+ * Always prefer the locally-committed copy under `public/ref-diagrams/`. We must NOT fall
+ * back to Cloudflare's `developers.cloudflare.com/_astro/*` URLs: those are content-hashed
+ * (fingerprinted) build assets whose hashes rotate whenever Cloudflare rebuilds their docs,
+ * so hotlinking them produces images that 404 without warning. `sourceUrl` is kept in the
+ * data purely as provenance for the sync script — never as a render source.
+ */
 function resolveDiagramImageUrl(image: { file?: string; sourceUrl?: string; url?: string }): string {
   if (image.file) return `/ref-diagrams/${image.file}`;
-  return image.sourceUrl ?? image.url ?? '';
+  // Only accept a non-remote fallback (e.g. an already-local path); never a fingerprinted hotlink.
+  const fallback = image.url ?? '';
+  if (fallback && !fallback.includes('developers.cloudflare.com/')) return fallback;
+  return '';
 }
 
 function toDiagram(raw: RawDiagram): ReferenceDiagram {
