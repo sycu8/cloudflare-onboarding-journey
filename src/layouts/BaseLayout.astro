@@ -51,6 +51,38 @@ const imageUrl = new URL(ogImage ?? siteSeo.defaultImage, siteOrigin).href;
       html:not([data-lang='en']) .lang-en{display:none!important}
     </style>
 
+    <style is:global>
+      /* Shareable section-heading anchors (added by /scripts none; see BaseLayout script) */
+      [data-anchor-heading]{ scroll-margin-top: 5.5rem; }
+      .heading-anchor{
+        display: inline-flex;
+        align-items: center;
+        margin-left: 0.4rem;
+        font-weight: 400;
+        line-height: 1;
+        color: var(--cf-accent);
+        text-decoration: none;
+        opacity: 0;
+        transition: opacity 0.15s ease;
+        vertical-align: middle;
+        user-select: none;
+      }
+      :is(h1, h2, h3, h4) > .heading-anchor { font-size: 0.85em; }
+      :is(h1, h2, h3, h4):hover > .heading-anchor,
+      .heading-anchor:focus-visible { opacity: 0.75; }
+      .heading-anchor:hover { opacity: 1; }
+      .heading-anchor.is-copied { opacity: 1; }
+      .heading-anchor.is-copied::after {
+        content: 'Đã copy';
+        margin-left: 0.35rem;
+        font-size: 0.7rem;
+        font-weight: 500;
+        color: var(--cf-accent);
+      }
+      html[data-lang='en'] .heading-anchor.is-copied::after { content: 'Copied'; }
+      @media (hover: none) { .heading-anchor { opacity: 0.5; } }
+    </style>
+
     <title>{titleVi}</title>
     <meta name="description" content={description.vi} />
 
@@ -107,5 +139,94 @@ const imageUrl = new URL(ogImage ?? siteSeo.defaultImage, siteOrigin).href;
       <BackToTop client:load />
       <Footer />
     </div>
+
+    <script>
+      // Give section headings stable, shareable, copyable anchor URLs
+      // (e.g. /resources/#tai-lieu). Scoped to real section headings only —
+      // card titles (inside <article>/.card) and interactive islands are skipped.
+      (function () {
+        function slugify(text) {
+          return (text || '')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[đĐ]/g, 'd')
+            .toLowerCase()
+            .trim()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+        }
+
+        function flash(anchor) {
+          anchor.classList.add('is-copied');
+          window.setTimeout(function () { anchor.classList.remove('is-copied'); }, 1400);
+        }
+
+        function init() {
+          var main = document.querySelector('main');
+          if (!main) return;
+
+          var used = new Set();
+          document.querySelectorAll('[id]').forEach(function (el) {
+            if (el.id) used.add(el.id);
+          });
+
+          main.querySelectorAll('h2, h3').forEach(function (heading) {
+            if (heading.hasAttribute('data-anchor-heading')) return;
+            // Only anchor genuine section headings: nearest section/card/article/island must be a <section>.
+            var boundary = heading.closest('section, article, astro-island, .card');
+            if (!boundary || boundary.tagName !== 'SECTION') return;
+
+            var viSpan = heading.querySelector('.lang-vi');
+            var base = viSpan && viSpan.textContent.trim() ? viSpan.textContent : heading.textContent;
+            var slug = slugify(base);
+            if (!slug) return;
+
+            var id = heading.id;
+            if (!id) {
+              var candidate = slug;
+              var n = 2;
+              while (used.has(candidate)) candidate = slug + '-' + n++;
+              id = candidate;
+              heading.id = id;
+            }
+            used.add(id);
+            heading.setAttribute('data-anchor-heading', '');
+
+            var anchor = document.createElement('a');
+            anchor.className = 'heading-anchor';
+            anchor.href = '#' + id;
+            anchor.setAttribute('aria-label', 'Copy link to this section');
+            anchor.innerHTML = '<span aria-hidden="true">#</span>';
+            anchor.addEventListener('click', function (e) {
+              e.preventDefault();
+              var url = location.origin + location.pathname + '#' + id;
+              try { history.replaceState(null, '', '#' + id); } catch (err) {}
+              var target = document.getElementById(id);
+              if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(function () { flash(anchor); }).catch(function () { flash(anchor); });
+              } else {
+                flash(anchor);
+              }
+            });
+            heading.appendChild(anchor);
+          });
+
+          // IDs are assigned at runtime, so resolve any incoming deep link manually.
+          if (location.hash && location.hash.length > 1) {
+            try {
+              var target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+              if (target) requestAnimationFrame(function () { target.scrollIntoView({ block: 'start' }); });
+            } catch (err) {}
+          }
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', init);
+        } else {
+          init();
+        }
+      })();
+    </script>
   </body>
 </html>
