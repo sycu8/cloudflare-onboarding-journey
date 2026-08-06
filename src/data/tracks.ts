@@ -15,6 +15,12 @@ export type TrackModule = {
   lessons: TrackLesson[];
 };
 
+export type TrackTool = {
+  title: LocalizedString;
+  description: LocalizedString;
+  href: string;
+};
+
 export type Track = {
   slug:
     | 'application-services'
@@ -30,6 +36,7 @@ export type Track = {
   mentalModel: LocalizedString;
   outcomes: { vi: string[]; en: string[] };
   keyConcepts: string[];
+  tools?: TrackTool[];
   modules: TrackModule[];
   recommendedSequence: { vi: string[]; en: string[] };
   relatedUseCases: { href: string; label: LocalizedString }[];
@@ -804,6 +811,16 @@ export const tracks: Track[] = [
     mentalModel: { vi: 'Signals → triage → runbook → safe change → verify → learn. Dùng dashboard, logs và status để giảm thời gian phát hiện/phục hồi, không chỉ “xem metric”.', en: 'Signals → triage → runbook → safe change → verify → learn. Use dashboards, logs, and status to reduce detection/recovery time, not merely to “view metrics”.' },
     outcomes: { vi: ['Thiết kế signals và logs hữu ích cho zone, Worker, Zero Trust và AI', 'Triage incident với status, Security Events và runbook', 'Release có preview, rollback, purge/cache plan và secret hygiene', 'Lập kế hoạch resilience, performance và cost review định kỳ'], en: ['Design useful signals and logs for zones, Workers, Zero Trust, and AI', 'Triage incidents with status, Security Events, and runbooks', 'Release with preview, rollback, purge/cache plans, and secret hygiene', 'Plan resilience, performance, and recurring cost reviews'] },
     keyConcepts: ['Observability', 'Logpush', 'Runbooks', 'Rollback', 'Health checks', 'Core Web Vitals', 'SLOs', 'Cost'],
+    tools: [
+      {
+        title: { vi: 'Trợ lý viết Support case', en: 'Support case assistant' },
+        description: {
+          vi: 'Khi cần mở ticket với Cloudflare Support: mô tả lỗi hoặc dán screenshot, công cụ gợi ý nguyên nhân, hướng dẫn kiểm tra và thu thập bằng chứng theo mức ưu tiên P1–P4, rồi tạo bản nháp case (EN/VI). Hợp với bước incident response và runbook. Dữ liệu chỉ nằm trong trình duyệt — không nhập secret/API key.',
+          en: 'When you need to open a Cloudflare Support ticket: describe the error or attach a screenshot; it suggests likely causes, guides your checks, collects P1–P4 evidence, and generates a case draft (EN/VI). Pairs with the incident-response and runbook steps. Data stays in your browser — never enter secrets/API keys.',
+        },
+        href: 'https://helpr.orangecloud.vn/',
+      },
+    ],
     modules: [
       { id: 'oe-1', title: { vi: 'Phần 1: Observability & logging', en: 'Part 1: Observability & logging' }, description: { vi: 'Signals từ traffic, application, security và AI.', en: 'Signals from traffic, applications, security, and AI.' }, duration: { vi: '~60 phút', en: '~60 min' }, lessons: [
         { title: { vi: 'Zone và traffic analytics', en: 'Zone and traffic analytics' }, body: { vi: 'Chọn baseline cho traffic, cache hit/miss, 4xx/5xx và latency trước khi đặt alert.', en: 'Establish baselines for traffic, cache hit/miss, 4xx/5xx, and latency before creating alerts.' }, hubLink: '/content-delivery#measure' },
