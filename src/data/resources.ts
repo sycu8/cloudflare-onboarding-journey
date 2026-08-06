@@ -33,6 +33,17 @@ export const resources: ResourceCard[] = [
     status: 'available',
   },
   {
+    slug: 'support-case-helper',
+    title: { vi: 'Trợ lý viết Support case', en: 'Support case assistant' },
+    description: {
+      vi: 'Biến lỗi Cloudflare thành case gửi Support đầy đủ: mô tả hoặc dán screenshot, gợi ý nguyên nhân, thu thập bằng chứng theo mức ưu tiên P1–P4 và tạo bản nháp (EN/VI). Dữ liệu chỉ nằm trong trình duyệt — đừng nhập secret/API key.',
+      en: 'Turn a Cloudflare error into a complete Support case: describe it or attach a screenshot, get likely causes, collect P1–P4 evidence, and generate a draft (EN/VI). Data stays in your browser — never enter secrets/API keys.',
+    },
+    type: 'external',
+    href: 'https://helpr.orangecloud.vn/',
+    status: 'available',
+  },
+  {
     slug: 'content-delivery',
     title: { vi: 'Content delivery & hiệu năng web', en: 'Content delivery & web performance' },
     description: {

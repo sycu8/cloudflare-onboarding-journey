@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/chrome/Breadcrumbs.astro';
 import LangText from '../../components/ui/LangText.astro';
 import CTASection from '../../components/content/CTASection.astro';
+import ResourceCard from '../../components/content/ResourceCard.astro';
 import TrackModuleCard from '../../components/content/TrackModuleCard.astro';
 import TrackContextBanner from '../../components/content/TrackContextBanner.astro';
 import TrackSwitcher from '../../components/content/TrackSwitcher.astro';
@@ -167,6 +168,25 @@ const trackDiagrams = getDiagramsForTrack(track.slug, 3);
       ))}
     </div>
   </section>
+
+  {track.tools && track.tools.length > 0 ? (
+    <section class="mb-8">
+      <LangText as="h2" class="mb-1 text-xl font-semibold" text={{ vi: 'Công cụ hỗ trợ vận hành', en: 'Operational tools' }} />
+      <LangText
+        as="p"
+        class="text-muted mb-4 max-w-3xl text-sm leading-relaxed"
+        text={{
+          vi: 'Công cụ thực hành áp dụng ngay khi vận hành và xử lý sự cố.',
+          en: 'Hands-on tools to apply while operating and handling incidents.',
+        }}
+      />
+      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {track.tools.map((tool) => (
+          <ResourceCard title={tool.title} description={tool.description} type="tool" href={tool.href} status="available" />
+        ))}
+      </div>
+    </section>
+  ) : null}
 
   <section class="grid gap-6 md:grid-cols-2 mb-8">
     <div class="card">
