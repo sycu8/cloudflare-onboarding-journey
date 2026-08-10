@@ -26,10 +26,14 @@ const post = getBlogPost(slug!);
 if (!post) throw new Error(`Blog post not found: ${slug}`);
 
 const related = getRelatedBlogPosts(post, 3);
+const hubHrefs = new Set(post.hubLinks.map((l) => l.href.replace(/\/$/, '')));
 const track = tracks.find((t) => t.slug === post.relatedTrack);
+const trackHref = track ? `/tracks/${track.slug}` : null;
+const showTrackLink = Boolean(trackHref && !hubHrefs.has(trackHref));
 const products = (post.relatedProductSlugs ?? [])
   .map((s) => getProductBySlug(s))
-  .filter((p): p is NonNullable<typeof p> => Boolean(p));
+  .filter((p): p is NonNullable<typeof p> => Boolean(p))
+  .filter((p) => !hubHrefs.has(`/products/${p.slug}`));
 
 const siteOrigin = Astro.site ?? siteSeo.origin;
 const canonicalUrl = new URL(`/blog/${post.slug}/`, siteOrigin).href;
