@@ -11,10 +11,19 @@ import {
   blogTopicLabels,
   type BlogTopic,
 } from '../../data/blog';
+import {
+  blogCadenceNote,
+  getUpcomingSchedule,
+  getTodayBlogAssignment,
+  todayInVietnam,
+} from '../../data/blogSchedule';
 import { siteSeo } from '../../lib/seo';
 
 const topics = Object.keys(blogTopicLabels) as BlogTopic[];
 const siteOrigin = Astro.site ?? siteSeo.origin;
+const today = todayInVietnam();
+const todayAssignment = getTodayBlogAssignment();
+const upcoming = getUpcomingSchedule(7);
 
 const itemListJsonLd = {
   '@context': 'https://schema.org',
@@ -54,9 +63,13 @@ const itemListJsonLd = {
     <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: 'Blog học Cloudflare', en: 'Cloudflare learning blog' }} />
     <LangText as="p" class="text-muted mt-2 max-w-3xl text-sm leading-relaxed md:text-base" text={blogIntro} />
     <LangText as="p" class="text-muted mt-2 max-w-3xl text-xs" text={blogSourceNote} />
+    <LangText as="p" class="text-muted mt-2 max-w-3xl text-xs" text={blogCadenceNote} />
     <div class="mt-4 flex flex-wrap gap-2">
       <a class="btn btn-primary" href="https://blog.cloudflare.com/" target="_blank" rel="noopener noreferrer">
         <LangText text={{ vi: 'Nguồn: blog.cloudflare.com ↗', en: 'Source: blog.cloudflare.com ↗' }} />
+      </a>
+      <a class="btn btn-secondary" href="#schedule">
+        <LangText text={{ vi: 'Lịch bài sắp tới', en: 'Upcoming schedule' }} />
       </a>
       <a class="btn btn-secondary" href="/tracks/">
         <LangText text={{ vi: 'Lộ trình học', en: 'Learning tracks' }} />
@@ -66,6 +79,88 @@ const itemListJsonLd = {
       </a>
     </div>
   </header>
+
+  <section id="schedule" class="card mb-10" aria-labelledby="schedule-heading">
+    <LangText
+      as="h2"
+      id="schedule-heading"
+      class="text-lg font-semibold"
+      text={{ vi: 'Lịch generate: 1 bài / ngày', en: 'Generate schedule: 1 post / day' }}
+    />
+    <LangText
+      as="p"
+      class="text-muted mt-2 text-sm"
+      text={{
+        vi: `Hôm nay (ICT): ${today}. Workflow GitHub mở issue generate lúc 00:05 giờ Việt Nam.`,
+        en: `Today (ICT): ${today}. A GitHub Action opens the generate issue at 00:05 Vietnam time.`,
+      }}
+    />
+    {
+      todayAssignment.kind === 'planned' ? (
+        <div class="mt-4 rounded-md border border-[var(--cf-border)] p-4">
+          <p class="text-xs font-medium uppercase tracking-wide text-[var(--cf-text-muted)]">
+            <span class="lang-vi">Bài hôm nay · {todayAssignment.status}</span>
+            <span class="lang-en">Today’s assignment · {todayAssignment.status}</span>
+          </p>
+          <LangText as="p" class="mt-2 font-semibold" text={todayAssignment.item.workingTitle} />
+          <LangText as="p" class="text-muted mt-1 text-sm" text={todayAssignment.item.angle} />
+          <p class="text-muted mt-2 text-xs">
+            <LangText text={blogTopicLabels[todayAssignment.item.topic]} />
+            <span aria-hidden="true"> · </span>
+            {todayAssignment.item.date}
+            <span aria-hidden="true"> · </span>
+            <code>{todayAssignment.item.slug}</code>
+          </p>
+        </div>
+      ) : todayAssignment.kind === 'published' ? (
+        <div class="mt-4 rounded-md border border-[var(--cf-border)] p-4">
+          <p class="text-xs font-medium uppercase tracking-wide text-[var(--cf-text-muted)]">
+            <span class="lang-vi">Đã xuất bản hôm nay</span>
+            <span class="lang-en">Published today</span>
+          </p>
+          <p class="mt-2 font-semibold">
+            <a class="link" href={`/blog/${todayAssignment.slug}/`}>
+              <LangText text={todayAssignment.title} />
+            </a>
+          </p>
+        </div>
+      ) : (
+        <LangText
+          as="p"
+          class="text-muted mt-4 text-sm"
+          text={{
+            vi: 'Chưa có mục lịch cho hôm nay — cần bổ sung blogScheduleQueue.',
+            en: 'No schedule row for today — extend blogScheduleQueue.',
+          }}
+        />
+      )
+    }
+    {
+      upcoming.length > 0 ? (
+        <div class="mt-6">
+          <LangText
+            as="h3"
+            class="text-base font-semibold"
+            text={{ vi: 'Sắp tới', en: 'Coming up' }}
+          />
+          <ul class="mt-3 space-y-3 text-sm">
+            {upcoming.map((item) => (
+              <li class="border-t border-[var(--cf-border)] pt-3">
+                <p class="font-medium">
+                  <time datetime={item.date}>{item.date}</time>
+                  <span class="text-muted"> · </span>
+                  <LangText text={blogTopicLabels[item.topic]} />
+                  <span class="text-muted"> · </span>
+                  <span class="badge">{item.level}</span>
+                </p>
+                <LangText as="p" class="mt-1" text={item.workingTitle} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null
+    }
+  </section>
 
   <nav class="card mb-8 flex flex-wrap gap-2 p-4 text-sm" aria-label="Blog topics">
     <span class="text-muted w-full text-xs font-medium uppercase tracking-wide">
