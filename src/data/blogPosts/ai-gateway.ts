@@ -43,6 +43,7 @@ export const postAiGateway: BlogPost = {
           en: 'For intermediate learners, this is the maturity step from “we can call an LLM” to “we can operate an AI product.” It also bridges into security: you cannot protect what you cannot see.',
         },
       ],
+      diagramSlug: 'ai-composable'
     },
     {
       heading: {
@@ -155,5 +156,9 @@ export const postAiGateway: BlogPost = {
       href: '/products/waf/',
       label: { vi: 'WAF cho endpoint AI public', en: 'WAF for public AI endpoints' },
     },
+  ],
+  diagramSlugs: [
+    'ai-multivendor-observability-control',
+    'ai-composable',
   ],
 };

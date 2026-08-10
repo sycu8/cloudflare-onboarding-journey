@@ -28,6 +28,7 @@ After user merges on GitHub: `git pull origin main` → `npm run build` → `npm
 - Bilingual `{ vi, en }` for user-facing copy
 - No secrets in repo; `wrangler.toml` is local-only
 - Minimize scope; match existing Astro/React patterns in `src/`
+- Blog visuals: prefer `diagramSlugs` → `public/ref-diagrams/` (official Cloudflare diagrams). Dashboard screenshots go in `public/images/blog/` via post `images` / `sections[].image` — see that folder’s README.
 
 ## Cursor Cloud specific instructions
 
