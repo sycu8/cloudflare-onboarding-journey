@@ -1,3 +1,4 @@
+import { blogIntro, blogPosts } from '../../data/blog';
 import { cf101TerminologySections } from '../../data/cf101Terminology';
 import { getAllFlatTrackLessons } from '../../data/trackLessons';
 import { glossary } from '../../data/glossary';
@@ -112,6 +113,12 @@ export function buildSearchDocuments(): SearchDocument[] {
         en: 'CASB, SWG, RBI, AI Gateway, WAF/Bots, and Radar for AI security.',
       },
       category: 'Reference',
+    },
+    {
+      href: '/blog/',
+      title: { vi: 'Blog học Cloudflare', en: 'Cloudflare learning blog' },
+      description: blogIntro,
+      category: 'Blog',
     },
   ];
 
@@ -249,6 +256,19 @@ export function buildSearchDocuments(): SearchDocument[] {
         { vi: preview.summaryVi, en: preview.summaryEn || preview.summaryVi },
         'Tutorial preview',
         `${preview.track} ${preview.contentType}`,
+      ),
+    );
+  }
+
+  for (const post of blogPosts) {
+    out.push(
+      doc(
+        `blog-${post.slug}`,
+        `/blog/${post.slug}/`,
+        post.title,
+        post.description,
+        'Blog',
+        `${post.topic} ${post.level} ${post.keywords.en} ${post.keywords.vi}`,
       ),
     );
   }
