@@ -5,13 +5,14 @@ type Props = {
   text: LocalizedString;
   as?: 'span' | 'div' | 'p' | 'h1' | 'h2' | 'h3';
   class?: string;
+  id?: string;
 };
 
-const { text, as = 'span', class: className } = Astro.props;
+const { text, as = 'span', class: className, id } = Astro.props;
 const Tag = as;
 ---
 
-<Tag class={className}>
+<Tag class={className} id={id}>
   <span class="lang-vi">{text.vi}</span>
   <span class="lang-en">{text.en}</span>
 </Tag>

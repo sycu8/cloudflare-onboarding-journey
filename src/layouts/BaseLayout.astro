@@ -17,9 +17,19 @@ type Props = {
   /** Override default OG image for this page */
   ogImage?: string;
   noindex?: boolean;
+  /** Open Graph type — use `article` for blog posts */
+  ogType?: 'website' | 'article';
 };
 
-const { title, description, canonicalPath, showProgressBar = false, ogImage, noindex = false } = Astro.props;
+const {
+  title,
+  description,
+  canonicalPath,
+  showProgressBar = false,
+  ogImage,
+  noindex = false,
+  ogType = 'website',
+} = Astro.props;
 const enableWebMcp = canonicalPath === '/' || Astro.url.pathname === '/';
 const siteName = siteSeo.name;
 const siteOrigin = Astro.site ?? siteSeo.origin;
@@ -100,7 +110,7 @@ const imageUrl = new URL(ogImage ?? siteSeo.defaultImage, siteOrigin).href;
     {noindex ? <meta name="robots" content="noindex, nofollow" /> : <meta name="robots" content="index, follow" />}
 
     <meta property="og:site_name" content={siteName} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:locale" content={siteSeo.locale} />
     <meta property="og:locale:alternate" content={siteSeo.localeAlternate} />
     <meta property="og:title" content={titleVi} />
@@ -113,6 +123,8 @@ const imageUrl = new URL(ogImage ?? siteSeo.defaultImage, siteOrigin).href;
     <meta name="twitter:title" content={titleVi} />
     <meta name="twitter:description" content={description.vi} />
     <meta name="twitter:image" content={imageUrl} />
+
+    <slot name="head" />
 
     <script is:inline define:vars={{ titleVi, titleEn, descriptionVi: description.vi, descriptionEn: description.en }}>
       (function () {

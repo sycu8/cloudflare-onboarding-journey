@@ -1,0 +1,40 @@
+---
+import LangText from '../ui/LangText.astro';
+import {
+  blogLevelLabels,
+  blogPostPath,
+  blogTopicLabels,
+  type BlogPost,
+} from '../../data/blog';
+
+type Props = { post: BlogPost };
+const { post } = Astro.props;
+const href = blogPostPath(post.slug);
+---
+
+<article class="card flex h-full flex-col p-5">
+  <div class="mb-3 flex flex-wrap items-center gap-2 text-xs">
+    <span class="badge">
+      <LangText text={blogTopicLabels[post.topic]} />
+    </span>
+    <span class="badge">
+      <LangText text={blogLevelLabels[post.level]} />
+    </span>
+    <time class="text-muted" datetime={post.date}>{post.date}</time>
+    <span class="text-muted">
+      <span class="lang-vi">~{post.readingMinutes} phút</span>
+      <span class="lang-en">~{post.readingMinutes} min</span>
+    </span>
+  </div>
+  <h2 class="text-lg font-semibold leading-snug">
+    <a class="link" href={href}>
+      <LangText text={post.title} />
+    </a>
+  </h2>
+  <LangText as="p" class="text-muted mt-2 flex-1 text-sm leading-relaxed" text={post.excerpt} />
+  <p class="mt-4">
+    <a class="btn btn-secondary" href={href}>
+      <LangText text={{ vi: 'Đọc bài →', en: 'Read post →' }} />
+    </a>
+  </p>
+</article>

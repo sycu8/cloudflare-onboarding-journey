@@ -1,0 +1,134 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/chrome/Breadcrumbs.astro';
+import LangText from '../../components/ui/LangText.astro';
+import BlogPostCard from '../../components/content/BlogPostCard.astro';
+import CTASection from '../../components/content/CTASection.astro';
+import {
+  blogIntro,
+  blogPosts,
+  blogSourceNote,
+  blogTopicLabels,
+  type BlogTopic,
+} from '../../data/blog';
+import { siteSeo } from '../../lib/seo';
+
+const topics = Object.keys(blogTopicLabels) as BlogTopic[];
+const siteOrigin = Astro.site ?? siteSeo.origin;
+
+const itemListJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Blog',
+  name: 'Cloudflare Starter Hub Blog',
+  description: blogIntro.en,
+  url: new URL('/blog/', siteOrigin).href,
+  inLanguage: ['vi', 'en'],
+  blogPost: blogPosts.map((post) => ({
+    '@type': 'BlogPosting',
+    headline: post.title.en,
+    datePublished: post.date,
+    url: new URL(`/blog/${post.slug}/`, siteOrigin).href,
+    description: post.description.en,
+  })),
+};
+---
+
+<BaseLayout
+  title={{
+    vi: 'Blog Cloudflare dễ hiểu — AI, Security, CDN, Workers',
+    en: 'Plain-language Cloudflare blog — AI, Security, CDN, Workers',
+  }}
+  description={blogIntro}
+  canonicalPath="/blog/"
+  showProgressBar
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(itemListJsonLd)} />
+  </Fragment>
+
+  <Breadcrumbs
+    items={[{ href: '/blog/', label: { vi: 'Blog', en: 'Blog' } }]}
+  />
+
+  <header class="mb-8">
+    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: 'Blog học Cloudflare', en: 'Cloudflare learning blog' }} />
+    <LangText as="p" class="text-muted mt-2 max-w-3xl text-sm leading-relaxed md:text-base" text={blogIntro} />
+    <LangText as="p" class="text-muted mt-2 max-w-3xl text-xs" text={blogSourceNote} />
+    <div class="mt-4 flex flex-wrap gap-2">
+      <a class="btn btn-primary" href="https://blog.cloudflare.com/" target="_blank" rel="noopener noreferrer">
+        <LangText text={{ vi: 'Nguồn: blog.cloudflare.com ↗', en: 'Source: blog.cloudflare.com ↗' }} />
+      </a>
+      <a class="btn btn-secondary" href="/tracks/">
+        <LangText text={{ vi: 'Lộ trình học', en: 'Learning tracks' }} />
+      </a>
+      <a class="btn btn-secondary" href="/cloudflare-101/">
+        <LangText text={{ vi: 'Cloudflare 101', en: 'Cloudflare 101' }} />
+      </a>
+    </div>
+  </header>
+
+  <nav class="card mb-8 flex flex-wrap gap-2 p-4 text-sm" aria-label="Blog topics">
+    <span class="text-muted w-full text-xs font-medium uppercase tracking-wide">
+      <span class="lang-vi">Chủ đề</span>
+      <span class="lang-en">Topics</span>
+    </span>
+    {
+      topics.map((topic) => (
+        <a href={`#topic-${topic}`} class="badge hover:border-[var(--cf-accent)]">
+          <LangText text={blogTopicLabels[topic]} />
+        </a>
+      ))
+    }
+  </nav>
+
+  <section class="mb-10" aria-labelledby="all-posts">
+    <LangText
+      as="h2"
+      id="all-posts"
+      class="mb-4 text-lg font-semibold"
+      text={{ vi: 'Tất cả bài (mới nhất trước)', en: 'All posts (newest first)' }}
+    />
+    <div class="grid gap-4 md:grid-cols-2">
+      {blogPosts.map((post) => <BlogPostCard post={post} />)}
+    </div>
+  </section>
+
+  {
+    topics.map((topic) => {
+      const posts = blogPosts.filter((p) => p.topic === topic);
+      if (posts.length === 0) return null;
+      return (
+        <section class="mb-10" id={`topic-${topic}`} aria-labelledby={`heading-${topic}`}>
+          <LangText
+            as="h2"
+            id={`heading-${topic}`}
+            class="mb-4 text-lg font-semibold"
+            text={blogTopicLabels[topic]}
+          />
+          <ul class="space-y-2 text-sm">
+            {posts.map((post) => (
+              <li>
+                <a class="link font-medium" href={`/blog/${post.slug}/`}>
+                  <LangText text={post.title} />
+                </a>
+                <span class="text-muted"> · {post.date}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      );
+    })
+  }
+
+  <CTASection
+    title={{
+      vi: 'Muốn học theo lộ trình có cấu trúc?',
+      en: 'Want a structured learning path?',
+    }}
+    description={{
+      vi: 'Blog giúp bạn hiểu nhanh; tracks và use cases giúp bạn luyện theo từng bước.',
+      en: 'The blog builds intuition; tracks and use cases help you practice step by step.',
+    }}
+    cta={{ href: '/start-here/', label: { vi: 'Bắt đầu tại đây', en: 'Start here' } }}
+  />
+</BaseLayout>
