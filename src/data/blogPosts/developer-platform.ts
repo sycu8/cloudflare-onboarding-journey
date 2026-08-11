@@ -43,6 +43,7 @@ export const postDeveloperPlatform: BlogPost = {
           en: 'If you have read the CDN, WAF, Workers, and AI posts in this series, you are at the join point: Application Services protect and accelerate what you already have; the Developer Platform helps you build new things on the edge.',
         },
       ],
+      diagramSlug: 'programmable-platforms'
     },
     {
       heading: {
@@ -159,5 +160,9 @@ export const postDeveloperPlatform: BlogPost = {
       href: '/products/workers/',
       label: { vi: 'Workers — khối compute trung tâm', en: 'Workers — central compute block' },
     },
+  ],
+  diagramSlugs: [
+    'fullstack-application',
+    'programmable-platforms',
   ],
 };

@@ -12,6 +12,10 @@ export type BlogLevel = 'entry' | 'intermediate';
 export type BlogSection = {
   heading: LocalizedString;
   paragraphs: LocalizedString[];
+  /** Optional mid-article official diagram slug from referenceDiagrams */
+  diagramSlug?: string;
+  /** Optional local screenshot under /images/blog/ or /ref-diagrams/ */
+  image?: BlogImage;
 };
 
 export type BlogFaq = {
@@ -27,6 +31,15 @@ export type BlogSource = {
 export type BlogHubLink = {
   href: string;
   label: LocalizedString;
+};
+
+/** Local or hub image (prefer committed /ref-diagrams or /images/blog screenshots). */
+export type BlogImage = {
+  src: string;
+  alt: LocalizedString;
+  caption?: LocalizedString;
+  /** e.g. Cloudflare Dashboard · Security → WAF */
+  credit?: LocalizedString;
 };
 
 export type BlogPost = {
@@ -52,6 +65,13 @@ export type BlogPost = {
   relatedProductSlugs?: string[];
   relatedPostSlugs: string[];
   hubLinks: BlogHubLink[];
+  /**
+   * Official Cloudflare Reference Architecture diagram slugs
+   * (files under public/ref-diagrams — see src/data/referenceDiagrams.ts).
+   */
+  diagramSlugs?: string[];
+  /** Extra screenshots (Dashboard UI, etc.) stored under public/images/blog/ */
+  images?: BlogImage[];
 };
 
 export const blogTopicLabels: Record<BlogTopic, LocalizedString> = {

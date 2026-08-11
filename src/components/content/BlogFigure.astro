@@ -1,0 +1,39 @@
+---
+import LangText from '../ui/LangText.astro';
+import type { BlogImage } from '../../data/blog';
+
+type Props = {
+  image: BlogImage;
+  eager?: boolean;
+};
+
+const { image, eager = false } = Astro.props;
+---
+
+<figure class="blog-figure overflow-hidden rounded-xl border border-[var(--cf-border)] bg-[var(--cf-bg-elevated)]">
+  <img
+    src={image.src}
+    alt={image.alt.en}
+    title={image.alt.en}
+    loading={eager ? 'eager' : 'lazy'}
+    decoding="async"
+    class="blog-figure-img w-full"
+  />
+  {
+    image.caption || image.credit ? (
+      <figcaption class="text-muted space-y-1 border-t border-[var(--cf-border)] px-4 py-3 text-xs leading-relaxed">
+        {image.caption ? <LangText as="p" class="font-medium text-[var(--cf-text)]" text={image.caption} /> : null}
+        {image.credit ? <LangText as="p" text={image.credit} /> : null}
+      </figcaption>
+    ) : null
+  }
+</figure>
+
+<style>
+  .blog-figure-img {
+    max-height: min(28rem, 70vh);
+    object-fit: contain;
+    object-position: center top;
+    background: var(--cf-bg-elevated);
+  }
+</style>

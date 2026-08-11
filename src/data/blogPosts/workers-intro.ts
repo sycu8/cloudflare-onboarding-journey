@@ -43,6 +43,7 @@ export const postWorkersIntro: BlogPost = {
           en: 'The official Cloudflare Blog often describes Workers as the center brick of the Developer Platform: from there you attach R2 (object storage), D1 (database), KV, AI, and more via bindings — a way to wire resources into a Worker without scattering secrets in frontend code.',
         },
       ],
+      diagramSlug: 'serverless-global-apis'
     },
     {
       heading: {
@@ -140,5 +141,9 @@ export const postWorkersIntro: BlogPost = {
     { href: '/use-cases/build-serverless-app/', label: { vi: 'Use case: ứng dụng serverless', en: 'Use case: build a serverless app' } },
     { href: '/use-cases/deploy-static-site/', label: { vi: 'Use case: deploy static site', en: 'Use case: deploy a static site' } },
     { href: '/roadmaps/developer/', label: { vi: 'Roadmap cho Developer', en: 'Developer role roadmap' } },
+  ],
+  diagramSlugs: [
+    'fullstack-application',
+    'serverless-global-apis',
   ],
 };
