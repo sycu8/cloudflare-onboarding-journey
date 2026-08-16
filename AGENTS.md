@@ -29,6 +29,7 @@ After user merges on GitHub: `git pull origin main` → `npm run build` → `npm
 - No secrets in repo; `wrangler.toml` is local-only
 - Minimize scope; match existing Astro/React patterns in `src/`
 - Blog visuals: prefer `diagramSlugs` → `public/ref-diagrams/` (official Cloudflare diagrams). Dashboard screenshots go in `public/images/blog/` via post `images` / `sections[].image` — see that folder’s README.
+- Blog cadence: **1 post / 2 days** via email to `sycu.lee@gmail.com` (approve by reply `APPROVE` or link). See [docs/BLOG_SCHEDULE.md](docs/BLOG_SCHEDULE.md).
 
 ## Cursor Cloud specific instructions
 

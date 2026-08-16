@@ -1,0 +1,118 @@
+# Bi-daily blog editorial email (every calendar day cron; only sends on schedule dates)
+#
+# Sends ONE email to sycu.lee@gmail.com with Approve link + Reply APPROVE instructions.
+# Does NOT open GitHub issues.
+
+name: Blog bi-daily email
+
+on:
+  schedule:
+    # 00:05 Asia/Ho_Chi_Minh = 17:05 UTC previous calendar day
+    - cron: '5 17 * * *'
+  workflow_dispatch:
+    inputs:
+      date:
+        description: Override date YYYY-MM-DD (Asia/Ho_Chi_Minh). Empty = today.
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: blog-biweekly-email
+  cancel-in-progress: false
+
+jobs:
+  email-editor:
+    name: Email bi-daily blog assignment
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Build email payload
+        id: mail
+        env:
+          OVERRIDE_DATE: ${{ inputs.date }}
+          BLOG_APPROVE_SECRET: ${{ secrets.BLOG_APPROVE_SECRET }}
+          BLOG_EDITOR_EMAIL: sycu.lee@gmail.com
+          BLOG_APPROVE_INBOX: blog-approve@orangecloud.vn
+          PUBLIC_SITE_URL: https://onboarding.orangecloud.vn
+        run: |
+          set -euo pipefail
+          if [ -z "${BLOG_APPROVE_SECRET:-}" ]; then
+            echo "::error::Missing secret BLOG_APPROVE_SECRET"
+            exit 1
+          fi
+          ARGS=(--email-body)
+          if [ -n "${OVERRIDE_DATE:-}" ]; then
+            ARGS+=(--date="$OVERRIDE_DATE")
+          fi
+          node scripts/blog-editorial.mjs "${ARGS[@]}" > /tmp/blog-email.json
+          cat /tmp/blog-email.json
+          SKIP=$(node -e "const j=require('/tmp/blog-email.json'); process.stdout.write(j.skip?'true':(j.ok===false?'noslot':'false'))")
+          echo "skip=$SKIP" >> "$GITHUB_OUTPUT"
+          if [ "$SKIP" = "noslot" ]; then
+            echo "No bi-daily slot today — OK"
+          fi
+
+      - name: Send email via Cloudflare Email API
+        if: steps.mail.outputs.skip == 'false'
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_EMAIL_API_TOKEN: ${{ secrets.CLOUDFLARE_EMAIL_API_TOKEN }}
+          WORKSHOP_EMAIL_FROM: ${{ secrets.WORKSHOP_EMAIL_FROM }}
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs = require('fs');
+          const j = JSON.parse(fs.readFileSync('/tmp/blog-email.json', 'utf8'));
+          const email = j.email;
+          const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
+          const token = process.env.CLOUDFLARE_EMAIL_API_TOKEN;
+          const from = process.env.WORKSHOP_EMAIL_FROM || 'Cloudflare Starter Hub <onboarding@orangecloud.vn>';
+          if (!accountId || !token) {
+            console.error('Missing CLOUDFLARE_ACCOUNT_ID or CLOUDFLARE_EMAIL_API_TOKEN secrets');
+            process.exit(1);
+          }
+          function fromPayload(raw) {
+            const m = raw.match(/^(.+?)\s*<([^>]+)>$/);
+            if (m) return { name: m[1].trim(), address: m[2].trim() };
+            return raw.trim();
+          }
+          (async () => {
+            const res = await fetch(
+              `https://api.cloudflare.com/client/v4/accounts/${accountId}/email/sending/send`,
+              {
+                method: 'POST',
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  to: email.to,
+                  from: fromPayload(from),
+                  reply_to: email.replyTo,
+                  subject: email.subject,
+                  html: email.html,
+                  text: email.text,
+                }),
+              },
+            );
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok || !data.success) {
+              console.error(res.status, JSON.stringify(data, null, 2));
+              process.exit(1);
+            }
+            console.log('Sent editorial email to', email.to, 'slug', email.item.slug);
+          })();
+          NODE

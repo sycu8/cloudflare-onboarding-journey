@@ -1,0 +1,151 @@
+# Runs after editor APPROVE (link or email reply) → scaffold PR for publish
+
+name: Blog on approve
+
+on:
+  repository_dispatch:
+    types: [blog-approved]
+  workflow_dispatch:
+    inputs:
+      date:
+        description: Schedule date YYYY-MM-DD
+        required: true
+      slug:
+        description: Post slug
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: blog-on-approve-${{ github.event.client_payload.slug || inputs.slug }}
+  cancel-in-progress: false
+
+jobs:
+  open-pr:
+    name: Scaffold blog PR
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Resolve payload
+        id: meta
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
+            DATE='${{ github.event.client_payload.date }}'
+            SLUG='${{ github.event.client_payload.slug }}'
+          else
+            DATE='${{ inputs.date }}'
+            SLUG='${{ inputs.slug }}'
+          fi
+          echo "date=$DATE" >> "$GITHUB_OUTPUT"
+          echo "slug=$SLUG" >> "$GITHUB_OUTPUT"
+          echo "branch=blog/${SLUG}" >> "$GITHUB_OUTPUT"
+
+      - name: Scaffold + open PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          DATE="${{ steps.meta.outputs.date }}"
+          SLUG="${{ steps.meta.outputs.slug }}"
+          BRANCH="${{ steps.meta.outputs.branch }}"
+
+          git config user.name "blog-editorial-bot"
+          git config user.email "onboarding@orangecloud.vn"
+
+          git fetch origin main
+          git checkout -B "$BRANCH" origin/main
+
+          node scripts/blog-editorial.mjs --scaffold --date="$DATE" || true
+          node scripts/blog-register-scaffold.mjs
+          node scripts/blog-editorial.mjs --prompt --date="$DATE" > /tmp/blog-prompt.md
+
+          git add src/data/blogPosts src/data/blog.ts || true
+          if git diff --cached --quiet; then
+            echo "No file changes — branch may already have scaffold"
+          else
+            git commit -m "chore(blog): scaffold ${SLUG} after email APPROVE"
+          fi
+
+          git push -u origin "$BRANCH" --force-with-lease
+
+          {
+            cat /tmp/blog-prompt.md
+            echo ""
+            echo "---"
+            echo ""
+            echo "Approved via editorial email (\`sycu.lee@gmail.com\`)."
+            echo ""
+            echo "After expanding bilingual content (≥400 words/lang), **merge this PR** then deploy to publish."
+          } > /tmp/pr-body.md
+
+          if gh pr view "$BRANCH" --json number >/dev/null 2>&1; then
+            gh pr edit "$BRANCH" --title "Blog: ${SLUG} (${DATE})" --body-file /tmp/pr-body.md
+          else
+            gh pr create --base main --head "$BRANCH" --title "Blog: ${SLUG} (${DATE})" --body-file /tmp/pr-body.md
+          fi
+
+          gh pr view "$BRANCH" --json url,number \
+            --jq '"PR #" + (.number|tostring) + " " + .url' | tee /tmp/pr.txt
+
+      - name: Email PR link to editor
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_EMAIL_API_TOKEN: ${{ secrets.CLOUDFLARE_EMAIL_API_TOKEN }}
+          WORKSHOP_EMAIL_FROM: ${{ secrets.WORKSHOP_EMAIL_FROM }}
+          PR_LINE: ${{ '' }}
+        run: |
+          set -euo pipefail
+          export PR_LINE="$(cat /tmp/pr.txt 2>/dev/null || echo PR pending)"
+          export SLUG="${{ steps.meta.outputs.slug }}"
+          export DATE="${{ steps.meta.outputs.date }}"
+          node <<'NODE'
+          const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
+          const token = process.env.CLOUDFLARE_EMAIL_API_TOKEN;
+          const fromRaw = process.env.WORKSHOP_EMAIL_FROM || 'Cloudflare Starter Hub <onboarding@orangecloud.vn>';
+          if (!accountId || !token) {
+            console.log('Skip PR email — missing email secrets');
+            process.exit(0);
+          }
+          function fromPayload(raw) {
+            const m = raw.match(/^(.+?)\s*<([^>]+)>$/);
+            if (m) return { name: m[1].trim(), address: m[2].trim() };
+            return raw.trim();
+          }
+          const pr = process.env.PR_LINE;
+          const slug = process.env.SLUG;
+          const date = process.env.DATE;
+          (async () => {
+            const res = await fetch(
+              `https://api.cloudflare.com/client/v4/accounts/${accountId}/email/sending/send`,
+              {
+                method: 'POST',
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  to: 'sycu.lee@gmail.com',
+                  from: fromPayload(fromRaw),
+                  subject: `[Blog] PR sẵn sàng — ${date} ${slug}`,
+                  text: `APPROVE đã nhận.\n${pr}\n\nViết đủ nội dung bilingual rồi merge PR (+ deploy) để đăng.`,
+                  html: `<p>APPROVE đã nhận.</p><p><strong>${pr}</strong></p><p>Viết đủ nội dung bilingual rồi <strong>merge PR</strong> (+ deploy) để đăng.</p>`,
+                }),
+              },
+            );
+            const data = await res.json().catch(() => ({}));
+            console.log(res.status, data.success);
+          })();
+          NODE

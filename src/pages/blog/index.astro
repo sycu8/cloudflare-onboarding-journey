@@ -11,10 +11,16 @@ import {
   blogTopicLabels,
   type BlogTopic,
 } from '../../data/blog';
+import {
+  blogCadenceNote,
+  getScheduleStatus,
+  listUpcoming,
+} from '../../data/blogSchedule';
 import { siteSeo } from '../../lib/seo';
 
 const topics = Object.keys(blogTopicLabels) as BlogTopic[];
 const siteOrigin = Astro.site ?? siteSeo.origin;
+const upcoming = listUpcoming(8);
 
 const itemListJsonLd = {
   '@context': 'https://schema.org',
@@ -80,6 +86,32 @@ const itemListJsonLd = {
       ))
     }
   </nav>
+
+  <section class="card mb-10 p-5" id="schedule" aria-labelledby="schedule-heading">
+    <LangText
+      as="h2"
+      id="schedule-heading"
+      class="text-lg font-semibold"
+      text={{ vi: 'Lịch viết (2 ngày / lần)', en: 'Writing schedule (every 2 days)' }}
+    />
+    <LangText as="p" class="text-muted mt-2 text-sm" text={blogCadenceNote} />
+    <ul class="mt-4 space-y-2 text-sm">
+      {
+        upcoming.map((item) => {
+          const status = getScheduleStatus(item);
+          return (
+            <li class="flex flex-wrap items-baseline gap-x-2 gap-y-1 border-t border-[var(--cf-border)] pt-2 first:border-0 first:pt-0">
+              <time class="font-mono text-xs text-muted" datetime={item.date}>
+                {item.date}
+              </time>
+              <span class="badge text-[10px]">{status}</span>
+              <LangText as="span" class="font-medium" text={item.workingTitle} />
+            </li>
+          );
+        })
+      }
+    </ul>
+  </section>
 
   <section class="mb-10" aria-labelledby="all-posts">
     <LangText

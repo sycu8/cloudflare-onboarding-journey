@@ -39,4 +39,5 @@ AI_SEARCH_INSTANCE = "cloudflare-starter-hub"
 
 # Pages secret: CLOUDFLARE_EMAIL_API_TOKEN (Email Sending permission)
 # Optional vars: WORKSHOP_EMAIL_FROM, PUBLIC_SITE_URL
+# Blog editorial: BLOG_APPROVE_SECRET, BLOG_GITHUB_TOKEN, BLOG_EDITOR_EMAIL=sycu.lee@gmail.com
 # Domain orangecloud.vn must be onboarded in Email Service (SPF/DKIM)
