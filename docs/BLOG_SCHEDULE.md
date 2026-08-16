@@ -46,7 +46,7 @@ Notifications go **only** to `sycu.lee@gmail.com` (no GitHub issues).
 
 ## Email Routing (reply APPROVE)
 
-1. Deploy Worker: `cd workers/blog-email-inbox && npx wrangler secret put BLOG_APPROVE_SECRET && npx wrangler deploy`
+1. Deploy Worker: `cd workers/blog-email-inbox && cp wrangler.toml.example wrangler.toml && npx wrangler secret put BLOG_APPROVE_SECRET && npx wrangler deploy`
 2. Cloudflare Dashboard → Email Routing → rule: `blog-approve@orangecloud.vn` → Worker `blog-email-inbox`
 3. Outbound editorial mail already sets `reply_to` to that inbox
 
