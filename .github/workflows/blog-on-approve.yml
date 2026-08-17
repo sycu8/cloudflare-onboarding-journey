@@ -1,0 +1,255 @@
+# After editor APPROVE (link/email → D1), open scaffold PR.
+# Uses CLOUDFLARE_API_TOKEN + CLOUDFLARE_ACCOUNT_ID to poll D1 for approvals
+# (no Pages BLOG_GITHUB_TOKEN required).
+
+name: Blog on approve
+
+on:
+  repository_dispatch:
+    types: [blog-approved]
+  schedule:
+    # Pick up D1 approvals shortly after editor clicks Approve
+    - cron: '20,50 * * * *'
+  workflow_dispatch:
+    inputs:
+      date:
+        description: Schedule date YYYY-MM-DD (optional if polling D1)
+        required: false
+        default: ''
+      slug:
+        description: Post slug (optional if polling D1)
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: blog-on-approve
+  cancel-in-progress: false
+
+env:
+  D1_DATABASE_ID: df92a9b8-1410-41c3-8d95-ee0f9ebf84ca
+
+jobs:
+  open-pr:
+    name: Scaffold blog PR(s)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Resolve jobs (dispatch / inputs / D1 poll)
+        id: meta
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          D1_DATABASE_ID: ${{ env.D1_DATABASE_ID }}
+          EVENT_NAME: ${{ github.event_name }}
+          DISPATCH_DATE: ${{ github.event.client_payload.date }}
+          DISPATCH_SLUG: ${{ github.event.client_payload.slug }}
+          INPUT_DATE: ${{ inputs.date }}
+          INPUT_SLUG: ${{ inputs.slug }}
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs = require('fs');
+          const jobs = [];
+          const event = process.env.EVENT_NAME;
+          if (event === 'repository_dispatch' && process.env.DISPATCH_DATE && process.env.DISPATCH_SLUG) {
+            jobs.push({ date: process.env.DISPATCH_DATE, slug: process.env.DISPATCH_SLUG });
+          } else if (process.env.INPUT_DATE && process.env.INPUT_SLUG) {
+            jobs.push({ date: process.env.INPUT_DATE, slug: process.env.INPUT_SLUG });
+          }
+
+          async function pollD1() {
+            const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
+            const token = process.env.CLOUDFLARE_API_TOKEN;
+            const dbId = process.env.D1_DATABASE_ID;
+            if (!accountId || !token || !dbId) {
+              console.error('Missing CLOUDFLARE_ACCOUNT_ID / CLOUDFLARE_API_TOKEN for D1 poll');
+              return;
+            }
+            const res = await fetch(
+              `https://api.cloudflare.com/client/v4/accounts/${accountId}/d1/database/${dbId}/query`,
+              {
+                method: 'POST',
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  sql: `SELECT date, slug FROM blog_editorial WHERE status = 'approved' ORDER BY updated_at ASC LIMIT 5`,
+                }),
+              },
+            );
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok || !data.success) {
+              console.error('D1 query failed', res.status, JSON.stringify(data));
+              return;
+            }
+            const rows = data.result?.[0]?.results || data.result?.results || [];
+            for (const row of rows) {
+              if (row.date && row.slug) jobs.push({ date: row.date, slug: row.slug });
+            }
+          }
+
+          (async () => {
+            // Always poll D1 on schedule; also poll when no explicit job
+            if (event === 'schedule' || jobs.length === 0) {
+              await pollD1();
+            }
+            const seen = new Set();
+            const unique = [];
+            for (const j of jobs) {
+              const k = `${j.date}:${j.slug}`;
+              if (seen.has(k)) continue;
+              seen.add(k);
+              unique.push(j);
+            }
+            const out = { jobs: unique };
+            fs.writeFileSync('/tmp/blog-jobs.json', JSON.stringify(out, null, 2));
+            console.log(JSON.stringify(out, null, 2));
+          })();
+          NODE
+          COUNT=$(node -e "console.log(require('/tmp/blog-jobs.json').jobs.length)")
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+          if [ "$COUNT" = "0" ]; then
+            echo "No approved blog jobs — done"
+          fi
+
+      - name: Scaffold + open PRs
+        if: steps.meta.outputs.count != '0'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          WORKSHOP_EMAIL_FROM: ${{ secrets.WORKSHOP_EMAIL_FROM }}
+          D1_DATABASE_ID: ${{ env.D1_DATABASE_ID }}
+        run: |
+          set -euo pipefail
+          git config user.name "blog-editorial-bot"
+          git config user.email "onboarding@orangecloud.vn"
+
+          node <<'NODE'
+          const fs = require('fs');
+          const { execSync } = require('child_process');
+          const { jobs } = JSON.parse(fs.readFileSync('/tmp/blog-jobs.json', 'utf8'));
+          const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
+          const token = process.env.CLOUDFLARE_API_TOKEN;
+          const dbId = process.env.D1_DATABASE_ID;
+          const fromRaw = process.env.WORKSHOP_EMAIL_FROM || 'Cloudflare Starter Hub <onboarding@orangecloud.vn>';
+
+          function sh(cmd) {
+            console.log('+', cmd);
+            return execSync(cmd, { stdio: 'inherit', encoding: 'utf8' });
+          }
+          function shOut(cmd) {
+            return execSync(cmd, { encoding: 'utf8' }).trim();
+          }
+          function fromPayload(raw) {
+            const m = raw.match(/^(.+?)\s*<([^>]+)>$/);
+            if (m) return { name: m[1].trim(), address: m[2].trim() };
+            return raw.trim();
+          }
+
+          async function markPr(date, slug, prUrl) {
+            if (!accountId || !token) return;
+            await fetch(
+              `https://api.cloudflare.com/client/v4/accounts/${accountId}/d1/database/${dbId}/query`,
+              {
+                method: 'POST',
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  sql: `UPDATE blog_editorial SET status = 'pr_opened', pr_url = ?, note = 'opened_by_actions', updated_at = datetime('now') WHERE date = ? AND slug = ?`,
+                  params: [prUrl, date, slug],
+                }),
+              },
+            );
+          }
+
+          async function emailPr(date, slug, prLine) {
+            if (!accountId || !token) return;
+            await fetch(
+              `https://api.cloudflare.com/client/v4/accounts/${accountId}/email/sending/send`,
+              {
+                method: 'POST',
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  to: 'sycu.lee@gmail.com',
+                  from: fromPayload(fromRaw),
+                  subject: `[Blog] PR sẵn sàng — ${date} ${slug}`,
+                  text: `APPROVE đã nhận.\n${prLine}\n\nViết đủ nội dung bilingual rồi merge PR (+ deploy) để đăng.`,
+                  html: `<p>APPROVE đã nhận.</p><p><strong>${prLine}</strong></p><p>Viết đủ nội dung bilingual rồi <strong>merge PR</strong> (+ deploy) để đăng.</p>`,
+                }),
+              },
+            );
+          }
+
+          (async () => {
+            for (const job of jobs) {
+              const { date, slug } = job;
+              const branch = `blog/${slug}`;
+              console.log('Processing', date, slug);
+
+              sh('git fetch origin main');
+              sh(`git checkout -B ${branch} origin/main`);
+
+              try {
+                sh(`node scripts/blog-editorial.mjs --scaffold --date=${date}`);
+              } catch {
+                console.log('scaffold skipped (exists?)');
+              }
+              sh('node scripts/blog-register-scaffold.mjs');
+              sh(`node scripts/blog-editorial.mjs --prompt --date=${date} > /tmp/blog-prompt.md`);
+
+              sh('git add src/data/blogPosts src/data/blog.ts || true');
+              try {
+                sh(`git commit -m "chore(blog): scaffold ${slug} after email APPROVE"`);
+              } catch {
+                console.log('nothing to commit');
+              }
+              sh(`git push -u origin ${branch} --force-with-lease`);
+
+              const body = `${fs.readFileSync('/tmp/blog-prompt.md', 'utf8')}
+
+---
+
+Approved via editorial email (\`sycu.lee@gmail.com\`).
+
+After expanding bilingual content (≥400 words/lang), **merge this PR** then deploy to publish.
+`;
+              fs.writeFileSync('/tmp/pr-body.md', body);
+
+              try {
+                shOut(`gh pr view ${branch} --json number`);
+                sh(`gh pr edit ${branch} --title "Blog: ${slug} (${date})" --body-file /tmp/pr-body.md`);
+              } catch {
+                sh(`gh pr create --base main --head ${branch} --title "Blog: ${slug} (${date})" --body-file /tmp/pr-body.md`);
+              }
+
+              const prLine = shOut(
+                `gh pr view ${branch} --json url,number --jq '"PR #" + (.number|tostring) + " " + .url'`,
+              );
+              console.log(prLine);
+              const prUrl = prLine.split(' ').pop();
+              await markPr(date, slug, prUrl);
+              await emailPr(date, slug, prLine);
+            }
+          })();
+          NODE
