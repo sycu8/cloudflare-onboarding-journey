@@ -1,7 +1,7 @@
-# Bi-daily blog editorial email (every calendar day cron; only sends on schedule dates)
+# Bi-daily blog editorial email (cron daily; only sends on schedule dates)
 #
-# Sends ONE email to sycu.lee@gmail.com with Approve link + Reply APPROVE instructions.
-# Does NOT open GitHub issues.
+# Uses existing Actions secrets: CLOUDFLARE_API_TOKEN + CLOUDFLARE_ACCOUNT_ID
+# Sends ONE email to sycu.lee@gmail.com (Approve link + Reply APPROVE).
 
 name: Blog bi-daily email
 
@@ -43,14 +43,17 @@ jobs:
         id: mail
         env:
           OVERRIDE_DATE: ${{ inputs.date }}
+          # Prefer dedicated secret; else reuse Cloudflare API token already in Actions
           BLOG_APPROVE_SECRET: ${{ secrets.BLOG_APPROVE_SECRET }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           BLOG_EDITOR_EMAIL: sycu.lee@gmail.com
           BLOG_APPROVE_INBOX: blog-approve@orangecloud.vn
           PUBLIC_SITE_URL: https://onboarding.orangecloud.vn
         run: |
           set -euo pipefail
+          export BLOG_APPROVE_SECRET="${BLOG_APPROVE_SECRET:-$CLOUDFLARE_API_TOKEN}"
           if [ -z "${BLOG_APPROVE_SECRET:-}" ]; then
-            echo "::error::Missing secret BLOG_APPROVE_SECRET"
+            echo "::error::Need BLOG_APPROVE_SECRET or CLOUDFLARE_API_TOKEN"
             exit 1
           fi
           ARGS=(--email-body)
@@ -69,7 +72,7 @@ jobs:
         if: steps.mail.outputs.skip == 'false'
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          CLOUDFLARE_EMAIL_API_TOKEN: ${{ secrets.CLOUDFLARE_EMAIL_API_TOKEN }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           WORKSHOP_EMAIL_FROM: ${{ secrets.WORKSHOP_EMAIL_FROM }}
         run: |
           set -euo pipefail
@@ -78,10 +81,10 @@ jobs:
           const j = JSON.parse(fs.readFileSync('/tmp/blog-email.json', 'utf8'));
           const email = j.email;
           const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
-          const token = process.env.CLOUDFLARE_EMAIL_API_TOKEN;
+          const token = process.env.CLOUDFLARE_API_TOKEN;
           const from = process.env.WORKSHOP_EMAIL_FROM || 'Cloudflare Starter Hub <onboarding@orangecloud.vn>';
           if (!accountId || !token) {
-            console.error('Missing CLOUDFLARE_ACCOUNT_ID or CLOUDFLARE_EMAIL_API_TOKEN secrets');
+            console.error('Missing CLOUDFLARE_ACCOUNT_ID or CLOUDFLARE_API_TOKEN');
             process.exit(1);
           }
           function fromPayload(raw) {

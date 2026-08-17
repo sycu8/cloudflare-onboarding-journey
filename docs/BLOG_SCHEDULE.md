@@ -11,9 +11,9 @@ Notifications go **only** to `sycu.lee@gmail.com` (no GitHub issues).
 3. You **Approve** by either:
    - Replying **`APPROVE`** (Reply-To: `blog-approve@orangecloud.vn`), or
    - Clicking the **Approve** link (`/api/blog-approve?token=…`).
-4. Pages Function records approval + `repository_dispatch` `blog-approved`.
-5. `.github/workflows/blog-on-approve.yml` scaffolds a PR.
-6. Expand content → **merge PR** → deploy (existing Deploy workflow / `npm run deploy`) to publish.
+4. Pages Function writes `blog_editorial` status=`approved` in D1.
+5. `.github/workflows/blog-on-approve.yml` (cron every :20/:50) polls D1 with existing `CLOUDFLARE_API_TOKEN` and opens a scaffold PR.
+6. Expand content → **merge PR** → deploy to publish.
 
 ## Sources of truth
 
@@ -25,32 +25,44 @@ Notifications go **only** to `sycu.lee@gmail.com` (no GitHub issues).
 | Reply Worker | `workers/blog-email-inbox/` |
 | D1 | `migrations/0003_blog_editorial.sql` |
 
-## GitHub Actions secrets
+## GitHub Actions secrets (reuse deploy credentials)
 
-| Secret | Used by |
+Already used by `deploy.yml` — **no new Cloudflare secrets required**:
+
+| Secret | Purpose |
 |--------|---------|
-| `BLOG_APPROVE_SECRET` | Sign/verify approve tokens; Worker → API auth |
-| `CLOUDFLARE_ACCOUNT_ID` | Email Sending API |
-| `CLOUDFLARE_EMAIL_API_TOKEN` | Email Sending API |
-| `WORKSHOP_EMAIL_FROM` | From address (e.g. `Cloudflare Starter Hub <onboarding@orangecloud.vn>`) |
+| `CLOUDFLARE_API_TOKEN` | Email Sending API + D1 poll + HMAC fallback for approve tokens |
+| `CLOUDFLARE_ACCOUNT_ID` | Account id for Email + D1 APIs |
+
+Optional:
+
+| Secret | Purpose |
+|--------|---------|
+| `BLOG_APPROVE_SECRET` | Dedicated HMAC secret (else Actions uses `CLOUDFLARE_API_TOKEN`) |
+| `WORKSHOP_EMAIL_FROM` | From address (default `Cloudflare Starter Hub <onboarding@orangecloud.vn>`) |
 
 ## Pages secrets / vars
 
-| Name | Type |
+| Name | Notes |
 |------|------|
-| `BLOG_APPROVE_SECRET` | secret (same value as Actions) |
-| `BLOG_GITHUB_TOKEN` | secret — PAT with `repo` scope to dispatch `blog-approved` |
-| `GITHUB_REPO` | var optional — default `sycu8/cloudflare-onboarding-journey` |
-| `BLOG_EDITOR_EMAIL` | var optional — default `sycu.lee@gmail.com` |
-| `CLOUDFLARE_ACCOUNT_ID` / `CLOUDFLARE_EMAIL_API_TOKEN` / `WORKSHOP_EMAIL_FROM` | already used for workshop mail |
+| `CLOUDFLARE_API_TOKEN` **or** `CLOUDFLARE_EMAIL_API_TOKEN` **or** `BLOG_APPROVE_SECRET` | Must match the secret Actions used to sign the Approve link (typically set Pages `BLOG_APPROVE_SECRET` = same value as Actions `CLOUDFLARE_API_TOKEN`, or reuse Email token if identical) |
+| `CLOUDFLARE_ACCOUNT_ID` / `CLOUDFLARE_EMAIL_API_TOKEN` / `WORKSHOP_EMAIL_FROM` | Already used for workshop mail |
+| `BLOG_EDITOR_EMAIL` | optional — default `sycu.lee@gmail.com` |
+
+Apply D1 migration (prod):
+
+```bash
+npx wrangler d1 migrations apply cloudflare-starter-hub-db --remote
+```
 
 ## Email Routing (reply APPROVE)
 
-1. Deploy Worker: `cd workers/blog-email-inbox && cp wrangler.toml.example wrangler.toml && npx wrangler secret put BLOG_APPROVE_SECRET && npx wrangler deploy`
-2. Cloudflare Dashboard → Email Routing → rule: `blog-approve@orangecloud.vn` → Worker `blog-email-inbox`
-3. Outbound editorial mail already sets `reply_to` to that inbox
+1. `cd workers/blog-email-inbox && cp wrangler.toml.example wrangler.toml`
+2. `npx wrangler secret put BLOG_APPROVE_SECRET` (same HMAC material as Pages/Actions)
+3. `npx wrangler deploy`
+4. Email Routing rule: `blog-approve@orangecloud.vn` → Worker `blog-email-inbox`
 
-Without the Worker, the **Approve link** in the email still works.
+Without the Worker, the **Approve link** still works.
 
 ## CLI
 

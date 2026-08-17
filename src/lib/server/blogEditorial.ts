@@ -11,11 +11,23 @@ import { sendTransactionalEmail, type MailEnv } from './workshopEmail';
 export type BlogEditorialEnv = MailEnv & {
   DB?: D1Database;
   BLOG_APPROVE_SECRET?: string;
+  /** Fallback HMAC secret — same token GitHub Actions already stores */
+  CLOUDFLARE_API_TOKEN?: string;
   BLOG_EDITOR_EMAIL?: string;
   BLOG_APPROVE_INBOX?: string;
   BLOG_GITHUB_TOKEN?: string;
   GITHUB_REPO?: string;
 };
+
+/** Prefer dedicated secret; else reuse Cloudflare API / Email tokens already on Pages. */
+export function resolveApproveSecret(env: BlogEditorialEnv): string | undefined {
+  return (
+    env.BLOG_APPROVE_SECRET ||
+    env.CLOUDFLARE_API_TOKEN ||
+    env.CLOUDFLARE_EMAIL_API_TOKEN ||
+    undefined
+  );
+}
 
 function timingSafeEqual(a: string, b: string): boolean {
   if (a.length !== b.length) return false;

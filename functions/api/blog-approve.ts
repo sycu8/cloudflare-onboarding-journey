@@ -1,5 +1,6 @@
 import {
   approveBlogItem,
+  resolveApproveSecret,
   verifyApproveToken,
   type BlogEditorialEnv,
 } from '../../src/lib/server/blogEditorial';
@@ -23,9 +24,13 @@ function htmlPage(title: string, body: string, status = 200) {
 export const onRequestGet: PagesFunction<Env> = async (context) => {
   const url = new URL(context.request.url);
   const token = url.searchParams.get('token') || '';
-  const secret = context.env.BLOG_APPROVE_SECRET;
+  const secret = resolveApproveSecret(context.env);
   if (!secret) {
-    return htmlPage('Misconfigured', '<h1>Thiếu BLOG_APPROVE_SECRET</h1><p>Thêm secret trên Pages rồi deploy lại.</p>', 500);
+    return htmlPage(
+      'Misconfigured',
+      '<h1>Thiếu secret duyệt bài</h1><p>Cần <code>BLOG_APPROVE_SECRET</code> hoặc <code>CLOUDFLARE_API_TOKEN</code> / <code>CLOUDFLARE_EMAIL_API_TOKEN</code> trên Pages (cùng giá trị dùng để ký token trong GitHub Actions).</p>',
+      500,
+    );
   }
   if (!token) {
     return htmlPage('Missing token', '<h1>Thiếu token</h1><p>Mở link Approve từ email biên tập.</p>', 400);
@@ -56,7 +61,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
 
   const dispatchNote = result.dispatch.dispatched
     ? 'Đã kích hoạt workflow GitHub để mở PR scaffold.'
-    : `Ghi nhận duyệt, nhưng chưa dispatch GitHub (${'reason' in result.dispatch ? result.dispatch.reason : 'unknown'}). Kiểm tra secret BLOG_GITHUB_TOKEN.`;
+    : `Đã ghi nhận duyệt trên D1. Workflow “Blog on approve” sẽ mở PR (poll D1 bằng CLOUDFLARE_API_TOKEN)${'reason' in result.dispatch ? ` — dispatch: ${result.dispatch.reason}` : ''}.`;
 
   return htmlPage(
     'Approved',
@@ -71,7 +76,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
 
 /** Service endpoint for Email Worker reply → APPROVE */
 export const onRequestPost: PagesFunction<Env> = async (context) => {
-  const secret = context.env.BLOG_APPROVE_SECRET;
+  const secret = resolveApproveSecret(context.env);
   if (!secret) return Response.json({ ok: false, error: 'missing_secret' }, { status: 500 });
 
   const headerSecret = context.request.headers.get('x-blog-approve-secret') || '';
