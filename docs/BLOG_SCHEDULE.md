@@ -27,7 +27,7 @@ Notifications go **only** to `sycu.lee@gmail.com` (no GitHub issues).
 
 ## GitHub Actions secrets (reuse deploy credentials)
 
-Already used by `deploy.yml` — **no new Cloudflare secrets required**:
+Already used by Deploy → **`production` environment** — blog workflows use the same env:
 
 | Secret | Purpose |
 |--------|---------|
@@ -35,6 +35,8 @@ Already used by `deploy.yml` — **no new Cloudflare secrets required**:
 | `CLOUDFLARE_ACCOUNT_ID` | Account id for Email + D1 APIs |
 
 Optional: `WORKSHOP_EMAIL_FROM` (default `Cloudflare Starter Hub <onboarding@orangecloud.vn>`).
+
+If Environment **production** has required reviewers, approve the pending deployment when the blog workflow runs (or move these secrets to repository-level / a `blog` env without reviewers for unattended cron).
 
 Approve tokens are stored in D1 by Actions; Pages verifies the link against D1 (no matching HMAC secret required on Pages).
 

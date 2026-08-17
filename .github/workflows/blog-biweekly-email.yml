@@ -1,6 +1,7 @@
 # Bi-daily blog editorial email (cron daily; only sends on schedule dates)
 #
-# Uses existing Actions secrets: CLOUDFLARE_API_TOKEN + CLOUDFLARE_ACCOUNT_ID
+# Reuses Deploy credentials from the `production` GitHub Environment:
+#   CLOUDFLARE_API_TOKEN + CLOUDFLARE_ACCOUNT_ID
 # Sends ONE email to sycu.lee@gmail.com (Approve link + Reply APPROVE).
 
 name: Blog bi-daily email
@@ -23,11 +24,18 @@ concurrency:
   group: blog-biweekly-email
   cancel-in-progress: false
 
+env:
+  D1_DATABASE_ID: df92a9b8-1410-41c3-8d95-ee0f9ebf84ca
+  # Public account id fallback (also stored as Actions secret on production env)
+  CF_ACCOUNT_ID_FALLBACK: 4c15704ef706b9c8954cd6f9feb678d8
+
 jobs:
   email-editor:
     name: Email bi-daily blog assignment
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
+    # Same env as Deploy → production so CLOUDFLARE_* secrets resolve
+    environment: production
     steps:
       - uses: actions/checkout@v4
 
@@ -65,17 +73,18 @@ jobs:
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          D1_DATABASE_ID: df92a9b8-1410-41c3-8d95-ee0f9ebf84ca
+          D1_DATABASE_ID: ${{ env.D1_DATABASE_ID }}
+          CF_ACCOUNT_ID_FALLBACK: ${{ env.CF_ACCOUNT_ID_FALLBACK }}
         run: |
           set -euo pipefail
           node <<'NODE'
           const fs = require('fs');
           const j = JSON.parse(fs.readFileSync('/tmp/blog-email.json', 'utf8'));
-          const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
+          const accountId = process.env.CLOUDFLARE_ACCOUNT_ID || process.env.CF_ACCOUNT_ID_FALLBACK;
           const token = process.env.CLOUDFLARE_API_TOKEN;
           const dbId = process.env.D1_DATABASE_ID;
           if (!accountId || !token) {
-            console.error('Missing CLOUDFLARE_ACCOUNT_ID or CLOUDFLARE_API_TOKEN');
+            console.error('Missing CLOUDFLARE_API_TOKEN (and account id). Use GitHub Environment "production" secrets.');
             process.exit(1);
           }
           const date = j.email.item.date;
@@ -117,17 +126,18 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           WORKSHOP_EMAIL_FROM: ${{ secrets.WORKSHOP_EMAIL_FROM }}
+          CF_ACCOUNT_ID_FALLBACK: ${{ env.CF_ACCOUNT_ID_FALLBACK }}
         run: |
           set -euo pipefail
           node <<'NODE'
           const fs = require('fs');
           const j = JSON.parse(fs.readFileSync('/tmp/blog-email.json', 'utf8'));
           const email = j.email;
-          const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
+          const accountId = process.env.CLOUDFLARE_ACCOUNT_ID || process.env.CF_ACCOUNT_ID_FALLBACK;
           const token = process.env.CLOUDFLARE_API_TOKEN;
           const from = process.env.WORKSHOP_EMAIL_FROM || 'Cloudflare Starter Hub <onboarding@orangecloud.vn>';
           if (!accountId || !token) {
-            console.error('Missing CLOUDFLARE_ACCOUNT_ID or CLOUDFLARE_API_TOKEN');
+            console.error('Missing CLOUDFLARE_API_TOKEN (and account id). Use GitHub Environment "production" secrets.');
             process.exit(1);
           }
           function fromPayload(raw) {

@@ -1,6 +1,5 @@
 # After editor APPROVE (link/email → D1), open scaffold PR.
-# Uses CLOUDFLARE_API_TOKEN + CLOUDFLARE_ACCOUNT_ID to poll D1 for approvals
-# (no Pages BLOG_GITHUB_TOKEN required).
+# Polls D1 with CLOUDFLARE_API_TOKEN from the `production` GitHub Environment.
 
 name: Blog on approve
 
@@ -31,12 +30,14 @@ concurrency:
 
 env:
   D1_DATABASE_ID: df92a9b8-1410-41c3-8d95-ee0f9ebf84ca
+  CF_ACCOUNT_ID_FALLBACK: 4c15704ef706b9c8954cd6f9feb678d8
 
 jobs:
   open-pr:
     name: Scaffold blog PR(s)
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    environment: production
     steps:
       - uses: actions/checkout@v4
 
@@ -54,6 +55,7 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           D1_DATABASE_ID: ${{ env.D1_DATABASE_ID }}
+          CF_ACCOUNT_ID_FALLBACK: ${{ env.CF_ACCOUNT_ID_FALLBACK }}
           EVENT_NAME: ${{ github.event_name }}
           DISPATCH_DATE: ${{ github.event.client_payload.date }}
           DISPATCH_SLUG: ${{ github.event.client_payload.slug }}
@@ -72,11 +74,11 @@ jobs:
           }
 
           async function pollD1() {
-            const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
+            const accountId = process.env.CLOUDFLARE_ACCOUNT_ID || process.env.CF_ACCOUNT_ID_FALLBACK;
             const token = process.env.CLOUDFLARE_API_TOKEN;
             const dbId = process.env.D1_DATABASE_ID;
             if (!accountId || !token || !dbId) {
-              console.error('Missing CLOUDFLARE_ACCOUNT_ID / CLOUDFLARE_API_TOKEN for D1 poll');
+              console.error('Missing CLOUDFLARE_API_TOKEN for D1 poll (production env secrets)');
               return;
             }
             const res = await fetch(
@@ -104,7 +106,6 @@ jobs:
           }
 
           (async () => {
-            // Always poll D1 on schedule; also poll when no explicit job
             if (event === 'schedule' || jobs.length === 0) {
               await pollD1();
             }
@@ -135,6 +136,7 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           WORKSHOP_EMAIL_FROM: ${{ secrets.WORKSHOP_EMAIL_FROM }}
           D1_DATABASE_ID: ${{ env.D1_DATABASE_ID }}
+          CF_ACCOUNT_ID_FALLBACK: ${{ env.CF_ACCOUNT_ID_FALLBACK }}
         run: |
           set -euo pipefail
           git config user.name "blog-editorial-bot"
@@ -144,7 +146,7 @@ jobs:
           const fs = require('fs');
           const { execSync } = require('child_process');
           const { jobs } = JSON.parse(fs.readFileSync('/tmp/blog-jobs.json', 'utf8'));
-          const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
+          const accountId = process.env.CLOUDFLARE_ACCOUNT_ID || process.env.CF_ACCOUNT_ID_FALLBACK;
           const token = process.env.CLOUDFLARE_API_TOKEN;
           const dbId = process.env.D1_DATABASE_ID;
           const fromRaw = process.env.WORKSHOP_EMAIL_FROM || 'Cloudflare Starter Hub <onboarding@orangecloud.vn>';
@@ -226,14 +228,17 @@ jobs:
               }
               sh(`git push -u origin ${branch} --force-with-lease`);
 
-              const body = `${fs.readFileSync('/tmp/blog-prompt.md', 'utf8')}
-
----
-
-Approved via editorial email (\`sycu.lee@gmail.com\`).
-
-After expanding bilingual content (≥400 words/lang), **merge this PR** then deploy to publish.
-`;
+              // Keep "---" off column 0 so YAML does not treat it as a document separator.
+              const body = [
+                fs.readFileSync('/tmp/blog-prompt.md', 'utf8'),
+                '',
+                '---',
+                '',
+                'Approved via editorial email (`sycu.lee@gmail.com`).',
+                '',
+                'After expanding bilingual content (≥400 words/lang), **merge this PR** then deploy to publish.',
+                '',
+              ].join('\n');
               fs.writeFileSync('/tmp/pr-body.md', body);
 
               try {
