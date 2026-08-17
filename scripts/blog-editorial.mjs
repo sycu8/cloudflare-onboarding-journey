@@ -338,12 +338,8 @@ async function main() {
   const secret = process.env.BLOG_APPROVE_SECRET || '';
   let token = null;
   if (args.emailBody || args.signToken) {
-    if (!secret) {
-      console.error('BLOG_APPROVE_SECRET is required to sign approve tokens');
-      process.exitCode = 2;
-      return;
-    }
-    token = signApproveToken(item, secret);
+    // Opaque token stored in D1 by the email workflow (HMAC optional if secret set)
+    token = signApproveToken(item, secret || 'd1-opaque');
   }
 
   if (args.emailBody) {

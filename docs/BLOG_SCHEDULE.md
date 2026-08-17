@@ -31,23 +31,20 @@ Already used by `deploy.yml` — **no new Cloudflare secrets required**:
 
 | Secret | Purpose |
 |--------|---------|
-| `CLOUDFLARE_API_TOKEN` | Email Sending API + D1 poll + HMAC fallback for approve tokens |
+| `CLOUDFLARE_API_TOKEN` | Email Sending API + D1 read/write (store approve token, poll approvals) |
 | `CLOUDFLARE_ACCOUNT_ID` | Account id for Email + D1 APIs |
 
-Optional:
+Optional: `WORKSHOP_EMAIL_FROM` (default `Cloudflare Starter Hub <onboarding@orangecloud.vn>`).
 
-| Secret | Purpose |
-|--------|---------|
-| `BLOG_APPROVE_SECRET` | Dedicated HMAC secret (else Actions uses `CLOUDFLARE_API_TOKEN`) |
-| `WORKSHOP_EMAIL_FROM` | From address (default `Cloudflare Starter Hub <onboarding@orangecloud.vn>`) |
+Approve tokens are stored in D1 by Actions; Pages verifies the link against D1 (no matching HMAC secret required on Pages).
 
 ## Pages secrets / vars
 
 | Name | Notes |
 |------|------|
-| `CLOUDFLARE_API_TOKEN` **or** `CLOUDFLARE_EMAIL_API_TOKEN` **or** `BLOG_APPROVE_SECRET` | Must match the secret Actions used to sign the Approve link (typically set Pages `BLOG_APPROVE_SECRET` = same value as Actions `CLOUDFLARE_API_TOKEN`, or reuse Email token if identical) |
-| `CLOUDFLARE_ACCOUNT_ID` / `CLOUDFLARE_EMAIL_API_TOKEN` / `WORKSHOP_EMAIL_FROM` | Already used for workshop mail |
+| `CLOUDFLARE_ACCOUNT_ID` / `CLOUDFLARE_EMAIL_API_TOKEN` / `WORKSHOP_EMAIL_FROM` | Already used for workshop mail (confirmation emails after approve) |
 | `BLOG_EDITOR_EMAIL` | optional — default `sycu.lee@gmail.com` |
+| `DB` binding | Required for approve token lookup |
 
 Apply D1 migration (prod):
 

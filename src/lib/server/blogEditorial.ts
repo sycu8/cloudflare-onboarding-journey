@@ -29,42 +29,38 @@ export function resolveApproveSecret(env: BlogEditorialEnv): string | undefined 
   );
 }
 
-function timingSafeEqual(a: string, b: string): boolean {
-  if (a.length !== b.length) return false;
-  let out = 0;
-  for (let i = 0; i < a.length; i++) out |= a.charCodeAt(i) ^ b.charCodeAt(i);
-  return out === 0;
-}
 
-async function hmacSign(secret: string, payload: string): Promise<string> {
-  const key = await crypto.subtle.importKey(
-    'raw',
-    new TextEncoder().encode(secret),
-    { name: 'HMAC', hash: 'SHA-256' },
-    false,
-    ['sign'],
-  );
-  const sig = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(payload));
-  const bytes = new Uint8Array(sig);
-  let str = '';
-  for (const b of bytes) str += String.fromCharCode(b);
-  return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-}
 
-/** Token format: date:slug:nonce.signature */
-export async function verifyApproveToken(
-  token: string,
-  secret: string,
-): Promise<{ ok: true; date: string; slug: string; nonce: string } | { ok: false; error: string }> {
+/** Parse token payload date:slug:nonce[.signature] without requiring HMAC. */
+export function parseApproveToken(token: string): { date: string; slug: string; nonce: string } | null {
   const lastDot = token.lastIndexOf('.');
-  if (lastDot <= 0) return { ok: false, error: 'invalid_token' };
-  const payload = token.slice(0, lastDot);
-  const sig = token.slice(lastDot + 1);
-  const expected = await hmacSign(secret, payload);
-  if (!timingSafeEqual(sig, expected)) return { ok: false, error: 'bad_signature' };
+  const payload = lastDot > 0 ? token.slice(0, lastDot) : token;
   const [date, slug, nonce] = payload.split(':');
-  if (!date || !slug || !nonce) return { ok: false, error: 'bad_payload' };
-  return { ok: true, date, slug, nonce };
+  if (!date || !slug || !nonce) return null;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return null;
+  return { date, slug, nonce };
+}
+
+export async function lookupEmailedToken(
+  env: BlogEditorialEnv,
+  token: string,
+): Promise<{ ok: true; date: string; slug: string } | { ok: false; error: string }> {
+  const parsed = parseApproveToken(token);
+  if (!parsed) return { ok: false, error: 'bad_payload' };
+  if (!env.DB) return { ok: false, error: 'db_unavailable' };
+  try {
+    const row = await env.DB.prepare(
+      `SELECT date, slug, status, token_nonce FROM blog_editorial WHERE date = ? AND slug = ? LIMIT 1`,
+    )
+      .bind(parsed.date, parsed.slug)
+      .first<{ date: string; slug: string; status: string; token_nonce: string | null }>();
+    if (!row) return { ok: false, error: 'unknown_token' };
+    if (!row.token_nonce || row.token_nonce !== token) return { ok: false, error: 'token_mismatch' };
+    return { ok: true, date: row.date, slug: row.slug };
+  } catch (e) {
+    console.warn('blog token lookup failed', e);
+    return { ok: false, error: 'db_error' };
+  }
 }
 
 export function editorEmail(env: BlogEditorialEnv) {

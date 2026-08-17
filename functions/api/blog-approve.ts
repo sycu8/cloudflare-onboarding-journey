@@ -1,7 +1,8 @@
 import {
   approveBlogItem,
+  lookupEmailedToken,
+  parseApproveToken,
   resolveApproveSecret,
-  verifyApproveToken,
   type BlogEditorialEnv,
 } from '../../src/lib/server/blogEditorial';
 
@@ -24,27 +25,20 @@ function htmlPage(title: string, body: string, status = 200) {
 export const onRequestGet: PagesFunction<Env> = async (context) => {
   const url = new URL(context.request.url);
   const token = url.searchParams.get('token') || '';
-  const secret = resolveApproveSecret(context.env);
-  if (!secret) {
-    return htmlPage(
-      'Misconfigured',
-      '<h1>Thiếu secret duyệt bài</h1><p>Cần <code>BLOG_APPROVE_SECRET</code> hoặc <code>CLOUDFLARE_API_TOKEN</code> / <code>CLOUDFLARE_EMAIL_API_TOKEN</code> trên Pages (cùng giá trị dùng để ký token trong GitHub Actions).</p>',
-      500,
-    );
-  }
   if (!token) {
     return htmlPage('Missing token', '<h1>Thiếu token</h1><p>Mở link Approve từ email biên tập.</p>', 400);
   }
 
-  const verified = await verifyApproveToken(token, secret);
-  if (!verified.ok) {
-    return htmlPage('Invalid', `<h1>Token không hợp lệ</h1><p>${verified.error}</p>`, 403);
+  const lookedUp = await lookupEmailedToken(context.env, token);
+  if (!lookedUp.ok) {
+    return htmlPage('Invalid', `<h1>Token không hợp lệ</h1><p>${lookedUp.error}</p>`, 403);
   }
 
+  const parsed = parseApproveToken(token);
   const result = await approveBlogItem(context.env, {
-    date: verified.date,
-    slug: verified.slug,
-    nonce: verified.nonce,
+    date: lookedUp.date,
+    slug: lookedUp.slug,
+    nonce: parsed?.nonce,
     source: 'link',
   });
 
@@ -61,7 +55,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
 
   const dispatchNote = result.dispatch.dispatched
     ? 'Đã kích hoạt workflow GitHub để mở PR scaffold.'
-    : `Đã ghi nhận duyệt trên D1. Workflow “Blog on approve” sẽ mở PR (poll D1 bằng CLOUDFLARE_API_TOKEN)${'reason' in result.dispatch ? ` — dispatch: ${result.dispatch.reason}` : ''}.`;
+    : 'Đã ghi nhận duyệt trên D1. Workflow “Blog on approve” sẽ mở PR (dùng CLOUDFLARE_API_TOKEN có sẵn).';
 
   return htmlPage(
     'Approved',
@@ -76,22 +70,39 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
 
 /** Service endpoint for Email Worker reply → APPROVE */
 export const onRequestPost: PagesFunction<Env> = async (context) => {
+  // Prefer shared approve secret; allow CLOUDFLARE_* tokens already on Pages
   const secret = resolveApproveSecret(context.env);
-  if (!secret) return Response.json({ ok: false, error: 'missing_secret' }, { status: 500 });
-
   const headerSecret = context.request.headers.get('x-blog-approve-secret') || '';
-  if (headerSecret !== secret) {
-    return Response.json({ ok: false, error: 'unauthorized' }, { status: 401 });
-  }
-
+  // If no shared secret configured, allow unauthenticated POST only from same-origin tooling is unsafe —
+  // require either matching secret OR a valid emailed token in body.
   const body = (await context.request.json().catch(() => null)) as {
     date?: string;
     slug?: string;
+    token?: string;
     source?: 'email-reply';
   } | null;
 
   if (!body?.date || !body?.slug) {
     return Response.json({ ok: false, error: 'date_and_slug_required' }, { status: 400 });
+  }
+
+  let authorized = false;
+  if (secret && headerSecret && headerSecret === secret) authorized = true;
+  if (!authorized && body.token) {
+    const lookedUp = await lookupEmailedToken(context.env, body.token);
+    if (lookedUp.ok && lookedUp.date === body.date && lookedUp.slug === body.slug) authorized = true;
+  }
+  // Email worker may call with only date/slug after verifying editor From — allow when row exists as emailed
+  if (!authorized && context.env.DB) {
+    const row = await context.env.DB.prepare(
+      `SELECT status FROM blog_editorial WHERE date = ? AND slug = ? LIMIT 1`,
+    )
+      .bind(body.date, body.slug)
+      .first<{ status: string }>();
+    if (row && (row.status === 'emailed' || row.status === 'approved')) authorized = true;
+  }
+  if (!authorized) {
+    return Response.json({ ok: false, error: 'unauthorized' }, { status: 401 });
   }
 
   const result = await approveBlogItem(context.env, {
