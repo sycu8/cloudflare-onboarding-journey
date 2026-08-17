@@ -1,0 +1,13 @@
+name = "blog-email-inbox"
+main = "src/index.ts"
+compatibility_date = "2026-06-02"
+
+# Secrets (wrangler secret put):
+#   BLOG_APPROVE_SECRET
+# Vars:
+#   SITE_ORIGIN = https://onboarding.orangecloud.vn
+#   BLOG_EDITOR_EMAIL = sycu.lee@gmail.com
+
+[vars]
+SITE_ORIGIN = "https://onboarding.orangecloud.vn"
+BLOG_EDITOR_EMAIL = "sycu.lee@gmail.com"

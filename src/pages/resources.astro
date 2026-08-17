@@ -59,14 +59,16 @@ import {
   CLOUDFLARE_RESOURCES_URL,
   RESOURCES_LAST_SYNCED,
 } from '../data/cloudflareResources';
+import { blogPosts, blogPostPath, blogTopicLabels } from '../data/blog';
 
+const featuredBlog = blogPosts.slice(0, 4);
 ---
 
 <BaseLayout
   title={{ vi: 'Tài nguyên học Cloudflare', en: 'Cloudflare learning resources' }}
   description={{
-    vi: 'Tài nguyên học Cloudflare: Resource Hub, Reference Architecture, GitHub, Learning Center, CloudSecOp — có lọc và phân trang cho danh sách dài.',
-    en: 'Cloudflare learning resources: Resource Hub, Reference Architecture, GitHub, Learning Center, CloudSecOp — with filters and pagination.',
+    vi: 'Tài nguyên học Cloudflare: Blog, Resource Hub, Reference Architecture, GitHub, Learning Center, CloudSecOp — có lọc và phân trang cho danh sách dài.',
+    en: 'Cloudflare learning resources: Blog, Resource Hub, Reference Architecture, GitHub, Learning Center, CloudSecOp — with filters and pagination.',
   }}
   canonicalPath="/resources"
   showProgressBar
@@ -82,7 +84,55 @@ import {
         <span class="lang-en">Official Cloudflare Resource Hub ↗</span>
       </a>
     </p>
+    <div class="mt-4 flex flex-wrap gap-2">
+      <a class="btn btn-primary" href="/blog/">
+        <LangText text={{ vi: 'Đọc Blog →', en: 'Read the Blog →' }} />
+      </a>
+      <a class="btn btn-secondary" href="#blog">
+        <LangText text={{ vi: 'Bài mới trên hub', en: 'Latest hub posts' }} />
+      </a>
+    </div>
   </header>
+
+  <section id="blog" class="card mb-10">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+      <div>
+        <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Blog học Cloudflare', en: 'Cloudflare learning blog' }} />
+        <LangText
+          as="p"
+          class="text-muted mt-1 text-sm"
+          text={{
+            vi: 'Bài viết entry & intermediate về AI, Security, CDN, Workers và Developer Platform — viết lại dễ hiểu từ blog.cloudflare.com, có FAQ và liên kết học tiếp trên hub.',
+            en: 'Entry & intermediate posts on AI, Security, CDN, Workers, and the Developer Platform — plain-language rewrites from blog.cloudflare.com, with FAQs and hub next steps.',
+          }}
+        />
+      </div>
+      <a class="btn btn-primary shrink-0" href="/blog/">
+        <LangText text={{ vi: 'Xem tất cả bài', en: 'View all posts' }} />
+      </a>
+    </div>
+    <ul class="mt-4 divide-y divide-[var(--cf-border)] border-t border-[var(--cf-border)]">
+      {
+        featuredBlog.map((post) => (
+          <li class="flex flex-col gap-1 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+            <div class="min-w-0">
+              <a class="link font-medium" href={blogPostPath(post.slug)}>
+                <LangText text={post.title} />
+              </a>
+              <p class="text-muted mt-1 text-xs">
+                <LangText text={blogTopicLabels[post.topic]} />
+                <span aria-hidden="true"> · </span>
+                <time datetime={post.date}>{post.date}</time>
+              </p>
+            </div>
+            <a class="btn btn-secondary shrink-0 self-start text-sm" href={blogPostPath(post.slug)}>
+              <LangText text={{ vi: 'Đọc', en: 'Read' }} />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
 
   <section class="card mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
     <div>
@@ -98,23 +148,6 @@ import {
     </div>
     <a class="btn btn-primary shrink-0" href="/first-week">
       <LangText text={{ vi: 'Mở lộ trình tuần đầu', en: 'Open first-week plan' }} />
-    </a>
-  </section>
-
-  <section id="blog" class="card mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-    <div>
-      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Blog học Cloudflare', en: 'Cloudflare learning blog' }} />
-      <LangText
-        as="p"
-        class="text-muted mt-1 text-sm"
-        text={{
-          vi: 'Bài viết entry & intermediate về AI, Security, CDN, Workers và Developer Platform — viết lại dễ hiểu từ blog.cloudflare.com, có FAQ và liên kết học tiếp trên hub.',
-          en: 'Entry & intermediate posts on AI, Security, CDN, Workers, and the Developer Platform — plain-language rewrites from blog.cloudflare.com, with FAQs and hub next steps.',
-        }}
-      />
-    </div>
-    <a class="btn btn-primary shrink-0" href="/blog/">
-      <LangText text={{ vi: 'Mở blog', en: 'Open blog' }} />
     </a>
   </section>
 

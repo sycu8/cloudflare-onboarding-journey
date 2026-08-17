@@ -4,6 +4,8 @@ import Breadcrumbs from '../../components/chrome/Breadcrumbs.astro';
 import LangText from '../../components/ui/LangText.astro';
 import CTASection from '../../components/content/CTASection.astro';
 import BlogPostCard from '../../components/content/BlogPostCard.astro';
+import BlogFigure from '../../components/content/BlogFigure.astro';
+import ReferenceDiagramFigure from '../../components/content/ReferenceDiagramFigure.astro';
 import {
   blogLevelLabels,
   blogPosts,
@@ -13,6 +15,7 @@ import {
   getBlogPost,
   getRelatedBlogPosts,
 } from '../../data/blog';
+import { getDiagramBySlug } from '../../data/referenceDiagrams';
 import { getProductBySlug } from '../../data/productPages';
 import { tracks } from '../../data/tracks';
 import { siteSeo } from '../../lib/seo';
@@ -35,10 +38,25 @@ const products = (post.relatedProductSlugs ?? [])
   .filter((p): p is NonNullable<typeof p> => Boolean(p))
   .filter((p) => !hubHrefs.has(`/products/${p.slug}`));
 
+const diagrams = (post.diagramSlugs ?? [])
+  .map((s) => getDiagramBySlug(s))
+  .filter((d): d is NonNullable<typeof d> => Boolean(d && d.primaryImageUrl));
+const heroDiagram = diagrams[0];
+const sectionDiagramSlugs = new Set(
+  post.sections.map((s) => s.diagramSlug).filter((s): s is string => Boolean(s)),
+);
+/** Extra official diagrams not already embedded mid-article via sections[].diagramSlug */
+const galleryDiagrams = diagrams
+  .slice(1)
+  .filter((d) => !sectionDiagramSlugs.has(d.slug));
+const customImages = post.images ?? [];
+const ogImage = customImages[0]?.src ?? heroDiagram?.primaryImageUrl;
+
 const siteOrigin = Astro.site ?? siteSeo.origin;
 const canonicalUrl = new URL(`/blog/${post.slug}/`, siteOrigin).href;
 const wordsVi = countBlogWords(post, 'vi');
 const wordsEn = countBlogWords(post, 'en');
+const jsonLdImage = ogImage ? new URL(ogImage, siteOrigin).href : undefined;
 
 const articleJsonLd = {
   '@context': 'https://schema.org',
@@ -52,6 +70,7 @@ const articleJsonLd = {
   mainEntityOfPage: canonicalUrl,
   url: canonicalUrl,
   keywords: `${post.keywords.en}, ${post.keywords.vi}`,
+  ...(jsonLdImage ? { image: [jsonLdImage] } : {}),
   author: {
     '@type': 'Organization',
     name: siteSeo.name,
@@ -108,6 +127,7 @@ const breadcrumbJsonLd = {
   canonicalPath={`/blog/${post.slug}/`}
   showProgressBar
   ogType="article"
+  ogImage={ogImage}
 >
   <Fragment slot="head">
     <meta name="keywords" content={`${post.keywords.vi}, ${post.keywords.en}`} />
@@ -147,16 +167,73 @@ const breadcrumbJsonLd = {
       />
     </header>
 
+    {
+      heroDiagram ? (
+        <div class="mb-8">
+          <ReferenceDiagramFigure diagram={heroDiagram} />
+        </div>
+      ) : null
+    }
+    {
+      customImages[0] ? (
+        <div class="mb-8">
+          <BlogFigure image={customImages[0]} eager={!heroDiagram} />
+        </div>
+      ) : null
+    }
+
     <div class="mx-auto max-w-3xl space-y-8">
       {
-        post.sections.map((section) => (
-          <section>
-            <LangText as="h2" class="text-xl font-semibold" text={section.heading} />
-            {section.paragraphs.map((paragraph) => (
-              <LangText as="p" class="text-muted mt-3 text-sm leading-relaxed md:text-base" text={paragraph} />
-            ))}
+        post.sections.map((section) => {
+          const sectionDiagram = section.diagramSlug ? getDiagramBySlug(section.diagramSlug) : undefined;
+          return (
+            <section>
+              <LangText as="h2" class="text-xl font-semibold" text={section.heading} />
+              {section.paragraphs.map((paragraph) => (
+                <LangText as="p" class="text-muted mt-3 text-sm leading-relaxed md:text-base" text={paragraph} />
+              ))}
+              {sectionDiagram ? (
+                <div class="mt-5">
+                  <ReferenceDiagramFigure diagram={sectionDiagram} compact />
+                </div>
+              ) : null}
+              {section.image ? (
+                <div class="mt-5">
+                  <BlogFigure image={section.image} />
+                </div>
+              ) : null}
+            </section>
+          );
+        })
+      }
+
+      {
+        galleryDiagrams.length > 0 || customImages.length > 1 ? (
+          <section aria-labelledby="visuals-heading">
+            <LangText
+              as="h2"
+              id="visuals-heading"
+              class="text-xl font-semibold"
+              text={{ vi: 'Hình minh họa Cloudflare', en: 'Cloudflare visuals' }}
+            />
+            <LangText
+              as="p"
+              class="text-muted mt-2 text-sm"
+              text={{
+                vi: 'Sơ đồ Reference Architecture chính thức và (khi có) ảnh Dashboard — giúp đối chiếu khi học.',
+                en: 'Official Reference Architecture diagrams and (when available) Dashboard screenshots — useful while you learn.',
+              }}
+            />
+            <div class="mt-4 space-y-6">
+              {galleryDiagrams.map((d) => (
+                <ReferenceDiagramFigure diagram={d} compact />
+              ))}
+              {customImages.slice(1).map((img) => (
+                <BlogFigure image={img} />
+              ))}
+            </div>
           </section>
-        ))
+        ) : null
       }
 
       <section class="blog-faq" aria-labelledby="faq-heading">
@@ -196,7 +273,7 @@ const breadcrumbJsonLd = {
             ))
           }
           {
-            track ? (
+            showTrackLink && track ? (
               <li>
                 <a class="link" href={`/tracks/${track.slug}/`}>
                   <LangText

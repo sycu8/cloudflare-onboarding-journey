@@ -41,7 +41,7 @@ function fromForRest(from: string | { email: string; name?: string }): string | 
 
 async function sendEmailViaRest(
   env: MailEnv,
-  payload: { to: string; subject: string; html: string; text: string },
+  payload: { to: string; subject: string; html: string; text: string; replyTo?: string },
 ): Promise<boolean> {
   const accountId = env.CLOUDFLARE_ACCOUNT_ID;
   const token = env.CLOUDFLARE_EMAIL_API_TOKEN;
@@ -62,6 +62,7 @@ async function sendEmailViaRest(
       subject: payload.subject,
       html: payload.html,
       text: payload.text,
+      ...(payload.replyTo ? { reply_to: payload.replyTo } : {}),
     }),
   });
 
@@ -79,7 +80,7 @@ async function sendEmailViaRest(
 
 async function sendEmailViaBinding(
   env: MailEnv,
-  payload: { to: string; subject: string; html: string; text: string },
+  payload: { to: string; subject: string; html: string; text: string; replyTo?: string },
 ): Promise<boolean> {
   if (!env.EMAIL) return false;
   try {
@@ -100,10 +101,18 @@ async function sendEmailViaBinding(
 
 async function sendEmail(
   env: MailEnv,
-  payload: { to: string; subject: string; html: string; text: string },
+  payload: { to: string; subject: string; html: string; text: string; replyTo?: string },
 ): Promise<boolean> {
   if (env.EMAIL) return sendEmailViaBinding(env, payload);
   return sendEmailViaRest(env, payload);
+}
+
+/** Shared transactional send (workshop + blog editorial). */
+export async function sendTransactionalEmail(
+  env: MailEnv,
+  payload: { to: string; subject: string; html: string; text: string; replyTo?: string },
+): Promise<boolean> {
+  return sendEmail(env, payload);
 }
 
 function layout(body: string, origin: string) {

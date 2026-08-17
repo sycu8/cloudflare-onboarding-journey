@@ -8,13 +8,16 @@ import JourneyStepper from '../components/content/JourneyStepper.astro';
 import LangText from '../components/ui/LangText.astro';
 import CTASection from '../components/content/CTASection.astro';
 import DeploymentExamplesHighlight from '../components/content/DeploymentExamplesHighlight.astro';
+import BlogPostCard from '../components/content/BlogPostCard.astro';
 import { useCases, getUseCasesByTrack } from '../data/useCases';
+import { blogPosts } from '../data/blog';
 
 const asCount = getUseCasesByTrack('application-services').length;
 const dpCount = getUseCasesByTrack('developer-platform').length;
 const c1Count = getUseCasesByTrack('cloudflare-one').length;
 const aiCount = getUseCasesByTrack('ai-security-adoption').length;
 const oeCount = getUseCasesByTrack('operational-excellence').length;
+const featuredBlogPosts = blogPosts.slice(0, 3);
 ---
 
 <BaseLayout
@@ -34,8 +37,36 @@ const oeCount = getUseCasesByTrack('operational-excellence').length;
       en: 'A learning hub for Application Services, Developer Platform, Cloudflare One, AI Security & Adoption, and Operational Excellence.',
     }}
     primaryCta={{ href: '/start-here', label: { vi: 'Bắt đầu tại đây', en: 'Start here' } }}
-    secondaryCta={{ href: '/first-week', label: { vi: 'Lộ trình 7 ngày', en: '7-day path' } }}
+    secondaryCta={{ href: '/blog/', label: { vi: 'Đọc Blog', en: 'Read the Blog' } }}
+    extraCtas={[{ href: '/first-week', label: { vi: 'Lộ trình 7 ngày', en: '7-day path' } }]}
   />
+
+  <section class="mt-10" aria-labelledby="home-blog">
+    <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <LangText
+          as="h2"
+          id="home-blog"
+          class="text-xl font-semibold md:text-2xl"
+          text={{ vi: 'Blog mới — đọc dễ, học tiếp trên hub', en: 'Fresh blog posts — plain language, hub next steps' }}
+        />
+        <LangText
+          as="p"
+          class="text-muted mt-1 max-w-2xl text-sm"
+          text={{
+            vi: 'AI, Security, CDN, Workers và Developer Platform — viết lại cho người mới và trung cấp, kèm FAQ và liên kết lộ trình.',
+            en: 'AI, Security, CDN, Workers, and Developer Platform — rewritten for beginners and intermediate learners, with FAQs and track links.',
+          }}
+        />
+      </div>
+      <a class="btn btn-primary shrink-0" href="/blog/">
+        <LangText text={{ vi: 'Xem tất cả bài Blog', en: 'Browse all Blog posts' }} />
+      </a>
+    </div>
+    <div class="grid gap-4 md:grid-cols-3">
+      {featuredBlogPosts.map((post) => <BlogPostCard post={post} />)}
+    </div>
+  </section>
 
   <section class="mt-10">
     <LangText as="h2" class="text-xl font-semibold md:text-2xl" text={{ vi: 'Hiểu Cloudflare theo 5 lớp đơn giản', en: 'Cloudflare in 5 simple layers' }} />
@@ -243,6 +274,14 @@ const oeCount = getUseCasesByTrack('operational-excellence').length;
     </div>
 
     <div class="space-y-4">
+      <CTASection
+        title={{ vi: 'Đọc Blog để giữ đà học', en: 'Read the Blog to stay on track' }}
+        description={{
+          vi: 'Bài ngắn, dễ hiểu về CDN, WAF, Workers, AI — mỗi ngày một góc nhìn từ blog.cloudflare.com.',
+          en: 'Short, plain-language posts on CDN, WAF, Workers, and AI — daily angles from blog.cloudflare.com.',
+        }}
+        cta={{ href: '/blog/', label: { vi: 'Mở Blog ngay', en: 'Open the Blog' } }}
+      />
       <CTASection
         title={{ vi: 'Bắt đầu trong 30 phút', en: 'Get started in 30 minutes' }}
         description={{

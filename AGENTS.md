@@ -28,14 +28,8 @@ After user merges on GitHub: `git pull origin main` → `npm run build` → `npm
 - Bilingual `{ vi, en }` for user-facing copy
 - No secrets in repo; `wrangler.toml` is local-only
 - Minimize scope; match existing Astro/React patterns in `src/`
-
-## Blog cadence (1 post / day)
-
-- Queue: [`src/data/blogSchedule.ts`](src/data/blogSchedule.ts) (dates in Asia/Ho_Chi_Minh)
-- Daily cron workflow: `.github/workflows/blog-daily.yml` opens a GitHub issue at **00:05 ICT**
-- Commands: `npm run blog:today` · `npm run blog:scaffold` · `npm run blog:issue` · `npm run blog:upcoming`
-- When generating: rewrite from blog.cloudflare.com for non-tech readers, ≥400 words/lang, FAQ + hub backlinks, register in `src/data/blog.ts`
-- Extend the schedule queue before it runs out; see [docs/BLOG_SCHEDULE.md](docs/BLOG_SCHEDULE.md)
+- Blog visuals: prefer `diagramSlugs` → `public/ref-diagrams/` (official Cloudflare diagrams). Dashboard screenshots go in `public/images/blog/` via post `images` / `sections[].image` — see that folder’s README.
+- Blog cadence: **1 post / 2 days** via email to `sycu.lee@gmail.com` (approve by reply `APPROVE` or link). See [docs/BLOG_SCHEDULE.md](docs/BLOG_SCHEDULE.md).
 
 ## Cursor Cloud specific instructions
 

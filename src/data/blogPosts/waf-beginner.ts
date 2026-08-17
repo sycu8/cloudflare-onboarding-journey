@@ -43,6 +43,7 @@ export const postWafBeginner: BlogPost = {
           en: 'Cloudflare Blog posts on application security often note that attacks shift over time (bots, new CVEs, mass scanning). Managed rules mean you are not tracking every vulnerability alone — which is why a managed WAF helps small teams.',
         },
       ],
+      diagramSlug: 'securing-data-in-transit'
     },
     {
       heading: {
@@ -140,5 +141,9 @@ export const postWafBeginner: BlogPost = {
     { href: '/tracks/application-services/', label: { vi: 'Lộ trình Application Services', en: 'Application Services track' } },
     { href: '/checklists/beginner-cloudflare-checklist/', label: { vi: 'Checklist người mới', en: 'Beginner checklist' } },
     { href: '/glossary/', label: { vi: 'Thuật ngữ bảo mật', en: 'Security glossary' } },
+  ],
+  diagramSlugs: [
+    'bot-management',
+    'securing-data-in-transit',
   ],
 };

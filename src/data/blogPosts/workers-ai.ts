@@ -43,6 +43,7 @@ export const postWorkersAi: BlogPost = {
           en: 'That matters for small teams in Vietnam and beyond: you can try an internal chatbot, document summarization, support-ticket classification, or search embeddings without investing in an expensive GPU cluster first.',
         },
       ],
+      diagramSlug: 'ai-composable'
     },
     {
       heading: {
@@ -159,5 +160,9 @@ export const postWorkersAi: BlogPost = {
       href: '/tracks/developer-platform/',
       label: { vi: 'Lộ trình Developer Platform', en: 'Developer Platform track' },
     },
+  ],
+  diagramSlugs: [
+    'ai-rag',
+    'ai-composable',
   ],
 };

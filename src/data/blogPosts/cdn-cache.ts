@@ -43,6 +43,7 @@ export const postCdnCache: BlogPost = {
           en: 'On blog.cloudflare.com, CDN and cache posts often stress one idea: speed is not cosmetic — it ties to experience, origin bandwidth cost, and surviving traffic spikes during campaigns or viral moments.',
         },
       ],
+      diagramSlug: 'optimizing-image-delivery-with-cloudflare-image-resizing-and-r2'
     },
     {
       heading: {
@@ -152,5 +153,9 @@ export const postCdnCache: BlogPost = {
     { href: '/tracks/application-services/', label: { vi: 'Lộ trình Application Services', en: 'Application Services track' } },
     { href: '/use-cases/accelerate-content-delivery/', label: { vi: 'Use case: tăng tốc nội dung', en: 'Use case: accelerate content delivery' } },
     { href: '/cloudflare-101/', label: { vi: 'Cloudflare 101', en: 'Cloudflare 101' } },
+  ],
+  diagramSlugs: [
+    'distributed-web-performance-architecture',
+    'optimizing-image-delivery-with-cloudflare-image-resizing-and-r2',
   ],
 };

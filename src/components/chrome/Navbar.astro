@@ -22,8 +22,12 @@ const currentPath = Astro.url.pathname;
         const pathNorm = currentPath.replace(/\/$/, '') || '/';
         const active =
           pathNorm === normalized ||
-          (normalized !== '/' && normalized !== '/use-cases' && pathNorm.startsWith(normalized)) ||
-          (normalized === '/use-cases' && pathNorm.startsWith('/use-cases'));
+          (normalized !== '/' &&
+            normalized !== '/use-cases' &&
+            normalized !== '/blog' &&
+            pathNorm.startsWith(normalized)) ||
+          (normalized === '/use-cases' && pathNorm.startsWith('/use-cases')) ||
+          (normalized === '/blog' && pathNorm.startsWith('/blog'));
         return (
           <a
             href={item.href}
