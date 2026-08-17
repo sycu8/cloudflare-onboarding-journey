@@ -11,7 +11,7 @@ Use this when reviewing a PR: match changed files to risk zones before merge.
 | **Interactive islands** | `src/components/interactive/**` | Hydration errors, client-only bugs |
 | **Pages Functions** | `functions/**` | Workshop API, assets proxy, rate limits broken in prod |
 | **Bindings & deploy** | `wrangler.toml.example`, `package.json` deploy scripts | Prod deploy fails; never commit real `wrangler.toml` |
-| **Blog cadence** | `src/data/blog.ts`, `src/data/blogPosts/**`, `src/data/blogSchedule.ts`, `.github/workflows/blog-daily.yml` | Broken daily generate queue / duplicate slugs |
+| **Blog cadence** | `src/data/blogSchedule.ts`, `src/data/blogSchedule.data.json`, `.github/workflows/blog-biweekly-email.yml`, `.github/workflows/blog-on-approve.yml` | Broken bi-daily email queue / approve flow / duplicate slugs |
 | **Tests** | `tests/**`, `playwright.config.ts`, `scripts/smoke-test.mjs` | False green CI or missed regressions |
 | **Static & headers** | `public/**`, `public/_headers` | Cache/security headers wrong on Pages |
 
