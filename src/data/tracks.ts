@@ -536,179 +536,435 @@ export const tracks: Track[] = [
     slug: 'cloudflare-one',
     title: { vi: 'Cloudflare One', en: 'Cloudflare One' },
     headline: {
-      vi: 'Bảo vệ users, access, SaaS và mạng doanh nghiệp',
-      en: 'Secure users, access, SaaS, and corporate networks',
+      vi: 'Triển khai Zero Trust theo từng mô-đun: identity, thiết bị, ZTNA, Gateway, DLP, AI và Cloudflare WAN',
+      en: 'Deploy Zero Trust module by module: identity, devices, ZTNA, Gateway, DLP, AI, and Cloudflare WAN',
     },
     promise: {
-      vi: 'Bảo vệ users, access, SaaS và networks.',
-      en: 'Secure users, access, SaaS, and networks.',
+      vi: 'Bảo vệ users, access, SaaS và networks — follow-along từ tài khoản đến go-live.',
+      en: 'Secure users, access, SaaS, and networks — follow along from account to go-live.',
     },
     description: {
-      vi: 'Lộ trình Zero Trust / SASE cho team cần bảo vệ nhân viên, remote work, SaaS và ứng dụng nội bộ — thay thế hoặc bổ sung VPN truyền thống.',
-      en: 'A Zero Trust / SASE path for teams securing employees, remote work, SaaS, and internal apps — replacing or complementing traditional VPN.',
+      vi: 'Lộ trình Zero Trust / SASE bám theo hướng dẫn onboarding Cloudflare One: tài khoản, identity, Cloudflare One Client, Access (ZTNA), Gateway, DLP, kiểm soát AI và (tuỳ chọn) Cloudflare WAN. Làm theo thứ tự — mỗi mô-đun xây trên mô-đun trước. Pilot → validate → expand; dừng sau bất kỳ phần nào vẫn có giá trị.',
+      en: 'A Zero Trust / SASE path aligned with the Cloudflare One onboarding guide: account, identity, Cloudflare One Client, Access (ZTNA), Gateway, DLP, AI controls, and (optionally) Cloudflare WAN. Work in order — each module builds on the last. Pilot → validate → expand; stopping after any module still leaves something useful.',
     },
     whoIsThisFor: {
-      vi: 'IT admin, security team, hoặc founder cần kiểm soát ai truy cập app nội bộ/SaaS từ bên ngoài office.',
-      en: 'IT admins, security teams, or founders who need to control access to internal/SaaS apps from outside the office.',
+      vi: 'IT admin, security, identity hoặc founder cần bảo vệ nhân viên, remote work, SaaS và app nội bộ — thay VPN hoặc bổ sung SWG/DLP. Không cần kinh nghiệm Cloudflare trước.',
+      en: 'IT admins, security, identity, or founders securing employees, remote work, SaaS, and internal apps — replacing VPN or adding SWG/DLP. No prior Cloudflare experience required.',
     },
     mentalModel: {
-      vi: 'User/device → Cloudflare Zero Trust (identity + policy) → Private app / SaaS / Internet (qua SWG). Không mở toàn bộ mạng như VPN.',
-      en: 'User/device → Cloudflare Zero Trust (identity + policy) → Private app / SaaS / Internet (via SWG). No full network access like VPN.',
+      vi: 'User/device (hoặc chi nhánh Cloudflare WAN) → Cloudflare edge: (1) Identity (2) Posture (3) Access/ZTNA (4) Gateway (5) DLP (6) AI controls → Internet / SaaS / private app (qua Tunnel). Kiểm tra mọi request; không mở toàn mạng như VPN.',
+      en: 'User/device (or a Cloudflare WAN site) → Cloudflare edge: (1) Identity (2) Posture (3) Access/ZTNA (4) Gateway (5) DLP (6) AI controls → Internet / SaaS / private app (via Tunnel). Check every request; no full-network access like VPN.',
     },
     outcomes: {
       vi: [
-        'Kết nối identity provider (Google, Microsoft, Okta…)',
-        'Publish app nội bộ đầu tiên với policy rõ ràng',
-        'Pilot với nhóm user nhỏ trước khi rollout',
-        'Hiểu SWG vs ZTNA vs CASB — dùng đúng công cụ',
-        'Có checklist mở rộng DLP/CASB sau pilot',
+        'Tạo tổ chức Cloudflare One, chọn team name (URL đăng nhập) và break-glass admin',
+        'Kết nối IdP (Entra ID / Okta / Google), kiểm tra group claims và bật MFA',
+        'Enroll Cloudflare One Client (WARP), cấu hình device profile và posture',
+        'Publish app nội bộ đầu tiên bằng Tunnel + Access — không mở inbound firewall',
+        'Bật Gateway theo lớp DNS → Network → HTTP/TLS; Shadow IT và RBI khi sẵn sàng',
+        'Pilot DLP log-only rồi enforce; quản trị AI (không cấm mù) gồm MCP và AI Gateway',
       ],
       en: [
-        'Connect an identity provider (Google, Microsoft, Okta…)',
-        'Publish a first internal app with clear policies',
-        'Pilot with a small user group before rollout',
-        'Understand SWG vs ZTNA vs CASB — use the right tool',
-        'Have a checklist to expand DLP/CASB after pilot',
+        'Create a Cloudflare One organization, lock in the team name (login URL), and keep a break-glass admin',
+        'Connect an IdP (Entra ID / Okta / Google), verify group claims, and require MFA',
+        'Enroll the Cloudflare One Client (WARP), configure device profiles, and add posture checks',
+        'Publish a first private app with Tunnel + Access — no inbound firewall ports',
+        'Roll out Gateway in layers: DNS → Network → HTTP/TLS; add Shadow IT and RBI when ready',
+        'Pilot DLP in log-only then enforce; govern AI (do not blind-ban) including MCP and AI Gateway',
       ],
     },
-    keyConcepts: ['Zero Trust', 'ZTNA', 'SWG', 'CASB', 'DLP', 'Email security', 'Remote Browser Isolation', 'Cloudflare WAN'],
+    keyConcepts: [
+      'Zero Trust',
+      'ZTNA',
+      'Identity provider',
+      'Cloudflare One Client',
+      'Device posture',
+      'Cloudflare Tunnel',
+      'SWG',
+      'Gateway',
+      'Browser Isolation',
+      'CASB',
+      'DLP',
+      'AI controls',
+      'MCP portals',
+      'AI Gateway',
+      'Cloudflare WAN',
+    ],
+    tools: [
+      {
+        title: { vi: 'Hướng dẫn onboarding Zero Trust (follow-along)', en: 'Zero Trust onboarding guide (follow-along)' },
+        description: {
+          vi: 'Từng bước click-by-click: account, identity, thiết bị, ZTNA, Gateway, DLP, AI và Cloudflare WAN. Có bản tiếng Việt. Đây là hướng dẫn cộng đồng — không phải tài liệu chính thức của Cloudflare.',
+          en: 'Click-by-click modules: account, identity, devices, ZTNA, Gateway, DLP, AI, and Cloudflare WAN. Vietnamese available. Community guide — not an official Cloudflare publication.',
+        },
+        href: 'https://zerotrust.cfsase.workers.dev/',
+      },
+      {
+        title: { vi: 'Configuration runbook', en: 'Configuration runbook' },
+        description: {
+          vi: 'Bảng tham chiếu nhanh: đường dẫn dashboard, field và giá trị mẫu cho từng mô-đun khi bạn đã hiểu luồng.',
+          en: 'Quick reference: dashboard paths, fields, and sample values for each module once you know the flow.',
+        },
+        href: 'https://zerotrust.cfsase.workers.dev/configuration-runbook.html',
+      },
+      {
+        title: { vi: 'Best-practice guide', en: 'Best-practice guide' },
+        description: {
+          vi: 'Thứ tự rollout, 10 golden rules, và chiến lược pilot → validate → expand cho từng phase.',
+          en: 'Rollout order, 10 golden rules, and the pilot → validate → expand strategy for each phase.',
+        },
+        href: 'https://zerotrust.cfsase.workers.dev/best-practice-guide.html',
+      },
+    ],
     modules: [
       {
         id: 'c1-1',
-        title: { vi: 'Phần 1: Chuẩn bị Zero Trust', en: 'Part 1: Zero Trust preparation' },
+        title: { vi: 'Phần 1: Kiến trúc và tài khoản', en: 'Part 1: Architecture and account' },
         description: {
-          vi: 'Inventory users, apps và identity trước khi cấu hình.',
-          en: 'Inventory users, apps, and identity before configuring.',
+          vi: 'Bức tranh SASE, checklist trước khi bắt đầu, tạo tổ chức Cloudflare One và quản trị admin least-privilege.',
+          en: 'The SASE picture, pre-start checklist, creating the Cloudflare One organization, and least-privilege admins.',
         },
-        duration: { vi: '~30 phút', en: '~30 min' },
+        duration: { vi: '~50 phút', en: '~50 min' },
         lessons: [
           {
-            title: { vi: 'Liệt kê users và nhóm', en: 'List users and groups' },
+            title: { vi: 'Kiến trúc & thứ tự triển khai', en: 'Architecture & rollout order' },
             body: {
-              vi: 'Ai cần truy cập gì: engineering, sales, contractor. Map với groups trong IdP để policy dễ quản lý.',
-              en: 'Who needs what: engineering, sales, contractors. Map to IdP groups for easier policies.',
+              vi: 'Zero Trust thay mô hình “lâu đài + hào” (VPN + firewall) bằng kiểm tra mọi request. Traffic đi một lần qua identity, posture, Access, Gateway, DLP và AI controls tại edge. Làm theo phase: Foundation → Devices → Access → Web filtering → Data & AI → Network; luôn pilot → validate → expand.',
+              en: 'Zero Trust replaces castle-and-moat (VPN + firewall) with check-every-request. Traffic passes identity, posture, Access, Gateway, DLP, and AI controls in one pass at the edge. Phases: Foundation → Devices → Access → Web filtering → Data & AI → Network; always pilot → validate → expand.',
             },
+            tip: {
+              vi: 'Nhiều team làm Mô-đun 1–3 tuần đầu (identity + thiết bị), Access và Gateway tuần hai, DLP/AI/WAN sau.',
+              en: 'Many teams do Modules 1–3 in week one (identity + devices), Access and Gateway in week two, then DLP/AI/WAN later.',
+            },
+            hubLink: '/use-cases/cloudflare-one',
           },
           {
-            title: { vi: 'Danh sách ứng dụng: SaaS và private', en: 'App inventory: SaaS and private' },
+            title: { vi: 'Tạo account, team name và Cloudflare One', en: 'Create the account, team name, and Cloudflare One' },
             body: {
-              vi: 'Ví dụ: Jira, Notion, internal admin, SSH bastion. Ưu tiên 1 app ít rủi ro cho pilot (internal wiki, staging).',
-              en: 'Examples: Jira, Notion, internal admin, SSH bastion. Pick one low-risk app for pilot (internal wiki, staging).',
+              vi: 'Đăng ký dash.cloudflare.com, xác thực email, bật 2FA cho admin. Mở Zero Trust, chọn team name (trở thành `https://<team>.cloudflareaccess.com`) và plan. Team name rất khó đổi — chọn tên ngắn, bền. Cloudflare tự là IdP mặc định; Restrict to account members rồi test login tại team domain.',
+              en: 'Sign up at dash.cloudflare.com, verify email, and enable admin 2FA. Open Zero Trust, pick a team name (it becomes `https://<team>.cloudflareaccess.com`) and a plan. The team name is hard to change — choose a short, durable name. Cloudflare is the default IdP; Restrict to account members, then test login at the team domain.',
             },
-            hubLink: '/use-cases/replace-vpn',
+            tip: {
+              vi: 'Cần phương thức thanh toán kể cả Free — Free không bị tính phí. Domain không bắt buộc để bắt đầu Zero Trust.',
+              en: 'A payment method is required even on Free — you are not charged on Free. A domain is not required to start Zero Trust.',
+            },
+            hubLink: '/glossary',
+          },
+          {
+            title: { vi: 'Admin, vai trò và break-glass', en: 'Admins, roles, and break-glass' },
+            body: {
+              vi: 'Admin nhận account role; nhân viên dùng dịch vụ chỉ cần enrollment + Access policy — không cần role trên account. Mời ít nhất hai Super Admin, dùng role hẹp cho daily work, và giữ Cloudflare login / OTP làm đường break-glass nếu Access khóa dashboard. Token API account-owned + expiry; xem audit log sau mỗi thay đổi admin.',
+              en: 'Admins get account roles; employees using the service only need enrollment + Access policies — not an account role. Invite at least two Super Admins, use narrower roles for daily work, and keep Cloudflare login / OTP as break-glass if Access ever wraps the dashboard. Prefer account-owned API tokens with expiry; review audit logs after every admin change.',
+            },
+            tip: {
+              vi: 'Nếu gắn Access lên chính dashboard admin, identity break-glass phải luôn thỏa policy — nếu không một rule sai khóa cả team.',
+              en: 'If you put Access in front of the admin dashboard, the break-glass identity must always satisfy that policy — otherwise a bad rule locks everyone out.',
+            },
           },
         ],
       },
       {
         id: 'c1-2',
-        title: { vi: 'Phần 2: ZTNA — thay thế VPN từng bước', en: 'Part 2: ZTNA — replace VPN step by step' },
+        title: { vi: 'Phần 2: Identity provider', en: 'Part 2: Identity provider' },
         description: {
-          vi: 'Cấp quyền theo application, không theo toàn mạng.',
-          en: 'Grant access per application, not per entire network.',
+          vi: 'Kết nối đăng nhập công ty — nền cho mọi policy Access, enrollment và Gateway sau này.',
+          en: 'Connect corporate login — the foundation for every later Access, enrollment, and Gateway policy.',
         },
         duration: { vi: '~45 phút', en: '~45 min' },
         lessons: [
           {
-            title: { vi: 'Kết nối Identity Provider', en: 'Connect your Identity Provider' },
+            title: { vi: 'Kết nối Entra ID, Okta hoặc Google', en: 'Connect Entra ID, Okta, or Google' },
             body: {
-              vi: 'Tích hợp Google Workspace, Azure AD hoặc Okta. Bật MFA ở IdP trước khi enforce policy trên Cloudflare.',
-              en: 'Integrate Google Workspace, Azure AD, or Okta. Enable MFA at the IdP before enforcing Cloudflare policies.',
+              vi: 'Callback URL: `https://<team-name>.cloudflareaccess.com/cdn-cgi/access/callback`. Đăng ký app trên IdP (không chọn gallery SaaS), dán callback, copy client ID / tenant / secret, cấp quyền đọc user và group, Grant admin consent, rồi Add IdP trong Cloudflare One → Settings → Authentication. Google còn cần JavaScript origin = team domain.',
+              en: 'Callback URL: `https://<team-name>.cloudflareaccess.com/cdn-cgi/access/callback`. Register an app in the IdP (not a gallery SaaS app), paste the callback, copy client ID / tenant / secret, grant user and group read permissions, Grant admin consent, then Add IdP in Cloudflare One → Settings → Authentication. Google also needs the JavaScript origin = team domain.',
+            },
+            tip: {
+              vi: 'Secret IdP chỉ hiện một lần và khi hết hạn mọi login dừng — đặt reminder gia hạn trước expiry.',
+              en: 'The IdP secret is shown once; when it expires all logins stop — set a reminder to rotate before expiry.',
             },
             hubLink: '/demo-guides#cloudflare-one',
           },
           {
-            title: { vi: 'Policy: ai được vào app nào', en: 'Policies: who can access which app' },
+            title: { vi: 'Test group claims, MFA và SCIM', en: 'Test group claims, MFA, and SCIM' },
             body: {
-              vi: 'Ví dụ: group Eng → staging admin; group All → company wiki. Log mọi session để audit.',
-              en: 'Example: Eng group → staging admin; All → company wiki. Log sessions for audit.',
+              vi: 'Dùng Test trên IdP: phải thấy email và groups. Bật MFA bắt buộc tại IdP trước khi enforce Access. Bật SCIM khi sẵn sàng để group/user đồng bộ khi offboard. Policy nên tham chiếu group IdP, không phải từng user. Cloudflare login mặc định vẫn giữ làm break-glass.',
+              en: 'Use Test on the IdP: you should see email and groups. Require MFA at the IdP before enforcing Access. Enable SCIM when ready so groups and users sync on offboarding. Policies should reference IdP groups, not individual users. Keep default Cloudflare login as break-glass.',
             },
-            hubLink: '/use-cases/replace-vpn',
+            tip: {
+              vi: 'Identity là nền — đừng viết policy theo group trước khi Test hiện group claims.',
+              en: 'Identity is the foundation — do not write group-based policies until Test shows group claims.',
+            },
+            hubLink: '/use-cases/secure-saas-access',
           },
         ],
       },
       {
         id: 'c1-3',
-        title: { vi: 'Phần 3: Secure browsing (SWG)', en: 'Part 3: Secure browsing (SWG)' },
+        title: { vi: 'Phần 3: Thiết bị — Cloudflare One Client', en: 'Part 3: Devices — Cloudflare One Client' },
         description: {
-          vi: 'Kiểm soát Internet browsing cho remote users.',
-          en: 'Control Internet browsing for remote users.',
+          vi: 'Enrollment, device profile (mode, split tunnel, BYOD) và posture — on-ramp + tín hiệu sức khỏe thiết bị.',
+          en: 'Enrollment, device profiles (mode, split tunnel, BYOD), and posture — the on-ramp plus device-health signals.',
         },
-        duration: { vi: '~35 phút', en: '~35 min' },
+        duration: { vi: '~60 phút', en: '~60 min' },
         lessons: [
           {
-            title: { vi: 'DNS filtering và malware', en: 'DNS filtering and malware' },
+            title: { vi: 'Enrollment và cài Cloudflare One Client', en: 'Enrollment and installing the Cloudflare One Client' },
             body: {
-              vi: 'Chặn category rủi ro, phishing domain. Kết hợp với agent WARP trên laptop user.',
-              en: 'Block risky categories and phishing domains. Combine with the WARP agent on user laptops.',
+              vi: 'Trước khi cài: Settings → WARP Client → Device enrollment permissions — Allow email ending in `@yourcompany.com` với IdP vừa nối. Nếu bỏ bước này, client báo “not allowed to enroll.” Cài WARP/Cloudflare One Client, chọn login to Cloudflare Zero Trust (không phải consumer 1.1.1.1), nhập team name, đăng nhập IdP. Dashboard phải hiện thiết bị Connected.',
+              en: 'Before installing: Settings → WARP Client → Device enrollment permissions — Allow emails ending in `@yourcompany.com` with the IdP you connected. Skip this and the client says “not allowed to enroll.” Install the WARP / Cloudflare One Client, choose login to Cloudflare Zero Trust (not consumer 1.1.1.1), enter the team name, and sign in via IdP. The dashboard should list the device as Connected.',
+            },
+            tip: {
+              vi: 'App chính thức là Cloudflare One Client; menu và binary vẫn ghi WARP — cùng một thứ. Cài root CA trước khi bật HTTP inspection.',
+              en: 'The official name is Cloudflare One Client; menus and the binary still say WARP — same app. Install the root CA before you turn on HTTP inspection.',
             },
             hubLink: '/use-cases/secure-remote-users',
           },
           {
-            title: { vi: 'CASB và DLP (khi sẵn sàng)', en: 'CASB and DLP (when ready)' },
+            title: { vi: 'Device profiles, split tunnel và BYOD', en: 'Device profiles, split tunnel, and BYOD' },
             body: {
-              vi: 'Sau khi ZTNA ổn định, thêm kiểm soát upload/download SaaS và dữ liệu nhạy cảm.',
-              en: 'After ZTNA is stable, add controls for SaaS uploads/downloads and sensitive data.',
+              vi: 'Laptop công ty: Default profile → Gateway with WARP, Switch Locked on, Auto connect 1 phút. Split tunnel Exclude (full protection). BYOD: profile riêng, Include mode chỉ company apps/networks — Exclude trên máy cá nhân đưa browsing cá nhân qua công ty. Profile cụ thể đặt trên profile rộng. Prefer CIDR hơn domain trong split tunnel.',
+              en: 'Company laptops: Default profile → Gateway with WARP, Switch Locked on, Auto connect 1 minute. Split tunnel Exclude (full protection). BYOD: a separate profile in Include mode listing only company apps/networks — Exclude on personal devices routes private browsing through the company. Put specific profiles above broad ones. Prefer CIDRs over domains in split tunnel lists.',
+            },
+            tip: {
+              vi: 'Đổi Exclude ↔ Include xóa danh sách — copy entries trước. Local Domain Fallback không đi qua Gateway (mất log/filter).',
+              en: 'Switching Exclude ↔ Include wipes the list — copy entries first. Local Domain Fallback bypasses Gateway (no logs or filtering).',
+            },
+          },
+          {
+            title: { vi: 'Device posture checks', en: 'Device posture checks' },
+            body: {
+              vi: 'Tạo check tái sử dụng (disk encryption, firewall, OS version, client certificate, EDR). Gắn vào Access và/hoặc Gateway. Posture được đánh giá lại liên tục — thiết bị hết compliant mất quyền. Tanium không dùng được trong Gateway policy (chỉ Access). Service-token enrollment không match selector identity — dùng OS hoặc managed network.',
+              en: 'Create reusable checks (disk encryption, firewall, OS version, client certificate, EDR). Attach them to Access and/or Gateway. Posture is re-evaluated continuously — a device that drops out of compliance loses access. Tanium is not supported in Gateway policies (Access only). Service-token enrollment cannot match identity selectors — use OS or managed network instead.',
+            },
+            tip: {
+              vi: 'Gói check phổ biến vào Access Group để một thay đổi áp dụng mọi app.',
+              en: 'Bundle common checks into an Access Group so one change applies across apps.',
             },
           },
         ],
       },
       {
         id: 'c1-4',
-        title: { vi: 'Phần 4: Mở rộng và vận hành', en: 'Part 4: Expand and operate' },
+        title: { vi: 'Phần 4: ZTNA — Access và connectors', en: 'Part 4: ZTNA — Access and connectors' },
         description: {
-          vi: 'Rollout rộng hơn và đo lường thành công.',
-          en: 'Broader rollout and measuring success.',
+          vi: 'Publish app theo identity, không theo toàn mạng — Tunnel outbound, policy group, Mesh/Appliance khi cần site-to-site.',
+          en: 'Publish apps by identity, not by whole network — outbound Tunnel, group policies, Mesh/Appliance when you need site-to-site.',
         },
-        duration: { vi: '~25 phút', en: '~25 min' },
+        duration: { vi: '~60 phút', en: '~60 min' },
         lessons: [
           {
-            title: { vi: 'Mở rộng theo từng phòng ban', en: 'Expand department by department' },
+            title: { vi: 'Tunnel outbound và public hostname', en: 'Outbound Tunnel and public hostname' },
             body: {
-              vi: 'Tránh big-bang. Mỗi wave có support channel và rollback plan.',
-              en: 'Avoid big-bang cutovers. Each wave needs a support channel and rollback plan.',
+              vi: 'Networks → Tunnels → Create cloudflared. Chạy connector trên host reach được app (outbound TCP 7844). Token là secret. Map public hostname (ví dụ `wiki.yourcompany.com`) → `localhost:port`. Checkpoint: connector Healthy. Cần zone trên Cloudflare cho hostname tự host.',
+              en: 'Networks → Tunnels → Create cloudflared. Run the connector on a host that can reach the app (outbound TCP 7844). The install token is a secret. Map a public hostname (for example `wiki.yourcompany.com`) → `localhost:port`. Checkpoint: connector Healthy. You need a Cloudflare zone for a self-hosted hostname.',
             },
+            tip: {
+              vi: 'Đặt tên tunnel theo location (`datacenter-1`). HA = thêm connector vào cùng tunnel.',
+              en: 'Name the tunnel after the location (`datacenter-1`). HA = add another connector to the same tunnel.',
+            },
+            hubLink: '/use-cases/replace-vpn',
           },
           {
-            title: { vi: 'Chỉ số theo dõi', en: 'Metrics to track' },
+            title: { vi: 'Access application và policy theo group', en: 'Access application and group policies' },
             body: {
-              vi: 'Số ticket VPN giảm, thời gian cấp quyền app mới, số sự cố malware. Review policy hàng quý.',
-              en: 'Fewer VPN tickets, time to grant new app access, malware incidents. Review policies quarterly.',
+              vi: 'Access controls → Applications → Self-hosted. Cùng hostname với Tunnel. Session 24h (ngắn hơn cho app nhạy cảm). Policy Allow: email ending in / IdP group + posture nếu cần. Instant auth khi một IdP; Authenticate with Cloudflare One Client cho user đã enroll. Dùng Access Group / rule group, không Allow Everyone.',
+              en: 'Access controls → Applications → Self-hosted. Same hostname as the Tunnel. Session 24h (shorter for sensitive apps). Allow policy: emails ending in / IdP group + posture if needed. Instant auth with a single IdP; Authenticate with Cloudflare One Client for already-enrolled users. Use Access Groups / rule groups — not Allow Everyone.',
+            },
+            tip: {
+              vi: 'App có iframe/nhiều hostname — khai báo nhiều domain trong một Access application. IaC (Terraform) khi số app tăng.',
+              en: 'Apps with iframes or many hostnames — list multiple domains in one Access application. Use IaC (Terraform) as the app count grows.',
+            },
+            hubLink: '/use-cases/replace-vpn',
+          },
+          {
+            title: { vi: 'Chọn connector: Tunnel, Mesh hay Appliance', en: 'Pick a connector: Tunnel, Mesh, or Appliance' },
+            body: {
+              vi: 'Tunnel: app/server và CIDR riêng, một chiều tới Cloudflare. Mesh (ex-WARP Connector): any-to-any giữa host/device/site. Appliance: cả chi nhánh. Có thể kết hợp. Host tunnel phải ra được Cloudflare:7844.',
+              en: 'Tunnel: apps/servers and private CIDRs, one-way to Cloudflare. Mesh (formerly WARP Connector): any-to-any between hosts, devices, and sites. Appliance: a whole branch. They can be combined. Tunnel hosts must reach Cloudflare on 7844.',
+            },
+            tip: {
+              vi: 'Quy tắc: Tunnel cho app, Mesh cho host-to-host, Appliance cho cả site — đừng dùng Tunnel inbound thay outbound.',
+              en: 'Rule of thumb: Tunnel for apps, Mesh for host-to-host, Appliance for a whole site — never replace outbound Tunnel with inbound ports.',
             },
           },
         ],
       },
       {
         id: 'c1-5',
-        title: { vi: 'Phần 5: Quản trị AI theo SASE', en: 'Part 5: Govern AI with SASE' },
-        description: { vi: 'Shadow AI, SWG/RBI, CASB/DLP và rollout theo rủi ro.', en: 'Shadow AI, SWG/RBI, CASB/DLP, and risk-based rollout.' },
+        title: { vi: 'Phần 5: Gateway — lọc web và Shadow IT', en: 'Part 5: Gateway — web filtering and Shadow IT' },
+        description: {
+          vi: 'DNS trước, rồi Network, rồi HTTP/TLS. Egress, Browser Isolation và khám phá SaaS/AI khi đã ổn định.',
+          en: 'DNS first, then Network, then HTTP/TLS. Add egress, Browser Isolation, and SaaS/AI discovery once that is stable.',
+        },
+        duration: { vi: '~90 phút', en: '~90 min' },
+        lessons: [
+          {
+            title: { vi: 'Gateway theo lớp: DNS → Network → HTTP', en: 'Gateway in layers: DNS → Network → HTTP' },
+            body: {
+              vi: 'DNS policies: Block Security Categories (malware, phishing, C2, cryptomining…). Test `malware.testcategory.com` — phải ra block page. Rồi Network, rồi HTTP với TLS decryption (cần root CA). Do Not Inspect cho cert-pinning và Microsoft 365. Start log/monitor rồi mới Block hàng loạt.',
+              en: 'DNS policies: Block Security Categories (malware, phishing, C2, cryptomining…). Test `malware.testcategory.com` — you should hit a block page. Then Network, then HTTP with TLS decryption (needs the root CA). Do Not Inspect for certificate pinning and Microsoft 365. Start in log/monitor before wide Blocks.',
+            },
+            tip: {
+              vi: 'DNS Locations bảo vệ office không cần client. HTTP inspection là engine cho DLP và AI prompt scanning.',
+              en: 'DNS Locations protect offices without the client. HTTP inspection is the engine for DLP and AI prompt scanning.',
+            },
+            hubLink: '/use-cases/secure-remote-users',
+          },
+          {
+            title: { vi: 'Egress policies và phiên bản IP', en: 'Egress policies and IP version' },
+            body: {
+              vi: 'Dedicated egress IPs khi SaaS allowlist theo IP công ty. Policy egress theo identity/group. Tắt IPv6 trên profile nếu destination dual-stack làm lệch IP allowlist. Kiểm tra IP thoát trên pilot device sau khi bật.',
+              en: 'Dedicated egress IPs when SaaS allowlists your company IPs. Scope egress policies by identity/group. Disable IPv6 on the profile if dual-stack destinations bypass the allowlist. Verify the egress IP on a pilot device after enabling.',
+            },
+          },
+          {
+            title: { vi: 'Remote Browser Isolation (RBI)', en: 'Remote Browser Isolation (RBI)' },
+            body: {
+              vi: 'Cô lập browsing rủi ro trên browser remote — clipboard, upload, print có thể tắt. Clientless cho contractor/BYOD không cài client (không có device posture). Dùng cho upload AI rủi ro cao hoặc site untrusted. Test user journey trước khi isolate cả category.',
+              en: 'Isolate risky browsing in a remote browser — clipboard, upload, and print can be disabled. Clientless covers contractors/BYOD with no client (no device posture). Use it for high-risk AI uploads or untrusted sites. Test the user journey before isolating a whole category.',
+            },
+            hubLink: '/cheatsheets/ai-protection-portfolio#swg-rbi',
+          },
+          {
+            title: { vi: 'Shadow IT và khám phá AI SaaS', en: 'Shadow IT and AI SaaS discovery' },
+            body: {
+              vi: 'CASB / Shadow IT: inventory SaaS và AI tools đang dùng, owner và độ nhạy dữ liệu. Đừng block mù khi chưa có sanctioned alternative — người dùng sẽ sang điện thoại và bạn mất visibility. Discover → allow có guardrail / isolate / block có chủ đích.',
+              en: 'CASB / Shadow IT: inventory SaaS and AI tools in use, owners, and data sensitivity. Do not blind-block without a sanctioned alternative — people switch to phones and you lose visibility. Discover → allow with guardrails / isolate / block on purpose.',
+            },
+            hubLink: '/cheatsheets/ai-protection-portfolio#casb',
+          },
+        ],
+      },
+      {
+        id: 'c1-6',
+        title: { vi: 'Phần 6: DLP — bảo vệ dữ liệu', en: 'Part 6: DLP — data protection' },
+        description: {
+          vi: 'Phát hiện PII, secret, source code trên HTTP đã giải mã — monitor trước, block sau. Thường cần Enterprise.',
+          en: 'Detect PII, secrets, and source code on decrypted HTTP — monitor first, block second. Typically Enterprise.',
+        },
         duration: { vi: '~45 phút', en: '~45 min' },
         lessons: [
-          { title: { vi: 'CASB: Shadow AI và SaaS posture', en: 'CASB: Shadow AI and SaaS posture' }, body: { vi: 'Inventory AI SaaS chưa được phê duyệt, review findings về token/user và ưu tiên remediation theo data sensitivity.', en: 'Inventory unsanctioned AI SaaS, review token/user findings, and prioritize remediation by data sensitivity.' }, hubLink: '/cheatsheets/ai-protection-portfolio#casb' },
-          { title: { vi: 'SWG + RBI: kiểm soát web AI', en: 'SWG + RBI: govern web AI' }, body: { vi: 'Dùng policy web để discover, allow/block hoặc steer AI destinations; dùng Browser Isolation cho browsing hoặc upload risk cao.', en: 'Use web policy to discover, allow/block, or steer AI destinations; use Browser Isolation for high-risk browsing or uploads.' }, hubLink: '/cheatsheets/ai-protection-portfolio#swg-rbi' },
-          { title: { vi: 'Radar, AI Gateway và rollout order', en: 'Radar, AI Gateway, and rollout order' }, body: { vi: 'Radar cung cấp intelligence, không enforce policy. Rollout identity/Access → SWG → CASB/DLP; app team dùng AI Gateway và WAF cho AI endpoint.', en: 'Radar provides intelligence, not policy enforcement. Roll out identity/Access → SWG → CASB/DLP; app teams use AI Gateway and WAF for AI endpoints.' }, hubLink: '/cheatsheets/ai-protection-portfolio#radar-sase' },
+          {
+            title: { vi: 'DLP profile và chạy log-only', en: 'DLP profiles and log-only' },
+            body: {
+              vi: 'Cần TLS decryption (Mô-đun 5). DLP Profiles: Credentials and Secrets, Financial, PII, Source Code — hoặc custom regex/dictionary. Confidence Medium; tăng nếu noisy. HTTP policy Allow + DLP profile trên mọi destination = log-only 1–2 tuần. Tune false positive trước Block.',
+              en: 'Needs TLS decryption (Part 5). DLP Profiles: Credentials and Secrets, Financial, PII, Source Code — or custom regex/dictionaries. Confidence Medium; raise it if noisy. HTTP policy Allow + DLP profile on all destinations = log-only for 1–2 weeks. Tune false positives before Block.',
+            },
+            tip: {
+              vi: 'Vàng cho DLP: monitor first, block second. Block ngay gây false positive và ticket.',
+              en: 'Golden rule for DLP: monitor first, block second. Immediate Block floods false positives and tickets.',
+            },
+          },
+          {
+            title: { vi: 'Enforce trên destination rủi ro cao', en: 'Enforce on high-risk destinations' },
+            body: {
+              vi: 'Sau baseline: Block (hoặc Isolate) khi DLP match tới unsanctioned file sharing / AI / personal email. Giữ Allow+log cho destination đã phê duyệt. Gắn profile tái sử dụng; sửa một profile là mọi policy đổi. Review DLP logs theo cadence.',
+              en: 'After a baseline: Block (or Isolate) on DLP match to unsanctioned file sharing / AI / personal email. Keep Allow+log for sanctioned destinations. Reuse profiles; editing one profile updates every policy. Review DLP logs on a cadence.',
+            },
+            hubLink: '/use-cases/govern-enterprise-ai',
+          },
+        ],
+      },
+      {
+        id: 'c1-7',
+        title: { vi: 'Phần 7: Kiểm soát AI, MCP và crawler', en: 'Part 7: AI controls, MCP, and crawlers' },
+        description: {
+          vi: 'Govern AI workforce (đừng cấm), MCP portals, AI Gateway cho app/agent, và AI crawler trên content public.',
+          en: 'Govern workforce AI (do not ban), MCP portals, AI Gateway for apps/agents, and AI crawlers on your public content.',
+        },
+        duration: { vi: '~70 phút', en: '~70 min' },
+        lessons: [
+          {
+            title: { vi: 'Govern AI: thấy, cho phép an toàn, chặn data leak', en: 'Govern AI: see it, allow safely, stop data leaks' },
+            body: {
+              vi: 'Cấm ChatGPT khiến người dùng sang điện thoại — mất visibility. Dùng Gateway/CASB để thấy tool, allow sanctioned với DLP trên prompt, RBI cho upload rủi ro, block hoặc isolate tool không phê duyệt. Suite: Shadow AI (5d) → control apps → DLP prompts → MCP agents → AI Gateway cho app bạn build.',
+              en: 'Banning ChatGPT pushes people onto phones — you lose visibility. Use Gateway/CASB to see tools, allow sanctioned ones with DLP on prompts, RBI for risky uploads, and block or isolate unsanctioned tools. Suite: Shadow AI (5d) → control apps → DLP prompts → MCP agents → AI Gateway for apps you build.',
+            },
+            tip: {
+              vi: 'Golden rule: govern, don’t ban.',
+              en: 'Golden rule: govern, don’t ban.',
+            },
+            hubLink: '/cheatsheets/ai-protection-portfolio#radar-sase',
+          },
+          {
+            title: { vi: 'MCP portals: Access cho AI agents', en: 'MCP portals: Access for AI agents' },
+            body: {
+              vi: 'Đưa MCP server nội bộ sau Access; portal một URL với tool đã curate, identity per-user và log. Managed OAuth chỉ khi server validate JWT Access (`Cf-Access-Jwt-Assertion`). Policy trên portal chỉ ẩn tool — enforce thật = Access làm OAuth provider. Agent tự trị dùng service token; tool call vào Access/Gateway logs.',
+              en: 'Put internal MCP servers behind Access; one portal URL with curated tools, per-user identity, and logs. Enable Managed OAuth only if the server validates the Access JWT (`Cf-Access-Jwt-Assertion`). Portal policies only hide tools — real enforcement is Access as the OAuth provider. Autonomous agents use service tokens; tool calls land in Access/Gateway logs.',
+            },
+            hubLink: '/cheatsheets/ai-protection-portfolio#ai-gateway',
+          },
+          {
+            title: { vi: 'AI Gateway: auth, DLP, cost cho model call', en: 'AI Gateway: auth, DLP, and cost for model calls' },
+            body: {
+              vi: 'AI Gateway ngồi trước model provider — không cần WARP hay TLS decrypt. Authenticated Gateway + token; BYOK để key không nằm trong app. Guardrails = an toàn nội dung; DLP = PII/secret (Enterprise). Response scanning buffer full body (chậm streaming). Không cache/rate-limit gateway dùng cho AI Search/RAG.',
+              en: 'AI Gateway sits in front of model providers — no WARP or TLS decrypt required. Authenticated Gateway + token; BYOK so keys never live in the app. Guardrails = content safety; DLP = PII/secrets (Enterprise). Response scanning buffers the full body (hurts streaming). Do not cache or rate-limit a gateway used for AI Search/RAG.',
+            },
+          },
+          {
+            title: { vi: 'Agentic Internet: AI crawler trên site của bạn', en: 'Agentic Internet: AI crawlers on your site' },
+            body: {
+              vi: 'AI Audit xem crawler nào hit content. Policy theo purpose (Training / Agent / Search): allow, block, hoặc block trên trang có ads. Default mới (domain mới từ 15 Sep 2026): Training/Agent blocked trên trang ads; Search allowed. Enforce robots.txt; Pay Per Crawl trả 402 nếu crawler chưa đồng ý trả. Lớp inbound — tách với SWG cho nhân viên.',
+              en: 'AI Audit shows which crawlers hit your content. Policy by purpose (Training / Agent / Search): allow, block, or block on pages with ads. New defaults (new domains from 15 Sep 2026): Training/Agent blocked on ad pages; Search allowed. Enforce robots.txt; Pay Per Crawl returns 402 until the crawler agrees to pay. This is the inbound lane — separate from SWG for employees.',
+            },
+          },
+        ],
+      },
+      {
+        id: 'c1-8',
+        title: { vi: 'Phần 8: Cloudflare WAN (tuỳ chọn)', en: 'Part 8: Cloudflare WAN (optional)' },
+        description: {
+          vi: 'Nối office, DC và cloud vào Cloudflare để cả site — không chỉ laptop WARP — được lọc và định tuyến. Enterprise; đụng production network.',
+          en: 'Connect offices, DCs, and cloud to Cloudflare so whole sites — not only WARP laptops — are filtered and routed. Enterprise; this touches production networking.',
+        },
+        duration: { vi: '~90 phút', en: '~90 min' },
+        lessons: [
+          {
+            title: { vi: 'On-ramp, MSS clamping và tunnel dư thừa', en: 'On-ramp, MSS clamping, and redundant tunnels' },
+            body: {
+              vi: 'Chọn GRE / IPsec / Connector / CNI. Làm MSS clamping trước — quên thì HTTP chạy còn HTTPS treo. Tạo hai tunnel, match PSK/lifetime trên firewall, health check Healthy. Một site trước; có console + rollback. IP overlap giữa site (`192.168.1.0/24` hai nơi) phá routing.',
+              en: 'Choose GRE / IPsec / Connector / CNI. Do MSS clamping first — skip it and HTTP works while HTTPS hangs. Create two tunnels, match PSK/lifetime on the firewall, health checks Healthy. One site first; have console access and a rollback. Overlapping site IPs (`192.168.1.0/24` in two places) break routing.',
+            },
+            tip: {
+              vi: 'Lịch maintenance window. BGP khi nhiều site thay đổi; static route cho site ổn định.',
+              en: 'Schedule a maintenance window. Use BGP when many sites change; static routes for stable sites.',
+            },
+            hubLink: '/use-cases/secure-remote-users',
+          },
+          {
+            title: { vi: 'Routing, Magic Firewall và gửi traffic qua Gateway', en: 'Routing, Magic Firewall, and sending traffic through Gateway' },
+            body: {
+              vi: 'Static hoặc BGP vào Magic routing table. Magic Firewall baseline. Gửi site traffic qua Gateway để DNS/HTTP/DLP giống user WARP. Test connectivity, HTTPS (MSS), failover tunnel, rồi mới retire MPLS/VPN site-to-site. Logpush Access+Gateway từ đầu.',
+              en: 'Static or BGP into the Magic routing table. Magic Firewall baseline. Send site traffic through Gateway so DNS/HTTP/DLP match WARP users. Test connectivity, HTTPS (MSS), and tunnel failover before retiring MPLS/site-to-site VPN. Turn on Logpush for Access+Gateway from day one.',
+            },
+          },
         ],
       },
     ],
     recommendedSequence: {
       vi: [
-        'Xác định users và identity provider',
-        'Liệt kê private apps và SaaS apps',
-        'Chọn first use case: VPN replacement hoặc secure browsing',
-        'Define access policies',
-        'Test với một nhóm user nhỏ',
-        'Mở rộng sang nhiều apps và users hơn',
-        'Inventory Shadow AI và pilot SWG policy cho AI destinations',
-        'Bổ sung DLP, CASB, email security hoặc network modernization',
+        'Đọc kiến trúc + checklist (team name, pilot 5–25 user, app đầu tiên, plan tier)',
+        'Tạo Cloudflare One, 2FA admin, Restrict Cloudflare IdP, break-glass Super Admin',
+        'Kết nối IdP, Test email+groups, MFA tại IdP, SCIM khi sẵn sàng',
+        'Enrollment permission → cài Cloudflare One Client trên laptop pilot',
+        'Device profile (managed vs BYOD) + posture tái sử dụng',
+        'Tunnel + Access cho một private app; Access Group thay snowflake',
+        'Gateway DNS (block malware) → Network → HTTP/TLS với Do Not Inspect',
+        'Shadow IT / AI discovery; DLP log-only rồi block destination rủi ro',
+        'Govern AI (MCP, AI Gateway) — không cấm mù; crawler policy cho site public',
+        'Tuỳ chọn: Cloudflare WAN một site, failover, rồi expand; retire VPN theo wave',
       ],
       en: [
-        'Identify users and identity provider',
-        'List private apps and SaaS apps',
-        'Choose first use case: VPN replacement or secure browsing',
-        'Define access policies',
-        'Test with a small user group',
-        'Expand to more apps and users',
-        'Inventory Shadow AI and pilot SWG policy for AI destinations',
-        'Add DLP, CASB, email, or network modernization',
+        'Read architecture + checklist (team name, 5–25 user pilot, first app, plan tier)',
+        'Create Cloudflare One, admin 2FA, restrict Cloudflare IdP, break-glass Super Admin',
+        'Connect the IdP, Test email+groups, MFA at the IdP, SCIM when ready',
+        'Enrollment permission → install Cloudflare One Client on a pilot laptop',
+        'Device profiles (managed vs BYOD) + reusable posture',
+        'Tunnel + Access for one private app; Access Groups instead of snowflakes',
+        'Gateway DNS (block malware) → Network → HTTP/TLS with Do Not Inspect exceptions',
+        'Shadow IT / AI discovery; DLP log-only then block high-risk destinations',
+        'Govern AI (MCP, AI Gateway) — do not blind-ban; crawler policy for public sites',
+        'Optional: Cloudflare WAN one site, prove failover, then expand; retire VPN in waves',
       ],
     },
     relatedUseCases: [
@@ -720,54 +976,62 @@ export const tracks: Track[] = [
     commonMistakes: {
       vi: [
         {
-          title: 'Cutover VPN big-bang không pilot',
-          detail: 'Rollout toàn công ty một đêm dễ gây outage. Pilot 1 app + 1 nhóm nhỏ; giữ VPN read-only song song vài tuần.',
+          title: 'Big-bang thay vì pilot → validate → expand',
+          detail: 'SASE reference architecture khuyên 1–2 use case (VPN replacement, rồi SWG). Mỗi phase: nhóm 5–25 user, rollback, rồi mới expand. Cutover một đêm gây outage.',
         },
         {
-          title: 'Access policy quá rộng (Allow Everyone)',
-          detail: 'Zero Trust thất bại nếu policy như VPN cũ. Gắn quyền theo IdP group + app cụ thể; review policy hàng quý.',
+          title: 'Team name chọn bừa',
+          detail: 'Team name thành `https://<name>.cloudflareaccess.com` — đổi sau phá login URL, Access app và enrollment. Chọn tên ngắn, bền trước Module 1.',
         },
         {
-          title: 'Bỏ qua MFA tại Identity Provider',
-          detail: 'Access chỉ mạnh bằng IdP. Bật MFA bắt buộc ở Google/Azure/Okta trước khi enforce Cloudflare policy.',
+          title: 'Bỏ MFA tại IdP hoặc không Test group claims',
+          detail: 'Access chỉ mạnh bằng IdP. Bật MFA ở Entra/Okta/Google và xác nhận Test hiện groups trước khi viết policy theo group.',
         },
         {
-          title: 'Bật CASB/DLP trước khi ZTNA ổn định',
-          detail: 'Thêm quá nhiều lớp cùng lúc làm support quá tải. Xong Access + WARP pilot trước; CASB/DLP ở wave 2.',
+          title: 'TLS inspect / DLP / AI prompt scan không có Do Not Inspect',
+          detail: 'HTTP inspection cần root CA. Cert-pinned apps và Microsoft 365 cần exception. DLP/AI chỉ thấy traffic đã decrypt. Log-only trước Block.',
         },
         {
-          title: 'Không triển khai WARP trên mọi thiết bị user',
-          detail: 'SWG/DNS policy không áp dụng nếu traffic không qua Cloudflare One client. MDM hoặc onboarding checklist cho laptop.',
+          title: 'BYOD chạy Exclude / full tunnel',
+          detail: 'Exclude trên máy cá nhân đưa browsing riêng tư qua công ty. BYOD dùng Include chỉ app/mạng công ty; managed laptop mới Exclude.',
         },
         {
-          title: 'Tunnel inbound thay vì outbound `cloudflared`',
-          detail: 'Mở port inbound vào datacenter tăng attack surface. Ưu tiên Tunnel outbound; firewall chỉ cho Cloudflare.',
+          title: 'Mở inbound thay vì Tunnel outbound; không break-glass',
+          detail: 'cloudflared chỉ cần outbound 7844. Giữ ≥2 Super Admin và Cloudflare login/OTP nếu Access bọc dashboard. Token API account-owned, có expiry.',
+        },
+        {
+          title: 'Cấm AI thay vì govern',
+          detail: 'Block ChatGPT đẩy usage sang điện thoại — mất log. Discover → allow có DLP/RBI → block có chủ đích. MCP cần Access làm OAuth, không chỉ ẩn trên portal.',
         },
       ],
       en: [
         {
-          title: 'Big-bang VPN cutover without a pilot',
-          detail: 'Company-wide overnight cutovers cause outages. Pilot one app + small group; keep VPN read-only in parallel for weeks.',
+          title: 'Big-bang instead of pilot → validate → expand',
+          detail: 'The SASE reference architecture recommends one or two use cases (VPN replacement, then SWG). Each phase: 5–25 users, a rollback, then expand. Overnight cutovers cause outages.',
         },
         {
-          title: 'Overly broad Access policies (Allow Everyone)',
-          detail: 'Zero Trust fails if policies mirror old VPN. Tie access to IdP groups + specific apps; review policies quarterly.',
+          title: 'Picking the team name casually',
+          detail: 'The team name becomes `https://<name>.cloudflareaccess.com` — changing it later breaks login URLs, Access apps, and enrollment. Choose a short, durable name before Module 1.',
         },
         {
-          title: 'Skipping MFA at the Identity Provider',
-          detail: 'Access is only as strong as your IdP. Require MFA in Google/Azure/Okta before enforcing Cloudflare policies.',
+          title: 'Skipping MFA at the IdP or not Testing group claims',
+          detail: 'Access is only as strong as your IdP. Require MFA in Entra/Okta/Google and confirm Test shows groups before writing group-based policies.',
         },
         {
-          title: 'Enabling CASB/DLP before ZTNA is stable',
-          detail: 'Too many layers at once overwhelms support. Finish Access + WARP pilot first; CASB/DLP in wave 2.',
+          title: 'TLS inspect / DLP / AI prompt scan without Do Not Inspect',
+          detail: 'HTTP inspection needs the root CA. Certificate-pinned apps and Microsoft 365 need exceptions. DLP/AI only see decrypted traffic. Log-only before Block.',
         },
         {
-          title: 'Not deploying WARP on all user devices',
-          detail: 'SWG/DNS policies do not apply if traffic bypasses the Cloudflare One client. Use MDM or a laptop onboarding checklist.',
+          title: 'BYOD on Exclude / full tunnel',
+          detail: 'Exclude on personal devices routes private browsing through the company. BYOD uses Include for company apps/networks only; managed laptops use Exclude.',
         },
         {
-          title: 'Inbound tunnels instead of outbound `cloudflared`',
-          detail: 'Opening inbound ports into the datacenter increases attack surface. Prefer outbound Tunnel; firewall allow Cloudflare only.',
+          title: 'Inbound ports instead of outbound Tunnel; no break-glass',
+          detail: 'cloudflared only needs outbound 7844. Keep ≥2 Super Admins and Cloudflare login/OTP if Access wraps the dashboard. Use account-owned API tokens with expiry.',
+        },
+        {
+          title: 'Banning AI instead of governing it',
+          detail: 'Blocking ChatGPT pushes usage onto phones — you lose logs. Discover → allow with DLP/RBI → block on purpose. MCP needs Access as OAuth, not merely hiding tools on a portal.',
         },
       ],
     },
