@@ -977,7 +977,7 @@ export const tracks: Track[] = [
       vi: [
         {
           title: 'Big-bang thay vì pilot → validate → expand',
-          detail: 'SASE reference architecture khuyên 1–2 use case (VPN replacement, rồi SWG). Mỗi phase: nhóm 5–25 user, rollback, rồi mới expand. Cutover một đêm gây outage.',
+          detail: 'Kiến trúc tham chiếu SASE khuyên 1–2 use case (thay VPN, rồi SWG). Mỗi phase: nhóm 5–25 user, rollback, rồi mới expand. Cutover một đêm gây outage.',
         },
         {
           title: 'Team name chọn bừa',

@@ -29,7 +29,7 @@ export type ReferenceArchitectureItem = {
 };
 
 export const referenceArchitectureIntro: LocalizedString = {
-  vi: 'Sơ đồ và tài liệu kiến trúc chính thức từ Cloudflare Architecture Center — kèm hình ảnh từ Reference Diagrams (developers.cloudflare.com/reference-architecture/diagrams).',
+  vi: 'Sơ đồ và tài liệu kiến trúc chính thức từ Cloudflare Architecture Center — kèm hình từ thư viện sơ đồ (developers.cloudflare.com/reference-architecture/diagrams).',
   en: 'Official diagrams and reference docs from the Cloudflare Architecture Center — with figures from Reference Diagrams (developers.cloudflare.com/reference-architecture/diagrams).',
 };
 
@@ -53,7 +53,7 @@ export const referenceSolutionLabels: Record<ReferenceSolution, LocalizedString>
 export const referenceArchitectureItems: ReferenceArchitectureItem[] = [
   {
     slug: 'sase',
-    title: { vi: 'Evolving to a SASE architecture with Cloudflare', en: 'Evolving to a SASE architecture with Cloudflare' },
+    title: { vi: 'Chuyển sang kiến trúc SASE với Cloudflare', en: 'Evolving to a SASE architecture with Cloudflare' },
     summary: {
       vi: 'Hợp nhất security và networking trên một control plane — thay patchwork appliance bằng Cloudflare One.',
       en: 'Consolidate security and networking on one control plane — replace appliance patchwork with Cloudflare One.',
@@ -66,7 +66,7 @@ export const referenceArchitectureItems: ReferenceArchitectureItem[] = [
   },
   {
     slug: 'security-architecture',
-    title: { vi: 'Cloudflare Security Architecture', en: 'Cloudflare Security Architecture' },
+    title: { vi: 'Kiến trúc bảo mật Cloudflare', en: 'Cloudflare Security Architecture' },
     summary: {
       vi: 'Cách mạng và nền tảng Cloudflare được thiết kế về security, vận hành và dịch vụ cho doanh nghiệp.',
       en: 'How Cloudflare’s network and platform are designed for security, operations, and enterprise services.',
@@ -79,7 +79,7 @@ export const referenceArchitectureItems: ReferenceArchitectureItem[] = [
   },
   {
     slug: 'cdn',
-    title: { vi: 'CDN Reference Architecture', en: 'CDN Reference Architecture' },
+    title: { vi: 'Kiến trúc tham chiếu CDN', en: 'CDN Reference Architecture' },
     summary: {
       vi: 'Thách thức web app truyền thống, cách CDN Cloudflare giải quyết, và thiết kế kiến trúc CDN.',
       en: 'Traditional web app challenges, how Cloudflare CDN solves them, and CDN architecture design.',
@@ -92,7 +92,7 @@ export const referenceArchitectureItems: ReferenceArchitectureItem[] = [
   },
   {
     slug: 'load-balancing',
-    title: { vi: 'Load Balancing Reference Architecture', en: 'Load Balancing Reference Architecture' },
+    title: { vi: 'Kiến trúc tham chiếu Load Balancing', en: 'Load Balancing Reference Architecture' },
     summary: {
       vi: 'Global và local traffic management — cho team vận hành web, hosting và network.',
       en: 'Global and local traffic management — for web, hosting, and network teams.',
@@ -104,7 +104,7 @@ export const referenceArchitectureItems: ReferenceArchitectureItem[] = [
   },
   {
     slug: 'magic-transit',
-    title: { vi: 'Magic Transit Reference Architecture', en: 'Magic Transit Reference Architecture' },
+    title: { vi: 'Kiến trúc tham chiếu Magic Transit', en: 'Magic Transit Reference Architecture' },
     summary: {
       vi: 'Kiến trúc và tùy chọn triển khai Magic Transit — DDoS protection ở tầng network.',
       en: 'Magic Transit architecture and deployment options — network-layer DDoS protection.',
@@ -116,7 +116,7 @@ export const referenceArchitectureItems: ReferenceArchitectureItem[] = [
   },
   {
     slug: 'email-security',
-    title: { vi: 'Email Security deployments', en: 'Email Security deployments' },
+    title: { vi: 'Triển khai Email Security', en: 'Email Security deployments' },
     summary: {
       vi: 'Kiến trúc chính của Cloudflare Email Security — phishing, BEC, DMARC.',
       en: 'Core architecture of Cloudflare Email Security — phishing, BEC, DMARC.',
@@ -128,7 +128,7 @@ export const referenceArchitectureItems: ReferenceArchitectureItem[] = [
   },
   {
     slug: 'secure-app-delivery',
-    title: { vi: 'Securely deliver applications with Cloudflare', en: 'Securely deliver applications with Cloudflare' },
+    title: { vi: 'Phân phối ứng dụng an toàn với Cloudflare', en: 'Securely deliver applications with Cloudflare' },
     summary: {
       vi: 'Bộ dịch vụ performance, security, reliability, development và Zero Trust cho ứng dụng.',
       en: 'Performance, security, reliability, development, and Zero Trust services for applications.',
@@ -141,7 +141,7 @@ export const referenceArchitectureItems: ReferenceArchitectureItem[] = [
   },
   {
     slug: 'ztna-policies',
-    title: { vi: 'Designing ZTNA access policies', en: 'Designing ZTNA access policies' },
+    title: { vi: 'Thiết kế policy truy cập ZTNA', en: 'Designing ZTNA access policies' },
     summary: {
       vi: 'Best practices xây policy Cloudflare Access / ZTNA hiệu quả.',
       en: 'Best practices for effective Cloudflare Access / ZTNA policies.',
@@ -153,7 +153,7 @@ export const referenceArchitectureItems: ReferenceArchitectureItem[] = [
   },
   {
     slug: 'vpn-migration',
-    title: { vi: 'Migrate from VPN to Zero Trust', en: 'Migrate from VPN to Zero Trust' },
+    title: { vi: 'Chuyển từ VPN sang Zero Trust', en: 'Migrate from VPN to Zero Trust' },
     summary: {
       vi: 'Chuyển từ VPN concentrator sang ZTNA cloud — bảo mật và chi phí tốt hơn.',
       en: 'Move from VPN concentrators to cloud ZTNA — better security and cost.',
@@ -165,7 +165,7 @@ export const referenceArchitectureItems: ReferenceArchitectureItem[] = [
   },
   {
     slug: 'zero-trust-startups',
-    title: { vi: 'Zero Trust for startups', en: 'Zero Trust for startups' },
+    title: { vi: 'Zero Trust cho startup', en: 'Zero Trust for startups' },
     summary: {
       vi: 'Xây nền tảng Zero Trust sớm với Cloudflare — đơn giản, đôi khi miễn phí.',
       en: 'Build Zero Trust early with Cloudflare — simple, sometimes free.',
@@ -177,7 +177,7 @@ export const referenceArchitectureItems: ReferenceArchitectureItem[] = [
   },
   {
     slug: 'waf-deployment',
-    title: { vi: 'Streamlined WAF deployment', en: 'Streamlined WAF deployment' },
+    title: { vi: 'Triển khai WAF thống nhất', en: 'Streamlined WAF deployment' },
     summary: {
       vi: 'Triển khai WAF thống nhất trên nhiều zone và application.',
       en: 'Deploy WAF consistently across zones and applications.',
@@ -190,7 +190,7 @@ export const referenceArchitectureItems: ReferenceArchitectureItem[] = [
   },
   {
     slug: 'fullstack-workers',
-    title: { vi: 'Fullstack applications on Workers', en: 'Fullstack applications on Workers' },
+    title: { vi: 'Ứng dụng fullstack trên Workers', en: 'Fullstack applications on Workers' },
     summary: {
       vi: 'Ví dụ kiến trúc fullstack thực tế — Workers, storage, compute phối hợp.',
       en: 'A practical fullstack architecture — Workers, storage, and compute together.',
@@ -203,7 +203,7 @@ export const referenceArchitectureItems: ReferenceArchitectureItem[] = [
   },
   {
     slug: 'ai-rag',
-    title: { vi: 'RAG architecture diagram', en: 'RAG architecture diagram' },
+    title: { vi: 'Sơ đồ kiến trúc RAG', en: 'RAG architecture diagram' },
     summary: {
       vi: 'Retrieval Augmented Generation — kết hợp retrieval và generative models trên Cloudflare.',
       en: 'Retrieval Augmented Generation — retrieval plus generative models on Cloudflare.',
@@ -215,7 +215,7 @@ export const referenceArchitectureItems: ReferenceArchitectureItem[] = [
   },
   {
     slug: 'serverless-global-apis',
-    title: { vi: 'Serverless global APIs', en: 'Serverless global APIs' },
+    title: { vi: 'API serverless toàn cầu', en: 'Serverless global APIs' },
     summary: {
       vi: 'Kiến trúc API serverless toàn cầu — Workers, D1, R2 tương tác thế nào.',
       en: 'Global serverless API architecture — how Workers, D1, and R2 interact.',
@@ -227,7 +227,7 @@ export const referenceArchitectureItems: ReferenceArchitectureItem[] = [
   },
   {
     slug: 'bot-management',
-    title: { vi: 'Bot management diagram', en: 'Bot management diagram' },
+    title: { vi: 'Sơ đồ quản lý bot', en: 'Bot management diagram' },
     summary: {
       vi: 'Phát hiện và giảm thiểu bot traffic — bảo vệ domain khỏi bot xấu.',
       en: 'Detect and mitigate bot traffic — protect domains from bad bots.',
@@ -239,7 +239,7 @@ export const referenceArchitectureItems: ReferenceArchitectureItem[] = [
   },
   {
     slug: 'distributed-web-performance',
-    title: { vi: 'Distributed web performance', en: 'Distributed web performance' },
+    title: { vi: 'Hiệu năng web phân tán', en: 'Distributed web performance' },
     summary: {
       vi: 'Pattern L7 giảm latency, tăng cache hit, cải thiện Core Web Vitals.',
       en: 'L7 pattern to cut latency, raise cache efficiency, and improve Core Web Vitals.',
@@ -252,7 +252,7 @@ export const referenceArchitectureItems: ReferenceArchitectureItem[] = [
   },
   {
     slug: 'saas-access-sase',
-    title: { vi: 'Secure SaaS access with SASE', en: 'Secure SaaS access with SASE' },
+    title: { vi: 'Truy cập SaaS an toàn với SASE', en: 'Secure SaaS access with SASE' },
     summary: {
       vi: 'Zero Trust cho SaaS — policy theo device, identity, network location.',
       en: 'Zero Trust for SaaS — policies by device, identity, and network location.',
@@ -265,7 +265,7 @@ export const referenceArchitectureItems: ReferenceArchitectureItem[] = [
   },
   {
     slug: 'r2-egress-free',
-    title: { vi: 'Egress-free storage multi-cloud', en: 'Egress-free storage multi-cloud' },
+    title: { vi: 'Lưu trữ đa cloud không phí egress', en: 'Egress-free storage multi-cloud' },
     summary: {
       vi: 'Dùng R2 để object storage đa cloud không phí egress.',
       en: 'Use R2 for multi-cloud object storage without egress fees.',
@@ -278,7 +278,7 @@ export const referenceArchitectureItems: ReferenceArchitectureItem[] = [
   },
   {
     slug: 'impl-zero-trust',
-    title: { vi: 'Zero Trust implementation guides', en: 'Zero Trust implementation guides' },
+    title: { vi: 'Hướng dẫn triển khai Zero Trust', en: 'Zero Trust implementation guides' },
     summary: {
       vi: 'Tổng hợp hướng dẫn triển khai Zero Trust từng bước trên Cloudflare.',
       en: 'Step-by-step Zero Trust implementation guides on Cloudflare.',
@@ -290,7 +290,7 @@ export const referenceArchitectureItems: ReferenceArchitectureItem[] = [
   },
   {
     slug: 'learning-replace-vpn',
-    title: { vi: 'Learning path: Replace your VPN', en: 'Learning path: Replace your VPN' },
+    title: { vi: 'Lộ trình học: Thay VPN', en: 'Learning path: Replace your VPN' },
     summary: {
       vi: 'Lộ trình học chính thức thay VPN bằng Cloudflare Zero Trust.',
       en: 'Official learning path to replace VPN with Cloudflare Zero Trust.',
@@ -302,7 +302,7 @@ export const referenceArchitectureItems: ReferenceArchitectureItem[] = [
   },
   {
     slug: 'find-by-solution',
-    title: { vi: 'Find by solution area', en: 'Find by solution area' },
+    title: { vi: 'Tìm theo nhóm giải pháp', en: 'Find by solution area' },
     summary: {
       vi: 'Duyệt tài liệu theo use case: SASE, CDN, Workers, data storage…',
       en: 'Browse docs by use case: SASE, CDN, Workers, data storage…',
