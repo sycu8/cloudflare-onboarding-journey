@@ -627,10 +627,10 @@ export const tracks: Track[] = [
         duration: { vi: '~50 phút', en: '~50 min' },
         lessons: [
           {
-            title: { vi: 'Kiến trúc & thứ tự triển khai', en: 'Architecture & rollout order' },
+            title: { vi: 'Kiến trúc và quy trình onboarding', en: 'Architecture & workflow' },
             body: {
-              vi: 'Zero Trust thay mô hình “lâu đài + hào” (VPN + firewall) bằng kiểm tra mọi request. Traffic đi một lần qua identity, posture, Access, Gateway, DLP và AI controls tại edge. Làm theo phase: Foundation → Devices → Access → Web filtering → Data & AI → Network; luôn pilot → validate → expand.',
-              en: 'Zero Trust replaces castle-and-moat (VPN + firewall) with check-every-request. Traffic passes identity, posture, Access, Gateway, DLP, and AI controls in one pass at the edge. Phases: Foundation → Devices → Access → Web filtering → Data & AI → Network; always pilot → validate → expand.',
+              vi: 'Bản đồ trực quan của toàn bộ dự án: bạn đang xây gì (kiến trúc tham chiếu) và thứ tự xây (quy trình onboarding). Mỗi khối gắn module (M1, M2, …) để nhảy thẳng sang hướng dẫn.',
+              en: 'A visual map of the whole project: what you are building (the reference architecture) and the order you build it in (the onboarding workflow). Every box is tagged with the module (M1, M2, …) that covers it, so you can jump straight to the how-to.',
             },
             tip: {
               vi: 'Nhiều team làm Mô-đun 1–3 tuần đầu (identity + thiết bị), Access và Gateway tuần hai, DLP/AI/WAN sau.',
@@ -936,6 +936,31 @@ export const tracks: Track[] = [
             body: {
               vi: 'Static hoặc BGP vào Magic routing table. Magic Firewall baseline. Gửi site traffic qua Gateway để DNS/HTTP/DLP giống user WARP. Test connectivity, HTTPS (MSS), failover tunnel, rồi mới retire MPLS/VPN site-to-site. Logpush Access+Gateway từ đầu.',
               en: 'Static or BGP into the Magic routing table. Magic Firewall baseline. Send site traffic through Gateway so DNS/HTTP/DLP match WARP users. Test connectivity, HTTPS (MSS), and tunnel failover before retiring MPLS/site-to-site VPN. Turn on Logpush for Access+Gateway from day one.',
+            },
+          },
+        ],
+      },
+      {
+        id: 'c1-9',
+        title: { vi: 'Phần 9: Tham chiếu — thực hành tốt và sổ tay cấu hình', en: 'Part 9: Reference — best practices and configuration runbook' },
+        description: {
+          vi: 'Hướng dẫn chiến lược rollout (10 golden rules) và bảng cấu hình đầy đủ từng field trên dashboard.',
+          en: 'Rollout strategy (10 golden rules) and the full dashboard field-by-field configuration runbook.',
+        },
+        duration: { vi: 'Tham chiếu', en: 'Reference' },
+        lessons: [
+          {
+            title: { vi: 'Hướng dẫn thực hành tốt (best-practice guide)', en: 'Best-practice guide' },
+            body: {
+              vi: 'Thứ tự rollout, chiến lược pilot → validate → expand, và các golden rule cho identity, thiết bị, Access, Gateway, DLP, AI và Cloudflare WAN.',
+              en: 'Rollout order, the pilot → validate → expand strategy, and golden rules for identity, devices, Access, Gateway, DLP, AI, and Cloudflare WAN.',
+            },
+          },
+          {
+            title: { vi: 'Sổ tay cấu hình (configuration runbook)', en: 'Configuration runbook' },
+            body: {
+              vi: 'Bảng tham chiếu đầy đủ: đường dẫn dashboard, field và giá trị mẫu cho từng module khi bạn đã hiểu luồng.',
+              en: 'Full quick reference: dashboard paths, fields, and sample values for every module once you know the flow.',
             },
           },
         ],

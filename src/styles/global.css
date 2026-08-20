@@ -258,6 +258,87 @@ html.dark .badge-accent {
   color: var(--cf-text);
 }
 
+.onboarding-md {
+  color: var(--cf-text);
+}
+.onboarding-md > h1:first-child {
+  display: none;
+}
+.onboarding-md h2 {
+  @apply mt-8 mb-3 text-lg font-semibold text-[var(--cf-text)];
+}
+.onboarding-md h3 {
+  @apply mt-6 mb-2 text-base font-semibold text-[var(--cf-text)];
+}
+.onboarding-md p,
+.onboarding-md li {
+  @apply text-sm leading-relaxed;
+  color: var(--cf-text-muted);
+}
+.onboarding-md strong {
+  color: var(--cf-text);
+  font-weight: 600;
+}
+.onboarding-md a {
+  color: var(--cf-accent);
+  text-underline-offset: 4px;
+}
+.onboarding-md a:hover {
+  text-decoration: underline;
+}
+.onboarding-md hr {
+  @apply my-6 border-[var(--cf-border)];
+}
+.onboarding-md ul,
+.onboarding-md ol {
+  @apply my-3 space-y-1 pl-5 text-sm;
+}
+.onboarding-md ul {
+  list-style: disc;
+}
+.onboarding-md ol {
+  list-style: decimal;
+}
+.onboarding-md table {
+  @apply my-4 w-full text-left text-sm;
+  border-collapse: collapse;
+}
+.onboarding-md th,
+.onboarding-md td {
+  @apply border border-[var(--cf-border)] px-3 py-2 align-top;
+}
+.onboarding-md th {
+  background: var(--cf-bg-elevated);
+  color: var(--cf-text);
+  font-weight: 600;
+}
+.onboarding-md blockquote {
+  @apply my-4 rounded-xl border border-[var(--cf-border)] bg-[var(--cf-surface)] px-4 py-3 text-sm;
+}
+.onboarding-md code {
+  @apply rounded bg-[var(--cf-bg-elevated)] px-1 py-0.5 font-mono text-xs;
+}
+.onboarding-md pre {
+  @apply my-4 overflow-x-auto rounded-xl border border-[var(--cf-border)] bg-[var(--cf-bg-elevated)] p-4 text-xs;
+}
+.onboarding-md figure {
+  @apply my-6;
+}
+.onboarding-md figure img {
+  @apply w-full rounded-xl border border-[var(--cf-border)] bg-white;
+  max-height: min(40rem, 85vh);
+  object-fit: contain;
+}
+.onboarding-md figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1.625;
+  color: var(--cf-text-muted);
+}
+.onboarding-md span.entag {
+  display: none;
+}
+
 .tutorial-body :global(strong) {
   color: var(--cf-text);
   font-weight: 600;

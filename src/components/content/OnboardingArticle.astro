@@ -1,0 +1,25 @@
+---
+import type { LocalizedString } from '../../i18n/types';
+import { ZT_ONBOARDING_SOURCE } from '../../data/zeroTrustOnboarding';
+
+type Props = {
+  html: LocalizedString;
+  sourceUrl: string;
+};
+const { html, sourceUrl } = Astro.props;
+---
+
+<section class="onboarding-article mb-8">
+  <div class="lang-vi prose-learn onboarding-md" set:html={html.vi} />
+  <div class="lang-en prose-learn onboarding-md" set:html={html.en} />
+  <p class="text-muted mt-6 text-xs leading-relaxed">
+    <span class="lang-vi">
+      Nguồn cộng đồng — không phải tài liệu chính thức của Cloudflare:{' '}
+      <a class="link" href={sourceUrl} target="_blank" rel="noopener noreferrer">{ZT_ONBOARDING_SOURCE}</a>
+    </span>
+    <span class="lang-en">
+      Community source — not an official Cloudflare publication:{' '}
+      <a class="link" href={sourceUrl} target="_blank" rel="noopener noreferrer">{ZT_ONBOARDING_SOURCE}</a>
+    </span>
+  </p>
+</section>

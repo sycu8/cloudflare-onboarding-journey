@@ -12,6 +12,8 @@ import {
   getLessonDiagrams,
   getLessonHeroImage,
 } from '../../../data/trackLessons';
+import { getOnboardingPageForLesson, onboardingHtml } from '../../../data/zeroTrustOnboarding';
+import OnboardingArticle from '../../../components/content/OnboardingArticle.astro';
 import { getDeploymentExamplesForLesson } from '../../../data/cloudflareResources';
 import { getProductBySlug } from '../../../data/productPages';
 import { tracks } from '../../../data/tracks';
@@ -37,6 +39,7 @@ const relatedProducts = (enrichment.productSlugs ?? [])
   .map((s) => getProductBySlug(s))
   .filter((p): p is NonNullable<ReturnType<typeof getProductBySlug>> => !!p);
 const deploymentExamples = getDeploymentExamplesForLesson(lesson.id);
+const onboardingPage = track.slug === 'cloudflare-one' ? getOnboardingPageForLesson(lesson.id) : undefined;
 ---
 
 <BaseLayout
@@ -67,9 +70,15 @@ const deploymentExamples = getDeploymentExamplesForLesson(lesson.id);
       </span>
     </p>
     <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={lesson.title} />
-    <LangText as="p" class="text-muted mt-3 max-w-3xl text-sm leading-relaxed" text={lesson.body} />
+    {onboardingPage ? null : (
+      <LangText as="p" class="text-muted mt-3 max-w-3xl text-sm leading-relaxed" text={lesson.body} />
+    )}
   </header>
 
+  {onboardingPage ? (
+    <OnboardingArticle html={onboardingHtml(onboardingPage)} sourceUrl={onboardingPage.sourceUrl} />
+  ) : (
+    <>
   {heroImage ? (
     <figure class="card mb-8 overflow-hidden p-0">
       <img
@@ -112,6 +121,8 @@ const deploymentExamples = getDeploymentExamplesForLesson(lesson.id);
       </p>
     ) : null}
   </section>
+    </>
+  )}
 
   {enrichment.bestPracticeNote ? (
     <section class="card mb-6 border-l-4 border-[var(--cf-accent)]">

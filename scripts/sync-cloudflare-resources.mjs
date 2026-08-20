@@ -272,6 +272,8 @@ const LESSON_KEYWORDS: Record<string, string[]> = {
   'c1-7-l4': ['ai crawler', 'bot management', 'radar'],
   'c1-8-l1': ['magic wan', 'ipsec', 'gre', 'cloudflare wan'],
   'c1-8-l2': ['magic wan', 'magic firewall', 'bgp'],
+  'c1-9-l1': ['best practice', 'zero trust', 'sase', 'rollout'],
+  'c1-9-l2': ['runbook', 'configuration', 'cloudflare one', 'gateway'],
 };
 
 function scoreResourceForLesson(resource: CloudflareResource, lessonId: string): number {
