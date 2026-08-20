@@ -237,66 +237,66 @@ export const trackLessonBestPractices: Record<string, BestPracticeNote> = {
   // ── Cloudflare One ──
   'c1-1-l1': {
     text: {
-      vi: 'Nếu nhiều policy trùng rule, tạo rule group (ví dụ "corporate users" với posture + email, hoặc "developers" tham chiếu group IdP) rồi tái sử dụng across policies.',
-      en: 'If many policies share duplicate rules, build a rule group (e.g. "corporate users" with posture and emails, or "developers" referencing an IdP group) and reuse it across policies.',
+      vi: 'Ưu tiên một hoặc hai use case (thay VPN, rồi SWG) và layer phần còn lại. Rollout SASE thất bại thường vì bật mọi thứ cùng lúc.',
+      en: 'Prioritize one or two use cases (VPN replacement, then SWG) and layer the rest. Failed SASE rollouts usually turn everything on at once.',
     },
-    sourceTitle: { vi: 'Access application — Best practices', en: 'Access application — Best practices' },
-    sourceUrl: ACCESS_BP,
-  },
-  'c1-1-l2': {
-    text: {
-      vi: 'App nội bộ có nhiều service phụ thuộc (iframe, embedded) — cân nhắc khai báo nhiều top-level domain trong một Access application thay vì tách rời.',
-      en: 'Internal apps with interdependent services (iFrames, embedded systems) — consider specifying multiple top-level domains in a single Access application.',
-    },
-    sourceTitle: { vi: 'Access application — Best practices', en: 'Access application — Best practices' },
-    sourceUrl: ACCESS_BP,
+    sourceTitle: { vi: 'SASE reference architecture', en: 'SASE reference architecture' },
+    sourceUrl: 'https://developers.cloudflare.com/reference-architecture/architectures/sase/',
   },
   'c1-2-l1': {
     text: {
-      vi: 'Rule group có thể gom yêu cầu device posture và email cụ thể, hoặc tham chiếu group trong IdP — giúp policy dễ maintain hơn rule từng user.',
-      en: 'Rule groups can combine device posture requirements and specific emails, or reference an IdP group — easier to maintain than per-user rules.',
+      vi: 'Rule group có thể gom device posture và email, hoặc tham chiếu group IdP — dễ maintain hơn rule từng user.',
+      en: 'Rule groups can combine device posture and emails, or reference an IdP group — easier to maintain than per-user rules.',
     },
     sourceTitle: { vi: 'Access application — Best practices', en: 'Access application — Best practices' },
     sourceUrl: ACCESS_BP,
   },
   'c1-2-l2': {
     text: {
-      vi: 'Trước production, đọc Application paths để hiểu wildcard/path. Policy trùng lặp → dùng rule group. Mục tiêu đơn giản hóa nhiều domain → một domain chính/app + IaC (Terraform) cho phần còn lại.',
-      en: 'Before production, review Application paths to understand wildcards. Duplicate policy rules → use rule groups. To streamline many domains → one primary domain per app and automate the rest with IaC (Terraform).',
+      vi: 'Trước production: hiểu wildcard/path. Policy trùng → rule group. Nhiều domain → một domain chính mỗi app + IaC (Terraform) cho phần còn lại.',
+      en: 'Before production, review wildcards/paths. Duplicate policy rules → rule groups. Many domains → one primary domain per app and automate the rest with IaC (Terraform).',
     },
     sourceTitle: { vi: 'Access application — Best practices', en: 'Access application — Best practices' },
     sourceUrl: ACCESS_BP,
-  },
-  'c1-3-l1': {
-    text: {
-      vi: 'Triển khai Gateway theo phase: bắt đầu DNS filtering (resolver hoặc WARP DNS-only), chặn category malware/phishing, xem DNS log — rồi mới thêm network/HTTP inspection.',
-      en: 'Roll out Gateway in phases: start with DNS filtering (resolver or WARP DNS-only), block malware/phishing categories, review DNS logs — then add network/HTTP inspection.',
-    },
-    sourceTitle: { vi: 'Gateway traffic policies — Get started', en: 'Gateway traffic policies — Get started' },
-    sourceUrl: GATEWAY_BP,
-  },
-  'c1-3-l2': {
-    text: {
-      vi: 'HTTP inspection (CASB/DLP) cần cài root cert và bật TLS decryption; tạo Do Not Inspect cho app dùng certificate pinning. Cấu hình DLP profile sau khi HTTPS inspection sẵn sàng.',
-      en: 'HTTP inspection (CASB/DLP) requires installing the root certificate and enabling TLS decryption; create Do Not Inspect policies for certificate-pinning apps. Configure DLP profiles after HTTPS inspection is ready.',
-    },
-    sourceTitle: { vi: 'Gateway traffic policies — Get started', en: 'Gateway traffic policies — Get started' },
-    sourceUrl: GATEWAY_BP,
   },
   'c1-4-l1': {
     text: {
-      vi: 'Không cần hoàn thành mọi phase Gateway cùng lúc — chọn phase phù hợp timeline và yêu cầu bảo mật; rollout từng wave thay vì big-bang.',
-      en: 'You do not need to complete every Gateway phase at once — choose phases that match your security requirements and timeline; roll out in waves rather than big-bang.',
+      vi: 'App nội bộ có iframe/service phụ thuộc — khai báo nhiều top-level domain trong một Access application thay vì tách rời.',
+      en: 'Internal apps with interdependent services (iframes, embedded systems) — specify multiple top-level domains in a single Access application.',
+    },
+    sourceTitle: { vi: 'Access application — Best practices', en: 'Access application — Best practices' },
+    sourceUrl: ACCESS_BP,
+  },
+  'c1-4-l2': {
+    text: {
+      vi: 'Một domain chính mỗi Access application giữ policy rõ; tự động hóa multi-app bằng Terraform hoặc IaC khác.',
+      en: 'One primary domain per Access application keeps policies clear; automate repetitive multi-app deployments with Terraform or other IaC.',
+    },
+    sourceTitle: { vi: 'Access application — Best practices', en: 'Access application — Best practices' },
+    sourceUrl: ACCESS_BP,
+  },
+  'c1-5-l1': {
+    text: {
+      vi: 'Gateway theo phase: DNS filtering trước (resolver hoặc WARP DNS-only), chặn malware/phishing, xem DNS log — rồi mới network/HTTP inspection.',
+      en: 'Roll out Gateway in phases: DNS filtering first (resolver or WARP DNS-only), block malware/phishing, review DNS logs — then add network/HTTP inspection.',
     },
     sourceTitle: { vi: 'Gateway traffic policies — Get started', en: 'Gateway traffic policies — Get started' },
     sourceUrl: GATEWAY_BP,
   },
-  'c1-4-l2': {
+  'c1-5-l3': {
     text: {
-      vi: 'Một domain chính mỗi Access application giúp policy rõ ràng; triển khai nhiều app/domain lặp lại nên tự động hóa bằng Terraform hoặc IaC khác.',
-      en: 'One primary domain per Access application keeps policies clear; automate repetitive multi-app/domain deployments with Terraform or other IaC.',
+      vi: 'Không cần hoàn thành mọi phase Gateway cùng lúc — chọn phase khớp timeline và yêu cầu bảo mật; rollout theo wave.',
+      en: 'You do not need every Gateway phase at once — choose phases that match your timeline and security requirements; roll out in waves.',
     },
-    sourceTitle: { vi: 'Access application — Best practices', en: 'Access application — Best practices' },
-    sourceUrl: ACCESS_BP,
+    sourceTitle: { vi: 'Gateway traffic policies — Get started', en: 'Gateway traffic policies — Get started' },
+    sourceUrl: GATEWAY_BP,
+  },
+  'c1-6-l1': {
+    text: {
+      vi: 'HTTP inspection (CASB/DLP) cần root cert và TLS decryption; Do Not Inspect cho app certificate pinning. Cấu hình DLP sau khi HTTPS inspection sẵn sàng.',
+      en: 'HTTP inspection (CASB/DLP) requires the root certificate and TLS decryption; create Do Not Inspect policies for certificate-pinning apps. Configure DLP after HTTPS inspection is ready.',
+    },
+    sourceTitle: { vi: 'Gateway traffic policies — Get started', en: 'Gateway traffic policies — Get started' },
+    sourceUrl: GATEWAY_BP,
   },
 };

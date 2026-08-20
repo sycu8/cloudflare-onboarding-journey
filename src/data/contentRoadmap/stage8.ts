@@ -138,7 +138,7 @@ export const stage8: ContentRoadmapStage = {
         level: 'beginner',
         filterTags: ['zero-trust'],
         sourceUrls: ['https://developers.cloudflare.com/use-cases/company-security/internet-access/'],
-        relatedExistingRoutes: ['/use-cases/secure-remote-users', '/tracks/cloudflare-one/c1-2-l1'],
+        relatedExistingRoutes: ['/use-cases/secure-remote-users', '/tracks/cloudflare-one/c1-3-l1'],
         relatedCloudflareProducts: ['WARP', 'Gateway'],
         prerequisites: ['c1-warp'],
       },

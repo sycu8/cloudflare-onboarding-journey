@@ -85,7 +85,7 @@ export const stage7: ContentRoadmapStage = {
         level: 'beginner',
         filterTags: ['zero-trust'],
         sourceUrls: ['https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/warp/'],
-        relatedExistingRoutes: ['/tracks/cloudflare-one/c1-2-l1', '/use-cases/secure-remote-users'],
+        relatedExistingRoutes: ['/tracks/cloudflare-one/c1-3-l1', '/use-cases/secure-remote-users'],
         relatedCloudflareProducts: ['WARP'],
         prerequisites: ['c1-gateway'],
         commonMistakesVi: ['Triển khai WARP hàng loạt không pilot group và exception policy.'],

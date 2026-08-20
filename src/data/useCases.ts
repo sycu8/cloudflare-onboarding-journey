@@ -727,8 +727,8 @@ export const useCaseTrackLabels: Record<
   'cloudflare-one': {
     title: { vi: 'Cloudflare One', en: 'Cloudflare One' },
     headline: {
-      vi: 'Zero Trust, ZTNA, SWG, remote users và thay thế VPN.',
-      en: 'Zero Trust, ZTNA, SWG, remote users, and VPN replacement.',
+      vi: 'Zero Trust, ZTNA, WARP, Gateway, DLP, AI controls và thay thế VPN.',
+      en: 'Zero Trust, ZTNA, WARP, Gateway, DLP, AI controls, and VPN replacement.',
     },
     trackHref: '/tracks/cloudflare-one',
   },
