@@ -1,0 +1,179 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/chrome/Breadcrumbs.astro';
+import LangText from '../components/ui/LangText.astro';
+import CTASection from '../components/content/CTASection.astro';
+import {
+  allEnterpriseSections,
+  enterprisePageIntro,
+  enterpriseTopicNav,
+  enterpriseSourceNote,
+  indochinaEnterpriseBenefits,
+  ENTERPRISE_OFFICIAL_URL,
+  SUCCESS_OFFERINGS_URL,
+  CONTACT_SALES_URL,
+  VN_PARTNER_HELPER_URL,
+} from '../data/enterprise';
+---
+
+<BaseLayout
+  title={{
+    vi: 'Enterprise, Premium Success, TAM & Professional Services',
+    en: 'Enterprise, Premium Success, TAM & Professional Services',
+  }}
+  description={{
+    vi: 'Ưu điểm gói Enterprise, tầm quan trọng nâng cấp, Premium Success, TAM, Professional Services — và 3 lý do mua qua đối tác Indochina (VAT, tư vấn triển khai, Cloudflare local team).',
+    en: 'Enterprise advantages, why upgrades matter, Premium Success, TAM, Professional Services — plus 3 reasons to buy via an Indochina partner (VAT, consult & deploy, Cloudflare local team).',
+  }}
+  canonicalPath="/enterprise"
+  showProgressBar
+>
+  <Breadcrumbs
+    items={[
+      { href: '/resources', label: { vi: 'Tài nguyên', en: 'Resources', km: 'Resources' } },
+      { href: '/enterprise', label: { vi: 'Enterprise', en: 'Enterprise', km: 'Enterprise' } },
+    ]}
+  />
+
+  <header class="mb-8">
+    <LangText
+      as="h1"
+      class="text-2xl font-semibold md:text-3xl"
+      text={{
+        vi: 'Gói Enterprise: Success, TAM, Professional Services & đối tác Indochina',
+        en: 'Enterprise: Success, TAM, Professional Services & Indochina partners',
+        km: 'Enterprise: Success, TAM, Professional Services & Indochina partners',
+      }}
+    />
+    <LangText as="p" class="text-muted mt-2 max-w-3xl text-sm leading-relaxed md:text-base" text={enterprisePageIntro} />
+    <p class="mt-3 flex flex-wrap gap-3 text-sm">
+      <a class="link" href="/plans">
+        <span class="lang-vi">So sánh gói Free → Enterprise →</span>
+        <span class="lang-en">Compare Free → Enterprise plans →</span>
+        <span class="lang-km">Compare Free → Enterprise plans →</span>
+      </a>
+      <a class="link" href={ENTERPRISE_OFFICIAL_URL} target="_blank" rel="noopener noreferrer">
+        <span class="lang-vi">Enterprise chính thức ↗</span>
+        <span class="lang-en">Official Enterprise ↗</span>
+        <span class="lang-km">Official Enterprise ↗</span>
+      </a>
+      <a class="link" href={SUCCESS_OFFERINGS_URL} target="_blank" rel="noopener noreferrer">
+        <span class="lang-vi">Success Offerings ↗</span>
+        <span class="lang-en">Success Offerings ↗</span>
+        <span class="lang-km">Success Offerings ↗</span>
+      </a>
+    </p>
+  </header>
+
+  <nav class="card mb-8 flex flex-wrap gap-2 p-4 text-sm" aria-label="Topics">
+    <span class="text-muted w-full text-xs font-medium uppercase tracking-wide">
+      <span class="lang-vi">Chủ đề</span>
+      <span class="lang-en">Topics</span>
+      <span class="lang-km">ប្រធានបទ</span>
+    </span>
+    {
+      enterpriseTopicNav.map((t) => (
+        <a href={`#${t.id}`} class="badge hover:border-[var(--cf-accent)]">
+          <span class="lang-vi">{t.label.vi}</span>
+          <span class="lang-en">{t.label.en}</span>
+          <span class="lang-km">{t.label.en}</span>
+        </a>
+      ))
+    }
+  </nav>
+
+  <div class="space-y-10">
+    {
+      allEnterpriseSections.map((section) => (
+        <section id={section.id} class="scroll-mt-24">
+          <LangText as="h2" class="text-xl font-semibold" text={section.title} />
+          <LangText as="p" class="text-muted mt-2 max-w-3xl text-sm leading-relaxed" text={section.summary} />
+          <ul class="text-muted mt-4 list-disc space-y-2 pl-5 text-sm leading-relaxed">
+            {section.bullets.map((b) => (
+              <li>
+                <span class="lang-vi">{b.vi}</span>
+                <span class="lang-en">{b.en}</span>
+                <span class="lang-km">{b.km ?? b.en}</span>
+              </li>
+            ))}
+          </ul>
+          {section.id === 'partner-vietnam' ? (
+            <p class="mt-4 flex flex-wrap gap-3 text-sm">
+              <a class="link" href={VN_PARTNER_HELPER_URL} target="_blank" rel="noopener noreferrer">
+                <span class="lang-vi">Trợ lý Support case (đối tác) ↗</span>
+                <span class="lang-en">Partner Support case helper ↗</span>
+                <span class="lang-km">Partner Support case helper ↗</span>
+              </a>
+              <a class="link" href="/workshop">
+                <span class="lang-vi">Đăng ký hội thảo với đối tác →</span>
+                <span class="lang-en">Workshop with a partner →</span>
+                <span class="lang-km">Workshop with a partner →</span>
+              </a>
+            </p>
+          ) : null}
+        </section>
+      ))
+    }
+
+    <section id="indochina" class="scroll-mt-24">
+      <LangText
+        as="h2"
+        class="text-xl font-semibold"
+        text={{
+          vi: '3 ưu điểm chính khi mua Enterprise tại khu vực Indochina',
+          en: '3 key advantages of buying Enterprise in Indochina',
+          km: '3 key advantages of buying Enterprise in Indochina',
+        }}
+      />
+      <LangText
+        as="p"
+        class="text-muted mt-2 max-w-3xl text-sm leading-relaxed"
+        text={{
+          vi: 'Mua qua đối tác khu vực Indochina (ví dụ Việt Nam) thường mang lại ba lợi ích vận hành và tài chính rõ ràng hơn so với tự mua trực tiếp nước ngoài.',
+          en: 'Buying through an Indochina-region partner (for example in Vietnam) usually delivers three clearer operational and financial benefits than purchasing abroad alone.',
+        }}
+      />
+      <ol class="mt-6 grid gap-4 md:grid-cols-3">
+        {
+          indochinaEnterpriseBenefits.map((b, i) => (
+            <li class="card flex h-full flex-col p-5">
+              <span class="text-xs font-semibold tracking-wide text-[var(--cf-accent)]">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <LangText as="h3" class="mt-2 text-base font-semibold" text={b.title} />
+              <LangText as="p" class="text-muted mt-2 flex-1 text-sm leading-relaxed" text={b.detail} />
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+  </div>
+
+  <aside class="card mt-10 border-dashed p-4 text-xs leading-relaxed" style="border-color: var(--cf-border)">
+    <LangText as="p" class="text-muted" text={enterpriseSourceNote} />
+  </aside>
+
+  <CTASection
+    title={{
+      vi: 'Sẵn sàng trao đổi về Enterprise?',
+      en: 'Ready to talk Enterprise?',
+    }}
+    description={{
+      vi: 'Liên hệ Cloudflare Sales cho báo giá chính thức, hoặc đăng ký workshop với đối tác tại Việt Nam để được tư vấn VAT, triển khai và phối hợp local team.',
+      en: 'Contact Cloudflare Sales for an official quote, or register for a Vietnam partner workshop for VAT, deployment, and local-team coordination advice.',
+    }}
+    cta={{ href: '/workshop', label: { vi: 'Đăng ký hội thảo', en: 'Workshop signup' } }}
+  />
+  <p class="mt-4 flex flex-wrap justify-center gap-4 text-sm">
+    <a class="link" href={CONTACT_SALES_URL} target="_blank" rel="noopener noreferrer">
+      <span class="lang-vi">Liên hệ Enterprise Sales ↗</span>
+      <span class="lang-en">Contact Enterprise Sales ↗</span>
+      <span class="lang-km">Contact Enterprise Sales ↗</span>
+    </a>
+    <a class="link" href="/plans#key-differences">
+      <span class="lang-vi">Business vs Enterprise trên hub →</span>
+      <span class="lang-en">Business vs Enterprise on this hub →</span>
+      <span class="lang-km">Business vs Enterprise on this hub →</span>
+    </a>
+  </p>
+</BaseLayout>

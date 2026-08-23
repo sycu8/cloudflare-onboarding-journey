@@ -29,6 +29,7 @@ export const mobileNavPrimary: NavItem[] = [
 /** Mobile drawer — collapsed under "Thêm" */
 export const mobileNavMore: NavItem[] = [
   { href: '/workshop', label: { vi: 'Hội thảo', en: 'Workshop', km: 'សិក្ខាសាលា' } },
+  { href: '/enterprise', label: { vi: 'Enterprise', en: 'Enterprise', km: 'Enterprise' } },
   { href: '/content-roadmap', label: { vi: 'Lộ trình nội dung', en: 'Content Roadmap', km: 'ផ្លូវមាតិកា' } },
   { href: '/roadmaps', label: { vi: 'Roadmap vai trò', en: 'Role roadmaps', km: 'ផ្លូវតាមតួនាទី' } },
   { href: '/first-week', label: { vi: 'Tuần đầu (7 ngày)', en: 'First week', km: 'សប្តាហ៍ទី ១ (៧ ថ្ងៃ)' } },

@@ -99,6 +99,17 @@ export const resources: ResourceCard[] = [
     status: 'available',
   },
   {
+    slug: 'enterprise-success',
+    title: { vi: 'Enterprise, Premium Success & TAM', en: 'Enterprise, Premium Success & TAM' },
+    description: {
+      vi: 'Ưu điểm Enterprise, Premium Success, TAM, Professional Services — và 3 lợi ích mua qua đối tác Indochina.',
+      en: 'Enterprise advantages, Premium Success, TAM, Professional Services — plus 3 Indochina partner buying benefits.',
+    },
+    type: 'external',
+    href: '/enterprise',
+    status: 'available',
+  },
+  {
     slug: 'beginner-checklist',
     title: { vi: 'Beginner Cloudflare Checklist', en: 'Beginner Cloudflare Checklist' },
     description: {
