@@ -253,8 +253,7 @@ jobs:
 
       - name: Smoke test production
         run: |
-          echo "Pages preview URL: ${{ steps.deploy.outputs.deployment-url }}"
-          node scripts/wait-for-deploy.mjs "${{ steps.deploy.outputs.deployment-url }}"
+          echo "Pages preview URL (informational): ${{ steps.deploy.outputs.deployment-url }}"
           node scripts/wait-for-deploy.mjs "${{ env.PUBLIC_SITE_URL_PROD }}"
           for attempt in 1 2 3 4 5; do
             if node scripts/smoke-test.mjs "${{ env.PUBLIC_SITE_URL_PROD }}"; then
