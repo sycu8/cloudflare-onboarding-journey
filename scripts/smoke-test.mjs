@@ -112,6 +112,7 @@ const ROUTES = [
   '/changelog',
   '/status',
   '/plans',
+  '/enterprise',
   '/demo-guides',
   '/content-delivery',
   '/solutions',
