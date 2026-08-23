@@ -5,6 +5,11 @@ import { postWorkersIntro } from './blogPosts/workers-intro';
 import { postWorkersAi } from './blogPosts/workers-ai';
 import { postAiGateway } from './blogPosts/ai-gateway';
 import { postDeveloperPlatform } from './blogPosts/developer-platform';
+import { postAiGatewayChiPhiToken } from './blogPosts/ai-gateway-chi-phi-token';
+import { postObservabilityLogsWorkersChoNguoiMoi } from './blogPosts/observability-logs-workers-cho-nguoi-moi';
+import { postImageOptimizationCdnTocDo } from './blogPosts/image-optimization-cdn-toc-do';
+import { postRateLimitingBaoVeFormLogin } from './blogPosts/rate-limiting-bao-ve-form-login';
+import { postSandboxChayCodeAnToan } from './blogPosts/sandbox-chay-code-an-toan';
 import { postBotManagementPhanBietNguoiVaBot } from './blogPosts/bot-management-phan-biet-nguoi';
 import { postD1SqliteEdgeChoAppNho } from './blogPosts/d1-sqlite-edge-cho-app';
 import { postAgentsSdkAgentAiTrenCloudflare } from './blogPosts/agents-sdk-agent-ai-tren';
@@ -115,6 +120,11 @@ export const blogPosts: BlogPost[] = [
   postAgentsSdkAgentAiTrenCloudflare,
   postWranglerDeployTuMayTinhLenEdge,
   postSslTlsHttpsCloudflareChoNguoiMoi,
+  postAiGatewayChiPhiToken,
+  postObservabilityLogsWorkersChoNguoiMoi,
+  postImageOptimizationCdnTocDo,
+  postRateLimitingBaoVeFormLogin,
+  postSandboxChayCodeAnToan,
 ].sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
 
 export function getBlogPost(slug: string): BlogPost | undefined {
