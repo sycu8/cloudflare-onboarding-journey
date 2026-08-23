@@ -142,7 +142,7 @@ jobs:
             --commit-dirty=true 2>&1 | tee "$LOG"
           URL=$(grep 'Deployment complete' "$LOG" | grep -oE 'https://[a-z0-9-]+\.[a-z0-9.-]+\.pages\.dev' | head -1)
           if [ -z "$URL" ]; then
-            URL=$(grep -oE 'https://[a-z0-9-]+\.[a-z0-9.-]+\.pages\.dev' "$LOG" | grep -Ev '/(head|main)\.' | head -1)
+            URL=$(grep -oE 'https://[a-z0-9-]+\.[a-z0-9.-]+\.pages\.dev' "$LOG" | grep -vE 'https://(head|main)\.' | head -1)
           fi
           if [ -z "$URL" ]; then
             echo "Could not parse deployment URL from wrangler output"
@@ -155,10 +155,7 @@ jobs:
         if: steps.deploy.outputs.deployment-url != ''
         run: |
           URL="${{ steps.deploy.outputs.deployment-url }}"
-          for i in $(seq 1 30); do
-            if curl -sf "${URL%/}/" >/dev/null; then echo "UAT ready"; break; fi
-            sleep 2
-          done
+          node scripts/wait-for-deploy.mjs "$URL"
           for attempt in 1 2 3 4 5; do
             if node scripts/smoke-test.mjs "$URL"; then
               exit 0
@@ -244,7 +241,7 @@ jobs:
             --commit-dirty=true 2>&1 | tee "$LOG"
           URL=$(grep 'Deployment complete' "$LOG" | grep -oE 'https://[a-z0-9-]+\.[a-z0-9.-]+\.pages\.dev' | head -1)
           if [ -z "$URL" ]; then
-            URL=$(grep -oE 'https://[a-z0-9-]+\.[a-z0-9.-]+\.pages\.dev' "$LOG" | grep -Ev '/(head|main)\.' | head -1)
+            URL=$(grep -oE 'https://[a-z0-9-]+\.[a-z0-9.-]+\.pages\.dev' "$LOG" | grep -vE 'https://(head|main)\.' | head -1)
           fi
           if [ -z "$URL" ]; then
             echo "Could not parse deployment URL from wrangler output"
@@ -259,10 +256,7 @@ jobs:
           smoke_with_retry() {
             local url="$1"
             echo "Smoke test → $url"
-            for i in $(seq 1 30); do
-              if curl -sf "${url%/}/" >/dev/null; then echo "URL ready: $url"; break; fi
-              sleep 2
-            done
+            node scripts/wait-for-deploy.mjs "$url"
             for attempt in 1 2 3 4 5; do
               if node scripts/smoke-test.mjs "$url"; then
                 return 0
