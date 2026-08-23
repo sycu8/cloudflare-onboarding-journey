@@ -4,6 +4,19 @@
  */
 const BASE = (process.argv[2] || 'http://127.0.0.1:4321').replace(/\/$/, '');
 const IS_LOCAL_PREVIEW = /^https?:\/\/(?:127\.0\.0\.1|localhost)(?::\d+)?$/i.test(BASE);
+/** Deploy hash / branch aliases on Pages lack R2 bindings for /assets/* (503). */
+const IS_EPHEMERAL_PAGES = (() => {
+  try {
+    const host = new URL(BASE).hostname;
+    return (
+      /\.cloudflare-starter-hub(-uat)?\.pages\.dev$/i.test(host) &&
+      !/^cloudflare-starter-hub(-uat)?\.pages\.dev$/i.test(host)
+    );
+  } catch {
+    return false;
+  }
+})();
+const R2_ASSET_PREVIEW = IS_LOCAL_PREVIEW || IS_EPHEMERAL_PAGES;
 
 const ROUTES = [
   '/',
@@ -216,8 +229,8 @@ for (const path of ASSET_ROUTES) {
   try {
     const res = await fetch(`${BASE}${path}`, { redirect: 'follow' });
     if (!res.ok) {
-      if (IS_LOCAL_PREVIEW && res.status === 503 && path.startsWith('/assets/')) {
-        warnings.push(`${path} → HTTP 503 (local Pages preview has no R2 asset binding)`);
+      if (R2_ASSET_PREVIEW && res.status === 503 && path.startsWith('/assets/')) {
+        warnings.push(`${path} → HTTP 503 (R2 /assets/* unavailable on Pages preview URL)`);
       } else {
         errors.push(`${path} → HTTP ${res.status}`);
       }
@@ -337,8 +350,8 @@ for (const path of toCheck) {
   try {
     const { status, ok } = await fetchPathResolved(path);
     if (!ok) {
-      if (IS_LOCAL_PREVIEW && status === 503 && path.startsWith('/assets/')) {
-        warnings.push(`discovered link ${path} → HTTP 503 (local Pages preview has no R2 asset binding)`);
+      if (R2_ASSET_PREVIEW && status === 503 && path.startsWith('/assets/')) {
+        warnings.push(`discovered link ${path} → HTTP 503 (R2 /assets/* unavailable on Pages preview URL)`);
       } else {
         errors.push(`discovered link ${path} → HTTP ${status}`);
       }
