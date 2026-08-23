@@ -139,7 +139,10 @@ jobs:
             --project-name="$PROJECT" \
             --branch="$BRANCH" \
             --commit-dirty=true 2>&1 | tee "$LOG"
-          URL=$(grep -oE 'https://[a-z0-9-]+\.[a-z0-9.-]+\.pages\.dev' "$LOG" | tail -1)
+          URL=$(grep 'Deployment complete' "$LOG" | grep -oE 'https://[a-z0-9-]+\.[a-z0-9.-]+\.pages\.dev' | head -1)
+          if [ -z "$URL" ]; then
+            URL=$(grep -oE 'https://[a-z0-9-]+\.[a-z0-9.-]+\.pages\.dev' "$LOG" | grep -Ev '/(head|main)\.' | head -1)
+          fi
           if [ -z "$URL" ]; then
             echo "Could not parse deployment URL from wrangler output"
             exit 1
@@ -149,7 +152,13 @@ jobs:
 
       - name: Smoke test UAT
         if: steps.deploy.outputs.deployment-url != ''
-        run: node scripts/smoke-test.mjs "${{ steps.deploy.outputs.deployment-url }}"
+        run: |
+          URL="${{ steps.deploy.outputs.deployment-url }}"
+          for i in $(seq 1 30); do
+            if curl -sf "${URL%/}/" >/dev/null; then echo "UAT ready"; break; fi
+            sleep 2
+          done
+          node scripts/smoke-test.mjs "$URL"
 
       - name: Comment UAT URL on PR
         if: github.event_name == 'pull_request' && steps.deploy.outputs.deployment-url != ''
@@ -223,12 +232,24 @@ jobs:
           npx wrangler pages deploy dist \
             --project-name="$PROJECT" \
             --commit-dirty=true 2>&1 | tee "$LOG"
-          URL=$(grep -oE 'https://[a-z0-9-]+\.[a-z0-9.-]+\.pages\.dev' "$LOG" | tail -1)
+          URL=$(grep 'Deployment complete' "$LOG" | grep -oE 'https://[a-z0-9-]+\.[a-z0-9.-]+\.pages\.dev' | head -1)
+          if [ -z "$URL" ]; then
+            URL=$(grep -oE 'https://[a-z0-9-]+\.[a-z0-9.-]+\.pages\.dev' "$LOG" | grep -Ev '/(head|main)\.' | head -1)
+          fi
+          if [ -z "$URL" ]; then
+            echo "Could not parse deployment URL from wrangler output"
+            exit 1
+          fi
           echo "deployment-url=$URL" >> "$GITHUB_OUTPUT"
           echo "Deployed production Pages URL: $URL"
           echo "Custom domain: ${{ env.PUBLIC_SITE_URL_PROD }}"
 
       - name: Smoke test production
         run: |
-          node scripts/smoke-test.mjs "${{ steps.deploy.outputs.deployment-url }}"
+          URL="${{ steps.deploy.outputs.deployment-url }}"
+          for i in $(seq 1 30); do
+            if curl -sf "${URL%/}/" >/dev/null; then echo "Deployment ready"; break; fi
+            sleep 2
+          done
+          node scripts/smoke-test.mjs "$URL"
           node scripts/smoke-test.mjs "${{ env.PUBLIC_SITE_URL_PROD }}"
