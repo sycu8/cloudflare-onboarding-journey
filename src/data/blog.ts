@@ -5,6 +5,27 @@ import { postWorkersIntro } from './blogPosts/workers-intro';
 import { postWorkersAi } from './blogPosts/workers-ai';
 import { postAiGateway } from './blogPosts/ai-gateway';
 import { postDeveloperPlatform } from './blogPosts/developer-platform';
+import { postDnsProxyDamMayCamChoNguoiMoi } from './blogPosts/dns-proxy-dam-may-cam';
+import { postDdosLaGiCloudflareBaoVeTheNao } from './blogPosts/ddos-la-gi-cloudflare-bao-ve';
+import { postPagesVsWorkersKhiNaoDungGi } from './blogPosts/pages-vs-workers-khi-nao-dung';
+import { postVectorizeRagTimKiemTriThucDonGian } from './blogPosts/vectorize-rag-tim-kiem-tri-thuc';
+import { postR2LuuFileKhongPhiEgressChoNguoiMoi } from './blogPosts/r2-luu-file-khong-phi-egress';
+import { postCacheRulesVsPageRulesNguoiMoi } from './blogPosts/cache-rules-vs-page-rules';
+import { postAiGatewayChiPhiToken } from './blogPosts/ai-gateway-chi-phi-token';
+import { postObservabilityLogsWorkersChoNguoiMoi } from './blogPosts/observability-logs-workers-cho-nguoi-moi';
+import { postImageOptimizationCdnTocDo } from './blogPosts/image-optimization-cdn-toc-do';
+import { postRateLimitingBaoVeFormLogin } from './blogPosts/rate-limiting-bao-ve-form-login';
+import { postSandboxChayCodeAnToan } from './blogPosts/sandbox-chay-code-an-toan';
+import { postBotManagementPhanBietNguoiVaBot } from './blogPosts/bot-management-phan-biet-nguoi';
+import { postD1SqliteEdgeChoAppNho } from './blogPosts/d1-sqlite-edge-cho-app';
+import { postAgentsSdkAgentAiTrenCloudflare } from './blogPosts/agents-sdk-agent-ai-tren';
+import { postWranglerDeployTuMayTinhLenEdge } from './blogPosts/wrangler-deploy-tu-may-tinh';
+import { postSslTlsHttpsCloudflareChoNguoiMoi } from './blogPosts/ssl-tls-https-cloudflare-cho';
+import { postKvKeyValueEdgeKhi } from './blogPosts/kv-key-value-edge-khi';
+import { postAiSecurityPromptInjectionNguoi } from './blogPosts/ai-security-prompt-injection-nguoi';
+import { postLoadBalancingHaWebsiteDon } from './blogPosts/load-balancing-ha-website-don';
+import { postZeroTrustAccessThayVpn } from './blogPosts/zero-trust-access-thay-vpn';
+import { postWorkflowsTacVuDaiTren } from './blogPosts/workflows-tac-vu-dai-tren';
 
 export type BlogTopic = 'ai' | 'security' | 'cdn' | 'workers' | 'developer-platform';
 export type BlogLevel = 'entry' | 'intermediate';
@@ -97,7 +118,7 @@ export const blogSourceNote: LocalizedString = {
   en: 'Content is rewritten for clarity; always read the original posts on blog.cloudflare.com and official docs for technical detail or the latest updates.',
 };
 
-/** Six pre-written posts (one per day) covering trend topics. */
+/** All scheduled blog posts (6 seed + 21 bi-daily queue). */
 export const blogPosts: BlogPost[] = [
   postCdnCache,
   postWafBeginner,
@@ -105,6 +126,27 @@ export const blogPosts: BlogPost[] = [
   postWorkersAi,
   postAiGateway,
   postDeveloperPlatform,
+  postDnsProxyDamMayCamChoNguoiMoi,
+  postDdosLaGiCloudflareBaoVeTheNao,
+  postPagesVsWorkersKhiNaoDungGi,
+  postVectorizeRagTimKiemTriThucDonGian,
+  postR2LuuFileKhongPhiEgressChoNguoiMoi,
+  postCacheRulesVsPageRulesNguoiMoi,
+  postBotManagementPhanBietNguoiVaBot,
+  postD1SqliteEdgeChoAppNho,
+  postAgentsSdkAgentAiTrenCloudflare,
+  postWranglerDeployTuMayTinhLenEdge,
+  postSslTlsHttpsCloudflareChoNguoiMoi,
+  postKvKeyValueEdgeKhi,
+  postAiSecurityPromptInjectionNguoi,
+  postLoadBalancingHaWebsiteDon,
+  postZeroTrustAccessThayVpn,
+  postWorkflowsTacVuDaiTren,
+  postAiGatewayChiPhiToken,
+  postObservabilityLogsWorkersChoNguoiMoi,
+  postImageOptimizationCdnTocDo,
+  postRateLimitingBaoVeFormLogin,
+  postSandboxChayCodeAnToan,
 ].sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
 
 export function getBlogPost(slug: string): BlogPost | undefined {
