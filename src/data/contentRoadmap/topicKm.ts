@@ -255,7 +255,7 @@ export const topicKmById: Record<string, Partial<TopicKmOverlay>> = {
   },
   'load-balancing-basics': {
     summaryKm:
-      'load balancer ចែក traffic ទៅ origin/server ច្រើន, health-check ពួកវា ហើយ failover ពេល node down។ អនុញ្ញាត HA និង horizontal scaling។',
+      'load balancer ចែក traffic ទៅ origin/server ច្រើន, health-check ពួកវា ហើយ failover ពេល node down។ អនុញ្ញាត High Availability (H/A) និង horizontal scaling។',
     whyItMattersKm:
       'Cloudflare Load Balancing រួម DNS ជាមួយ global health check — ខុស LB កំណត់ data center តែមួយ។',
     commonMistakesKm: ['មិន កំណត់ health check — LB នៅតែផ្ញើ traffic ទៅ origin ដែល dead។'],
@@ -438,7 +438,7 @@ export const topicKmById: Record<string, Partial<TopicKmOverlay>> = {
     summaryKm:
       'Global LB ជាមួយ origin pool, geo steering និង health monitor។ រួម proxied DNS ជាមួយ automatic failover។',
     whyItMattersKm:
-      'Multi-region HA — architecture diagram នៅ hub បង្ហាញ pattern នេះ។',
+      'Multi-region High Availability (H/A) — architecture diagram នៅ hub បង្ហាញ pattern នេះ។',
   },
   'page-rules-vs-modern-rules': {
     summaryKm:

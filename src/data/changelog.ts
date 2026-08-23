@@ -216,8 +216,8 @@ export const changelogEntries: ChangelogEntry[] = [
     id: 'mesh-ha-replica-ui',
     date: '2026-05-28',
     title: {
-      vi: 'Cloudflare Mesh: quản lý replica HA trên dashboard',
-      en: 'Mesh HA replica management in dashboard',
+      vi: 'Cloudflare Mesh: quản lý replica tính sẵn sàng cao (H/A) trên dashboard',
+      en: 'Mesh High Availability (H/A) replica management in dashboard',
     },
     summary: {
       vi: 'Tab replica, badge active/passive, Mesh IP từng replica, promote to active một click.',

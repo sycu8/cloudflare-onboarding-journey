@@ -188,7 +188,7 @@ const viSummaryOverlay: Record<string, string> = {
   'augment-access-with-serverless':
     'ZTNA tăng cường policy Access bằng gọi API ngoài và Workers — xác thực và ủy quyền user trước khi vào tài nguyên được bảo vệ.',
   'cloudflare-one-appliance-deployment':
-    'Cách triển khai Cloudflare One Appliance và đánh giá các lựa chọn: uplink HA, dual connector, hybrid MPLS, split tunnel, segmentation.',
+    'Cách triển khai Cloudflare One Appliance và đánh giá các lựa chọn: uplink H/A, dual connector, hybrid MPLS, split tunnel, segmentation.',
   'deploying-self-hosted-voip-services-for-hybrid-users':
     'Cloudflare cải thiện so với VPN truyền thống nhờ mạng toàn cầu — kết nối an toàn từ thiết bị user tới SIP server.',
   'gateway-dns-for-isp':

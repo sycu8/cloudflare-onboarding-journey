@@ -253,7 +253,7 @@ export const topicEnById: Record<string, Partial<TopicEnOverlay>> = {
   },
   'load-balancing-basics': {
     summaryEn:
-      'A load balancer distributes traffic across multiple origins/servers, health-checks them, and fails over when a node is down. It enables HA and horizontal scaling.',
+      'A load balancer distributes traffic across multiple origins/servers, health-checks them, and fails over when a node is down. It enables High Availability (H/A) and horizontal scaling.',
     whyItMattersEn:
       'Cloudflare Load Balancing combines DNS with global health checks — unlike an LB confined to one data center.',
     commonMistakesEn: ['Not configuring health checks — the LB still sends traffic to dead origins.'],
@@ -436,7 +436,7 @@ export const topicEnById: Record<string, Partial<TopicEnOverlay>> = {
     summaryEn:
       'Global LB with origin pools, geo steering, and health monitors. Combines proxied DNS with automatic failover.',
     whyItMattersEn:
-      'Multi-region HA — architecture diagrams on the hub illustrate this pattern.',
+      'Multi-region High Availability (H/A) — architecture diagrams on the hub illustrate this pattern.',
   },
   'page-rules-vs-modern-rules': {
     summaryEn:
