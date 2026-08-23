@@ -15,6 +15,7 @@
     "dns-aid:print-zone": "node scripts/setup-dns-aid.mjs --print-zone",
     "access:workshop-admin": "node scripts/setup-workshop-admin-access.mjs",
     "preview": "astro preview",
+    "preview:ci": "cp wrangler.ci.toml wrangler.toml && npx wrangler pages dev dist --ip 127.0.0.1 --port 4321",
     "test:e2e": "playwright test",
     "test:smoke": "node scripts/smoke-test.mjs",
     "test:prod": "node scripts/smoke-test.mjs https://cloudflare-starter-hub.pages.dev && node scripts/smoke-test.mjs https://onboarding.orangecloud.vn",

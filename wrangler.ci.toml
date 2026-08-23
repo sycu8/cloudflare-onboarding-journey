@@ -1,0 +1,5 @@
+# Minimal Wrangler config for CI preview (no secrets, no remote bindings).
+# Copied to wrangler.toml in GitHub Actions before `wrangler pages dev`.
+name = "cloudflare-starter-hub"
+compatibility_date = "2026-06-02"
+pages_build_output_dir = "dist"
