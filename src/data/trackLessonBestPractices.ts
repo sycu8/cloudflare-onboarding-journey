@@ -240,7 +240,7 @@ export const trackLessonBestPractices: Record<string, BestPracticeNote> = {
       vi: 'Ưu tiên một hoặc hai use case (thay VPN, rồi SWG) và layer phần còn lại. Rollout SASE thất bại thường vì bật mọi thứ cùng lúc.',
       en: 'Prioritize one or two use cases (VPN replacement, then SWG) and layer the rest. Failed SASE rollouts usually turn everything on at once.',
     },
-    sourceTitle: { vi: 'SASE reference architecture', en: 'SASE reference architecture' },
+    sourceTitle: { vi: 'Kiến trúc tham chiếu SASE', en: 'SASE reference architecture' },
     sourceUrl: 'https://developers.cloudflare.com/reference-architecture/architectures/sase/',
   },
   'c1-2-l1': {
