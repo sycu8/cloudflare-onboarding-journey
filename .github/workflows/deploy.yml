@@ -66,7 +66,7 @@ jobs:
 
       - name: Start preview
         run: |
-          npx wrangler pages dev dist --ip 127.0.0.1 --port 4321 &
+          npm run preview:ci &
           echo $! > preview.pid
           for i in $(seq 1 30); do
             if curl -sf http://127.0.0.1:4321/ >/dev/null; then
