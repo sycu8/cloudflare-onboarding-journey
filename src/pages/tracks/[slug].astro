@@ -38,6 +38,9 @@ import {
 } from '../../data/resourceHub';
 import DemoVignetteList from '../../components/interactive/DemoVignetteList';
 import ReferenceDiagramFigure from '../../components/content/ReferenceDiagramFigure.astro';
+import OnboardingSourceFigures from '../../components/content/OnboardingSourceFigures.astro';
+import OnboardingArticle from '../../components/content/OnboardingArticle.astro';
+import { getOnboardingPageByFile, onboardingHtml } from '../../data/zeroTrustOnboarding';
 import { getDemosForTrack } from '../../data/demoScripts';
 import { getDiagramsForTrack } from '../../data/referenceDiagrams';
 
@@ -72,6 +75,7 @@ const trackDemoVignettes =
     : [];
 
 const trackDiagrams = getDiagramsForTrack(track.slug, 3);
+const onboardingOverview = track.slug === 'cloudflare-one' ? getOnboardingPageByFile('overview.html') : undefined;
 ---
 
 <BaseLayout
@@ -104,7 +108,24 @@ const trackDiagrams = getDiagramsForTrack(track.slug, 3);
     <LangText as="p" class="text-muted mt-2 font-mono text-sm leading-relaxed" text={track.mentalModel} />
   </section>
 
-  {trackDiagrams.length > 0 ? (
+  {track.slug === 'cloudflare-one' ? (
+    <section class="mb-8">
+      <LangText
+        as="h2"
+        class="mb-2 text-lg font-semibold"
+        text={{ vi: 'Sơ đồ kiến trúc tham chiếu', en: 'Reference architecture diagrams' }}
+      />
+      <LangText
+        as="p"
+        class="text-muted mb-4 max-w-3xl text-sm leading-relaxed"
+        text={{
+          vi: 'Ba sơ đồ gốc từ hướng dẫn onboarding: kiến trúc đầy đủ, thứ tự triển khai, và bốn lớp bảo mật AI/MCP. Huy hiệu M1–M8 khớp từng module bên dưới.',
+          en: 'Three diagrams from the onboarding guide: the complete architecture, rollout order, and four AI/MCP security layers. M1–M8 badges match each module below.',
+        }}
+      />
+      <OnboardingSourceFigures compact />
+    </section>
+  ) : trackDiagrams.length > 0 ? (
     <section class="mb-8">
       <LangText
         as="h2"
@@ -116,6 +137,17 @@ const trackDiagrams = getDiagramsForTrack(track.slug, 3);
           <ReferenceDiagramFigure diagram={d} compact />
         ))}
       </div>
+    </section>
+  ) : null}
+
+  {onboardingOverview ? (
+    <section class="mb-8">
+      <LangText
+        as="h2"
+        class="mb-4 text-lg font-semibold"
+        text={{ vi: 'Tổng quan onboarding', en: 'Onboarding overview' }}
+      />
+      <OnboardingArticle html={onboardingHtml(onboardingOverview)} sourceUrl={onboardingOverview.sourceUrlVi} />
     </section>
   ) : null}
 

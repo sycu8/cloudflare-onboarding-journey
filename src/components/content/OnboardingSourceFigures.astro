@@ -1,0 +1,38 @@
+---
+import LangText from '../ui/LangText.astro';
+import { cloudflareOneSourceDiagrams } from '../../data/zeroTrustOnboarding';
+
+type Props = { compact?: boolean };
+const { compact = false } = Astro.props;
+---
+
+<div class:list={['grid gap-6', compact ? 'lg:grid-cols-3' : 'lg:grid-cols-1']}>
+  {cloudflareOneSourceDiagrams.map((d) => (
+    <figure class:list={['onboarding-fig', compact && 'onboarding-fig-compact']}>
+      <a href={d.pageUrl} class="block overflow-hidden rounded-xl border border-[var(--cf-border)] bg-[var(--cf-bg-elevated)]">
+        <img class="lang-vi onboarding-fig-img w-full" src={d.src.vi} alt={d.alt.vi} loading="lazy" decoding="async" />
+        <img class="lang-en onboarding-fig-img w-full" src={d.src.en} alt={d.alt.en} loading="lazy" decoding="async" />
+      </a>
+      <figcaption class="text-muted mt-2 space-y-1 text-xs leading-relaxed">
+        <LangText as="p" class="font-medium text-[var(--cf-text)]" text={d.caption} />
+        <p>
+          <a class="link" href={d.pageUrl}>
+            <LangText text={{ vi: 'Xem hướng dẫn kèm sơ đồ →', en: 'Open the diagram guide →' }} />
+          </a>
+        </p>
+      </figcaption>
+    </figure>
+  ))}
+</div>
+
+<style>
+  .onboarding-fig-img {
+    max-height: min(36rem, 80vh);
+    object-fit: contain;
+    object-position: center top;
+    background: #fff;
+  }
+  .onboarding-fig-compact .onboarding-fig-img {
+    max-height: 14rem;
+  }
+</style>
