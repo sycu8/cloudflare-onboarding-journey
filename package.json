@@ -18,6 +18,7 @@
     "preview:ci": "cp wrangler.ci.toml wrangler.toml && npx wrangler pages dev dist --ip 127.0.0.1 --port 4321",
     "test:e2e": "playwright test",
     "test:smoke": "node scripts/smoke-test.mjs",
+    "wait:deploy": "node scripts/wait-for-deploy.mjs",
     "test:prod": "node scripts/smoke-test.mjs https://cloudflare-starter-hub.pages.dev && node scripts/smoke-test.mjs https://onboarding.orangecloud.vn",
     "deploy": "npm run build && npx wrangler pages deploy dist --project-name=cloudflare-starter-hub --commit-dirty=true",
     "deploy:uat": "npm run build && npx wrangler pages deploy dist --project-name=cloudflare-starter-hub-uat --commit-dirty=true",
