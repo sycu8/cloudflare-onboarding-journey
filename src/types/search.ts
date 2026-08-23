@@ -1,8 +1,8 @@
 export type SearchDocument = {
   id: string;
   href: string;
-  title: { vi: string; en: string };
-  description: { vi: string; en: string };
+  title: { vi: string; en: string; km?: string };
+  description: { vi: string; en: string; km?: string };
   category?: string;
   keywords?: string;
 };

@@ -12,6 +12,7 @@ const { topic } = Astro.props;
     <span class="badge">
       <span class="lang-vi">Lộ trình:</span>
       <span class="lang-en">Track:</span>
+      <span class="lang-km">Track:</span>
       {' '}
       {topic.relatedTrack === 'application-services'
         ? 'Application Services'
@@ -29,14 +30,14 @@ const { topic } = Astro.props;
       target="_blank"
       rel="noopener noreferrer"
     >
-      <LangText text={{ vi: 'Đọc trên Cloudflare Learning', en: 'Read on Cloudflare Learning' }} />
+      <LangText text={{ vi: 'Đọc trên Cloudflare Learning', en: 'Read on Cloudflare Learning', km: 'Read on Cloudflare Learning' }} />
       <span aria-hidden="true">↗</span>
     </a>
     <a
       class="btn btn-ghost flex-1 justify-center"
       href={`/tracks/${topic.relatedTrack}`}
     >
-      <LangText text={{ vi: 'Xem lộ trình', en: 'View track' }} />
+      <LangText text={{ vi: 'Xem lộ trình', en: 'View track', km: 'View track' }} />
     </a>
   </div>
 </article>

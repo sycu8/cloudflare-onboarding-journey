@@ -21,9 +21,9 @@ function formatEventDate(iso: string, lang: 'vi' | 'en', timeZone: string) {
 }
 
 const formatLabels: Record<WorkshopEvent['format'], { vi: string; en: string }> = {
-  online: { vi: 'Trực tuyến', en: 'Online' },
-  'in-person': { vi: 'Trực tiếp', en: 'In person' },
-  hybrid: { vi: 'Kết hợp', en: 'Hybrid' },
+  online: { vi: 'Trực tuyến', en: 'Online' , km: 'Online' },
+  'in-person': { vi: 'Trực tiếp', en: 'In person', km: 'In person' },
+  hybrid: { vi: 'Kết hợp', en: 'Hybrid' , km: 'Hybrid' },
 };
 
 export default function WorkshopEventsList({ selectedId, onSelect, onLoaded }: Props) {
@@ -60,6 +60,7 @@ export default function WorkshopEventsList({ selectedId, onSelect, onLoaded }: P
       <div className="card text-muted text-sm">
         <span className="lang-vi">Đang tải lịch workshop…</span>
         <span className="lang-en">Loading workshop schedule…</span>
+        <span className="lang-km">Loading workshop schedule…</span>
       </div>
     );
   }
@@ -69,6 +70,7 @@ export default function WorkshopEventsList({ selectedId, onSelect, onLoaded }: P
       <div className="card text-muted text-sm">
         <span className="lang-vi">Chưa tải được lịch sự kiện. Bạn vẫn có thể đăng ký chung bên dưới.</span>
         <span className="lang-en">Could not load events. You can still submit a general registration below.</span>
+        <span className="lang-km">Could not load events. You can still submit a general registration below.</span>
       </div>
     );
   }
@@ -79,10 +81,12 @@ export default function WorkshopEventsList({ selectedId, onSelect, onLoaded }: P
         <h2 className="text-lg font-semibold">
           <span className="lang-vi">Lịch workshop</span>
           <span className="lang-en">Workshop schedule</span>
+          <span className="lang-km">Workshop schedule</span>
         </h2>
         <p className="text-muted mt-2 text-sm">
           <span className="lang-vi">Chưa có sự kiện sắp tới. Đăng ký trước — chúng tôi sẽ liên hệ khi có lịch mới.</span>
           <span className="lang-en">No upcoming events yet. Register your interest — we will contact you when dates are announced.</span>
+          <span className="lang-km">No upcoming events yet. Register your interest — we will contact you when dates are announced.</span>
         </p>
       </div>
     );
@@ -93,6 +97,7 @@ export default function WorkshopEventsList({ selectedId, onSelect, onLoaded }: P
       <h2 className="text-lg font-semibold">
         <span className="lang-vi">Chọn sự kiện workshop</span>
         <span className="lang-en">Choose a workshop event</span>
+        <span className="lang-km">Choose a workshop event</span>
       </h2>
       <ul className="space-y-3">
         {events.map((event) => {
@@ -119,6 +124,7 @@ export default function WorkshopEventsList({ selectedId, onSelect, onLoaded }: P
                   <p className="text-muted mt-1 text-xs">
                     <span className="lang-vi">Địa điểm: </span>
                     <span className="lang-en">Location: </span>
+                    <span className="lang-km">Location:</span>
                     {loc}
                   </p>
                 ) : null}
@@ -126,6 +132,7 @@ export default function WorkshopEventsList({ selectedId, onSelect, onLoaded }: P
                   <p className="text-muted mt-1 text-xs">
                     <span className="lang-vi">Sức chứa ~{event.capacity} người</span>
                     <span className="lang-en">Capacity ~{event.capacity}</span>
+                    <span className="lang-km">Capacity ~{event.capacity}</span>
                   </p>
                 ) : null}
               </button>

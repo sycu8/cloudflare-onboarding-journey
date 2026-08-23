@@ -50,6 +50,7 @@ html.dark #term-${s.id}:checked ~ .cf101-term-labels label[for="term-${s.id}"] {
         <label for={`term-${s.id}`} class="badge cf101-term-label">
           <span class="lang-vi">{s.title.vi}</span>
           <span class="lang-en">{s.title.en}</span>
+          <span class="lang-km">{s.title.en}</span>
         </label>
       ))
     }
@@ -62,6 +63,7 @@ html.dark #term-${s.id}:checked ~ .cf101-term-labels label[for="term-${s.id}"] {
           <label class="block text-sm">
             <span class="lang-vi">Tìm trong chuyên mục</span>
             <span class="lang-en">Search in section</span>
+            <span class="lang-km">Search in section</span>
             <input
               type="search"
               class="cf-input cf101-term-search mt-1"
@@ -75,7 +77,8 @@ html.dark #term-${s.id}:checked ~ .cf101-term-labels label[for="term-${s.id}"] {
               <span data-count-vi={s.id}>{s.terms.length}</span> thuật ngữ
             </span>
             <span class="lang-en">
-              <span data-count-en={s.id}>{s.terms.length}</span> terms
+              <span data-count-en={s.id}>{s.terms.length}</span>
+            <span class="lang-km"><span data-count-en={s.id}>{s.terms.length}</span> terms
             </span>
           </p>
         </div>
@@ -85,6 +88,7 @@ html.dark #term-${s.id}:checked ~ .cf101-term-labels label[for="term-${s.id}"] {
             <div class="card text-muted text-sm">
               <span class="lang-vi">Không có kết quả.</span>
               <span class="lang-en">No results.</span>
+              <span class="lang-km">No results.</span>
             </div>
           ) : (
             <dl class="grid gap-2 sm:grid-cols-2">
@@ -100,6 +104,7 @@ html.dark #term-${s.id}:checked ~ .cf101-term-labels label[for="term-${s.id}"] {
                     <dd class="text-muted mt-1 text-sm leading-relaxed">
                       <span class="lang-vi">{t.definition.vi}</span>
                       <span class="lang-en">{t.definition.en}</span>
+                      <span class="lang-km">{t.definition.en}</span>
                     </dd>
                   </div>
                 ))
@@ -134,6 +139,15 @@ html.dark #term-${s.id}:checked ~ .cf101-term-labels label[for="term-${s.id}"] {
       </a>
       .
     </span>
+    <span class="lang-km">See also{' '}
+      <a class="link" href="/glossary">
+        Glossary
+      </a>{' '}
+      or{' '}
+      <a class="link" href={docsUrl('/glossary/')} target="_blank" rel="noopener noreferrer">
+        Cloudflare Docs Glossary
+      </a>
+      .</span>
   </p>
 </div>
 

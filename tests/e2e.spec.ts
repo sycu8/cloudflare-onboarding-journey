@@ -31,11 +31,14 @@ test.describe('Cloudflare Starter Hub E2E', () => {
     await page.goto(`${BASE}/cloudflare-101`);
     await waitForIslands(page);
     await expect(page.locator('html')).toHaveAttribute('data-lang', 'vi');
-    const langBtn = page.getByRole('button', { name: /Switch to English|Switch to Vietnamese/i });
+    const langBtn = page.getByRole('button', { name: /Switch to English|Switch to Vietnamese|Switch to Khmer/i });
     await expect(langBtn).toBeVisible();
     await langBtn.click();
     await expect(page.locator('html')).toHaveAttribute('data-lang', 'en');
     await expect(page.locator('.lang-en').first()).toBeVisible();
+    await langBtn.click();
+    await expect(page.locator('html')).toHaveAttribute('data-lang', 'km');
+    await expect(page.locator('.lang-km').first()).toBeVisible();
   });
 
   test('theme toggle adds dark class', async ({ page }) => {

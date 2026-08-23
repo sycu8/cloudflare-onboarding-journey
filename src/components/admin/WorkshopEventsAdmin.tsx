@@ -104,16 +104,19 @@ export default function WorkshopEventsAdmin({ events, onCreated }: Props) {
         <h2 className="font-semibold">
           <span className="lang-vi">Thêm sự kiện mới</span>
           <span className="lang-en">Add new event</span>
+          <span className="lang-km">Add new event</span>
         </h2>
 
         <div className="grid gap-4 md:grid-cols-2">
           <label className="block text-sm">
             <span className="lang-vi">Tiêu đề (VI)</span>
             <span className="lang-en">Title (VI)</span>
+            <span className="lang-km">Title (VI)</span>
             <input className="cf-input mt-1" required value={titleVi} onChange={(e) => setTitleVi(e.target.value)} />
           </label>
           <label className="block text-sm">
             <span className="lang-en">Title (EN)</span>
+            <span className="lang-km">Title (EN)</span>
             <input className="cf-input mt-1" required value={titleEn} onChange={(e) => setTitleEn(e.target.value)} />
           </label>
         </div>
@@ -121,10 +124,12 @@ export default function WorkshopEventsAdmin({ events, onCreated }: Props) {
         <label className="block text-sm">
           <span className="lang-vi">Mô tả (VI)</span>
           <span className="lang-en">Description (VI)</span>
+          <span className="lang-km">Description (VI)</span>
           <textarea className="cf-input mt-1 min-h-[80px]" value={descriptionVi} onChange={(e) => setDescriptionVi(e.target.value)} />
         </label>
         <label className="block text-sm">
           <span className="lang-en">Description (EN)</span>
+          <span className="lang-km">Description (EN)</span>
           <textarea className="cf-input mt-1 min-h-[80px]" value={descriptionEn} onChange={(e) => setDescriptionEn(e.target.value)} />
         </label>
 
@@ -132,11 +137,13 @@ export default function WorkshopEventsAdmin({ events, onCreated }: Props) {
           <label className="block text-sm">
             <span className="lang-vi">Bắt đầu</span>
             <span className="lang-en">Starts</span>
+            <span className="lang-km">Starts</span>
             <input className="cf-input mt-1" type="datetime-local" required value={startsAtLocal} onChange={(e) => setStartsAtLocal(e.target.value)} />
           </label>
           <label className="block text-sm">
             <span className="lang-vi">Kết thúc (tuỳ chọn)</span>
             <span className="lang-en">Ends (optional)</span>
+            <span className="lang-km">Ends (optional)</span>
             <input className="cf-input mt-1" type="datetime-local" value={endsAtLocal} onChange={(e) => setEndsAtLocal(e.target.value)} />
           </label>
         </div>
@@ -171,6 +178,7 @@ export default function WorkshopEventsAdmin({ events, onCreated }: Props) {
           </label>
           <label className="block text-sm">
             <span className="lang-en">Location (EN)</span>
+            <span className="lang-km">Location (EN)</span>
             <input className="cf-input mt-1" value={locationEn} onChange={(e) => setLocationEn(e.target.value)} />
           </label>
         </div>
@@ -184,11 +192,13 @@ export default function WorkshopEventsAdmin({ events, onCreated }: Props) {
           <label className="block text-sm">
             <span className="lang-vi">Sức chứa</span>
             <span className="lang-en">Capacity</span>
+            <span className="lang-km">Capacity</span>
             <input className="cf-input mt-1" type="number" min={1} value={capacity} onChange={(e) => setCapacity(e.target.value)} />
           </label>
           <label className="block text-sm">
             <span className="lang-vi">Track gợi ý</span>
             <span className="lang-en">Suggested track</span>
+            <span className="lang-km">Suggested track</span>
             <select className="cf-input mt-1" value={primaryInterest} onChange={(e) => setPrimaryInterest(e.target.value as Interest | '')}>
               <option value="">—</option>
               <option value="application-services">Application Services</option>
@@ -205,6 +215,7 @@ export default function WorkshopEventsAdmin({ events, onCreated }: Props) {
         <button type="submit" className="btn btn-primary w-full sm:w-auto" disabled={loading}>
           <span className="lang-vi">{loading ? 'Đang lưu…' : 'Tạo sự kiện'}</span>
           <span className="lang-en">{loading ? 'Saving…' : 'Create event'}</span>
+          <span className="lang-km">{loading ? 'Saving…' : 'Create event'}</span>
         </button>
       </form>
 
@@ -213,6 +224,7 @@ export default function WorkshopEventsAdmin({ events, onCreated }: Props) {
           <h2 className="mb-3 font-semibold">
             <span className="lang-vi">Tất cả sự kiện</span>
             <span className="lang-en">All events</span>
+            <span className="lang-km">All events</span>
           </h2>
           <table className="w-full text-left text-sm">
             <thead>
@@ -241,6 +253,7 @@ export default function WorkshopEventsAdmin({ events, onCreated }: Props) {
         <div className="card text-muted text-sm">
           <span className="lang-vi">Chưa có sự kiện nào.</span>
           <span className="lang-en">No events yet.</span>
+          <span className="lang-km">No events yet.</span>
         </div>
       )}
     </div>

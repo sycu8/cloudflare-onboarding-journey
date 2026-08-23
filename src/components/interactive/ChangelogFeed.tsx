@@ -23,11 +23,11 @@ function t(ls: { vi: string; en: string }, lang: 'vi' | 'en') {
 }
 
 const trackLabels: Record<TrackFilter, { vi: string; en: string }> = {
-  all: { vi: 'Mọi lộ trình', en: 'All tracks' },
-  'application-services': { vi: 'Application Services', en: 'Application Services' },
-  'developer-platform': { vi: 'Developer Platform', en: 'Developer Platform' },
-  'cloudflare-one': { vi: 'Cloudflare One', en: 'Cloudflare One' },
-  'cross-cutting': { vi: 'Chủ đề chung', en: 'Cross-cutting' },
+  all: { vi: 'Mọi lộ trình', en: 'All tracks' , km: 'All tracks' },
+  'application-services': { vi: 'Application Services', en: 'Application Services', km: 'Application Services' },
+  'developer-platform': { vi: 'Developer Platform', en: 'Developer Platform', km: 'Developer Platform' },
+  'cloudflare-one': { vi: 'Cloudflare One', en: 'Cloudflare One', km: 'Cloudflare One' },
+  'cross-cutting': { vi: 'Chủ đề chung', en: 'Cross-cutting', km: 'Cross-cutting' },
 };
 
 export default function ChangelogFeed({ entries, pageSize = PAGE_SIZE }: Props) {
@@ -74,6 +74,7 @@ export default function ChangelogFeed({ entries, pageSize = PAGE_SIZE }: Props) 
         <label className="text-sm font-medium">
           <span className="lang-vi">Sản phẩm: </span>
           <span className="lang-en">Product: </span>
+          <span className="lang-km">Product:</span>
           <select
             className="cf-input ml-1 inline-block w-auto min-w-[160px]"
             value={product}
@@ -90,6 +91,7 @@ export default function ChangelogFeed({ entries, pageSize = PAGE_SIZE }: Props) 
         <label className="text-sm font-medium">
           <span className="lang-vi">Lộ trình hub: </span>
           <span className="lang-en">Hub track: </span>
+          <span className="lang-km">Hub track:</span>
           <select
             className="cf-input ml-1 inline-block w-auto min-w-[180px]"
             value={track}
@@ -109,6 +111,7 @@ export default function ChangelogFeed({ entries, pageSize = PAGE_SIZE }: Props) 
           <span className="lang-en">
             {filtered.length} entries · page {page}/{totalPages}
           </span>
+          <span className="lang-km">{filtered.length} entries · page {page}/{totalPages}</span>
         </span>
       </div>
 
@@ -137,6 +140,7 @@ export default function ChangelogFeed({ entries, pageSize = PAGE_SIZE }: Props) 
                 <a className="link" href={entry.href} target="_blank" rel="noopener noreferrer">
                   <span className="lang-vi">Đọc trên Developer Changelog ↗</span>
                   <span className="lang-en">Read on Developer Changelog ↗</span>
+                  <span className="lang-km">Read on Developer Changelog ↗</span>
                 </a>
               </p>
             </article>
@@ -148,6 +152,7 @@ export default function ChangelogFeed({ entries, pageSize = PAGE_SIZE }: Props) 
         <p className="text-muted mt-6 text-sm">
           <span className="lang-vi">Không có mục nào khớp bộ lọc.</span>
           <span className="lang-en">No entries match the current filters.</span>
+          <span className="lang-km">No entries match the current filters.</span>
         </p>
       ) : null}
 

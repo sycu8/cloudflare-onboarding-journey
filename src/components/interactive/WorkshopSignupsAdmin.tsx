@@ -105,17 +105,20 @@ export default function WorkshopSignupsAdmin({ active }: Props) {
           <h3 className="text-lg font-semibold">
             <span className="lang-vi">Danh sách đăng ký</span>
             <span className="lang-en">Registrations</span>
+            <span className="lang-km">Registrations</span>
           </h3>
           <p className="text-muted text-sm">
             {total > 0 ? (
               <>
                 <span className="lang-vi">{total} bản ghi</span>
                 <span className="lang-en">{total} records</span>
+                <span className="lang-km">{total} records</span>
                 {signups.length < total ? (
                   <>
                     {' '}
                     <span className="lang-vi">(hiển thị {signups.length} mới nhất)</span>
                     <span className="lang-en">(showing latest {signups.length})</span>
+                    <span className="lang-km">(showing latest {signups.length})</span>
                   </>
                 ) : null}
               </>
@@ -123,6 +126,7 @@ export default function WorkshopSignupsAdmin({ active }: Props) {
               <>
                 <span className="lang-vi">Chưa có đăng ký</span>
                 <span className="lang-en">No registrations yet</span>
+                <span className="lang-km">No registrations yet</span>
               </>
             )}
           </p>
@@ -131,10 +135,12 @@ export default function WorkshopSignupsAdmin({ active }: Props) {
           <button type="button" className="btn btn-secondary text-sm" disabled={loading} onClick={() => void loadSignups()}>
             <span className="lang-vi">{loading ? 'Đang tải…' : 'Làm mới'}</span>
             <span className="lang-en">{loading ? 'Loading…' : 'Refresh'}</span>
+            <span className="lang-km">{loading ? 'Loading…' : 'Refresh'}</span>
           </button>
           <button type="button" className="btn btn-primary text-sm" disabled={!signups.length} onClick={exportCsv}>
             <span className="lang-vi">Xuất CSV</span>
             <span className="lang-en">Export CSV</span>
+            <span className="lang-km">Export CSV</span>
           </button>
         </div>
       </div>
@@ -149,27 +155,33 @@ export default function WorkshopSignupsAdmin({ active }: Props) {
                 <th className="py-2 pr-3">
                   <span className="lang-vi">Thời gian</span>
                   <span className="lang-en">When</span>
+                  <span className="lang-km">When</span>
                 </th>
                 <th className="py-2 pr-3">
                   <span className="lang-vi">Họ tên</span>
                   <span className="lang-en">Name</span>
+                  <span className="lang-km">Name</span>
                 </th>
                 <th className="py-2 pr-3">Email</th>
                 <th className="py-2 pr-3">
                   <span className="lang-vi">Công ty</span>
                   <span className="lang-en">Company</span>
+                  <span className="lang-km">Company</span>
                 </th>
                 <th className="py-2 pr-3">
                   <span className="lang-vi">Vị trí</span>
                   <span className="lang-en">Job title</span>
+                  <span className="lang-km">Job title</span>
                 </th>
                 <th className="py-2 pr-3">
                   <span className="lang-vi">Mối quan tâm</span>
                   <span className="lang-en">Interest</span>
+                  <span className="lang-km">Interest</span>
                 </th>
                 <th className="py-2">
                   <span className="lang-vi">Sự kiện</span>
                   <span className="lang-en">Event</span>
+                  <span className="lang-km">Event</span>
                 </th>
               </tr>
             </thead>
@@ -198,6 +210,7 @@ export default function WorkshopSignupsAdmin({ active }: Props) {
         <div className="card text-muted text-sm">
           <span className="lang-vi">Chưa có ai đăng ký qua form hub.</span>
           <span className="lang-en">No hub form registrations yet.</span>
+          <span className="lang-km">No hub form registrations yet.</span>
         </div>
       ) : null}
     </section>

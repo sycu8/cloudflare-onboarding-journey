@@ -20,27 +20,27 @@ const OPTIONS: Option[] = [
   },
   {
     id: 'secure-api',
-    label: { vi: 'API của tôi cần được bảo vệ', en: 'My API needs protection' },
+    label: { vi: 'API của tôi cần được bảo vệ', en: 'My API needs protection' , km: 'My API needs protection' },
     href: '/use-cases/secure-api',
   },
   {
     id: 'build-app',
-    label: { vi: 'Tôi muốn build và deploy app', en: 'I want to build and deploy an app' },
+    label: { vi: 'Tôi muốn build và deploy app', en: 'I want to build and deploy an app' , km: 'I want to build and deploy an app' },
     href: '/tracks/developer-platform',
   },
   {
     id: 'replace-vpn',
-    label: { vi: 'Tôi muốn thay thế VPN', en: 'I want to replace VPN' },
+    label: { vi: 'Tôi muốn thay thế VPN', en: 'I want to replace VPN' , km: 'I want to replace VPN' },
     href: '/use-cases/replace-vpn',
   },
   {
     id: 'secure-remote-users',
-    label: { vi: 'Tôi muốn bảo vệ remote users', en: 'I want to secure remote users' },
+    label: { vi: 'Tôi muốn bảo vệ remote users', en: 'I want to secure remote users' , km: 'I want to secure remote users' },
     href: '/use-cases/secure-remote-users',
   },
   {
     id: 'not-sure',
-    label: { vi: 'Tôi chưa chắc nên bắt đầu từ đâu', en: 'I am not sure where to start' },
+    label: { vi: 'Tôi chưa chắc nên bắt đầu từ đâu', en: 'I am not sure where to start' , km: 'I am not sure where to start' },
     href: '/checklists/beginner-cloudflare-checklist',
   },
 ];
@@ -85,6 +85,7 @@ export default function PathSelector() {
           >
             <span className="lang-vi">{o.label.vi}</span>
             <span className="lang-en">{o.label.en}</span>
+            <span className="lang-km">{o.label.en}</span>
             <span aria-hidden="true" className="text-muted opacity-60">
               →
             </span>

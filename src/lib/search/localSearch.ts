@@ -1,3 +1,5 @@
+import { pickLocalizedText } from '../../i18n';
+import type { Language } from '../../i18n/types';
 import type { LocalSearchHit, SearchDocument } from '../../types/search';
 
 function tokenize(query: string) {
@@ -8,9 +10,9 @@ function tokenize(query: string) {
     .filter((t) => t.length >= 2);
 }
 
-function scoreDocument(doc: SearchDocument, tokens: string[], lang: 'vi' | 'en') {
-  const title = doc.title[lang].toLowerCase();
-  const description = doc.description[lang].toLowerCase();
+function scoreDocument(doc: SearchDocument, tokens: string[], lang: Language) {
+  const title = pickLocalizedText(doc.title, lang).toLowerCase();
+  const description = pickLocalizedText(doc.description, lang).toLowerCase();
   const keywords = (doc.keywords ?? '').toLowerCase();
   const category = (doc.category ?? '').toLowerCase();
   const href = doc.href.toLowerCase();
@@ -29,7 +31,7 @@ function scoreDocument(doc: SearchDocument, tokens: string[], lang: 'vi' | 'en')
 export function searchLocalDocuments(
   documents: SearchDocument[],
   query: string,
-  lang: 'vi' | 'en',
+  lang: Language,
   limit = 12,
 ): LocalSearchHit[] {
   const trimmed = query.trim();
@@ -41,6 +43,10 @@ export function searchLocalDocuments(
   return documents
     .map((doc) => ({ ...doc, score: scoreDocument(doc, tokens, lang) }))
     .filter((hit) => hit.score > 0)
-    .sort((a, b) => b.score - a.score || a.title[lang].localeCompare(b.title[lang]))
+    .sort(
+      (a, b) =>
+        b.score - a.score ||
+        pickLocalizedText(a.title, lang).localeCompare(pickLocalizedText(b.title, lang)),
+    )
     .slice(0, limit);
 }

@@ -116,6 +116,7 @@ export default function WorkshopForm({ eventId = '', requireEvent = false }: Pro
       <div className="card">
         <span className="lang-vi">Đăng ký workshop tạm đóng. Vui lòng quay lại sau.</span>
         <span className="lang-en">Workshop registration is temporarily closed. Please check back later.</span>
+        <span className="lang-km">Workshop registration is temporarily closed. Please check back later.</span>
       </div>
     );
   }
@@ -128,32 +129,38 @@ export default function WorkshopForm({ eventId = '', requireEvent = false }: Pro
         <p className="rounded-xl border border-[var(--cf-border)] bg-[var(--cf-bg-elevated)]/50 px-3 py-2 text-xs">
           <span className="lang-vi">Đăng ký cho sự kiện: </span>
           <span className="lang-en">Registering for event: </span>
+          <span className="lang-km">Registering for event:</span>
           <span className="font-mono">{eventId}</span>
         </p>
       ) : null}
       <label className="block text-sm">
         <span className="lang-vi">Họ và tên (bắt buộc)</span>
         <span className="lang-en">Name (required)</span>
+        <span className="lang-km">Name (required)</span>
         <input className="cf-input mt-1" required value={name} onChange={(e) => setName(e.target.value)} />
       </label>
       <label className="block text-sm">
         <span className="lang-vi">Email (bắt buộc)</span>
         <span className="lang-en">Email (required)</span>
+        <span className="lang-km">Email (required)</span>
         <input className="cf-input mt-1" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
       </label>
       <label className="block text-sm">
         <span className="lang-vi">Công ty</span>
         <span className="lang-en">Company</span>
+        <span className="lang-km">Company</span>
         <input className="cf-input mt-1" value={company} onChange={(e) => setCompany(e.target.value)} />
       </label>
       <label className="block text-sm">
         <span className="lang-vi">Vị trí làm việc</span>
         <span className="lang-en">Job title</span>
+        <span className="lang-km">Job title</span>
         <input className="cf-input mt-1" value={role} onChange={(e) => setRole(e.target.value)} />
       </label>
       <label className="block text-sm">
         <span className="lang-vi">Mối quan tâm chính</span>
         <span className="lang-en">Primary interest</span>
+        <span className="lang-km">Primary interest</span>
         <select className="cf-input mt-1" value={interest} onChange={(e) => setInterest(e.target.value as Interest)}>
           <option value="application-services">Application Services</option>
           <option value="developer-platform">Developer Platform</option>
@@ -164,6 +171,7 @@ export default function WorkshopForm({ eventId = '', requireEvent = false }: Pro
       <label className="block text-sm">
         <span className="lang-vi">Câu hỏi của bạn</span>
         <span className="lang-en">Your question</span>
+        <span className="lang-km">Your question</span>
         <textarea className="cf-input mt-1 min-h-[100px]" value={question} onChange={(e) => setQuestion(e.target.value)} />
       </label>
       {turnstileSiteKey ? (
@@ -178,11 +186,14 @@ export default function WorkshopForm({ eventId = '', requireEvent = false }: Pro
           After signing up, you will receive a confirmation email. When new workshops are scheduled, we will email you
           with details. See{' '}
         </span>
+        <span className="lang-km">After signing up, you will receive a confirmation email. When new workshops are scheduled, we will email you
+          with details. See{' '}</span>
         <a className="link" href="/privacy">Privacy</a>.
       </p>
       {error ? <div className="rounded-xl border border-red-500/40 bg-red-500/10 p-3 text-sm text-red-400">{error}</div> : null}
       <button type="submit" className="btn btn-primary w-full" disabled={loading}>
-        {loading ? '…' : <><span className="lang-vi">Gửi đăng ký</span><span className="lang-en">Submit</span></>}
+        {loading ? '…' : <><span className="lang-vi">Gửi đăng ký</span><span className="lang-en">Submit</span>
+        <span className="lang-km">Submit</span></>}
       </button>
     </form>
   );

@@ -46,6 +46,7 @@ export default function RoadmapProgress({ totalTopics }: Props) {
           <p className="text-sm font-semibold">
             <span className="lang-vi">Tiến độ học</span>
             <span className="lang-en">Learning progress</span>
+            <span className="lang-km">វឌ្ឍនភាពសិក្សា</span>
           </p>
           <p className="text-muted mt-1 text-xs">
             <span className="lang-vi">
@@ -54,6 +55,7 @@ export default function RoadmapProgress({ totalTopics }: Props) {
             <span className="lang-en">
               {done}/{totalTopics} topics · {pct}% — saved in browser
             </span>
+            <span className="lang-km">{done}/{totalTopics} topics · {pct}% — saved in browser</span>
           </p>
         </div>
         <button
@@ -69,6 +71,7 @@ export default function RoadmapProgress({ totalTopics }: Props) {
         >
           <span className="lang-vi">Reset</span>
           <span className="lang-en">Reset</span>
+          <span className="lang-km">Reset</span>
         </button>
       </div>
       <div className="mt-3 h-2 overflow-hidden rounded-full bg-[var(--cf-surface-2)]">

@@ -16,6 +16,7 @@ const { module, trackSlug } = Astro.props;
     <span class="badge">
       <span class="lang-vi">{module.lessons.length} bài</span>
       <span class="lang-en">{module.lessons.length} lessons</span>
+      <span class="lang-km">{module.lessons.length} lessons</span>
     </span>
   </div>
 
@@ -39,14 +40,17 @@ const { module, trackSlug } = Astro.props;
                 <span class="font-medium text-[var(--cf-accent)]">
                   <span class="lang-vi">Mẹo: </span>
                   <span class="lang-en">Tip: </span>
+                  <span class="lang-km">Tip:</span>
                 </span>
                 <span class="lang-vi">{lesson.tip.vi}</span>
                 <span class="lang-en">{lesson.tip.en}</span>
+                <span class="lang-km">{lesson.tip.en}</span>
               </p>
             ) : null}
             <a class="link mt-3 inline-block text-sm" href={`/tracks/${trackSlug}/${lessonId}`}>
               <span class="lang-vi">Hướng dẫn chi tiết →</span>
               <span class="lang-en">Detailed guide →</span>
+              <span class="lang-km">Detailed guide →</span>
             </a>
           </div>
         </div>

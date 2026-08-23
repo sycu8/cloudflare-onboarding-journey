@@ -12,8 +12,8 @@ export const siteSeo = {
 } as const;
 
 export type PageSeo = {
-  title: { vi: string; en: string };
-  description: { vi: string; en: string };
+  title: { vi: string; en: string; km?: string };
+  description: { vi: string; en: string; km?: string };
 };
 
 export function formatTitle(pageTitle: string, siteName = siteSeo.name) {

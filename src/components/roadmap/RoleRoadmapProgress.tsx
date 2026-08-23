@@ -45,6 +45,7 @@ export default function RoleRoadmapProgress({ roleId, totalWeeks }: Props) {
       <p className="text-sm font-semibold">
         <span className="lang-vi">Tiến độ roadmap</span>
         <span className="lang-en">Roadmap progress</span>
+        <span className="lang-km">វឌ្ឍនភាព roadmap</span>
       </p>
       <p className="text-muted mt-1 text-xs">
         <span className="lang-vi">
@@ -53,6 +54,7 @@ export default function RoleRoadmapProgress({ roleId, totalWeeks }: Props) {
         <span className="lang-en">
           {done}/{totalWeeks} weeks · {pct}%
         </span>
+        <span className="lang-km">{done}/{totalWeeks} weeks · {pct}%</span>
       </p>
       <div className="mt-3 h-2 overflow-hidden rounded-full bg-[var(--cf-surface-2)]">
         <div className="h-full bg-[var(--cf-accent)] transition-all" style={{ width: `${pct}%` }} />

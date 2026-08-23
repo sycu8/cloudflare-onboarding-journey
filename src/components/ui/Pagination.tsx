@@ -27,6 +27,7 @@ export default function Pagination({ page, totalPages, onPageChange, className =
       >
         <span className="lang-vi">← Trước</span>
         <span className="lang-en">← Prev</span>
+        <span className="lang-km">← Prev</span>
       </button>
 
       {visible.map((p, idx) => {
@@ -55,6 +56,7 @@ export default function Pagination({ page, totalPages, onPageChange, className =
       >
         <span className="lang-vi">Sau →</span>
         <span className="lang-en">Next →</span>
+        <span className="lang-km">Next →</span>
       </button>
     </nav>
   );

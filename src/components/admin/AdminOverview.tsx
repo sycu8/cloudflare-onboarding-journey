@@ -44,6 +44,7 @@ export default function AdminOverview({ events, active, onGoEvents, onGoSignups 
           <p className="admin-stat-label">
             <span className="lang-vi">Tổng sự kiện</span>
             <span className="lang-en">Total events</span>
+            <span className="lang-km">Total events</span>
           </p>
           <p className="admin-stat-value">{events.length}</p>
         </div>
@@ -51,6 +52,7 @@ export default function AdminOverview({ events, active, onGoEvents, onGoSignups 
           <p className="admin-stat-label">
             <span className="lang-vi">Đang published</span>
             <span className="lang-en">Published</span>
+            <span className="lang-km">Published</span>
           </p>
           <p className="admin-stat-value">{published}</p>
         </div>
@@ -58,6 +60,7 @@ export default function AdminOverview({ events, active, onGoEvents, onGoSignups 
           <p className="admin-stat-label">
             <span className="lang-vi">Sắp diễn ra</span>
             <span className="lang-en">Upcoming</span>
+            <span className="lang-km">Upcoming</span>
           </p>
           <p className="admin-stat-value">{upcoming}</p>
         </div>
@@ -65,6 +68,7 @@ export default function AdminOverview({ events, active, onGoEvents, onGoSignups 
           <p className="admin-stat-label">
             <span className="lang-vi">Đăng ký</span>
             <span className="lang-en">Registrations</span>
+            <span className="lang-km">Registrations</span>
           </p>
           <p className="admin-stat-value">{loading ? '…' : (signupTotal ?? '—')}</p>
         </div>
@@ -75,15 +79,18 @@ export default function AdminOverview({ events, active, onGoEvents, onGoSignups 
           <h2 className="font-semibold">
             <span className="lang-vi">Thao tác nhanh</span>
             <span className="lang-en">Quick actions</span>
+            <span className="lang-km">Quick actions</span>
           </h2>
           <div className="flex flex-wrap gap-2">
             <button type="button" className="btn btn-primary text-sm" onClick={onGoEvents}>
               <span className="lang-vi">Tạo sự kiện mới</span>
               <span className="lang-en">Create new event</span>
+              <span className="lang-km">Create new event</span>
             </button>
             <button type="button" className="btn btn-secondary text-sm" onClick={onGoSignups}>
               <span className="lang-vi">Xem đăng ký</span>
               <span className="lang-en">View registrations</span>
+              <span className="lang-km">View registrations</span>
             </button>
           </div>
         </section>
@@ -92,11 +99,13 @@ export default function AdminOverview({ events, active, onGoEvents, onGoSignups 
           <h2 className="font-semibold">
             <span className="lang-vi">Sự kiện gần nhất</span>
             <span className="lang-en">Latest events</span>
+            <span className="lang-km">Latest events</span>
           </h2>
           {events.length === 0 ? (
             <p className="text-muted text-sm">
               <span className="lang-vi">Chưa có sự kiện.</span>
               <span className="lang-en">No events yet.</span>
+              <span className="lang-km">No events yet.</span>
             </p>
           ) : (
             <ul className="space-y-2 text-sm">

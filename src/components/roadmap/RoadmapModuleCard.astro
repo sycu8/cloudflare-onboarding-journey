@@ -12,9 +12,9 @@ type Props = {
 
 const { topic, stageIndex, done = false } = Astro.props;
 const levelLabels = {
-  foundation: { vi: 'Nền tảng', en: 'Foundation' },
-  beginner: { vi: 'Cơ bản', en: 'Beginner' },
-  intermediate: { vi: 'Trung cấp', en: 'Intermediate' },
+  foundation: { vi: 'Nền tảng', en: 'Foundation' , km: 'មូលដ្ឋាន' },
+  beginner: { vi: 'Cơ bản', en: 'Beginner' , km: 'អ្នកចាប់ផ្តើម' },
+  intermediate: { vi: 'Trung cấp', en: 'Intermediate' , km: 'កម្រិតមធ្យម' },
 };
 
 const tutorialLinks = (topic.relatedTutorialPaths ?? []).map((path) => {
@@ -23,6 +23,7 @@ const tutorialLinks = (topic.relatedTutorialPaths ?? []).map((path) => {
     hubPath: `/tutorials/${path.replace(/^\//, '').replace(/\/$/, '')}/`,
     titleVi: preview ? getTutorialDisplayTitle(preview, 'vi') : path,
     titleEn: preview ? getTutorialDisplayTitle(preview, 'en') : path,
+    titleKm: preview ? getTutorialDisplayTitle(preview, 'km') : path,
   };
 });
 ---
@@ -33,21 +34,25 @@ const tutorialLinks = (topic.relatedTutorialPaths ?? []).map((path) => {
     <span class="badge">
       <span class="lang-vi">{levelLabels[topic.level].vi}</span>
       <span class="lang-en">{levelLabels[topic.level].en}</span>
+      <span class="lang-km">{levelLabels[topic.level].km ?? levelLabels[topic.level].en}</span>
     </span>
     <span class="text-muted text-xs">
       <span class="lang-vi">{topic.estimatedMinutes} phút</span>
       <span class="lang-en">{topic.estimatedMinutes} min</span>
+      <span class="lang-km">{topic.estimatedMinutes} min</span>
     </span>
     {topic.isGeneralKnowledge ? (
       <span class="badge" title="Kiến thức Internet/mạng chung">
         <span class="lang-vi">Kiến thức chung</span>
         <span class="lang-en">General knowledge</span>
+        <span class="lang-km">ចំណេះទូទៅ</span>
       </span>
     ) : null}
     {done ? (
       <span class="badge badge-accent">
         <span class="lang-vi">Đã học</span>
         <span class="lang-en">Done</span>
+        <span class="lang-km">រួចរាល់</span>
       </span>
     ) : null}
   </div>
@@ -56,10 +61,12 @@ const tutorialLinks = (topic.relatedTutorialPaths ?? []).map((path) => {
     <h3 class="text-lg font-semibold">
       <span class="lang-vi">{topic.titleVi}</span>
       <span class="lang-en">{topic.titleEn ?? topic.titleVi}</span>
+      <span class="lang-km">{topic.titleKm ?? topic.titleEn ?? topic.titleVi}</span>
     </h3>
     <p class="text-muted mt-2 text-sm leading-relaxed">
       <span class="lang-vi">{topic.summaryVi}</span>
       <span class="lang-en">{topic.summaryEn ?? topic.summaryVi}</span>
+      <span class="lang-km">{topic.summaryKm ?? topic.summaryEn ?? topic.summaryVi}</span>
     </p>
   </div>
 
@@ -67,10 +74,12 @@ const tutorialLinks = (topic.relatedTutorialPaths ?? []).map((path) => {
     <p class="font-medium">
       <span class="lang-vi">Vì sao cần biết?</span>
       <span class="lang-en">Why it matters</span>
+      <span class="lang-km">ហេតុអ្វីសំខាន់</span>
     </p>
     <p class="text-muted mt-1">
       <span class="lang-vi">{topic.whyItMattersVi}</span>
       <span class="lang-en">{topic.whyItMattersEn ?? topic.whyItMattersVi}</span>
+      <span class="lang-km">{topic.whyItMattersKm ?? topic.whyItMattersEn ?? topic.whyItMattersVi}</span>
     </p>
   </div>
 
@@ -78,12 +87,14 @@ const tutorialLinks = (topic.relatedTutorialPaths ?? []).map((path) => {
     <p class="text-muted text-xs">
       <span class="lang-vi">Tiên quyết: </span>
       <span class="lang-en">Prerequisites: </span>
+      <span class="lang-km">Prerequisites:</span>
       {topic.prerequisites.map((id, i) => (
         <>
           {i > 0 ? ', ' : null}
           <a class="link" href={`#${id}`}>
             <span class="lang-vi">{getContentTopicTitle(id, 'vi')}</span>
             <span class="lang-en">{getContentTopicTitle(id, 'en')}</span>
+            <span class="lang-km">{getContentTopicTitle(id, 'km') ?? getContentTopicTitle(id, 'en')}</span>
           </a>
         </>
       ))}
@@ -95,6 +106,7 @@ const tutorialLinks = (topic.relatedTutorialPaths ?? []).map((path) => {
       <p class="text-xs font-medium">
         <span class="lang-vi">Sản phẩm Cloudflare liên quan</span>
         <span class="lang-en">Related Cloudflare products</span>
+        <span class="lang-km">ផលិតផល Cloudflare ពាក់ព័ន្ធ</span>
       </p>
       <ul class="mt-1 flex flex-wrap gap-1.5">
         {topic.relatedCloudflareProducts.map((p) => (
@@ -109,6 +121,7 @@ const tutorialLinks = (topic.relatedTutorialPaths ?? []).map((path) => {
       <p class="text-xs font-medium">
         <span class="lang-vi">Trên hub</span>
         <span class="lang-en">On this hub</span>
+        <span class="lang-km">នៅលើ hub</span>
       </p>
       <ul class="mt-1 flex flex-wrap gap-2 text-xs">
         {topic.relatedExistingRoutes.map((href) => {
@@ -118,6 +131,7 @@ const tutorialLinks = (topic.relatedTutorialPaths ?? []).map((path) => {
               <a class="link" href={href}>
                 <span class="lang-vi">{label.vi}</span>
                 <span class="lang-en">{label.en}</span>
+                <span class="lang-km">{label.km ?? label.en}</span>
               </a>
             </li>
           );
@@ -131,6 +145,7 @@ const tutorialLinks = (topic.relatedTutorialPaths ?? []).map((path) => {
       <p class="text-xs font-medium">
         <span class="lang-vi">Tutorial gợi ý</span>
         <span class="lang-en">Suggested tutorials</span>
+        <span class="lang-km">Tutorial ណែនាំ</span>
       </p>
       <ul class="mt-1 space-y-1 text-xs">
         {tutorialLinks.map((t) => (
@@ -138,6 +153,7 @@ const tutorialLinks = (topic.relatedTutorialPaths ?? []).map((path) => {
             <a class="link" href={t.hubPath}>
               <span class="lang-vi">{t.titleVi}</span>
               <span class="lang-en">{t.titleEn}</span>
+              <span class="lang-km">{t.titleKm ?? t.titleEn}</span>
             </a>
           </li>
         ))}
@@ -149,8 +165,10 @@ const tutorialLinks = (topic.relatedTutorialPaths ?? []).map((path) => {
     <p class="text-sm">
       <span class="font-medium lang-vi">Bài tập gợi ý: </span>
       <span class="font-medium lang-en">Suggested exercise: </span>
+      <span class="font-medium lang-km">Suggested exercise:</span>
       <span class="text-muted lang-vi">{topic.suggestedExerciseVi}</span>
       <span class="text-muted lang-en">{topic.suggestedExerciseVi}</span>
+      <span class="text-muted lang-km">{topic.suggestedExerciseVi}</span>
     </p>
   ) : null}
 
@@ -159,6 +177,7 @@ const tutorialLinks = (topic.relatedTutorialPaths ?? []).map((path) => {
       <p class="text-xs font-medium">
         <span class="lang-vi">Lỗi newbie hay gặp</span>
         <span class="lang-en">Common newbie mistakes</span>
+        <span class="lang-km">កំហុសថ្មីៗញឹកញាប់</span>
       </p>
       <ul class="text-muted mt-1 list-disc space-y-1 pl-5 text-xs">
         {topic.commonMistakesVi.map((m) => (
@@ -173,6 +192,7 @@ const tutorialLinks = (topic.relatedTutorialPaths ?? []).map((path) => {
       <p class="text-xs font-medium">
         <span class="lang-vi">Nguồn tham khảo</span>
         <span class="lang-en">Sources</span>
+        <span class="lang-km">ប្រភព</span>
       </p>
       <ul class="mt-1 space-y-1 text-xs">
         {topic.sourceUrls.map((url) => (
@@ -188,5 +208,6 @@ const tutorialLinks = (topic.relatedTutorialPaths ?? []).map((path) => {
     <input type="checkbox" class="cf-checkbox" data-topic-checkbox={topic.id} checked={done} />
     <span class="lang-vi">Đánh dấu đã học</span>
     <span class="lang-en">Mark as complete</span>
+    <span class="lang-km">សម្គាល់ថារួច</span>
   </label>
 </article>

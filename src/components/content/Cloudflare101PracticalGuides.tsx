@@ -16,6 +16,7 @@ export default function Cloudflare101PracticalGuides({ configSections, wafPracti
         <h3 className="mb-3 text-lg font-semibold">
           <span className="lang-vi">Hướng dẫn cấu hình cơ bản</span>
           <span className="lang-en">Basic configuration guide</span>
+          <span className="lang-km">Basic configuration guide</span>
         </h3>
         <p className="text-muted mb-4 max-w-3xl text-sm leading-relaxed">
           <span className="lang-vi">
@@ -26,6 +27,8 @@ export default function Cloudflare101PracticalGuides({ configSections, wafPracti
             Lab summaries for DNS, TLS, WAF, Bot, Cache, Load Balancer, and Transform Rules — follow along in the
             Dashboard.
           </span>
+          <span className="lang-km">Lab summaries for DNS, TLS, WAF, Bot, Cache, Load Balancer, and Transform Rules — follow along in the
+            Dashboard.</span>
         </p>
         <div className="space-y-2">
           {configSections.map((section) => {
@@ -42,10 +45,12 @@ export default function Cloudflare101PracticalGuides({ configSections, wafPracti
                     <span className="block font-semibold">
                       <span className="lang-vi">{section.title.vi}</span>
                       <span className="lang-en">{section.title.en}</span>
+                      <span className="lang-km">{section.title.en}</span>
                     </span>
                     <span className="text-muted mt-1 block text-sm">
                       <span className="lang-vi">{section.summary.vi}</span>
                       <span className="lang-en">{section.summary.en}</span>
+                      <span className="lang-km">{section.summary.en}</span>
                     </span>
                   </span>
                   <span className="text-muted shrink-0 text-lg" aria-hidden="true">
@@ -59,6 +64,7 @@ export default function Cloudflare101PracticalGuides({ configSections, wafPracti
                         <li key={i}>
                           <span className="lang-vi">{b.text.vi}</span>
                           <span className="lang-en">{b.text.en}</span>
+                          <span className="lang-km">{b.text.en}</span>
                         </li>
                       ))}
                     </ul>
@@ -84,6 +90,7 @@ export default function Cloudflare101PracticalGuides({ configSections, wafPracti
         <h3 className="mb-3 text-lg font-semibold">
           <span className="lang-vi">WAF — best practice rules</span>
           <span className="lang-en">WAF — best practice rules</span>
+          <span className="lang-km">WAF — best practice rules</span>
         </h3>
         <p className="text-muted mb-4 max-w-3xl text-sm">
           <span className="lang-vi">
@@ -92,6 +99,7 @@ export default function Cloudflare101PracticalGuides({ configSections, wafPracti
           <span className="lang-en">
             Common custom rule patterns. Free/Pro plans limit rule count — prioritize what matters most.
           </span>
+          <span className="lang-km">Common custom rule patterns. Free/Pro plans limit rule count — prioritize what matters most.</span>
         </p>
         <ul className="grid gap-3 md:grid-cols-2">
           {wafPractices.map((p) => (
@@ -99,15 +107,18 @@ export default function Cloudflare101PracticalGuides({ configSections, wafPracti
               <h4 className="font-semibold">
                 <span className="lang-vi">{p.title.vi}</span>
                 <span className="lang-en">{p.title.en}</span>
+                <span className="lang-km">{p.title.en}</span>
               </h4>
               <p className="text-muted mt-2 text-sm leading-relaxed">
                 <span className="lang-vi">{p.summary.vi}</span>
                 <span className="lang-en">{p.summary.en}</span>
+                <span className="lang-km">{p.summary.en}</span>
               </p>
               {p.note ? (
                 <p className="text-muted mt-2 text-xs">
                   <span className="lang-vi">{p.note.vi}</span>
                   <span className="lang-en">{p.note.en}</span>
+                  <span className="lang-km">{p.note.en}</span>
                 </p>
               ) : null}
             </li>
@@ -116,6 +127,7 @@ export default function Cloudflare101PracticalGuides({ configSections, wafPracti
         <a className="link mt-4 inline-block text-sm" href={docsUrl('/waf/custom-rules/')} target="_blank" rel="noopener noreferrer">
           <span className="lang-vi">Custom rules — Cloudflare Docs →</span>
           <span className="lang-en">Custom rules — Cloudflare Docs →</span>
+          <span className="lang-km">Custom rules — Cloudflare Docs →</span>
         </a>
       </div>
     </div>

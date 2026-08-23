@@ -31,6 +31,7 @@ const isTutorialLike =
       <a class="link" href={hubPath}>
         <span class="lang-vi">{getTutorialTitleForResource(resource, 'vi')}</span>
         <span class="lang-en">{getTutorialTitleForResource(resource, 'en')}</span>
+        <span class="lang-km">{getTutorialTitleForResource(resource, 'en')}</span>
       </a>
     ) : (
       resource.title
@@ -49,6 +50,6 @@ const isTutorialLike =
     href={isTutorialLike ? hubPath : resource.url}
     {...(!isTutorialLike ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
   >
-    <LangText text={{ vi: 'Tìm hiểu thêm', en: 'Learn more' }} />
+    <LangText text={{ vi: 'Tìm hiểu thêm', en: 'Learn more', km: 'Learn more' }} />
   </a>
 </article>

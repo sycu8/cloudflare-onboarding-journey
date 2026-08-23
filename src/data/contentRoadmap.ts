@@ -8,6 +8,8 @@ import { stage5 } from './contentRoadmap/stage5';
 import { stage6 } from './contentRoadmap/stage6';
 import { stage7 } from './contentRoadmap/stage7';
 import { stage8 } from './contentRoadmap/stage8';
+import { applyStageTopicEn } from './contentRoadmap/applyTopicEn';
+import { applyStageTopicKm } from './contentRoadmap/applyTopicKm';
 
 export const contentRoadmapStages: ContentRoadmapStage[] = [
   stage0,
@@ -19,15 +21,15 @@ export const contentRoadmapStages: ContentRoadmapStage[] = [
   stage6,
   stage7,
   stage8,
-];
+].map(applyStageTopicEn).map(applyStageTopicKm);
 
-export const contentRoadmapFilters: { id: ContentRoadmapFilter; labelVi: string; labelEn: string }[] = [
-  { id: 'foundation', labelVi: 'Nền tảng', labelEn: 'Foundation' },
-  { id: 'dns', labelVi: 'DNS', labelEn: 'DNS' },
-  { id: 'performance', labelVi: 'Hiệu năng', labelEn: 'Performance' },
-  { id: 'security', labelVi: 'Bảo mật', labelEn: 'Security' },
-  { id: 'developer', labelVi: 'Developer', labelEn: 'Developer' },
-  { id: 'zero-trust', labelVi: 'Zero Trust', labelEn: 'Zero Trust' },
+export const contentRoadmapFilters: { id: ContentRoadmapFilter; labelVi: string; labelEn: string; labelKm?: string }[] = [
+  { id: 'foundation', labelVi: 'Nền tảng', labelEn: 'Foundation', labelKm: 'មូលដ្ឋាន' },
+  { id: 'dns', labelVi: 'DNS', labelEn: 'DNS', labelKm: 'DNS' },
+  { id: 'performance', labelVi: 'Hiệu năng', labelEn: 'Performance', labelKm: 'Performance' },
+  { id: 'security', labelVi: 'Bảo mật', labelEn: 'Security', labelKm: 'Security' },
+  { id: 'developer', labelVi: 'Developer', labelEn: 'Developer', labelKm: 'Developer' },
+  { id: 'zero-trust', labelVi: 'Zero Trust', labelEn: 'Zero Trust', labelKm: 'Zero Trust' },
 ];
 
 export function getStageMinutes(stage: ContentRoadmapStage) {
@@ -46,9 +48,10 @@ export function getContentTopicById(id: string) {
   return undefined;
 }
 
-export function getContentTopicTitle(id: string, lang: 'vi' | 'en' = 'vi') {
+export function getContentTopicTitle(id: string, lang: 'vi' | 'en' | 'km' = 'vi') {
   const t = getContentTopicById(id);
   if (!t) return id;
+  if (lang === 'km') return t.titleKm ?? t.titleEn ?? t.titleVi;
   if (lang === 'en' && t.titleEn) return t.titleEn;
   return t.titleVi;
 }

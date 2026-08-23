@@ -26,30 +26,34 @@ import {
 >
   <Breadcrumbs
     items={[
-      { href: '/resources', label: { vi: 'Tài nguyên', en: 'Resources' } },
-      { href: '/demo-guides', label: { vi: 'Dashboard overview', en: 'Dashboard overview' } },
+      { href: '/resources', label: { vi: 'Tài nguyên', en: 'Resources' , km: 'Resources' } },
+      { href: '/demo-guides', label: { vi: 'Dashboard overview', en: 'Dashboard overview' , km: 'Dashboard overview' } },
     ]}
   />
 
   <header class="mb-8">
-    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: 'Dashboard overview', en: 'Dashboard overview' }} />
+    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: 'Dashboard overview', en: 'Dashboard overview', km: 'Dashboard overview' }} />
     <LangText as="p" class="text-muted mt-2 max-w-3xl text-sm leading-relaxed md:text-base" text={demoScriptsIntro} />
     <nav class="mt-4 flex flex-wrap gap-2 text-sm" aria-label="Dashboard overview sections">
       <a class="badge hover:border-[var(--cf-accent)]" href="#platform">
         <span class="lang-vi">Nền tảng</span>
         <span class="lang-en">Platform</span>
+        <span class="lang-km">Platform</span>
       </a>
       <a class="badge hover:border-[var(--cf-accent)]" href="#application-security">
         <span class="lang-vi">Application Security</span>
         <span class="lang-en">Application Security</span>
+        <span class="lang-km">Application Security</span>
       </a>
       <a class="badge hover:border-[var(--cf-accent)]" href="#cloudflare-one">
         <span class="lang-vi">Cloudflare One</span>
         <span class="lang-en">Cloudflare One</span>
+        <span class="lang-km">Cloudflare One</span>
       </a>
       <a class="badge hover:border-[var(--cf-accent)]" href="/plans">
         <span class="lang-vi">So sánh gói SME</span>
         <span class="lang-en">SME plan comparison</span>
+        <span class="lang-km">SME plan comparison</span>
       </a>
     </nav>
   </header>
@@ -58,7 +62,7 @@ import {
     <LangText
       as="h2"
       class="mb-2 text-xl font-semibold"
-      text={{ vi: 'Nền tảng — Account, zone & luồng request', en: 'Platform — Account, zone & request flow' }}
+      text={{ vi: 'Nền tảng — Account, zone & luồng request', en: 'Platform — Account, zone & request flow', km: 'Platform — Account, zone & request flow' }}
     />
     <LangText
       as="p"
@@ -73,6 +77,7 @@ import {
       <a class="link" href="/content-delivery">
         <span class="lang-vi">Hướng dẫn chi tiết content delivery & tăng tốc website →</span>
         <span class="lang-en">Detailed content delivery & website speed guide →</span>
+        <span class="lang-km">Detailed content delivery & website speed guide →</span>
       </a>
     </p>
   </section>
@@ -81,7 +86,7 @@ import {
     <LangText
       as="h2"
       class="mb-2 text-xl font-semibold"
-      text={{ vi: 'Application Security (Advanced Security)', en: 'Application Security (Advanced Security)' }}
+      text={{ vi: 'Application Security (Advanced Security)', en: 'Application Security (Advanced Security)', km: 'Application Security (Advanced Security)' }}
     />
     <LangText
       as="p"
@@ -95,6 +100,7 @@ import {
       <a class="link" href="/tracks/application-services">
         <span class="lang-vi">← Lộ trình Application Services</span>
         <span class="lang-en">← Application Services track</span>
+        <span class="lang-km">← Application Services track</span>
       </a>
     </p>
     <DemoVignetteList client:load vignettes={applicationSecurityDemos} />
@@ -104,7 +110,7 @@ import {
     <LangText
       as="h2"
       class="mb-2 text-xl font-semibold"
-      text={{ vi: 'Cloudflare One (Zero Trust)', en: 'Cloudflare One (Zero Trust)' }}
+      text={{ vi: 'Cloudflare One (Zero Trust)', en: 'Cloudflare One (Zero Trust)', km: 'Cloudflare One (Zero Trust)' }}
     />
     <LangText
       as="p"
@@ -118,6 +124,7 @@ import {
       <a class="link" href="/tracks/cloudflare-one">
         <span class="lang-vi">← Lộ trình Cloudflare One</span>
         <span class="lang-en">← Cloudflare One track</span>
+        <span class="lang-km">← Cloudflare One track</span>
       </a>
     </p>
     <DemoVignetteList client:load vignettes={cloudflareOneDemos} />

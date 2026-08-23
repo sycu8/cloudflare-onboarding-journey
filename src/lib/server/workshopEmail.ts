@@ -1,3 +1,8 @@
+import { pickLocalizedText } from '../../i18n';
+import { normalizeLanguage } from '../../i18n/storage';
+import type { Language } from '../../i18n/types';
+import { langLocale } from '../clientLang';
+
 export type WorkshopEmailBinding = {
   send(message: {
     to: string;
@@ -16,8 +21,6 @@ export type MailEnv = {
   WORKSHOP_EMAIL_FROM?: string;
   PUBLIC_SITE_URL?: string;
 };
-
-type Lang = 'vi' | 'en';
 
 function siteOrigin(env: MailEnv) {
   return (env.PUBLIC_SITE_URL || 'https://onboarding.orangecloud.vn').replace(/\/$/, '');
@@ -122,51 +125,30 @@ ${body}
 </body></html>`;
 }
 
+function eventLine(lang: Language, eventTitle: { vi: string; en: string }) {
+  const title = pickLocalizedText(eventTitle, lang);
+  if (lang === 'vi') return `<p>Sự kiện: <strong>${title}</strong></p>`;
+  return `<p>Event: <strong>${title}</strong></p>`;
+}
+
 export async function sendSignupConfirmation(
   env: MailEnv,
   input: {
     name: string;
     email: string;
-    language: Lang;
+    language: Language;
     eventTitle?: { vi: string; en: string } | null;
   },
 ) {
   const lang = input.language;
   const origin = siteOrigin(env);
-  const eventLine =
-    input.eventTitle && lang === 'en'
-      ? `<p>Event: <strong>${input.eventTitle.en}</strong></p>`
-      : input.eventTitle
-        ? `<p>Sự kiện: <strong>${input.eventTitle.vi}</strong></p>`
-        : '';
+  const eventBlock = input.eventTitle ? eventLine(lang, input.eventTitle) : '';
 
-  if (lang === 'en') {
+  if (lang === 'vi') {
     const html = layout(
-      `<p>Hi ${input.name},</p>
-<p>Thank you for registering your interest in Cloudflare Starter Hub workshops.</p>
-${eventLine}
-<p>We have saved your details. When a new workshop is scheduled, we will email you with date, format, and registration links.</p>
-<p>In the meantime, explore learning tracks and use cases:</p>
-<ul>
-<li><a href="${origin}/start-here/">Start here</a></li>
-<li><a href="${origin}/tracks/">Learning tracks</a></li>
-<li><a href="${origin}/use-cases/">Use cases</a></li>
-</ul>
-<p>See you soon,<br/>Cloudflare Starter Hub</p>`,
-      origin,
-    );
-    return sendEmail(env, {
-      to: input.email,
-      subject: 'Workshop registration received — Cloudflare Starter Hub',
-      html,
-      text: `Hi ${input.name},\n\nThank you for registering. We will email you when new workshops are announced.\n\n${origin}/workshop/`,
-    });
-  }
-
-  const html = layout(
-    `<p>Chào ${input.name},</p>
+      `<p>Chào ${input.name},</p>
 <p>Cảm ơn bạn đã đăng ký quan tâm workshop trên Cloudflare Starter Hub.</p>
-${eventLine}
+${eventBlock}
 <p>Chúng tôi đã ghi nhận thông tin của bạn. Khi có workshop mới, bạn sẽ nhận email thông báo về thời gian, hình thức và link đăng ký.</p>
 <p>Trong lúc chờ, bạn có thể khám phá lộ trình học và tình huống thực tế:</p>
 <ul>
@@ -175,13 +157,36 @@ ${eventLine}
 <li><a href="${origin}/use-cases/">Tình huống thực tế</a></li>
 </ul>
 <p>Hẹn gặp bạn,<br/>Cloudflare Starter Hub</p>`,
+      origin,
+    );
+    return sendEmail(env, {
+      to: input.email,
+      subject: 'Đã nhận đăng ký workshop — Cloudflare Starter Hub',
+      html,
+      text: `Chào ${input.name},\n\nCảm ơn bạn đã đăng ký. Chúng tôi sẽ gửi email khi có workshop mới.\n\n${origin}/workshop/`,
+    });
+  }
+
+  // English template for en and km (km falls back to en)
+  const html = layout(
+    `<p>Hi ${input.name},</p>
+<p>Thank you for registering your interest in Cloudflare Starter Hub workshops.</p>
+${eventBlock}
+<p>We have saved your details. When a new workshop is scheduled, we will email you with date, format, and registration links.</p>
+<p>In the meantime, explore learning tracks and use cases:</p>
+<ul>
+<li><a href="${origin}/start-here/">Start here</a></li>
+<li><a href="${origin}/tracks/">Learning tracks</a></li>
+<li><a href="${origin}/use-cases/">Use cases</a></li>
+</ul>
+<p>See you soon,<br/>Cloudflare Starter Hub</p>`,
     origin,
   );
   return sendEmail(env, {
     to: input.email,
-    subject: 'Đã nhận đăng ký workshop — Cloudflare Starter Hub',
+    subject: 'Workshop registration received — Cloudflare Starter Hub',
     html,
-    text: `Chào ${input.name},\n\nCảm ơn bạn đã đăng ký. Chúng tôi sẽ gửi email khi có workshop mới.\n\n${origin}/workshop/`,
+    text: `Hi ${input.name},\n\nThank you for registering. We will email you when new workshops are announced.\n\n${origin}/workshop/`,
   });
 }
 
@@ -195,9 +200,9 @@ export type WorkshopEventMail = {
   meetingUrl: string | null;
 };
 
-function formatEventWhen(startsAt: string, timezone: string, lang: Lang) {
+function formatEventWhen(startsAt: string, timezone: string, lang: Language) {
   try {
-    return new Intl.DateTimeFormat(lang === 'en' ? 'en-US' : 'vi-VN', {
+    return new Intl.DateTimeFormat(langLocale(lang), {
       dateStyle: 'full',
       timeStyle: 'short',
       timeZone: timezone,
@@ -212,51 +217,51 @@ export async function sendNewWorkshopAnnouncement(
   input: {
     name: string;
     email: string;
-    language: Lang;
+    language: Language;
     event: WorkshopEventMail;
   },
 ) {
   const lang = input.language;
   const origin = siteOrigin(env);
   const when = formatEventWhen(input.event.startsAt, input.event.timezone, lang);
-  const title = lang === 'en' ? input.event.title.en : input.event.title.vi;
-  const desc = lang === 'en' ? input.event.description.en : input.event.description.vi;
-  const loc = input.event.location ? (lang === 'en' ? input.event.location.en : input.event.location.vi) : '';
+  const title = pickLocalizedText(input.event.title, lang);
+  const desc = pickLocalizedText(input.event.description, lang);
+  const loc = input.event.location ? pickLocalizedText(input.event.location, lang) : '';
 
-  if (lang === 'en') {
+  if (lang === 'vi') {
     const html = layout(
-      `<p>Hi ${input.name},</p>
-<p>A new Cloudflare Starter Hub workshop is now open:</p>
-<h2 style="color:#f6821f;margin:16px 0">${title}</h2>
-<p><strong>When:</strong> ${when}</p>
-${loc ? `<p><strong>Location:</strong> ${loc}</p>` : ''}
-${desc ? `<p>${desc}</p>` : ''}
-<p><a href="${origin}/workshop/" style="display:inline-block;background:#f6821f;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">View & register</a></p>`,
-      origin,
-    );
-    return sendEmail(env, {
-      to: input.email,
-      subject: `New workshop: ${title}`,
-      html,
-      text: `New workshop: ${title}\n${when}\n${origin}/workshop/`,
-    });
-  }
-
-  const html = layout(
-    `<p>Chào ${input.name},</p>
+      `<p>Chào ${input.name},</p>
 <p>Có workshop mới trên Cloudflare Starter Hub:</p>
 <h2 style="color:#f6821f;margin:16px 0">${title}</h2>
 <p><strong>Thời gian:</strong> ${when}</p>
 ${loc ? `<p><strong>Địa điểm:</strong> ${loc}</p>` : ''}
 ${desc ? `<p>${desc}</p>` : ''}
 <p><a href="${origin}/workshop/" style="display:inline-block;background:#f6821f;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">Xem & đăng ký</a></p>`,
+      origin,
+    );
+    return sendEmail(env, {
+      to: input.email,
+      subject: `Workshop mới: ${title}`,
+      html,
+      text: `Workshop mới: ${title}\n${when}\n${origin}/workshop/`,
+    });
+  }
+
+  const html = layout(
+    `<p>Hi ${input.name},</p>
+<p>A new Cloudflare Starter Hub workshop is now open:</p>
+<h2 style="color:#f6821f;margin:16px 0">${title}</h2>
+<p><strong>When:</strong> ${when}</p>
+${loc ? `<p><strong>Location:</strong> ${loc}</p>` : ''}
+${desc ? `<p>${desc}</p>` : ''}
+<p><a href="${origin}/workshop/" style="display:inline-block;background:#f6821f;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none">View & register</a></p>`,
     origin,
   );
   return sendEmail(env, {
     to: input.email,
-    subject: `Workshop mới: ${title}`,
+    subject: `New workshop: ${title}`,
     html,
-    text: `Workshop mới: ${title}\n${when}\n${origin}/workshop/`,
+    text: `New workshop: ${title}\n${when}\n${origin}/workshop/`,
   });
 }
 
@@ -277,7 +282,7 @@ export async function notifyWorkshopSubscribers(
   const recipients = rows.results ?? [];
   let sent = 0;
   for (const row of recipients) {
-    const lang: Lang = row.language === 'en' ? 'en' : 'vi';
+    const lang = normalizeLanguage(row.language);
     const ok = await sendNewWorkshopAnnouncement(env, {
       name: row.name,
       email: row.email,

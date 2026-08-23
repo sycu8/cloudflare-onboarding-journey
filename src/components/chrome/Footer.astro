@@ -15,16 +15,18 @@ import { useCaseTrackOrder, getUseCasesByTrack } from '../../data/useCases';
         <span class="lang-en">
           A learning hub for Application Services, Developer Platform, Cloudflare One, AI Security & Adoption, and Operational Excellence.
         </span>
+        <span class="lang-km">A beginner-friendly learning hub for Application Services, Developer Platform, and Cloudflare One.</span>
       </p>
       <p class="text-muted mt-4 text-xs opacity-80">
         <span class="lang-vi">Hosted on Cloudflare Pages</span>
         <span class="lang-en">Hosted on Cloudflare Pages</span>
+        <span class="lang-km">Hosted on Cloudflare Pages</span>
       </p>
     </div>
 
     <div class="space-y-3 text-sm">
       <div class="font-semibold">
-        <LangText text={{ vi: 'Lộ trình học', en: 'Learning tracks' }} />
+        <LangText text={{ vi: 'Lộ trình học', en: 'Learning tracks', km: 'Learning tracks' }} />
       </div>
       <ul class="space-y-2">
         <li><a class="link" href="/tracks/application-services">Application Services</a></li>
@@ -37,10 +39,10 @@ import { useCaseTrackOrder, getUseCasesByTrack } from '../../data/useCases';
 
     <div class="space-y-3 text-sm">
       <div class="font-semibold">
-        <LangText text={{ vi: 'Tình huống thực tế', en: 'Use cases' }} />
+        <LangText text={{ vi: 'Tình huống thực tế', en: 'Use cases', km: 'Use cases' }} />
       </div>
       <ul class="space-y-2">
-        <li><a class="link font-medium" href="/use-cases/"><LangText text={{ vi: 'Tất cả tình huống', en: 'All use cases' }} /></a></li>
+        <li><a class="link font-medium" href="/use-cases/"><LangText text={{ vi: 'Tất cả tình huống', en: 'All use cases', km: 'All use cases' }} /></a></li>
         {
           useCaseTrackOrder.map((track) => {
             const cases = getUseCasesByTrack(track);
@@ -65,7 +67,7 @@ import { useCaseTrackOrder, getUseCasesByTrack } from '../../data/useCases';
       </ul>
       <div class="pt-2">
         <a class="btn btn-secondary w-full" href="/workshop">
-          <LangText text={{ vi: 'Tham gia workshop', en: 'Join workshop' }} />
+          <LangText text={{ vi: 'Tham gia workshop', en: 'Join workshop', km: 'Join workshop' }} />
         </a>
       </div>
     </div>
@@ -75,15 +77,16 @@ import { useCaseTrackOrder, getUseCasesByTrack } from '../../data/useCases';
     <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
       <div>© {new Date().getFullYear()} Cloudflare Starter Hub</div>
       <div class="flex flex-wrap gap-4">
-        <a class="link" href="/blog/"><LangText text={{ vi: 'Blog', en: 'Blog' }} /></a>
-        <a class="link" href="/resources"><LangText text={{ vi: 'Tài nguyên', en: 'Resources' }} /></a>
-        <a class="link" href="/glossary"><LangText text={{ vi: 'Thuật ngữ', en: 'Glossary' }} /></a>
-        <a class="link" href="/privacy"><LangText text={{ vi: 'Quyền riêng tư', en: 'Privacy' }} /></a>
+        <a class="link" href="/blog/"><LangText text={{ vi: 'Blog', en: 'Blog', km: 'Blog' }} /></a>
+        <a class="link" href="/resources"><LangText text={{ vi: 'Tài nguyên', en: 'Resources', km: 'Resources' }} /></a>
+        <a class="link" href="/glossary"><LangText text={{ vi: 'Thuật ngữ', en: 'Glossary', km: 'Glossary' }} /></a>
+        <a class="link" href="/privacy"><LangText text={{ vi: 'Quyền riêng tư', en: 'Privacy', km: 'Privacy' }} /></a>
       </div>
     </div>
     <p class="flex flex-wrap items-center gap-x-1 gap-y-1">
       <span class="lang-vi">Xây dựng bởi </span>
       <span class="lang-en">Built by </span>
+      <span class="lang-km">Built by</span>
       <a
         class="link font-medium text-[var(--cf-text)]"
         href="https://www.linkedin.com/in/sycule/"

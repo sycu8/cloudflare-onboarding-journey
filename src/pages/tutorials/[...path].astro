@@ -39,13 +39,14 @@ const resource = cloudflareResources.find((r) => r.path.replace(/\/$/, '') === d
 
 const titleEn = preview?.title ?? resource?.title ?? pathParam;
 const titleVi = preview ? getTutorialDisplayTitle(preview, 'vi') : titleEn;
+const titleKm = preview ? getTutorialDisplayTitle(preview, 'km') : titleEn;
 const officialUrl = preview?.url ?? resource?.url ?? `https://developers.cloudflare.com${docPath}/`;
 const contentType = preview?.contentType ?? resource?.contentType ?? 'Tutorial';
 const track = preview?.track ?? resource?.track ?? 'cross-cutting';
 const typeLabel = cloudflareResourceContentTypeLabels[contentType as keyof typeof cloudflareResourceContentTypeLabels];
 const trackLabel = cloudflareResourceTrackLabels[track as keyof typeof cloudflareResourceTrackLabels];
 
-const pageTitle = { vi: titleVi, en: titleEn };
+const pageTitle = { vi: titleVi, en: titleEn, km: titleKm };
 function safeSeoDescription(value: string | undefined, fallback: string): string {
   if (!value || /<\s*(?:!doctype|html|head|body|script|img|h[1-6])\b/i.test(value)) return fallback;
   return value.replace(/\s+/g, ' ').trim().slice(0, 320);
@@ -53,6 +54,10 @@ function safeSeoDescription(value: string | undefined, fallback: string): string
 const pageDesc = {
   vi: safeSeoDescription(preview?.summaryVi, `Hướng dẫn tutorial Cloudflare trên hub — có backlink tới docs gốc.`),
   en: safeSeoDescription(preview?.summaryEn, `Cloudflare tutorial guide on the hub with links to official docs.`),
+  km: safeSeoDescription(
+    preview?.summaryKm ?? preview?.summaryEn,
+    `Cloudflare tutorial guide on the hub with links to official docs.`,
+  ),
 };
 
 const hasGuide = Boolean(preview?.sections && preview.sections.length > 0);
@@ -61,9 +66,9 @@ const hasGuide = Boolean(preview?.sections && preview.sections.length > 0);
 <BaseLayout title={pageTitle} description={pageDesc} canonicalPath={`/tutorials/${pathParam}/`}>
   <Breadcrumbs
     items={[
-      { href: '/resources', label: { vi: 'Tài nguyên', en: 'Resources' } },
-      { href: '/resources#cloudflare-resources', label: { vi: 'Cloudflare Resources', en: 'Cloudflare Resources' } },
-      { href: `/tutorials/${pathParam}/`, label: { vi: titleVi, en: titleEn } },
+      { href: '/resources', label: { vi: 'Tài nguyên', en: 'Resources' , km: 'Resources' } },
+      { href: '/resources#cloudflare-resources', label: { vi: 'Cloudflare Resources', en: 'Cloudflare Resources' , km: 'Cloudflare Resources' } },
+      { href: `/tutorials/${pathParam}/`, label: { vi: titleVi, en: titleEn, km: titleKm } },
     ]}
   />
 
@@ -78,12 +83,14 @@ const hasGuide = Boolean(preview?.sections && preview.sections.length > 0);
           <span class="badge text-xs">
             <span class="lang-vi">~{preview.estimatedMinutes} phút</span>
             <span class="lang-en">~{preview.estimatedMinutes} min</span>
+            <span class="lang-km">~{preview.estimatedMinutes} min</span>
           </span>
         ) : null}
         {preview?.crawledAt ? (
           <span class="text-muted text-xs">
             <span class="lang-vi">Đồng bộ {preview.crawledAt}</span>
             <span class="lang-en">Synced {preview.crawledAt}</span>
+            <span class="lang-km">Synced {preview.crawledAt}</span>
           </span>
         ) : null}
       </div>
@@ -91,6 +98,7 @@ const hasGuide = Boolean(preview?.sections && preview.sections.length > 0);
       <h1 class="mt-4 text-2xl font-bold leading-tight md:text-3xl">
         <span class="lang-vi">{titleVi}</span>
         <span class="lang-en">{titleEn}</span>
+        <span class="lang-km">{titleKm}</span>
       </h1>
 
       <p class="text-muted mt-3 text-sm leading-relaxed">
@@ -100,10 +108,11 @@ const hasGuide = Boolean(preview?.sections && preview.sections.length > 0);
         <span class="lang-en">
           Detailed guide synced from Cloudflare docs — each section links to the matching anchor on the official page.
         </span>
+        <span class="lang-km">Detailed guide synced from Cloudflare docs — each section links to the matching anchor on the official page.</span>
       </p>
 
       <a class="btn btn-secondary mt-5" href="/resources#cloudflare-resources">
-        <LangText text={{ vi: '← Danh mục', en: '← Catalog' }} />
+        <LangText text={{ vi: '← Danh mục', en: '← Catalog', km: '← Catalog' }} />
       </a>
     </header>
 
@@ -111,25 +120,35 @@ const hasGuide = Boolean(preview?.sections && preview.sections.length > 0);
       <div class="space-y-8">
         <section class="card border-[var(--cf-accent)]/25 bg-gradient-to-br from-[rgba(255,140,56,0.06)] to-transparent p-6">
           <h2 class="text-lg font-semibold">
-            <LangText text={{ vi: 'Giải thích nhanh', en: 'Quick context' }} />
+            <LangText text={{ vi: 'Giải thích nhanh', en: 'Quick context', km: 'Quick context' }} />
           </h2>
           <p class="lang-vi mt-3 text-sm leading-relaxed">{preview.explanationVi}</p>
           <p class="lang-en mt-3 text-sm leading-relaxed text-[var(--text-muted)]">{preview.introEn}</p>
+          <p class="lang-km mt-3 text-sm leading-relaxed text-[var(--text-muted)]">
+            {preview.introKm ?? preview.introEn}
+          </p>
         </section>
 
         <section class="card p-6 border-amber-500/30 bg-amber-500/5">
           <h2 class="text-lg font-semibold text-amber-700 dark:text-amber-300">
-            <LangText text={{ vi: 'Lưu ý trước khi làm', en: 'Notes before you start' }} />
+            <LangText text={{ vi: 'Lưu ý trước khi làm', en: 'Notes before you start', km: 'Notes before you start' }} />
           </h2>
           <ul class="mt-4 list-disc space-y-2 pl-5 text-sm">
             {preview.notesVi.map((note) => (
               <li class="lang-vi leading-relaxed">{note}</li>
+            ))}
+            {(preview.notesEn ?? []).map((note) => (
+              <li class="lang-en leading-relaxed">{note}</li>
+            ))}
+            {(preview.notesKm ?? preview.notesEn ?? []).map((note) => (
+              <li class="lang-km leading-relaxed">{note}</li>
             ))}
           </ul>
           {preview.lastReviewed ? (
             <p class="text-muted mt-4 text-xs">
               <span class="lang-vi">Tài liệu gốc — rà soát lần cuối: {preview.lastReviewed}</span>
               <span class="lang-en">Official docs — last reviewed: {preview.lastReviewed}</span>
+              <span class="lang-km">Official docs — last reviewed: {preview.lastReviewed}</span>
             </p>
           ) : null}
         </section>
@@ -159,7 +178,7 @@ const hasGuide = Boolean(preview?.sections && preview.sections.length > 0);
             />
           </p>
           <a class="btn btn-primary shrink-0" href={officialUrl} target="_blank" rel="noopener noreferrer">
-            <LangText text={{ vi: 'Tài liệu gốc ↗', en: 'Official docs ↗' }} />
+            <LangText text={{ vi: 'Tài liệu gốc ↗', en: 'Official docs ↗', km: 'Official docs ↗' }} />
           </a>
         </section>
       </div>
@@ -172,9 +191,10 @@ const hasGuide = Boolean(preview?.sections && preview.sections.length > 0);
           <span class="lang-en">
             Tutorial not synced yet. Check back after the next catalog sync or open the official doc below.
           </span>
+          <span class="lang-km">Tutorial not synced yet. Check back after the next catalog sync or open the official doc below.</span>
         </p>
         <a class="btn btn-primary mt-4" href={officialUrl} target="_blank" rel="noopener noreferrer">
-          <LangText text={{ vi: 'Tài liệu gốc ↗', en: 'Official docs ↗' }} />
+          <LangText text={{ vi: 'Tài liệu gốc ↗', en: 'Official docs ↗', km: 'Official docs ↗' }} />
         </a>
       </section>
     )}

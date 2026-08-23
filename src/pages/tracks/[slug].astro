@@ -95,12 +95,12 @@ const trackDiagrams = getDiagramsForTrack(track.slug, 3);
   </header>
 
   <section class="card mb-6">
-    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Ai nên học lộ trình này?', en: 'Who is this for?' }} />
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Ai nên học lộ trình này?', en: 'Who is this for?', km: 'Who is this for?' }} />
     <LangText as="p" class="text-muted mt-2 text-sm leading-relaxed" text={track.whoIsThisFor} />
   </section>
 
   <section class="card mb-6">
-    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Mô hình tư duy', en: 'Mental model' }} />
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Mô hình tư duy', en: 'Mental model', km: 'Mental model' }} />
     <LangText as="p" class="text-muted mt-2 font-mono text-sm leading-relaxed" text={track.mentalModel} />
   </section>
 
@@ -109,7 +109,7 @@ const trackDiagrams = getDiagramsForTrack(track.slug, 3);
       <LangText
         as="h2"
         class="mb-4 text-lg font-semibold"
-        text={{ vi: 'Sơ đồ kiến trúc tham chiếu', en: 'Reference architecture diagrams' }}
+        text={{ vi: 'Sơ đồ kiến trúc tham chiếu', en: 'Reference architecture diagrams', km: 'Reference architecture diagrams' }}
       />
       <div class="grid gap-6 lg:grid-cols-3">
         {trackDiagrams.map((d) => (
@@ -120,19 +120,20 @@ const trackDiagrams = getDiagramsForTrack(track.slug, 3);
   ) : null}
 
   <section class="card mb-6">
-    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Sau lộ trình bạn sẽ', en: 'What you will achieve' }} />
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Sau lộ trình bạn sẽ', en: 'What you will achieve', km: 'What you will achieve' }} />
     <ul class="text-muted mt-3 list-disc space-y-2 pl-5 text-sm">
       {track.outcomes.vi.map((item, i) => (
         <li>
           <span class="lang-vi">{item}</span>
           <span class="lang-en">{track.outcomes.en[i]}</span>
+          <span class="lang-km">{track.outcomes.en[i]}</span>
         </li>
       ))}
     </ul>
   </section>
 
   <section class="card mb-8">
-    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Khái niệm cần nắm', en: 'Key concepts' }} />
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Khái niệm cần nắm', en: 'Key concepts', km: 'Key concepts' }} />
     <ul class="mt-3 flex flex-wrap gap-2">
       {track.keyConcepts.map((k) => (
         <li class="badge">{k}</li>
@@ -142,17 +143,19 @@ const trackDiagrams = getDiagramsForTrack(track.slug, 3);
 
   {track.commonMistakes ? (
     <section class="mb-8">
-      <LangText as="h2" class="text-xl font-semibold" text={{ vi: 'Lỗi thường gặp', en: 'Common mistakes' }} />
+      <LangText as="h2" class="text-xl font-semibold" text={{ vi: 'Lỗi thường gặp', en: 'Common mistakes', km: 'Common mistakes' }} />
       <div class="mt-4 grid gap-4 md:grid-cols-2">
         {track.commonMistakes.vi.map((m, i) => (
           <div class="card">
             <h3 class="font-semibold">
               <span class="lang-vi">{m.title}</span>
               <span class="lang-en">{track.commonMistakes!.en[i].title}</span>
+              <span class="lang-km">{track.commonMistakes!.en[i].title}</span>
             </h3>
             <p class="text-muted mt-2 text-sm leading-relaxed">
               <span class="lang-vi">{m.detail}</span>
               <span class="lang-en">{track.commonMistakes!.en[i].detail}</span>
+              <span class="lang-km">{track.commonMistakes!.en[i].detail}</span>
             </p>
           </div>
         ))}
@@ -161,7 +164,7 @@ const trackDiagrams = getDiagramsForTrack(track.slug, 3);
   ) : null}
 
   <section class="mb-8">
-    <LangText as="h2" class="mb-4 text-xl font-semibold" text={{ vi: 'Nội dung từng phần', en: 'Module-by-module content' }} />
+    <LangText as="h2" class="mb-4 text-xl font-semibold" text={{ vi: 'Nội dung từng phần', en: 'Module-by-module content', km: 'Module-by-module content' }} />
     <div class="space-y-6">
       {track.modules.map((mod, i) => (
         <TrackModuleCard module={mod} trackSlug={track.slug} />
@@ -190,18 +193,19 @@ const trackDiagrams = getDiagramsForTrack(track.slug, 3);
 
   <section class="grid gap-6 md:grid-cols-2 mb-8">
     <div class="card">
-      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Trình tự học gợi ý', en: 'Suggested learning order' }} />
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Trình tự học gợi ý', en: 'Suggested learning order', km: 'Suggested learning order' }} />
       <ol class="text-muted mt-3 list-decimal space-y-2 pl-5 text-sm">
         {track.recommendedSequence.vi.map((step, i) => (
           <li>
             <span class="lang-vi">{step}</span>
             <span class="lang-en">{track.recommendedSequence.en[i]}</span>
+            <span class="lang-km">{track.recommendedSequence.en[i]}</span>
           </li>
         ))}
       </ol>
     </div>
     <div class="card">
-      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Tình huống trong lộ trình', en: 'Use cases for this path' }} />
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Tình huống trong lộ trình', en: 'Use cases for this path', km: 'Use cases for this path' }} />
       <ul class="mt-3 space-y-2 text-sm">
         {track.relatedUseCases.map((uc) => (
           <li>
@@ -218,7 +222,7 @@ const trackDiagrams = getDiagramsForTrack(track.slug, 3);
     <LangText
       as="h2"
       class="text-xl font-semibold"
-      text={{ vi: 'Ví dụ triển khai (trong lộ trình này)', en: 'Deployment examples (this path only)' }}
+      text={{ vi: 'Ví dụ triển khai (trong lộ trình này)', en: 'Deployment examples (this path only)', km: 'Deployment examples (this path only)' }}
     />
     <p class="text-muted mt-2 max-w-3xl text-sm leading-relaxed">
       <span class="lang-vi">
@@ -227,6 +231,7 @@ const trackDiagrams = getDiagramsForTrack(track.slug, 3);
       <span class="lang-en">
         Tutorials and guides from Cloudflare Resources — only content matched to the {track.title.en} path. Each lesson suggests four examples.
       </span>
+      <span class="lang-km">Tutorials and guides from Cloudflare Resources — only content matched to the {track.title.en} path. Each lesson suggests four examples.</span>
     </p>
     <div class="mt-6">
       <CloudflareResourceGrid
@@ -244,7 +249,7 @@ const trackDiagrams = getDiagramsForTrack(track.slug, 3);
       <LangText
         as="h2"
         class="text-xl font-semibold"
-        text={{ vi: 'Script demo dashboard (thực chiến)', en: 'Field demo scripts (dashboard)' }}
+        text={{ vi: 'Script demo dashboard (thực chiến)', en: 'Field demo scripts (dashboard)', km: 'Field demo scripts (dashboard)' }}
       />
       <LangText
         as="p"
@@ -258,6 +263,7 @@ const trackDiagrams = getDiagramsForTrack(track.slug, 3);
         <a class="link" href="/demo-guides">
           <span class="lang-vi">Script demo (toàn hub) →</span>
           <span class="lang-en">Demo scripts (full hub) →</span>
+          <span class="lang-km">Demo scripts (full hub) →</span>
         </a>
       </div>
       <div class="mt-6">
@@ -271,7 +277,7 @@ const trackDiagrams = getDiagramsForTrack(track.slug, 3);
       <LangText
         as="h2"
         class="text-xl font-semibold"
-        text={{ vi: 'Tài nguyên chính thức (Resource Hub)', en: 'Official resources (Resource Hub)' }}
+        text={{ vi: 'Tài nguyên chính thức (Resource Hub)', en: 'Official resources (Resource Hub)', km: 'Official resources (Resource Hub)' }}
       />
       <p class="text-muted mt-2 max-w-3xl text-sm leading-relaxed">
         <span class="lang-vi">
@@ -288,6 +294,11 @@ const trackDiagrams = getDiagramsForTrack(track.slug, 3);
           </a>
           — docs, community, and case studies for this track.
         </span>
+        <span class="lang-km">Links from the{' '}
+          <a class="link" href={CLOUDFLARE_RESOURCE_HUB_URL} target="_blank" rel="noopener noreferrer">
+            Cloudflare Resource Hub
+          </a>
+          — docs, community, and case studies for this track.</span>
       </p>
       <div class="mt-6 grid gap-4 md:grid-cols-2">
         {resourceHubReading.map((item) => (
@@ -299,13 +310,14 @@ const trackDiagrams = getDiagramsForTrack(track.slug, 3);
 
   {relatedTopics.length > 0 ? (
     <section class="mb-8">
-      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Chủ đề Learning Center', en: 'Learning Center topics' }} />
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Chủ đề Learning Center', en: 'Learning Center topics', km: 'Learning Center topics' }} />
       <ul class="text-muted mt-3 space-y-2 text-sm">
         {relatedTopics.slice(0, 5).map((t) => (
           <li>
             <a class="link" href={t.officialPath} target="_blank" rel="noopener noreferrer">
               <span class="lang-vi">{t.title.vi}</span>
               <span class="lang-en">{t.title.en}</span>
+              <span class="lang-km">{t.title.en}</span>
               {' '}↗
             </a>
           </li>
@@ -319,7 +331,7 @@ const trackDiagrams = getDiagramsForTrack(track.slug, 3);
       <LangText
         as="h2"
         class="text-xl font-semibold"
-        text={{ vi: 'Reference Architecture', en: 'Reference Architecture' }}
+        text={{ vi: 'Reference Architecture', en: 'Reference Architecture', km: 'Reference Architecture' }}
       />
       <p class="text-muted mt-2 max-w-3xl text-sm leading-relaxed">
         <span class="lang-vi">
@@ -336,6 +348,11 @@ const trackDiagrams = getDiagramsForTrack(track.slug, 3);
           </a>
           — complementing this track in the hub.
         </span>
+        <span class="lang-km">Official design diagrams and docs from the{' '}
+          <a class="link" href={REFERENCE_ARCHITECTURE_HUB_URL} target="_blank" rel="noopener noreferrer">
+            Cloudflare Architecture Center
+          </a>
+          — complementing this track in the hub.</span>
       </p>
       <div class="mt-6 grid gap-4 md:grid-cols-2">
         {referenceReading.map((item) => (
@@ -350,7 +367,7 @@ const trackDiagrams = getDiagramsForTrack(track.slug, 3);
       <LangText
         as="h2"
         class="text-xl font-semibold"
-        text={{ vi: 'Ví dụ từ GitHub Cloudflare', en: 'Examples from Cloudflare GitHub' }}
+        text={{ vi: 'Ví dụ từ GitHub Cloudflare', en: 'Examples from Cloudflare GitHub', km: 'Examples from Cloudflare GitHub' }}
       />
       <p class="text-muted mt-2 max-w-3xl text-sm leading-relaxed">
         <span class="lang-vi">
@@ -359,6 +376,7 @@ const trackDiagrams = getDiagramsForTrack(track.slug, 3);
         <span class="lang-en">
           Official open source at <a class="link" href={CLOUDFLARE_GITHUB_ORG} target="_blank" rel="noopener noreferrer">github.com/cloudflare</a> — learn from READMEs and sample code.
         </span>
+        <span class="lang-km">Official open source at <a class="link" href={CLOUDFLARE_GITHUB_ORG} target="_blank" rel="noopener noreferrer">github.com/cloudflare</a> — learn from READMEs and sample code.</span>
       </p>
       {githubPaths.length > 0 ? (
         <div class="mt-4 grid gap-4 md:grid-cols-2">
@@ -381,7 +399,7 @@ const trackDiagrams = getDiagramsForTrack(track.slug, 3);
     <LangText
       as="h2"
       class="text-xl font-semibold"
-      text={{ vi: 'Đọc thêm — kinh nghiệm thực tế (CloudSecOp)', en: 'Further reading — field notes (CloudSecOp)' }}
+      text={{ vi: 'Đọc thêm — kinh nghiệm thực tế (CloudSecOp)', en: 'Further reading — field notes (CloudSecOp)', km: 'Further reading — field notes (CloudSecOp)' }}
     />
     <p class="text-muted mt-2 max-w-3xl text-sm leading-relaxed">
       <span class="lang-vi">
@@ -390,6 +408,7 @@ const trackDiagrams = getDiagramsForTrack(track.slug, 3);
       <span class="lang-en">
         Posts from <a class="link" href={CLOUDSECOP_TAG_URL} target="_blank" rel="noopener noreferrer">cloudsecop.net</a> — complement this track with production deployment context; not a replacement for official Cloudflare docs.
       </span>
+      <span class="lang-km">Posts from <a class="link" href={CLOUDSECOP_TAG_URL} target="_blank" rel="noopener noreferrer">cloudsecop.net</a> — complement this track with production deployment context; not a replacement for official Cloudflare docs.</span>
     </p>
     {cloudsecopSeries ? (
       <div class="mt-4 max-w-xl">
@@ -407,8 +426,8 @@ const trackDiagrams = getDiagramsForTrack(track.slug, 3);
   </TrackOptionalReading>
 
   <CTASection
-    title={{ vi: 'Bước tiếp theo', en: 'Next step' }}
-    description={{ vi: 'Áp dụng ngay qua tình huống thực tế và checklist.', en: 'Apply what you learned via a use case and checklist.' }}
+    title={{ vi: 'Bước tiếp theo', en: 'Next step', km: 'Next step' }}
+    description={{ vi: 'Áp dụng ngay qua tình huống thực tế và checklist.', en: 'Apply what you learned via a use case and checklist.', km: 'Apply what you learned via a use case and checklist.' }}
     cta={track.cta}
   />
 

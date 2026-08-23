@@ -22,7 +22,8 @@ export default function GlossarySearch({ terms }: Props) {
       return (
         t.term.toLowerCase().includes(query) ||
         t.definition.vi.toLowerCase().includes(query) ||
-        t.definition.en.toLowerCase().includes(query)
+        t.definition.en.toLowerCase().includes(query) ||
+        (t.definition.km?.toLowerCase().includes(query) ?? false)
       );
     });
   }, [terms, q, track, category]);
@@ -50,6 +51,7 @@ export default function GlossarySearch({ terms }: Props) {
         <label className="block text-sm font-medium">
           <span className="lang-vi">Tìm kiếm</span>
           <span className="lang-en">Search</span>
+          <span className="lang-km">Search</span>
           <input
             className="cf-input mt-1"
             value={q}
@@ -80,6 +82,7 @@ export default function GlossarySearch({ terms }: Props) {
           <span className="lang-en">
             {filtered.length} terms · page {page}/{totalPages}
           </span>
+          <span className="lang-km">{filtered.length} terms · page {page}/{totalPages}</span>
         </p>
       </div>
 
@@ -87,6 +90,7 @@ export default function GlossarySearch({ terms }: Props) {
         <div className="card mt-4 text-center text-sm">
           <span className="lang-vi">Không tìm thấy thuật ngữ.</span>
           <span className="lang-en">No terms found.</span>
+          <span className="lang-km">No terms found.</span>
         </div>
       ) : (
         <>
@@ -108,11 +112,13 @@ export default function GlossarySearch({ terms }: Props) {
                 <p className="text-muted mt-3 text-sm">
                   <span className="lang-vi">{t.definition.vi}</span>
                   <span className="lang-en">{t.definition.en}</span>
+                  <span className="lang-km">{t.definition.km ?? t.definition.en}</span>
                 </p>
                 {productSlug ? (
                   <a href={`/products/${productSlug}`} className="link mt-3 inline-block text-xs">
                     <span className="lang-vi">Đọc giải thích đầy đủ →</span>
                     <span className="lang-en">Full explainer →</span>
+                    <span className="lang-km">Full explainer →</span>
                   </a>
                 ) : null}
               </li>

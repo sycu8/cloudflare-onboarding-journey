@@ -12,7 +12,7 @@ const cat = githubCategories[repo.category];
   <div class="flex flex-wrap items-center gap-2">
     {repo.pinned ? (
       <span class="badge badge-accent">
-        <LangText text={{ vi: 'Pinned', en: 'Pinned' }} />
+        <LangText text={{ vi: 'Pinned', en: 'Pinned', km: 'Pinned' }} />
       </span>
     ) : null}
     <span class="badge">
@@ -35,13 +35,14 @@ const cat = githubCategories[repo.category];
       <p class="text-xs font-medium text-[var(--cf-accent)]">
         <span class="lang-vi">Gợi ý học / thử:</span>
         <span class="lang-en">Try this:</span>
+        <span class="lang-km">Try this:</span>
       </p>
       <LangText as="p" class="text-muted mt-1 text-xs leading-relaxed" text={repo.exampleUse} />
     </div>
   ) : null}
 
   <a class="btn btn-secondary mt-4 w-full justify-center" href={repo.href} target="_blank" rel="noopener noreferrer">
-    <LangText text={{ vi: 'Mở trên GitHub', en: 'Open on GitHub' }} />
+    <LangText text={{ vi: 'Mở trên GitHub', en: 'Open on GitHub', km: 'Open on GitHub' }} />
     <span aria-hidden="true">↗</span>
   </a>
 </article>

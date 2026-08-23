@@ -33,6 +33,7 @@ function HitList({
       <p className="text-muted px-1 py-6 text-center text-sm">
         <span className="lang-vi">Không có kết quả.</span>
         <span className="lang-en">No results.</span>
+        <span className="lang-km">No results.</span>
       </p>
     );
   }
@@ -153,6 +154,7 @@ export default function SiteSearch() {
         <span className="hidden lg:inline">
           <span className="lang-vi">Tìm kiếm</span>
           <span className="lang-en">Search</span>
+          <span className="lang-km">Search</span>
         </span>
       </button>
 
@@ -192,6 +194,7 @@ export default function SiteSearch() {
                   <h3 className="text-muted mb-2 text-xs font-semibold uppercase tracking-wide">
                     <span className="lang-vi">Trang & thuật ngữ</span>
                     <span className="lang-en">Pages & glossary</span>
+                    <span className="lang-km">Pages & glossary</span>
                   </h3>
                   <HitList hits={localHits} lang={lang} onNavigate={() => setOpen(false)} />
                 </section>
@@ -202,6 +205,7 @@ export default function SiteSearch() {
                       <h3 className="text-muted text-xs font-semibold uppercase tracking-wide">
                         <span className="lang-vi">AI Search (Cloudflare)</span>
                         <span className="lang-en">AI Search (Cloudflare)</span>
+                        <span className="lang-km">AI Search (Cloudflare)</span>
                       </h3>
                       <button
                         type="button"
@@ -213,11 +217,13 @@ export default function SiteSearch() {
                           <>
                             <span className="lang-vi">Đang tìm…</span>
                             <span className="lang-en">Searching…</span>
+                            <span className="lang-km">Searching…</span>
                           </>
                         ) : (
                           <>
                             <span className="lang-vi">Tìm bằng AI</span>
                             <span className="lang-en">Search with AI</span>
+                            <span className="lang-km">Search with AI</span>
                           </>
                         )}
                       </button>
@@ -233,6 +239,7 @@ export default function SiteSearch() {
                   <a className="link" href={`/search/?q=${encodeURIComponent(query.trim())}`} onClick={() => setOpen(false)}>
                     <span className="lang-vi">Xem trang tìm kiếm đầy đủ</span>
                     <span className="lang-en">Open full search page</span>
+                    <span className="lang-km">Open full search page</span>
                   </a>
                 </p>
               </div>
@@ -240,6 +247,7 @@ export default function SiteSearch() {
               <p className="text-muted mt-4 text-sm">
                 <span className="lang-vi">Gõ từ khóa hoặc nhấn Ctrl+K bất cứ lúc nào.</span>
                 <span className="lang-en">Type a keyword or press Ctrl+K anytime.</span>
+                <span className="lang-km">Type a keyword or press Ctrl+K anytime.</span>
               </p>
             )}
           </div>

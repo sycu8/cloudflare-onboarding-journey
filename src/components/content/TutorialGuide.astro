@@ -28,11 +28,13 @@ const toc = sections.filter((s) => s.blocks.length > 0);
                 <h2 class="text-lg font-semibold leading-snug md:text-xl">
                   <span class="lang-vi">{section.titleVi ?? section.title}</span>
                   <span class="lang-en">{section.title}</span>
+                  <span class="lang-km">{section.titleKm ?? section.title}</span>
                 </h2>
               ) : (
                 <h3 class="text-base font-semibold leading-snug">
                   <span class="lang-vi">{section.titleVi ?? section.title}</span>
                   <span class="lang-en">{section.title}</span>
+                  <span class="lang-km">{section.titleKm ?? section.title}</span>
                 </h3>
               )}
               {section.summaryVi ? (
@@ -46,30 +48,49 @@ const toc = sections.filter((s) => s.blocks.length > 0);
               rel="noopener noreferrer"
               title={section.title}
             >
-              <LangText text={{ vi: 'Mở section docs gốc ↗', en: 'Open source section ↗' }} />
+              <LangText text={{ vi: 'Mở section docs gốc ↗', en: 'Open source section ↗', km: 'Open source section ↗' }} />
             </a>
           </div>
 
           <div class="tutorial-body prose-learn mt-4 space-y-3 text-sm leading-relaxed">
             {section.blocks.map((block) => {
               if (block.type === 'paragraph') {
-                return <p set:html={block.html} />;
+                return (
+                  <>
+                    <p class="lang-en" set:html={block.html} />
+                    <p class="lang-km" set:html={block.htmlKm ?? block.html} />
+                  </>
+                );
               }
               if (block.type === 'note') {
                 return (
-                  <aside class="rounded-lg border border-amber-500/30 bg-amber-500/5 px-4 py-3 text-amber-900 dark:text-amber-100">
-                    <p set:html={block.html} />
-                  </aside>
+                  <>
+                    <aside class="lang-en rounded-lg border border-amber-500/30 bg-amber-500/5 px-4 py-3 text-amber-900 dark:text-amber-100">
+                      <p set:html={block.html} />
+                    </aside>
+                    <aside class="lang-km rounded-lg border border-amber-500/30 bg-amber-500/5 px-4 py-3 text-amber-900 dark:text-amber-100">
+                      <p set:html={block.htmlKm ?? block.html} />
+                    </aside>
+                  </>
                 );
               }
               if (block.type === 'list') {
                 const Tag = block.ordered ? 'ol' : 'ul';
+                const listClass = [block.ordered ? 'list-decimal' : 'list-disc', 'space-y-1 pl-5'];
+                const kmItems = block.itemsKm ?? block.items;
                 return (
-                  <Tag class:list={[block.ordered ? 'list-decimal' : 'list-disc', 'space-y-1 pl-5']}>
-                    {block.items.map((item) => (
-                      <li set:html={item} />
-                    ))}
-                  </Tag>
+                  <>
+                    <Tag class:list={[...listClass, 'lang-en']}>
+                      {block.items.map((item) => (
+                        <li set:html={item} />
+                      ))}
+                    </Tag>
+                    <Tag class:list={[...listClass, 'lang-km']}>
+                      {kmItems.map((item) => (
+                        <li set:html={item} />
+                      ))}
+                    </Tag>
+                  </>
                 );
               }
               if (block.type === 'code') {
@@ -91,7 +112,7 @@ const toc = sections.filter((s) => s.blocks.length > 0);
           {section.relatedLinks.length > 0 ? (
             <div class="mt-5 rounded-lg border border-[var(--cf-border)] bg-[var(--cf-bg-elevated)]/50 p-4">
               <p class="text-xs font-semibold uppercase tracking-wide text-[var(--cf-accent)]">
-                <LangText text={{ vi: 'Liên kết liên quan (docs Cloudflare)', en: 'Related links (Cloudflare docs)' }} />
+                <LangText text={{ vi: 'Liên kết liên quan (docs Cloudflare)', en: 'Related links (Cloudflare docs)', km: 'Related links (Cloudflare docs)' }} />
               </p>
               <ul class="mt-2 space-y-1.5 text-sm">
                 {section.relatedLinks.map((link) => (
@@ -117,7 +138,7 @@ const toc = sections.filter((s) => s.blocks.length > 0);
         aria-label="Tutorial table of contents"
       >
         <p class="text-xs font-semibold uppercase tracking-wide text-[var(--cf-text-muted)]">
-          <LangText text={{ vi: 'Mục lục', en: 'On this page' }} />
+          <LangText text={{ vi: 'Mục lục', en: 'On this page', km: 'On this page' }} />
         </p>
         <ol class="mt-3 max-h-[70vh] space-y-1 overflow-y-auto text-xs">
           {toc.map((section) => (
@@ -125,6 +146,7 @@ const toc = sections.filter((s) => s.blocks.length > 0);
               <a class="link block py-0.5 leading-snug" href={`#hub-${section.anchor}`}>
                 <span class="lang-vi">{section.titleVi ?? section.title}</span>
                 <span class="lang-en">{section.title}</span>
+                <span class="lang-km">{section.titleKm ?? section.title}</span>
               </a>
               <a
                 class="text-muted mt-0.5 block text-[10px] opacity-70 hover:opacity-100"
@@ -134,6 +156,7 @@ const toc = sections.filter((s) => s.blocks.length > 0);
               >
                 <span class="lang-vi">↗ docs gốc</span>
                 <span class="lang-en">↗ docs</span>
+                <span class="lang-km">↗ docs</span>
               </a>
             </li>
           ))}

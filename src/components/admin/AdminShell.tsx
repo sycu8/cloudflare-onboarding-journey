@@ -31,6 +31,7 @@ export default function AdminShell({ activeTab, onTabChange, adminEmail, childre
             <p className="admin-brand-sub">
               <span className="lang-vi">Quản lý workshop</span>
               <span className="lang-en">Workshop management</span>
+              <span className="lang-km">Workshop management</span>
             </p>
           </div>
         </div>
@@ -48,6 +49,7 @@ export default function AdminShell({ activeTab, onTabChange, adminEmail, childre
               </span>
               <span className="lang-vi">{item.vi}</span>
               <span className="lang-en">{item.en}</span>
+              <span className="lang-km">{item.km ?? item.en}</span>
             </button>
           ))}
         </nav>
@@ -56,10 +58,12 @@ export default function AdminShell({ activeTab, onTabChange, adminEmail, childre
           <a className="admin-foot-link" href="/workshop/" target="_blank" rel="noopener noreferrer">
             <span className="lang-vi">Trang đăng ký công khai ↗</span>
             <span className="lang-en">Public registration page ↗</span>
+            <span className="lang-km">Public registration page ↗</span>
           </a>
           <a className="admin-foot-link" href="/">
             <span className="lang-vi">← Về learning hub</span>
             <span className="lang-en">← Back to learning hub</span>
+            <span className="lang-km">← Back to learning hub</span>
           </a>
         </div>
       </aside>
@@ -72,6 +76,7 @@ export default function AdminShell({ activeTab, onTabChange, adminEmail, childre
                 <>
                   <span className="lang-vi">{activeNav.vi}</span>
                   <span className="lang-en">{activeNav.en}</span>
+                  <span className="lang-km">{activeNav.km ?? activeNav.en}</span>
                 </>
               ) : null}
             </h1>
@@ -79,6 +84,7 @@ export default function AdminShell({ activeTab, onTabChange, adminEmail, childre
               <p className="admin-page-sub">
                 <span className="lang-vi">Đăng nhập: </span>
                 <span className="lang-en">Signed in: </span>
+                <span className="lang-km">Signed in:</span>
                 {adminEmail}
               </p>
             ) : null}

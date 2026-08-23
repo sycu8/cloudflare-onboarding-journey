@@ -3,6 +3,7 @@ import { hashIp, hashUserAgent, randomId } from '../../src/lib/server/crypto';
 import { rateLimitOrThrow, rateLimitedResponse } from '../../src/lib/server/rateLimit';
 import { verifyTurnstile } from '../../src/lib/server/turnstile';
 import { feedbackSchema } from '../../src/lib/validation/schemas';
+import { trilingual } from '../../src/lib/clientLang';
 
 type Env = {
   DB: D1Database;
@@ -24,6 +25,8 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     return jsonResponse({ ok: false, error: 'validation_error' }, { status: 400 });
   }
 
+  const lang = parsed.data.language;
+
   const ip = request.headers.get('CF-Connecting-IP');
   const ua = request.headers.get('User-Agent');
   const salt = env.RATE_LIMIT_SALT || 'cfhub_v1';
@@ -38,7 +41,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     windowSeconds: 10 * 60,
     max: 10,
   });
-  if (!rl.allowed) return rateLimitedResponse(parsed.data.language);
+  if (!rl.allowed) return rateLimitedResponse(lang);
 
   // Optional: verify Turnstile if token provided (recommended in prod)
   if (parsed.data.turnstileToken) {
@@ -52,10 +55,12 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
         {
           ok: false,
           error: 'turnstile_failed',
-          message:
-            parsed.data.language === 'en'
-              ? 'Turnstile verification failed.'
-              : 'Xác minh Turnstile thất bại.',
+          message: trilingual(
+            'Xác minh Turnstile thất bại.',
+            'Turnstile verification failed.',
+            'ការផ្ទៀងផ្ទាត់ Turnstile បរាជ័យ។',
+            lang,
+          ),
         },
         { status: 400 },
       );
@@ -85,9 +90,15 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       .run();
   } catch (e) {
     console.error('feedback db error', e);
-    return jsonResponse({ ok: false, error: 'server_error' }, { status: 500 });
+    return jsonResponse(
+      {
+        ok: false,
+        error: 'server_error',
+        message: trilingual('Lỗi hệ thống.', 'Server error.', 'កំហុសប្រព័ន្ធ។', lang),
+      },
+      { status: 500 },
+    );
   }
 
   return jsonResponse({ ok: true }, { status: 200 });
 };
-

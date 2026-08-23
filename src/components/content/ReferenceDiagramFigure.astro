@@ -36,12 +36,13 @@ if (!image || !image.url) return null;
       <p>
         <span class="lang-vi">Thuật ngữ: </span>
         <span class="lang-en">Concepts: </span>
+        <span class="lang-km">Concepts:</span>
         {diagram.concepts.join(' · ')}
       </p>
     ) : null}
     <p>
       <a class="link" href={diagram.pageUrl} target="_blank" rel="noopener noreferrer">
-        <LangText text={{ vi: 'Sơ đồ chính thức ↗', en: 'Official diagram ↗' }} />
+        <LangText text={{ vi: 'Sơ đồ chính thức ↗', en: 'Official diagram ↗', km: 'Official diagram ↗' }} />
       </a>
       <span class="opacity-70"> · </span>
       <LangText text={diagram.categoryLabel} />

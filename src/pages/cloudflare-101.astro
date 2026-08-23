@@ -27,7 +27,7 @@ const cf101Diagrams = getDiagramsForHubPage('/cloudflare-101');
   canonicalPath="/cloudflare-101"
   showProgressBar
 >
-  <Breadcrumbs items={[{ href: '/cloudflare-101', label: { vi: 'Cloudflare 101', en: 'Cloudflare 101' } }]} />
+  <Breadcrumbs items={[{ href: '/cloudflare-101', label: { vi: 'Cloudflare 101', en: 'Cloudflare 101' , km: 'Cloudflare 101' } }]} />
 
   <header class="mb-8">
     <LangText
@@ -51,7 +51,7 @@ const cf101Diagrams = getDiagramsForHubPage('/cloudflare-101');
         developers.cloudflare.com
       </a>
       <a class="link" href="/products">
-        <LangText text={{ vi: 'Trang giải thích từng sản phẩm →', en: 'Per-product explainers →' }} />
+        <LangText text={{ vi: 'Trang giải thích từng sản phẩm →', en: 'Per-product explainers →', km: 'Per-product explainers →' }} />
       </a>
     </p>
   </header>
@@ -63,6 +63,7 @@ const cf101Diagrams = getDiagramsForHubPage('/cloudflare-101');
     <span class="text-muted w-full text-xs font-medium uppercase tracking-wide">
       <span class="lang-vi">Chuyên mục</span>
       <span class="lang-en">Sections</span>
+      <span class="lang-km">Sections</span>
     </span>
   {
     [
@@ -74,6 +75,7 @@ const cf101Diagrams = getDiagramsForHubPage('/cloudflare-101');
       <a href={`#${s.id}`} class="badge hover:border-[var(--cf-accent)]">
         <span class="lang-vi">{s.vi}</span>
         <span class="lang-en">{s.en}</span>
+        <span class="lang-km">{s.km ?? s.en}</span>
       </a>
     ))
   }
@@ -84,7 +86,7 @@ const cf101Diagrams = getDiagramsForHubPage('/cloudflare-101');
       <LangText
         as="h2"
         class="mb-4 text-lg font-semibold"
-        text={{ vi: 'Sơ đồ kiến trúc nền', en: 'Foundational architecture diagrams' }}
+        text={{ vi: 'Sơ đồ kiến trúc nền', en: 'Foundational architecture diagrams', km: 'Foundational architecture diagrams' }}
       />
       <div class="grid gap-6 lg:grid-cols-3">
         {cf101Diagrams.map((d) => (
@@ -98,7 +100,7 @@ const cf101Diagrams = getDiagramsForHubPage('/cloudflare-101');
     <LangText
       as="h2"
       class="mb-2 text-xl font-semibold md:text-2xl"
-      text={{ vi: 'Nền tảng — đọc trước', en: 'Foundations — read first' }}
+      text={{ vi: 'Nền tảng — đọc trước', en: 'Foundations — read first', km: 'Foundations — read first' }}
     />
     <LangText
       as="p"
@@ -128,6 +130,7 @@ const cf101Diagrams = getDiagramsForHubPage('/cloudflare-101');
               <a href={`/products/${p.id}`} class="link mt-3 inline-block text-xs">
                 <span class="lang-vi">Giải thích chi tiết →</span>
                 <span class="lang-en">Detailed explainer →</span>
+                <span class="lang-km">Detailed explainer →</span>
               </a>
             </li>
           );
@@ -140,7 +143,7 @@ const cf101Diagrams = getDiagramsForHubPage('/cloudflare-101');
     <LangText
       as="h2"
       class="mb-2 text-xl font-semibold md:text-2xl"
-      text={{ vi: 'Thuật ngữ Cloudflare', en: 'Cloudflare terminology' }}
+      text={{ vi: 'Thuật ngữ Cloudflare', en: 'Cloudflare terminology', km: 'Cloudflare terminology' }}
     />
     <LangText
       as="p"
@@ -157,7 +160,7 @@ const cf101Diagrams = getDiagramsForHubPage('/cloudflare-101');
     <LangText
       as="h2"
       class="mb-2 text-xl font-semibold md:text-2xl"
-      text={{ vi: 'Hướng dẫn thực hành', en: 'Practical guides' }}
+      text={{ vi: 'Hướng dẫn thực hành', en: 'Practical guides', km: 'Practical guides' }}
     />
     <Cloudflare101PracticalGuides
       client:load
@@ -171,7 +174,7 @@ const cf101Diagrams = getDiagramsForHubPage('/cloudflare-101');
   </div>
 
   <section class="card mt-10">
-    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Đọc sâu hơn', en: 'Go deeper' }} />
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Đọc sâu hơn', en: 'Go deeper', km: 'Go deeper' }} />
     <p class="text-muted mt-2 text-sm leading-relaxed">
       <span class="lang-vi">
         <a class="link" href="/glossary">Glossary</a> ·
@@ -191,15 +194,22 @@ const cf101Diagrams = getDiagramsForHubPage('/cloudflare-101');
         <a class="link" href="/resources#resource-hub">Resource Hub</a> ·
         <a class="link" href="https://cloudsecop.net/tag/cloudflare/" target="_blank" rel="noopener noreferrer">CloudSecOp</a>
       </span>
+      <span class="lang-km"><a class="link" href="/glossary">Glossary</a> ·
+        <a class="link" href="#terminology">CF101 terminology</a> ·
+        <a class="link" href="/first-week#platform-2026">2026 snapshot</a> ·
+        <a class="link" href="/resources#reference-diagrams">Reference Diagrams</a> ·
+        <a class="link" href="/resources#reference-architecture">Reference Architecture</a> ·
+        <a class="link" href="/resources#resource-hub">Resource Hub</a> ·
+        <a class="link" href="https://cloudsecop.net/tag/cloudflare/" target="_blank" rel="noopener noreferrer">CloudSecOp</a></span>
     </p>
   </section>
 
   <CTASection
-    title={{ vi: 'Chọn lộ trình học', en: 'Choose your learning path' }}
+    title={{ vi: 'Chọn lộ trình học', en: 'Choose your learning path', km: 'Choose your learning path' }}
     description={{
       vi: 'Sau khi nắm bản đồ sản phẩm, chọn track Application Services, Developer Platform hoặc Cloudflare One.',
       en: 'Once you know the product map, pick Application Services, Developer Platform, or Cloudflare One.',
     }}
-    cta={{ href: '/choose-your-path', label: { vi: 'Chọn lộ trình', en: 'Choose your path' } }}
+    cta={{ href: '/choose-your-path', label: { vi: 'Chọn lộ trình', en: 'Choose your path' , km: 'Choose your path' } }}
   />
 </BaseLayout>

@@ -100,6 +100,7 @@ export default function CloudflareResourceGrid({
         <label className="text-sm font-medium">
           <span className="lang-vi">Lộ trình: </span>
           <span className="lang-en">Track: </span>
+          <span className="lang-km">Track:</span>
           <select
             className="cf-input ml-1 inline-block w-auto min-w-[160px]"
             value={track}
@@ -116,6 +117,7 @@ export default function CloudflareResourceGrid({
         <label className="text-sm font-medium">
           <span className="lang-vi">Loại: </span>
           <span className="lang-en">Type: </span>
+          <span className="lang-km">Type:</span>
           <select
             className="cf-input ml-1 inline-block w-auto min-w-[160px]"
             value={contentType}
@@ -132,6 +134,7 @@ export default function CloudflareResourceGrid({
         <label className="text-sm font-medium flex-1 min-w-[200px]">
           <span className="lang-vi">Tìm: </span>
           <span className="lang-en">Search: </span>
+          <span className="lang-km">Search:</span>
           <input
             className="cf-input ml-1 w-full max-w-xs"
             type="search"
@@ -167,6 +170,7 @@ export default function CloudflareResourceGrid({
                   <a className="link" href={hubPath}>
                     <span className="lang-vi">{getTutorialTitleForResource(r, 'vi')}</span>
                     <span className="lang-en">{getTutorialTitleForResource(r, 'en')}</span>
+                    <span className="lang-km">{getTutorialTitleForResource(r, 'en')}</span>
                   </a>
                 ) : (
                   r.title
@@ -191,6 +195,7 @@ export default function CloudflareResourceGrid({
         <p className="text-muted mt-6 text-sm">
           <span className="lang-vi">Không có kết quả — thử bộ lọc khác.</span>
           <span className="lang-en">No results — try different filters.</span>
+          <span className="lang-km">No results — try different filters.</span>
         </p>
       ) : null}
 

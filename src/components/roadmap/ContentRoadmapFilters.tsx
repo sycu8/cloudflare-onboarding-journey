@@ -22,6 +22,7 @@ export default function ContentRoadmapFilters({ onFilter }: Props) {
       >
         <span className="lang-vi">Tất cả</span>
         <span className="lang-en">All</span>
+        <span className="lang-km">All</span>
       </button>
       {contentRoadmapFilters.map((f) => (
         <button
@@ -32,6 +33,7 @@ export default function ContentRoadmapFilters({ onFilter }: Props) {
         >
           <span className="lang-vi">{f.labelVi}</span>
           <span className="lang-en">{f.labelEn}</span>
+          <span className="lang-km">{f.labelEn}</span>
         </button>
       ))}
     </div>

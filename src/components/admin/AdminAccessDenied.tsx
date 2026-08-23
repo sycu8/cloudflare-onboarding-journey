@@ -20,6 +20,7 @@ export default function AdminAccessDenied({ authInfo, adminEmail, error }: Props
       <h2 className="text-lg font-semibold">
         <span className="lang-vi">Truy cập bị từ chối</span>
         <span className="lang-en">Access denied</span>
+        <span className="lang-km">Access denied</span>
       </h2>
       {missingAccessIdentity ? (
         <p className="text-muted text-sm">
@@ -31,6 +32,8 @@ export default function AdminAccessDenied({ authInfo, adminEmail, error }: Props
             Admin UI passed Cloudflare Access but API requests lack the identity header. Ensure an Access app protects{' '}
             <code className="text-xs">/admin</code> (includes <code className="text-xs">/admin/api/*</code>).
           </span>
+          <span className="lang-km">Admin UI passed Cloudflare Access but API requests lack the identity header. Ensure an Access app protects{' '}
+            <code className="text-xs">/admin</code> (includes <code className="text-xs">/admin/api/*</code>).</span>
         </p>
       ) : accessEmail ? (
         <p className="text-muted text-sm">
@@ -40,11 +43,13 @@ export default function AdminAccessDenied({ authInfo, adminEmail, error }: Props
           <span className="lang-en">
             Access email: <strong>{accessEmail}</strong> — not in allowlist ({allowlist}).
           </span>
+          <span className="lang-km">Access email: <strong>{accessEmail}</strong> — not in allowlist ({allowlist}).</span>
         </p>
       ) : (
         <p className="text-muted text-sm">
           <span className="lang-vi">Chỉ email được phép ({allowlist}) mới truy cập khu vực admin.</span>
           <span className="lang-en">Only allowlisted emails ({allowlist}) may access the admin area.</span>
+          <span className="lang-km">Only allowlisted emails ({allowlist}) may access the admin area.</span>
         </p>
       )}
       {error ? <p className="text-sm text-red-400">{error}</p> : null}

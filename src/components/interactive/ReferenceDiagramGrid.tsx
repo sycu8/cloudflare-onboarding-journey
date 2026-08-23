@@ -64,6 +64,7 @@ export default function ReferenceDiagramGrid({ diagrams, pageSize = PAGE_SIZE }:
         <label className="text-sm font-medium">
           <span className="lang-vi">Chủ đề: </span>
           <span className="lang-en">Category: </span>
+          <span className="lang-km">Category:</span>
           <select
             className="cf-input ml-1 inline-block w-auto min-w-[180px]"
             value={category}
@@ -84,6 +85,7 @@ export default function ReferenceDiagramGrid({ diagrams, pageSize = PAGE_SIZE }:
           <span className="lang-en">
             {filtered.length} diagrams · page {page}/{totalPages}
           </span>
+          <span className="lang-km">{filtered.length} diagrams · page {page}/{totalPages}</span>
         </span>
       </div>
 
@@ -124,6 +126,7 @@ export default function ReferenceDiagramGrid({ diagrams, pageSize = PAGE_SIZE }:
                 >
                   <span className="lang-vi">Mở sơ đồ ↗</span>
                   <span className="lang-en">Open diagram ↗</span>
+                  <span className="lang-km">Open diagram ↗</span>
                 </a>
               </div>
             </article>

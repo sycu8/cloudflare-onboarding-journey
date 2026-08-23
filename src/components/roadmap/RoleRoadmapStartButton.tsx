@@ -15,6 +15,7 @@ export default function RoleRoadmapStartButton({ roleId, firstStepId }: Props) {
     >
       <span className="lang-vi">Bắt đầu roadmap này</span>
       <span className="lang-en">Start this roadmap</span>
+      <span className="lang-km">ចាប់ផ្តើម roadmap</span>
     </button>
   );
 }

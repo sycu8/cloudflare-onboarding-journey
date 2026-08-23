@@ -14,11 +14,13 @@ const url = cloudsecopArticleUrl(article.slug);
       <span class="badge badge-accent">
         <span class="lang-vi">Phần {article.seriesPart}</span>
         <span class="lang-en">Part {article.seriesPart}</span>
+        <span class="lang-km">Part {article.seriesPart}</span>
       </span>
     ) : null}
     <span class="badge">
       <span class="lang-vi">{article.readMinutes} phút đọc</span>
       <span class="lang-en">{article.readMinutes} min read</span>
+      <span class="lang-km">{article.readMinutes} min read</span>
     </span>
   </div>
   <LangText as="h3" class="mt-3 text-base font-semibold leading-snug" text={article.title} />
@@ -36,7 +38,7 @@ const url = cloudsecopArticleUrl(article.slug);
     target="_blank"
     rel="noopener noreferrer"
   >
-    <LangText text={{ vi: 'Đọc trên CloudSecOp', en: 'Read on CloudSecOp' }} />
+    <LangText text={{ vi: 'Đọc trên CloudSecOp', en: 'Read on CloudSecOp', km: 'Read on CloudSecOp' }} />
     <span aria-hidden="true">↗</span>
   </a>
 </article>

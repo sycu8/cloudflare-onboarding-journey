@@ -4,6 +4,9 @@ import { rateLimitedResponse, checkRateLimit, recordRateLimitHit } from '../../s
 import { verifyTurnstile } from '../../src/lib/server/turnstile';
 import { sendSignupConfirmation } from '../../src/lib/server/workshopEmail';
 import { workshopSignupSchema } from '../../src/lib/validation/schemas';
+import { normalizeLanguage } from '../../src/i18n/storage';
+import type { Language } from '../../src/i18n/types';
+import { trilingual } from '../../src/lib/clientLang';
 
 type Env = {
   DB: D1Database;
@@ -16,29 +19,31 @@ type Env = {
   PUBLIC_SITE_URL?: string;
 };
 
-function validationError(lang: 'vi' | 'en') {
+function validationError(lang: Language) {
   return jsonResponse(
     {
       ok: false,
       error: 'validation_error',
-      message: lang === 'en' ? 'Invalid input.' : 'Dữ liệu không hợp lệ.',
+      message: trilingual('Dữ liệu không hợp lệ.', 'Invalid input.', 'ទិន្នន័យមិនត្រឹមត្រូវ។', lang),
     },
     { status: 400 },
   );
 }
 
 export const onRequestPost: PagesFunction<Env> = async ({ request, env, waitUntil }) => {
-  const lang = (request.headers.get('x-cfhub-lang') === 'en' ? 'en' : 'vi') as 'vi' | 'en';
+  const headerLang = normalizeLanguage(request.headers.get('x-cfhub-lang'));
 
   let payload: unknown;
   try {
     payload = await readJson(request, 60_000);
   } catch {
-    return validationError(lang);
+    return validationError(headerLang);
   }
 
   const parsed = workshopSignupSchema.safeParse(payload);
-  if (!parsed.success) return validationError(lang);
+  if (!parsed.success) return validationError(headerLang);
+
+  const lang = parsed.data.language;
 
   const ip = request.headers.get('CF-Connecting-IP');
   const ua = request.headers.get('User-Agent');
@@ -55,7 +60,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env, waitUnti
     key: rlKey,
     max: 10,
   });
-  if (!rl.allowed) return rateLimitedResponse(parsed.data.language);
+  if (!rl.allowed) return rateLimitedResponse(lang);
 
   // Verify Turnstile
   const turnstile = await verifyTurnstile({
@@ -68,7 +73,12 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env, waitUnti
       {
         ok: false,
         error: 'turnstile_failed',
-        message: parsed.data.language === 'en' ? 'Turnstile verification failed.' : 'Xác minh Turnstile thất bại.',
+        message: trilingual(
+          'Xác minh Turnstile thất bại.',
+          'Turnstile verification failed.',
+          'ការផ្ទៀងផ្ទាត់ Turnstile បរាជ័យ។',
+          lang,
+        ),
       },
       { status: 400 },
     );
@@ -88,10 +98,12 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env, waitUnti
         {
           ok: false,
           error: 'invalid_event',
-          message:
-            parsed.data.language === 'en'
-              ? 'This workshop event is not available for registration.'
-              : 'Sự kiện workshop này không còn mở đăng ký.',
+          message: trilingual(
+            'Sự kiện workshop này không còn mở đăng ký.',
+            'This workshop event is not available for registration.',
+            'ព្រឹត្តិការណ៍ workshop នេះមិនអាចចុះឈ្មោះបានទេ។',
+            lang,
+          ),
         },
         { status: 400 },
       );
@@ -102,10 +114,12 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env, waitUnti
         {
           ok: false,
           error: 'event_started',
-          message:
-            parsed.data.language === 'en'
-              ? 'Registration for this event has closed.'
-              : 'Sự kiện đã bắt đầu — không thể đăng ký thêm.',
+          message: trilingual(
+            'Sự kiện đã bắt đầu — không thể đăng ký thêm.',
+            'Registration for this event has closed.',
+            'ការចុះឈ្មោះសម្រាប់ព្រឹត្តិការណ៍នេះបានបិទហើយ។',
+            lang,
+          ),
         },
         { status: 400 },
       );
@@ -123,10 +137,12 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env, waitUnti
         {
           ok: false,
           error: 'rate_limited',
-          message:
-            parsed.data.language === 'en'
-              ? 'You have already registered recently. Please try again later.'
-              : 'Email này đã đăng ký gần đây. Vui lòng thử lại sau.',
+          message: trilingual(
+            'Email này đã đăng ký gần đây. Vui lòng thử lại sau.',
+            'You have already registered recently. Please try again later.',
+            undefined,
+            lang,
+          ),
         },
         { status: 429 },
       );
@@ -169,7 +185,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env, waitUnti
       {
         ok: false,
         error: 'server_error',
-        message: parsed.data.language === 'en' ? 'Server error.' : 'Lỗi hệ thống.',
+        message: trilingual('Lỗi hệ thống.', 'Server error.', 'កំហុសប្រព័ន្ធ។', lang),
       },
       { status: 500 },
     );
@@ -192,4 +208,3 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env, waitUnti
 
   return jsonResponse({ ok: true, message: 'registered', id }, { status: 200 });
 };
-

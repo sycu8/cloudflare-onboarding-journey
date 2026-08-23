@@ -7,7 +7,7 @@ const origin = Astro.site?.href.replace(/\/$/, '') ?? 'https://onboarding.orange
 ---
 
 <BaseLayout
-  title={{ vi: 'API cho agent & tích hợp', en: 'API for agents & integrations' }}
+  title={{ vi: 'API cho agent & tích hợp', en: 'API for agents & integrations', km: 'API for agents & integrations' }}
   description={{
     vi: 'Tài liệu REST API, OpenAPI, api-catalog và OAuth discovery cho Cloudflare Starter Hub.',
     en: 'REST API docs, OpenAPI, api-catalog, and OAuth discovery for Cloudflare Starter Hub.',
@@ -16,12 +16,12 @@ const origin = Astro.site?.href.replace(/\/$/, '') ?? 'https://onboarding.orange
 >
   <Breadcrumbs
     items={[
-      { href: '/docs/api/', label: { vi: 'API', en: 'API' } },
+      { href: '/docs/api/', label: { vi: 'API', en: 'API' , km: 'API' } },
     ]}
   />
 
   <header class="mb-8">
-    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: 'Hub API', en: 'Hub API' }} />
+    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: 'Hub API', en: 'Hub API', km: 'Hub API' }} />
     <LangText
       as="p"
       class="text-muted mt-2 max-w-3xl text-sm leading-relaxed"
@@ -33,12 +33,13 @@ const origin = Astro.site?.href.replace(/\/$/, '') ?? 'https://onboarding.orange
   </header>
 
   <section class="card mb-6">
-    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Machine discovery', en: 'Machine discovery' }} />
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Machine discovery', en: 'Machine discovery', km: 'Machine discovery' }} />
     <ul class="text-muted mt-3 list-disc space-y-2 pl-5 text-sm">
       <li>
         <a class="link" href={`${origin}/.well-known/api-catalog`}>/.well-known/api-catalog</a>
         <span class="lang-vi"> — RFC 9727 linkset</span>
         <span class="lang-en"> — RFC 9727 linkset</span>
+        <span class="lang-km">— RFC 9727 linkset</span>
       </li>
       <li>
         <a class="link" href={`${origin}/.well-known/openapi.json`}>/.well-known/openapi.json</a>
@@ -55,7 +56,7 @@ const origin = Astro.site?.href.replace(/\/$/, '') ?? 'https://onboarding.orange
   </section>
 
   <section class="card mb-6">
-    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'REST endpoints', en: 'REST endpoints' }} />
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'REST endpoints', en: 'REST endpoints', km: 'REST endpoints' }} />
     <ul class="text-muted mt-3 space-y-2 font-mono text-sm">
       <li>GET /api/site-config</li>
       <li>GET /api/workshop-events</li>
@@ -67,7 +68,7 @@ const origin = Astro.site?.href.replace(/\/$/, '') ?? 'https://onboarding.orange
 
   <p class="text-muted text-sm">
     <a class="link" href="/">
-      <LangText text={{ vi: '← Về trang chủ', en: '← Back to home' }} />
+      <LangText text={{ vi: '← Về trang chủ', en: '← Back to home', km: '← Back to home' }} />
     </a>
   </p>
 </BaseLayout>

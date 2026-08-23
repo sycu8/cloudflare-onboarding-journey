@@ -2,12 +2,19 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* --- Bilingual (static-first) --- */
-html[data-lang="en"] .lang-vi {
+/* --- Trilingual (static-first) --- */
+html:not([data-lang="vi"]) .lang-vi {
   display: none !important;
 }
 html:not([data-lang="en"]) .lang-en {
   display: none !important;
+}
+html:not([data-lang="km"]) .lang-km {
+  display: none !important;
+}
+
+html {
+  font-family: "Noto Sans Khmer", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
 /* --- Design tokens --- */

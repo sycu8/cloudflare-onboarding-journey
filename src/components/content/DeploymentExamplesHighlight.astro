@@ -18,6 +18,7 @@ const featured = getFeaturedDeploymentExamples();
         <p class="text-xs font-semibold uppercase tracking-wide text-[var(--cf-accent)]">
           <span class="lang-vi">Thực hành ngay</span>
           <span class="lang-en">Hands-on</span>
+          <span class="lang-km">Hands-on</span>
         </p>
         <LangText
           as="h2"
@@ -37,7 +38,7 @@ const featured = getFeaturedDeploymentExamples();
         />
       </div>
       <a class="btn btn-primary shrink-0" href="/resources#cloudflare-resources">
-        <LangText text={{ vi: 'Xem toàn bộ catalog', en: 'Browse full catalog' }} />
+        <LangText text={{ vi: 'Xem toàn bộ catalog', en: 'Browse full catalog', km: 'Browse full catalog' }} />
       </a>
     </div>
 
@@ -66,6 +67,13 @@ const featured = getFeaturedDeploymentExamples();
         Per-lesson picks on{' '}
         <a class="link" href="/tracks/application-services/">learning tracks</a>.
       </span>
+      <span class="lang-km">Source:{' '}
+        <a class="link" href={CLOUDFLARE_RESOURCES_URL} target="_blank" rel="noopener noreferrer">
+          Cloudflare Resources ↗
+        </a>
+        {' · '}
+        Per-lesson picks on{' '}
+        <a class="link" href="/tracks/application-services/">learning tracks</a>.</span>
     </p>
   </div>
 </section>

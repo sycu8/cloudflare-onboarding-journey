@@ -1,4 +1,6 @@
 import type { RoleId, RoleRoadmap, RoleRoadmapStep } from '../types/roadmap';
+import { applyRoleStepsEn } from './roleRoadmaps/applyRoleStepEn';
+import { applyRoleStepsKm } from './roleRoadmaps/applyRoleStepKm';
 
 const CF_DOCS = 'https://developers.cloudflare.com';
 
@@ -10,6 +12,8 @@ const salesSteps: RoleRoadmapStep[] = [
     titleEn: 'Foundation: What Cloudflare is and what problems it solves',
     objectiveVi:
       'Nắm mental model cơ bản để giải thích Cloudflare cho khách hàng không kỹ thuật — không chỉ là DNS.',
+    objectiveEn:
+      'Build a basic mental model to explain Cloudflare to non-technical customers — not just DNS.',
     topics: ['Connectivity Cloud', 'Edge vs Origin', 'Ba lộ trình sản phẩm', 'Giá trị kinh doanh'],
     existingRoutes: ['/start-here/', '/cloudflare-101/', '/content-roadmap/'],
     recommendedProducts: ['DNS', 'CDN', 'Workers'],
@@ -18,8 +22,15 @@ const salesSteps: RoleRoadmapStep[] = [
       'Đọc Start Here và ghi 3 câu hỏi khách hàng thường hỏi bạn nhất — đối chiếu với hub.',
       'Liệt kê 2 lợi ích kinh doanh (tốc độ, bảo mật, chi phí) cho từng track.',
     ],
+    exercisesEn: [
+      'Draw User → Cloudflare → Origin and explain it in your own words in 2 minutes.',
+      'Read Start Here and write 3 questions customers ask most — compare with the hub.',
+      'List 2 business benefits (speed, security, cost) for each track.',
+    ],
     expectedOutcomeVi:
       'Bạn tự tin mở đầu cuộc gọi bằng câu chuyện “lớp kết nối” thay vì liệt kê tính năng.',
+    expectedOutcomeEn:
+      'You can open calls with the "connectivity layer" story instead of listing features.',
     sourceUrls: [
       `${CF_DOCS}/fundamentals/`,
       `${CF_DOCS}/fundamentals/concepts/how-cloudflare-works/`,
@@ -33,6 +44,8 @@ const salesSteps: RoleRoadmapStep[] = [
     titleEn: 'Application Services: selling protection and performance',
     objectiveVi:
       'Hiểu đủ sâu để map nhu cầu khách (website chậm, bị tấn công, API lộ) sang sản phẩm phù hợp.',
+    objectiveEn:
+      'Understand enough to map customer needs (slow site, attacks, exposed API) to the right products.',
     topics: ['DNS & Proxy', 'CDN & Cache', 'WAF & DDoS', 'Use case bảo vệ website'],
     existingRoutes: [
       '/tracks/application-services/',
@@ -47,8 +60,15 @@ const salesSteps: RoleRoadmapStep[] = [
       'Tra glossary 5 thuật ngữ: proxy, cache, WAF, bot, rate limiting.',
       'So sánh 2 tình huống: chỉ cần CDN vs cần thêm WAF — ghi dấu hiệu phân biệt.',
     ],
+    exercisesEn: [
+      'Read one "protect website" use case and write a 30-second pitch for an e-commerce customer.',
+      'Look up 5 glossary terms: proxy, cache, WAF, bot, rate limiting.',
+      'Compare two scenarios: CDN only vs CDN + WAF — note how to tell them apart.',
+    ],
     expectedOutcomeVi:
       'Bạn phân loại được lead “cần tốc độ” vs “cần bảo mật” và đề xuất bước tiếp theo hợp lý.',
+    expectedOutcomeEn:
+      'You can classify "needs speed" vs "needs security" leads and suggest sensible next steps.',
     sourceUrls: [
       `${CF_DOCS}/learning-paths/application-security/`,
       `${CF_DOCS}/dns/`,
@@ -186,6 +206,10 @@ const solutionEngineerSteps: RoleRoadmapStep[] = [
       '/use-cases/secure-api/',
       '/demo-guides/',
     ],
+    tutorialPaths: [
+      '/use-cases/solutions/stop-malicious-bots',
+      '/turnstile/tutorials/integrating-turnstile-waf-and-bot-management',
+    ],
     recommendedProducts: ['WAF', 'DDoS Protection', 'Bot Management', 'API Shield', 'Rate Limiting'],
     exercisesVi: [
       'Đọc use case chống DDoS — liệt kê 3 metric chứng minh hiệu quả cho khách.',
@@ -213,6 +237,10 @@ const solutionEngineerSteps: RoleRoadmapStep[] = [
       '/use-cases/build-serverless-app/',
       '/use-cases/deploy-static-site/',
       '/products/',
+    ],
+    tutorialPaths: [
+      '/workers/tutorials/deploy-an-express-app',
+      '/d1/tutorials/build-a-comments-api',
     ],
     recommendedProducts: ['Workers', 'Pages', 'KV', 'D1', 'R2', 'Durable Objects'],
     exercisesVi: [
@@ -811,6 +839,11 @@ export const roleRoadmaps: RoleRoadmap[] = [
       'Người cần nói chuyện với khách SMB và mid-market',
       'Team muốn thống nhất ngôn ngữ sản phẩm trước khi demo',
     ],
+    bestForEn: [
+      'Account Executives, BDRs, and new Cloudflare pre-sales',
+      'People talking to SMB and mid-market customers',
+      'Teams aligning on product language before demos',
+    ],
     totalWeeks: 4,
     startingLevel: 'zero',
     finalOutcomeVi:
@@ -818,7 +851,7 @@ export const roleRoadmaps: RoleRoadmap[] = [
     finalOutcomeEn:
       'Lead discovery calls confidently, map needs to the right track/products, and prepare demos or SE handoff.',
     primaryTrack: 'mixed',
-    steps: salesSteps,
+    steps: applyRoleStepsKm(applyRoleStepsEn(salesSteps)),
   },
   {
     roleId: 'solution-engineer',
@@ -833,6 +866,11 @@ export const roleRoadmaps: RoleRoadmap[] = [
       'Kỹ sư đã biết mạng/web muốn chuyên sâu portfolio Cloudflare',
       'Người làm workshop và proof-of-concept cho khách hàng',
     ],
+    bestForEn: [
+      'Solution Engineers, Sales Engineers, and solution architects',
+      'Engineers with networking/web background going deep on Cloudflare',
+      'People running workshops and customer proof-of-concepts',
+    ],
     totalWeeks: 6,
     startingLevel: 'basic',
     finalOutcomeVi:
@@ -840,7 +878,7 @@ export const roleRoadmaps: RoleRoadmap[] = [
     finalOutcomeEn:
       'Design and present end-to-end solutions (app + security + Zero Trust) with POC scope and go-live checklist.',
     primaryTrack: 'mixed',
-    steps: solutionEngineerSteps,
+    steps: applyRoleStepsKm(applyRoleStepsEn(solutionEngineerSteps)),
   },
   {
     roleId: 'developer',
@@ -855,6 +893,11 @@ export const roleRoadmaps: RoleRoadmap[] = [
       'Sinh viên CNTT làm đồ án trên Cloudflare',
       'Dev đã dùng AWS/Vercel muốn thêm Workers vào stack',
     ],
+    bestForEn: [
+      'Frontend/backend developers learning serverless at the edge',
+      'CS students building projects on Cloudflare',
+      'Devs on AWS/Vercel adding Workers to their stack',
+    ],
     totalWeeks: 6,
     startingLevel: 'technical',
     finalOutcomeVi:
@@ -862,7 +905,7 @@ export const roleRoadmaps: RoleRoadmap[] = [
     finalOutcomeEn:
       'Deploy a full-stack mini-project (Pages + Worker + storage) and understand basic production patterns.',
     primaryTrack: 'developer-platform',
-    steps: developerSteps,
+    steps: applyRoleStepsKm(applyRoleStepsEn(developerSteps)),
   },
   {
     roleId: 'it-admin',
@@ -877,6 +920,11 @@ export const roleRoadmaps: RoleRoadmap[] = [
       'Team infra muốn thêm Cloudflare vào perimeter hiện tại',
       'Admin đang tìm lộ trình thay VPN an toàn hơn',
     ],
+    bestForEn: [
+      'Sysadmins, IT managers, and domain/certificate owners',
+      'Infra teams adding Cloudflare to the existing perimeter',
+      'Admins looking for a safer VPN replacement path',
+    ],
     totalWeeks: 5,
     startingLevel: 'basic',
     finalOutcomeVi:
@@ -884,7 +932,7 @@ export const roleRoadmaps: RoleRoadmap[] = [
     finalOutcomeEn:
       'Run production domains safely with baseline WAF and a documented Zero Trust pilot plan.',
     primaryTrack: 'cloudflare-one',
-    steps: itAdminSteps,
+    steps: applyRoleStepsKm(applyRoleStepsEn(itAdminSteps)),
   },
   {
     roleId: 'startup-founder',
@@ -899,6 +947,11 @@ export const roleRoadmaps: RoleRoadmap[] = [
       'Startup pre-seed/seed cần landing + API + bảo mật tối thiểu',
       'Người muốn tránh over-engineer infra từ ngày đầu',
     ],
+    bestForEn: [
+      'Solo founders or small teams without dedicated DevOps',
+      'Pre-seed/seed startups needing landing + API + baseline security',
+      'People avoiding over-engineered infra from day one',
+    ],
     totalWeeks: 4,
     startingLevel: 'basic',
     finalOutcomeVi:
@@ -906,7 +959,7 @@ export const roleRoadmaps: RoleRoadmap[] = [
     finalOutcomeEn:
       'Have an MVP on Cloudflare, security baseline, and a 3-month cost/direction plan aligned with product.',
     primaryTrack: 'mixed',
-    steps: startupFounderSteps,
+    steps: applyRoleStepsKm(applyRoleStepsEn(startupFounderSteps)),
   },
   {
     roleId: 'student',
@@ -921,6 +974,11 @@ export const roleRoadmaps: RoleRoadmap[] = [
       'Người tự học muốn portfolio hoặc chứng chỉ sau này',
       'Intern mới vào team dùng Cloudflare',
     ],
+    bestForEn: [
+      'CS, networking, and cybersecurity students',
+      'Self-learners building toward a portfolio or certification',
+      'Interns joining a team that uses Cloudflare',
+    ],
     totalWeeks: 4,
     startingLevel: 'zero',
     finalOutcomeVi:
@@ -928,7 +986,7 @@ export const roleRoadmaps: RoleRoadmap[] = [
     finalOutcomeEn:
       'Understand the Cloudflare mental model, finish module 1 of one track, summarize a use case, and plan next learning steps.',
     primaryTrack: 'mixed',
-    steps: studentSteps,
+    steps: applyRoleStepsKm(applyRoleStepsEn(studentSteps)),
   },
 ];
 

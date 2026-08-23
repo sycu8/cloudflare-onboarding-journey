@@ -64,6 +64,7 @@ const deploymentExamples = getDeploymentExamplesForLesson(lesson.id);
         ·
         <span class="lang-vi"> Bài {lesson.lessonIndex + 1}/{lesson.totalLessonsInModule}</span>
         <span class="lang-en"> Lesson {lesson.lessonIndex + 1}/{lesson.totalLessonsInModule}</span>
+        <span class="lang-km">Lesson {lesson.lessonIndex + 1}/{lesson.totalLessonsInModule}</span>
       </span>
     </p>
     <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={lesson.title} />
@@ -82,33 +83,37 @@ const deploymentExamples = getDeploymentExamplesForLesson(lesson.id);
       <figcaption class="text-muted border-t border-[var(--cf-border)] px-4 py-2 text-xs">
         <span class="lang-vi">Minh họa từ Cloudflare Reference Architecture (developers.cloudflare.com)</span>
         <span class="lang-en">Illustration from Cloudflare Reference Architecture (developers.cloudflare.com)</span>
+        <span class="lang-km">Illustration from Cloudflare Reference Architecture (developers.cloudflare.com)</span>
       </figcaption>
     </figure>
   ) : null}
 
   <section class="card mb-6">
-    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Các bước thực hiện', en: 'Step-by-step' }} />
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Các bước thực hiện', en: 'Step-by-step', km: 'Step-by-step' }} />
     <ol class="text-muted mt-4 list-decimal space-y-3 pl-5 text-sm leading-relaxed">
       {enrichment.steps.vi.map((step, i) => (
         <li>
           <span class="lang-vi">{step}</span>
           <span class="lang-en">{enrichment.steps.en[i]}</span>
+          <span class="lang-km">{enrichment.steps.en[i]}</span>
         </li>
       ))}
     </ol>
   </section>
 
   <section class="card mb-6">
-    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Giải thích chi tiết', en: 'Detailed explanation' }} />
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Giải thích chi tiết', en: 'Detailed explanation', km: 'Detailed explanation' }} />
     <LangText as="p" class="text-muted mt-3 text-sm leading-relaxed" text={enrichment.deepDive} />
     {lesson.tip ? (
       <p class="mt-4 rounded-lg border border-[var(--cf-border)] bg-[var(--cf-surface)] px-4 py-3 text-sm">
         <span class="font-medium text-[var(--cf-accent)]">
           <span class="lang-vi">Mẹo: </span>
           <span class="lang-en">Tip: </span>
+          <span class="lang-km">Tip:</span>
         </span>
         <span class="lang-vi">{lesson.tip.vi}</span>
         <span class="lang-en">{lesson.tip.en}</span>
+        <span class="lang-km">{lesson.tip.en}</span>
       </p>
     ) : null}
   </section>
@@ -118,12 +123,13 @@ const deploymentExamples = getDeploymentExamplesForLesson(lesson.id);
       <LangText
         as="h2"
         class="text-lg font-semibold"
-        text={{ vi: 'Lưu ý (best practices)', en: 'Note (best practices)' }}
+        text={{ vi: 'Lưu ý (best practices)', en: 'Note (best practices)', km: 'Note (best practices)' }}
       />
       <LangText as="p" class="text-muted mt-3 text-sm leading-relaxed" text={enrichment.bestPracticeNote.text} />
       <p class="text-muted mt-3 text-xs">
         <span class="lang-vi">Nguồn: </span>
         <span class="lang-en">Source: </span>
+        <span class="lang-km">Source:</span>
         <a
           class="link"
           href={enrichment.bestPracticeNote.sourceUrl}
@@ -141,11 +147,12 @@ const deploymentExamples = getDeploymentExamplesForLesson(lesson.id);
       <LangText
         as="h2"
         class="text-lg font-semibold"
-        text={{ vi: 'Ví dụ triển khai (Cloudflare Resources)', en: 'Deployment examples (Cloudflare Resources)' }}
+        text={{ vi: 'Ví dụ triển khai (Cloudflare Resources)', en: 'Deployment examples (Cloudflare Resources)', km: 'Deployment examples (Cloudflare Resources)' }}
       />
       <p class="text-muted mt-2 text-xs">
         <span class="lang-vi">Ví dụ chính thức từ Cloudflare Resources — gợi ý theo chủ đề bài học trong lộ trình này.</span>
         <span class="lang-en">Official examples from Cloudflare Resources — matched to this lesson within this path.</span>
+        <span class="lang-km">Official examples from Cloudflare Resources — matched to this lesson within this path.</span>
       </p>
       <div class="mt-4 grid gap-4 sm:grid-cols-2">
         {deploymentExamples.map((resource) => (
@@ -154,7 +161,7 @@ const deploymentExamples = getDeploymentExamplesForLesson(lesson.id);
       </div>
       <p class="text-muted mt-4 text-xs">
         <a class="link" href={`/tracks/${track.slug}#track-resources`}>
-          <LangText text={{ vi: 'Xem thêm ví dụ trong lộ trình →', en: 'More examples in this path →' }} />
+          <LangText text={{ vi: 'Xem thêm ví dụ trong lộ trình →', en: 'More examples in this path →', km: 'More examples in this path →' }} />
         </a>
       </p>
     </section>
@@ -162,7 +169,7 @@ const deploymentExamples = getDeploymentExamplesForLesson(lesson.id);
 
   {enrichment.docsLinks.length > 0 ? (
     <section class="card mb-6">
-      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Tài liệu Cloudflare Developers', en: 'Cloudflare Developer docs' }} />
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Tài liệu Cloudflare Developers', en: 'Cloudflare Developer docs', km: 'Cloudflare Developer docs' }} />
       <ul class="mt-3 space-y-2 text-sm">
         {enrichment.docsLinks.map((link) => (
           <li>
@@ -177,10 +184,11 @@ const deploymentExamples = getDeploymentExamplesForLesson(lesson.id);
 
   {enrichment.apiLinks && enrichment.apiLinks.length > 0 ? (
     <section class="card mb-6">
-      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Cloudflare API (tham khảo)', en: 'Cloudflare API (reference)' }} />
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Cloudflare API (tham khảo)', en: 'Cloudflare API (reference)', km: 'Cloudflare API (reference)' }} />
       <p class="text-muted mt-2 text-xs">
         <span class="lang-vi">Dùng khi tự động hóa bước này qua script hoặc Terraform — cần API token phù hợp.</span>
         <span class="lang-en">Use when automating this step via script or Terraform — requires an appropriate API token.</span>
+        <span class="lang-km">Use when automating this step via script or Terraform — requires an appropriate API token.</span>
       </p>
       <ul class="mt-3 space-y-2 text-sm">
         {enrichment.apiLinks.map((link) => (
@@ -205,7 +213,7 @@ const deploymentExamples = getDeploymentExamplesForLesson(lesson.id);
       <LangText
         as="h2"
         class="mb-4 text-lg font-semibold"
-        text={{ vi: 'Sơ đồ kiến trúc (Cloudflare Docs)', en: 'Architecture diagrams (Cloudflare Docs)' }}
+        text={{ vi: 'Sơ đồ kiến trúc (Cloudflare Docs)', en: 'Architecture diagrams (Cloudflare Docs)', km: 'Architecture diagrams (Cloudflare Docs)' }}
       />
       <div class="grid gap-6 lg:grid-cols-2">
         {diagrams.map((d) => (
@@ -217,7 +225,7 @@ const deploymentExamples = getDeploymentExamplesForLesson(lesson.id);
 
   {relatedProducts.length > 0 ? (
     <section class="card mb-6">
-      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Sản phẩm liên quan', en: 'Related products' }} />
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Sản phẩm liên quan', en: 'Related products', km: 'Related products' }} />
       <ul class="mt-3 flex flex-wrap gap-2">
         {relatedProducts.map((p) => (
           <li>
@@ -235,16 +243,18 @@ const deploymentExamples = getDeploymentExamplesForLesson(lesson.id);
       <a class="btn btn-secondary" href={`/tracks/${track.slug}/${prev.id}`}>
         <span class="lang-vi">← {prev.title.vi}</span>
         <span class="lang-en">← {prev.title.en}</span>
+        <span class="lang-km">← {prev.title.en}</span>
       </a>
     ) : (
       <a class="btn btn-secondary" href={`/tracks/${track.slug}`}>
-        <LangText text={{ vi: '← Về lộ trình', en: '← Back to track' }} />
+        <LangText text={{ vi: '← Về lộ trình', en: '← Back to track', km: '← Back to track' }} />
       </a>
     )}
     {next ? (
       <a class="btn btn-primary ml-auto" href={`/tracks/${track.slug}/${next.id}`}>
         <span class="lang-vi">{next.title.vi} →</span>
         <span class="lang-en">{next.title.en} →</span>
+        <span class="lang-km">{next.title.en} →</span>
       </a>
     ) : (
       <a class="btn btn-primary ml-auto" href={track.cta.href}>

@@ -35,7 +35,7 @@ const firstStepId = roadmap.steps[0]?.id ?? '';
 >
   <Breadcrumbs
     items={[
-      { href: '/roadmaps', label: { vi: 'Roadmap vai trò', en: 'Role roadmaps' } },
+      { href: '/roadmaps', label: { vi: 'Roadmap vai trò', en: 'Role roadmaps' , km: 'Role roadmaps' } },
       { href: `/roadmaps/${roadmap.roleId}`, label: { vi: roadmap.roleNameVi, en: roadmap.roleNameEn ?? roadmap.roleNameVi } },
     ]}
   />
@@ -45,20 +45,24 @@ const firstStepId = roadmap.steps[0]?.id ?? '';
     <p class="text-muted mt-2 max-w-3xl text-sm leading-relaxed">
       <span class="lang-vi">{roadmap.descriptionVi}</span>
       <span class="lang-en">{roadmap.descriptionEn ?? roadmap.descriptionVi}</span>
+      <span class="lang-km">{roadmap.descriptionKm ?? roadmap.descriptionEn ?? roadmap.descriptionVi}</span>
     </p>
     <ul class="text-muted mt-3 space-y-1 text-sm">
       {roadmap.bestForVi.map((item, i) => (
         <li>
           • <span class="lang-vi">{item}</span>
           <span class="lang-en">{roadmap.bestForEn?.[i] ?? item}</span>
+          <span class="lang-km">{roadmap.bestForKm?.[i] ?? roadmap.bestForEn?.[i] ?? item}</span>
         </li>
       ))}
     </ul>
     <p class="mt-4 text-sm">
       <span class="font-medium lang-vi">Kết quả cuối: </span>
       <span class="font-medium lang-en">Final outcome: </span>
+      <span class="font-medium lang-km">Final outcome:</span>
       <span class="text-muted lang-vi">{roadmap.finalOutcomeVi}</span>
       <span class="text-muted lang-en">{roadmap.finalOutcomeEn ?? roadmap.finalOutcomeVi}</span>
+      <span class="text-muted lang-km">{roadmap.finalOutcomeKm ?? roadmap.finalOutcomeEn ?? roadmap.finalOutcomeVi}</span>
     </p>
     {firstStepId ? (
       <div class="mt-4">
@@ -78,7 +82,7 @@ const firstStepId = roadmap.steps[0]?.id ?? '';
   </div>
 
   <aside class="card mt-10 space-y-3">
-    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Liên kết học thêm', en: 'Keep learning' }} />
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Liên kết học thêm', en: 'Keep learning', km: 'បន្តសិក្សា' }} />
     <ul class="flex flex-wrap gap-3 text-sm">
       <li><a class="link" href="/content-roadmap/">Content Roadmap</a></li>
       <li><a class="link" href="/cloudflare-101/">Cloudflare 101</a></li>

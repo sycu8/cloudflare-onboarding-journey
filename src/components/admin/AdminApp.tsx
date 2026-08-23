@@ -18,6 +18,7 @@ export default function AdminApp() {
         <div className="card text-muted text-sm">
           <span className="lang-vi">Đang xác thực Cloudflare Access…</span>
           <span className="lang-en">Verifying Cloudflare Access…</span>
+          <span className="lang-km">Verifying Cloudflare Access…</span>
         </div>
       </div>
     );

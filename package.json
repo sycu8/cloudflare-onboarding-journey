@@ -32,6 +32,11 @@
     "blog:scaffold": "node scripts/blog-editorial.mjs --scaffold",
     "blog:email-body": "node scripts/blog-editorial.mjs --email-body",
     "blog:prompt": "node scripts/blog-editorial.mjs --prompt",
+    "translate:km": "node scripts/translate-to-km.mjs",
+    "translate:km:topics": "node scripts/translate-to-km.mjs --roadmap-topics",
+    "translate:km:steps": "node scripts/translate-to-km.mjs --roadmap-steps",
+    "translate:km:tutorials": "node scripts/translate-to-km.mjs --tutorials",
+    "verify:i18n": "node scripts/verify-i18n.mjs",
     "astro": "astro"
   },
   "dependencies": {

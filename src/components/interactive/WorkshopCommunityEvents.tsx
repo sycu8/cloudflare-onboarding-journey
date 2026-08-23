@@ -2,9 +2,9 @@ import { usePageLang } from '../../lib/usePageLang';
 import { splitCommunityEvents, type CommunityEvent } from '../../data/communityEvents';
 
 const formatLabels: Record<CommunityEvent['format'], { vi: string; en: string }> = {
-  online: { vi: 'Trực tuyến', en: 'Online' },
-  'in-person': { vi: 'Trực tiếp', en: 'In person' },
-  hybrid: { vi: 'Kết hợp', en: 'Hybrid' },
+  online: { vi: 'Trực tuyến', en: 'Online' , km: 'Online' },
+  'in-person': { vi: 'Trực tiếp', en: 'In person', km: 'In person' },
+  hybrid: { vi: 'Kết hợp', en: 'Hybrid' , km: 'Hybrid' },
 };
 
 function formatRange(event: CommunityEvent, lang: 'vi' | 'en') {
@@ -40,11 +40,13 @@ function EventCard({ event, past }: { event: CommunityEvent; past?: boolean }) {
             <>
               <span className="lang-vi">Đã qua</span>
               <span className="lang-en">Past</span>
+              <span className="lang-km">Past</span>
             </>
           ) : (
             <>
               <span className="lang-vi">Sắp tới</span>
               <span className="lang-en">Upcoming</span>
+              <span className="lang-km">Upcoming</span>
             </>
           )}
         </span>
@@ -53,6 +55,7 @@ function EventCard({ event, past }: { event: CommunityEvent; past?: boolean }) {
           <span className="badge">
             <span className="lang-vi">Miễn phí</span>
             <span className="lang-en">Free</span>
+            <span className="lang-km">Free</span>
           </span>
         ) : null}
         <span className="text-muted text-xs">Luma</span>
@@ -70,6 +73,7 @@ function EventCard({ event, past }: { event: CommunityEvent; past?: boolean }) {
           <dt className="font-medium text-[var(--cf-text)]">
             <span className="lang-vi">Địa điểm</span>
             <span className="lang-en">Location</span>
+            <span className="lang-km">Location</span>
           </dt>
           <dd>{location}</dd>
         </div>
@@ -77,6 +81,7 @@ function EventCard({ event, past }: { event: CommunityEvent; past?: boolean }) {
           <dt className="font-medium text-[var(--cf-text)]">
             <span className="lang-vi">Ngôn ngữ</span>
             <span className="lang-en">Language</span>
+            <span className="lang-km">Language</span>
           </dt>
           <dd>{language}</dd>
         </div>
@@ -84,6 +89,7 @@ function EventCard({ event, past }: { event: CommunityEvent; past?: boolean }) {
           <dt className="font-medium text-[var(--cf-text)]">
             <span className="lang-vi">Host</span>
             <span className="lang-en">Host</span>
+            <span className="lang-km">Host</span>
           </dt>
           <dd>{event.host}</dd>
         </div>
@@ -93,6 +99,7 @@ function EventCard({ event, past }: { event: CommunityEvent; past?: boolean }) {
         <h4 className="text-sm font-semibold">
           <span className="lang-vi">Diễn giả</span>
           <span className="lang-en">Speakers</span>
+          <span className="lang-km">Speakers</span>
         </h4>
         <ul className="text-muted mt-2 space-y-1 text-sm">
           {event.speakers.map((speaker) => (
@@ -125,11 +132,13 @@ function EventCard({ event, past }: { event: CommunityEvent; past?: boolean }) {
         <a className="btn btn-primary inline-flex" href={event.registrationUrl} target="_blank" rel="noopener noreferrer">
           <span className="lang-vi">Đăng ký trên Luma</span>
           <span className="lang-en">Register on Luma</span>
+          <span className="lang-km">Register on Luma</span>
         </a>
       ) : (
         <a className="link text-sm" href={event.sourceUrl} target="_blank" rel="noopener noreferrer">
           <span className="lang-vi">Xem trang sự kiện</span>
           <span className="lang-en">View event page</span>
+          <span className="lang-km">View event page</span>
         </a>
       )}
     </article>
@@ -153,6 +162,7 @@ function EventSection({
       <h2 className="text-lg font-semibold">
         <span className="lang-vi">{titleVi}</span>
         <span className="lang-en">{titleEn}</span>
+        <span className="lang-km">{titleEn}</span>
       </h2>
       <div className="space-y-4">
         {events.map((event) => (

@@ -288,7 +288,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Zero Trust typically requires Cloudflare One tenant admin access and a connected IdP.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/cloudflare-one/tutorials/mysql-network-policy": {
     "path": "/cloudflare-one/tutorials/mysql-network-policy",
@@ -540,7 +546,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Zero Trust typically requires Cloudflare One tenant admin access and a connected IdP.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/pages/tutorials/add-a-react-form-with-formspree": {
     "path": "/pages/tutorials/add-a-react-form-with-formspree",
@@ -939,7 +951,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/pulumi/tutorial/add-site": {
     "path": "/pulumi/tutorial/add-site",
@@ -1946,7 +1964,13 @@
       "Clean up."
     ],
     "estimatedMinutes": 48,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Verify API tokens and the state backend before running against production.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/pages/tutorials/add-an-html-form-with-formspree": {
     "path": "/pages/tutorials/add-an-html-form-with-formspree",
@@ -2246,7 +2270,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/terraform/tutorial/add-page-rules": {
     "path": "/terraform/tutorial/add-page-rules",
@@ -2461,7 +2491,13 @@
       "Commit and merge the changes:."
     ],
     "estimatedMinutes": 32,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Verify API tokens and the state backend before running against production.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/fundamentals/manage-domains/add-multiple-sites-automation": {
     "path": "/fundamentals/manage-domains/add-multiple-sites-automation",
@@ -2861,7 +2897,12 @@
       "Update nameservers."
     ],
     "estimatedMinutes": 16,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers-ai/guides/tutorials/image-generation-playground/image-generator-flux-newmodels": {
     "path": "/workers-ai/guides/tutorials/image-generation-playground/image-generator-flux-newmodels",
@@ -2888,7 +2929,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/sandbox/tutorials/analyze-data-with-ai": {
     "path": "/sandbox/tutorials/analyze-data-with-ai",
@@ -3301,7 +3348,12 @@
       "Deploy."
     ],
     "estimatedMinutes": 48,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/sandbox/tutorials/automated-testing-pipeline": {
     "path": "/sandbox/tutorials/automated-testing-pipeline",
@@ -3598,7 +3650,12 @@
       "Deploy."
     ],
     "estimatedMinutes": 32,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/ssl/keyless-ssl/hardware-security-modules/aws-cloud-hsm": {
     "path": "/ssl/keyless-ssl/hardware-security-modules/aws-cloud-hsm",
@@ -3782,7 +3839,13 @@
       "Modify the gokeyless config file and restart the service."
     ],
     "estimatedMinutes": 21,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Prerequisites (from docs): Provisioned an AWS CloudHSM cluster ↗ . · Installed the appropriate software library for PKCS#11 ↗.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/ssl/keyless-ssl/hardware-security-modules/azure-dedicated-hsm": {
     "path": "/ssl/keyless-ssl/hardware-security-modules/azure-dedicated-hsm",
@@ -4031,7 +4094,13 @@
       "Modify your gokeyless config file and restart the service."
     ],
     "estimatedMinutes": 37,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Prerequisites (from docs): Followed Microsoft's tutorial ↗ for deploying HSMs into a virtual network using PowerShell · Installed the SafeNet client software ↗",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/ssl/keyless-ssl/hardware-security-modules/azure-managed-hsm": {
     "path": "/ssl/keyless-ssl/hardware-security-modules/azure-managed-hsm",
@@ -4286,7 +4355,13 @@
       "Restart gokeyless."
     ],
     "estimatedMinutes": 45,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Prerequisites (from docs): Followed Microsoft's tutorial ↗ for provisioning and activating the managed HSM · Set up a VM for your key server",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/pages/tutorials/build-a-blog-using-nuxt-and-sanity": {
     "path": "/pages/tutorials/build-a-blog-using-nuxt-and-sanity",
@@ -4985,7 +5060,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/agents/getting-started/build-a-chat-agent": {
     "path": "/agents/getting-started/build-a-chat-agent",
@@ -5011,7 +5092,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/sandbox/tutorials/code-review-bot": {
     "path": "/sandbox/tutorials/code-review-bot",
@@ -5510,7 +5596,12 @@
       "Update webhook for production."
     ],
     "estimatedMinutes": 72,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/d1/tutorials/build-a-comments-api": {
     "path": "/d1/tutorials/build-a-comments-api",
@@ -6184,7 +6275,13 @@
       "Deploy your application."
     ],
     "estimatedMinutes": 72,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers/tutorials/build-a-qr-code-generator": {
     "path": "/workers/tutorials/build-a-qr-code-generator",
@@ -6587,7 +6684,13 @@
       "Deploy your Worker."
     ],
     "estimatedMinutes": 45,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Prerequisites (from docs): All of the tutorials assume you have already completed the Get started guide, which gets you set up with a Cloudflare Workers account, C3 ↗, and Wrangler.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers-ai/guides/tutorials/build-a-retrieval-augmented-generation-ai": {
     "path": "/workers-ai/guides/tutorials/build-a-retrieval-augmented-generation-ai",
@@ -7610,7 +7713,13 @@
       "Deploy your project."
     ],
     "estimatedMinutes": 88,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/durable-objects/tutorials/build-a-seat-booking-app": {
     "path": "/durable-objects/tutorials/build-a-seat-booking-app",
@@ -8243,7 +8352,12 @@
       "Deploy the application."
     ],
     "estimatedMinutes": 56,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers/tutorials/build-a-slackbot": {
     "path": "/workers/tutorials/build-a-slackbot",
@@ -9169,7 +9283,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Prerequisites (from docs): All of the tutorials assume you have already completed the Get started guide, which gets you set up with a Cloudflare Workers account, C3 ↗, and Wrangler.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/d1/tutorials/build-a-staff-directory-app": {
     "path": "/d1/tutorials/build-a-staff-directory-app",
@@ -9816,7 +9936,13 @@
       "Deploy your HonoX application."
     ],
     "estimatedMinutes": 56,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers/tutorials/build-a-jamstack-app": {
     "path": "/workers/tutorials/build-a-jamstack-app",
@@ -10483,7 +10609,13 @@
       "Conclusion and next steps."
     ],
     "estimatedMinutes": 53,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Prerequisites (from docs): All of the tutorials assume you have already completed the Get started guide, which gets you set up with a Cloudflare Workers account, C3 ↗, and Wrangler.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/agents/guides/build-a-voice-agent": {
     "path": "/agents/guides/build-a-voice-agent",
@@ -10509,7 +10641,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/sandbox/tutorials/ai-code-executor": {
     "path": "/sandbox/tutorials/ai-code-executor",
@@ -11004,7 +11141,12 @@
       "Test your deployment."
     ],
     "estimatedMinutes": 56,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/sandbox/tutorials/openai-agents": {
     "path": "/sandbox/tutorials/openai-agents",
@@ -11402,7 +11544,12 @@
       "Run the agent."
     ],
     "estimatedMinutes": 32,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers-ai/guides/tutorials/image-generation-playground/image-generator-flux": {
     "path": "/workers-ai/guides/tutorials/image-generation-playground/image-generator-flux",
@@ -11429,7 +11576,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/pages/tutorials/build-an-api-with-pages-functions": {
     "path": "/pages/tutorials/build-an-api-with-pages-functions",
@@ -11876,7 +12029,13 @@
       "Deploy."
     ],
     "estimatedMinutes": 24,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/d1/tutorials/build-an-api-to-access-d1": {
     "path": "/d1/tutorials/build-an-api-to-access-d1",
@@ -12740,7 +12899,14 @@
       "Deploy the API."
     ],
     "estimatedMinutes": 88,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Zero Trust typically requires Cloudflare One tenant admin access and a connected IdP.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/r2-sql/tutorials/end-to-end-pipeline": {
     "path": "/r2-sql/tutorials/end-to-end-pipeline",
@@ -13452,7 +13618,13 @@
       "Query the data with R2 SQL."
     ],
     "estimatedMinutes": 32,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/agents/guides/chatgpt-app": {
     "path": "/agents/guides/chatgpt-app",
@@ -13478,7 +13650,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/d1/tutorials/import-to-d1-with-rest-api": {
     "path": "/d1/tutorials/import-to-d1-with-rest-api",
@@ -14034,7 +14211,13 @@
       "Run the code."
     ],
     "estimatedMinutes": 64,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/fundamentals/manage-domains/domain-version": {
     "path": "/fundamentals/manage-domains/domain-version",
@@ -14390,7 +14573,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/dns/zone-setups/full-setup/setup": {
     "path": "/dns/zone-setups/full-setup/setup",
@@ -15105,7 +15293,12 @@
       "Re-enable DNSSEC."
     ],
     "estimatedMinutes": 32,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers-ai/guides/tutorials/how-to-choose-the-right-text-generation-model": {
     "path": "/workers-ai/guides/tutorials/how-to-choose-the-right-text-generation-model",
@@ -16295,7 +16488,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/agents/community-mcp-server": {
     "path": "/agents/community-mcp-server",
@@ -16321,7 +16520,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/queues/tutorials/web-crawler-with-browser-run": {
     "path": "/queues/tutorials/web-crawler-with-browser-run",
@@ -17079,7 +17283,12 @@
       "Deploy your Worker."
     ],
     "estimatedMinutes": 64,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/queues/tutorials/handle-rate-limits": {
     "path": "/queues/tutorials/handle-rate-limits",
@@ -17747,7 +17956,12 @@
       "Deploy your Worker."
     ],
     "estimatedMinutes": 64,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/sandbox/tutorials/workers-ai-code-interpreter": {
     "path": "/sandbox/tutorials/workers-ai-code-interpreter",
@@ -18223,7 +18437,13 @@
       "Test your deployment."
     ],
     "estimatedMinutes": 48,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/turnstile/tutorials/conditionally-enforcing-turnstile": {
     "path": "/turnstile/tutorials/conditionally-enforcing-turnstile",
@@ -18405,7 +18625,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/terraform/tutorial/configure-https-settings": {
     "path": "/terraform/tutorial/configure-https-settings",
@@ -18647,7 +18872,13 @@
       "Verify the settings."
     ],
     "estimatedMinutes": 24,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Verify API tokens and the state backend before running against production.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/ssl/client-certificates/configure-your-mobile-app-or-iot-device": {
     "path": "/ssl/client-certificates/configure-your-mobile-app-or-iot-device",
@@ -19036,7 +19267,12 @@
       "Cấu hình API Shield to require client certificates"
     ],
     "estimatedMinutes": 40,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/cloudflare-one/tutorials/cli": {
     "path": "/cloudflare-one/tutorials/cli",
@@ -19349,7 +19585,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Zero Trust typically requires Cloudflare One tenant admin access and a connected IdP.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/cloudflare-one/tutorials/kubectl": {
     "path": "/cloudflare-one/tutorials/kubectl",
@@ -19755,7 +19997,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Zero Trust typically requires Cloudflare One tenant admin access and a connected IdP.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers/tutorials/mysql": {
     "path": "/workers/tutorials/mysql",
@@ -20195,7 +20443,13 @@
       "Deploy your Worker."
     ],
     "estimatedMinutes": 40,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers/tutorials/postgres": {
     "path": "/workers/tutorials/postgres",
@@ -21019,7 +21273,13 @@
       "Redeploy your Worker."
     ],
     "estimatedMinutes": 72,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/agents/guides/connect-mcp-client": {
     "path": "/agents/guides/connect-mcp-client",
@@ -21045,7 +21305,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers/tutorials/connect-to-turso-using-workers": {
     "path": "/workers/tutorials/connect-to-turso-using-workers",
@@ -21790,7 +22055,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/dns/zone-setups/conversions/convert-full-to-partial": {
     "path": "/dns/zone-setups/conversions/convert-full-to-partial",
@@ -22102,7 +22373,12 @@
       "Clean up DNS records on Cloudflare."
     ],
     "estimatedMinutes": 32,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/dns/zone-setups/conversions/convert-full-to-secondary": {
     "path": "/dns/zone-setups/conversions/convert-full-to-secondary",
@@ -22336,7 +22612,12 @@
       "Convert the zone and initiate zone transfers."
     ],
     "estimatedMinutes": 24,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/dns/zone-setups/conversions/convert-partial-to-full": {
     "path": "/dns/zone-setups/conversions/convert-partial-to-full",
@@ -22601,7 +22882,12 @@
       "Activate full setup."
     ],
     "estimatedMinutes": 32,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/dns/zone-setups/conversions/convert-partial-to-secondary": {
     "path": "/dns/zone-setups/conversions/convert-partial-to-secondary",
@@ -23081,7 +23367,12 @@
       "Cấu hình the zone transfers"
     ],
     "estimatedMinutes": 24,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/dns/zone-setups/conversions/convert-secondary-to-full": {
     "path": "/dns/zone-setups/conversions/convert-secondary-to-full",
@@ -23323,7 +23614,12 @@
       "Convert your zone."
     ],
     "estimatedMinutes": 24,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/dns/zone-setups/conversions/convert-secondary-to-partial": {
     "path": "/dns/zone-setups/conversions/convert-secondary-to-partial",
@@ -23549,7 +23845,12 @@
       "Update nameservers."
     ],
     "estimatedMinutes": 32,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers/tutorials/create-finetuned-chatgpt-ai-models-with-r2": {
     "path": "/workers/tutorials/create-finetuned-chatgpt-ai-models-with-r2",
@@ -24155,7 +24456,13 @@
       "View the fine-tune job status and use the model."
     ],
     "estimatedMinutes": 72,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/pages/tutorials/forms": {
     "path": "/pages/tutorials/forms",
@@ -24583,7 +24890,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/hyperdrive/tutorials/serverless-timeseries-api-with-timescale": {
     "path": "/hyperdrive/tutorials/serverless-timeseries-api-with-timescale",
@@ -25085,7 +25398,12 @@
       "Deploy your Worker."
     ],
     "estimatedMinutes": 40,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/cloudflare-one/tutorials/ai-wrapper-tenant-control": {
     "path": "/cloudflare-one/tutorials/ai-wrapper-tenant-control",
@@ -25832,7 +26150,13 @@
       "Enforce Data Loss Prevention and Clientless Browser Isolation."
     ],
     "estimatedMinutes": 40,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Zero Trust typically requires Cloudflare One tenant admin access and a connected IdP.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/cloudflare-one/tutorials/access-workers": {
     "path": "/cloudflare-one/tutorials/access-workers",
@@ -26022,7 +26346,14 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Zero Trust typically requires Cloudflare One tenant admin access and a connected IdP.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/pulumi/tutorial/dynamic-provider-and-wrangler": {
     "path": "/pulumi/tutorial/dynamic-provider-and-wrangler",
@@ -26169,7 +26500,14 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Verify API tokens and the state backend before running against production.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/ai-gateway/tutorials/create-first-aig-workers": {
     "path": "/ai-gateway/tutorials/create-first-aig-workers",
@@ -26424,7 +26762,14 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Zero Trust typically requires Cloudflare One tenant admin access and a connected IdP.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/sandbox/tutorials/persistent-storage": {
     "path": "/sandbox/tutorials/persistent-storage",
@@ -26863,7 +27208,12 @@
       "Test the persistence flow."
     ],
     "estimatedMinutes": 40,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers/tutorials/deploy-a-realtime-chat-app": {
     "path": "/workers/tutorials/deploy-a-realtime-chat-app",
@@ -27233,7 +27583,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Prerequisites (from docs): All of the tutorials assume you have already completed the Get started guide, which gets you set up with a Cloudflare Workers account, C3 ↗, and Wrangler.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/pages/how-to/deploy-a-wordpress-site": {
     "path": "/pages/how-to/deploy-a-wordpress-site",
@@ -27457,7 +27813,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/pulumi/tutorial/hello-world": {
     "path": "/pulumi/tutorial/hello-world",
@@ -28572,7 +28934,13 @@
       "Clean up."
     ],
     "estimatedMinutes": 40,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Verify API tokens and the state backend before running against production.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers/tutorials/deploy-an-express-app": {
     "path": "/workers/tutorials/deploy-an-express-app",
@@ -29362,7 +29730,13 @@
       "Test production deployment."
     ],
     "estimatedMinutes": 101,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Prerequisites (from docs): All of the tutorials assume you have already completed the Get started guide, which gets you set up with a Cloudflare Workers account, C3 ↗, and Wrangler.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/cloudflare-one/tutorials/deploy-client-headless-linux": {
     "path": "/cloudflare-one/tutorials/deploy-client-headless-linux",
@@ -29757,7 +30131,13 @@
       "Install WARP."
     ],
     "estimatedMinutes": 32,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Zero Trust typically requires Cloudflare One tenant admin access and a connected IdP.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/cloudflare-one/tutorials/detect-mcp-traffic-gateway-logs": {
     "path": "/cloudflare-one/tutorials/detect-mcp-traffic-gateway-logs",
@@ -30331,7 +30711,13 @@
       "Classify Portal traffic and shadow MCP traffic."
     ],
     "estimatedMinutes": 40,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Zero Trust typically requires Cloudflare One tenant admin access and a connected IdP.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/use-cases/solutions/discover-secure-api-endpoints": {
     "path": "/use-cases/solutions/discover-secure-api-endpoints",
@@ -31738,7 +32124,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/load-balancing/additional-options/dns-persistence": {
     "path": "/load-balancing/additional-options/dns-persistence",
@@ -31976,7 +32367,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/dns/dnssec/dnssec-active-migration": {
     "path": "/dns/dnssec/dnssec-active-migration",
@@ -32415,7 +32811,12 @@
       "Remove previous provider."
     ],
     "estimatedMinutes": 32,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/use-cases/solutions/encrypt-all-keep-site-secure": {
     "path": "/use-cases/solutions/encrypt-all-keep-site-secure",
@@ -33398,7 +33799,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/ssl/keyless-ssl/hardware-security-modules/entrust-nshield-connect": {
     "path": "/ssl/keyless-ssl/hardware-security-modules/entrust-nshield-connect",
@@ -33424,7 +33830,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/turnstile/tutorials/excluding-turnstile-from-e2e-tests": {
     "path": "/turnstile/tutorials/excluding-turnstile-from-e2e-tests",
@@ -33698,7 +34109,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers-ai/guides/tutorials/explore-code-generation-using-deepseek-coder-models": {
     "path": "/workers-ai/guides/tutorials/explore-code-generation-using-deepseek-coder-models",
@@ -34062,7 +34478,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers-ai/guides/tutorials/explore-workers-ai-models-using-a-jupyter-notebook": {
     "path": "/workers-ai/guides/tutorials/explore-workers-ai-models-using-a-jupyter-notebook",
@@ -34567,7 +34989,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers-ai/guides/tutorials/fine-tune-models-with-autotrain": {
     "path": "/workers-ai/guides/tutorials/fine-tune-models-with-autotrain",
@@ -34976,7 +35404,13 @@
       "Use your Fine Tune in your Generations."
     ],
     "estimatedMinutes": 56,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/turnstile/tutorials/fraud-detection-with-ephemeral-ids": {
     "path": "/turnstile/tutorials/fraud-detection-with-ephemeral-ids",
@@ -35276,7 +35710,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers/tutorials/generate-youtube-thumbnails-with-workers-and-images": {
     "path": "/workers/tutorials/generate-youtube-thumbnails-with-workers-and-images",
@@ -35993,7 +36432,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Prerequisites (from docs): All of the tutorials assume you have already completed the Get started guide, which gets you set up with a Cloudflare Workers account, C3 ↗, and Wrangler. To follow this tutorial, make sure you have Node, Cargo, and Wrangler Installed on your machine.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/version-management/get-started": {
     "path": "/version-management/get-started",
@@ -36363,7 +36808,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/agents/think/getting-started": {
     "path": "/agents/think/getting-started",
@@ -36389,7 +36839,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers/tutorials/github-sms-notifications-using-twilio": {
     "path": "/workers/tutorials/github-sms-notifications-using-twilio",
@@ -36832,7 +37287,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Prerequisites (from docs): All of the tutorials assume you have already completed the Get started guide, which gets you set up with a Cloudflare Workers account, C3 ↗, and Wrangler.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/ssl/keyless-ssl/hardware-security-modules/google-cloud-hsm": {
     "path": "/ssl/keyless-ssl/hardware-security-modules/google-cloud-hsm",
@@ -37027,7 +37488,13 @@
       "Modify your gokeyless config file and restart the service."
     ],
     "estimatedMinutes": 37,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Prerequisites (from docs): Set up your Google Cloud project ↗",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/cloudflare-network-firewall/tutorials/graphql-analytics": {
     "path": "/cloudflare-network-firewall/tutorials/graphql-analytics",
@@ -37283,7 +37750,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/cloudflare-one/tutorials/graphql-analytics": {
     "path": "/cloudflare-one/tutorials/graphql-analytics",
@@ -37546,7 +38018,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Zero Trust typically requires Cloudflare One tenant admin access and a connected IdP.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers/tutorials/handle-form-submissions-with-airtable": {
     "path": "/workers/tutorials/handle-form-submissions-with-airtable",
@@ -38029,7 +38507,13 @@
       "Submit data to Airtable."
     ],
     "estimatedMinutes": 37,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Prerequisites (from docs): All of the tutorials assume you have already completed the Get started guide, which gets you set up with a Cloudflare Workers account, C3 ↗, and Wrangler.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers-ai/guides/tutorials/image-generation-playground": {
     "path": "/workers-ai/guides/tutorials/image-generation-playground",
@@ -38056,7 +38540,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/ssl/keyless-ssl/hardware-security-modules/ibm-cloud-hsm": {
     "path": "/ssl/keyless-ssl/hardware-security-modules/ibm-cloud-hsm",
@@ -38309,7 +38799,13 @@
       "Modify your gokeyless config file and restart the service."
     ],
     "estimatedMinutes": 37,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Prerequisites (from docs): Initialized your device ↗ · Installed the SafeNet client software ↗",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/cloudflare-one/tutorials/regional-private-dns-resolver-policies": {
     "path": "/cloudflare-one/tutorials/regional-private-dns-resolver-policies",
@@ -38707,7 +39203,13 @@
       "Cấu hình policy order"
     ],
     "estimatedMinutes": 24,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Zero Trust typically requires Cloudflare One tenant admin access and a connected IdP.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/terraform/advanced-topics/import-cloudflare-resources": {
     "path": "/terraform/advanced-topics/import-cloudflare-resources",
@@ -39085,7 +39587,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Verify API tokens and the state backend before running against production.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/terraform/tutorial/use-load-balancing": {
     "path": "/terraform/tutorial/use-load-balancing",
@@ -39404,7 +39912,13 @@
       "Switch to using Cloudflare's Load Balancing product."
     ],
     "estimatedMinutes": 16,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Verify API tokens and the state backend before running against production.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/cloudflare-one/tutorials/integrate-microsoft-mcas-teams": {
     "path": "/cloudflare-one/tutorials/integrate-microsoft-mcas-teams",
@@ -39641,7 +40155,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Zero Trust typically requires Cloudflare One tenant admin access and a connected IdP.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/turnstile/tutorials/integrating-turnstile-waf-and-bot-management": {
     "path": "/turnstile/tutorials/integrating-turnstile-waf-and-bot-management",
@@ -40027,7 +40547,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/terraform/tutorial/initialize-terraform": {
     "path": "/terraform/tutorial/initialize-terraform",
@@ -40284,7 +40809,13 @@
       "Apply and verify."
     ],
     "estimatedMinutes": 24,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Verify API tokens and the state backend before running against production.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/cloudflare-one/tutorials/entra-id-risky-users": {
     "path": "/cloudflare-one/tutorials/entra-id-risky-users",
@@ -40675,7 +41206,13 @@
       "Tạo browser isolation policy"
     ],
     "estimatedMinutes": 40,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Zero Trust typically requires Cloudflare One tenant admin access and a connected IdP.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/magic-transit/partners/kentik": {
     "path": "/magic-transit/partners/kentik",
@@ -40849,7 +41386,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers-ai/guides/tutorials/llama-vision-tutorial": {
     "path": "/workers-ai/guides/tutorials/llama-vision-tutorial",
@@ -41212,7 +41754,13 @@
       "Verify the response."
     ],
     "estimatedMinutes": 56,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/load-balancing/additional-options/load-shedding": {
     "path": "/load-balancing/additional-options/load-shedding",
@@ -41575,7 +42123,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/pages/tutorials/localize-a-website": {
     "path": "/pages/tutorials/localize-a-website",
@@ -42052,7 +42605,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/r2/tutorials/upload-logs-event-notifications": {
     "path": "/r2/tutorials/upload-logs-event-notifications",
@@ -42437,7 +42996,13 @@
       "Test."
     ],
     "estimatedMinutes": 72,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/pulumi/tutorial/manage-secrets": {
     "path": "/pulumi/tutorial/manage-secrets",
@@ -42912,7 +43477,13 @@
       "Load .dev.vars."
     ],
     "estimatedMinutes": 32,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Verify API tokens and the state backend before running against production.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/r2/tutorials/mastodon": {
     "path": "/r2/tutorials/mastodon",
@@ -43183,7 +43754,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers/static-assets/migration-guides/netlify-to-workers": {
     "path": "/workers/static-assets/migration-guides/netlify-to-workers",
@@ -43458,7 +44035,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers/static-assets/migration-guides/vercel-to-workers": {
     "path": "/workers/static-assets/migration-guides/vercel-to-workers",
@@ -43725,7 +44308,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/pages/migrations/migrating-jekyll-from-github-pages": {
     "path": "/pages/migrations/migrating-jekyll-from-github-pages",
@@ -44076,7 +44665,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/pages/migrations/migrating-from-firebase": {
     "path": "/pages/migrations/migrating-from-firebase",
@@ -44211,7 +44806,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/pages/migrations/migrating-from-netlify": {
     "path": "/pages/migrations/migrating-from-netlify",
@@ -44505,7 +45106,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/pages/migrations/migrating-from-vercel": {
     "path": "/pages/migrations/migrating-from-vercel",
@@ -44751,7 +45358,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/pages/migrations/migrating-from-workers": {
     "path": "/pages/migrations/migrating-from-workers",
@@ -45015,7 +45628,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/fundamentals/performance/minimize-downtime": {
     "path": "/fundamentals/performance/minimize-downtime",
@@ -45259,7 +45878,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/cloudflare-one/tutorials/mongodb-tunnel": {
     "path": "/cloudflare-one/tutorials/mongodb-tunnel",
@@ -45604,7 +46228,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Zero Trust typically requires Cloudflare One tenant admin access and a connected IdP.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/cloudflare-one/tutorials/grafana": {
     "path": "/cloudflare-one/tutorials/grafana",
@@ -45905,7 +46535,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Zero Trust typically requires Cloudflare One tenant admin access and a connected IdP.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/fundamentals": {
     "path": "/fundamentals",
@@ -45992,7 +46628,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/fundamentals/manage-domains/add-site": {
     "path": "/fundamentals/manage-domains/add-site",
@@ -46390,7 +47031,12 @@
       "Complete SSL/TLS setup."
     ],
     "estimatedMinutes": 32,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers/tutorials/openai-function-calls-workers": {
     "path": "/workers/tutorials/openai-function-calls-workers",
@@ -46847,7 +47493,13 @@
       "Next steps."
     ],
     "estimatedMinutes": 53,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Prerequisites (from docs): All of the tutorials assume you have already completed the Get started guide, which gets you set up with a Cloudflare Workers account, C3 ↗, and Wrangler.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/images/tutorials/optimize-mobile-viewing": {
     "path": "/images/tutorials/optimize-mobile-viewing",
@@ -46981,7 +47633,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/load-balancing/additional-options/planned-maintenance": {
     "path": "/load-balancing/additional-options/planned-maintenance",
@@ -47190,7 +47847,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/r2/tutorials/postman": {
     "path": "/r2/tutorials/postman",
@@ -47479,7 +48141,13 @@
       "Get an object."
     ],
     "estimatedMinutes": 48,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/cloudflare-one/tutorials/s3-buckets": {
     "path": "/cloudflare-one/tutorials/s3-buckets",
@@ -47870,7 +48538,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Zero Trust typically requires Cloudflare One tenant admin access and a connected IdP.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/cloudflare-one/tutorials/m365-dedicated-egress-ips": {
     "path": "/cloudflare-one/tutorials/m365-dedicated-egress-ips",
@@ -48077,7 +48751,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Zero Trust typically requires Cloudflare One tenant admin access and a connected IdP.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/r2/tutorials/cloudflare-access": {
     "path": "/r2/tutorials/cloudflare-access",
@@ -48360,7 +49040,14 @@
       "Test your Access policy."
     ],
     "estimatedMinutes": 32,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Zero Trust typically requires Cloudflare One tenant admin access and a connected IdP.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/turnstile/tutorials/login-pages": {
     "path": "/turnstile/tutorials/login-pages",
@@ -48561,7 +49248,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/use-cases/solutions/protect-sensitive-forms-fraud-abuse": {
     "path": "/use-cases/solutions/protect-sensitive-forms-fraud-abuse",
@@ -49323,7 +50016,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/d1/tutorials/d1-and-prisma-orm": {
     "path": "/d1/tutorials/d1-and-prisma-orm",
@@ -50080,7 +50778,13 @@
       "Deploy the Worker."
     ],
     "estimatedMinutes": 56,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/cloudflare-one/tutorials/okta-u2f": {
     "path": "/cloudflare-one/tutorials/okta-u2f",
@@ -50305,7 +51009,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Zero Trust typically requires Cloudflare One tenant admin access and a connected IdP.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/terraform/tutorial/revert-configuration": {
     "path": "/terraform/tutorial/revert-configuration",
@@ -50587,7 +51297,13 @@
       "Verify the revert."
     ],
     "estimatedMinutes": 40,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Verify API tokens and the state backend before running against production.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/sandbox/tutorials/claude-code": {
     "path": "/sandbox/tutorials/claude-code",
@@ -50953,7 +51669,12 @@
       "Deploy."
     ],
     "estimatedMinutes": 32,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/fundamentals/api/reference/sdks": {
     "path": "/fundamentals/api/reference/sdks",
@@ -51091,7 +51812,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers/tutorials/upload-assets-with-r2": {
     "path": "/workers/tutorials/upload-assets-with-r2",
@@ -51476,7 +52202,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers/tutorials/send-emails-with-postmark": {
     "path": "/workers/tutorials/send-emails-with-postmark",
@@ -51783,7 +52515,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers/tutorials/send-emails-with-resend": {
     "path": "/workers/tutorials/send-emails-with-resend",
@@ -52095,7 +52833,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/cloudflare-one/tutorials/extend-sso-with-workers": {
     "path": "/cloudflare-one/tutorials/extend-sso-with-workers",
@@ -52457,7 +53201,14 @@
       "Deploy the Worker."
     ],
     "estimatedMinutes": 32,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Zero Trust typically requires Cloudflare One tenant admin access and a connected IdP.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/dns/zone-setups/partial-setup/setup": {
     "path": "/dns/zone-setups/partial-setup/setup",
@@ -52761,7 +53512,12 @@
       "Add DNS records."
     ],
     "estimatedMinutes": 24,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/dns/private-origins/set-up-via-cloudflare-wan": {
     "path": "/dns/private-origins/set-up-via-cloudflare-wan",
@@ -53069,7 +53825,12 @@
       "Verify end-to-end connectivity."
     ],
     "estimatedMinutes": 24,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers/tutorials/using-prisma-postgres-with-workers": {
     "path": "/workers/tutorials/using-prisma-postgres-with-workers",
@@ -53628,7 +54389,13 @@
       "Deploy the application to Cloudflare."
     ],
     "estimatedMinutes": 32,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/sandbox/tutorials/claude-managed-agents": {
     "path": "/sandbox/tutorials/claude-managed-agents",
@@ -53829,7 +54596,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/dns/zone-setups/zone-transfers/cloudflare-as-secondary/setup": {
     "path": "/dns/zone-setups/zone-transfers/cloudflare-as-secondary/setup",
@@ -54314,7 +55086,12 @@
       "Proxy traffic through Cloudflare (optional)."
     ],
     "estimatedMinutes": 48,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/dns/zone-setups/zone-transfers/cloudflare-as-primary/dnssec-for-primary": {
     "path": "/dns/zone-setups/zone-transfers/cloudflare-as-primary/dnssec-for-primary",
@@ -54517,7 +55294,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/dns/zone-setups/zone-transfers/cloudflare-as-primary/setup": {
     "path": "/dns/zone-setups/zone-transfers/cloudflare-as-primary/setup",
@@ -55031,7 +55813,12 @@
       "Add secondary nameservers to registrar."
     ],
     "estimatedMinutes": 56,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/ai-gateway/integrations/aig-workers-ai-binding": {
     "path": "/ai-gateway/integrations/aig-workers-ai-binding",
@@ -55463,7 +56250,14 @@
       "Deploy your AI Worker."
     ],
     "estimatedMinutes": 40,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Zero Trust typically requires Cloudflare One tenant admin access and a connected IdP.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/ssl/keyless-ssl/hardware-security-modules/softhsmv2": {
     "path": "/ssl/keyless-ssl/hardware-security-modules/softhsmv2",
@@ -55712,7 +56506,12 @@
       "Modify your gokeyless config file and restart the service."
     ],
     "estimatedMinutes": 32,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/use-cases/solutions/stop-account-takeover-attacks": {
     "path": "/use-cases/solutions/stop-account-takeover-attacks",
@@ -56984,7 +57783,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/use-cases/solutions/stop-malicious-bots": {
     "path": "/use-cases/solutions/stop-malicious-bots",
@@ -58358,7 +59162,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers-ai/guides/tutorials/image-generation-playground/image-generator-store-and-catalog": {
     "path": "/workers-ai/guides/tutorials/image-generation-playground/image-generator-store-and-catalog",
@@ -58385,7 +59194,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/waiting-room/additional-options/test-waiting-room": {
     "path": "/waiting-room/additional-options/test-waiting-room",
@@ -58644,7 +59459,12 @@
       "Analyze results."
     ],
     "estimatedMinutes": 24,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/terraform/tutorial/track-history": {
     "path": "/terraform/tutorial/track-history",
@@ -58830,7 +59650,13 @@
       "Store configuration in GitHub."
     ],
     "estimatedMinutes": 16,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Verify API tokens and the state backend before running against production.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/images/tutorials/optimize-user-uploaded-image": {
     "path": "/images/tutorials/optimize-user-uploaded-image",
@@ -59350,7 +60176,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers/vite-plugin/tutorial": {
     "path": "/workers/vite-plugin/tutorial",
@@ -59954,7 +60785,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/cloudflare-one/tutorials/r2-logs": {
     "path": "/cloudflare-one/tutorials/r2-logs",
@@ -60118,7 +60955,14 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Zero Trust typically requires Cloudflare One tenant admin access and a connected IdP.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/cloudflare-one/tutorials/tunnel-kubectl": {
     "path": "/cloudflare-one/tutorials/tunnel-kubectl",
@@ -60397,7 +61241,13 @@
       "Use kubectl with Cloudflare Tunnel."
     ],
     "estimatedMinutes": 32,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Zero Trust typically requires Cloudflare One tenant admin access and a connected IdP.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/r2/tutorials/summarize-pdf": {
     "path": "/r2/tutorials/summarize-pdf",
@@ -61195,7 +62045,13 @@
       "Test."
     ],
     "estimatedMinutes": 88,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/cloudflare-one/tutorials/entra-id-conditional-access": {
     "path": "/cloudflare-one/tutorials/entra-id-conditional-access",
@@ -61429,7 +62285,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Zero Trust typically requires Cloudflare One tenant admin access and a connected IdP.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/load-balancing/pools/cloudflare-pages-origin": {
     "path": "/load-balancing/pools/cloudflare-pages-origin",
@@ -62001,7 +62863,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/ai-gateway/tutorials/pruna-p-video": {
     "path": "/ai-gateway/tutorials/pruna-p-video",
@@ -62345,7 +63213,13 @@
       "(Optional) Use async polling for longer requests."
     ],
     "estimatedMinutes": 40,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Zero Trust typically requires Cloudflare One tenant admin access and a connected IdP.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/pages/tutorials/use-r2-as-static-asset-storage-for-pages": {
     "path": "/pages/tutorials/use-r2-as-static-asset-storage-for-pages",
@@ -62665,7 +63539,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/r2/examples/ssec": {
     "path": "/r2/examples/ssec",
@@ -62796,7 +63676,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/cloudflare-one/tutorials/user-selectable-egress-ips": {
     "path": "/cloudflare-one/tutorials/user-selectable-egress-ips",
@@ -63230,7 +64116,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Zero Trust typically requires Cloudflare One tenant admin access and a connected IdP.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers/tutorials/workers-kv-from-rust": {
     "path": "/workers/tutorials/workers-kv-from-rust",
@@ -63585,7 +64477,13 @@
       "Deploy your project."
     ],
     "estimatedMinutes": 45,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Prerequisites (from docs): All of the tutorials assume you have already completed the Get started guide, which gets you set up with a Cloudflare Workers account, C3 ↗, and Wrangler.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers-ai/guides/tutorials/using-bigquery-with-workers-ai": {
     "path": "/workers-ai/guides/tutorials/using-bigquery-with-workers-ai",
@@ -64283,7 +65181,13 @@
       "Feed data into Workers AI."
     ],
     "estimatedMinutes": 56,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/d1/tutorials/using-read-replication-for-e-com": {
     "path": "/d1/tutorials/using-read-replication-for-e-com",
@@ -65069,7 +65973,13 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/cloudflare-one/tutorials/fastapi": {
     "path": "/cloudflare-one/tutorials/fastapi",
@@ -65211,7 +66121,13 @@
       "Use the validation function in your app."
     ],
     "estimatedMinutes": 16,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Zero Trust typically requires Cloudflare One tenant admin access and a connected IdP.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/workers-ai/guides/tutorials/build-a-workers-ai-whisper-with-chunking": {
     "path": "/workers-ai/guides/tutorials/build-a-workers-ai-whisper-with-chunking",
@@ -65650,7 +66566,13 @@
       "Deploy your Worker."
     ],
     "estimatedMinutes": 32,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/secrets-store/integrations/workers": {
     "path": "/secrets-store/integrations/workers",
@@ -66105,7 +67027,13 @@
       "Access the secret on the env object."
     ],
     "estimatedMinutes": 24,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Requires a Cloudflare account, Wrangler CLI, and (typically) completing the Workers/Pages Get started guide.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   },
   "/cloudflare-one/tutorials/gitlab": {
     "path": "/cloudflare-one/tutorials/gitlab",
@@ -66732,6 +67660,12 @@
     ],
     "stepsVi": [],
     "estimatedMinutes": 10,
-    "crawledAt": "2026-06-10"
+    "crawledAt": "2026-06-10",
+    "notesEn": [
+      "This is a summary on Orange Cloud Learning Hub — it does not replace the official documentation.",
+      "Open the Official docs link below for CLI commands, code snippets, and full screenshots.",
+      "Zero Trust typically requires Cloudflare One tenant admin access and a connected IdP.",
+      "Cloudflare docs change frequently — verify the Last reviewed date on the official page before production use."
+    ]
   }
 }

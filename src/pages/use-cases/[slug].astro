@@ -19,14 +19,14 @@ const trackMeta = useCaseTrackLabels[uc.relatedTrack];
 const siblingUseCases = getUseCasesByTrack(uc.relatedTrack).filter((u) => u.slug !== uc.slug);
 const diagramSectionTitle =
   uc.slug === 'secure-api'
-    ? { vi: 'Sơ đồ tham chiếu — API Shield', en: 'Reference diagram — API Shield' }
-    : { vi: 'Sơ đồ tham chiếu (Cloudflare Docs)', en: 'Reference diagrams (Cloudflare Docs)' };
+    ? { vi: 'Sơ đồ tham chiếu — API Shield', en: 'Reference diagram — API Shield', km: 'Reference diagram — API Shield' }
+    : { vi: 'Sơ đồ tham chiếu (Cloudflare Docs)', en: 'Reference diagrams (Cloudflare Docs)', km: 'Reference diagrams (Cloudflare Docs)' };
 ---
 
 <BaseLayout title={uc.title} description={uc.problem} canonicalPath={`/use-cases/${uc.slug}`} showProgressBar>
   <Breadcrumbs
     items={[
-      { href: '/use-cases/', label: { vi: 'Tình huống thực tế', en: 'Use cases' } },
+      { href: '/use-cases/', label: { vi: 'Tình huống thực tế', en: 'Use cases' , km: 'Use cases' } },
       { href: `/use-cases/${uc.relatedTrack}/`, label: trackMeta.title },
       { href: `/use-cases/${uc.slug}/`, label: uc.title },
     ]}
@@ -37,11 +37,12 @@ const diagramSectionTitle =
       <p class="text-muted text-xs font-medium uppercase tracking-wide">
         <span class="lang-vi">Lộ trình liên quan</span>
         <span class="lang-en">Related learning track</span>
+        <span class="lang-km">Related learning track</span>
       </p>
       <LangText as="p" class="mt-1 font-semibold" text={trackMeta.title} />
     </div>
     <a class="btn btn-secondary shrink-0" href={trackMeta.trackHref}>
-      <LangText text={{ vi: 'Học lộ trình này', en: 'Study this track' }} />
+      <LangText text={{ vi: 'Học lộ trình này', en: 'Study this track', km: 'Study this track' }} />
     </a>
   </div>
 
@@ -52,15 +53,17 @@ const diagramSectionTitle =
       <a class="link" href={uc.officialUrl} rel="noopener noreferrer" target="_blank">
         <span class="lang-vi">Tài liệu Cloudflare (use case) →</span>
         <span class="lang-en">Official Cloudflare use case docs →</span>
+        <span class="lang-km">Official Cloudflare use case docs →</span>
       </a>
     </p>
   </header>
 
   <section class="card">
-    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Kiến trúc gợi ý', en: 'Suggested architecture' }} />
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Kiến trúc gợi ý', en: 'Suggested architecture', km: 'Suggested architecture' }} />
     <p class="mt-3 font-mono text-sm text-[var(--cf-accent)]">
       <span class="lang-vi">{uc.architecture.vi}</span>
       <span class="lang-en">{uc.architecture.en}</span>
+      <span class="lang-km">{uc.architecture.en}</span>
     </p>
   </section>
 
@@ -77,12 +80,13 @@ const diagramSectionTitle =
 
   {uc.steps ? (
     <section class="card mt-6">
-      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Các bước thực hiện', en: 'Recommended steps' }} />
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Các bước thực hiện', en: 'Recommended steps', km: 'Recommended steps' }} />
       <ol class="text-muted mt-3 list-decimal space-y-2 pl-5 text-sm">
         {uc.steps.vi.map((step, i) => (
           <li>
             <span class="lang-vi">{step}</span>
             <span class="lang-en">{uc.steps!.en[i]}</span>
+            <span class="lang-km">{uc.steps!.en[i]}</span>
           </li>
         ))}
       </ol>
@@ -91,12 +95,13 @@ const diagramSectionTitle =
 
   {uc.bullets ? (
     <section class="card mt-6">
-      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Controls & stack', en: 'Controls & stack' }} />
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Controls & stack', en: 'Controls & stack', km: 'Controls & stack' }} />
       <ul class="text-muted mt-3 list-disc space-y-2 pl-5 text-sm">
         {uc.bullets.vi.map((b, i) => (
           <li>
             <span class="lang-vi">{b}</span>
             <span class="lang-en">{uc.bullets!.en[i]}</span>
+            <span class="lang-km">{uc.bullets!.en[i]}</span>
           </li>
         ))}
       </ul>
@@ -105,17 +110,19 @@ const diagramSectionTitle =
 
   {uc.commonMistakes ? (
     <section class="mt-6">
-      <LangText as="h2" class="text-xl font-semibold" text={{ vi: 'Lỗi thường gặp', en: 'Common mistakes' }} />
+      <LangText as="h2" class="text-xl font-semibold" text={{ vi: 'Lỗi thường gặp', en: 'Common mistakes', km: 'Common mistakes' }} />
       <div class="mt-4 grid gap-4 md:grid-cols-2">
         {uc.commonMistakes.vi.map((m, i) => (
           <div class="card">
             <h3 class="font-semibold">
               <span class="lang-vi">{m.title}</span>
               <span class="lang-en">{uc.commonMistakes!.en[i].title}</span>
+              <span class="lang-km">{uc.commonMistakes!.en[i].title}</span>
             </h3>
             <p class="text-muted mt-2 text-sm">
               <span class="lang-vi">{m.detail}</span>
               <span class="lang-en">{uc.commonMistakes!.en[i].detail}</span>
+              <span class="lang-km">{uc.commonMistakes!.en[i].detail}</span>
             </p>
           </div>
         ))}
@@ -128,7 +135,7 @@ const diagramSectionTitle =
       <LangText
         as="h2"
         class="text-lg font-semibold"
-        text={{ vi: 'Tình huống khác (cùng lộ trình)', en: 'Other scenarios (same track)' }}
+        text={{ vi: 'Tình huống khác (cùng lộ trình)', en: 'Other scenarios (same track)', km: 'Other scenarios (same track)' }}
       />
       <ul class="mt-3 space-y-2 text-sm">
         {siblingUseCases.map((other) => (
@@ -141,19 +148,19 @@ const diagramSectionTitle =
       </ul>
       <p class="text-muted mt-3 text-xs">
         <a class="link" href={`/use-cases/${uc.relatedTrack}`}>
-          <LangText text={{ vi: '← Tất cả tình huống lộ trình này', en: '← All scenarios in this track' }} />
+          <LangText text={{ vi: '← Tất cả tình huống lộ trình này', en: '← All scenarios in this track', km: '← All scenarios in this track' }} />
         </a>
         {' · '}
         <a class="link" href="/use-cases">
-          <LangText text={{ vi: 'Ba nhóm tình huống', en: 'All three groups' }} />
+          <LangText text={{ vi: 'Ba nhóm tình huống', en: 'All three groups', km: 'All three groups' }} />
         </a>
       </p>
     </section>
   ) : null}
 
   <CTASection
-    title={{ vi: 'Next step', en: 'Next step' }}
-    description={{ vi: 'Tiếp tục hành trình học của bạn.', en: 'Continue your learning journey.' }}
+    title={{ vi: 'Next step', en: 'Next step', km: 'Next step' }}
+    description={{ vi: 'Tiếp tục hành trình học của bạn.', en: 'Continue your learning journey.', km: 'Continue your learning journey.' }}
     cta={uc.nextCta}
   />
 </BaseLayout>

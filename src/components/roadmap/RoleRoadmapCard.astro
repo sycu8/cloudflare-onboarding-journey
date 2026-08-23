@@ -6,16 +6,16 @@ type Props = { roadmap: RoleRoadmap };
 const { roadmap } = Astro.props;
 
 const levelLabels = {
-  zero: { vi: 'Từ con số 0', en: 'From zero' },
-  basic: { vi: 'Cơ bản', en: 'Basic' },
-  technical: { vi: 'Kỹ thuật', en: 'Technical' },
+  zero: { vi: 'Từ con số 0', en: 'From zero' , km: 'ចាប់ផ្តើមពីសូន្យ' },
+  basic: { vi: 'Cơ bản', en: 'Basic' , km: 'មូលដ្ឋាន' },
+  technical: { vi: 'Kỹ thuật', en: 'Technical' , km: 'បច្ចេកទេស' },
 };
 
 const trackLabels = {
-  'application-services': { vi: 'Application Services', en: 'Application Services' },
-  'developer-platform': { vi: 'Developer Platform', en: 'Developer Platform' },
-  'cloudflare-one': { vi: 'Cloudflare One', en: 'Cloudflare One' },
-  mixed: { vi: 'Hỗn hợp', en: 'Mixed' },
+  'application-services': { vi: 'Application Services', en: 'Application Services', km: 'Application Services' },
+  'developer-platform': { vi: 'Developer Platform', en: 'Developer Platform', km: 'Developer Platform' },
+  'cloudflare-one': { vi: 'Cloudflare One', en: 'Cloudflare One', km: 'Cloudflare One' },
+  mixed: { vi: 'Hỗn hợp', en: 'Mixed' , km: 'ចម្រុះ' },
 };
 ---
 
@@ -23,10 +23,12 @@ const trackLabels = {
   <h2 class="text-xl font-semibold">
     <span class="lang-vi">{roadmap.roleNameVi}</span>
     <span class="lang-en">{roadmap.roleNameEn ?? roadmap.roleNameVi}</span>
+    <span class="lang-km">{roadmap.roleNameKm ?? roadmap.roleNameEn ?? roadmap.roleNameVi}</span>
   </h2>
   <p class="text-muted mt-2 flex-1 text-sm leading-relaxed">
     <span class="lang-vi">{roadmap.descriptionVi}</span>
     <span class="lang-en">{roadmap.descriptionEn ?? roadmap.descriptionVi}</span>
+    <span class="lang-km">{roadmap.descriptionKm ?? roadmap.descriptionEn ?? roadmap.descriptionVi}</span>
   </p>
 
   <ul class="text-muted mt-3 space-y-1 text-xs">
@@ -34,6 +36,7 @@ const trackLabels = {
       <li>
         • <span class="lang-vi">{item}</span>
         <span class="lang-en">{roadmap.bestForEn?.[i] ?? item}</span>
+        <span class="lang-km">{roadmap.bestForKm?.[i] ?? roadmap.bestForEn?.[i] ?? item}</span>
       </li>
     ))}
   </ul>
@@ -43,30 +46,36 @@ const trackLabels = {
       <dt class="font-medium text-[var(--cf-text)]">
         <span class="lang-vi">Thời lượng</span>
         <span class="lang-en">Duration</span>
+        <span class="lang-km">រយៈពេល</span>
       </dt>
       <dd>
         <span class="lang-vi">{roadmap.totalWeeks} tuần</span>
         <span class="lang-en">{roadmap.totalWeeks} weeks</span>
+        <span class="lang-km">{roadmap.totalWeeks} weeks</span>
       </dd>
     </div>
     <div>
       <dt class="font-medium text-[var(--cf-text)]">
         <span class="lang-vi">Trình độ bắt đầu</span>
         <span class="lang-en">Starting level</span>
+        <span class="lang-km">កម្រិតចាប់ផ្តើម</span>
       </dt>
       <dd>
         <span class="lang-vi">{levelLabels[roadmap.startingLevel].vi}</span>
         <span class="lang-en">{levelLabels[roadmap.startingLevel].en}</span>
+        <span class="lang-km">{levelLabels[roadmap.startingLevel].km ?? levelLabels[roadmap.startingLevel].en}</span>
       </dd>
     </div>
     <div class="sm:col-span-2">
       <dt class="font-medium text-[var(--cf-text)]">
         <span class="lang-vi">Track chính</span>
         <span class="lang-en">Primary track</span>
+        <span class="lang-km">Track ចម្បង</span>
       </dt>
       <dd>
         <span class="lang-vi">{trackLabels[roadmap.primaryTrack].vi}</span>
         <span class="lang-en">{trackLabels[roadmap.primaryTrack].en}</span>
+        <span class="lang-km">{trackLabels[roadmap.primaryTrack].km ?? trackLabels[roadmap.primaryTrack].en}</span>
       </dd>
     </div>
   </dl>
@@ -74,12 +83,15 @@ const trackLabels = {
   <p class="text-muted mt-4 text-sm">
     <span class="font-medium text-[var(--cf-text)] lang-vi">Kết quả: </span>
     <span class="font-medium text-[var(--cf-text)] lang-en">Outcome: </span>
+    <span class="font-medium text-[var(--cf-text)] lang-km">Outcome:</span>
     <span class="lang-vi">{roadmap.finalOutcomeVi}</span>
     <span class="lang-en">{roadmap.finalOutcomeEn ?? roadmap.finalOutcomeVi}</span>
+    <span class="lang-km">{roadmap.finalOutcomeKm ?? roadmap.finalOutcomeEn ?? roadmap.finalOutcomeVi}</span>
   </p>
 
   <a class="btn btn-primary mt-4 w-full justify-center" href={`/roadmaps/${roadmap.roleId}/`}>
     <span class="lang-vi">Xem roadmap</span>
     <span class="lang-en">View roadmap</span>
+    <span class="lang-km">មើល roadmap</span>
   </a>
 </article>

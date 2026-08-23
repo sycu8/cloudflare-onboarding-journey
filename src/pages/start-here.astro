@@ -10,7 +10,7 @@ const startDiagrams = getDiagramsForHubPage('/start-here');
 ---
 
 <BaseLayout
-  title={{ vi: 'Bắt đầu tại đây: hiểu Cloudflare trong 30 phút', en: 'Start here: understand Cloudflare in 30 minutes' }}
+  title={{ vi: 'Bắt đầu tại đây: hiểu Cloudflare trong 30 phút', en: 'Start here: understand Cloudflare in 30 minutes', km: 'Start here: understand Cloudflare in 30 minutes' }}
   description={{
     vi: 'Bắt đầu học Cloudflare trong 30 phút: mental model user → edge → origin, 3 câu hỏi chọn track, lộ trình 7 ngày và Resource Hub.',
     en: 'Start learning Cloudflare in 30 minutes: user → edge → origin mental model, three questions to pick a track, 7-day path, and Resource Hub.',
@@ -18,10 +18,10 @@ const startDiagrams = getDiagramsForHubPage('/start-here');
   canonicalPath="/start-here"
   showProgressBar
 >
-  <Breadcrumbs items={[{ href: '/start-here', label: { vi: 'Bắt đầu', en: 'Start Here' } }]} />
+  <Breadcrumbs items={[{ href: '/start-here', label: { vi: 'Bắt đầu', en: 'Start Here' , km: 'Start Here' } }]} />
 
   <header class="mb-6">
-    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: 'Bắt đầu tại đây: hiểu Cloudflare trong 30 phút', en: 'Start here: understand Cloudflare in 30 minutes' }} />
+    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: 'Bắt đầu tại đây: hiểu Cloudflare trong 30 phút', en: 'Start here: understand Cloudflare in 30 minutes', km: 'Start here: understand Cloudflare in 30 minutes' }} />
     <LangText
       as="p"
       class="text-muted mt-2 max-w-3xl text-sm"
@@ -34,37 +34,43 @@ const startDiagrams = getDiagramsForHubPage('/start-here');
 
   <section class="grid gap-4 md:grid-cols-3">
     <div class="card md:col-span-2">
-      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Mental model', en: 'Mental model' }} />
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Mental model', en: 'Mental model', km: 'Mental model' }} />
       <div class="text-muted mt-3 space-y-3 text-sm">
         <p>
           <span class="lang-vi">• “Với public apps: User → Cloudflare edge → website/app/API origin”</span>
           <span class="lang-en">• “For public apps: User → Cloudflare edge → website/app/API origin”</span>
+          <span class="lang-km">• “For public apps: User → Cloudflare edge → website/app/API origin”</span>
         </p>
         <p>
           <span class="lang-vi">• “Với developer apps: User → Cloudflare edge → Worker/Pages/R2/D1/KV”</span>
           <span class="lang-en">• “For developer apps: User → Cloudflare edge → Worker/Pages/R2/D1/KV”</span>
+          <span class="lang-km">• “For developer apps: User → Cloudflare edge → Worker/Pages/R2/D1/KV”</span>
         </p>
         <p>
           <span class="lang-vi">• “Với workforce security: User/device → Cloudflare Zero Trust → SaaS/private app/Internet”</span>
           <span class="lang-en">• “For workforce security: User/device → Cloudflare Zero Trust → SaaS/private app/Internet”</span>
+          <span class="lang-km">• “For workforce security: User/device → Cloudflare Zero Trust → SaaS/private app/Internet”</span>
         </p>
       </div>
     </div>
 
     <div class="card">
-      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Ba câu hỏi cho người mới', en: 'Three beginner questions' }} />
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Ba câu hỏi cho người mới', en: 'Three beginner questions', km: 'Three beginner questions' }} />
       <ul class="text-muted mt-3 space-y-3 text-sm">
         <li>
           <span class="lang-vi">1) Bạn đã có website, app hoặc API chưa? → Application Services</span>
           <span class="lang-en">1) Do you already have a website, app, or API? → Application Services</span>
+          <span class="lang-km">1) Do you already have a website, app, or API? → Application Services</span>
         </li>
         <li>
           <span class="lang-vi">2) Bạn muốn build app, API hoặc backend mới? → Developer Platform</span>
           <span class="lang-en">2) Do you want to build a new app, API, or backend? → Developer Platform</span>
+          <span class="lang-km">2) Do you want to build a new app, API, or backend? → Developer Platform</span>
         </li>
         <li>
           <span class="lang-vi">3) Bạn muốn bảo vệ nhân viên, SaaS, VPN hoặc private access? → Cloudflare One</span>
           <span class="lang-en">3) Do you want to secure employees, SaaS, VPN, or private access? → Cloudflare One</span>
+          <span class="lang-km">3) Do you want to secure employees, SaaS, VPN, or private access? → Cloudflare One</span>
         </li>
       </ul>
     </div>
@@ -75,7 +81,7 @@ const startDiagrams = getDiagramsForHubPage('/start-here');
       <LangText
         as="h2"
         class="mb-4 text-lg font-semibold"
-        text={{ vi: 'Sơ đồ tham chiếu cho 3 hướng', en: 'Reference diagrams for three paths' }}
+        text={{ vi: 'Sơ đồ tham chiếu cho 3 hướng', en: 'Reference diagrams for three paths', km: 'Reference diagrams for three paths' }}
       />
       <p class="text-muted mb-4 max-w-3xl text-sm">
         <span class="lang-vi">
@@ -86,6 +92,8 @@ const startDiagrams = getDiagramsForHubPage('/start-here');
           Each track has an official architecture diagram — click a figure to open the source on{' '}
           <a class="link" href={REF_ARCH_DIAGRAMS_URL} target="_blank" rel="noopener noreferrer">Reference Diagrams</a>.
         </span>
+        <span class="lang-km">Each track has an official architecture diagram — click a figure to open the source on{' '}
+          <a class="link" href={REF_ARCH_DIAGRAMS_URL} target="_blank" rel="noopener noreferrer">Reference Diagrams</a>.</span>
       </p>
       <div class="grid gap-6 lg:grid-cols-3">
         {startDiagrams.map((d) => (
@@ -96,7 +104,7 @@ const startDiagrams = getDiagramsForHubPage('/start-here');
   ) : null}
 
   <section class="mt-6 card">
-    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'What not to do first', en: 'What not to do first' }} />
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'What not to do first', en: 'What not to do first', km: 'What not to do first' }} />
     <LangText
       as="p"
       class="text-muted mt-2 text-sm"
@@ -108,7 +116,7 @@ const startDiagrams = getDiagramsForHubPage('/start-here');
   </section>
 
   <section class="mt-6 card">
-    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Lộ trình 7 ngày (gợi ý)', en: 'Suggested 7-day path' }} />
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Lộ trình 7 ngày (gợi ý)', en: 'Suggested 7-day path', km: 'Suggested 7-day path' }} />
     <LangText
       as="p"
       class="text-muted mt-2 text-sm"
@@ -118,13 +126,13 @@ const startDiagrams = getDiagramsForHubPage('/start-here');
       }}
     />
     <a class="btn btn-secondary mt-4" href="/first-week">
-      <LangText text={{ vi: 'Mở tuần đầu', en: 'Open first-week plan' }} />
+      <LangText text={{ vi: 'Mở tuần đầu', en: 'Open first-week plan', km: 'Open first-week plan' }} />
     </a>
   </section>
 
   <section class="mt-6 grid gap-4 md:grid-cols-2">
     <div class="card">
-      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Content Roadmap — từ con số 0', en: 'Content Roadmap — from zero' }} />
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Content Roadmap — từ con số 0', en: 'Content Roadmap — from zero', km: 'Content Roadmap — from zero' }} />
       <LangText
         as="p"
         class="text-muted mt-2 text-sm"
@@ -134,11 +142,11 @@ const startDiagrams = getDiagramsForHubPage('/start-here');
         }}
       />
       <a class="btn btn-primary mt-4" href="/content-roadmap/">
-        <LangText text={{ vi: 'Mở Content Roadmap', en: 'Open Content Roadmap' }} />
+        <LangText text={{ vi: 'Mở Content Roadmap', en: 'Open Content Roadmap', km: 'Open Content Roadmap' }} />
       </a>
     </div>
     <div class="card">
-      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Tôi là…', en: 'I am a…' }} />
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Tôi là…', en: 'I am a…', km: 'I am a…' }} />
       <LangText
         as="p"
         class="text-muted mt-2 text-sm"
@@ -148,13 +156,13 @@ const startDiagrams = getDiagramsForHubPage('/start-here');
         }}
       />
       <a class="btn btn-secondary mt-4" href="/roadmaps/">
-        <LangText text={{ vi: 'Xem roadmap vai trò', en: 'View role roadmaps' }} />
+        <LangText text={{ vi: 'Xem roadmap vai trò', en: 'View role roadmaps', km: 'View role roadmaps' }} />
       </a>
     </div>
   </section>
 
   <section class="mt-6 card">
-    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Tài nguyên chính thức', en: 'Official resources' }} />
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Tài nguyên chính thức', en: 'Official resources', km: 'Official resources' }} />
     <LangText
       as="p"
       class="text-muted mt-2 text-sm"
@@ -164,14 +172,14 @@ const startDiagrams = getDiagramsForHubPage('/start-here');
       }}
     />
     <a class="btn btn-secondary mt-4" href="/resources#resource-hub">
-      <LangText text={{ vi: 'Mở Resource Hub', en: 'Open Resource Hub' }} />
+      <LangText text={{ vi: 'Mở Resource Hub', en: 'Open Resource Hub', km: 'Open Resource Hub' }} />
     </a>
   </section>
 
   <CTASection
-    title={{ vi: 'Tiếp tục đến Cloudflare 101', en: 'Continue to Cloudflare 101' }}
-    description={{ vi: 'Nắm các khái niệm nền tảng để đọc tiếp toàn bộ hub.', en: 'Learn the foundational concepts for the rest of the hub.' }}
-    cta={{ href: '/cloudflare-101', label: { vi: 'Đi đến Cloudflare 101', en: 'Go to Cloudflare 101' } }}
+    title={{ vi: 'Tiếp tục đến Cloudflare 101', en: 'Continue to Cloudflare 101', km: 'Continue to Cloudflare 101' }}
+    description={{ vi: 'Nắm các khái niệm nền tảng để đọc tiếp toàn bộ hub.', en: 'Learn the foundational concepts for the rest of the hub.', km: 'Learn the foundational concepts for the rest of the hub.' }}
+    cta={{ href: '/cloudflare-101', label: { vi: 'Đi đến Cloudflare 101', en: 'Go to Cloudflare 101' , km: 'Go to Cloudflare 101' } }}
   />
 </BaseLayout>
 

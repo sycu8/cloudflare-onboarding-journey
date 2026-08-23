@@ -58,11 +58,13 @@ export default function ChecklistBlock({ sections }: { sections: ChecklistSectio
               {done}/{total}{' '}
               <span className="lang-vi">hoàn thành</span>
               <span className="lang-en">completed</span>
+              <span className="lang-km">completed</span>
             </div>
           </div>
           <button type="button" className="btn btn-secondary" onClick={reset}>
             <span className="lang-vi">Reset</span>
             <span className="lang-en">Reset</span>
+            <span className="lang-km">Reset</span>
           </button>
         </div>
         <div className="cf-progress-track mt-4 h-2 rounded-full">
@@ -75,6 +77,7 @@ export default function ChecklistBlock({ sections }: { sections: ChecklistSectio
           <h2 className="text-lg font-semibold">
             <span className="lang-vi">{section.title.vi}</span>
             <span className="lang-en">{section.title.en}</span>
+            <span className="lang-km">{section.title.en}</span>
           </h2>
           <ul className="mt-3 space-y-2">
             {section.items.map((item) => (
@@ -89,6 +92,7 @@ export default function ChecklistBlock({ sections }: { sections: ChecklistSectio
                   <span className="text-sm">
                     <span className="lang-vi">{item.text.vi}</span>
                     <span className="lang-en">{item.text.en}</span>
+                    <span className="lang-km">{item.text.en}</span>
                   </span>
                 </label>
               </li>
@@ -102,10 +106,12 @@ export default function ChecklistBlock({ sections }: { sections: ChecklistSectio
           <p className="font-medium">
             <span className="lang-vi">Tuyệt vời! Bạn đã hoàn thành checklist.</span>
             <span className="lang-en">Great! You completed the checklist.</span>
+            <span className="lang-km">Great! You completed the checklist.</span>
           </p>
           <a className="btn btn-primary mt-4" href="/quiz/beginner-readiness">
             <span className="lang-vi">Kiểm tra kiến thức</span>
             <span className="lang-en">Knowledge check</span>
+            <span className="lang-km">Knowledge check</span>
           </a>
         </div>
       ) : null}

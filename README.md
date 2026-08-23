@@ -4,7 +4,7 @@
 [![Astro](https://img.shields.io/badge/Astro-6-BC52EE?style=flat-square&logo=astro)](https://astro.build/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 
-**Cloudflare Starter Hub** — a bilingual (Vietnamese-first) learning site that helps beginners go from *“I don’t know where to start”* to a clear path across **Application Services**, **Developer Platform**, and **Cloudflare One**.
+**Cloudflare Starter Hub** — a trilingual (Vietnamese, English, Khmer) learning site that helps beginners go from *“I don’t know where to start”* to a clear path across **Application Services**, **Developer Platform**, and **Cloudflare One**.
 
 Live sites:
 
@@ -116,14 +116,14 @@ Optional: [**First week (7 days)**](/first-week) — day-by-day plan, common mis
 - **Product pages** — searchable catalog at `/products` (Workers, WAF, Zero Trust, D1, R2, …)
 - **Cloudflare 101 extras** — terminology dictionary (6 categories, CSS tabs, search) + lab-style config/WAF guides
 - **Content Roadmap** — `/content-roadmap/` — 9 stages from Internet/DNS basics to Cloudflare use cases (with `sourceUrls`, hub links, prerequisite anchors, related tutorials)
-- **Role roadmaps** — `/roadmaps/` — Sales, SE, Developer, IT Admin, Founder, Student (weekly plans, tutorial picks, localStorage progress)
+- **Role roadmaps** — `/roadmaps/` — Sales, SE, Developer, IT Admin, Founder, Student (weekly plans, tutorial picks, localStorage progress, **unified progress dashboard**)
 - **Tutorial previews** — **164** Cloudflare tutorials/solution guides on hub at `/tutorials/{path}/` with VI summaries, section TOC, and doc backlinks (see [Recent updates](#recent-updates-june-2026))
 - **Deployment examples** — homepage + track lessons + `/resources#cloudflare-resources` catalog with filters (track, type, search)
 - **Search** — instant search (**541+** indexed pages/terms/tutorials/roadmap topics) via Ctrl+K; optional [Cloudflare AI Search](docs/AI-SEARCH-SETUP.md) for semantic results
 - **Interactive** — glossary search + pagination, quiz with explanations, checklist progress, path selector
 - **Resources hub** — official docs grid (synced), Reference Architecture **diagrams**, Resource Hub, GitHub, CloudSecOp, Learning Center, **Cloudflare Resources** catalog
 - **Solutions & demos** — bilingual solution proposals, SE demo guides, content-delivery guide, plan comparison
-- **SEO** — per-page title/description, Open Graph, Twitter cards, canonical URLs
+- **Trilingual UI** — Vietnamese, English, and Khmer (`VI → EN → KM` language switcher; preference in `localStorage`)
 - **Cloudflare branding** — orange cloud favicon and navbar logo; static assets via R2 `/assets/*` in production
 - **Pages Functions** — workshop events, signups, quiz submissions, site config, asset proxy, optional Workers AI
 - **D1 + KV + R2** — production-ready bindings (configure in your account)
@@ -444,6 +444,27 @@ npm run review:pr -- 12 --verify # + isolated build in .worktrees/
 ```
 
 Details: [docs/MAINTAINER_REVIEW.md](docs/MAINTAINER_REVIEW.md). Cursor/agent: [AGENTS.md](AGENTS.md).
+
+### Khmer (km) content
+
+The site is **trilingual** (vi / en / km). Khmer copy lives in:
+
+- `src/i18n/km.ts` — core UI dictionary
+- `src/data/contentRoadmap/topicKm.ts` — 88 roadmap topic overlays
+- `src/data/roleRoadmaps/stepKm.ts` + `stepTopicsKm.ts` — role week plans
+- `src/data/tutorialPreviews.km.json` — tutorial body overlay (generate with script below)
+- Inline `.lang-km` spans across pages (fallback to English when `km` missing)
+
+Regenerate Khmer from English (machine translation; Cloudflare/IT terms preserved):
+
+```bash
+npm run translate:km:topics      # content roadmap topics
+npm run translate:km:steps       # role roadmaps
+npm run translate:km:tutorials     # all 164 tutorials (~hours; checkpoints every 5)
+npm run verify:i18n              # after npm run build
+```
+
+Set `TRANSLATE_PROVIDER=dry-run` to skip API calls. Optional: `TRANSLATE_PROVIDER=workers-ai` with `CLOUDFLARE_ACCOUNT_ID` + `CLOUDFLARE_API_TOKEN`.
 
 ---
 

@@ -15,6 +15,7 @@ export default function WorkshopSection() {
           <h2 className="text-lg font-semibold">
             <span className="lang-vi">Đăng ký qua Cloudflare Starter Hub</span>
             <span className="lang-en">Register via Cloudflare Starter Hub</span>
+            <span className="lang-km">Register via Cloudflare Starter Hub</span>
           </h2>
           <p className="text-muted mt-2 max-w-2xl text-sm">
             <span className="lang-vi">
@@ -23,6 +24,7 @@ export default function WorkshopSection() {
             <span className="lang-en">
               Hub-hosted workshops (separate from the Luma community events above).
             </span>
+            <span className="lang-km">Hub-hosted workshops (separate from the Luma community events above).</span>
           </p>
         </header>
         <WorkshopEventsList

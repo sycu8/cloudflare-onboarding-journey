@@ -1,4 +1,6 @@
 import { jsonResponse } from './json';
+import type { Language } from '../../i18n/types';
+import { trilingual } from '../clientLang';
 
 type KVNamespaceLike = {
   get: (key: string) => Promise<string | null>;
@@ -47,15 +49,17 @@ export async function recordRateLimitHit(opts: {
   await opts.kv.put(opts.key, String(current + 1), { expirationTtl: opts.windowSeconds });
 }
 
-export function rateLimitedResponse(lang: 'vi' | 'en') {
+export function rateLimitedResponse(lang: Language) {
   return jsonResponse(
     {
       ok: false,
       error: 'rate_limited',
-      message:
-        lang === 'en'
-          ? 'Too many requests. Please try again later.'
-          : 'Bạn gửi quá nhiều lần. Vui lòng thử lại sau.',
+      message: trilingual(
+        'Bạn gửi quá nhiều lần. Vui lòng thử lại sau.',
+        'Too many requests. Please try again later.',
+        undefined,
+        lang,
+      ),
     },
     { status: 429 },
   );

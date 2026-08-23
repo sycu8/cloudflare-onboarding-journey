@@ -31,13 +31,18 @@ export function topic(
   opts: {
     level?: ContentRoadmapLevel;
     estimatedMinutes?: number;
+    summaryEn?: string;
+    whyItMattersEn?: string;
     prerequisites?: string[];
     relatedCloudflareProducts?: string[];
     relatedExistingRoutes?: string[];
+    relatedTutorialPaths?: string[];
     sourceUrls: string[];
     filterTags: ContentRoadmapFilter[];
     suggestedExerciseVi?: string;
+    suggestedExerciseEn?: string;
     commonMistakesVi?: string[];
+    commonMistakesEn?: string[];
     isGeneralKnowledge?: boolean;
   },
 ): ContentRoadmapTopic {
@@ -48,14 +53,19 @@ export function topic(
     level: opts.level ?? 'foundation',
     estimatedMinutes: opts.estimatedMinutes ?? 8,
     summaryVi,
+    summaryEn: opts.summaryEn,
     whyItMattersVi,
+    whyItMattersEn: opts.whyItMattersEn,
     prerequisites: opts.prerequisites ?? [],
     relatedCloudflareProducts: opts.relatedCloudflareProducts ?? [],
     relatedExistingRoutes: opts.relatedExistingRoutes ?? [],
+    relatedTutorialPaths: opts.relatedTutorialPaths,
     sourceUrls: opts.sourceUrls,
     filterTags: opts.filterTags,
     suggestedExerciseVi: opts.suggestedExerciseVi,
+    suggestedExerciseEn: opts.suggestedExerciseEn,
     commonMistakesVi: opts.commonMistakesVi,
+    commonMistakesEn: opts.commonMistakesEn,
     isGeneralKnowledge: opts.isGeneralKnowledge,
   };
 }

@@ -14,8 +14,9 @@ const tutorialLinks = (step.tutorialPaths ?? []).map((path) => {
   const preview = getTutorialPreviewByPath(path);
   const titleVi = preview ? getTutorialDisplayTitle(preview, 'vi') : path;
   const titleEn = preview ? getTutorialDisplayTitle(preview, 'en') : path;
+  const titleKm = preview ? getTutorialDisplayTitle(preview, 'km') : path;
   const hubPath = `/tutorials/${path.replace(/^\//, '').replace(/\/$/, '')}/`;
-  return { hubPath, titleVi, titleEn };
+  return { hubPath, titleVi, titleEn, titleKm };
 });
 ---
 
@@ -24,11 +25,13 @@ const tutorialLinks = (step.tutorialPaths ?? []).map((path) => {
     <span class="badge badge-accent">
       <span class="lang-vi">Tuần {step.week}</span>
       <span class="lang-en">Week {step.week}</span>
+      <span class="lang-km">Week {step.week}</span>
     </span>
     {done ? (
       <span class="badge">
         <span class="lang-vi">Hoàn thành</span>
         <span class="lang-en">Complete</span>
+        <span class="lang-km">រួចរាល់</span>
       </span>
     ) : null}
   </div>
@@ -37,10 +40,12 @@ const tutorialLinks = (step.tutorialPaths ?? []).map((path) => {
     <h3 class="text-lg font-semibold">
       <span class="lang-vi">{step.titleVi}</span>
       <span class="lang-en">{step.titleEn ?? step.titleVi}</span>
+      <span class="lang-km">{step.titleKm ?? step.titleEn ?? step.titleVi}</span>
     </h3>
     <p class="text-muted mt-2 text-sm">
       <span class="lang-vi">{step.objectiveVi}</span>
       <span class="lang-en">{step.objectiveEn ?? step.objectiveVi}</span>
+      <span class="lang-km">{step.objectiveKm ?? step.objectiveEn ?? step.objectiveVi}</span>
     </p>
   </div>
 
@@ -48,6 +53,7 @@ const tutorialLinks = (step.tutorialPaths ?? []).map((path) => {
     <p class="text-sm font-medium">
       <span class="lang-vi">Chủ đề</span>
       <span class="lang-en">Topics</span>
+      <span class="lang-km">ប្រធានបទ</span>
     </p>
     <ul class="mt-2 flex flex-wrap gap-1.5">
       {step.topics.map((t) => (
@@ -61,6 +67,7 @@ const tutorialLinks = (step.tutorialPaths ?? []).map((path) => {
       <p class="text-sm font-medium">
         <span class="lang-vi">Liên kết trên hub</span>
         <span class="lang-en">Hub links</span>
+        <span class="lang-km">តំណ hub</span>
       </p>
       <ul class="mt-2 flex flex-wrap gap-2 text-xs">
         {step.existingRoutes.map((href) => {
@@ -70,6 +77,7 @@ const tutorialLinks = (step.tutorialPaths ?? []).map((path) => {
               <a class="link" href={href}>
                 <span class="lang-vi">{label.vi}</span>
                 <span class="lang-en">{label.en}</span>
+                <span class="lang-km">{label.km ?? label.en}</span>
               </a>
             </li>
           );
@@ -83,6 +91,7 @@ const tutorialLinks = (step.tutorialPaths ?? []).map((path) => {
       <p class="text-sm font-medium">
         <span class="lang-vi">Ví dụ triển khai gợi ý</span>
         <span class="lang-en">Suggested deployment tutorials</span>
+        <span class="lang-km">Tutorial deploy ណែនាំ</span>
       </p>
       <ul class="mt-2 space-y-1.5 text-sm">
         {tutorialLinks.map((t) => (
@@ -90,6 +99,7 @@ const tutorialLinks = (step.tutorialPaths ?? []).map((path) => {
             <a class="link" href={t.hubPath}>
               <span class="lang-vi">{t.titleVi}</span>
               <span class="lang-en">{t.titleEn}</span>
+              <span class="lang-km">{t.titleKm ?? t.titleEn}</span>
             </a>
           </li>
         ))}
@@ -102,6 +112,7 @@ const tutorialLinks = (step.tutorialPaths ?? []).map((path) => {
       <p class="text-sm font-medium">
         <span class="lang-vi">Sản phẩm gợi ý</span>
         <span class="lang-en">Recommended products</span>
+        <span class="lang-km">ផលិតផលណែនាំ</span>
       </p>
       <ul class="mt-2 flex flex-wrap gap-1.5">
         {step.recommendedProducts.map((p) => (
@@ -115,12 +126,14 @@ const tutorialLinks = (step.tutorialPaths ?? []).map((path) => {
     <p class="text-sm font-medium">
       <span class="lang-vi">Bài tập</span>
       <span class="lang-en">Exercises</span>
+      <span class="lang-km">លំហាត់</span>
     </p>
     <ul class="text-muted mt-2 list-disc space-y-1 pl-5 text-sm">
       {step.exercisesVi.map((ex, i) => (
         <li>
           <span class="lang-vi">{ex}</span>
           <span class="lang-en">{step.exercisesEn?.[i] ?? ex}</span>
+          <span class="lang-km">{step.exercisesKm?.[i] ?? step.exercisesEn?.[i] ?? ex}</span>
         </li>
       ))}
     </ul>
@@ -129,8 +142,10 @@ const tutorialLinks = (step.tutorialPaths ?? []).map((path) => {
   <p class="text-sm">
     <span class="font-medium lang-vi">Kết quả tuần: </span>
     <span class="font-medium lang-en">Week outcome: </span>
+    <span class="font-medium lang-km">Week outcome:</span>
     <span class="text-muted lang-vi">{step.expectedOutcomeVi}</span>
     <span class="text-muted lang-en">{step.expectedOutcomeEn ?? step.expectedOutcomeVi}</span>
+    <span class="text-muted lang-km">{step.expectedOutcomeKm ?? step.expectedOutcomeEn ?? step.expectedOutcomeVi}</span>
   </p>
 
   {step.sourceUrls.length ? (
@@ -138,6 +153,7 @@ const tutorialLinks = (step.tutorialPaths ?? []).map((path) => {
       <p class="text-xs font-medium">
         <span class="lang-vi">Nguồn tham khảo</span>
         <span class="lang-en">Sources</span>
+        <span class="lang-km">ប្រភព</span>
       </p>
       <ul class="mt-1 space-y-1 text-xs">
         {step.sourceUrls.map((url) => (
@@ -153,5 +169,6 @@ const tutorialLinks = (step.tutorialPaths ?? []).map((path) => {
     <input type="checkbox" class="cf-checkbox" data-week-checkbox={step.id} checked={done} />
     <span class="lang-vi">Đánh dấu tuần hoàn thành</span>
     <span class="lang-en">Mark week complete</span>
+    <span class="lang-km">សម្គាល់សប្តាហ៍រួច</span>
   </label>
 </article>

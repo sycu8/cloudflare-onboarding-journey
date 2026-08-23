@@ -34,11 +34,13 @@ const diagram = getDiagramForRefArchItem(item.slug);
       <span class="badge">
         <span class="lang-vi">Nổi bật</span>
         <span class="lang-en">Featured</span>
+        <span class="lang-km">Featured</span>
       </span>
     ) : null}
     <span class="badge">
       <span class="lang-vi">Lộ trình:</span>
       <span class="lang-en">Track:</span>
+      <span class="lang-km">Track:</span>
       {' '}
       {item.relatedTrack === 'application-services'
         ? 'Application Services'
@@ -58,12 +60,12 @@ const diagram = getDiagramForRefArchItem(item.slug);
       target="_blank"
       rel="noopener noreferrer"
     >
-      <LangText text={{ vi: 'Đọc trên Cloudflare', en: 'Read on Cloudflare' }} />
+      <LangText text={{ vi: 'Đọc trên Cloudflare', en: 'Read on Cloudflare', km: 'Read on Cloudflare' }} />
       <span aria-hidden="true">↗</span>
     </a>
     {item.relatedTrack !== 'cross-cutting' ? (
       <a class="btn btn-ghost flex-1 justify-center" href={`/tracks/${item.relatedTrack}`}>
-        <LangText text={{ vi: 'Xem lộ trình', en: 'View track' }} />
+        <LangText text={{ vi: 'Xem lộ trình', en: 'View track', km: 'View track' }} />
       </a>
     ) : null}
   </div>

@@ -185,18 +185,21 @@ export default function StatusDashboard() {
             <p className="text-xs font-semibold uppercase tracking-wide opacity-80">
               <span className="lang-vi">Trạng thái tổng thể</span>
               <span className="lang-en">Overall status</span>
+              <span className="lang-km">Overall status</span>
             </p>
             <p className="mt-1 text-lg font-semibold">{t(indicatorLabel, lang)}</p>
             {!live ? (
               <p className="text-muted mt-2 text-xs">
                 <span className="lang-vi">Đang dùng snapshot tĩnh — không tải được API live.</span>
                 <span className="lang-en">Using static snapshot — live API unavailable.</span>
+                <span className="lang-km">Using static snapshot — live API unavailable.</span>
               </p>
             ) : null}
             {updatedAt ? (
               <p className="text-muted mt-1 text-xs">
                 <span className="lang-vi">Cập nhật: </span>
                 <span className="lang-en">Updated: </span>
+                <span className="lang-km">Updated:</span>
                 {formatWhen(updatedAt, lang)}
               </p>
             ) : null}
@@ -205,10 +208,12 @@ export default function StatusDashboard() {
             <button type="button" className="btn btn-secondary text-sm" disabled={loading} onClick={() => void load()}>
               <span className="lang-vi">{loading ? 'Đang tải…' : 'Làm mới'}</span>
               <span className="lang-en">{loading ? 'Loading…' : 'Refresh'}</span>
+              <span className="lang-km">{loading ? 'Loading…' : 'Refresh'}</span>
             </button>
             <a className="btn btn-primary text-sm" href={CLOUDFLARE_STATUS_URL} target="_blank" rel="noopener noreferrer">
               <span className="lang-vi">Mở status chính thức ↗</span>
               <span className="lang-en">Open official status ↗</span>
+              <span className="lang-km">Open official status ↗</span>
             </a>
           </div>
         </div>
@@ -218,6 +223,7 @@ export default function StatusDashboard() {
         <label className="text-sm font-medium">
           <span className="lang-vi">Lọc theo lộ trình hub: </span>
           <span className="lang-en">Hub track filter: </span>
+          <span className="lang-km">Hub track filter:</span>
           <select
             className="cf-input ml-1 inline-block w-auto min-w-[180px]"
             value={track}
@@ -236,12 +242,14 @@ export default function StatusDashboard() {
         <h2 className="text-lg font-semibold">
           <span className="lang-vi">Sự cố đang active</span>
           <span className="lang-en">Active incidents</span>
+          <span className="lang-km">Active incidents</span>
           <span className="text-muted ml-2 text-sm font-normal">({filteredActive.length})</span>
         </h2>
         {filteredActive.length === 0 ? (
           <p className="text-muted mt-3 text-sm">
             <span className="lang-vi">Không có sự cố active khớp bộ lọc.</span>
             <span className="lang-en">No active incidents match the filter.</span>
+            <span className="lang-km">No active incidents match the filter.</span>
           </p>
         ) : (
           <ul className="mt-4 space-y-3">
@@ -277,6 +285,7 @@ export default function StatusDashboard() {
           <h2 className="text-lg font-semibold">
             <span className="lang-vi">Bảo trì đang diễn ra</span>
             <span className="lang-en">Active maintenance</span>
+            <span className="lang-km">Active maintenance</span>
           </h2>
           <ul className="mt-4 space-y-3">
             {maintenance.map((m) => (
@@ -295,12 +304,14 @@ export default function StatusDashboard() {
         <h2 className="text-lg font-semibold">
           <span className="lang-vi">Sự cố gần đây (đã xử lý)</span>
           <span className="lang-en">Recent incidents (resolved)</span>
+          <span className="lang-km">Recent incidents (resolved)</span>
           <span className="text-muted ml-2 text-sm font-normal">({filteredRecent.length})</span>
         </h2>
         {filteredRecent.length === 0 ? (
           <p className="text-muted mt-3 text-sm">
             <span className="lang-vi">Không có mục nào khớp bộ lọc.</span>
             <span className="lang-en">No entries match the filter.</span>
+            <span className="lang-km">No entries match the filter.</span>
           </p>
         ) : (
           <ul className="mt-4 space-y-3">

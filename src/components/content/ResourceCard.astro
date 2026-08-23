@@ -20,6 +20,7 @@ const external = href.startsWith('http');
       <span class="badge badge-accent">
         <span class="lang-vi">Sắp có</span>
         <span class="lang-en">Coming soon</span>
+        <span class="lang-km">Coming soon</span>
       </span>
     ) : null}
   </div>
@@ -28,7 +29,7 @@ const external = href.startsWith('http');
   <div class="mt-4">
     {status === 'coming-soon' ? (
       <span class="btn btn-secondary w-full cursor-not-allowed opacity-60" aria-disabled="true">
-        <LangText text={{ vi: 'Sắp có', en: 'Coming soon' }} />
+        <LangText text={{ vi: 'Sắp có', en: 'Coming soon', km: 'Coming soon' }} />
       </span>
     ) : (
       <a class="btn btn-secondary w-full justify-between" href={href} target={external ? '_blank' : undefined} rel={external ? 'noopener noreferrer' : undefined}>

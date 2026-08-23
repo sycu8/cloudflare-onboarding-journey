@@ -126,10 +126,12 @@ export default function QuizBlock() {
           <p className="text-muted text-sm">
             <span className="lang-vi">Kết quả kiểm tra</span>
             <span className="lang-en">Knowledge check result</span>
+            <span className="lang-km">Knowledge check result</span>
           </p>
           <h2 className="mt-1 text-xl font-semibold">
             <span className="lang-vi">{tier.title.vi}</span>
             <span className="lang-en">{tier.title.en}</span>
+            <span className="lang-km">{tier.title.en}</span>
           </h2>
           <p className="mt-3 text-4xl font-bold text-[var(--cf-accent)]">
             {score}/{total}
@@ -137,11 +139,13 @@ export default function QuizBlock() {
           <p className="text-muted mt-2 text-sm leading-relaxed">
             <span className="lang-vi">{tier.message.vi}</span>
             <span className="lang-en">{tier.message.en}</span>
+            <span className="lang-km">{tier.message.en}</span>
           </p>
           {passed ? (
             <p className="mt-2 text-sm text-[var(--cf-success,#16a34a)]">
               <span className="lang-vi">✓ Đạt ngưỡng ôn tập ({quiz.passingScore}/{total})</span>
               <span className="lang-en">✓ Review threshold met ({quiz.passingScore}/{total})</span>
+              <span className="lang-km">✓ Review threshold met ({quiz.passingScore}/{total})</span>
             </p>
           ) : (
             <p className="mt-2 text-sm text-amber-600 dark:text-amber-400">
@@ -151,16 +155,19 @@ export default function QuizBlock() {
               <span className="lang-en">
                 At least {quiz.passingScore}/{total} is recommended — review the explanations below.
               </span>
+              <span className="lang-km">At least {quiz.passingScore}/{total} is recommended — review the explanations below.</span>
             </p>
           )}
           <div className="mt-4 flex flex-wrap gap-2">
             <a className="btn btn-primary" href={tier.primaryCta.href}>
               <span className="lang-vi">{tier.primaryCta.label.vi}</span>
               <span className="lang-en">{tier.primaryCta.label.en}</span>
+              <span className="lang-km">{tier.primaryCta.label.en}</span>
             </a>
             <button type="button" className="btn btn-secondary" onClick={retake}>
               <span className="lang-vi">Làm lại quiz</span>
               <span className="lang-en">Retake quiz</span>
+              <span className="lang-km">Retake quiz</span>
             </button>
           </div>
         </div>
@@ -170,6 +177,7 @@ export default function QuizBlock() {
             <h3 className="font-semibold">
               <span className="lang-vi">Chủ đề nên ôn lại</span>
               <span className="lang-en">Topics to review</span>
+              <span className="lang-km">Topics to review</span>
             </h3>
             <ul className="mt-3 flex flex-wrap gap-2">
               {wrongTopics.map((topic) => {
@@ -185,6 +193,7 @@ export default function QuizBlock() {
                     <a className="badge badge-accent link" href={href}>
                       <span className="lang-vi">{label.vi}</span>
                       <span className="lang-en">{label.en}</span>
+                      <span className="lang-km">{label.km ?? label.en}</span>
                     </a>
                   </li>
                 );
@@ -197,6 +206,7 @@ export default function QuizBlock() {
           <h3 className="mb-3 text-lg font-semibold">
             <span className="lang-vi">Tổng kết từng câu</span>
             <span className="lang-en">Question-by-question review</span>
+            <span className="lang-km">Question-by-question review</span>
           </h3>
           <ol className="space-y-4">
             {quiz.questions.map((question, i) => {
@@ -216,25 +226,30 @@ export default function QuizBlock() {
                     <span className="lang-en">
                       Q{i + 1} · {topicLabels[question.topic].en}
                     </span>
+                    <span className="lang-km">Q{i + 1} · {topicLabels[question.topic].en}</span>
                   </p>
                   <p className="mt-1 font-medium">
                     <span className="lang-vi">{question.prompt.vi}</span>
                     <span className="lang-en">{question.prompt.en}</span>
+                    <span className="lang-km">{question.prompt.en}</span>
                   </p>
                   <p className="mt-2 text-sm">
                     {correct ? (
                       <span className="text-[var(--cf-success,#16a34a)]">
                         <span className="lang-vi">✓ Đúng</span>
                         <span className="lang-en">✓ Correct</span>
+                        <span className="lang-km">✓ Correct</span>
                       </span>
                     ) : (
                       <>
                         <span className="text-amber-600 dark:text-amber-400">
                           <span className="lang-vi">Bạn chọn: </span>
                           <span className="lang-en">Your answer: </span>
+                          <span className="lang-km">Your answer:</span>
                           {userAnswer}.{' '}
                           <span className="lang-vi">{userOpt?.text.vi}</span>
                           <span className="lang-en">{userOpt?.text.en}</span>
+                          <span className="lang-km">{userOpt?.text.en}</span>
                         </span>
                         <br />
                         <span className="lang-vi">
@@ -243,6 +258,7 @@ export default function QuizBlock() {
                         <span className="lang-en">
                           Correct: {question.correct}. {correctOpt?.text.en}
                         </span>
+                        <span className="lang-km">Correct: {question.correct}. {correctOpt?.text.en}</span>
                       </>
                     )}
                   </p>
@@ -250,14 +266,17 @@ export default function QuizBlock() {
                     <span className="font-medium text-[var(--cf-accent)]">
                       <span className="lang-vi">Giải thích: </span>
                       <span className="lang-en">Explanation: </span>
+                      <span className="lang-km">Explanation:</span>
                     </span>
                     <span className="lang-vi">{question.explanation.vi}</span>
                     <span className="lang-en">{question.explanation.en}</span>
+                    <span className="lang-km">{question.explanation.en}</span>
                   </p>
                   {question.learnMore ? (
                     <a className="link mt-2 inline-block text-sm" href={question.learnMore.href}>
                       <span className="lang-vi">{question.learnMore.label.vi} →</span>
                       <span className="lang-en">{question.learnMore.label.en} →</span>
+                      <span className="lang-km">{question.learnMore.label.en} →</span>
                     </a>
                   ) : null}
                 </li>
@@ -292,6 +311,7 @@ export default function QuizBlock() {
           <span className="lang-en">
             Question {step + 1}/{total} · {topicLabels[q.topic].en}
           </span>
+          <span className="lang-km">Question {step + 1}/{total} · {topicLabels[q.topic].en}</span>
         </p>
 
         {phase === 'question' ? (
@@ -299,6 +319,7 @@ export default function QuizBlock() {
             <h2 className="mt-2 text-lg font-semibold">
               <span className="lang-vi">{q.prompt.vi}</span>
               <span className="lang-en">{q.prompt.en}</span>
+              <span className="lang-km">{q.prompt.en}</span>
             </h2>
             <div className="mt-4 space-y-2">
               {q.options.map((opt) => (
@@ -311,6 +332,7 @@ export default function QuizBlock() {
                   <span className="mr-2 font-mono opacity-80">{opt.id}.</span>
                   <span className="lang-vi">{opt.text.vi}</span>
                   <span className="lang-en">{opt.text.en}</span>
+                  <span className="lang-km">{opt.text.en}</span>
                 </button>
               ))}
             </div>
@@ -329,28 +351,33 @@ export default function QuizBlock() {
                   <>
                     <span className="lang-vi">Chính xác!</span>
                     <span className="lang-en">Correct!</span>
+                    <span className="lang-km">Correct!</span>
                   </>
                 ) : (
                   <>
                     <span className="lang-vi">Chưa đúng — đáp án đúng là {q.correct}</span>
                     <span className="lang-en">Not quite — the correct answer is {q.correct}</span>
+                    <span className="lang-km">Not quite — the correct answer is {q.correct}</span>
                   </>
                 )}
               </p>
               <p className="text-muted mt-2 leading-relaxed">
                 <span className="lang-vi">{q.explanation.vi}</span>
                 <span className="lang-en">{q.explanation.en}</span>
+                <span className="lang-km">{q.explanation.en}</span>
               </p>
               {q.learnMore ? (
                 <a className="link mt-2 inline-block text-sm" href={q.learnMore.href}>
                   <span className="lang-vi">{q.learnMore.label.vi} →</span>
                   <span className="lang-en">{q.learnMore.label.en} →</span>
+                  <span className="lang-km">{q.learnMore.label.en} →</span>
                 </a>
               ) : null}
             </div>
             <button type="button" className="btn btn-primary mt-6 w-full" onClick={continueFromFeedback}>
               <span className="lang-vi">{step < total - 1 ? 'Câu tiếp theo' : 'Xem tổng kết'}</span>
               <span className="lang-en">{step < total - 1 ? 'Next question' : 'See summary'}</span>
+              <span className="lang-km">{step < total - 1 ? 'Next question' : 'See summary'}</span>
             </button>
           </>
         )}
@@ -359,6 +386,7 @@ export default function QuizBlock() {
       <p className="text-muted text-center text-xs">
         <span className="lang-vi">Chọn một đáp án — bạn sẽ thấy giải thích ngay trước khi sang câu sau.</span>
         <span className="lang-en">Pick one answer — you will see an explanation before moving on.</span>
+        <span className="lang-km">Pick one answer — you will see an explanation before moving on.</span>
       </p>
     </div>
   );

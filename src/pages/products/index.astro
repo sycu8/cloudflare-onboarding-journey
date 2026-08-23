@@ -6,7 +6,7 @@ import { productPages, productCategoryOrder } from '../../data/productPages';
 ---
 
 <BaseLayout
-  title={{ vi: 'Sản phẩm Cloudflare — giải thích cho người mới', en: 'Cloudflare products — explained for beginners' }}
+  title={{ vi: 'Sản phẩm Cloudflare — giải thích cho người mới', en: 'Cloudflare products — explained for beginners', km: 'Cloudflare products — explained for beginners' }}
   description={{
     vi: 'Trang con cho từng sản phẩm và thuật ngữ: giải thích dễ hiểu, sơ đồ trực quan từ Cloudflare Docs.',
     en: 'Sub-pages for each product and glossary term: plain-language explanations and visual diagrams from Cloudflare Docs.',
@@ -16,13 +16,13 @@ import { productPages, productCategoryOrder } from '../../data/productPages';
 >
   <Breadcrumbs
     items={[
-      { href: '/cloudflare-101', label: { vi: 'Cloudflare 101', en: 'Cloudflare 101' } },
-      { href: '/products', label: { vi: 'Sản phẩm', en: 'Products' } },
+      { href: '/cloudflare-101', label: { vi: 'Cloudflare 101', en: 'Cloudflare 101' , km: 'Cloudflare 101' } },
+      { href: '/products', label: { vi: 'Sản phẩm', en: 'Products' , km: 'Products' } },
     ]}
   />
 
   <header class="mb-8">
-    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: 'Sản phẩm & thuật ngữ', en: 'Products & terms' }} />
+    <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: 'Sản phẩm & thuật ngữ', en: 'Products & terms', km: 'Products & terms' }} />
     <LangText
       as="p"
       class="text-muted mt-2 max-w-3xl text-sm md:text-base"
@@ -49,6 +49,7 @@ import { productPages, productCategoryOrder } from '../../data/productPages';
                   <span class="link mt-3 text-xs">
                     <span class="lang-vi">Đọc giải thích →</span>
                     <span class="lang-en">Read explainer →</span>
+                    <span class="lang-km">Read explainer →</span>
                   </span>
                 </a>
               </li>

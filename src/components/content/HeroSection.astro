@@ -25,6 +25,7 @@ const { eyebrow, badge, title, subtitle, primaryCta, secondaryCta, extraCtas = [
           <span class="badge badge-accent">
             <span class="lang-vi">{badge.vi}</span>
             <span class="lang-en">{badge.en}</span>
+            <span class="lang-km">{badge.km ?? badge.en}</span>
           </span>
         ) : null}
         <LangText text={eyebrow} />

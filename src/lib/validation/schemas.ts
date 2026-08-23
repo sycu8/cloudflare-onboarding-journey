@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const languageSchema = z.union([z.literal('vi'), z.literal('en')]).default('vi');
+export const languageSchema = z.union([z.literal('vi'), z.literal('en'), z.literal('km')]).default('vi');
 
 export const primaryInterestSchema = z.union([
   z.literal('application-services'),

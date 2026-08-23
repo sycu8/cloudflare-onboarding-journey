@@ -58,6 +58,7 @@ export default function ThemeToggle() {
       <span className="hidden text-sm sm:inline">
         <span className="lang-vi">{isDark ? 'Sáng' : 'Tối'}</span>
         <span className="lang-en">{isDark ? 'Light' : 'Dark'}</span>
+        <span className="lang-km">{isDark ? 'Light' : 'Dark'}</span>
       </span>
     </button>
   );

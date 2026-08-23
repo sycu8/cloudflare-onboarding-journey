@@ -84,6 +84,7 @@ export default function TurnstileField({ siteKey, onToken, onExpire }: Props) {
       <p className="text-muted text-xs">
         <span className="lang-vi">Không tải được xác minh Turnstile. Tải lại trang và thử lại.</span>
         <span className="lang-en">Could not load Turnstile. Refresh the page and try again.</span>
+        <span className="lang-km">Could not load Turnstile. Refresh the page and try again.</span>
       </p>
     );
   }

@@ -15,8 +15,8 @@ import type { SearchDocument } from '../../types/search';
 function doc(
   id: string,
   href: string,
-  title: { vi: string; en: string },
-  description: { vi: string; en: string },
+  title: { vi: string; en: string; km?: string },
+  description: { vi: string; en: string; km?: string },
   category?: string,
   keywords?: string,
 ): SearchDocument {
@@ -30,79 +30,91 @@ export function buildSearchDocuments(): SearchDocument[] {
   const staticPages: Array<{ href: string; title: SearchDocument['title']; description: SearchDocument['title']; category: string }> = [
     {
       href: '/',
-      title: { vi: 'Trang chủ', en: 'Home' },
+      title: { vi: 'Trang chủ', en: 'Home', km: 'ទំព័រដើម' },
       description: {
         vi: 'Bắt đầu học Cloudflare từ con số 0 — lộ trình, checklist, quiz.',
         en: 'Start learning Cloudflare from zero — tracks, checklist, quiz.',
+        km: 'ចាប់ផ្តើមរៀន Cloudflare ពីសូន្យ — tracks, checklist, quiz.',
       },
       category: 'Hub',
     },
     {
       href: '/start-here/',
-      title: { vi: 'Bắt đầu tại đây', en: 'Start here' },
+      title: { vi: 'Bắt đầu tại đây', en: 'Start here', km: 'ចាប់ផ្តើមនៅទីនេះ' },
       description: {
         vi: 'Điểm khởi đầu cho người mới — chọn lộ trình và bước tiếp theo.',
         en: 'Starting point for beginners — pick a path and next steps.',
+        km: 'ចំណុចចាប់ផ្តើមសម្រាប់អ្នកថ្មី — ជ្រើសរើសផ្លូវ និងជំហានបន្ទាប់។',
       },
       category: 'Hub',
     },
     {
       href: '/cloudflare-101/',
-      title: { vi: 'Cloudflare 101', en: 'Cloudflare 101' },
+      title: { vi: 'Cloudflare 101', en: 'Cloudflare 101', km: 'Cloudflare 101' },
       description: {
         vi: 'Thuật ngữ, hướng dẫn thực hành DNS/TLS/WAF và bản đồ sản phẩm.',
         en: 'Terminology, practical DNS/TLS/WAF guides, and product map.',
+        km: 'ពាក្យបច្ចេកទេស, មគ្គុទ្ទេសក៍ DNS/TLS/WAF និងផែនទីផលិតផល។',
       },
       category: 'Learning',
     },
     {
       href: '/first-week/',
-      title: { vi: 'Lộ trình 7 ngày', en: '7-day path' },
+      title: { vi: 'Lộ trình 7 ngày', en: '7-day path', km: 'ផ្លូវ 7 ថ្ងៃ' },
       description: {
         vi: 'Kế hoạch học Cloudflare trong tuần đầu.',
         en: 'A one-week plan to learn Cloudflare.',
+        km: 'ផែនការរៀន Cloudflare ក្នុងសប្តាហ៍ទីមួយ។',
       },
       category: 'Learning',
     },
     {
       href: '/workshop/',
-      title: { vi: 'Hội thảo & sự kiện', en: 'Workshops & events' },
+      title: { vi: 'Hội thảo & sự kiện', en: 'Workshops & events', km: 'Workshop & ព្រឹត្តិការណ៍' },
       description: {
         vi: 'Sự kiện cộng đồng PeerPoint và đăng ký workshop.',
         en: 'PeerPoint community events and workshop registration.',
+        km: 'ព្រឹត្តិការណ៍សហគមន៍ PeerPoint និងការចុះឈ្មោះ workshop។',
       },
       category: 'Community',
     },
     {
       href: '/glossary/',
-      title: { vi: 'Thuật ngữ', en: 'Glossary' },
-      description: { vi: 'Từ điển thuật ngữ Cloudflare song ngữ.', en: 'Bilingual Cloudflare glossary.' },
+      title: { vi: 'Thuật ngữ', en: 'Glossary', km: 'Glossary' },
+      description: {
+        vi: 'Từ điển thuật ngữ Cloudflare song ngữ.',
+        en: 'Bilingual Cloudflare glossary.',
+        km: 'វចនានុក្រម Cloudflare ពហុភាសា។',
+      },
       category: 'Reference',
     },
     {
       href: '/search/',
-      title: { vi: 'Tìm kiếm', en: 'Search' },
+      title: { vi: 'Tìm kiếm', en: 'Search', km: 'ស្វែងរក' },
       description: {
         vi: 'Tìm trang, thuật ngữ và nội dung học trên hub.',
         en: 'Find pages, terms, and learning content on the hub.',
+        km: 'ស្វែងរកទំព័រ, ពាក្យ, និងមាតិកាសិក្សានៅលើ hub។',
       },
       category: 'Hub',
     },
     {
       href: '/content-roadmap/',
-      title: { vi: 'Lộ trình nội dung', en: 'Content Roadmap' },
+      title: { vi: 'Lộ trình nội dung', en: 'Content Roadmap', km: 'Content Roadmap' },
       description: {
         vi: 'Học từ Internet, DNS, CDN đến Cloudflare — lộ trình từ con số 0.',
         en: 'Learn from Internet, DNS, CDN to Cloudflare — zero-to-hero path.',
+        km: 'រៀនពី Internet, DNS, CDN ទៅ Cloudflare — ផ្លូវពីសូន្យ។',
       },
       category: 'Learning',
     },
     {
       href: '/roadmaps/',
-      title: { vi: 'Roadmap theo vai trò', en: 'Role roadmaps' },
+      title: { vi: 'Roadmap theo vai trò', en: 'Role roadmaps', km: 'Role roadmaps' },
       description: {
         vi: 'Lộ trình cho Sales, SE, Developer, IT Admin, Founder, Student.',
         en: 'Roadmaps for Sales, SE, Developer, IT Admin, Founder, Student.',
+        km: 'Roadmaps for Sales, SE, Developer, IT Admin, Founder, Student.',
       },
       category: 'Learning',
     },
@@ -286,8 +298,16 @@ export function buildSearchDocuments(): SearchDocument[] {
       doc(
         `tutorial-preview-${preview.path}`,
         href,
-        { vi: preview.titleVi ?? preview.title, en: preview.title },
-        { vi: preview.summaryVi, en: preview.summaryEn || preview.summaryVi },
+        {
+          vi: preview.titleVi ?? preview.title,
+          en: preview.title,
+          km: preview.titleKm ?? preview.title,
+        },
+        {
+          vi: preview.summaryVi,
+          en: preview.summaryEn || preview.summaryVi,
+          km: preview.summaryKm ?? preview.summaryEn ?? preview.summaryVi,
+        },
         'Tutorial preview',
         `${preview.track} ${preview.contentType}`,
       ),

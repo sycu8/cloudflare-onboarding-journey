@@ -78,6 +78,7 @@ export default function SearchPage() {
         <span className="text-sm font-medium">
           <span className="lang-vi">Tìm kiếm</span>
           <span className="lang-en">Search</span>
+          <span className="lang-km">Search</span>
         </span>
         <input
           className="cf-input mt-2"
@@ -93,6 +94,7 @@ export default function SearchPage() {
         <p className="text-muted text-sm">
           <span className="lang-vi">Không tải được chỉ mục tìm kiếm.</span>
           <span className="lang-en">Could not load the search index.</span>
+          <span className="lang-km">Could not load the search index.</span>
         </p>
       ) : null}
 
@@ -102,6 +104,7 @@ export default function SearchPage() {
             <h2 className="text-lg font-semibold">
               <span className="lang-vi">Kết quả nhanh</span>
               <span className="lang-en">Instant results</span>
+              <span className="lang-km">Instant results</span>
               <span className="text-muted ml-2 text-sm font-normal">({localHits.length})</span>
             </h2>
             {localHits.length ? (
@@ -122,6 +125,7 @@ export default function SearchPage() {
               <p className="text-muted text-sm">
                 <span className="lang-vi">Không có kết quả khớp từ khóa.</span>
                 <span className="lang-en">No keyword matches.</span>
+                <span className="lang-km">No keyword matches.</span>
               </p>
             )}
           </section>
@@ -131,15 +135,18 @@ export default function SearchPage() {
               <h2 className="text-lg font-semibold">
                 <span className="lang-vi">AI Search (Cloudflare)</span>
                 <span className="lang-en">AI Search (Cloudflare)</span>
+                <span className="lang-km">AI Search (Cloudflare)</span>
               </h2>
               <p className="text-muted text-sm">
                 <span className="lang-vi">Tìm kiếm ngữ nghĩa trên nội dung hub đã được index.</span>
                 <span className="lang-en">Semantic search over indexed hub content.</span>
+                <span className="lang-km">Semantic search over indexed hub content.</span>
               </p>
               {aiLoading ? (
                 <p className="text-muted text-sm">
                   <span className="lang-vi">Đang tìm bằng AI…</span>
                   <span className="lang-en">Searching with AI…</span>
+                  <span className="lang-km">Searching with AI…</span>
                 </p>
               ) : null}
               {aiError ? <p className="text-muted text-sm">{aiError}</p> : null}
@@ -158,6 +165,7 @@ export default function SearchPage() {
                 <p className="text-muted text-sm">
                   <span className="lang-vi">Chưa có kết quả AI.</span>
                   <span className="lang-en">No AI results yet.</span>
+                  <span className="lang-km">No AI results yet.</span>
                 </p>
               ) : null}
             </section>
@@ -171,6 +179,8 @@ export default function SearchPage() {
                 AI Search is not enabled — see <a className="link" href="https://developers.cloudflare.com/ai-search/">Cloudflare docs</a> and{' '}
                 <code>docs/AI-SEARCH-SETUP.md</code>.
               </span>
+              <span className="lang-km">AI Search is not enabled — see <a className="link" href="https://developers.cloudflare.com/ai-search/">Cloudflare docs</a> and{' '}
+                <code>docs/AI-SEARCH-SETUP.md</code>.</span>
             </p>
           )}
         </>
@@ -178,6 +188,7 @@ export default function SearchPage() {
         <p className="text-muted text-sm">
           <span className="lang-vi">Nhập từ khóa để tìm trang, bài học, sản phẩm và thuật ngữ.</span>
           <span className="lang-en">Enter a keyword to find pages, lessons, products, and glossary terms.</span>
+          <span className="lang-km">Enter a keyword to find pages, lessons, products, and glossary terms.</span>
         </p>
       )}
     </div>

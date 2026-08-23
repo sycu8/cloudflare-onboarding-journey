@@ -19,10 +19,11 @@ const trackLabel = useCaseTrackLabels[useCase.relatedTrack].title;
   <p class="mt-3 font-mono text-xs text-[var(--cf-accent)] opacity-90">
     <span class="lang-vi">{useCase.architecture.vi}</span>
     <span class="lang-en">{useCase.architecture.en}</span>
+    <span class="lang-km">{useCase.architecture.en}</span>
   </p>
   <div class="mt-4 flex flex-col gap-2">
     <a class="btn btn-secondary w-full justify-center" href={`/use-cases/${useCase.slug}/`}>
-      <LangText text={{ vi: 'Đọc tình huống →', en: 'Read use case →' }} />
+      <LangText text={{ vi: 'Đọc tình huống →', en: 'Read use case →', km: 'Read use case →' }} />
     </a>
     <a
       class="text-muted text-center text-xs hover:text-[var(--cf-accent)]"
@@ -32,6 +33,7 @@ const trackLabel = useCaseTrackLabels[useCase.relatedTrack].title;
     >
       <span class="lang-vi">Tài liệu Cloudflare →</span>
       <span class="lang-en">Official Cloudflare docs →</span>
+      <span class="lang-km">Official Cloudflare docs →</span>
     </a>
   </div>
 </article>

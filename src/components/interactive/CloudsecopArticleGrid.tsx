@@ -13,11 +13,11 @@ type Props = {
 };
 
 const trackLabels: Record<TrackFilter, { vi: string; en: string }> = {
-  all: { vi: 'Tất cả track', en: 'All tracks' },
-  'application-services': { vi: 'Application Services', en: 'Application Services' },
-  'developer-platform': { vi: 'Developer Platform', en: 'Developer Platform' },
-  'cloudflare-one': { vi: 'Cloudflare One', en: 'Cloudflare One' },
-  'cross-cutting': { vi: 'Chủ đề chung', en: 'Cross-cutting' },
+  all: { vi: 'Tất cả track', en: 'All tracks' , km: 'All tracks' },
+  'application-services': { vi: 'Application Services', en: 'Application Services', km: 'Application Services' },
+  'developer-platform': { vi: 'Developer Platform', en: 'Developer Platform', km: 'Developer Platform' },
+  'cloudflare-one': { vi: 'Cloudflare One', en: 'Cloudflare One', km: 'Cloudflare One' },
+  'cross-cutting': { vi: 'Chủ đề chung', en: 'Cross-cutting', km: 'Cross-cutting' },
 };
 
 export default function CloudsecopArticleGrid({ articles, pageSize = PAGE_SIZE }: Props) {
@@ -49,6 +49,7 @@ export default function CloudsecopArticleGrid({ articles, pageSize = PAGE_SIZE }
         <label className="text-sm font-medium">
           <span className="lang-vi">Lọc theo lộ trình: </span>
           <span className="lang-en">Filter by track: </span>
+          <span className="lang-km">Filter by track:</span>
           <select
             className="cf-input ml-1 inline-block w-auto min-w-[180px]"
             value={track}
@@ -68,6 +69,7 @@ export default function CloudsecopArticleGrid({ articles, pageSize = PAGE_SIZE }
           <span className="lang-en">
             {filtered.length} posts · page {page}/{totalPages}
           </span>
+          <span className="lang-km">{filtered.length} posts · page {page}/{totalPages}</span>
         </span>
       </div>
 
@@ -80,20 +82,24 @@ export default function CloudsecopArticleGrid({ articles, pageSize = PAGE_SIZE }
                   <span className="badge badge-accent">
                     <span className="lang-vi">Phần {article.seriesPart}</span>
                     <span className="lang-en">Part {article.seriesPart}</span>
+                    <span className="lang-km">Part {article.seriesPart}</span>
                   </span>
                 ) : null}
                 <span className="badge">
                   <span className="lang-vi">{article.readMinutes} phút đọc</span>
                   <span className="lang-en">{article.readMinutes} min read</span>
+                  <span className="lang-km">{article.readMinutes} min read</span>
                 </span>
               </div>
               <h3 className="mt-3 text-base font-semibold leading-snug">
                 <span className="lang-vi">{article.title.vi}</span>
                 <span className="lang-en">{article.title.en}</span>
+                <span className="lang-km">{article.title.en}</span>
               </h3>
               <p className="text-muted mt-2 flex-1 text-sm leading-relaxed">
                 <span className="lang-vi">{article.excerpt.vi}</span>
                 <span className="lang-en">{article.excerpt.en}</span>
+                <span className="lang-km">{article.excerpt.en}</span>
               </p>
               {article.tags.length > 0 ? (
                 <ul className="mt-3 flex flex-wrap gap-1">
@@ -112,6 +118,7 @@ export default function CloudsecopArticleGrid({ articles, pageSize = PAGE_SIZE }
               >
                 <span className="lang-vi">Đọc trên CloudSecOp</span>
                 <span className="lang-en">Read on CloudSecOp</span>
+                <span className="lang-km">Read on CloudSecOp</span>
                 <span aria-hidden="true"> ↗</span>
               </a>
             </article>
