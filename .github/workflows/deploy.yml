@@ -253,10 +253,11 @@ jobs:
 
       - name: Smoke test production
         run: |
-          echo "Pages preview URL (informational): ${{ steps.deploy.outputs.deployment-url }}"
-          node scripts/wait-for-deploy.mjs "${{ env.PUBLIC_SITE_URL_PROD }}"
+          URL="${{ steps.deploy.outputs.deployment-url }}"
+          echo "Smoke test deployment URL: $URL"
+          node scripts/wait-for-deploy.mjs "$URL"
           for attempt in 1 2 3 4 5; do
-            if node scripts/smoke-test.mjs "${{ env.PUBLIC_SITE_URL_PROD }}"; then
+            if node scripts/smoke-test.mjs "$URL"; then
               exit 0
             fi
             if [ "$attempt" -eq 5 ]; then
@@ -265,3 +266,5 @@ jobs:
             echo "Smoke test attempt $attempt failed; waiting 15s for CDN propagation..."
             sleep 15
           done
+          # Custom domain is not smoke-tested in CI — GitHub Actions egress often gets HTTP 403 (WAF).
+
