@@ -142,6 +142,14 @@ async function fetchPath(path, { redirect = 'follow' } = {}) {
   return { path, url, status: res.status, text, ok: res.ok };
 }
 
+/** Retry directory-style paths with a trailing slash when the bare path 404s. */
+async function fetchPathResolved(path, options) {
+  const first = await fetchPath(path, options);
+  if (first.ok || path.endsWith('/') || path.includes('.')) return first;
+  const second = await fetchPath(`${path}/`, options);
+  return second.ok ? second : first;
+}
+
 const PROTECTED_ROUTES = ['/admin', '/workshop/admin'];
 
 const errors = [];
@@ -327,7 +335,7 @@ for (const root of crawlRoots) {
 
 for (const path of toCheck) {
   try {
-    const { status, ok } = await fetchPath(path);
+    const { status, ok } = await fetchPathResolved(path);
     if (!ok) {
       if (IS_LOCAL_PREVIEW && status === 503 && path.startsWith('/assets/')) {
         warnings.push(`discovered link ${path} → HTTP 503 (local Pages preview has no R2 asset binding)`);

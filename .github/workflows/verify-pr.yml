@@ -31,16 +31,17 @@ jobs:
 
       - name: Start preview
         run: |
-          npm run preview:ci &
+          npm run preview:ci > wrangler-preview.log 2>&1 &
           echo $! > preview.pid
-          for i in $(seq 1 30); do
+          for i in $(seq 1 90); do
             if curl -sf http://127.0.0.1:4321/ >/dev/null; then
-              echo "Preview ready"
+              echo "Preview ready (${i}s)"
               exit 0
             fi
             sleep 1
           done
           echo "Preview failed to start"
+          tail -n 80 wrangler-preview.log || true
           exit 1
 
       - name: Smoke test

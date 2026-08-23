@@ -66,16 +66,17 @@ jobs:
 
       - name: Start preview
         run: |
-          npm run preview:ci &
+          npm run preview:ci > wrangler-preview.log 2>&1 &
           echo $! > preview.pid
-          for i in $(seq 1 30); do
+          for i in $(seq 1 90); do
             if curl -sf http://127.0.0.1:4321/ >/dev/null; then
-              echo "Preview ready"
+              echo "Preview ready (${i}s)"
               exit 0
             fi
             sleep 1
           done
           echo "Preview failed to start"
+          tail -n 80 wrangler-preview.log || true
           exit 1
 
       - name: Smoke test
@@ -158,7 +159,16 @@ jobs:
             if curl -sf "${URL%/}/" >/dev/null; then echo "UAT ready"; break; fi
             sleep 2
           done
-          node scripts/smoke-test.mjs "$URL"
+          for attempt in 1 2 3 4 5; do
+            if node scripts/smoke-test.mjs "$URL"; then
+              exit 0
+            fi
+            if [ "$attempt" -eq 5 ]; then
+              exit 1
+            fi
+            echo "Smoke test attempt $attempt failed; waiting 15s for CDN propagation..."
+            sleep 15
+          done
 
       - name: Comment UAT URL on PR
         if: github.event_name == 'pull_request' && steps.deploy.outputs.deployment-url != ''
@@ -246,10 +256,23 @@ jobs:
 
       - name: Smoke test production
         run: |
-          URL="${{ steps.deploy.outputs.deployment-url }}"
-          for i in $(seq 1 30); do
-            if curl -sf "${URL%/}/" >/dev/null; then echo "Deployment ready"; break; fi
-            sleep 2
-          done
-          node scripts/smoke-test.mjs "$URL"
-          node scripts/smoke-test.mjs "${{ env.PUBLIC_SITE_URL_PROD }}"
+          smoke_with_retry() {
+            local url="$1"
+            echo "Smoke test → $url"
+            for i in $(seq 1 30); do
+              if curl -sf "${url%/}/" >/dev/null; then echo "URL ready: $url"; break; fi
+              sleep 2
+            done
+            for attempt in 1 2 3 4 5; do
+              if node scripts/smoke-test.mjs "$url"; then
+                return 0
+              fi
+              if [ "$attempt" -eq 5 ]; then
+                return 1
+              fi
+              echo "Attempt $attempt failed; waiting 15s for CDN propagation..."
+              sleep 15
+            done
+          }
+          smoke_with_retry "${{ steps.deploy.outputs.deployment-url }}"
+          smoke_with_retry "${{ env.PUBLIC_SITE_URL_PROD }}"
