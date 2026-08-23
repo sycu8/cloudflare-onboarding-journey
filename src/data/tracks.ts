@@ -759,8 +759,8 @@ export const tracks: Track[] = [
               en: 'Networks → Tunnels → Create cloudflared. Run the connector on a host that can reach the app (outbound TCP 7844). The install token is a secret. Map a public hostname (for example `wiki.yourcompany.com`) → `localhost:port`. Checkpoint: connector Healthy. You need a Cloudflare zone for a self-hosted hostname.',
             },
             tip: {
-              vi: 'Đặt tên tunnel theo location (`datacenter-1`). HA = thêm connector vào cùng tunnel.',
-              en: 'Name the tunnel after the location (`datacenter-1`). HA = add another connector to the same tunnel.',
+              vi: 'Đặt tên tunnel theo location (`datacenter-1`). H/A = thêm connector vào cùng tunnel.',
+              en: 'Name the tunnel after the location (`datacenter-1`). H/A = add another connector to the same tunnel.',
             },
             hubLink: '/use-cases/replace-vpn',
           },

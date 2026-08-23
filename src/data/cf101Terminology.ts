@@ -21,7 +21,7 @@ export const cf101TerminologySections: Cf101TermSection[] = [
       { term: 'Congestion', definition: { vi: 'Nghẽn mạng khi lưu lượng vượt khả năng xử lý.', en: 'Network congestion when traffic exceeds capacity.' } },
       { term: 'Failover', definition: { vi: 'Chuyển sang hệ thống dự phòng khi primary gặp sự cố.', en: 'Switching to a backup system when the primary fails.' } },
       { term: 'Redundancy', definition: { vi: 'Dự phòng — nhiều thành phần thay thế để tăng độ tin cậy.', en: 'Redundancy — spare components to improve reliability.' } },
-      { term: 'High Availability (HA)', definition: { vi: 'Hệ thống có tính sẵn sàng cao, giảm downtime.', en: 'High availability — designed to minimize downtime.' } },
+      { term: 'High Availability (H/A)', definition: { vi: 'Hệ thống có tính sẵn sàng cao (H/A), giảm downtime.', en: 'High availability (H/A) — designed to minimize downtime.' } },
       { term: 'Scalability', definition: { vi: 'Khả năng mở rộng khi tải tăng.', en: 'Ability to scale as load grows.' } },
       { term: 'Horizontal Scaling', definition: { vi: 'Mở rộng bằng cách thêm node/máy chủ.', en: 'Scaling out by adding nodes or servers.' } },
       { term: 'Vertical Scaling', definition: { vi: 'Tăng tài nguyên (CPU/RAM) trên một máy.', en: 'Scaling up by adding CPU/RAM to one machine.' } },

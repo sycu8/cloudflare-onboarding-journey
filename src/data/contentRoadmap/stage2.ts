@@ -168,7 +168,7 @@ export const stage2: ContentRoadmapStage = {
       'load-balancing-basics',
       'Load balancing cơ bản',
       'Load balancing basics',
-      'Load balancer phân phối traffic sang nhiều origin/server, health check và failover khi một node down. Giúp HA và scale ngang.',
+      'Load balancer phân phối traffic sang nhiều origin/server, health check và failover khi một node down. Giúp tính sẵn sàng cao (H/A) và scale ngang.',
       'Cloudflare Load Balancing kết hợp DNS + health check toàn cầu — khác LB chỉ trong một data center.',
       {
         level: 'beginner',

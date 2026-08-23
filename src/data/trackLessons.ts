@@ -953,13 +953,13 @@ export const trackLessonEnrichment: Record<string, TrackLessonEnrichment> = {
         'Zero Trust → Networks → Tunnels → Create cloudflared; tên theo location.',
         'Chạy lệnh install (token = secret) trên host reach app; mở outbound TCP 7844.',
         'Public hostname: subdomain + domain zone Cloudflare → URL local (`localhost:3000`).',
-        'Checkpoint: connector Healthy. Thêm connector thứ hai cho HA.',
+        'Checkpoint: connector Healthy. Thêm connector thứ hai cho tính sẵn sàng cao (H/A).',
       ],
       en: [
         'Zero Trust → Networks → Tunnels → Create cloudflared; name it after the location.',
         'Run the install command (token = secret) on a host that can reach the app; allow outbound TCP 7844.',
         'Public hostname: subdomain + a Cloudflare zone domain → local URL (`localhost:3000`).',
-        'Checkpoint: connector Healthy. Add a second connector for HA.',
+        'Checkpoint: connector Healthy. Add a second connector for High Availability (H/A).',
       ],
     },
     deepDive: {

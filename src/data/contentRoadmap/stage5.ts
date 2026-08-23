@@ -131,7 +131,7 @@ export const stage5: ContentRoadmapStage = {
       'Load Balancing',
       'Load Balancing',
       'Global LB với pool origin, geo steering, health monitor. Kết hợp DNS proxied và failover tự động.',
-      'HA multi-region — architecture diagram trên hub minh họa pattern.',
+      'Tính sẵn sàng cao (H/A) multi-region — architecture diagram trên hub minh họa pattern.',
       {
         level: 'intermediate',
         filterTags: ['performance'],

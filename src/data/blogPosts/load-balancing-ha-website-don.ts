@@ -1,6 +1,6 @@
 import type { BlogPost } from '../blog';
 
-/** Intermediate · CDN — rewritten from Load Balancing / HA blog themes */
+/** Intermediate · CDN — rewritten from Load Balancing / High Availability blog themes */
 export const postLoadBalancingHaWebsiteDon: BlogPost = {
   slug: 'load-balancing-ha-website-don-gian',
   date: '2026-09-12',
@@ -8,20 +8,20 @@ export const postLoadBalancingHaWebsiteDon: BlogPost = {
   level: 'intermediate',
   readingMinutes: 8,
   title: {
-    vi: 'Load Balancing Cloudflare: khi một server không đủ — HA đơn giản cho vận hành nhỏ',
-    en: 'Cloudflare Load Balancing: when one origin is not enough — simple HA for small ops',
+    vi: 'Load Balancing Cloudflare: khi một server không đủ — tính sẵn sàng cao (H/A) đơn giản cho vận hành nhỏ',
+    en: 'Cloudflare Load Balancing: when one origin is not enough — simple High Availability (H/A) for small ops',
   },
   description: {
-    vi: 'Giải thích Load Balancing trung cấp: chia traffic, health check, failover; khác gì CDN cache; và khi team nhỏ nên cân nhắc HA thay vì “một server duy nhất”.',
-    en: 'An intermediate Load Balancing guide: split traffic, health checks, failover; how it differs from CDN cache; and when small teams should consider HA instead of a single origin.',
+    vi: 'Giải thích Load Balancing trung cấp: chia traffic, health check, failover; khác gì CDN cache; và khi team nhỏ nên cân nhắc tính sẵn sàng cao (H/A) thay vì “một server duy nhất”.',
+    en: 'An intermediate Load Balancing guide: split traffic, health checks, failover; how it differs from CDN cache; and when small teams should consider High Availability (H/A) instead of a single origin.',
   },
   excerpt: {
     vi: 'Load Balancing giống mở thêm quầy phục vụ: khách được chỉ vào quầy còn “khỏe”, quầy hỏng thì tự chuyển — website ít sập hơn khi một origin gặp sự cố.',
     en: 'Load Balancing is like opening extra service counters: customers go to healthy ones, and failed counters drop out — your site stays up more often when one origin breaks.',
   },
   keywords: {
-    vi: 'Cloudflare Load Balancing, high availability website, health check failover, chia traffic origin, học HA cơ bản',
-    en: 'Cloudflare Load Balancing, high availability website, health check failover, split origin traffic, beginner HA',
+    vi: 'Cloudflare Load Balancing, high availability website, health check failover, chia traffic origin, học H/A cơ bản',
+    en: 'Cloudflare Load Balancing, high availability website, health check failover, split origin traffic, beginner H/A',
   },
   sections: [
     {
@@ -80,8 +80,8 @@ export const postLoadBalancingHaWebsiteDon: BlogPost = {
           en: 'Load Balancing does not replace database backups or deploy testing — it only stops sending traffic to dead servers. Combine it with CDN (static cache), WAF (bad request filtering), and monitoring (know which pool is unhealthy) for a balanced Application Services architecture.',
         },
         {
-          vi: 'Trên hub này, lộ trình Application Services và trang CDN giúp bạn đặt Load Balancing đúng chỗ trong “bức tranh lớn”. Đừng mua HA vì FOMO — hãy bắt đầu từ health check thật và runbook khi failover xảy ra (ai được thông báo, làm gì với session sticky).',
-          en: 'On this hub, the Application Services track and CDN product page help you place Load Balancing in the bigger picture. Do not buy HA from FOMO — start with honest health checks and a failover runbook (who gets paged, what to do about sticky sessions).',
+          vi: 'Trên hub này, lộ trình Application Services và trang CDN giúp bạn đặt Load Balancing đúng chỗ trong “bức tranh lớn”. Đừng mua H/A vì FOMO — hãy bắt đầu từ health check thật và runbook khi failover xảy ra (ai được thông báo, làm gì với session sticky).',
+          en: 'On this hub, the Application Services track and CDN product page help you place Load Balancing in the bigger picture. Do not buy High Availability (H/A) from FOMO — start with honest health checks and a failover runbook (who gets paged, what to do about sticky sessions).',
         },
       ],
     },
@@ -96,12 +96,12 @@ export const postLoadBalancingHaWebsiteDon: BlogPost = {
           en: 'One: create a `/healthz` endpoint that checks the DB or minimal dependencies. Two: run at least two origins on the same code (same version or a planned blue/green). Three: configure a pool in Cloudflare Load Balancing with sensible health intervals — too aggressive wastes resources, too slow delays failover. Four: test by shutting down one origin in staging and confirm users still get through.',
         },
         {
-          vi: 'Năm: document session affinity — nếu app cần sticky session, hiểu Cloudflare và origin xử lý cookie thế nào khi failover. Sáu: kết hợp với Page Rules hoặc Cache Rules để không cache trang cần origin sống. Đọc bài CDN/cache trong blog hub nếu chưa — HA không cứu được trang dynamic bị cache sai.',
-          en: 'Five: document session affinity — if the app needs sticky sessions, understand how Cloudflare and origin handle cookies on failover. Six: pair with Page Rules or Cache Rules so dynamic pages are not wrongly cached. Read the CDN/cache posts on this hub if needed — HA cannot fix wrongly cached dynamic pages.',
+          vi: 'Năm: document session affinity — nếu app cần sticky session, hiểu Cloudflare và origin xử lý cookie thế nào khi failover. Sáu: kết hợp với Page Rules hoặc Cache Rules để không cache trang cần origin sống. Đọc bài CDN/cache trong blog hub nếu chưa — H/A không cứu được trang dynamic bị cache sai.',
+          en: 'Five: document session affinity — if the app needs sticky sessions, understand how Cloudflare and origin handle cookies on failover. Six: pair with Page Rules or Cache Rules so dynamic pages are not wrongly cached. Read the CDN/cache posts on this hub if needed — High Availability (H/A) cannot fix wrongly cached dynamic pages.',
         },
         {
-          vi: 'Mở bài gốc trên blog.cloudflare.com về load balancing để cập nhật tính năng mới (active monitoring, spectrum, multi-cloud). Câu hỏi tự kiểm tra: “Nếu origin A chết lúc 2 giờ sáng, ai thức dậy và quy trình gì?” Nếu chưa có câu trả lời, HA kỹ thuật chưa đủ — cần runbook con người.',
-          en: 'Open original blog.cloudflare.com load balancing posts for newer features (active monitoring, Spectrum, multi-cloud). Self-check: “If origin A dies at 2 a.m., who wakes up and what is the process?” If there is no answer, technical HA is incomplete — you need a human runbook.',
+          vi: 'Mở bài gốc trên blog.cloudflare.com về load balancing để cập nhật tính năng mới (active monitoring, spectrum, multi-cloud). Câu hỏi tự kiểm tra: “Nếu origin A chết lúc 2 giờ sáng, ai thức dậy và quy trình gì?” Nếu chưa có câu trả lời, H/A kỹ thuật chưa đủ — cần runbook con người.',
+          en: 'Open original blog.cloudflare.com load balancing posts for newer features (active monitoring, Spectrum, multi-cloud). Self-check: “If origin A dies at 2 a.m., who wakes up and what is the process?” If there is no answer, technical High Availability (H/A) is incomplete — you need a human runbook.',
         },
       ],
     },
@@ -119,12 +119,12 @@ export const postLoadBalancingHaWebsiteDon: BlogPost = {
     },
     {
       question: {
-        vi: 'Cần mấy origin tối thiểu để có HA?',
-        en: 'How many origins do I need minimum for HA?',
+        vi: 'Cần mấy origin tối thiểu để có tính sẵn sàng cao (H/A)?',
+        en: 'How many origins do I need minimum for High Availability (H/A)?',
       },
       answer: {
-        vi: 'Thực tế ít nhất hai origin (hoặc primary + standby có thể kích hoạt). Một origin + Load Balancing không tạo HA thật — vẫn là single point of failure.',
-        en: 'Practically at least two origins (or primary + standby you can activate). One origin plus Load Balancing is not real HA — still a single point of failure.',
+        vi: 'Thực tế ít nhất hai origin (hoặc primary + standby có thể kích hoạt). Một origin + Load Balancing không tạo H/A thật — vẫn là single point of failure.',
+        en: 'Practically at least two origins (or primary + standby you can activate). One origin plus Load Balancing is not real High Availability (H/A) — still a single point of failure.',
       },
     },
     {

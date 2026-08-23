@@ -467,8 +467,8 @@ export const cloudsecopArticles: CloudsecopArticle[] = [
     slug: 'cloudflare-tunnel-deep-dive',
     title: { vi: 'Cloudflare Tunnel deep-dive: đưa internal service ra ngoài', en: 'Cloudflare Tunnel deep-dive' },
     excerpt: {
-      vi: 'cloudflared, ingress, HA, SSH/RDP/SMB — nền tảng kết nối Zero Trust.',
-      en: 'cloudflared, ingress, HA, SSH/RDP/SMB — Zero Trust connectivity foundation.',
+      vi: 'cloudflared, ingress, H/A, SSH/RDP/SMB — nền tảng kết nối Zero Trust.',
+      en: 'cloudflared, ingress, High Availability (H/A), SSH/RDP/SMB — Zero Trust connectivity foundation.',
     },
     readMinutes: 14,
     relatedTrack: 'cloudflare-one',
