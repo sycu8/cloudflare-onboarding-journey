@@ -43,33 +43,6 @@ const featuredBlogPosts = blogPosts.slice(0, 3);
     extraCtas={[{ href: '/first-week', label: { vi: 'Lộ trình 7 ngày', en: '7-day path', km: 'ផ្លូវ 7 ថ្ងៃ' } }]}
   />
 
-  <section class="mt-10" aria-labelledby="home-blog">
-    <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-      <div>
-        <LangText
-          as="h2"
-          id="home-blog"
-          class="text-xl font-semibold md:text-2xl"
-          text={{ vi: 'Blog mới — đọc dễ, học tiếp trên hub', en: 'Fresh blog posts — plain language, hub next steps' }}
-        />
-        <LangText
-          as="p"
-          class="text-muted mt-1 max-w-2xl text-sm"
-          text={{
-            vi: 'AI, Security, CDN, Workers và Developer Platform — viết lại cho người mới và trung cấp, kèm FAQ và liên kết lộ trình.',
-            en: 'AI, Security, CDN, Workers, and Developer Platform — rewritten for beginners and intermediate learners, with FAQs and track links.',
-          }}
-        />
-      </div>
-      <a class="btn btn-primary shrink-0" href="/blog/">
-        <LangText text={{ vi: 'Xem tất cả bài Blog', en: 'Browse all Blog posts' }} />
-      </a>
-    </div>
-    <div class="grid gap-4 md:grid-cols-3">
-      {featuredBlogPosts.map((post) => <BlogPostCard post={post} />)}
-    </div>
-  </section>
-
   <section class="mt-10">
     <LangText as="h2" class="text-xl font-semibold md:text-2xl" text={{ vi: 'Hiểu Cloudflare theo 5 lớp đơn giản', en: 'Cloudflare in 5 simple layers', km: 'Cloudflare in 5 simple layers' }} />
     <div class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
@@ -306,6 +279,33 @@ const featuredBlogPosts = blogPosts.slice(0, 3);
         }}
         cta={{ href: '/quiz/beginner-readiness', label: { vi: 'Kiểm tra kiến thức', en: 'Knowledge check' , km: 'Knowledge check' } }}
       />
+    </div>
+  </section>
+
+  <section class="mt-10" aria-labelledby="home-blog">
+    <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <LangText
+          as="h2"
+          id="home-blog"
+          class="text-xl font-semibold md:text-2xl"
+          text={{ vi: 'Blog mới — đọc dễ, học tiếp trên hub', en: 'Fresh blog posts — plain language, hub next steps' }}
+        />
+        <LangText
+          as="p"
+          class="text-muted mt-1 max-w-2xl text-sm"
+          text={{
+            vi: 'AI, Security, CDN, Workers và Developer Platform — viết lại cho người mới và trung cấp, kèm FAQ và liên kết lộ trình.',
+            en: 'AI, Security, CDN, Workers, and Developer Platform — rewritten for beginners and intermediate learners, with FAQs and track links.',
+          }}
+        />
+      </div>
+      <a class="btn btn-primary shrink-0" href="/blog/">
+        <LangText text={{ vi: 'Xem tất cả bài Blog', en: 'Browse all Blog posts' }} />
+      </a>
+    </div>
+    <div class="grid gap-4 md:grid-cols-3">
+      {featuredBlogPosts.map((post) => <BlogPostCard post={post} />)}
     </div>
   </section>
 </BaseLayout>
