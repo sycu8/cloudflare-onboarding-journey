@@ -5,6 +5,12 @@ import { postWorkersIntro } from './blogPosts/workers-intro';
 import { postWorkersAi } from './blogPosts/workers-ai';
 import { postAiGateway } from './blogPosts/ai-gateway';
 import { postDeveloperPlatform } from './blogPosts/developer-platform';
+import { postDnsProxyDamMayCamChoNguoiMoi } from './blogPosts/dns-proxy-dam-may-cam';
+import { postDdosLaGiCloudflareBaoVeTheNao } from './blogPosts/ddos-la-gi-cloudflare-bao-ve';
+import { postPagesVsWorkersKhiNaoDungGi } from './blogPosts/pages-vs-workers-khi-nao-dung';
+import { postVectorizeRagTimKiemTriThucDonGian } from './blogPosts/vectorize-rag-tim-kiem-tri-thuc';
+import { postR2LuuFileKhongPhiEgressChoNguoiMoi } from './blogPosts/r2-luu-file-khong-phi-egress';
+import { postCacheRulesVsPageRulesNguoiMoi } from './blogPosts/cache-rules-vs-page-rules';
 import { postAiGatewayChiPhiToken } from './blogPosts/ai-gateway-chi-phi-token';
 import { postObservabilityLogsWorkersChoNguoiMoi } from './blogPosts/observability-logs-workers-cho-nguoi-moi';
 import { postImageOptimizationCdnTocDo } from './blogPosts/image-optimization-cdn-toc-do';
@@ -107,7 +113,7 @@ export const blogSourceNote: LocalizedString = {
   en: 'Content is rewritten for clarity; always read the original posts on blog.cloudflare.com and official docs for technical detail or the latest updates.',
 };
 
-/** Pre-written posts covering trend topics (batch 1 + batch 2). */
+/** Pre-written posts covering trend topics (batch 1 + batch 2 + Aug 17–27). */
 export const blogPosts: BlogPost[] = [
   postCdnCache,
   postWafBeginner,
@@ -115,6 +121,12 @@ export const blogPosts: BlogPost[] = [
   postWorkersAi,
   postAiGateway,
   postDeveloperPlatform,
+  postDnsProxyDamMayCamChoNguoiMoi,
+  postDdosLaGiCloudflareBaoVeTheNao,
+  postPagesVsWorkersKhiNaoDungGi,
+  postVectorizeRagTimKiemTriThucDonGian,
+  postR2LuuFileKhongPhiEgressChoNguoiMoi,
+  postCacheRulesVsPageRulesNguoiMoi,
   postBotManagementPhanBietNguoiVaBot,
   postD1SqliteEdgeChoAppNho,
   postAgentsSdkAgentAiTrenCloudflare,
