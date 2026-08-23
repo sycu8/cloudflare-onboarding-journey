@@ -40,6 +40,7 @@ import DemoVignetteList from '../../components/interactive/DemoVignetteList';
 import ReferenceDiagramFigure from '../../components/content/ReferenceDiagramFigure.astro';
 import OnboardingSourceFigures from '../../components/content/OnboardingSourceFigures.astro';
 import OnboardingArticle from '../../components/content/OnboardingArticle.astro';
+import TrackStartHere from '../../components/content/TrackStartHere.astro';
 import { getOnboardingPageByFile, onboardingHtml } from '../../data/zeroTrustOnboarding';
 import { getDemosForTrack } from '../../data/demoScripts';
 import { getDiagramsForTrack } from '../../data/referenceDiagrams';
@@ -107,6 +108,8 @@ const onboardingOverview = track.slug === 'cloudflare-one' ? getOnboardingPageBy
     <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Mô hình tư duy', en: 'Mental model', km: 'Mental model' }} />
     <LangText as="p" class="text-muted mt-2 font-mono text-sm leading-relaxed" text={track.mentalModel} />
   </section>
+
+  {track.startHere ? <TrackStartHere startHere={track.startHere} /> : null}
 
   {track.slug === 'cloudflare-one' ? (
     <section class="mb-8">

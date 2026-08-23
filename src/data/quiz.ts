@@ -111,10 +111,10 @@ export const beginnerReadinessQuiz: Quiz = {
       ],
       correct: 'A',
       explanation: {
-        vi: 'Pages, Workers, KV, D1, R2 — build và deploy trên edge, phù hợp app mới hoặc MVP.',
-        en: 'Pages, Workers, KV, D1, and R2 let you build and deploy on the edge — great for new apps or MVPs.',
+        vi: 'On-ramp 2026: C3 + Worker, rồi KV/D1/R2. Pages dành cho Git site hiện có — không bắt buộc trước Worker.',
+        en: '2026 on-ramp: C3 + Worker, then KV/D1/R2. Pages is for existing Git sites — not required before a Worker.',
       },
-      learnMore: { href: '/tracks/developer-platform', label: { vi: 'Xem lộ trình', en: 'View track' } },
+      learnMore: { href: '/tracks/developer-platform/dp-1-l1', label: { vi: 'Bài Worker đầu tiên', en: 'First Worker lesson' } },
     },
     {
       id: 'q4',
@@ -174,7 +174,7 @@ export const beginnerReadinessQuiz: Quiz = {
         vi: 'Full (strict) mã hóa end-to-end và xác thực cert origin — tránh lỗ hổng khi dùng Flexible với origin chỉ HTTPS.',
         en: 'Full (strict) encrypts end-to-end and validates the origin cert — avoid Flexible when origin expects HTTPS.',
       },
-      learnMore: { href: '/tracks/application-services', label: { vi: 'Phần SSL trong lộ trình', en: 'SSL module in track' } },
+      learnMore: { href: '/tracks/application-services/as-2-l1', label: { vi: 'Bài SSL/TLS Full (strict)', en: 'SSL/TLS Full (strict) lesson' } },
     },
     {
       id: 'q7',
@@ -234,10 +234,10 @@ export const beginnerReadinessQuiz: Quiz = {
       ],
       correct: 'B',
       explanation: {
-        vi: 'WAF + managed rules bảo vệ path public (login, API) tại edge — giảm tải và rủi ro cho origin.',
-        en: 'WAF and managed rules protect public paths (login, API) at the edge — reducing risk and origin load.',
+        vi: 'WAF chặn request độc hại tại edge. Bật managed rules ở Simulate/Log 24–48h rồi mới Block — hostname phải Proxied.',
+        en: 'WAF blocks malicious requests at the edge. Enable managed rules in Simulate/Log for 24–48h before Block — the hostname must be Proxied.',
       },
-      learnMore: { href: '/use-cases/secure-api', label: { vi: 'Tình huống bảo vệ API', en: 'Secure API use case' } },
+      learnMore: { href: '/tracks/application-services/as-3-l1', label: { vi: 'Bài WAF managed rules', en: 'WAF managed rules lesson' } },
     },
     {
       id: 'q10',

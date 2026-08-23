@@ -417,7 +417,7 @@ export const useCases: UseCase[] = [
     },
     relatedTrack: 'developer-platform',
     nextCta: {
-      href: '/tracks/developer-platform/dp-1-l1',
+      href: '/tracks/developer-platform/dp-2-l1',
       label: { vi: 'Bài học Pages', en: 'Pages lesson' },
     },
   },

@@ -1,0 +1,48 @@
+---
+import LangText from '../ui/LangText.astro';
+import type { TrackStartHere } from '../../data/tracks';
+
+type Props = {
+  startHere: TrackStartHere;
+};
+
+const { startHere } = Astro.props;
+---
+
+<section class="card mb-8">
+  <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Bắt đầu tại đây (START HERE)', en: 'START HERE' }} />
+  <LangText as="p" class="text-muted mt-3 text-sm leading-relaxed whitespace-pre-line" text={startHere.intro} />
+
+  <LangText as="h3" class="mt-6 text-base font-semibold" text={startHere.checklistTitle} />
+  <ul class="text-muted mt-3 list-disc space-y-2 pl-5 text-sm">
+    {startHere.checklist.vi.map((item, i) => (
+      <li>
+        <span class="lang-vi">{item}</span>
+        <span class="lang-en">{startHere.checklist.en[i]}</span>
+      </li>
+    ))}
+  </ul>
+
+  <LangText as="h3" class="mt-6 text-base font-semibold" text={{ vi: 'Gói nào cần cho từng lớp?', en: 'Which plan for each layer?' }} />
+  <LangText as="p" class="text-muted mt-2 text-sm leading-relaxed" text={startHere.planNote} />
+  <div class="mt-4 overflow-x-auto">
+    <table class="follow-along-meta w-full text-sm">
+      <thead>
+        <tr>
+          <th><span class="lang-vi">Khả năng</span><span class="lang-en">Capability</span></th>
+          <th>Free</th>
+          <th><span class="lang-vi">Pro / Business / Enterprise</span><span class="lang-en">Pro / Business / Enterprise</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        {startHere.planRows.map((row) => (
+          <tr>
+            <td><LangText text={row.capability} /></td>
+            <td><LangText text={row.free} /></td>
+            <td><LangText text={row.paid} /></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</section>

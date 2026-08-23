@@ -7,12 +7,28 @@ export type TrackLesson = {
   hubLink?: string;
 };
 
+export type TrackModuleRole = 'required' | 'recommended' | 'optional' | 'deep-dive' | 'reference';
+
 export type TrackModule = {
   id: string;
   title: LocalizedString;
   description: LocalizedString;
   duration?: LocalizedString;
+  /** Follow-along spine label — Required / Recommended / Optional / Reference */
+  role?: TrackModuleRole;
   lessons: TrackLesson[];
+};
+
+export type TrackStartHere = {
+  intro: LocalizedString;
+  checklistTitle: LocalizedString;
+  checklist: { vi: string[]; en: string[] };
+  planNote: LocalizedString;
+  planRows: {
+    capability: LocalizedString;
+    free: LocalizedString;
+    paid: LocalizedString;
+  }[];
 };
 
 export type TrackTool = {
@@ -37,6 +53,7 @@ export type Track = {
   outcomes: { vi: string[]; en: string[] };
   keyConcepts: string[];
   tools?: TrackTool[];
+  startHere?: TrackStartHere;
   modules: TrackModule[];
   recommendedSequence: { vi: string[]; en: string[] };
   relatedUseCases: { href: string; label: LocalizedString }[];
@@ -49,51 +66,133 @@ export const tracks: Track[] = [
     slug: 'application-services',
     title: { vi: 'Application Services', en: 'Application Services' },
     headline: {
-      vi: 'Bảo vệ và tăng tốc website, application và API',
-      en: 'Protect and accelerate websites, applications, and APIs',
+      vi: 'Follow-along: DNS → proxy → SSL → WAF → cache — rồi mới rẽ API Shield hoặc Load Balancing',
+      en: 'Follow-along: DNS → proxy → SSL → WAF → cache — then branch to API Shield or Load Balancing',
     },
     promise: {
-      vi: 'Bảo vệ và tăng tốc website, application và API.',
-      en: 'Protect and accelerate websites, applications, and APIs.',
+      vi: 'Làm đúng từng bước trên dashboard: zone chạy, HTTPS Full (strict), WAF log rồi block, cache không phá session.',
+      en: 'Click through the dashboard: a live zone, Full (strict) HTTPS, WAF log-then-block, cache that does not break sessions.',
     },
     description: {
-      vi: 'Lộ trình này dành cho team đã có website, web app, mobile backend hoặc API public. Bạn sẽ học cách đặt Cloudflare phía trước application để cải thiện bảo mật, tốc độ, độ tin cậy và khả năng quan sát traffic.',
-      en: 'This path is for teams with a website, web app, mobile backend, or public API. You will learn to put Cloudflare in front of your application to improve security, speed, reliability, and traffic visibility.',
+      vi: 'Lộ trình follow-along cho team đã có website, web app hoặc API public. Làm theo thứ tự — mỗi phần xây trên phần trước. Dừng sau bất kỳ phần bắt buộc nào vẫn có giá trị. Use case (bảo vệ site / API / DDoS) là cửa chọn; track này là đường làm.',
+      en: 'A follow-along path for teams with a live website, web app, or public API. Work in order — each part builds on the last. Stopping after any required part still leaves something useful. Use cases (protect site / API / DDoS) are the doorway; this track is the how-to.',
     },
     whoIsThisFor: {
       vi: 'Phù hợp nếu bạn là IT, Security, DevOps, developer vận hành production, hoặc chủ doanh nghiệp có website/app đang chạy thật.',
       en: 'A good fit if you are IT, Security, DevOps, a developer operating production, or a business owner with a live website or app.',
     },
     mentalModel: {
-      vi: 'User → Cloudflare (DNS + proxy + security + cache) → Origin (server/app/API của bạn). Cloudflare xử lý gần user trước khi request tới origin.',
-      en: 'User → Cloudflare (DNS + proxy + security + cache) → Origin (your server/app/API). Cloudflare processes traffic near users before it reaches origin.',
+      vi: 'Visitor → DNS (NS hoặc CNAME) → Proxy (orange cloud) → SSL/TLS → WAF / Bot / Rate limit → Cache / Speed → Origin. Proxy tắt = chỉ DNS, không WAF/cache.',
+      en: 'Visitor → DNS (NS or CNAME) → Proxy (orange cloud) → SSL/TLS → WAF / Bot / Rate limit → Cache / Speed → Origin. Proxy off = DNS only, no WAF/cache.',
     },
     outcomes: {
       vi: [
-        'Hiểu record DNS nào nên proxy và record nào để DNS only',
-        'Cấu hình SSL/TLS không gây redirect loop',
-        'Bật baseline WAF/DDoS và rate limit cho path nhạy cảm',
-        'Tối ưu cache cho static mà không phá session động',
-        'Đọc analytics để biết traffic bất thường',
+        'Zone Active, MX/TXT còn nguyên, screenshot rollback',
+        'Hostname public Proxied — curl thấy CF-Ray',
+        'Full (strict) + Always Use HTTPS; origin không bị bypass IP',
+        'WAF managed Simulate 24–48h rồi Block; rate limit /login 10 req/phút/IP',
+        'Cache Rules: bypass /admin /checkout, TTL /assets; báo cáo hit ratio + LCP',
+        'Biết khi nào mới cần API Shield, Load Balancing hoặc Waiting Room',
       ],
       en: [
-        'Know which DNS records to proxy vs DNS only',
-        'Configure SSL/TLS without redirect loops',
-        'Enable baseline WAF/DDoS and rate limits on sensitive paths',
-        'Optimize cache for static assets without breaking dynamic sessions',
-        'Use analytics to spot abnormal traffic',
+        'Zone Active, MX/TXT intact, rollback screenshot saved',
+        'Public hostnames Proxied — curl shows CF-Ray',
+        'Full (strict) + Always Use HTTPS; origin not bypassable by IP',
+        'WAF managed Simulate 24–48h then Block; /login rate limit 10 req/min/IP',
+        'Cache Rules: bypass /admin /checkout, TTL /assets; hit ratio + LCP report',
+        'Know when you actually need API Shield, Load Balancing, or Waiting Room',
       ],
     },
     keyConcepts: ['DNS', 'Proxy', 'SSL/TLS', 'CDN/cache', 'WAF', 'DDoS protection', 'Bot protection', 'Rate limiting', 'API security'],
+    tools: [
+      {
+        title: { vi: 'Add a site (official)', en: 'Add a site (official)' },
+        description: {
+          vi: 'Onboard domain, nameserver và CNAME setup — nguồn sự thật dashboard.',
+          en: 'Onboard a domain, nameservers, and CNAME setup — dashboard source of truth.',
+        },
+        href: 'https://developers.cloudflare.com/fundamentals/setup/manage-domains/add-site/',
+      },
+      {
+        title: { vi: 'Application security learning path', en: 'Application security learning path' },
+        description: {
+          vi: 'Thứ tự chính thức: account → default traffic → WAF.',
+          en: 'Official order: account → default traffic → WAF.',
+        },
+        href: 'https://developers.cloudflare.com/learning-paths/application-security/',
+      },
+      {
+        title: { vi: 'DNS best practices', en: 'DNS best practices' },
+        description: {
+          vi: 'TTL, DNSSEC, cutover — đọc trước khi đổi nameserver production.',
+          en: 'TTL, DNSSEC, cutover — read before changing production nameservers.',
+        },
+        href: 'https://developers.cloudflare.com/learning-paths/dns-best-practices/',
+      },
+    ],
+    startHere: {
+      intro: {
+        vi: 'Đây là hướng dẫn follow-along. Làm đúng từng bước: click, nhập, checkpoint. Nhãn menu có thể đổi — chọn mục tương đương gần nhất. Use case trên hub giúp chọn đường; đừng rẽ API Shield hay Load Balancing trước khi proxy + SSL + WAF log ổn.',
+        en: 'This is a follow-along guide. Do exactly what each step says: click, type, checkpoint. Menu labels shift — follow the nearest equivalent. Hub use cases help you choose a path; do not branch into API Shield or Load Balancing before proxy + SSL + WAF log are healthy.',
+      },
+      checklistTitle: { vi: 'Trước khi Add a site', en: 'Before you Add a site' },
+      checklist: {
+        vi: [
+          'Domain đang chạy (hoặc staging) và quyền đổi nameserver tại registrar',
+          'Screenshot hoặc zone file DNS hiện tại (MX, TXT, SPF/DKIM, verification)',
+          'Quyền SSH/firewall origin nếu sẽ lockdown IP',
+          'Ghi: hostname production (www vs apex), path nhạy cảm đầu tiên (/login hoặc /api), plan hiện tại',
+          'Quyết định: full setup (đổi NS) hay partial/CNAME (Business+)',
+        ],
+        en: [
+          'A live domain (or staging) and permission to change nameservers at the registrar',
+          'Screenshot or zone file of current DNS (MX, TXT, SPF/DKIM, verification)',
+          'SSH/firewall access to origin if you will lock down IPs',
+          'Write down: production hostname (www vs apex), first sensitive path (/login or /api), current plan',
+          'Decide: full setup (change NS) or partial/CNAME (Business+)',
+        ],
+      },
+      planNote: {
+        vi: 'Bắt đầu Free để học Phần 1–4. Nâng cấp khi Bot Management, API Shield, Load Balancing hoặc Waiting Room bị greyed out — không đoán feature.',
+        en: 'Start on Free to learn Parts 1–4. Upgrade when Bot Management, API Shield, Load Balancing, or Waiting Room is greyed out — do not guess entitlements.',
+      },
+      planRows: [
+        { capability: { vi: 'Add site, DNS, proxy, Universal SSL', en: 'Add site, DNS, proxy, Universal SSL' }, free: { vi: 'Có', en: 'Yes' }, paid: { vi: 'Có', en: 'Yes' } },
+        { capability: { vi: 'WAF managed / rate limit', en: 'WAF managed / rate limit' }, free: { vi: 'Cơ bản, ít rule', en: 'Basic, few rules' }, paid: { vi: 'Đầy đủ hơn ở Pro/Biz/Ent', en: 'Fuller on Pro/Biz/Ent' } },
+        { capability: { vi: 'Bot Fight / Super Bot / Bot Management', en: 'Bot Fight / Super Bot / Bot Management' }, free: { vi: 'Bot Fight', en: 'Bot Fight' }, paid: { vi: 'Super Bot (Pro+); Bot Management (Ent)', en: 'Super Bot (Pro+); Bot Management (Ent)' } },
+        { capability: { vi: 'Cache Rules, Speed, Images', en: 'Cache Rules, Speed, Images' }, free: { vi: 'Cache Rules giới hạn', en: 'Limited Cache Rules' }, paid: { vi: 'Nhiều rule; Images/Argo add-on', en: 'More rules; Images/Argo add-on' } },
+        { capability: { vi: 'API Shield, mTLS, Load Balancing, Waiting Room', en: 'API Shield, mTLS, Load Balancing, Waiting Room' }, free: { vi: 'Không / rất hạn chế', en: 'No / very limited' }, paid: { vi: 'Add-on hoặc Enterprise', en: 'Add-on or Enterprise' } },
+      ],
+    },
     modules: [
+      {
+        id: 'as-0',
+        title: { vi: 'Phần 0: Kiến trúc và quy trình', en: 'Part 0: Architecture and workflow' },
+        description: {
+          vi: 'Bức tranh Visitor → proxy → SSL → WAF → cache → Origin và thứ tự xây. Đọc trước khi đổi nameserver.',
+          en: 'The picture Visitor → proxy → SSL → WAF → cache → Origin and the build order. Read before changing nameservers.',
+        },
+        duration: { vi: '~15 phút', en: '~15 min' },
+        role: 'required',
+        lessons: [
+          {
+            title: { vi: 'Kiến trúc Application Services và thứ tự onboarding', en: 'Application Services architecture and onboarding order' },
+            body: {
+              vi: 'Proxy phải bật trước WAF và cache. Use case là cửa chọn — đừng rẽ API Shield hay Load Balancing trước nền.',
+              en: 'Proxy must be on before WAF and cache. Use cases are the doorway — do not branch to API Shield or Load Balancing before the spine.',
+            },
+          },
+        ],
+      },
       {
         id: 'as-1',
         title: { vi: 'Phần 1: Đưa domain lên Cloudflare', en: 'Part 1: Onboard your domain' },
         description: {
-          vi: 'Thiết lập nền tảng DNS và hiểu traffic sẽ đi qua đâu.',
-          en: 'Set up DNS foundations and understand where traffic will flow.',
+          vi: 'Tạo zone, review DNS, đổi nameserver (hoặc CNAME setup), rồi bật proxy đúng record.',
+          en: 'Create the zone, review DNS, change nameservers (or CNAME setup), then proxy the right records.',
         },
-        duration: { vi: '~30 phút', en: '~30 min' },
+        duration: { vi: '~45 phút', en: '~45 min' },
+        role: 'required',
         lessons: [
           {
             title: { vi: 'Thêm domain và review DNS records', en: 'Add domain and review DNS records' },
@@ -124,7 +223,8 @@ export const tracks: Track[] = [
           vi: 'Tránh lỗi chứng chỉ và đảm bảo traffic mã hóa end-to-end phù hợp mô hình của bạn.',
           en: 'Avoid certificate errors and ensure encryption fits your architecture.',
         },
-        duration: { vi: '~25 phút', en: '~25 min' },
+        duration: { vi: '~45 phút', en: '~45 min' },
+        role: 'required',
         lessons: [
           {
             title: { vi: 'Chọn SSL/TLS mode phù hợp', en: 'Choose the right SSL/TLS mode' },
@@ -153,7 +253,8 @@ export const tracks: Track[] = [
           vi: 'WAF, DDoS, bot và rate limiting cho path quan trọng.',
           en: 'WAF, DDoS, bots, and rate limiting for critical paths.',
         },
-        duration: { vi: '~45 phút', en: '~45 min' },
+        duration: { vi: '~60 phút + 24–48h log', en: '~60 min + 24–48h log' },
+        role: 'required',
         lessons: [
           {
             title: { vi: 'Bật WAF managed rules', en: 'Enable WAF managed rules' },
@@ -187,7 +288,8 @@ export const tracks: Track[] = [
           vi: 'CDN, cache rules, Speed, Argo/Tiered Cache và đo lường — giảm tải origin, cải thiện LCP.',
           en: 'CDN, cache rules, Speed, Argo/Tiered Cache, and measurement — less origin load, better LCP.',
         },
-        duration: { vi: '~45 phút', en: '~45 min' },
+        duration: { vi: '~90 phút', en: '~90 min' },
+        role: 'recommended',
         lessons: [
           {
             title: { vi: 'CDN & cache hit/miss', en: 'CDN & cache hit/miss' },
@@ -223,27 +325,93 @@ export const tracks: Track[] = [
           },
         ],
       },
+      {
+        id: 'as-5',
+        title: { vi: 'Phần 5: API Shield (tùy chọn)', en: 'Part 5: API Shield (optional)' },
+        description: {
+          vi: 'Sau nền zone: schema, mTLS, rate limit /api — chỉ khi use case là API.',
+          en: 'After the zone spine: schema, mTLS, /api rate limits — only when the use case is an API.',
+        },
+        duration: { vi: '~40 phút', en: '~40 min' },
+        role: 'optional',
+        lessons: [
+          {
+            title: { vi: 'Bảo vệ API sau khi proxy + WAF ổn', en: 'Protect APIs after proxy + WAF are stable' },
+            body: {
+              vi: 'Free/Pro: WAF + rate limit /api + origin lockdown. Enterprise: API Shield schema, JWT, mTLS. Discover/log trước khi enforce.',
+              en: 'Free/Pro: WAF + /api rate limit + origin lockdown. Enterprise: API Shield schema, JWT, mTLS. Discover/log before enforce.',
+            },
+            hubLink: '/use-cases/secure-api',
+          },
+        ],
+      },
+      {
+        id: 'as-6',
+        title: { vi: 'Phần 6: Load Balancing và DDoS (tùy chọn)', en: 'Part 6: Load Balancing and DDoS (optional)' },
+        description: {
+          vi: 'Nhiều origin hoặc sự kiện traffic — plan-gated. DDoS L3/L4 đã có khi Proxied.',
+          en: 'Many origins or a traffic event — plan-gated. L3/L4 DDoS is already on when Proxied.',
+        },
+        duration: { vi: '~45 phút', en: '~45 min' },
+        role: 'optional',
+        lessons: [
+          {
+            title: { vi: 'Pool/monitor, DDoS khi proxied, Waiting Room cho event', en: 'Pools/monitors, DDoS when proxied, Waiting Room for events' },
+            body: {
+              vi: 'LB: health /health 60s, failover lab. Waiting Room chỉ đúng path sale/ticket. Một origin ổn — chưa cần mua LB.',
+              en: 'LB: /health every 60s, fail over in a lab. Waiting Room only on the sale/ticket path. One stable origin — do not buy LB yet.',
+            },
+            hubLink: '/use-cases/defend-ddos-attacks',
+          },
+        ],
+      },
+      {
+        id: 'as-7',
+        title: { vi: 'Phần 7: Tham chiếu — golden rules và sổ tay', en: 'Part 7: Reference — golden rules and runbook' },
+        description: {
+          vi: '10 rule rollout và path dashboard / giá trị mẫu khi đã hiểu luồng.',
+          en: '10 rollout rules and dashboard paths / sample values once you know the flow.',
+        },
+        duration: { vi: 'Tham chiếu', en: 'Reference' },
+        role: 'reference',
+        lessons: [
+          {
+            title: { vi: '10 golden rules Application Services', en: '10 Application Services golden rules' },
+            body: {
+              vi: 'Proxy trước WAF; review DNS trước đổi NS; Full (strict); lockdown origin; log rồi block; không cache session; đo rồi mới khoe.',
+              en: 'Proxy before WAF; review DNS before changing NS; Full (strict); lock down origin; log then block; no session cache; measure before celebrating.',
+            },
+          },
+          {
+            title: { vi: 'Sổ tay cấu hình (dashboard runbook)', en: 'Configuration runbook (dashboard)' },
+            body: {
+              vi: 'Add site → DNS → Proxied → Full (strict) → Origin CA → WAF Log → /login 10/phút → Cache Rules → Analytics.',
+              en: 'Add site → DNS → Proxied → Full (strict) → Origin CA → WAF Log → /login 10/min → Cache Rules → Analytics.',
+            },
+          },
+        ],
+      },
     ],
     recommendedSequence: {
       vi: [
-        'Add domain vào Cloudflare',
-        'Review DNS records',
-        'Enable proxy cho các record phù hợp',
-        'Configure SSL/TLS đúng cách',
-        'Bật baseline security',
-        'Review caching behavior',
-        'Thêm WAF/rate limiting cho các path rủi ro',
-        'Monitor analytics và logs',
+        'Đọc kiến trúc + checklist (domain, MX/TXT, path /login, plan)',
+        'Add site, review DNS, đổi nameserver — zone Active',
+        'Proxy hostname public; curl CF-Ray; MX grey-cloud',
+        'Full (strict) + Always Use HTTPS; Origin CA + firewall Cloudflare IPs',
+        'WAF managed Simulate 24–48h rồi Block; rate limit /login',
+        'Cache Rules bypass /admin /checkout; TTL /assets; đo hit ratio + LCP',
+        'Chỉ khi cần: API Shield (use case API) hoặc Load Balancing / Waiting Room',
+        'Review golden rules; dùng runbook khi làm lại trên zone khác',
       ],
       en: [
-        'Add domain to Cloudflare',
-        'Review DNS records',
-        'Enable proxy on selected records',
-        'Configure SSL/TLS correctly',
-        'Turn on baseline security',
-        'Review caching behavior',
-        'Add WAF/rate limiting for risky paths',
-        'Monitor analytics and logs',
+        'Read architecture + checklist (domain, MX/TXT, /login path, plan)',
+        'Add site, review DNS, change nameservers — zone Active',
+        'Proxy public hostnames; curl CF-Ray; MX grey-cloud',
+        'Full (strict) + Always Use HTTPS; Origin CA + Cloudflare IP firewall',
+        'WAF managed Simulate 24–48h then Block; rate-limit /login',
+        'Cache Rules bypass /admin /checkout; TTL /assets; measure hit ratio + LCP',
+        'Only if needed: API Shield (API use case) or Load Balancing / Waiting Room',
+        'Review golden rules; use the runbook when repeating on another zone',
       ],
     },
     relatedUseCases: [
@@ -251,98 +419,234 @@ export const tracks: Track[] = [
       { href: '/use-cases/secure-api/', label: { vi: 'Bảo vệ API', en: 'Secure an API' } },
       { href: '/use-cases/defend-ddos-attacks/', label: { vi: 'Chống DDoS', en: 'Defend DDoS' } },
     ],
+    commonMistakes: {
+      vi: [
+        {
+          title: 'Đổi nameserver trước khi review MX/TXT/DNSSEC',
+          detail: 'Email và xác thực domain gãy. Screenshot DNS cũ, gỡ DS nếu cần, rồi mới đổi NS.',
+        },
+        {
+          title: 'Bật WAF/cache khi hostname còn grey-cloud',
+          detail: 'Không proxy = Cloudflare chỉ trả lời DNS. Cam trước, rồi mới rule.',
+        },
+        {
+          title: 'Flexible khi origin chỉ nhận HTTPS',
+          detail: 'Redirect loop. Dùng Full (strict) khi origin có cert hợp lệ hoặc Origin CA.',
+        },
+        {
+          title: 'WAF Block ngày đầu không Simulate',
+          detail: 'False positive trên checkout/API. Log 24–48h, tune, rồi Block.',
+        },
+        {
+          title: 'Cache Everything trên HTML có session',
+          detail: 'User thấy giỏ hàng của nhau. Bypass /admin /checkout; cache /assets hashed.',
+        },
+        {
+          title: 'Không lockdown origin',
+          detail: 'Attacker gọi thẳng IP, bỏ qua WAF. Allowlist IP Cloudflare hoặc Authenticated Origin Pulls.',
+        },
+      ],
+      en: [
+        {
+          title: 'Changing nameservers before reviewing MX/TXT/DNSSEC',
+          detail: 'Email and domain verification break. Screenshot old DNS, remove DS if needed, then change NS.',
+        },
+        {
+          title: 'Enabling WAF/cache while the hostname is grey-cloud',
+          detail: 'No proxy = Cloudflare only answers DNS. Orange-cloud first, then rules.',
+        },
+        {
+          title: 'Flexible when origin is HTTPS-only',
+          detail: 'Redirect loops. Use Full (strict) when origin has a valid cert or Origin CA.',
+        },
+        {
+          title: 'WAF Block on day one with no Simulate',
+          detail: 'False positives on checkout/API. Log 24–48h, tune, then Block.',
+        },
+        {
+          title: 'Cache Everything on session HTML',
+          detail: 'Users see each other’s carts. Bypass /admin /checkout; cache hashed /assets.',
+        },
+        {
+          title: 'No origin lockdown',
+          detail: 'Attackers hit the origin IP and skip the WAF. Allowlist Cloudflare IPs or use Authenticated Origin Pulls.',
+        },
+      ],
+    },
     cta: { href: '/use-cases/application-services', label: { vi: 'Tình huống Application Services', en: 'Application Services use cases' } },
   },
   {
     slug: 'developer-platform',
     title: { vi: 'Developer Platform', en: 'Developer Platform' },
     headline: {
-      vi: 'Build và deploy app trên Cloudflare',
-      en: 'Build and deploy apps on Cloudflare',
+      vi: 'Follow-along Worker-first: C3 + Wrangler, rồi storage, Pages (compat), operate và AI',
+      en: 'Follow-along Worker-first: C3 + Wrangler, then storage, Pages (compat), operate, and AI',
     },
     promise: {
-      vi: 'Build và deploy apps trên Cloudflare.',
-      en: 'Build and deploy apps on Cloudflare.',
+      vi: 'Deploy Hello World lên *.workers.dev, bind KV/D1/R2 đúng chỗ, secret không lên client — AI chỉ sau nền.',
+      en: 'Deploy Hello World to *.workers.dev, bind KV/D1/R2 correctly, keep secrets off the client — AI only after the spine.',
     },
     description: {
-      vi: 'Lộ trình cho developer muốn deploy frontend, API, backend serverless hoặc app có AI. Bạn sẽ đi từ static site trên Pages đến Worker, storage (KV/D1/R2) và tích hợp cơ bản.',
-      en: 'For developers deploying frontends, APIs, serverless backends, or AI apps. You will go from a static Pages site to Workers, storage (KV/D1/R2), and basic integrations.',
+      vi: 'Lộ trình follow-along 2026: app mới bắt đầu bằng Workers (C3 + wrangler). Pages vẫn có cho Git site hiện có (như chính hub này). Dừng sau Worker đầu tiên vẫn có giá trị. Use case là cửa chọn; track là đường làm.',
+      en: 'A 2026 follow-along path: new apps start with Workers (C3 + wrangler). Pages remains for existing Git sites (like this hub). Stopping after the first Worker still leaves something useful. Use cases are the doorway; this track is the how-to.',
     },
     whoIsThisFor: {
       vi: 'Developer, full-stack engineer, hoặc team build internal tool / MVP / side project muốn ship nhanh không quản lý server.',
       en: 'Developers, full-stack engineers, or teams building internal tools, MVPs, or side projects who want to ship fast without managing servers.',
     },
     mentalModel: {
-      vi: 'User → Cloudflare edge (Pages / Workers) → KV / D1 / R2 / external API. Code chạy gần user, data lưu trên platform bindings.',
-      en: 'User → Cloudflare edge (Pages / Workers) → KV / D1 / R2 / external API. Code runs near users; data lives in platform bindings.',
+      vi: 'User → Worker (mặc định) hoặc Pages (Git site) → bindings KV / D1 / R2 → (tuỳ chọn) AI Gateway → model. Secret ở Worker, không phải PUBLIC_*.',
+      en: 'User → Worker (default) or Pages (Git site) → KV / D1 / R2 bindings → (optional) AI Gateway → model. Secrets live on the Worker, not in PUBLIC_*.',
     },
     outcomes: {
       vi: [
-        'Deploy site static hoặc full-stack trên Pages',
-        'Tạo API route bằng Pages Functions hoặc Worker',
-        'Chọn đúng storage: KV vs D1 vs R2',
-        'Xử lý lỗi và logging cơ bản trên edge',
-        'Build và bảo mật AI feature với Workers AI, AI Gateway và Vectorize',
-        'Thiết kế Agent với tools hẹp và credential theo least privilege',
+        'C3 + wrangler login/dev/deploy — URL *.workers.dev sống',
+        'wrangler.jsonc + wrangler secret — không key trong git',
+        'Chọn KV vs D1 vs R2; migration D1 local và remote',
+        'Pages Git + preview PR khi đó là site framework (compat)',
+        'wrangler tail; Turnstile verify server-side trước INSERT D1',
+        'Workers AI + AI Gateway; RAG có ACL; agent tools hẹp',
       ],
       en: [
-        'Deploy a static or full-stack site on Pages',
-        'Create an API route with Pages Functions or a Worker',
-        'Pick the right storage: KV vs D1 vs R2',
-        'Handle errors and basic edge logging',
-        'Build and secure an AI feature with Workers AI, AI Gateway, and Vectorize',
-        'Design an Agent with narrow tools and least-privilege credentials',
+        'C3 + wrangler login/dev/deploy — a live *.workers.dev URL',
+        'wrangler.jsonc + wrangler secret — no keys in git',
+        'Choose KV vs D1 vs R2; D1 migrations local and remote',
+        'Pages Git + PR previews when that is a framework site (compat)',
+        'wrangler tail; Turnstile verified server-side before D1 INSERT',
+        'Workers AI + AI Gateway; RAG with ACL; narrow agent tools',
       ],
     },
-    keyConcepts: ['Pages', 'Workers', 'KV', 'D1', 'R2', 'Durable Objects', 'Workers AI', 'AI Gateway', 'Vectorize'],
+    keyConcepts: ['Workers', 'C3', 'Wrangler', 'Pages', 'KV', 'D1', 'R2', 'Durable Objects', 'Workers AI', 'AI Gateway', 'Vectorize'],
+    tools: [
+      {
+        title: { vi: 'Workers learning path', en: 'Workers learning path' },
+        description: {
+          vi: 'On-ramp chính thức: C3, Wrangler, concepts.',
+          en: 'Official on-ramp: C3, Wrangler, concepts.',
+        },
+        href: 'https://developers.cloudflare.com/learning-paths/workers/',
+      },
+      {
+        title: { vi: 'Workers get started', en: 'Workers get started' },
+        description: {
+          vi: 'Guide Hello World — account, deploy, wrangler dev.',
+          en: 'Hello World guide — account, deploy, wrangler dev.',
+        },
+        href: 'https://developers.cloudflare.com/workers/get-started/guide/',
+      },
+      {
+        title: { vi: 'Migrate from Pages', en: 'Migrate from Pages' },
+        description: {
+          vi: 'Khi site Git sẵn sàng chuyển sang Workers + static assets — đọc, không copy vội.',
+          en: 'When a Git site is ready to move to Workers + static assets — read it; do not paste blindly.',
+        },
+        href: 'https://developers.cloudflare.com/workers/static-assets/migration-guides/migrate-from-pages/',
+      },
+    ],
+    startHere: {
+      intro: {
+        vi: 'App mới: Worker trước. Hub này dùng Pages + Functions vì nó là site nội dung — đó không phải template cho API mới. Làm đúng lệnh, checkpoint URL, rồi mới AI.',
+        en: 'New apps: Worker first. This hub uses Pages + Functions because it is a content site — that is not the template for a new API. Run the commands, checkpoint the URL, then AI.',
+      },
+      checklistTitle: { vi: 'Trước khi chạy C3', en: 'Before you run C3' },
+      checklist: {
+        vi: [
+          'Node.js 18.17+ và npm',
+          'Tài khoản Cloudflare (Workers & Pages)',
+          'Quyết định: app mới (Worker) hay Git site có sẵn (Pages)',
+          'Không commit file .env có secret; chuẩn bị tên project (my-first-worker)',
+          'Nếu sẽ gắn domain: zone đã có trên account (track Application Services)',
+        ],
+        en: [
+          'Node.js 18.17+ and npm',
+          'A Cloudflare account (Workers & Pages)',
+          'Decide: new app (Worker) or existing Git site (Pages)',
+          'Do not commit .env secrets; pick a project name (my-first-worker)',
+          'If you will attach a domain: a zone already on the account (Application Services track)',
+        ],
+      },
+      planNote: {
+        vi: 'Workers Free đủ Hello World, KV/D1/R2 nhỏ, Workers AI lab. Durable Objects, Queues, Workflows, Hyperdrive thường cần Paid — xác nhận trên dashboard trước Phần 6.',
+        en: 'Workers Free is enough for Hello World, small KV/D1/R2, and a Workers AI lab. Durable Objects, Queues, Workflows, and Hyperdrive usually need Paid — confirm in the dashboard before Part 6.',
+      },
+      planRows: [
+        { capability: { vi: 'Workers, wrangler, workers.dev', en: 'Workers, wrangler, workers.dev' }, free: { vi: 'Có (quota ngày)', en: 'Yes (daily quota)' }, paid: { vi: 'Quota cao hơn', en: 'Higher quota' } },
+        { capability: { vi: 'KV, D1, R2', en: 'KV, D1, R2' }, free: { vi: 'Free tier', en: 'Free tier' }, paid: { vi: 'Limit cao hơn', en: 'Higher limits' } },
+        { capability: { vi: 'Pages + Functions', en: 'Pages + Functions' }, free: { vi: 'Có', en: 'Yes' }, paid: { vi: 'Build minutes nhiều hơn', en: 'More build minutes' } },
+        { capability: { vi: 'Workers AI, AI Gateway', en: 'Workers AI, AI Gateway' }, free: { vi: 'Lab / neurons ngày', en: 'Lab / daily neurons' }, paid: { vi: 'Usage + guardrails/DLP', en: 'Usage + guardrails/DLP' } },
+        { capability: { vi: 'Durable Objects, Queues, Workflows, Hyperdrive', en: 'Durable Objects, Queues, Workflows, Hyperdrive' }, free: { vi: 'Hạn chế / không', en: 'Limited / no' }, paid: { vi: 'Workers Paid / add-on', en: 'Workers Paid / add-on' } },
+      ],
+    },
     modules: [
       {
-        id: 'dp-1',
-        title: { vi: 'Phần 1: Deploy đầu tiên với Pages', en: 'Part 1: First deploy with Pages' },
+        id: 'dp-0',
+        title: { vi: 'Phần 0: Kiến trúc và quy trình', en: 'Part 0: Architecture and workflow' },
         description: {
-          vi: 'Đưa frontend lên Cloudflare Pages và hiểu preview/production.',
-          en: 'Ship a frontend on Cloudflare Pages and understand preview vs production.',
+          vi: 'Worker-first cho app mới; Pages cho Git site; AI sau storage và secret.',
+          en: 'Worker-first for new apps; Pages for Git sites; AI after storage and secrets.',
         },
-        duration: { vi: '~40 phút', en: '~40 min' },
+        duration: { vi: '~15 phút', en: '~15 min' },
+        role: 'required',
         lessons: [
           {
-            title: { vi: 'Tạo project Pages từ Git hoặc CLI', en: 'Create a Pages project from Git or CLI' },
+            title: { vi: 'Kiến trúc Developer Platform 2026', en: 'Developer Platform architecture 2026' },
             body: {
-              vi: 'Kết nối repo GitHub/GitLab hoặc dùng `wrangler pages deploy`. Mỗi PR có preview URL — rất hữu ích cho review.',
-              en: 'Connect GitHub/GitLab or use `wrangler pages deploy`. Each PR gets a preview URL — great for reviews.',
+              vi: 'User → Worker hoặc Pages → bindings → AI Gateway. Hub này là ví dụ Pages; project mới dùng C3.',
+              en: 'User → Worker or Pages → bindings → AI Gateway. This hub is a Pages example; new projects use C3.',
+            },
+          },
+        ],
+      },
+      {
+        id: 'dp-1',
+        title: { vi: 'Phần 1: Worker đầu tiên với C3 và Wrangler', en: 'Part 1: First Worker with C3 and Wrangler' },
+        description: {
+          vi: 'Account, npm create cloudflare, wrangler login/dev/deploy, rồi secret và wrangler.jsonc.',
+          en: 'Account, npm create cloudflare, wrangler login/dev/deploy, then secrets and wrangler.jsonc.',
+        },
+        duration: { vi: '~55 phút', en: '~55 min' },
+        role: 'required',
+        lessons: [
+          {
+            title: { vi: 'C3, wrangler login và deploy Hello World', en: 'C3, wrangler login, and deploy Hello World' },
+            body: {
+              vi: 'Hello World, Worker only, TypeScript. Checkpoint: localhost:8787 và *.workers.dev.',
+              en: 'Hello World, Worker only, TypeScript. Checkpoint: localhost:8787 and *.workers.dev.',
             },
             hubLink: '/use-cases/build-serverless-app',
           },
           {
-            title: { vi: 'Cấu hình build và output', en: 'Configure build and output' },
+            title: { vi: 'wrangler.jsonc, vars và wrangler secret', en: 'wrangler.jsonc, vars, and wrangler secret' },
             body: {
-              vi: 'Đặt build command (`npm run build`) và thư mục output (`dist`). Kiểm tra biến môi trường cho API URL.',
-              en: 'Set build command (`npm run build`) and output directory (`dist`). Check env vars for API URLs.',
+              vi: 'File config là source of truth. Secret không nằm trong vars hay PUBLIC_*.',
+              en: 'The config file is the source of truth. Secrets do not live in vars or PUBLIC_*.',
             },
           },
         ],
       },
       {
         id: 'dp-2',
-        title: { vi: 'Phần 2: API trên edge', en: 'Part 2: APIs on the edge' },
+        title: { vi: 'Phần 2: Pages (tương thích Git site)', en: 'Part 2: Pages (Git site compatibility)' },
         description: {
-          vi: 'Thêm logic serverless nhỏ không cần server riêng.',
-          en: 'Add small serverless logic without a separate server.',
+          vi: 'Deploy framework từ Git, preview PR, Functions khi logic gắn site — không phải on-ramp mặc định.',
+          en: 'Deploy a framework from Git, PR previews, Functions when logic belongs with the site — not the default on-ramp.',
         },
-        duration: { vi: '~50 phút', en: '~50 min' },
+        duration: { vi: '~55 phút', en: '~55 min' },
+        role: 'recommended',
         lessons: [
           {
-            title: { vi: 'Pages Functions cho route `/api/*`', en: 'Pages Functions for `/api/*` routes' },
+            title: { vi: 'Pages từ Git: build command và output dist', en: 'Pages from Git: build command and dist output' },
             body: {
-              vi: 'Đặt handler trong `functions/` để xử lý form, webhook, proxy nhẹ. Phù hợp logic gắn với site Pages.',
-              en: 'Put handlers in `functions/` for forms, webhooks, light proxying. Good for logic tied to your Pages site.',
+              vi: 'Connect Git, npm run build, output dist. Preview mỗi PR. Đọc guide migrate sang Workers khi sẵn sàng.',
+              en: 'Connect Git, npm run build, output dist. Preview per PR. Read the migrate-to-Workers guide when ready.',
             },
+            hubLink: '/use-cases/deploy-static-site',
           },
           {
-            title: { vi: 'Worker độc lập khi cần routing phức tạp', en: 'Standalone Worker for complex routing' },
+            title: { vi: 'Pages Functions /api/* và khi nào tách Worker', en: 'Pages Functions /api/* and when to split a Worker' },
             body: {
-              vi: 'Dùng Worker khi cần middleware, auth edge, hoặc nhiều hostname. Worker là đơn vị compute linh hoạt nhất.',
-              en: 'Use a Worker when you need middleware, edge auth, or multiple hostnames. Workers are the most flexible compute unit.',
+              vi: 'Cùng Workers runtime. Tách Worker khi service không gắn UI tĩnh.',
+              en: 'Same Workers runtime. Split a Worker when the service is not tied to static UI.',
             },
           },
         ],
@@ -354,7 +658,8 @@ export const tracks: Track[] = [
           vi: 'KV, D1 và R2 — khi nào dùng cái nào.',
           en: 'KV, D1, and R2 — when to use each.',
         },
-        duration: { vi: '~35 phút', en: '~35 min' },
+        duration: { vi: '~75 phút', en: '~75 min' },
+        role: 'required',
         lessons: [
           {
             title: { vi: 'KV cho config và cache nhẹ', en: 'KV for config and light cache' },
@@ -387,7 +692,8 @@ export const tracks: Track[] = [
           vi: 'Analytics, bảo vệ form, và hướng AI.',
           en: 'Analytics, form protection, and AI next steps.',
         },
-        duration: { vi: '~30 phút', en: '~30 min' },
+        duration: { vi: '~45 phút', en: '~45 min' },
+        role: 'recommended',
         lessons: [
           {
             title: { vi: 'Web Analytics và log Workers', en: 'Web Analytics and Worker logs' },
@@ -414,6 +720,7 @@ export const tracks: Track[] = [
           en: 'From first inference to AI security, RAG, and agents with tools and skills.',
         },
         duration: { vi: '~110 phút', en: '~110 min' },
+        role: 'recommended',
         lessons: [
           {
             title: { vi: 'Inference đầu tiên với Workers AI', en: 'First inference with Workers AI' },
@@ -454,29 +761,72 @@ export const tracks: Track[] = [
           },
         ],
       },
+      {
+        id: 'dp-6',
+        title: { vi: 'Phần 6: Durable Objects, Queues, Workflows, Hyperdrive', en: 'Part 6: Durable Objects, Queues, Workflows, Hyperdrive' },
+        description: {
+          vi: 'Optional — chọn đúng một sản phẩm sau khi Worker + storage ổn. Thường cần Workers Paid.',
+          en: 'Optional — pick exactly one product after Worker + storage are stable. Often needs Workers Paid.',
+        },
+        duration: { vi: '~30 phút', en: '~30 min' },
+        role: 'optional',
+        lessons: [
+          {
+            title: { vi: 'Khi nào thêm DO, Queue, Workflow hoặc Hyperdrive', en: 'When to add DO, Queue, Workflow, or Hyperdrive' },
+            body: {
+              vi: 'DO: state theo object. Queues: việc nền. Workflows: pipeline dài. Hyperdrive: Postgres/MySQL bên ngoài — không thay D1.',
+              en: 'DO: per-object state. Queues: background work. Workflows: long pipelines. Hyperdrive: external Postgres/MySQL — not a D1 replacement.',
+            },
+          },
+        ],
+      },
+      {
+        id: 'dp-7',
+        title: { vi: 'Phần 7: Tham chiếu — golden rules và sổ tay', en: 'Part 7: Reference — golden rules and runbook' },
+        description: {
+          vi: '10 rule và lệnh wrangler / path dashboard khi đã hiểu luồng.',
+          en: '10 rules and wrangler commands / dashboard paths once you know the flow.',
+        },
+        duration: { vi: 'Tham chiếu', en: 'Reference' },
+        role: 'reference',
+        lessons: [
+          {
+            title: { vi: '10 golden rules Developer Platform', en: '10 Developer Platform golden rules' },
+            body: {
+              vi: 'Worker-first; secret qua wrangler secret; chọn storage đúng; verify Turnstile; vector ≠ ACL.',
+              en: 'Worker-first; secrets via wrangler secret; pick storage correctly; verify Turnstile; vectors ≠ ACL.',
+            },
+          },
+          {
+            title: { vi: 'Sổ tay lệnh (C3 / wrangler / Pages)', en: 'Command runbook (C3 / wrangler / Pages)' },
+            body: {
+              vi: 'create cloudflare → login/dev/deploy → secret put → kv/d1/r2 → tail → Pages Git dist.',
+              en: 'create cloudflare → login/dev/deploy → secret put → kv/d1/r2 → tail → Pages Git dist.',
+            },
+          },
+        ],
+      },
     ],
     recommendedSequence: {
       vi: [
-        'Deploy static site với Pages',
-        'Thêm một API route',
-        'Build một Worker endpoint nhỏ',
-        'Lưu dữ liệu đơn giản trong KV hoặc D1',
-        'Upload files lên R2',
-        'Thêm basic analytics và error handling',
-        'Ship một Workers AI feature có mục tiêu rõ ràng',
-        'Thêm AI Gateway observability và security controls',
-        'Chỉ build RAG hoặc agent khi data/tool boundaries rõ ràng',
+        'Đọc kiến trúc: app mới = Worker; Git site = Pages',
+        'C3 Hello World, wrangler login/dev/deploy — *.workers.dev',
+        'wrangler.jsonc + wrangler secret (không PUBLIC_* cho key)',
+        'Chọn KV / D1 / R2; apply migration D1 local và remote',
+        'Nếu có framework Git: Pages + preview; Functions chỉ khi gắn site',
+        'wrangler tail; Turnstile siteverify trước ghi D1',
+        'Workers AI một task; AI Gateway; RAG/agent khi boundary rõ',
+        'Optional: một trong DO / Queues / Workflows / Hyperdrive',
       ],
       en: [
-        'Deploy a static site with Pages',
-        'Add one API route',
-        'Build a small Worker endpoint',
-        'Store simple data in KV or D1',
-        'Upload files to R2',
-        'Add basic analytics and error handling',
-        'Ship one focused Workers AI feature',
-        'Add AI Gateway observability and security controls',
-        'Build RAG or an agent only when its data and tool boundaries are clear',
+        'Read the architecture: new app = Worker; Git site = Pages',
+        'C3 Hello World, wrangler login/dev/deploy — *.workers.dev',
+        'wrangler.jsonc + wrangler secret (no PUBLIC_* for keys)',
+        'Choose KV / D1 / R2; apply D1 migrations local and remote',
+        'If you have a Git framework: Pages + preview; Functions only when tied to the site',
+        'wrangler tail; Turnstile siteverify before D1 writes',
+        'Workers AI one task; AI Gateway; RAG/agent when boundaries are clear',
+        'Optional: one of DO / Queues / Workflows / Hyperdrive',
       ],
     },
     relatedUseCases: [
@@ -506,6 +856,10 @@ export const tracks: Track[] = [
           title: 'Bỏ qua observability khi debug edge',
           detail: 'Worker/Pages Function lỗi khó thấy trên server truyền thống. Dùng `wrangler tail`, logs và error handling rõ ràng.',
         },
+        {
+          title: 'App mới bắt đầu bằng Pages Functions',
+          detail: 'On-ramp 2026 là C3 + Worker. Pages Functions hợp site Git hiện có (như hub này), không phải template API mới.',
+        },
       ],
       en: [
         {
@@ -527,6 +881,10 @@ export const tracks: Track[] = [
         {
           title: 'Skipping observability when debugging edge code',
           detail: 'Worker/Pages Function errors are invisible like traditional servers. Use `wrangler tail`, logs, and explicit error handling.',
+        },
+        {
+          title: 'Starting a new app with Pages Functions',
+          detail: 'The 2026 on-ramp is C3 + Worker. Pages Functions fit existing Git sites (like this hub), not a new API template.',
         },
       ],
     },

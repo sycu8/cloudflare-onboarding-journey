@@ -1,6 +1,14 @@
 ---
 import LangText from '../ui/LangText.astro';
-import type { TrackModule } from '../../data/tracks';
+import type { TrackModule, TrackModuleRole } from '../../data/tracks';
+
+const roleLabel: Record<TrackModuleRole, { vi: string; en: string }> = {
+  required: { vi: 'Bắt buộc', en: 'Required' },
+  recommended: { vi: 'Khuyến nghị', en: 'Recommended' },
+  optional: { vi: 'Tùy chọn', en: 'Optional' },
+  'deep-dive': { vi: 'Đi sâu', en: 'Deep-dive' },
+  reference: { vi: 'Tham chiếu', en: 'Reference' },
+};
 
 type Props = {
   module: TrackModule;
@@ -12,7 +20,14 @@ const { module, trackSlug } = Astro.props;
 
 <article class="card">
   <div class="flex flex-wrap items-center gap-2">
-    {module.duration ? <span class="badge badge-accent"><LangText text={module.duration} /></span> : null}
+    {module.role ? (
+      <span class="badge badge-accent">
+        <span class="lang-vi">{roleLabel[module.role].vi}</span>
+        <span class="lang-en">{roleLabel[module.role].en}</span>
+        <span class="lang-km">{roleLabel[module.role].en}</span>
+      </span>
+    ) : null}
+    {module.duration ? <span class="badge"><LangText text={module.duration} /></span> : null}
     <span class="badge">
       <span class="lang-vi">{module.lessons.length} bài</span>
       <span class="lang-en">{module.lessons.length} lessons</span>

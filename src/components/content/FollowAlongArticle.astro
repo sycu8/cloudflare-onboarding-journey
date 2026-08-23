@@ -1,0 +1,145 @@
+---
+import LangText from '../ui/LangText.astro';
+import type { FollowAlongLesson, FollowAlongRole } from '../../data/followAlongLessons';
+
+type Props = {
+  lesson: FollowAlongLesson;
+};
+
+const { lesson } = Astro.props;
+
+const roleLabel: Record<FollowAlongRole, { vi: string; en: string }> = {
+  required: { vi: 'Bắt buộc', en: 'Required' },
+  recommended: { vi: 'Khuyến nghị', en: 'Recommended' },
+  optional: { vi: 'Tùy chọn', en: 'Optional' },
+  'deep-dive': { vi: 'Đi sâu', en: 'Deep-dive' },
+  reference: { vi: 'Tham chiếu', en: 'Reference' },
+};
+---
+
+<section class="follow-along mb-8 space-y-6">
+  <div class="card overflow-x-auto">
+    <div class="mb-4 flex flex-wrap items-center gap-2">
+      <span class="badge badge-accent">
+        <span class="lang-vi">{roleLabel[lesson.role].vi}</span>
+        <span class="lang-en">{roleLabel[lesson.role].en}</span>
+        <span class="lang-km">{roleLabel[lesson.role].en}</span>
+      </span>
+    </div>
+    <table class="follow-along-meta w-full text-sm">
+      <tbody>
+        <tr>
+          <th><span class="lang-vi">Mục tiêu</span><span class="lang-en">Goal</span></th>
+          <td><LangText text={lesson.goal} /></td>
+        </tr>
+        <tr>
+          <th><span class="lang-vi">Ai làm</span><span class="lang-en">Who does this</span></th>
+          <td><LangText text={lesson.who} /></td>
+        </tr>
+        <tr>
+          <th><span class="lang-vi">Thời gian</span><span class="lang-en">Time</span></th>
+          <td><LangText text={lesson.time} /></td>
+        </tr>
+        <tr>
+          <th><span class="lang-vi">Kết thúc bạn sẽ có</span><span class="lang-en">You'll finish with</span></th>
+          <td><LangText text={lesson.finishWith} /></td>
+        </tr>
+        <tr>
+          <th><span class="lang-vi">Trước khi bắt đầu</span><span class="lang-en">Before you begin</span></th>
+          <td><LangText text={lesson.beforeYouBegin} /></td>
+        </tr>
+        {lesson.planNote ? (
+          <tr>
+            <th><span class="lang-vi">Gói / plan</span><span class="lang-en">Plan</span></th>
+            <td><LangText text={lesson.planNote} /></td>
+          </tr>
+        ) : null}
+      </tbody>
+    </table>
+  </div>
+
+  {lesson.intro ? (
+    <div class="card">
+      <LangText as="p" class="text-sm leading-relaxed whitespace-pre-line" text={lesson.intro} />
+    </div>
+  ) : null}
+
+  <div class="card">
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Làm theo từng bước', en: 'Follow along' }} />
+    <ol class="mt-4 space-y-4">
+      {lesson.steps.map((step, i) => (
+        <li class="rounded-xl border border-[var(--cf-border)] bg-[var(--cf-bg-elevated)]/50 p-4">
+          <p class="font-medium">
+            <span class="badge badge-accent mr-2">{i + 1}</span>
+            <LangText text={step.action} />
+          </p>
+          {step.see ? (
+            <p class="text-muted mt-2 text-sm">
+              <span class="font-medium text-[var(--cf-accent)]">
+                <span class="lang-vi">Bạn sẽ thấy: </span>
+                <span class="lang-en">What you'll see: </span>
+              </span>
+              <LangText text={step.see} />
+            </p>
+          ) : null}
+          {step.click ? (
+            <p class="text-muted mt-2 text-sm">
+              <span class="font-medium text-[var(--cf-accent)]">
+                <span class="lang-vi">Nhấp: </span>
+                <span class="lang-en">Click: </span>
+              </span>
+              <LangText text={step.click} />
+            </p>
+          ) : null}
+          {step.enter ? (
+            <p class="text-muted mt-2 text-sm">
+              <span class="font-medium text-[var(--cf-accent)]">
+                <span class="lang-vi">Nhập: </span>
+                <span class="lang-en">Enter: </span>
+              </span>
+              <code class="follow-along-code"><LangText text={step.enter} /></code>
+            </p>
+          ) : null}
+          {step.checkpoint ? (
+            <p class="mt-3 rounded-lg border border-[var(--cf-border)] bg-[var(--cf-surface)] px-3 py-2 text-sm">
+              <span class="font-medium text-[var(--cf-accent)]">
+                <span class="lang-vi">Checkpoint: </span>
+                <span class="lang-en">Checkpoint: </span>
+              </span>
+              <LangText text={step.checkpoint} />
+            </p>
+          ) : null}
+        </li>
+      ))}
+    </ol>
+  </div>
+
+  {lesson.watchOuts.length > 0 ? (
+    <div class="card">
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Cẩn thận', en: 'Watch out' }} />
+      <ul class="text-muted mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed">
+        {lesson.watchOuts.map((item) => (
+          <li><LangText text={item} /></li>
+        ))}
+      </ul>
+    </div>
+  ) : null}
+
+  {lesson.tips.length > 0 ? (
+    <div class="card">
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Mẹo', en: 'Tips' }} />
+      <ul class="text-muted mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed">
+        {lesson.tips.map((item) => (
+          <li><LangText text={item} /></li>
+        ))}
+      </ul>
+    </div>
+  ) : null}
+
+  {lesson.officialDocs.length > 0 ? (
+    <p class="text-muted text-xs leading-relaxed">
+      <span class="lang-vi">Nguồn sự thật: tài liệu chính thức Cloudflare Developers (diễn giải, không sao chép nguyên văn). Nhãn menu dashboard có thể đổi — chọn mục tương đương gần nhất.</span>
+      <span class="lang-en">Source of truth: official Cloudflare Developer docs (paraphrased, not copied verbatim). Dashboard labels shift — follow the nearest equivalent.</span>
+    </p>
+  ) : null}
+</section>
