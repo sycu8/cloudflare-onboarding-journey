@@ -71,6 +71,11 @@ const salesSteps: RoleRoadmapStep[] = [
       '/use-cases/build-serverless-app/',
       '/use-cases/replace-vpn/',
     ],
+    tutorialPaths: [
+      '/workers/tutorials/build-a-jamstack-app',
+      '/pages/tutorials/build-an-api-with-pages-functions',
+      '/cloudflare-one/tutorials/clientless-access-private-dns',
+    ],
     recommendedProducts: ['Workers', 'Pages', 'Zero Trust', 'Access', 'Gateway'],
     exercisesVi: [
       'Đọc use case “build serverless app” — tóm tắt 3 lợi ích cho CTO startup.',
@@ -320,6 +325,10 @@ const developerSteps: RoleRoadmapStep[] = [
       '/use-cases/secure-api/',
       '/products/',
     ],
+    tutorialPaths: [
+      '/workers/tutorials/deploy-an-express-app',
+      '/workers/tutorials/build-a-qr-code-generator',
+    ],
     recommendedProducts: ['Workers', 'Workers Routes', 'Workers AI'],
     exercisesVi: [
       'Hoàn thành 3 lesson đầu track Developer Platform về Workers.',
@@ -366,6 +375,10 @@ const developerSteps: RoleRoadmapStep[] = [
       '/use-cases/deploy-static-site/',
       '/use-cases/build-serverless-app/',
       '/resources/',
+    ],
+    tutorialPaths: [
+      '/workers/tutorials/build-a-jamstack-app',
+      '/pages/tutorials/build-an-api-with-pages-functions',
     ],
     recommendedProducts: ['Pages', 'Workers', 'R2'],
     exercisesVi: [
@@ -791,6 +804,8 @@ export const roleRoadmaps: RoleRoadmap[] = [
     roleNameEn: 'Sales / Pre-sales',
     descriptionVi:
       'Lộ trình 4 tuần cho người bán hàng hoặc pre-sales: hiểu đủ sâu để qualifying khách, kể câu chuyện giá trị và biết khi nào cần Solution Engineer — không cần biết code.',
+    descriptionEn:
+      'A 4-week path for sales and pre-sales: qualify customers, tell the value story, and know when to bring in a Solution Engineer — no coding required.',
     bestForVi: [
       'Account Executive, BDR, pre-sales mới vào Cloudflare',
       'Người cần nói chuyện với khách SMB và mid-market',
@@ -800,6 +815,8 @@ export const roleRoadmaps: RoleRoadmap[] = [
     startingLevel: 'zero',
     finalOutcomeVi:
       'Tự tin dẫn cuộc gọi discovery, map nhu cầu sang đúng track/sản phẩm và chuẩn bị demo hoặc handoff SE.',
+    finalOutcomeEn:
+      'Lead discovery calls confidently, map needs to the right track/products, and prepare demos or SE handoff.',
     primaryTrack: 'mixed',
     steps: salesSteps,
   },
@@ -809,6 +826,8 @@ export const roleRoadmaps: RoleRoadmap[] = [
     roleNameEn: 'Solution Engineer',
     descriptionVi:
       'Lộ trình 6 tuần cho SE: từ kiến trúc Connectivity Cloud tới thiết kế giải pháp đa sản phẩm, demo và POC có thể bàn giao.',
+    descriptionEn:
+      'A 6-week path for SEs: from Connectivity Cloud architecture to multi-product solution design, demos, and deliverable POCs.',
     bestForVi: [
       'Solution Engineer, Sales Engineer, kiến trúc sư giải pháp',
       'Kỹ sư đã biết mạng/web muốn chuyên sâu portfolio Cloudflare',
@@ -818,6 +837,8 @@ export const roleRoadmaps: RoleRoadmap[] = [
     startingLevel: 'basic',
     finalOutcomeVi:
       'Thiết kế và trình bày được giải pháp end-to-end (app + security + Zero Trust) kèm POC scope và checklist go-live.',
+    finalOutcomeEn:
+      'Design and present end-to-end solutions (app + security + Zero Trust) with POC scope and go-live checklist.',
     primaryTrack: 'mixed',
     steps: solutionEngineerSteps,
   },
@@ -827,6 +848,8 @@ export const roleRoadmaps: RoleRoadmap[] = [
     roleNameEn: 'Developer',
     descriptionVi:
       'Lộ trình 6 tuần cho developer: từ mental model edge tới Workers, storage, Pages và dự án portfolio trên Developer Platform.',
+    descriptionEn:
+      'A 6-week developer path: edge mental model to Workers, storage, Pages, and a Developer Platform portfolio project.',
     bestForVi: [
       'Lập trình viên frontend/backend muốn học serverless trên edge',
       'Sinh viên CNTT làm đồ án trên Cloudflare',
@@ -836,6 +859,8 @@ export const roleRoadmaps: RoleRoadmap[] = [
     startingLevel: 'technical',
     finalOutcomeVi:
       'Deploy được mini-project full-stack (Pages + Worker + storage) và hiểu pattern production cơ bản.',
+    finalOutcomeEn:
+      'Deploy a full-stack mini-project (Pages + Worker + storage) and understand basic production patterns.',
     primaryTrack: 'developer-platform',
     steps: developerSteps,
   },
@@ -845,6 +870,8 @@ export const roleRoadmaps: RoleRoadmap[] = [
     roleNameEn: 'IT Admin / Sysadmin',
     descriptionVi:
       'Lộ trình 5 tuần cho IT vận hành: DNS/SSL production, WAF/DDoS và pilot Zero Trust thay VPN — tập trung runbook và checklist.',
+    descriptionEn:
+      'A 5-week IT ops path: production DNS/SSL, WAF/DDoS, and Zero Trust pilot to replace VPN — focused on runbooks and checklists.',
     bestForVi: [
       'Sysadmin, IT manager, người quản lý domain và certificate',
       'Team infra muốn thêm Cloudflare vào perimeter hiện tại',
@@ -854,6 +881,8 @@ export const roleRoadmaps: RoleRoadmap[] = [
     startingLevel: 'basic',
     finalOutcomeVi:
       'Vận hành domain production an toàn, có baseline WAF và kế hoạch pilot Zero Trust có tài liệu nội bộ.',
+    finalOutcomeEn:
+      'Run production domains safely with baseline WAF and a documented Zero Trust pilot plan.',
     primaryTrack: 'cloudflare-one',
     steps: itAdminSteps,
   },
@@ -863,6 +892,8 @@ export const roleRoadmaps: RoleRoadmap[] = [
     roleNameEn: 'Startup Founder',
     descriptionVi:
       'Lộ trình 4 tuần cho founder technical hoặc semi-technical: ship MVP nhanh, bảo vệ khi có user, và hiểu chi phí scale.',
+    descriptionEn:
+      'A 4-week path for technical or semi-technical founders: ship MVP fast, secure when users arrive, and understand scaling costs.',
     bestForVi: [
       'Founder solo hoặc team nhỏ chưa có DevOps chuyên trách',
       'Startup pre-seed/seed cần landing + API + bảo mật tối thiểu',
@@ -872,6 +903,8 @@ export const roleRoadmaps: RoleRoadmap[] = [
     startingLevel: 'basic',
     finalOutcomeVi:
       'Có MVP trên Cloudflare, baseline bảo mật và bảng chi phí/direction 3 tháng align với product.',
+    finalOutcomeEn:
+      'Have an MVP on Cloudflare, security baseline, and a 3-month cost/direction plan aligned with product.',
     primaryTrack: 'mixed',
     steps: startupFounderSteps,
   },
@@ -881,6 +914,8 @@ export const roleRoadmaps: RoleRoadmap[] = [
     roleNameEn: 'Student / New learner',
     descriptionVi:
       'Lộ trình 4 tuần thân thiện người mới: nền tảng Internet, chọn track, thực hành use case và tự đánh giá bằng quiz/checklist.',
+    descriptionEn:
+      'A beginner-friendly 4-week path: Internet foundations, pick a track, practice use cases, and self-assess with quiz/checklist.',
     bestForVi: [
       'Sinh viên CNTT, mạng, an toàn thông tin',
       'Người tự học muốn portfolio hoặc chứng chỉ sau này',
@@ -890,6 +925,8 @@ export const roleRoadmaps: RoleRoadmap[] = [
     startingLevel: 'zero',
     finalOutcomeVi:
       'Hiểu mental model Cloudflare, hoàn thành module 1 một track, có bài tóm tắt use case và kế hoạch học tiếp.',
+    finalOutcomeEn:
+      'Understand the Cloudflare mental model, finish module 1 of one track, summarize a use case, and plan next learning steps.',
     primaryTrack: 'mixed',
     steps: studentSteps,
   },

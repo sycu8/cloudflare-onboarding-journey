@@ -7,8 +7,13 @@ export const stage7: ContentRoadmapStage = {
   titleEn: 'Cloudflare One Path',
   descriptionVi:
     'Zero Trust, Access, Gateway, WARP và Tunnel — bảo vệ user, thiết bị và truy cập app nội bộ/SaaS thay mô hình VPN perimeter.',
+  descriptionEn:
+    'Zero Trust, Access, Gateway, WARP, and Tunnel — secure users, devices, and internal/SaaS access instead of perimeter VPN.',
   learnerOutcomeVi:
     'Giải thích ZTNA vs VPN, thiết kế policy Access/Gateway cơ bản và onboard remote user với WARP/Tunnel.',
+  learnerOutcomeEn:
+    'Explain ZTNA vs VPN, design basic Access/Gateway policies, and onboard remote users with WARP/Tunnel.',
+  suggestedRoleIds: ['it-admin', 'solution-engineer'],
   filterTags: ['zero-trust', 'security'],
   topics: [
     topic(

@@ -7,8 +7,13 @@ export const stage3: ContentRoadmapStage = {
   titleEn: 'Security Basics',
   descriptionVi:
     'TLS, DDoS, bot, WAF và các tấn công web phổ biến — nền tảng bảo mật trước khi cấu hình rule trên Cloudflare.',
+  descriptionEn:
+    'TLS, DDoS, bots, WAF, and common web attacks — security foundations before configuring Cloudflare rules.',
   learnerOutcomeVi:
     'Phân biệt được HTTPS vs HTTP, hiểu vai trò certificate, WAF, rate limit và cách Cloudflare giảm rủi ro ở edge.',
+  learnerOutcomeEn:
+    'Distinguish HTTPS vs HTTP, understand certificates, WAF, rate limiting, and how Cloudflare reduces risk at the edge.',
+  suggestedRoleIds: ['student', 'it-admin'],
   filterTags: ['foundation', 'security'],
   topics: [
     topic(

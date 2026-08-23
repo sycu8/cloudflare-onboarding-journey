@@ -7,8 +7,13 @@ export const stage0: ContentRoadmapStage = {
   titleEn: 'Internet & Network Foundations',
   descriptionVi:
     'Nền tảng về Internet và mạng máy tính trước khi đụng Cloudflare — hiểu client/server, IP, giao thức và luồng request cơ bản.',
+  descriptionEn:
+    'Internet and networking foundations before Cloudflare — client/server, IP, protocols, and basic request flow.',
   learnerOutcomeVi:
     'Giải thích được Internet hoạt động thế nào, đọc được luồng request/response và hiểu các khái niệm mạng cần cho DNS, CDN và bảo mật sau này.',
+  learnerOutcomeEn:
+    'Explain how the Internet works, read request/response flow, and understand network concepts needed for DNS, CDN, and security later.',
+  suggestedRoleIds: ['student', 'sales'],
   filterTags: ['foundation'],
   topics: [
     topic(

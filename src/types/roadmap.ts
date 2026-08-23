@@ -15,7 +15,10 @@ export type ContentRoadmapTopic = {
   level: ContentRoadmapLevel;
   estimatedMinutes: number;
   summaryVi: string;
+  summaryEn?: string;
   whyItMattersVi: string;
+  whyItMattersEn?: string;
+  relatedTutorialPaths?: string[];
   prerequisites: string[];
   relatedCloudflareProducts: string[];
   relatedExistingRoutes: string[];
@@ -32,7 +35,10 @@ export type ContentRoadmapStage = {
   titleVi: string;
   titleEn?: string;
   descriptionVi: string;
+  descriptionEn?: string;
   learnerOutcomeVi: string;
+  learnerOutcomeEn?: string;
+  suggestedRoleIds?: RoleId[];
   filterTags: ContentRoadmapFilter[];
   topics: ContentRoadmapTopic[];
 };
@@ -51,11 +57,15 @@ export type RoleRoadmapStep = {
   titleVi: string;
   titleEn?: string;
   objectiveVi: string;
+  objectiveEn?: string;
   topics: string[];
   existingRoutes: string[];
+  tutorialPaths?: string[];
   recommendedProducts: string[];
   exercisesVi: string[];
+  exercisesEn?: string[];
   expectedOutcomeVi: string;
+  expectedOutcomeEn?: string;
   sourceUrls: string[];
 };
 
@@ -64,10 +74,13 @@ export type RoleRoadmap = {
   roleNameVi: string;
   roleNameEn?: string;
   descriptionVi: string;
+  descriptionEn?: string;
   bestForVi: string[];
+  bestForEn?: string[];
   totalWeeks: number;
   startingLevel: 'zero' | 'basic' | 'technical';
   finalOutcomeVi: string;
+  finalOutcomeEn?: string;
   primaryTrack: 'application-services' | 'developer-platform' | 'cloudflare-one' | 'mixed';
   steps: RoleRoadmapStep[];
 };

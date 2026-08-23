@@ -26,12 +26,15 @@ const trackLabels = {
   </h2>
   <p class="text-muted mt-2 flex-1 text-sm leading-relaxed">
     <span class="lang-vi">{roadmap.descriptionVi}</span>
-    <span class="lang-en">{roadmap.descriptionVi}</span>
+    <span class="lang-en">{roadmap.descriptionEn ?? roadmap.descriptionVi}</span>
   </p>
 
   <ul class="text-muted mt-3 space-y-1 text-xs">
-    {roadmap.bestForVi.map((item) => (
-      <li>• {item}</li>
+    {roadmap.bestForVi.map((item, i) => (
+      <li>
+        • <span class="lang-vi">{item}</span>
+        <span class="lang-en">{roadmap.bestForEn?.[i] ?? item}</span>
+      </li>
     ))}
   </ul>
 
@@ -71,7 +74,8 @@ const trackLabels = {
   <p class="text-muted mt-4 text-sm">
     <span class="font-medium text-[var(--cf-text)] lang-vi">Kết quả: </span>
     <span class="font-medium text-[var(--cf-text)] lang-en">Outcome: </span>
-    {roadmap.finalOutcomeVi}
+    <span class="lang-vi">{roadmap.finalOutcomeVi}</span>
+    <span class="lang-en">{roadmap.finalOutcomeEn ?? roadmap.finalOutcomeVi}</span>
   </p>
 
   <a class="btn btn-primary mt-4 w-full justify-center" href={`/roadmaps/${roadmap.roleId}/`}>

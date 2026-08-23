@@ -32,7 +32,7 @@ Cloudflare **Tutorial** and **Solution guide** entries from [Cloudflare Resource
 | **Hub pages** | [`/tutorials/{path}/`](https://onboarding.orangecloud.vn/tutorials/workers/tutorials/deploy-an-express-app/) — context (VI), notes, step sections, code blocks, per-section backlinks to the exact `#anchor` on the official page |
 | **Homepage teaser** | **Ví dụ triển khai** — 6 featured deployment examples with Vietnamese summaries |
 | **Lesson integration** | Track lesson pages show matched **Ví dụ triển khai (Cloudflare Resources)** cards |
-| **Search** | Tutorial previews indexed (~**419** documents total in `search-index.json`) |
+| **Search** | Tutorial previews + roadmap topics/weeks indexed (~**541** documents total in `search-index.json`) |
 | **Regenerate data** | `npm run resources:crawl-previews` (`--force` re-parse cache, `--refetch` re-download markdown) |
 
 **Button UX (intentional):**
@@ -51,10 +51,10 @@ Example: [Triển khai Express.js trên Workers](https://onboarding.orangecloud.
 
 | Route | What it is |
 |-------|------------|
-| [`/content-roadmap`](https://onboarding.orangecloud.vn/content-roadmap/) | **9 stages** from Internet/DNS foundations → practical Cloudflare use cases; filters, topic checkboxes, `sourceUrls`, hub links |
-| [`/roadmaps`](https://onboarding.orangecloud.vn/roadmaps/) | **6 role paths** — Sales, Solution Engineer, Developer, IT Admin, Startup Founder, Student — weekly plans + localStorage progress |
+| [`/content-roadmap`](https://onboarding.orangecloud.vn/content-roadmap/) | **9 stages** from Internet/DNS foundations → practical Cloudflare use cases; filters, topic checkboxes, `sourceUrls`, hub links, **related tutorial picks**, role roadmap CTAs per stage |
+| [`/roadmaps`](https://onboarding.orangecloud.vn/roadmaps/) | **6 role paths** — Sales, Solution Engineer, Developer, IT Admin, Startup Founder, Student — weekly plans + localStorage progress, **hub link labels**, **tutorial picks** on key weeks |
 
-Stage titles and roadmap UI strings are localized (VI default, EN toggle).
+Stage titles and roadmap UI strings are localized (VI default, EN toggle). Content topics and role weeks are searchable via Ctrl+K.
 
 ### Localization & quality pass
 
@@ -115,11 +115,11 @@ Optional: [**First week (7 days)**](/first-week) — day-by-day plan, common mis
 - **Use cases hub** — [`/use-cases`](/use-cases): protect website, secure API, serverless app, VPN replacement, remote users (grouped by track)
 - **Product pages** — searchable catalog at `/products` (Workers, WAF, Zero Trust, D1, R2, …)
 - **Cloudflare 101 extras** — terminology dictionary (6 categories, CSS tabs, search) + lab-style config/WAF guides
-- **Content Roadmap** — `/content-roadmap/` — 9 stages from Internet/DNS basics to Cloudflare use cases (with `sourceUrls` and hub links)
-- **Role roadmaps** — `/roadmaps/` — Sales, SE, Developer, IT Admin, Founder, Student (weekly plans + localStorage progress)
+- **Content Roadmap** — `/content-roadmap/` — 9 stages from Internet/DNS basics to Cloudflare use cases (with `sourceUrls`, hub links, prerequisite anchors, related tutorials)
+- **Role roadmaps** — `/roadmaps/` — Sales, SE, Developer, IT Admin, Founder, Student (weekly plans, tutorial picks, localStorage progress)
 - **Tutorial previews** — **164** Cloudflare tutorials/solution guides on hub at `/tutorials/{path}/` with VI summaries, section TOC, and doc backlinks (see [Recent updates](#recent-updates-june-2026))
 - **Deployment examples** — homepage + track lessons + `/resources#cloudflare-resources` catalog with filters (track, type, search)
-- **Search** — instant search (**419+** indexed pages/terms/tutorials) via Ctrl+K; optional [Cloudflare AI Search](docs/AI-SEARCH-SETUP.md) for semantic results
+- **Search** — instant search (**541+** indexed pages/terms/tutorials/roadmap topics) via Ctrl+K; optional [Cloudflare AI Search](docs/AI-SEARCH-SETUP.md) for semantic results
 - **Interactive** — glossary search + pagination, quiz with explanations, checklist progress, path selector
 - **Resources hub** — official docs grid (synced), Reference Architecture **diagrams**, Resource Hub, GitHub, CloudSecOp, Learning Center, **Cloudflare Resources** catalog
 - **Solutions & demos** — bilingual solution proposals, SE demo guides, content-delivery guide, plan comparison

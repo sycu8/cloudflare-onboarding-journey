@@ -1,5 +1,8 @@
 ---
 import type { ContentRoadmapTopic } from '../../types/roadmap';
+import { getContentTopicTitle } from '../../data/contentRoadmap';
+import { getHubLinkLabel } from '../../data/roadmapHubLinks';
+import { getTutorialDisplayTitle, getTutorialPreviewByPath } from '../../data/tutorialPreviews';
 
 type Props = {
   topic: ContentRoadmapTopic;
@@ -13,6 +16,15 @@ const levelLabels = {
   beginner: { vi: 'Cơ bản', en: 'Beginner' },
   intermediate: { vi: 'Trung cấp', en: 'Intermediate' },
 };
+
+const tutorialLinks = (topic.relatedTutorialPaths ?? []).map((path) => {
+  const preview = getTutorialPreviewByPath(path);
+  return {
+    hubPath: `/tutorials/${path.replace(/^\//, '').replace(/\/$/, '')}/`,
+    titleVi: preview ? getTutorialDisplayTitle(preview, 'vi') : path,
+    titleEn: preview ? getTutorialDisplayTitle(preview, 'en') : path,
+  };
+});
 ---
 
 <article class="card space-y-3" id={topic.id} data-roadmap-topic={topic.id}>
@@ -47,7 +59,7 @@ const levelLabels = {
     </h3>
     <p class="text-muted mt-2 text-sm leading-relaxed">
       <span class="lang-vi">{topic.summaryVi}</span>
-      <span class="lang-en">{topic.summaryVi}</span>
+      <span class="lang-en">{topic.summaryEn ?? topic.summaryVi}</span>
     </p>
   </div>
 
@@ -58,14 +70,23 @@ const levelLabels = {
     </p>
     <p class="text-muted mt-1">
       <span class="lang-vi">{topic.whyItMattersVi}</span>
-      <span class="lang-en">{topic.whyItMattersVi}</span>
+      <span class="lang-en">{topic.whyItMattersEn ?? topic.whyItMattersVi}</span>
     </p>
   </div>
 
   {topic.prerequisites.length ? (
     <p class="text-muted text-xs">
-      <span class="lang-vi">Tiên quyết: {topic.prerequisites.join(', ')}</span>
-      <span class="lang-en">Prerequisites: {topic.prerequisites.join(', ')}</span>
+      <span class="lang-vi">Tiên quyết: </span>
+      <span class="lang-en">Prerequisites: </span>
+      {topic.prerequisites.map((id, i) => (
+        <>
+          {i > 0 ? ', ' : null}
+          <a class="link" href={`#${id}`}>
+            <span class="lang-vi">{getContentTopicTitle(id, 'vi')}</span>
+            <span class="lang-en">{getContentTopicTitle(id, 'en')}</span>
+          </a>
+        </>
+      ))}
     </p>
   ) : null}
 
@@ -90,9 +111,34 @@ const levelLabels = {
         <span class="lang-en">On this hub</span>
       </p>
       <ul class="mt-1 flex flex-wrap gap-2 text-xs">
-        {topic.relatedExistingRoutes.map((href) => (
+        {topic.relatedExistingRoutes.map((href) => {
+          const label = getHubLinkLabel(href);
+          return (
+            <li>
+              <a class="link" href={href}>
+                <span class="lang-vi">{label.vi}</span>
+                <span class="lang-en">{label.en}</span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  ) : null}
+
+  {tutorialLinks.length ? (
+    <div>
+      <p class="text-xs font-medium">
+        <span class="lang-vi">Tutorial gợi ý</span>
+        <span class="lang-en">Suggested tutorials</span>
+      </p>
+      <ul class="mt-1 space-y-1 text-xs">
+        {tutorialLinks.map((t) => (
           <li>
-            <a class="link" href={href}>{href}</a>
+            <a class="link" href={t.hubPath}>
+              <span class="lang-vi">{t.titleVi}</span>
+              <span class="lang-en">{t.titleEn}</span>
+            </a>
           </li>
         ))}
       </ul>
@@ -103,7 +149,8 @@ const levelLabels = {
     <p class="text-sm">
       <span class="font-medium lang-vi">Bài tập gợi ý: </span>
       <span class="font-medium lang-en">Suggested exercise: </span>
-      <span class="text-muted">{topic.suggestedExerciseVi}</span>
+      <span class="text-muted lang-vi">{topic.suggestedExerciseVi}</span>
+      <span class="text-muted lang-en">{topic.suggestedExerciseVi}</span>
     </p>
   ) : null}
 

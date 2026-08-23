@@ -7,8 +7,13 @@ export const stage2: ContentRoadmapStage = {
   titleEn: 'Website Delivery Basics',
   descriptionVi:
     'Hosting, origin, CDN, cache và phân phối nội dung — hiểu website được phục vụ nhanh và ổn định như thế nào.',
+  descriptionEn:
+    'Hosting, origin, CDN, cache, and content delivery — how websites are served fast and reliably.',
   learnerOutcomeVi:
     'Giải thích được vai trò origin vs edge, cache hit/miss, static/dynamic content và khi nào cần CDN hay load balancing.',
+  learnerOutcomeEn:
+    'Explain origin vs edge, cache hit/miss, static vs dynamic content, and when CDN or load balancing is needed.',
+  suggestedRoleIds: ['student', 'sales'],
   filterTags: ['foundation', 'performance'],
   topics: [
     topic(

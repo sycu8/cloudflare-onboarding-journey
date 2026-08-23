@@ -7,8 +7,13 @@ export const stage4: ContentRoadmapStage = {
   titleEn: 'Cloudflare Mental Model',
   descriptionVi:
     'Cloudflare nằm ở đâu trong luồng traffic, orange vs gray cloud, ba họ sản phẩm và cách chọn đúng nhóm giải pháp.',
+  descriptionEn:
+    'Where Cloudflare sits in traffic flow, orange vs gray cloud, three product families, and choosing the right solution group.',
   learnerOutcomeVi:
     'Vẽ được sơ đồ User → Cloudflare → origin, giải thích zone/account và chọn Application Services vs Developer Platform vs Cloudflare One.',
+  learnerOutcomeEn:
+    'Draw User → Cloudflare → origin, explain zone/account, and choose Application Services vs Developer Platform vs Cloudflare One.',
+  suggestedRoleIds: ['sales', 'student'],
   filterTags: ['foundation', 'security', 'developer', 'zero-trust'],
   topics: [
     topic(

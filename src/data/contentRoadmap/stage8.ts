@@ -7,8 +7,13 @@ export const stage8: ContentRoadmapStage = {
   titleEn: 'Practical Use Cases',
   descriptionVi:
     'Áp dụng kiến thức vào tình huống thực tế — map pain point sang kiến trúc Cloudflare và trang use case trên hub.',
+  descriptionEn:
+    'Apply knowledge to real scenarios — map pain points to Cloudflare architecture and hub use case pages.',
   learnerOutcomeVi:
     'Chọn được use case phù hợp, mô tả architecture một dòng và biết bước triển khai tiếp theo trên hub.',
+  learnerOutcomeEn:
+    'Pick the right use case, describe architecture in one line, and know the next deployment step on the hub.',
+  suggestedRoleIds: ['sales', 'solution-engineer', 'startup-founder'],
   filterTags: ['foundation', 'performance', 'security', 'developer', 'zero-trust'],
   topics: [
     topic(

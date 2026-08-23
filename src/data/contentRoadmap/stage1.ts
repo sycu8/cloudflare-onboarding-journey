@@ -7,8 +7,13 @@ export const stage1: ContentRoadmapStage = {
   titleEn: 'DNS & Domain Basics',
   descriptionVi:
     'Hiểu domain, bản ghi DNS và cách traffic tìm đến server — nền tảng bắt buộc trước khi onboard zone lên Cloudflare.',
+  descriptionEn:
+    'Domains, DNS records, and how traffic reaches servers — required before onboarding a zone to Cloudflare.',
   learnerOutcomeVi:
     'Đọc được bảng DNS, chọn đúng loại record, hiểu propagation/TTL và phân biệt DNS-only vs proxied trên Cloudflare.',
+  learnerOutcomeEn:
+    'Read DNS tables, pick the right record types, understand propagation/TTL, and distinguish DNS-only vs proxied on Cloudflare.',
+  suggestedRoleIds: ['student', 'it-admin', 'solution-engineer'],
   filterTags: ['foundation', 'dns'],
   topics: [
     topic(

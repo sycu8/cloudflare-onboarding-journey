@@ -7,8 +7,13 @@ export const stage6: ContentRoadmapStage = {
   titleEn: 'Developer Platform Path',
   descriptionVi:
     'Build và deploy trên Cloudflare — Pages, Workers, storage (KV, D1, R2), messaging và AI tại edge.',
+  descriptionEn:
+    'Build and deploy on Cloudflare — Pages, Workers, storage (KV, D1, R2), messaging, and edge AI.',
   learnerOutcomeVi:
     'Chọn đúng storage/compute, deploy app full-stack đơn giản và hiểu binding giữa Workers và dịch vụ Cloudflare.',
+  learnerOutcomeEn:
+    'Pick the right storage/compute, deploy a simple full-stack app, and understand Workers bindings to Cloudflare services.',
+  suggestedRoleIds: ['developer', 'startup-founder'],
   filterTags: ['developer'],
   topics: [
     topic(

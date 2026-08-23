@@ -28,7 +28,7 @@ const firstStepId = roadmap.steps[0]?.id ?? '';
   }}
   description={{
     vi: roadmap.descriptionVi,
-    en: roadmap.descriptionVi,
+    en: roadmap.descriptionEn ?? roadmap.descriptionVi,
   }}
   canonicalPath={`/roadmaps/${roadmap.roleId}`}
   showProgressBar
@@ -42,16 +42,23 @@ const firstStepId = roadmap.steps[0]?.id ?? '';
 
   <header class="mb-6">
     <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={{ vi: roadmap.roleNameVi, en: roadmap.roleNameEn ?? roadmap.roleNameVi }} />
-    <p class="text-muted mt-2 max-w-3xl text-sm leading-relaxed">{roadmap.descriptionVi}</p>
+    <p class="text-muted mt-2 max-w-3xl text-sm leading-relaxed">
+      <span class="lang-vi">{roadmap.descriptionVi}</span>
+      <span class="lang-en">{roadmap.descriptionEn ?? roadmap.descriptionVi}</span>
+    </p>
     <ul class="text-muted mt-3 space-y-1 text-sm">
-      {roadmap.bestForVi.map((item) => (
-        <li>• {item}</li>
+      {roadmap.bestForVi.map((item, i) => (
+        <li>
+          • <span class="lang-vi">{item}</span>
+          <span class="lang-en">{roadmap.bestForEn?.[i] ?? item}</span>
+        </li>
       ))}
     </ul>
     <p class="mt-4 text-sm">
       <span class="font-medium lang-vi">Kết quả cuối: </span>
       <span class="font-medium lang-en">Final outcome: </span>
-      <span class="text-muted">{roadmap.finalOutcomeVi}</span>
+      <span class="text-muted lang-vi">{roadmap.finalOutcomeVi}</span>
+      <span class="text-muted lang-en">{roadmap.finalOutcomeEn ?? roadmap.finalOutcomeVi}</span>
     </p>
     {firstStepId ? (
       <div class="mt-4">

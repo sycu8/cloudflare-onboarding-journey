@@ -8,6 +8,7 @@ import { resources } from '../../data/resources';
 import { tracks } from '../../data/tracks';
 import { useCases } from '../../data/useCases';
 import { roleRoadmaps } from '../../data/roleRoadmaps';
+import { contentRoadmapStages } from '../../data/contentRoadmap';
 import { getAllTutorialPreviews, getTutorialHubPath } from '../../data/tutorialPreviews';
 import type { SearchDocument } from '../../types/search';
 
@@ -89,7 +90,7 @@ export function buildSearchDocuments(): SearchDocument[] {
     },
     {
       href: '/content-roadmap/',
-      title: { vi: 'Content Roadmap', en: 'Content Roadmap' },
+      title: { vi: 'Lộ trình nội dung', en: 'Content Roadmap' },
       description: {
         vi: 'Học từ Internet, DNS, CDN đến Cloudflare — lộ trình từ con số 0.',
         en: 'Learn from Internet, DNS, CDN to Cloudflare — zero-to-hero path.',
@@ -225,11 +226,44 @@ export function buildSearchDocuments(): SearchDocument[] {
         `role-roadmap-${role.roleId}`,
         `/roadmaps/${role.roleId}/`,
         { vi: `Roadmap ${role.roleNameVi}`, en: `${role.roleNameEn ?? role.roleNameVi} roadmap` },
-        { vi: role.descriptionVi, en: role.descriptionVi },
+        { vi: role.descriptionVi, en: role.descriptionEn ?? role.descriptionVi },
         'Role roadmap',
         role.primaryTrack,
       ),
     );
+    for (const step of role.steps) {
+      out.push(
+        doc(
+          `role-week-${step.id}`,
+          `/roadmaps/${role.roleId}/#${step.id}`,
+          {
+            vi: `${role.roleNameVi} — Tuần ${step.week}: ${step.titleVi}`,
+            en: `${role.roleNameEn ?? role.roleNameVi} — Week ${step.week}: ${step.titleEn ?? step.titleVi}`,
+          },
+          {
+            vi: step.objectiveVi,
+            en: step.objectiveEn ?? step.objectiveVi,
+          },
+          'Role roadmap',
+          `${role.roleId} week-${step.week}`,
+        ),
+      );
+    }
+  }
+
+  for (const stage of contentRoadmapStages) {
+    for (const topic of stage.topics) {
+      out.push(
+        doc(
+          `content-topic-${topic.id}`,
+          `/content-roadmap/#${topic.id}`,
+          { vi: topic.titleVi, en: topic.titleEn ?? topic.titleVi },
+          { vi: topic.summaryVi, en: topic.summaryEn ?? topic.summaryVi },
+          'Content Roadmap',
+          topic.filterTags.join(' '),
+        ),
+      );
+    }
   }
 
   for (const resource of resources) {

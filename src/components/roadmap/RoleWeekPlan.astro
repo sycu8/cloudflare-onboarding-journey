@@ -1,5 +1,7 @@
 ---
 import type { RoleRoadmapStep } from '../../types/roadmap';
+import { getHubLinkLabel } from '../../data/roadmapHubLinks';
+import { getTutorialDisplayTitle, getTutorialPreviewByPath } from '../../data/tutorialPreviews';
 
 type Props = {
   step: RoleRoadmapStep;
@@ -7,6 +9,14 @@ type Props = {
 };
 
 const { step, done = false } = Astro.props;
+
+const tutorialLinks = (step.tutorialPaths ?? []).map((path) => {
+  const preview = getTutorialPreviewByPath(path);
+  const titleVi = preview ? getTutorialDisplayTitle(preview, 'vi') : path;
+  const titleEn = preview ? getTutorialDisplayTitle(preview, 'en') : path;
+  const hubPath = `/tutorials/${path.replace(/^\//, '').replace(/\/$/, '')}/`;
+  return { hubPath, titleVi, titleEn };
+});
 ---
 
 <article class="card space-y-4" id={step.id} data-role-week={step.week}>
@@ -30,7 +40,7 @@ const { step, done = false } = Astro.props;
     </h3>
     <p class="text-muted mt-2 text-sm">
       <span class="lang-vi">{step.objectiveVi}</span>
-      <span class="lang-en">{step.objectiveVi}</span>
+      <span class="lang-en">{step.objectiveEn ?? step.objectiveVi}</span>
     </p>
   </div>
 
@@ -53,9 +63,34 @@ const { step, done = false } = Astro.props;
         <span class="lang-en">Hub links</span>
       </p>
       <ul class="mt-2 flex flex-wrap gap-2 text-xs">
-        {step.existingRoutes.map((href) => (
+        {step.existingRoutes.map((href) => {
+          const label = getHubLinkLabel(href);
+          return (
+            <li>
+              <a class="link" href={href}>
+                <span class="lang-vi">{label.vi}</span>
+                <span class="lang-en">{label.en}</span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  ) : null}
+
+  {tutorialLinks.length ? (
+    <div>
+      <p class="text-sm font-medium">
+        <span class="lang-vi">Ví dụ triển khai gợi ý</span>
+        <span class="lang-en">Suggested deployment tutorials</span>
+      </p>
+      <ul class="mt-2 space-y-1.5 text-sm">
+        {tutorialLinks.map((t) => (
           <li>
-            <a class="link" href={href}>{href}</a>
+            <a class="link" href={t.hubPath}>
+              <span class="lang-vi">{t.titleVi}</span>
+              <span class="lang-en">{t.titleEn}</span>
+            </a>
           </li>
         ))}
       </ul>
@@ -82,8 +117,11 @@ const { step, done = false } = Astro.props;
       <span class="lang-en">Exercises</span>
     </p>
     <ul class="text-muted mt-2 list-disc space-y-1 pl-5 text-sm">
-      {step.exercisesVi.map((ex) => (
-        <li>{ex}</li>
+      {step.exercisesVi.map((ex, i) => (
+        <li>
+          <span class="lang-vi">{ex}</span>
+          <span class="lang-en">{step.exercisesEn?.[i] ?? ex}</span>
+        </li>
       ))}
     </ul>
   </div>
@@ -91,7 +129,8 @@ const { step, done = false } = Astro.props;
   <p class="text-sm">
     <span class="font-medium lang-vi">Kết quả tuần: </span>
     <span class="font-medium lang-en">Week outcome: </span>
-    <span class="text-muted">{step.expectedOutcomeVi}</span>
+    <span class="text-muted lang-vi">{step.expectedOutcomeVi}</span>
+    <span class="text-muted lang-en">{step.expectedOutcomeEn ?? step.expectedOutcomeVi}</span>
   </p>
 
   {step.sourceUrls.length ? (

@@ -37,3 +37,18 @@ export function getStageMinutes(stage: ContentRoadmapStage) {
 export function getTotalTopicCount() {
   return contentRoadmapStages.reduce((sum, s) => sum + s.topics.length, 0);
 }
+
+export function getContentTopicById(id: string) {
+  for (const stage of contentRoadmapStages) {
+    const topic = stage.topics.find((t) => t.id === id);
+    if (topic) return topic;
+  }
+  return undefined;
+}
+
+export function getContentTopicTitle(id: string, lang: 'vi' | 'en' = 'vi') {
+  const t = getContentTopicById(id);
+  if (!t) return id;
+  if (lang === 'en' && t.titleEn) return t.titleEn;
+  return t.titleVi;
+}

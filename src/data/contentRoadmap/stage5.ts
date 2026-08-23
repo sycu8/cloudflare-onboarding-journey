@@ -7,8 +7,13 @@ export const stage5: ContentRoadmapStage = {
   titleEn: 'Application Services Path',
   descriptionVi:
     'Lộ trình sản phẩm bảo vệ và tăng tốc website, API — từ DNS/CDN đến WAF, bot và SSL/TLS mode.',
+  descriptionEn:
+    'Protect and accelerate websites and APIs — from DNS/CDN to WAF, bots, and SSL/TLS modes.',
   learnerOutcomeVi:
     'Cấu hình được zone cơ bản, cache/WAF rule đầu tiên, hiểu SSL mode và bảo vệ origin cho app đã có sẵn.',
+  learnerOutcomeEn:
+    'Configure a basic zone, first cache/WAF rules, SSL modes, and origin protection for an existing app.',
+  suggestedRoleIds: ['sales', 'solution-engineer', 'it-admin'],
   filterTags: ['dns', 'performance', 'security'],
   topics: [
     topic(
