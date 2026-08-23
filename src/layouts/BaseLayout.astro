@@ -10,8 +10,8 @@ import { siteSeo, formatTitle } from '../lib/seo';
 const faviconHref = assetUrl('favicon.svg');
 
 type Props = {
-  title: { vi: string; en: string };
-  description: { vi: string; en: string };
+  title: { vi: string; en: string; km?: string };
+  description: { vi: string; en: string; km?: string };
   canonicalPath?: string;
   showProgressBar?: boolean;
   /** Override default OG image for this page */
@@ -36,6 +36,8 @@ const siteOrigin = Astro.site ?? siteSeo.origin;
 const canonical = new URL(canonicalPath ?? Astro.url.pathname, siteOrigin);
 const titleVi = formatTitle(title.vi, siteName);
 const titleEn = formatTitle(title.en, siteName);
+const titleKm = formatTitle(title.km ?? title.en, siteName);
+const descKm = description.km ?? description.en;
 const imageUrl = new URL(ogImage ?? siteSeo.defaultImage, siteOrigin).href;
 ---
 
@@ -44,8 +46,10 @@ const imageUrl = new URL(ogImage ?? siteSeo.defaultImage, siteOrigin).href;
   data-lang="vi"
   data-seo-title-vi={titleVi}
   data-seo-title-en={titleEn}
+  data-seo-title-km={titleKm}
   data-seo-desc-vi={description.vi}
   data-seo-desc-en={description.en}
+  data-seo-desc-km={descKm}
 >
   <head>
     <meta charset="utf-8" />
@@ -57,8 +61,9 @@ const imageUrl = new URL(ogImage ?? siteSeo.defaultImage, siteOrigin).href;
 
     <link rel="stylesheet" href="/styles/site.css" />
     <style is:inline>
-      html[data-lang='en'] .lang-vi{display:none!important}
+      html:not([data-lang='vi']) .lang-vi{display:none!important}
       html:not([data-lang='en']) .lang-en{display:none!important}
+      html:not([data-lang='km']) .lang-km{display:none!important}
     </style>
 
     <style is:global>
@@ -126,13 +131,13 @@ const imageUrl = new URL(ogImage ?? siteSeo.defaultImage, siteOrigin).href;
 
     <slot name="head" />
 
-    <script is:inline define:vars={{ titleVi, titleEn, descriptionVi: description.vi, descriptionEn: description.en }}>
+    <script is:inline define:vars={{ titleVi, titleEn, titleKm, descriptionVi: description.vi, descriptionEn: description.en, descriptionKm: descKm }}>
       (function () {
-        var pageTitle = { vi: titleVi, en: titleEn };
-        var pageDesc = { vi: descriptionVi, en: descriptionEn };
+        var pageTitle = { vi: titleVi, en: titleEn, km: titleKm };
+        var pageDesc = { vi: descriptionVi, en: descriptionEn, km: descriptionKm };
         try {
           var lang = localStorage.getItem('cfhub_language');
-          if (lang !== 'en') lang = 'vi';
+          if (lang !== 'en' && lang !== 'km') lang = 'vi';
           document.documentElement.dataset.lang = lang;
           document.documentElement.lang = lang;
           document.title = pageTitle[lang] || pageTitle.vi;
