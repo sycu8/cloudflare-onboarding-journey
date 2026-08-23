@@ -6,8 +6,8 @@ import {
   cloudflareResourceTrackLabels,
 } from '../../data/cloudflareResources';
 import {
+  getResourceDisplaySummary,
   getTutorialHubPath,
-  getTutorialPreviewForResource,
   getTutorialTitleForResource,
 } from '../../data/tutorialPreviews';
 
@@ -15,10 +15,12 @@ type Props = { resource: CloudflareResource; compact?: boolean };
 const { resource, compact = false } = Astro.props;
 const typeLabel = cloudflareResourceContentTypeLabels[resource.contentType];
 const trackLabel = cloudflareResourceTrackLabels[resource.track];
-const preview = getTutorialPreviewForResource(resource);
 const hubPath = getTutorialHubPath(resource);
 const isTutorialLike =
   resource.contentType === 'Tutorial' || resource.contentType === 'Solution guide';
+const summaryVi = getResourceDisplaySummary(resource, 'vi');
+const summaryEn = getResourceDisplaySummary(resource, 'en');
+const summaryKm = getResourceDisplaySummary(resource, 'km');
 ---
 
 <article class:list={['card flex h-full flex-col', compact ? 'p-4' : 'p-5']}>
@@ -34,22 +36,24 @@ const isTutorialLike =
         <span class="lang-km">{getTutorialTitleForResource(resource, 'km')}</span>
       </a>
     ) : (
-      resource.title
+      <>
+        <span class="lang-vi">{getTutorialTitleForResource(resource, 'vi')}</span>
+        <span class="lang-en">{getTutorialTitleForResource(resource, 'en')}</span>
+        <span class="lang-km">{getTutorialTitleForResource(resource, 'km')}</span>
+      </>
     )}
   </h3>
-  {preview?.summaryVi ? (
-    <p class="lang-vi mt-2 flex-1 text-xs leading-relaxed opacity-90 line-clamp-3">{preview.summaryVi}</p>
+  {summaryVi ? (
+    <p class="lang-vi mt-2 flex-1 text-xs leading-relaxed opacity-90 line-clamp-3">{summaryVi}</p>
   ) : null}
-  {preview?.summaryEn ? (
-    <p class="lang-en text-muted mt-2 flex-1 text-xs leading-relaxed opacity-80 line-clamp-3">{preview.summaryEn}</p>
+  {summaryEn ? (
+    <p class="lang-en text-muted mt-2 flex-1 text-xs leading-relaxed opacity-80 line-clamp-3">{summaryEn}</p>
   ) : null}
-  {preview?.summaryKm ? (
-    <p class="lang-km text-muted mt-2 flex-1 text-xs leading-relaxed opacity-80 line-clamp-3">{preview.summaryKm}</p>
-  ) : preview?.summaryEn ? (
-    <p class="lang-km text-muted mt-2 flex-1 text-xs leading-relaxed opacity-80 line-clamp-3">{preview.summaryEn}</p>
-  ) : (
+  {summaryKm ? (
+    <p class="lang-km text-muted mt-2 flex-1 text-xs leading-relaxed opacity-80 line-clamp-3">{summaryKm}</p>
+  ) : !summaryEn && !summaryVi ? (
     <p class="lang-en lang-km text-muted mt-2 flex-1 text-xs break-all opacity-80">{resource.path}</p>
-  )}
+  ) : null}
   <a
     class="btn btn-primary mt-4 w-full justify-center text-sm"
     href={isTutorialLike ? hubPath : resource.url}

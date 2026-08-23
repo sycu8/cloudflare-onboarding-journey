@@ -7420,6 +7420,11 @@
     },
     "complete": true
   },
+  "/workers/tutorials/deploy-an-express-app": {
+    "titleKm": "ដាក់កម្មវិធី Express.js លើ Cloudflare Workers",
+    "summaryKm": "រៀនរបៀបដាក់កម្មវិធី Express.js លើ Cloudflare Workers។",
+    "introKm": "រៀនរបៀបដាក់កម្មវិធី Express.js លើ Cloudflare Workers។"
+  },
   "/workers/tutorials/build-a-jamstack-app": {
     "titleKm": "បង្កើតបញ្ជីការងារត្រូវធ្វើ Jamstack",
     "summaryKm": "ការបង្រៀននេះពន្យល់ពីរបៀបបង្កើតកម្មវិធីបញ្ជីការងារត្រូវធ្វើដោយប្រើ HTML, CSS និង JavaScript ។",

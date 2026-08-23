@@ -1,6 +1,9 @@
 import type { CloudflareResource } from './cloudflareResources';
 import { applyTutorialKm } from './tutorialPreviews/applyTutorialKm';
 import previewsJson from './tutorialPreviews.data.json';
+import { getDiagramBySlug } from './referenceDiagrams';
+import { pickLocalizedText } from '../i18n';
+import type { Language } from '../i18n/types';
 
 export type TutorialContentBlock =
   | { type: 'paragraph'; html: string; htmlKm?: string }
@@ -120,9 +123,26 @@ export function getTutorialSectionSummaryEn(
 
 export function getTutorialTitleForResource(
   resource: CloudflareResource,
-  lang: 'vi' | 'en' | 'km' = 'vi',
+  lang: Language = 'vi',
 ): string {
   const preview = getTutorialPreviewForResource(resource);
   if (preview) return getTutorialDisplayTitle(preview, lang);
+  const diagram = getDiagramBySlug(resource.slug);
+  if (diagram) return pickLocalizedText(diagram.title, lang);
   return resource.title;
+}
+
+export function getResourceDisplaySummary(
+  resource: CloudflareResource,
+  lang: Language,
+): string | undefined {
+  const preview = getTutorialPreviewForResource(resource);
+  if (preview) {
+    if (lang === 'vi' && preview.summaryVi) return preview.summaryVi;
+    if (lang === 'km' && preview.summaryKm) return preview.summaryKm;
+    return preview.summaryEn;
+  }
+  const diagram = getDiagramBySlug(resource.slug);
+  if (diagram) return pickLocalizedText(diagram.summary, lang);
+  return undefined;
 }

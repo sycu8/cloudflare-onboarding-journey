@@ -35,21 +35,33 @@ export const cloudflareResourceContentTypeLabels: Record<
   CloudflareResourceContentType,
   LocalizedString
 > = {
-  'Design guide': { vi: 'Hướng dẫn thiết kế', en: 'Design guide' },
-  'Learning path': { vi: 'Lộ trình học', en: 'Learning path' },
-  'Reference architecture': { vi: 'Kiến trúc tham chiếu', en: 'Reference architecture' },
-  'Reference architecture diagram': { vi: 'Sơ đồ kiến trúc', en: 'Reference architecture diagram' },
-  'Solution guide': { vi: 'Hướng dẫn giải pháp', en: 'Solution guide' },
-  Tutorial: { vi: 'Tutorial', en: 'Tutorial' },
-  Video: { vi: 'Video', en: 'Video' },
+  'Design guide': { vi: 'Hướng dẫn thiết kế', en: 'Design guide', km: 'មគ្គុទ្ទេសករណ៍រចនា' },
+  'Learning path': { vi: 'Lộ trình học', en: 'Learning path', km: 'ផ្លូវសិក្សា' },
+  'Reference architecture': { vi: 'Kiến trúc tham chiếu', en: 'Reference architecture', km: 'ស្ថាបត្យកម្មយោង' },
+  'Reference architecture diagram': {
+    vi: 'Sơ đồ kiến trúc',
+    en: 'Reference architecture diagram',
+    km: 'គំនូសស្ថាបត្យកម្មយោង',
+  },
+  'Solution guide': { vi: 'Hướng dẫn giải pháp', en: 'Solution guide', km: 'មគ្គុទ្ទេសករណ៍ដំណោះស្រាយ' },
+  Tutorial: { vi: 'Tutorial', en: 'Tutorial', km: 'Tutorial' },
+  Video: { vi: 'Video', en: 'Video', km: 'វីដេអូ' },
 };
 
 export const cloudflareResourceTrackLabels: Record<CloudflareResourceTrack, LocalizedString> = {
-  'application-services': { vi: 'Application Services', en: 'Application Services' },
-  'developer-platform': { vi: 'Developer Platform', en: 'Developer Platform' },
-  'cloudflare-one': { vi: 'Cloudflare One', en: 'Cloudflare One' },
-  'operational-excellence': { vi: 'Operational Excellence', en: 'Operational Excellence' },
-  'cross-cutting': { vi: 'Chung / đa lĩnh vực', en: 'Cross-cutting' },
+  'application-services': {
+    vi: 'Application Services',
+    en: 'Application Services',
+    km: 'Application Services',
+  },
+  'developer-platform': { vi: 'Developer Platform', en: 'Developer Platform', km: 'Developer Platform' },
+  'cloudflare-one': { vi: 'Cloudflare One', en: 'Cloudflare One', km: 'Cloudflare One' },
+  'operational-excellence': {
+    vi: 'Operational Excellence',
+    en: 'Operational Excellence',
+    km: 'Operational Excellence',
+  },
+  'cross-cutting': { vi: 'Chung / đa lĩnh vực', en: 'Cross-cutting', km: 'ឆ្លងកាត់ / ពហុវិស័យ' },
 };
 
 export function getResourcesByTrack(track: CloudflareResourceTrack): CloudflareResource[] {

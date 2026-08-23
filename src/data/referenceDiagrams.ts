@@ -146,6 +146,17 @@ const viTitleOverlay: Record<string, string> = {
   'storing-user-generated-content': 'Lưu nội dung do người dùng tạo',
 };
 
+/** Khmer titles for featured / homepage deployment diagram cards. */
+const kmTitleOverlay: Record<string, string> = {
+  'protecting-sp-networks-from-ddos':
+    'ការពារបណ្តាញ ISP និងទូរគមនាគមន៍ពីការវាយប្រហារ DDoS',
+};
+
+const kmSummaryOverlay: Record<string, string> = {
+  'protecting-sp-networks-from-ddos':
+    'របៀបដែលអ្នកផ្តល់សេវាអ៊ីនធឺណិត (ISP) និងក្រុមហ៊ុនទូរគមនាគមន៍ការពារបណ្តាញពីការវាយប្រហារ DDoS។',
+};
+
 const viSummaryOverlay: Record<string, string> = {
   'ai-asset-creation':
     'Hệ thống AI kết hợp mô hình sinh văn bản và text-to-image để tạo hình từ text — sinh prompt, kiểm duyệt nội dung và xuất ảnh cho nhiều ứng dụng.',
@@ -325,10 +336,11 @@ function toDiagram(raw: RawDiagram): ReferenceDiagram {
     slug: raw.slug,
     category,
     categoryLabel: diagramCategoryLabels[category] ?? { vi: category, en: category },
-    title: { vi: viTitle, en: raw.title },
+    title: { vi: viTitle, en: raw.title, km: kmTitleOverlay[raw.slug] },
     summary: {
       vi: viSummaryOverlay[raw.slug] ?? raw.desc,
       en: raw.desc,
+      km: kmSummaryOverlay[raw.slug],
     },
     concepts: conceptOverlay[raw.slug] ?? [],
     pageUrl: raw.pageUrl,
