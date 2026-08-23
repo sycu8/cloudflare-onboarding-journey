@@ -8,12 +8,12 @@ type Props = {
 
 const { lesson } = Astro.props;
 
-const roleLabel: Record<FollowAlongRole, { vi: string; en: string }> = {
-  required: { vi: 'Bắt buộc', en: 'Required' },
-  recommended: { vi: 'Khuyến nghị', en: 'Recommended' },
-  optional: { vi: 'Tùy chọn', en: 'Optional' },
-  'deep-dive': { vi: 'Đi sâu', en: 'Deep-dive' },
-  reference: { vi: 'Tham chiếu', en: 'Reference' },
+const roleLabel: Record<FollowAlongRole, { vi: string; en: string; km: string }> = {
+  required: { vi: 'Bắt buộc', en: 'Required', km: 'ចាំបាច់' },
+  recommended: { vi: 'Khuyến nghị', en: 'Recommended', km: 'ណែនាំ' },
+  optional: { vi: 'Tùy chọn', en: 'Optional', km: 'ស្រេចចិត្ត' },
+  'deep-dive': { vi: 'Đi sâu', en: 'Deep-dive', km: 'សិក្សាស៊ីជម្រៅ' },
+  reference: { vi: 'Tham chiếu', en: 'Reference', km: 'ឯកសារយោង' },
 };
 ---
 
@@ -23,34 +23,34 @@ const roleLabel: Record<FollowAlongRole, { vi: string; en: string }> = {
       <span class="badge badge-accent">
         <span class="lang-vi">{roleLabel[lesson.role].vi}</span>
         <span class="lang-en">{roleLabel[lesson.role].en}</span>
-        <span class="lang-km">{roleLabel[lesson.role].en}</span>
+        <span class="lang-km">{roleLabel[lesson.role].km}</span>
       </span>
     </div>
     <table class="follow-along-meta w-full text-sm">
       <tbody>
         <tr>
-          <th><span class="lang-vi">Mục tiêu</span><span class="lang-en">Goal</span></th>
+          <th><span class="lang-vi">Mục tiêu</span><span class="lang-en">Goal</span><span class="lang-km">គោលដៅ</span></th>
           <td><LangText text={lesson.goal} /></td>
         </tr>
         <tr>
-          <th><span class="lang-vi">Ai làm</span><span class="lang-en">Who does this</span></th>
+          <th><span class="lang-vi">Ai làm</span><span class="lang-en">Who does this</span><span class="lang-km">អ្នកធ្វើ</span></th>
           <td><LangText text={lesson.who} /></td>
         </tr>
         <tr>
-          <th><span class="lang-vi">Thời gian</span><span class="lang-en">Time</span></th>
+          <th><span class="lang-vi">Thời gian</span><span class="lang-en">Time</span><span class="lang-km">រយៈពេល</span></th>
           <td><LangText text={lesson.time} /></td>
         </tr>
         <tr>
-          <th><span class="lang-vi">Kết thúc bạn sẽ có</span><span class="lang-en">You'll finish with</span></th>
+          <th><span class="lang-vi">Kết thúc bạn sẽ có</span><span class="lang-en">You'll finish with</span><span class="lang-km">ពេលបញ្ចប់អ្នកនឹងមាន</span></th>
           <td><LangText text={lesson.finishWith} /></td>
         </tr>
         <tr>
-          <th><span class="lang-vi">Trước khi bắt đầu</span><span class="lang-en">Before you begin</span></th>
+          <th><span class="lang-vi">Trước khi bắt đầu</span><span class="lang-en">Before you begin</span><span class="lang-km">មុនពេលចាប់ផ្តើម</span></th>
           <td><LangText text={lesson.beforeYouBegin} /></td>
         </tr>
         {lesson.planNote ? (
           <tr>
-            <th><span class="lang-vi">Gói / plan</span><span class="lang-en">Plan</span></th>
+            <th><span class="lang-vi">Gói / plan</span><span class="lang-en">Plan</span><span class="lang-km">Plan</span></th>
             <td><LangText text={lesson.planNote} /></td>
           </tr>
         ) : null}
@@ -65,7 +65,7 @@ const roleLabel: Record<FollowAlongRole, { vi: string; en: string }> = {
   ) : null}
 
   <div class="card">
-    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Làm theo từng bước', en: 'Follow along' }} />
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Làm theo từng bước', en: 'Follow along', km: 'ធ្វើតាមជំហាន' }} />
     <ol class="mt-4 space-y-4">
       {lesson.steps.map((step, i) => (
         <li class="rounded-xl border border-[var(--cf-border)] bg-[var(--cf-bg-elevated)]/50 p-4">
@@ -78,6 +78,7 @@ const roleLabel: Record<FollowAlongRole, { vi: string; en: string }> = {
               <span class="font-medium text-[var(--cf-accent)]">
                 <span class="lang-vi">Bạn sẽ thấy: </span>
                 <span class="lang-en">What you'll see: </span>
+                <span class="lang-km">អ្នកនឹងឃើញ៖ </span>
               </span>
               <LangText text={step.see} />
             </p>
@@ -87,6 +88,7 @@ const roleLabel: Record<FollowAlongRole, { vi: string; en: string }> = {
               <span class="font-medium text-[var(--cf-accent)]">
                 <span class="lang-vi">Nhấp: </span>
                 <span class="lang-en">Click: </span>
+                <span class="lang-km">ចុច៖ </span>
               </span>
               <LangText text={step.click} />
             </p>
@@ -96,6 +98,7 @@ const roleLabel: Record<FollowAlongRole, { vi: string; en: string }> = {
               <span class="font-medium text-[var(--cf-accent)]">
                 <span class="lang-vi">Nhập: </span>
                 <span class="lang-en">Enter: </span>
+                <span class="lang-km">បញ្ចូល៖ </span>
               </span>
               <code class="follow-along-code"><LangText text={step.enter} /></code>
             </p>
@@ -105,6 +108,7 @@ const roleLabel: Record<FollowAlongRole, { vi: string; en: string }> = {
               <span class="font-medium text-[var(--cf-accent)]">
                 <span class="lang-vi">Checkpoint: </span>
                 <span class="lang-en">Checkpoint: </span>
+                <span class="lang-km">Checkpoint៖ </span>
               </span>
               <LangText text={step.checkpoint} />
             </p>
@@ -116,7 +120,7 @@ const roleLabel: Record<FollowAlongRole, { vi: string; en: string }> = {
 
   {lesson.watchOuts.length > 0 ? (
     <div class="card">
-      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Cẩn thận', en: 'Watch out' }} />
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Cẩn thận', en: 'Watch out', km: 'ប្រុងប្រយ័ត្ន' }} />
       <ul class="text-muted mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed">
         {lesson.watchOuts.map((item) => (
           <li><LangText text={item} /></li>
@@ -127,7 +131,7 @@ const roleLabel: Record<FollowAlongRole, { vi: string; en: string }> = {
 
   {lesson.tips.length > 0 ? (
     <div class="card">
-      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Mẹo', en: 'Tips' }} />
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Mẹo', en: 'Tips', km: 'គន្លឹះ' }} />
       <ul class="text-muted mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed">
         {lesson.tips.map((item) => (
           <li><LangText text={item} /></li>
@@ -140,6 +144,7 @@ const roleLabel: Record<FollowAlongRole, { vi: string; en: string }> = {
     <p class="text-muted text-xs leading-relaxed">
       <span class="lang-vi">Nguồn sự thật: tài liệu chính thức Cloudflare Developers (diễn giải, không sao chép nguyên văn). Nhãn menu dashboard có thể đổi — chọn mục tương đương gần nhất.</span>
       <span class="lang-en">Source of truth: official Cloudflare Developer docs (paraphrased, not copied verbatim). Dashboard labels shift — follow the nearest equivalent.</span>
+      <span class="lang-km">ប្រភពពិត: official Cloudflare Developer docs (paraphrased)។ Dashboard labels ផ្លាស់ — តាម equivalent ជិតបំផុត។</span>
     </p>
   ) : null}
 </section>

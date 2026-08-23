@@ -10,7 +10,7 @@ const { startHere } = Astro.props;
 ---
 
 <section class="card mb-8">
-  <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Bắt đầu tại đây (START HERE)', en: 'START HERE' }} />
+  <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Bắt đầu tại đây (START HERE)', en: 'START HERE', km: 'ចាប់ផ្តើមនៅទីនេះ (START HERE)' }} />
   <LangText as="p" class="text-muted mt-3 text-sm leading-relaxed whitespace-pre-line" text={startHere.intro} />
 
   <LangText as="h3" class="mt-6 text-base font-semibold" text={startHere.checklistTitle} />
@@ -19,19 +19,20 @@ const { startHere } = Astro.props;
       <li>
         <span class="lang-vi">{item}</span>
         <span class="lang-en">{startHere.checklist.en[i]}</span>
+        <span class="lang-km">{startHere.checklist.km?.[i] ?? startHere.checklist.en[i]}</span>
       </li>
     ))}
   </ul>
 
-  <LangText as="h3" class="mt-6 text-base font-semibold" text={{ vi: 'Gói nào cần cho từng lớp?', en: 'Which plan for each layer?' }} />
+  <LangText as="h3" class="mt-6 text-base font-semibold" text={{ vi: 'Gói nào cần cho từng lớp?', en: 'Which plan for each layer?', km: 'Plan មួយណាសម្រាប់ស្រទាប់នីមួយៗ?' }} />
   <LangText as="p" class="text-muted mt-2 text-sm leading-relaxed" text={startHere.planNote} />
   <div class="mt-4 overflow-x-auto">
     <table class="follow-along-meta w-full text-sm">
       <thead>
         <tr>
-          <th><span class="lang-vi">Khả năng</span><span class="lang-en">Capability</span></th>
+          <th><span class="lang-vi">Khả năng</span><span class="lang-en">Capability</span><span class="lang-km">សមត្ថភាព</span></th>
           <th>Free</th>
-          <th><span class="lang-vi">Pro / Business / Enterprise</span><span class="lang-en">Pro / Business / Enterprise</span></th>
+          <th><span class="lang-vi">Pro / Business / Enterprise</span><span class="lang-en">Pro / Business / Enterprise</span><span class="lang-km">Pro / Business / Enterprise</span></th>
         </tr>
       </thead>
       <tbody>

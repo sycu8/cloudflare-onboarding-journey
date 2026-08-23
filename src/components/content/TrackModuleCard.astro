@@ -2,12 +2,12 @@
 import LangText from '../ui/LangText.astro';
 import type { TrackModule, TrackModuleRole } from '../../data/tracks';
 
-const roleLabel: Record<TrackModuleRole, { vi: string; en: string }> = {
-  required: { vi: 'Bắt buộc', en: 'Required' },
-  recommended: { vi: 'Khuyến nghị', en: 'Recommended' },
-  optional: { vi: 'Tùy chọn', en: 'Optional' },
-  'deep-dive': { vi: 'Đi sâu', en: 'Deep-dive' },
-  reference: { vi: 'Tham chiếu', en: 'Reference' },
+const roleLabel: Record<TrackModuleRole, { vi: string; en: string; km: string }> = {
+  required: { vi: 'Bắt buộc', en: 'Required', km: 'ចាំបាច់' },
+  recommended: { vi: 'Khuyến nghị', en: 'Recommended', km: 'ណែនាំ' },
+  optional: { vi: 'Tùy chọn', en: 'Optional', km: 'ស្រេចចិត្ត' },
+  'deep-dive': { vi: 'Đi sâu', en: 'Deep-dive', km: 'សិក្សាស៊ីជម្រៅ' },
+  reference: { vi: 'Tham chiếu', en: 'Reference', km: 'ឯកសារយោង' },
 };
 
 type Props = {
@@ -24,14 +24,14 @@ const { module, trackSlug } = Astro.props;
       <span class="badge badge-accent">
         <span class="lang-vi">{roleLabel[module.role].vi}</span>
         <span class="lang-en">{roleLabel[module.role].en}</span>
-        <span class="lang-km">{roleLabel[module.role].en}</span>
+        <span class="lang-km">{roleLabel[module.role].km}</span>
       </span>
     ) : null}
     {module.duration ? <span class="badge"><LangText text={module.duration} /></span> : null}
     <span class="badge">
       <span class="lang-vi">{module.lessons.length} bài</span>
       <span class="lang-en">{module.lessons.length} lessons</span>
-      <span class="lang-km">{module.lessons.length} lessons</span>
+      <span class="lang-km">{module.lessons.length} មេរៀន</span>
     </span>
   </div>
 
@@ -55,17 +55,17 @@ const { module, trackSlug } = Astro.props;
                 <span class="font-medium text-[var(--cf-accent)]">
                   <span class="lang-vi">Mẹo: </span>
                   <span class="lang-en">Tip: </span>
-                  <span class="lang-km">Tip:</span>
+                  <span class="lang-km">គន្លឹះ៖ </span>
                 </span>
                 <span class="lang-vi">{lesson.tip.vi}</span>
                 <span class="lang-en">{lesson.tip.en}</span>
-                <span class="lang-km">{lesson.tip.en}</span>
+                <span class="lang-km">{lesson.tip.km ?? lesson.tip.en}</span>
               </p>
             ) : null}
             <a class="link mt-3 inline-block text-sm" href={`/tracks/${trackSlug}/${lessonId}`}>
               <span class="lang-vi">Hướng dẫn chi tiết →</span>
               <span class="lang-en">Detailed guide →</span>
-              <span class="lang-km">Detailed guide →</span>
+              <span class="lang-km">មគ្គុទេសក៍លម្អិត →</span>
             </a>
           </div>
         </div>

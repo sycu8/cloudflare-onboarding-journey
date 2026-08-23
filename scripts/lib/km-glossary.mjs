@@ -63,6 +63,19 @@ export const PROTECTED_TERMS = [
   'Googlebot',
   'PeerPoint',
   'Get started',
+  'Hello World',
+  'API Shield',
+  'Waiting Room',
+  'Load Balancing',
+  'Origin CA',
+  'Full (strict)',
+  'Always Use HTTPS',
+  'workers.dev',
+  'wrangler.jsonc',
+  'create-cloudflare',
+  'C3',
+  'Turnstile',
+  'Authenticated Origin Pulls',
 ];
 
 const sorted = [...PROTECTED_TERMS].sort((a, b) => b.length - a.length);
