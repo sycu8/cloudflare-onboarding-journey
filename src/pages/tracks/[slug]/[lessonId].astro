@@ -14,6 +14,8 @@ import {
 } from '../../../data/trackLessons';
 import { getOnboardingPageForLesson, onboardingHtml } from '../../../data/zeroTrustOnboarding';
 import OnboardingArticle from '../../../components/content/OnboardingArticle.astro';
+import FollowAlongArticle from '../../../components/content/FollowAlongArticle.astro';
+import { getFollowAlongLesson } from '../../../data/followAlongLessons';
 import { getDeploymentExamplesForLesson } from '../../../data/cloudflareResources';
 import { getProductBySlug } from '../../../data/productPages';
 import { tracks } from '../../../data/tracks';
@@ -40,6 +42,7 @@ const relatedProducts = (enrichment.productSlugs ?? [])
   .filter((p): p is NonNullable<ReturnType<typeof getProductBySlug>> => !!p);
 const deploymentExamples = getDeploymentExamplesForLesson(lesson.id);
 const onboardingPage = track.slug === 'cloudflare-one' ? getOnboardingPageForLesson(lesson.id) : undefined;
+const followAlong = !onboardingPage ? getFollowAlongLesson(lesson.id) : undefined;
 ---
 
 <BaseLayout
@@ -67,17 +70,19 @@ const onboardingPage = track.slug === 'cloudflare-one' ? getOnboardingPageForLes
         ·
         <span class="lang-vi"> Bài {lesson.lessonIndex + 1}/{lesson.totalLessonsInModule}</span>
         <span class="lang-en"> Lesson {lesson.lessonIndex + 1}/{lesson.totalLessonsInModule}</span>
-        <span class="lang-km">Lesson {lesson.lessonIndex + 1}/{lesson.totalLessonsInModule}</span>
+        <span class="lang-km"> មេរៀន {lesson.lessonIndex + 1}/{lesson.totalLessonsInModule}</span>
       </span>
     </p>
     <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={lesson.title} />
-    {onboardingPage ? null : (
+    {onboardingPage || followAlong ? null : (
       <LangText as="p" class="text-muted mt-3 max-w-3xl text-sm leading-relaxed" text={lesson.body} />
     )}
   </header>
 
   {onboardingPage ? (
     <OnboardingArticle html={onboardingHtml(onboardingPage)} sourceUrl={onboardingPage.sourceUrl} />
+  ) : followAlong ? (
+    <FollowAlongArticle lesson={followAlong} />
   ) : (
     <>
   {heroImage ? (

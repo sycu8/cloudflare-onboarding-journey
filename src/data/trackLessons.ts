@@ -1,5 +1,6 @@
 import type { LocalizedString } from '../i18n/types';
 import { tracks, type Track, type TrackLesson, type TrackModule } from './tracks';
+import { getFollowAlongLesson } from './followAlongLessons';
 import { getDiagramBySlug } from './referenceDiagrams';
 import type { ReferenceDiagram } from './referenceDiagrams';
 import { trackLessonBestPractices, type BestPracticeNote } from './trackLessonBestPractices';
@@ -93,6 +94,19 @@ export function getAdjacentLessons(
 /** Per-lesson enrichment: steps, docs, API, diagrams. */
 export const trackLessonEnrichment: Record<string, TrackLessonEnrichment> = {
   // ── Application Services ──
+  'as-0-l1': {
+    steps: {
+      vi: ['Đọc kiến trúc Visitor → proxy → SSL → WAF → cache → Origin.', 'Ghi bốn quyết định trước Add a site.'],
+      en: ['Read Visitor → proxy → SSL → WAF → cache → Origin.', 'Write four decisions before Add a site.'],
+    },
+    deepDive: {
+      vi: 'Proxy tắt thì WAF và cache không chạy. Use case là cửa chọn, không phải bước 1.',
+      en: 'With proxy off, WAF and cache do not run. Use cases are the doorway, not step 1.',
+    },
+    docsLinks: [],
+    diagramSlugs: ['distributed-web-performance-architecture'],
+    productSlugs: ['dns', 'proxy', 'waf'],
+  },
   'as-1-l1': {
     steps: {
       vi: [
@@ -378,78 +392,125 @@ export const trackLessonEnrichment: Record<string, TrackLessonEnrichment> = {
     ],
     productSlugs: ['web-analytics', 'cache'],
   },
+  'as-5-l1': {
+    steps: {
+      vi: ['Bypass cache /api nếu response theo user.', 'WAF + rate limit /api.', 'API Shield schema/mTLS nếu plan có.'],
+      en: ['Bypass cache on /api if responses are per-user.', 'WAF + rate limit /api.', 'API Shield schema/mTLS if the plan includes it.'],
+    },
+    deepDive: {
+      vi: 'Không có Enterprise: WAF + origin lockdown vẫn là lớp API hợp lệ.',
+      en: 'Without Enterprise: WAF + origin lockdown is still a valid API layer.',
+    },
+    docsLinks: [],
+    productSlugs: ['waf'],
+  },
+  'as-6-l1': {
+    steps: {
+      vi: ['LB: monitor /health, pool, failover lab.', 'DDoS khi Proxied.', 'Waiting Room đúng path event.'],
+      en: ['LB: /health monitor, pool, lab failover.', 'DDoS when Proxied.', 'Waiting Room on the event path only.'],
+    },
+    deepDive: {
+      vi: 'Một origin ổn — chưa cần mua Load Balancing.',
+      en: 'One stable origin — you do not need to buy Load Balancing yet.',
+    },
+    docsLinks: [],
+    diagramSlugs: ['bot-management'],
+    productSlugs: ['waf'],
+  },
+  'as-7-l1': {
+    steps: { vi: ['Review 10 golden rules với team.'], en: ['Review the 10 golden rules with the team.'] },
+    deepDive: {
+      vi: 'Một thay đổi mỗi lần, có rollback.',
+      en: 'One change at a time, with rollback.',
+    },
+    docsLinks: [],
+  },
+  'as-7-l2': {
+    steps: { vi: ['Mở runbook khi ngồi trong dashboard.'], en: ['Open the runbook while you sit in the dashboard.'] },
+    deepDive: {
+      vi: 'Nhãn menu đổi; path gần nhất.',
+      en: 'Menu labels shift; use the nearest path.',
+    },
+    docsLinks: [],
+  },
   // ── Developer Platform ──
+  'dp-0-l1': {
+    steps: {
+      vi: ['App mới → Worker. Git site → Pages. AI sau storage.'],
+      en: ['New app → Worker. Git site → Pages. AI after storage.'],
+    },
+    deepDive: {
+      vi: 'Hub này là Pages + Functions — không phải template API mới.',
+      en: 'This hub is Pages + Functions — not a new-API template.',
+    },
+    docsLinks: [],
+    diagramSlugs: ['fullstack-application', 'serverless-global-apis'],
+    productSlugs: ['workers'],
+  },
   'dp-1-l1': {
     steps: {
       vi: [
-        'Dashboard → Workers & Pages → Create → Pages → Connect Git.',
-        'Chọn repo, branch production (main), framework preset (Astro/React…).',
-        'Deploy lần đầu — kiểm tra URL *.pages.dev.',
-        'Mở PR test — xác nhận preview deployment URL.',
+        'npm create cloudflare@latest -- my-first-worker (Hello World, Worker only).',
+        'npx wrangler login && npx wrangler dev — http://localhost:8787.',
+        'npx wrangler deploy — curl URL *.workers.dev.',
       ],
       en: [
-        'Dashboard → Workers & Pages → Create → Pages → Connect Git.',
-        'Pick repo, production branch (main), framework preset (Astro/React…).',
-        'First deploy — verify *.pages.dev URL.',
-        'Open a test PR — confirm preview deployment URL.',
+        'npm create cloudflare@latest -- my-first-worker (Hello World, Worker only).',
+        'npx wrangler login && npx wrangler dev — http://localhost:8787.',
+        'npx wrangler deploy — curl the *.workers.dev URL.',
       ],
     },
     deepDive: {
-      vi: 'Pages = hosting + CI tích hợp. Preview URL mỗi PR là workflow review không cần staging server riêng.',
-      en: 'Pages = hosting + built-in CI. Per-PR preview URLs replace separate staging servers for reviews.',
+      vi: 'On-ramp 2026 là C3 + Wrangler, không phải Pages Git.',
+      en: 'The 2026 on-ramp is C3 + Wrangler, not Pages Git.',
     },
     docsLinks: [
-      { label: { vi: 'Pages Git integration', en: 'Pages Git integration' }, url: 'https://developers.cloudflare.com/pages/get-started/git-integration/' },
-      { label: { vi: 'Direct Upload / Wrangler', en: 'Direct Upload / Wrangler' }, url: 'https://developers.cloudflare.com/pages/get-started/direct-upload/' },
+      { label: { vi: 'Workers get started', en: 'Workers get started' }, url: 'https://developers.cloudflare.com/workers/get-started/guide/' },
     ],
     diagramSlugs: ['fullstack-application'],
-    productSlugs: ['pages'],
+    productSlugs: ['workers'],
   },
   'dp-1-l2': {
     steps: {
       vi: [
-        'Settings → Builds: `npm run build`, output `dist` (hoặc `build`).',
-        'Thêm Environment variables: API_URL, PUBLIC_* cho build.',
-        'Node version ≥ 18 trong build config.',
-        'Re-deploy sau khi sửa env — build log phải pass.',
+        'Đọc wrangler.jsonc: name, main, compatibility_date.',
+        'Thêm vars không mật; `npx wrangler secret put API_TOKEN`.',
+        'Không đưa key vào PUBLIC_* hoặc git.',
       ],
       en: [
-        'Settings → Builds: `npm run build`, output `dist` (or `build`).',
-        'Add environment variables: API_URL, PUBLIC_* for build.',
-        'Node version ≥ 18 in build config.',
-        'Re-deploy after env changes — build log must pass.',
+        'Read wrangler.jsonc: name, main, compatibility_date.',
+        'Add non-secret vars; `npx wrangler secret put API_TOKEN`.',
+        'Do not put keys in PUBLIC_* or git.',
       ],
     },
     deepDive: {
-      vi: 'Sai output directory là lỗi #1 Pages — Astro dùng `dist`, Create React App dùng `build`.',
-      en: 'Wrong output directory is the #1 Pages mistake — Astro uses `dist`, CRA uses `build`.',
+      vi: 'wrangler.jsonc là source of truth — đừng sửa cùng field trên dashboard.',
+      en: 'wrangler.jsonc is the source of truth — do not edit the same fields in the dashboard.',
     },
     docsLinks: [
-      { label: { vi: 'Build configuration', en: 'Build configuration' }, url: 'https://developers.cloudflare.com/pages/configuration/build-configuration/' },
+      { label: { vi: 'Wrangler configuration', en: 'Wrangler configuration' }, url: 'https://developers.cloudflare.com/workers/wrangler/configuration/' },
     ],
-    productSlugs: ['pages'],
+    productSlugs: ['workers'],
   },
   'dp-2-l1': {
     steps: {
       vi: [
-        'Tạo thư mục `functions/` cạnh output static.',
-        'Thêm `functions/api/hello.ts` export `onRequestGet`.',
-        'Deploy — gọi `https://<site>/api/hello`.',
-        'Binding D1/KV trong Pages project settings nếu cần.',
+        'Workers & Pages → Create → Pages → Connect Git.',
+        'npm run build, output dist, Node 18+.',
+        'Mở PR — xác nhận preview URL.',
       ],
       en: [
-        'Create a `functions/` folder beside static output.',
-        'Add `functions/api/hello.ts` exporting `onRequestGet`.',
-        'Deploy — call `https://<site>/api/hello`.',
-        'Bind D1/KV in Pages project settings if needed.',
+        'Workers & Pages → Create → Pages → Connect Git.',
+        'npm run build, output dist, Node 18+.',
+        'Open a PR — confirm the preview URL.',
       ],
     },
     deepDive: {
-      vi: 'Pages Functions chạy trên Workers runtime — API gắn với site, không cần server riêng.',
-      en: 'Pages Functions run on the Workers runtime — APIs colocated with your site, no separate server.',
+      vi: 'Pages là đường tương thích cho Git site. App mới: Worker (dp-1).',
+      en: 'Pages is the compatibility path for Git sites. New apps: Worker (dp-1).',
     },
     docsLinks: [
-      { label: { vi: 'Pages Functions', en: 'Pages Functions' }, url: 'https://developers.cloudflare.com/pages/functions/' },
+      { label: { vi: 'Pages Git integration', en: 'Pages Git integration' }, url: 'https://developers.cloudflare.com/pages/get-started/git-integration/' },
     ],
     diagramSlugs: ['fullstack-application', 'serverless-global-apis'],
     productSlugs: ['pages', 'workers'],
@@ -741,6 +802,28 @@ export const trackLessonEnrichment: Record<string, TrackLessonEnrichment> = {
     ],
     diagramSlugs: ['enterprise-ai-agent-workspace'],
     productSlugs: ['agents', 'durable-objects'],
+  },
+  'dp-6-l1': {
+    steps: {
+      vi: ['Chọn đúng một: DO, Queues, Workflows, hoặc Hyperdrive.', 'Lab một sản phẩm; ba cái kia để sau.'],
+      en: ['Pick exactly one: DO, Queues, Workflows, or Hyperdrive.', 'Lab one product; leave the other three for later.'],
+    },
+    deepDive: {
+      vi: 'Hyperdrive không thay D1. Optional thường cần Workers Paid.',
+      en: 'Hyperdrive does not replace D1. Optional products usually need Workers Paid.',
+    },
+    docsLinks: [],
+    productSlugs: ['durable-objects'],
+  },
+  'dp-7-l1': {
+    steps: { vi: ['Review 10 golden rules trước khi ship AI.'], en: ['Review the 10 golden rules before shipping AI.'] },
+    deepDive: { vi: 'Worker-first; secret không lên client.', en: 'Worker-first; secrets stay off the client.' },
+    docsLinks: [],
+  },
+  'dp-7-l2': {
+    steps: { vi: ['Copy lệnh C3 / wrangler / D1 / R2 / tail.'], en: ['Copy C3 / wrangler / D1 / R2 / tail commands.'] },
+    deepDive: { vi: 'Gắn custom domain sau khi workers.dev ổn.', en: 'Attach a custom domain after workers.dev is healthy.' },
+    docsLinks: [],
   },
   // ── Cloudflare One (aligned with zerotrust.cfsase.workers.dev) ──
   'c1-1-l1': {
@@ -1358,7 +1441,18 @@ export function getLessonEnrichment(lesson: FlatTrackLesson): TrackLessonEnrichm
     trackLessonEnrichment[lesson.id] ??
     buildDefaultEnrichment(lesson, tracks.find((t) => t.slug === lesson.trackSlug)!);
   const bestPracticeNote = trackLessonBestPractices[lesson.id];
-  return bestPracticeNote ? { ...base, bestPracticeNote } : base;
+  const followAlong = getFollowAlongLesson(lesson.id);
+  const followDocs =
+    followAlong?.officialDocs.map((doc) => ({ label: doc.label, url: doc.url })) ?? [];
+  const docsLinks = [
+    ...base.docsLinks,
+    ...followDocs.filter((doc) => !base.docsLinks.some((existing) => existing.url === doc.url)),
+  ];
+  return {
+    ...base,
+    docsLinks,
+    ...(bestPracticeNote ? { bestPracticeNote } : {}),
+  };
 }
 
 export function getLessonDiagrams(lesson: FlatTrackLesson): ReferenceDiagram[] {

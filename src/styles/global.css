@@ -346,6 +346,27 @@ html.dark .badge-accent {
   display: none;
 }
 
+.follow-along-meta th,
+.follow-along-meta td {
+  border-bottom: 1px solid var(--cf-border);
+  padding: 0.65rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+.follow-along-meta th {
+  width: 11rem;
+  font-weight: 600;
+  color: var(--cf-text);
+}
+.follow-along-meta td,
+.follow-along-meta th:not(:first-child) {
+  color: var(--cf-text-muted);
+}
+.follow-along-code {
+  font-size: 0.85em;
+  word-break: break-all;
+}
+
 .tutorial-body :global(strong) {
   color: var(--cf-text);
   font-weight: 600;

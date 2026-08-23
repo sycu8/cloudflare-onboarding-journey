@@ -40,6 +40,7 @@ import DemoVignetteList from '../../components/interactive/DemoVignetteList';
 import ReferenceDiagramFigure from '../../components/content/ReferenceDiagramFigure.astro';
 import OnboardingSourceFigures from '../../components/content/OnboardingSourceFigures.astro';
 import OnboardingArticle from '../../components/content/OnboardingArticle.astro';
+import TrackStartHere from '../../components/content/TrackStartHere.astro';
 import { getOnboardingPageByFile, onboardingHtml } from '../../data/zeroTrustOnboarding';
 import { getDemosForTrack } from '../../data/demoScripts';
 import { getDiagramsForTrack } from '../../data/referenceDiagrams';
@@ -108,6 +109,8 @@ const onboardingOverview = track.slug === 'cloudflare-one' ? getOnboardingPageBy
     <LangText as="p" class="text-muted mt-2 font-mono text-sm leading-relaxed" text={track.mentalModel} />
   </section>
 
+  {track.startHere ? <TrackStartHere startHere={track.startHere} /> : null}
+
   {track.slug === 'cloudflare-one' ? (
     <section class="mb-8">
       <LangText
@@ -152,20 +155,20 @@ const onboardingOverview = track.slug === 'cloudflare-one' ? getOnboardingPageBy
   ) : null}
 
   <section class="card mb-6">
-    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Sau lộ trình bạn sẽ', en: 'What you will achieve', km: 'What you will achieve' }} />
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Sau lộ trình bạn sẽ', en: 'What you will achieve', km: 'អ្វីដែលអ្នកនឹងសម្រេច' }} />
     <ul class="text-muted mt-3 list-disc space-y-2 pl-5 text-sm">
       {track.outcomes.vi.map((item, i) => (
         <li>
           <span class="lang-vi">{item}</span>
           <span class="lang-en">{track.outcomes.en[i]}</span>
-          <span class="lang-km">{track.outcomes.en[i]}</span>
+          <span class="lang-km">{track.outcomes.km?.[i] ?? track.outcomes.en[i]}</span>
         </li>
       ))}
     </ul>
   </section>
 
   <section class="card mb-8">
-    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Khái niệm cần nắm', en: 'Key concepts', km: 'Key concepts' }} />
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Khái niệm cần nắm', en: 'Key concepts', km: 'គោលគំនិតសំខាន់' }} />
     <ul class="mt-3 flex flex-wrap gap-2">
       {track.keyConcepts.map((k) => (
         <li class="badge">{k}</li>
@@ -175,19 +178,19 @@ const onboardingOverview = track.slug === 'cloudflare-one' ? getOnboardingPageBy
 
   {track.commonMistakes ? (
     <section class="mb-8">
-      <LangText as="h2" class="text-xl font-semibold" text={{ vi: 'Lỗi thường gặp', en: 'Common mistakes', km: 'Common mistakes' }} />
+      <LangText as="h2" class="text-xl font-semibold" text={{ vi: 'Lỗi thường gặp', en: 'Common mistakes', km: 'កំហុសញឹកញាប់' }} />
       <div class="mt-4 grid gap-4 md:grid-cols-2">
         {track.commonMistakes.vi.map((m, i) => (
           <div class="card">
             <h3 class="font-semibold">
               <span class="lang-vi">{m.title}</span>
               <span class="lang-en">{track.commonMistakes!.en[i].title}</span>
-              <span class="lang-km">{track.commonMistakes!.en[i].title}</span>
+              <span class="lang-km">{track.commonMistakes!.km?.[i]?.title ?? track.commonMistakes!.en[i].title}</span>
             </h3>
             <p class="text-muted mt-2 text-sm leading-relaxed">
               <span class="lang-vi">{m.detail}</span>
               <span class="lang-en">{track.commonMistakes!.en[i].detail}</span>
-              <span class="lang-km">{track.commonMistakes!.en[i].detail}</span>
+              <span class="lang-km">{track.commonMistakes!.km?.[i]?.detail ?? track.commonMistakes!.en[i].detail}</span>
             </p>
           </div>
         ))}
@@ -196,7 +199,7 @@ const onboardingOverview = track.slug === 'cloudflare-one' ? getOnboardingPageBy
   ) : null}
 
   <section class="mb-8">
-    <LangText as="h2" class="mb-4 text-xl font-semibold" text={{ vi: 'Nội dung từng phần', en: 'Module-by-module content', km: 'Module-by-module content' }} />
+    <LangText as="h2" class="mb-4 text-xl font-semibold" text={{ vi: 'Nội dung từng phần', en: 'Module-by-module content', km: 'ខ្លឹមសារតាមផ្នែក' }} />
     <div class="space-y-6">
       {track.modules.map((mod, i) => (
         <TrackModuleCard module={mod} trackSlug={track.slug} />
@@ -225,19 +228,19 @@ const onboardingOverview = track.slug === 'cloudflare-one' ? getOnboardingPageBy
 
   <section class="grid gap-6 md:grid-cols-2 mb-8">
     <div class="card">
-      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Trình tự học gợi ý', en: 'Suggested learning order', km: 'Suggested learning order' }} />
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Trình tự học gợi ý', en: 'Suggested learning order', km: 'លំដាប់សិក្សាណែនាំ' }} />
       <ol class="text-muted mt-3 list-decimal space-y-2 pl-5 text-sm">
         {track.recommendedSequence.vi.map((step, i) => (
           <li>
             <span class="lang-vi">{step}</span>
             <span class="lang-en">{track.recommendedSequence.en[i]}</span>
-            <span class="lang-km">{track.recommendedSequence.en[i]}</span>
+            <span class="lang-km">{track.recommendedSequence.km?.[i] ?? track.recommendedSequence.en[i]}</span>
           </li>
         ))}
       </ol>
     </div>
     <div class="card">
-      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Tình huống trong lộ trình', en: 'Use cases for this path', km: 'Use cases for this path' }} />
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Tình huống trong lộ trình', en: 'Use cases for this path', km: 'ករណីប្រើប្រាស់សម្រាប់ផ្លូវនេះ' }} />
       <ul class="mt-3 space-y-2 text-sm">
         {track.relatedUseCases.map((uc) => (
           <li>

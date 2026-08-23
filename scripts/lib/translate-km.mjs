@@ -45,8 +45,10 @@ async function translateGoogleChunk(text) {
   url.searchParams.set('dt', 't');
   url.searchParams.set('q', text);
 
-  const res = await fetch(url);
-  if (!res.ok) {
+  let res;
+  for (let attempt = 1; attempt <= 8; attempt += 1) {
+    res = await fetch(url);
+    if (res.ok) break;
     if (res.status === 413 && text.length > 200) {
       const mid = Math.floor(text.length / 2);
       const split = text.lastIndexOf(' ', mid) > 0 ? text.lastIndexOf(' ', mid) : mid;
@@ -54,8 +56,13 @@ async function translateGoogleChunk(text) {
       const b = await translateGoogleChunk(text.slice(split));
       return a + b;
     }
+    if (res.status === 429 || res.status >= 500) {
+      await sleep(800 * attempt);
+      continue;
+    }
     throw new Error(`Google translate HTTP ${res.status}`);
   }
+  if (!res.ok) throw new Error(`Google translate HTTP ${res.status}`);
   const data = await res.json();
   const parts = (data[0] ?? []).map((p) => p[0]).join('');
   if (!parts) throw new Error('Empty translation response');
