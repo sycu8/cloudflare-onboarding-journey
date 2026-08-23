@@ -252,19 +252,24 @@ jobs:
           echo "Custom domain: ${{ env.PUBLIC_SITE_URL_PROD }}"
 
       - name: Smoke test production
+        env:
+          DEPLOY_WAIT_ATTEMPTS: '24'
+          DEPLOY_WAIT_MS: '5000'
+          SMOKE_SKIP_LINK_CRAWL: '1'
         run: |
           URL="${{ steps.deploy.outputs.deployment-url }}"
           echo "Smoke test deployment URL: $URL"
-          node scripts/wait-for-deploy.mjs "$URL"
-          for attempt in 1 2 3 4 5; do
+          echo "Custom domain (manual check): ${{ env.PUBLIC_SITE_URL_PROD }}"
+          node scripts/wait-for-deploy.mjs "$URL" || echo "Readiness wait incomplete; continuing with smoke retries..."
+          for attempt in 1 2 3 4 5 6 7 8 9 10; do
             if node scripts/smoke-test.mjs "$URL"; then
               exit 0
             fi
-            if [ "$attempt" -eq 5 ]; then
+            if [ "$attempt" -eq 10 ]; then
               exit 1
             fi
-            echo "Smoke test attempt $attempt failed; waiting 15s for CDN propagation..."
-            sleep 15
+            echo "Smoke test attempt $attempt failed; waiting 20s..."
+            sleep 20
           done
           # Custom domain is not smoke-tested in CI — GitHub Actions egress often gets HTTP 403 (WAF).
 

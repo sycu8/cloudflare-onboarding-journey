@@ -18,6 +18,29 @@ const IS_EPHEMERAL_PAGES = (() => {
 })();
 const R2_ASSET_PREVIEW = IS_LOCAL_PREVIEW || IS_EPHEMERAL_PAGES;
 
+const SMOKE_UA = 'cloudflare-starter-hub-smoke/1.0 (+https://onboarding.orangecloud.vn)';
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function siteFetch(url, options = {}, attempt = 1) {
+  const { headers, ...rest } = options;
+  const res = await fetch(url, {
+    redirect: 'follow',
+    ...rest,
+    headers: {
+      'User-Agent': SMOKE_UA,
+      ...headers,
+    },
+  });
+  if (res.status === 429 && attempt < 2) {
+    await sleep(2000);
+    return siteFetch(url, options, attempt + 1);
+  }
+  return res;
+}
+
 const ROUTES = [
   '/',
   '/start-here',
@@ -150,7 +173,7 @@ function extractInternalLinks(html, fromPath) {
 
 async function fetchPath(path, { redirect = 'follow' } = {}) {
   const url = `${BASE}${path}`;
-  const res = await fetch(url, { redirect });
+  const res = await siteFetch(url, { redirect });
   const text = await res.text();
   return { path, url, status: res.status, text, ok: res.ok };
 }
@@ -172,8 +195,13 @@ console.log(`\nSmoke test → ${BASE}\n`);
 
 for (const path of ROUTES) {
   try {
+    if (!IS_LOCAL_PREVIEW) await sleep(15);
     const { status, text, ok } = await fetchPath(path);
     if (!ok) {
+      if (!IS_LOCAL_PREVIEW && status === 429) {
+        warnings.push(`${path} → HTTP 429 (rate limited)`);
+        continue;
+      }
       errors.push(`${path} → HTTP ${status}`);
       continue;
     }
@@ -207,7 +235,7 @@ for (const path of PROTECTED_ROUTES) {
 
 for (const path of CSS_ROUTES) {
   try {
-    const res = await fetch(`${BASE}${path}`, { redirect: 'follow' });
+    const res = await siteFetch(`${BASE}${path}`, { redirect: 'follow' });
     const ct = (res.headers.get('content-type') || '').toLowerCase();
     if (res.status === 302 || res.status === 303) {
       errors.push(`${path} → HTTP ${res.status} (Access may block static CSS — see docs/WORKSHOP-ADMIN-ACCESS.md)`);
@@ -227,7 +255,7 @@ for (const path of CSS_ROUTES) {
 
 for (const path of ASSET_ROUTES) {
   try {
-    const res = await fetch(`${BASE}${path}`, { redirect: 'follow' });
+    const res = await siteFetch(`${BASE}${path}`, { redirect: 'follow' });
     if (!res.ok) {
       if (R2_ASSET_PREVIEW && res.status === 503 && path.startsWith('/assets/')) {
         warnings.push(`${path} → HTTP 503 (R2 /assets/* unavailable on Pages preview URL)`);
@@ -248,7 +276,7 @@ for (const path of ASSET_ROUTES) {
 }
 
 try {
-  const homeRes = await fetch(`${BASE}/`, { redirect: 'follow' });
+  const homeRes = await siteFetch(`${BASE}/`, { redirect: 'follow' });
   const link = homeRes.headers.get('link') || '';
   if (!link.includes('api-catalog')) errors.push('headers / → missing Link rel=api-catalog');
   else console.log('✓ (link) / Link api-catalog');
@@ -258,7 +286,7 @@ try {
 
 for (const { path, type } of AGENT_JSON_ROUTES) {
   try {
-    const res = await fetch(`${BASE}${path}`, {
+    const res = await siteFetch(`${BASE}${path}`, {
       redirect: 'follow',
       headers: { Accept: 'application/linkset+json, application/json' },
     });
@@ -284,7 +312,7 @@ const HEADER_CHECKS = [
 
 for (const { path, expect, label } of HEADER_CHECKS) {
   try {
-    const res = await fetch(`${BASE}${path}`, { redirect: 'follow' });
+    const res = await siteFetch(`${BASE}${path}`, { redirect: 'follow' });
     if (!res.ok) {
       errors.push(`headers ${path} → HTTP ${res.status}`);
       continue;
@@ -298,11 +326,11 @@ for (const { path, expect, label } of HEADER_CHECKS) {
 }
 
 try {
-  const home = await fetch(`${BASE}/`, { redirect: 'follow' });
+  const home = await siteFetch(`${BASE}/`, { redirect: 'follow' });
   const html = await home.text();
   const astroCss = html.match(/href="(\/_astro\/[^"]+\.css)"/);
   if (astroCss) {
-    const res = await fetch(`${BASE}${astroCss[1]}`, { redirect: 'follow' });
+    const res = await siteFetch(`${BASE}${astroCss[1]}`, { redirect: 'follow' });
     const cc = (res.headers.get('cache-control') || '').toLowerCase();
     if (!cc.includes('immutable')) errors.push(`/_astro CSS → expected immutable, got ${cc || 'none'}`);
     else console.log(`✓ (cache) ${astroCss[1]}`);
@@ -330,8 +358,8 @@ for (const path of API_ROUTES) {
   }
 }
 
-// Link crawl from homepage + resources
-const crawlRoots = ['/', '/resources'];
+// Link crawl from homepage + resources (skip when rate limits are likely, e.g. post-deploy CI)
+const crawlRoots = process.env.SMOKE_SKIP_LINK_CRAWL ? [] : ['/', '/resources'];
 const seen = new Set(ROUTES);
 const toCheck = [];
 
@@ -348,10 +376,13 @@ for (const root of crawlRoots) {
 
 for (const path of toCheck) {
   try {
+    if (!IS_LOCAL_PREVIEW) await sleep(75);
     const { status, ok } = await fetchPathResolved(path);
     if (!ok) {
       if (R2_ASSET_PREVIEW && status === 503 && path.startsWith('/assets/')) {
         warnings.push(`discovered link ${path} → HTTP 503 (R2 /assets/* unavailable on Pages preview URL)`);
+      } else if (status === 429) {
+        warnings.push(`discovered link ${path} → HTTP 429 (rate limited; retry manually if needed)`);
       } else {
         errors.push(`discovered link ${path} → HTTP ${status}`);
       }

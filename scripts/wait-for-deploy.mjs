@@ -15,9 +15,20 @@ if (!base) {
 
 const maxAttempts = Number(process.env.DEPLOY_WAIT_ATTEMPTS || 40);
 const delayMs = Number(process.env.DEPLOY_WAIT_MS || 3000);
+const WAIT_UA = 'cloudflare-starter-hub-deploy-wait/1.0 (+https://onboarding.orangecloud.vn)';
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function siteFetch(url) {
+  return fetch(url, {
+    redirect: 'follow',
+    headers: {
+      'User-Agent': WAIT_UA,
+      Accept: 'text/html,application/xhtml+xml',
+    },
+  });
 }
 
 for (let attempt = 1; attempt <= maxAttempts; attempt++) {
@@ -25,7 +36,7 @@ for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     paths.map(async (path) => {
       const url = `${base}${path.startsWith('/') ? path : `/${path}`}`;
       try {
-        const res = await fetch(url, { redirect: 'follow' });
+        const res = await siteFetch(url);
         return { path, ok: res.ok, status: res.status };
       } catch (err) {
         return { path, ok: false, status: err.message };
