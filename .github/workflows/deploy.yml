@@ -253,20 +253,16 @@ jobs:
 
       - name: Smoke test production
         run: |
-          smoke_with_retry() {
-            local url="$1"
-            echo "Smoke test → $url"
-            node scripts/wait-for-deploy.mjs "$url"
-            for attempt in 1 2 3 4 5; do
-              if node scripts/smoke-test.mjs "$url"; then
-                return 0
-              fi
-              if [ "$attempt" -eq 5 ]; then
-                return 1
-              fi
-              echo "Attempt $attempt failed; waiting 15s for CDN propagation..."
-              sleep 15
-            done
-          }
-          smoke_with_retry "${{ steps.deploy.outputs.deployment-url }}"
-          smoke_with_retry "${{ env.PUBLIC_SITE_URL_PROD }}"
+          echo "Pages preview URL: ${{ steps.deploy.outputs.deployment-url }}"
+          node scripts/wait-for-deploy.mjs "${{ steps.deploy.outputs.deployment-url }}"
+          node scripts/wait-for-deploy.mjs "${{ env.PUBLIC_SITE_URL_PROD }}"
+          for attempt in 1 2 3 4 5; do
+            if node scripts/smoke-test.mjs "${{ env.PUBLIC_SITE_URL_PROD }}"; then
+              exit 0
+            fi
+            if [ "$attempt" -eq 5 ]; then
+              exit 1
+            fi
+            echo "Smoke test attempt $attempt failed; waiting 15s for CDN propagation..."
+            sleep 15
+          done
