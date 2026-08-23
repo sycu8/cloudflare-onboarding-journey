@@ -39,44 +39,52 @@ const featuredBlogPosts = blogPosts.slice(0, 3);
       km: 'មជ្ឈមណ្ឌលសិក្សាសម្រាប់ Application Services, Developer Platform, Cloudflare One, AI Security & Adoption និង Operational Excellence។',
     }}
     primaryCta={{ href: '/start-here', label: { vi: 'Bắt đầu tại đây', en: 'Start here', km: 'ចាប់ផ្តើមនៅទីនេះ' } }}
-    secondaryCta={{ href: '/blog/', label: { vi: 'Đọc Blog', en: 'Read the Blog', km: 'Read the Blog' } }}
+    secondaryCta={{ href: '/blog/', label: { vi: 'Đọc Blog', en: 'Read the Blog', km: 'អានប្លុក' } }}
     extraCtas={[{ href: '/first-week', label: { vi: 'Lộ trình 7 ngày', en: '7-day path', km: 'ផ្លូវ 7 ថ្ងៃ' } }]}
   />
 
   <section class="mt-10">
-    <LangText as="h2" class="text-xl font-semibold md:text-2xl" text={{ vi: 'Hiểu Cloudflare theo 5 lớp đơn giản', en: 'Cloudflare in 5 simple layers', km: 'Cloudflare in 5 simple layers' }} />
+    <LangText as="h2" class="text-xl font-semibold md:text-2xl" text={{ vi: 'Hiểu Cloudflare theo 5 lớp đơn giản', en: 'Cloudflare in 5 simple layers', km: 'យល់ពី Cloudflare តាម ៥ ស្រទាប់សាមញ្ញ' }} />
     <div class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
       <ConceptCard
-        title={{ vi: 'Protect applications', en: 'Protect applications', km: 'Protect applications' }}
+        title={{ vi: 'Protect applications', en: 'Protect applications', km: 'ការពារ application' }}
         description={{
           vi: 'Bảo vệ website, application và API khỏi tấn công, abuse, downtime và các vấn đề performance.',
           en: 'Protect websites, applications, and APIs from attacks, abuse, downtime, and performance issues.',
+          km: 'ការពារ website, application និង API ពីការវាយប្រហារ, abuse, downtime និងបញ្ហា performance។',
         }}
       />
       <ConceptCard
-        title={{ vi: 'Build applications', en: 'Build applications', km: 'Build applications' }}
+        title={{ vi: 'Build applications', en: 'Build applications', km: 'សាង application' }}
         description={{
           vi: 'Build và deploy frontend app, API, storage-backed application và AI workload trên Cloudflare.',
           en: 'Build and deploy frontend apps, APIs, storage-backed applications, and AI workloads on Cloudflare.',
+          km: 'សាង និង deploy frontend app, API, application ដែលប្រើ storage និង AI workload លើ Cloudflare។',
         }}
       />
       <ConceptCard
-        title={{ vi: 'Secure users and workforce', en: 'Secure users and workforce', km: 'Secure users and workforce' }}
+        title={{ vi: 'Secure users and workforce', en: 'Secure users and workforce', km: 'ការពារអ្នកប្រើប្រាស់ និង workforce' }}
         description={{
           vi: 'Bảo vệ quyền truy cập vào SaaS, private apps, Internet browsing, users, devices và networks bằng Zero Trust.',
           en: 'Secure access to SaaS, private apps, Internet browsing, users, devices, and networks with Zero Trust.',
+          km: 'ការពារការចូលប្រើ SaaS, private app, ការរុករក Internet, អ្នកប្រើប្រាស់, ឧបករណ៍ និងបណ្តាញ ដោយ Zero Trust។',
         }}
       />
       <ConceptCard
-        title={{ vi: 'Adopt AI safely', en: 'Adopt AI safely' }}
+        title={{ vi: 'Adopt AI safely', en: 'Adopt AI safely', km: 'ប្រើ AI ដោយសុវត្ថិភាព' }}
         description={{
           vi: 'Quản trị Shadow AI, bảo vệ dữ liệu và kiểm soát AI application với CASB, SWG, AI Gateway và WAF.',
           en: 'Govern Shadow AI, protect data, and control AI applications with CASB, SWG, AI Gateway, and WAF.',
+          km: 'គ្រប់គ្រង Shadow AI, ការពារទិន្នន័យ និងគ្រប់គ្រង AI application ដោយ CASB, SWG, AI Gateway និង WAF។',
         }}
       />
       <ConceptCard
-        title={{ vi: 'Operate with excellence', en: 'Operate with excellence' }}
-        description={{ vi: 'Quan sát, phản hồi sự cố, release an toàn và cải thiện reliability liên tục.', en: 'Observe, respond to incidents, release safely, and continuously improve reliability.' }}
+        title={{ vi: 'Operate with excellence', en: 'Operate with excellence', km: 'ប្រតិបត្តិការប្រកបដោយភាពអស់កល្ប' }}
+        description={{
+          vi: 'Quan sát, phản hồi sự cố, release an toàn và cải thiện reliability liên tục.',
+          en: 'Observe, respond to incidents, release safely, and continuously improve reliability.',
+          km: 'សង្កេត, ឆ្លើយតបឧប្បត្តិហេតុ, release ដោយសុវត្ថិភាព និងកែលម្អ reliability ជាបន្តបន្ទាប់។',
+        }}
       />
     </div>
     <ConnectivityCloudFigure />
@@ -85,52 +93,63 @@ const featuredBlogPosts = blogPosts.slice(0, 3);
   <section class="mt-10">
     <div class="card mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div>
-        <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Từ Cloudflare Learning Center', en: 'From Cloudflare Learning Center', km: 'From Cloudflare Learning Center' }} />
+        <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Từ Cloudflare Learning Center', en: 'From Cloudflare Learning Center', km: 'ពី Cloudflare Learning Center' }} />
         <p class="text-muted mt-1 text-sm">
           <span class="lang-vi">17 chủ đề: DDoS, CDN, DNS, Zero Trust, serverless, AI…</span>
           <span class="lang-en">17 topics: DDoS, CDN, DNS, Zero Trust, serverless, AI…</span>
-          <span class="lang-km">17 topics: DDoS, CDN, DNS, Zero Trust, serverless, AI…</span>
+          <span class="lang-km">ប្រធានបទ ១៧៖ DDoS, CDN, DNS, Zero Trust, serverless, AI…</span>
         </p>
       </div>
       <a class="btn btn-secondary shrink-0" href="/resources#learning-center">
-        <LangText text={{ vi: 'Xem chủ đề', en: 'Browse topics', km: 'Browse topics' }} />
+        <LangText text={{ vi: 'Xem chủ đề', en: 'Browse topics', km: 'មើលប្រធានបទ' }} />
       </a>
     </div>
-    <LangText as="h2" class="text-xl font-semibold md:text-2xl" text={{ vi: 'Pick your starting point', en: 'Pick your starting point', km: 'Pick your starting point' }} />
+    <LangText as="h2" class="text-xl font-semibold md:text-2xl" text={{ vi: 'Pick your starting point', en: 'Pick your starting point', km: 'ជ្រើសរើសចំណុចចាប់ផ្តើម' }} />
     <div class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
       <PathCard
-        title={{ vi: 'Tôi có website, application hoặc API', en: 'I have a website, application, or API', km: 'I have a website, application, or API' }}
+        title={{ vi: 'Tôi có website, application hoặc API', en: 'I have a website, application, or API', km: 'ខ្ញុំមាន website, application ឬ API' }}
         description={{
           vi: 'Học DNS, CDN, SSL/TLS, WAF, DDoS, Bot protection, API security và performance.',
           en: 'Learn DNS, CDN, SSL/TLS, WAF, DDoS, Bot protection, API security, and performance.',
+          km: 'រៀន DNS, CDN, SSL/TLS, WAF, DDoS, Bot protection, API security និង performance។',
         }}
-        cta={{ href: '/tracks/application-services', label: { vi: 'Bắt đầu với Application Services', en: 'Start Application Services' , km: 'Start Application Services' } }}
+        cta={{ href: '/tracks/application-services', label: { vi: 'Bắt đầu với Application Services', en: 'Start Application Services', km: 'ចាប់ផ្តើម Application Services' } }}
       />
       <PathCard
-        title={{ vi: 'Tôi muốn build và deploy app', en: 'I want to build and deploy an app', km: 'I want to build and deploy an app' }}
+        title={{ vi: 'Tôi muốn build và deploy app', en: 'I want to build and deploy an app', km: 'ខ្ញុំចង់សាង និង deploy app' }}
         description={{
           vi: 'Học Pages, Workers, R2, D1, KV, AI Gateway và Workers AI.',
           en: 'Learn Pages, Workers, R2, D1, KV, AI Gateway, and Workers AI.',
+          km: 'រៀន Pages, Workers, R2, D1, KV, AI Gateway និង Workers AI។',
         }}
-        cta={{ href: '/tracks/developer-platform', label: { vi: 'Bắt đầu với Developer Platform', en: 'Start Developer Platform' , km: 'Start Developer Platform' } }}
+        cta={{ href: '/tracks/developer-platform', label: { vi: 'Bắt đầu với Developer Platform', en: 'Start Developer Platform', km: 'ចាប់ផ្តើម Developer Platform' } }}
       />
       <PathCard
-        title={{ vi: 'Tôi muốn bảo vệ users và workforce', en: 'I want to secure users and workforce', km: 'I want to secure users and workforce' }}
+        title={{ vi: 'Tôi muốn bảo vệ users và workforce', en: 'I want to secure users and workforce', km: 'ខ្ញុំចង់ការពារអ្នកប្រើប្រាស់ និង workforce' }}
         description={{
           vi: 'Khám phá Zero Trust follow-along: identity, thiết bị, ZTNA, Gateway, DLP, AI và Cloudflare WAN.',
           en: 'Explore a follow-along Zero Trust path: identity, devices, ZTNA, Gateway, DLP, AI, and Cloudflare WAN.',
+          km: 'ស្វែងរកផ្លូវ Zero Trust follow-along៖ identity, ឧបករណ៍, ZTNA, Gateway, DLP, AI និង Cloudflare WAN។',
         }}
-        cta={{ href: '/tracks/cloudflare-one', label: { vi: 'Bắt đầu với Cloudflare One', en: 'Start Cloudflare One' , km: 'Start Cloudflare One' } }}
+        cta={{ href: '/tracks/cloudflare-one', label: { vi: 'Bắt đầu với Cloudflare One', en: 'Start Cloudflare One', km: 'ចាប់ផ្តើម Cloudflare One' } }}
       />
       <PathCard
-        title={{ vi: 'Tôi muốn adopt AI an toàn', en: 'I want to adopt AI safely' }}
-        description={{ vi: 'Học CASB, Shadow AI, SWG, RBI, AI Gateway, WAF và bảo mật RAG/agent.', en: 'Learn CASB, Shadow AI, SWG, RBI, AI Gateway, WAF, and RAG/agent security.' }}
-        cta={{ href: '/tracks/ai-security-adoption', label: { vi: 'Bắt đầu AI Security', en: 'Start AI Security' } }}
+        title={{ vi: 'Tôi muốn adopt AI an toàn', en: 'I want to adopt AI safely', km: 'ខ្ញុំចង់ប្រើ AI ដោយសុវត្ថិភាព' }}
+        description={{
+          vi: 'Học CASB, Shadow AI, SWG, RBI, AI Gateway, WAF và bảo mật RAG/agent.',
+          en: 'Learn CASB, Shadow AI, SWG, RBI, AI Gateway, WAF, and RAG/agent security.',
+          km: 'រៀន CASB, Shadow AI, SWG, RBI, AI Gateway, WAF និងសុវត្ថិភាព RAG/agent។',
+        }}
+        cta={{ href: '/tracks/ai-security-adoption', label: { vi: 'Bắt đầu AI Security', en: 'Start AI Security', km: 'ចាប់ផ្តើម AI Security' } }}
       />
       <PathCard
-        title={{ vi: 'Tôi vận hành workload production', en: 'I operate production workloads' }}
-        description={{ vi: 'Học observability, incident response, release safety, resilience, performance và cost.', en: 'Learn observability, incident response, release safety, resilience, performance, and cost.' }}
-        cta={{ href: '/tracks/operational-excellence', label: { vi: 'Bắt đầu Operational Excellence', en: 'Start Operational Excellence' } }}
+        title={{ vi: 'Tôi vận hành workload production', en: 'I operate production workloads', km: 'ខ្ញុំប្រតិបត្តិការ workload production' }}
+        description={{
+          vi: 'Học observability, incident response, release safety, resilience, performance và cost.',
+          en: 'Learn observability, incident response, release safety, resilience, performance, and cost.',
+          km: 'រៀន observability, incident response, release safety, resilience, performance និង cost។',
+        }}
+        cta={{ href: '/tracks/operational-excellence', label: { vi: 'Bắt đầu Operational Excellence', en: 'Start Operational Excellence', km: 'ចាប់ផ្តើម Operational Excellence' } }}
       />
     </div>
   </section>
@@ -138,18 +157,19 @@ const featuredBlogPosts = blogPosts.slice(0, 3);
   <section class="mt-10">
     <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
       <div>
-        <LangText as="h2" class="text-xl font-semibold md:text-2xl" text={{ vi: 'Tình huống thực tế', en: 'Practical use cases', km: 'Practical use cases' }} />
+        <LangText as="h2" class="text-xl font-semibold md:text-2xl" text={{ vi: 'Tình huống thực tế', en: 'Practical use cases', km: 'ករណីប្រើប្រាស់ជាក់ស្តែង' }} />
         <LangText
           as="p"
           class="text-muted mt-1 max-w-2xl text-sm"
           text={{
             vi: `${useCases.length} tình huống theo năm lộ trình, gồm AI Security & Adoption và Operational Excellence.`,
             en: `${useCases.length} scenarios across five tracks, including AI Security & Adoption and Operational Excellence.`,
+            km: `${useCases.length} ករណីប្រើប្រាស់តាម ៥ track រួមមាន AI Security & Adoption និង Operational Excellence។`,
           }}
         />
       </div>
       <a class="btn btn-secondary shrink-0" href="/use-cases/">
-        <LangText text={{ vi: 'Xem tất cả', en: 'Browse all', km: 'Browse all' }} />
+        <LangText text={{ vi: 'Xem tất cả', en: 'Browse all', km: 'មើលទាំងអស់' }} />
       </a>
     </div>
     <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
@@ -158,31 +178,33 @@ const featuredBlogPosts = blogPosts.slice(0, 3);
         description={{
           vi: 'Bảo vệ website public và API — DNS, CDN, WAF, SSL/TLS.',
           en: 'Protect public websites and APIs — DNS, CDN, WAF, SSL/TLS.',
+          km: 'ការពារ website public និង API — DNS, CDN, WAF, SSL/TLS។',
         }}
         cta={{
           href: '/use-cases/application-services',
-          label: { vi: `${asCount} tình huống`, en: `${asCount} scenarios` },
+          label: { vi: `${asCount} tình huống`, en: `${asCount} scenarios`, km: `${asCount} ករណី` },
         }}
       />
       <PathCard
         title={{ vi: 'AI Security & Adoption', en: 'AI Security & Adoption', km: 'AI Security & Adoption' }}
-        description={{ vi: 'Quản trị Shadow AI và bảo vệ AI application theo nhiều lớp.', en: 'Govern Shadow AI and protect AI applications in layers.', km: 'Govern Shadow AI and protect AI applications in layers.' }}
-        cta={{ href: '/use-cases/', label: { vi: `${aiCount} tình huống`, en: `${aiCount} scenarios`, km: `${aiCount} scenarios` } }}
+        description={{ vi: 'Quản trị Shadow AI và bảo vệ AI application theo nhiều lớp.', en: 'Govern Shadow AI and protect AI applications in layers.', km: 'គ្រប់គ្រង Shadow AI និងការពារ AI application ជាស្រទាប់ៗ។' }}
+        cta={{ href: '/use-cases/', label: { vi: `${aiCount} tình huống`, en: `${aiCount} scenarios`, km: `${aiCount} ករណី` } }}
       />
       <PathCard
         title={{ vi: 'Operational Excellence', en: 'Operational Excellence', km: 'Operational Excellence' }}
-        description={{ vi: 'Vận hành workload an toàn, ổn định và hiệu quả.', en: 'Operate workloads safely, reliably, and efficiently.', km: 'Operate workloads safely, reliably, and efficiently.' }}
-        cta={{ href: '/use-cases/operational-excellence', label: { vi: `${oeCount} tình huống`, en: `${oeCount} scenarios`, km: `${oeCount} scenarios` } }}
+        description={{ vi: 'Vận hành workload an toàn, ổn định và hiệu quả.', en: 'Operate workloads safely, reliably, and efficiently.', km: 'ប្រតិបត្តិការ workload ដោយសុវត្ថិភាព និរធនភាព និងប្រសិទ្ធភាព។' }}
+        cta={{ href: '/use-cases/operational-excellence', label: { vi: `${oeCount} tình huống`, en: `${oeCount} scenarios`, km: `${oeCount} ករណី` } }}
       />
       <PathCard
         title={{ vi: 'Developer Platform', en: 'Developer Platform', km: 'Developer Platform' }}
         description={{
           vi: 'Build và deploy app serverless — Pages, Workers, D1, KV, R2.',
           en: 'Build and deploy serverless apps — Pages, Workers, D1, KV, R2.',
+          km: 'សាង និង deploy app serverless — Pages, Workers, D1, KV, R2។',
         }}
         cta={{
           href: '/use-cases/developer-platform',
-          label: { vi: `${dpCount} tình huống`, en: `${dpCount} scenarios` },
+          label: { vi: `${dpCount} tình huống`, en: `${dpCount} scenarios`, km: `${dpCount} ករណី` },
         }}
       />
       <PathCard
@@ -190,10 +212,11 @@ const featuredBlogPosts = blogPosts.slice(0, 3);
         description={{
           vi: 'Zero Trust cho remote users — thay VPN, SWG, Access.',
           en: 'Zero Trust for remote users — VPN replacement, SWG, Access.',
+          km: 'Zero Trust សម្រាប់ remote users — ជំនួស VPN, SWG, Access។',
         }}
         cta={{
           href: '/use-cases/cloudflare-one',
-          label: { vi: `${c1Count} tình huống`, en: `${c1Count} scenarios` },
+          label: { vi: `${c1Count} tình huống`, en: `${c1Count} scenarios`, km: `${c1Count} ករណី` },
         }}
       />
     </div>
@@ -202,26 +225,26 @@ const featuredBlogPosts = blogPosts.slice(0, 3);
   <DeploymentExamplesHighlight />
 
   <section class="mt-10">
-    <LangText as="h2" class="text-xl font-semibold md:text-2xl" text={{ vi: 'Học từ con số 0 hoặc theo vai trò', en: 'Learn from zero or by role', km: 'Learn from zero or by role' }} />
+    <LangText as="h2" class="text-xl font-semibold md:text-2xl" text={{ vi: 'Học từ con số 0 hoặc theo vai trò', en: 'Learn from zero or by role', km: 'រៀនពីដើម ឬតាមតួនាទី' }} />
     <div class="mt-4 grid gap-4 md:grid-cols-2">
       <a class="card block hover:border-[var(--cf-accent)]" href="/content-roadmap/">
         <p class="font-semibold">Content Roadmap</p>
         <p class="text-muted mt-2 text-sm">
           <span class="lang-vi">Internet → DNS → CDN → bảo mật → Cloudflare → use case thực tế.</span>
           <span class="lang-en">Internet → DNS → CDN → security → Cloudflare → practical use cases.</span>
-          <span class="lang-km">Internet → DNS → CDN → security → Cloudflare → practical use cases.</span>
+          <span class="lang-km">Internet → DNS → CDN → security → Cloudflare → ករណីប្រើប្រាស់ជាក់ស្តែង។</span>
         </p>
       </a>
       <a class="card block hover:border-[var(--cf-accent)]" href="/roadmaps/">
         <p class="font-semibold">
           <span class="lang-vi">Tôi là… (Sales / SE / Dev / IT / Founder / Student)</span>
           <span class="lang-en">I am a… (Sales / SE / Dev / IT / Founder / Student)</span>
-          <span class="lang-km">I am a… (Sales / SE / Dev / IT / Founder / Student)</span>
+          <span class="lang-km">ខ្ញុំជា… (Sales / SE / Dev / IT / Founder / Student)</span>
         </p>
         <p class="text-muted mt-2 text-sm">
           <span class="lang-vi">Roadmap theo tuần — bài tập và liên kết hub có sẵn.</span>
           <span class="lang-en">Weekly roadmaps with exercises and existing hub links.</span>
-          <span class="lang-km">Weekly roadmaps with exercises and existing hub links.</span>
+          <span class="lang-km">ផ្លូវប្រចាំសប្តាហ៍ — លំហាត់ និងតំណ hub ដែលមានស្រាប់។</span>
         </p>
       </a>
     </div>
@@ -229,55 +252,57 @@ const featuredBlogPosts = blogPosts.slice(0, 3);
 
   <section class="mt-10 grid gap-6 md:grid-cols-2 md:items-start">
     <div class="card">
-      <LangText as="h2" class="text-xl font-semibold md:text-2xl" text={{ vi: 'Recommended beginner path', en: 'Recommended beginner path', km: 'Recommended beginner path' }} />
+      <LangText as="h2" class="text-xl font-semibold md:text-2xl" text={{ vi: 'Recommended beginner path', en: 'Recommended beginner path', km: 'ផ្លូវណែនាំសម្រាប់អ្នកចាប់ផ្តើម' }} />
       <p class="text-muted mt-2 text-sm">
         <span class="lang-vi">Một lộ trình ngắn để không bị ngợp.</span>
         <span class="lang-en">A short path to avoid overwhelm.</span>
-        <span class="lang-km">A short path to avoid overwhelm.</span>
+        <span class="lang-km">ផ្លូវខ្លីមួយ ដើម្បីមិនឲ្យរឹតបន្តឹងពេក។</span>
       </p>
       <div class="mt-4">
         <JourneyStepper
           steps={[
-            { vi: 'Hiểu Cloudflare làm gì', en: 'Understand what Cloudflare does', km: 'Understand what Cloudflare does' },
-            { vi: 'Hiểu request flow: user → Cloudflare edge → origin/app', en: 'Learn request flow: user → Cloudflare edge → origin/app', km: 'Learn request flow: user → Cloudflare edge → origin/app' },
-            { vi: 'Chọn lộ trình phù hợp', en: 'Pick your track', km: 'Pick your track' },
-            { vi: 'Đọc một use case thực tế', en: 'Read one practical use case', km: 'Read one practical use case' },
-            { vi: 'Hoàn thành beginner checklist', en: 'Complete the beginner checklist', km: 'Complete the beginner checklist' },
-            { vi: 'Làm lộ trình 7 ngày (tuần đầu)', en: 'Follow the 7-day first-week path', km: 'Follow the 7-day first-week path' },
-            { vi: 'Tham gia workshop hoặc thử lab', en: 'Join a workshop or try a lab', km: 'Join a workshop or try a lab' },
+            { vi: 'Hiểu Cloudflare làm gì', en: 'Understand what Cloudflare does', km: 'យល់ថា Cloudflare ធ្វើអ្វី' },
+            { vi: 'Hiểu request flow: user → Cloudflare edge → origin/app', en: 'Learn request flow: user → Cloudflare edge → origin/app', km: 'យល់ request flow៖ user → Cloudflare edge → origin/app' },
+            { vi: 'Chọn lộ trình phù hợp', en: 'Pick your track', km: 'ជ្រើស track ដែលសមរម្យ' },
+            { vi: 'Đọc một use case thực tế', en: 'Read one practical use case', km: 'អានករណីប្រើប្រាស់ជាក់ស្តែងមួយ' },
+            { vi: 'Hoàn thành beginner checklist', en: 'Complete the beginner checklist', km: 'បញ្ចប់ beginner checklist' },
+            { vi: 'Làm lộ trình 7 ngày (tuần đầu)', en: 'Follow the 7-day first-week path', km: 'ធ្វើផ្លូវ ៧ ថ្ងៃ (សប្តាហ៍ទី ១)' },
+            { vi: 'Tham gia workshop hoặc thử lab', en: 'Join a workshop or try a lab', km: 'ចូលរួម workshop ឬសាកល្បង lab' },
           ]}
         />
       </div>
       <a class="link mt-4 inline-block text-sm" href="/first-week">
-        <LangText text={{ vi: 'Xem chi tiết tuần đầu →', en: 'See the full first-week plan →', km: 'See the full first-week plan →' }} />
+        <LangText text={{ vi: 'Xem chi tiết tuần đầu →', en: 'See the full first-week plan →', km: 'មើលផែនការសប្តាហ៍ទី ១ពេញលេញ →' }} />
       </a>
     </div>
 
     <div class="space-y-4">
       <CTASection
-        title={{ vi: 'Đọc Blog để giữ đà học', en: 'Read the Blog to stay on track', km: 'Read the Blog to stay on track' }}
+        title={{ vi: 'Đọc Blog để giữ đà học', en: 'Read the Blog to stay on track', km: 'អានប្លុក ដើម្បីរក្សាចំណូលចិត្តរៀន' }}
         description={{
           vi: 'Bài ngắn, dễ hiểu về CDN, WAF, Workers, AI — mỗi ngày một góc nhìn từ blog.cloudflare.com.',
           en: 'Short, plain-language posts on CDN, WAF, Workers, and AI — daily angles from blog.cloudflare.com.',
-          km: 'Short, plain-language posts on CDN, WAF, Workers, and AI — daily angles from blog.cloudflare.com.',
+          km: 'អត្ថបទខ្លី ងាយយល់ អំពី CDN, WAF, Workers និង AI — មុំមើលប្រចាំថ្ងៃពី blog.cloudflare.com។',
         }}
-        cta={{ href: '/blog/', label: { vi: 'Mở Blog ngay', en: 'Open the Blog', km: 'Open the Blog' } }}
+        cta={{ href: '/blog/', label: { vi: 'Mở Blog ngay', en: 'Open the Blog', km: 'បើកប្លុកឥឡូវ' } }}
       />
       <CTASection
-        title={{ vi: 'Bắt đầu trong 30 phút', en: 'Get started in 30 minutes', km: 'Get started in 30 minutes' }}
+        title={{ vi: 'Bắt đầu trong 30 phút', en: 'Get started in 30 minutes', km: 'ចាប់ផ្តើមក្នុង ៣០ នាទី' }}
         description={{
           vi: 'Đi theo Journey A: Start Here → Cloudflare 101 → Choose Your Path.',
           en: 'Follow Journey A: Start Here → Cloudflare 101 → Choose Your Path.',
+          km: 'ធ្វើតាម Journey A៖ Start Here → Cloudflare 101 → Choose Your Path។',
         }}
-        cta={{ href: '/start-here', label: { vi: 'Bắt đầu tại đây', en: 'Start here' , km: 'Start here' } }}
+        cta={{ href: '/start-here', label: { vi: 'Bắt đầu tại đây', en: 'Start here', km: 'ចាប់ផ្តើមនៅទីនេះ' } }}
       />
       <CTASection
-        title={{ vi: 'Sẵn sàng chưa?', en: 'Ready yet?', km: 'Ready yet?' }}
+        title={{ vi: 'Sẵn sàng chưa?', en: 'Ready yet?', km: 'ត្រៀមខ្លួនហើយឬនៅ?' }}
         description={{
           vi: 'Làm bài kiểm tra 12 câu — có giải thích từng đáp án để ôn lại kiến thức.',
           en: 'Take a 12-question knowledge check with explanations for every answer.',
+          km: 'ធ្វើការត្រួតពិនិត្យចំណេះដឹង ១២ សំណួរ — មានការពន្យល់រាល់ចម្លើយ។',
         }}
-        cta={{ href: '/quiz/beginner-readiness', label: { vi: 'Kiểm tra kiến thức', en: 'Knowledge check' , km: 'Knowledge check' } }}
+        cta={{ href: '/quiz/beginner-readiness', label: { vi: 'Kiểm tra kiến thức', en: 'Knowledge check', km: 'ត្រួតពិនិត្យចំណេះដឹង' } }}
       />
     </div>
   </section>
@@ -289,7 +314,7 @@ const featuredBlogPosts = blogPosts.slice(0, 3);
           as="h2"
           id="home-blog"
           class="text-xl font-semibold md:text-2xl"
-          text={{ vi: 'Blog mới — đọc dễ, học tiếp trên hub', en: 'Fresh blog posts — plain language, hub next steps' }}
+          text={{ vi: 'Blog mới — đọc dễ, học tiếp trên hub', en: 'Fresh blog posts — plain language, hub next steps', km: 'អត្ថបទប្លុកថ្មី — ភាសាងាយ បន្តរៀនលើ hub' }}
         />
         <LangText
           as="p"
@@ -297,11 +322,12 @@ const featuredBlogPosts = blogPosts.slice(0, 3);
           text={{
             vi: 'AI, Security, CDN, Workers và Developer Platform — viết lại cho người mới và trung cấp, kèm FAQ và liên kết lộ trình.',
             en: 'AI, Security, CDN, Workers, and Developer Platform — rewritten for beginners and intermediate learners, with FAQs and track links.',
+            km: 'AI, Security, CDN, Workers និង Developer Platform — សរសេរឡើងវិញសម្រាប់អ្នកចាប់ផ្តើម និងកម្រិតមធ្យម ជាមួយ FAQ និងតំណ track។',
           }}
         />
       </div>
       <a class="btn btn-primary shrink-0" href="/blog/">
-        <LangText text={{ vi: 'Xem tất cả bài Blog', en: 'Browse all Blog posts' }} />
+        <LangText text={{ vi: 'Xem tất cả bài Blog', en: 'Browse all Blog posts', km: 'មើលអត្ថបទប្លុកទាំងអស់' }} />
       </a>
     </div>
     <div class="grid gap-4 md:grid-cols-3">

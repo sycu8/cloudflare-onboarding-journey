@@ -15,7 +15,7 @@ import { useCaseTrackOrder, getUseCasesByTrack } from '../../data/useCases';
         <span class="lang-en">
           A learning hub for Application Services, Developer Platform, Cloudflare One, AI Security & Adoption, and Operational Excellence.
         </span>
-        <span class="lang-km">A beginner-friendly learning hub for Application Services, Developer Platform, and Cloudflare One.</span>
+        <span class="lang-km">មជ្ឈមណ្ឌលសិក្សាសម្រាប់ Application Services, Developer Platform, Cloudflare One, AI Security & Adoption និង Operational Excellence។</span>
       </p>
       <p class="text-muted mt-4 text-xs opacity-80">
         <span class="lang-vi">Hosted on Cloudflare Pages</span>
@@ -26,7 +26,7 @@ import { useCaseTrackOrder, getUseCasesByTrack } from '../../data/useCases';
 
     <div class="space-y-3 text-sm">
       <div class="font-semibold">
-        <LangText text={{ vi: 'Lộ trình học', en: 'Learning tracks', km: 'Learning tracks' }} />
+        <LangText text={{ vi: 'Lộ trình học', en: 'Learning tracks', km: 'ផ្លូវសិក្សា' }} />
       </div>
       <ul class="space-y-2">
         <li><a class="link" href="/tracks/application-services">Application Services</a></li>
@@ -39,10 +39,10 @@ import { useCaseTrackOrder, getUseCasesByTrack } from '../../data/useCases';
 
     <div class="space-y-3 text-sm">
       <div class="font-semibold">
-        <LangText text={{ vi: 'Tình huống thực tế', en: 'Use cases', km: 'Use cases' }} />
+        <LangText text={{ vi: 'Tình huống thực tế', en: 'Use cases', km: 'ករណីប្រើប្រាស់' }} />
       </div>
       <ul class="space-y-2">
-        <li><a class="link font-medium" href="/use-cases/"><LangText text={{ vi: 'Tất cả tình huống', en: 'All use cases', km: 'All use cases' }} /></a></li>
+        <li><a class="link font-medium" href="/use-cases/"><LangText text={{ vi: 'Tất cả tình huống', en: 'All use cases', km: 'ករណីប្រើប្រាស់ទាំងអស់' }} /></a></li>
         {
           useCaseTrackOrder.map((track) => {
             const cases = getUseCasesByTrack(track);
@@ -67,7 +67,7 @@ import { useCaseTrackOrder, getUseCasesByTrack } from '../../data/useCases';
       </ul>
       <div class="pt-2">
         <a class="btn btn-secondary w-full" href="/workshop">
-          <LangText text={{ vi: 'Tham gia workshop', en: 'Join workshop', km: 'Join workshop' }} />
+          <LangText text={{ vi: 'Tham gia workshop', en: 'Join workshop', km: 'ចូលរួម workshop' }} />
         </a>
       </div>
     </div>
@@ -77,10 +77,10 @@ import { useCaseTrackOrder, getUseCasesByTrack } from '../../data/useCases';
     <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
       <div>© {new Date().getFullYear()} Cloudflare Starter Hub</div>
       <div class="flex flex-wrap gap-4">
-        <a class="link" href="/blog/"><LangText text={{ vi: 'Blog', en: 'Blog', km: 'Blog' }} /></a>
-        <a class="link" href="/resources"><LangText text={{ vi: 'Tài nguyên', en: 'Resources', km: 'Resources' }} /></a>
-        <a class="link" href="/glossary"><LangText text={{ vi: 'Thuật ngữ', en: 'Glossary', km: 'Glossary' }} /></a>
-        <a class="link" href="/privacy"><LangText text={{ vi: 'Quyền riêng tư', en: 'Privacy', km: 'Privacy' }} /></a>
+        <a class="link" href="/blog/"><LangText text={{ vi: 'Blog', en: 'Blog', km: 'ប្លុក' }} /></a>
+        <a class="link" href="/resources"><LangText text={{ vi: 'Tài nguyên', en: 'Resources', km: 'ធនធាន' }} /></a>
+        <a class="link" href="/glossary"><LangText text={{ vi: 'Thuật ngữ', en: 'Glossary', km: 'វចនានុក្រម' }} /></a>
+        <a class="link" href="/privacy"><LangText text={{ vi: 'Quyền riêng tư', en: 'Privacy', km: 'ភាពឯកជន' }} /></a>
       </div>
     </div>
     <p class="flex flex-wrap items-center gap-x-1 gap-y-1">

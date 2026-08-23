@@ -1,10 +1,11 @@
 ---
 import LangText from '../ui/LangText.astro';
+import type { LocalizedString } from '../../i18n/types';
 
 type Props = {
-  title: { vi: string; en: string };
-  description: { vi: string; en: string };
-  cta: { href: string; label: { vi: string; en: string } };
+  title: LocalizedString;
+  description: LocalizedString;
+  cta: { href: string; label: LocalizedString };
 };
 
 const { title, description, cta } = Astro.props;
