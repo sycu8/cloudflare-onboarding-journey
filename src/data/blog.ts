@@ -5,6 +5,11 @@ import { postWorkersIntro } from './blogPosts/workers-intro';
 import { postWorkersAi } from './blogPosts/workers-ai';
 import { postAiGateway } from './blogPosts/ai-gateway';
 import { postDeveloperPlatform } from './blogPosts/developer-platform';
+import { postBotManagementPhanBietNguoiVaBot } from './blogPosts/bot-management-phan-biet-nguoi';
+import { postD1SqliteEdgeChoAppNho } from './blogPosts/d1-sqlite-edge-cho-app';
+import { postAgentsSdkAgentAiTrenCloudflare } from './blogPosts/agents-sdk-agent-ai-tren';
+import { postWranglerDeployTuMayTinhLenEdge } from './blogPosts/wrangler-deploy-tu-may-tinh';
+import { postSslTlsHttpsCloudflareChoNguoiMoi } from './blogPosts/ssl-tls-https-cloudflare-cho';
 
 export type BlogTopic = 'ai' | 'security' | 'cdn' | 'workers' | 'developer-platform';
 export type BlogLevel = 'entry' | 'intermediate';
@@ -97,7 +102,7 @@ export const blogSourceNote: LocalizedString = {
   en: 'Content is rewritten for clarity; always read the original posts on blog.cloudflare.com and official docs for technical detail or the latest updates.',
 };
 
-/** Six pre-written posts (one per day) covering trend topics. */
+/** Pre-written posts covering trend topics (batch 1 + batch 2). */
 export const blogPosts: BlogPost[] = [
   postCdnCache,
   postWafBeginner,
@@ -105,6 +110,11 @@ export const blogPosts: BlogPost[] = [
   postWorkersAi,
   postAiGateway,
   postDeveloperPlatform,
+  postBotManagementPhanBietNguoiVaBot,
+  postD1SqliteEdgeChoAppNho,
+  postAgentsSdkAgentAiTrenCloudflare,
+  postWranglerDeployTuMayTinhLenEdge,
+  postSslTlsHttpsCloudflareChoNguoiMoi,
 ].sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
 
 export function getBlogPost(slug: string): BlogPost | undefined {
