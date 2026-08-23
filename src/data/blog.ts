@@ -21,6 +21,11 @@ import { postD1SqliteEdgeChoAppNho } from './blogPosts/d1-sqlite-edge-cho-app';
 import { postAgentsSdkAgentAiTrenCloudflare } from './blogPosts/agents-sdk-agent-ai-tren';
 import { postWranglerDeployTuMayTinhLenEdge } from './blogPosts/wrangler-deploy-tu-may-tinh';
 import { postSslTlsHttpsCloudflareChoNguoiMoi } from './blogPosts/ssl-tls-https-cloudflare-cho';
+import { postKvKeyValueEdgeKhi } from './blogPosts/kv-key-value-edge-khi';
+import { postAiSecurityPromptInjectionNguoi } from './blogPosts/ai-security-prompt-injection-nguoi';
+import { postLoadBalancingHaWebsiteDon } from './blogPosts/load-balancing-ha-website-don';
+import { postZeroTrustAccessThayVpn } from './blogPosts/zero-trust-access-thay-vpn';
+import { postWorkflowsTacVuDaiTren } from './blogPosts/workflows-tac-vu-dai-tren';
 
 export type BlogTopic = 'ai' | 'security' | 'cdn' | 'workers' | 'developer-platform';
 export type BlogLevel = 'entry' | 'intermediate';
@@ -113,7 +118,7 @@ export const blogSourceNote: LocalizedString = {
   en: 'Content is rewritten for clarity; always read the original posts on blog.cloudflare.com and official docs for technical detail or the latest updates.',
 };
 
-/** Pre-written posts covering trend topics (batch 1 + batch 2 + Aug 17–27). */
+/** All scheduled blog posts (6 seed + 21 bi-daily queue). */
 export const blogPosts: BlogPost[] = [
   postCdnCache,
   postWafBeginner,
@@ -132,6 +137,11 @@ export const blogPosts: BlogPost[] = [
   postAgentsSdkAgentAiTrenCloudflare,
   postWranglerDeployTuMayTinhLenEdge,
   postSslTlsHttpsCloudflareChoNguoiMoi,
+  postKvKeyValueEdgeKhi,
+  postAiSecurityPromptInjectionNguoi,
+  postLoadBalancingHaWebsiteDon,
+  postZeroTrustAccessThayVpn,
+  postWorkflowsTacVuDaiTren,
   postAiGatewayChiPhiToken,
   postObservabilityLogsWorkersChoNguoiMoi,
   postImageOptimizationCdnTocDo,
