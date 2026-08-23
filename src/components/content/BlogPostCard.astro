@@ -43,6 +43,7 @@ const thumbAlt = post.images?.[0]?.alt.en ?? post.title.en;
       <span class="text-muted">
         <span class="lang-vi">~{post.readingMinutes} phút</span>
         <span class="lang-en">~{post.readingMinutes} min</span>
+        <span class="lang-km">~{post.readingMinutes} នាទី</span>
       </span>
     </div>
     <h2 class="text-lg font-semibold leading-snug">
@@ -53,7 +54,7 @@ const thumbAlt = post.images?.[0]?.alt.en ?? post.title.en;
     <LangText as="p" class="text-muted mt-2 flex-1 text-sm leading-relaxed" text={post.excerpt} />
     <p class="mt-4">
       <a class="btn btn-secondary" href={href}>
-        <LangText text={{ vi: 'Đọc bài →', en: 'Read post →' }} />
+        <LangText text={{ vi: 'Đọc bài →', en: 'Read post →', km: 'អានអត្ថបទ →' }} />
       </a>
     </p>
   </div>

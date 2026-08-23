@@ -10,6 +10,7 @@ export const postRateLimitingBaoVeFormLogin: BlogPost = {
   title: {
     vi: 'Rate limiting: chặn spam form và dò mật khẩu đơn giản',
     en: 'Rate limiting: a simple brake on form spam and password guessing',
+    km: 'Rate limiting៖ របាំងសាមញ្ញបញ្ហ spam form និងការទាយពាក្យសម្ងាត់',
   },
   description: {
     vi: 'Giải thích rate limiting cho người mới: giới hạn request theo IP/path, bảo vệ form đăng ký và login, kết hợp WAF, và tránh false positive.',
@@ -18,6 +19,7 @@ export const postRateLimitingBaoVeFormLogin: BlogPost = {
   excerpt: {
     vi: 'Spam form và brute-force login không cần hack phức tạp — chỉ cần gửi nhiều request. Rate limiting là “cửa sổ đếm”: quá N lần trong T giây thì chặn hoặc challenge.',
     en: 'Form spam and login brute force do not need fancy hacks — just many requests. Rate limiting is a “counting window”: more than N times in T seconds means block or challenge.',
+    km: 'Spam form និង brute-force login មិនត្រូវការ hack ស្មុគស្មាញ — គ្រាន់តែ request ច្រើន។ Rate limiting គឺ "បង្អួចរាប់"៖ លើស N ដងក្នុង T វិនាទី នោះ block ឬ challenge។',
   },
   keywords: {
     vi: 'rate limiting Cloudflare, chặn spam form, bảo vệ login, WAF rate limit, brute force',

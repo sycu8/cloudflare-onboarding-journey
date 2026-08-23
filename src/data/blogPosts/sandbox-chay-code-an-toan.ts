@@ -10,6 +10,7 @@ export const postSandboxChayCodeAnToan: BlogPost = {
   title: {
     vi: 'Sandbox trên Cloudflare: chạy code không tin cậy an toàn hơn',
     en: 'Cloudflare Sandbox: running untrusted code more safely',
+    km: 'Cloudflare Sandbox៖ រត់ code មិនទុកចិត្តបានយ៉ាងសុវត្ថិភាពជាង',
   },
   description: {
     vi: 'Giải thích trung cấp về Sandbox SDK: khi nào cần cách ly code user/agent, khác Workers thường thế nào, và liên hệ agent code interpreter trên edge.',
@@ -18,6 +19,7 @@ export const postSandboxChayCodeAnToan: BlogPost = {
   excerpt: {
     vi: 'Workers chạy code bạn deploy — tin cậy. Khi user hoặc agent gửi script cần thực thi, bạn cần “hộp cát” tách biệt: Sandbox trên Cloudflare là lớp đó.',
     en: 'Workers run code you deploy — trusted. When users or agents send scripts to execute, you need a separate sandbox: Cloudflare Sandbox is that layer.',
+    km: 'Workers រត់ code ដែលអ្នក deploy — ទុកចិត្តបាន។ នៅពេលអ្នកប្រើ ឬ agent ផ្ញើ script ត្រូវប្រតិបត្តិ អ្នកត្រូវការ sandbox ដាច់ដោយឡែក៖ Cloudflare Sandbox គឺជាស្រទាប់នោះ។',
   },
   keywords: {
     vi: 'Cloudflare Sandbox, chạy code an toàn edge, agent code interpreter, cách ly code user, Sandbox SDK',

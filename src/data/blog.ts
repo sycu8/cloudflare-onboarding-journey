@@ -96,16 +96,16 @@ export type BlogPost = {
 };
 
 export const blogTopicLabels: Record<BlogTopic, LocalizedString> = {
-  ai: { vi: 'AI', en: 'AI' },
-  security: { vi: 'Bảo mật', en: 'Security' },
-  cdn: { vi: 'CDN', en: 'CDN' },
-  workers: { vi: 'Workers', en: 'Workers' },
-  'developer-platform': { vi: 'Developer Platform', en: 'Developer Platform' },
+  ai: { vi: 'AI', en: 'AI', km: 'AI' },
+  security: { vi: 'Bảo mật', en: 'Security', km: 'សុវត្ថិភាព' },
+  cdn: { vi: 'CDN', en: 'CDN', km: 'CDN' },
+  workers: { vi: 'Workers', en: 'Workers', km: 'Workers' },
+  'developer-platform': { vi: 'Developer Platform', en: 'Developer Platform', km: 'Developer Platform' },
 };
 
 export const blogLevelLabels: Record<BlogLevel, LocalizedString> = {
-  entry: { vi: 'Cơ bản', en: 'Entry' },
-  intermediate: { vi: 'Trung cấp', en: 'Intermediate' },
+  entry: { vi: 'Cơ bản', en: 'Entry', km: 'កម្រិតចាប់ផ្តើម' },
+  intermediate: { vi: 'Trung cấp', en: 'Intermediate', km: 'កម្រិតមធ្យម' },
 };
 
 export const blogIntro: LocalizedString = {

@@ -10,6 +10,7 @@ export const postImageOptimizationCdnTocDo: BlogPost = {
   title: {
     vi: 'Ảnh nặng làm chậm site: CDN và tối ưu ảnh trên Cloudflare',
     en: 'Heavy images slow sites: CDN and image optimization on Cloudflare',
+    km: 'រូបភាពធំធ្វើឱ្យគេហទំព័រយឺត៖ CDN និងការបង្កើនប្រសិទ្ធភាពរូបភាពលើ Cloudflare',
   },
   description: {
     vi: 'Giải thích cho người mới: vì sao ảnh là thủ phạm phổ biến, CDN cache và Cloudflare Images/resize, tối ưu mobile — cache thôi không sửa ảnh quá lớn.',
@@ -18,6 +19,7 @@ export const postImageOptimizationCdnTocDo: BlogPost = {
   excerpt: {
     vi: 'Một ảnh hero 4MB có thể chậm hơn cả trăm dòng HTML. CDN phân phối nhanh hơn; tối ưu ảnh giúp file nhẹ hơn trước khi cache — hai việc bổ sung, không thay thế.',
     en: 'One 4MB hero image can hurt more than a hundred lines of HTML. A CDN delivers faster; image optimization makes files lighter before cache — two jobs that complement, not replace, each other.',
+    km: 'រូប hero 4MB អាចធ្វើឱ្យយឺតជាង HTML រាប់រយបន្ទាត់។ CDN ចែកចាយលឿនជាង; ការបង្កើនប្រសិទ្ធភាពរូបភាពធ្វើឱ្យឯកសារស្រាលមុន cache — កិច្ចការពីរដែលបំពេញគ្នា មិនមែនជំនួសគ្នា។',
   },
   keywords: {
     vi: 'tối ưu ảnh Cloudflare, CDN tốc độ, Images resize, WebP AVIF, tăng tốc website ảnh',

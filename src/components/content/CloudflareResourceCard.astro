@@ -31,7 +31,7 @@ const isTutorialLike =
       <a class="link" href={hubPath}>
         <span class="lang-vi">{getTutorialTitleForResource(resource, 'vi')}</span>
         <span class="lang-en">{getTutorialTitleForResource(resource, 'en')}</span>
-        <span class="lang-km">{getTutorialTitleForResource(resource, 'en')}</span>
+        <span class="lang-km">{getTutorialTitleForResource(resource, 'km')}</span>
       </a>
     ) : (
       resource.title
@@ -42,14 +42,19 @@ const isTutorialLike =
   ) : null}
   {preview?.summaryEn ? (
     <p class="lang-en text-muted mt-2 flex-1 text-xs leading-relaxed opacity-80 line-clamp-3">{preview.summaryEn}</p>
+  ) : null}
+  {preview?.summaryKm ? (
+    <p class="lang-km text-muted mt-2 flex-1 text-xs leading-relaxed opacity-80 line-clamp-3">{preview.summaryKm}</p>
+  ) : preview?.summaryEn ? (
+    <p class="lang-km text-muted mt-2 flex-1 text-xs leading-relaxed opacity-80 line-clamp-3">{preview.summaryEn}</p>
   ) : (
-    <p class="text-muted mt-2 flex-1 text-xs break-all opacity-80">{resource.path}</p>
+    <p class="lang-en lang-km text-muted mt-2 flex-1 text-xs break-all opacity-80">{resource.path}</p>
   )}
   <a
     class="btn btn-primary mt-4 w-full justify-center text-sm"
     href={isTutorialLike ? hubPath : resource.url}
     {...(!isTutorialLike ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
   >
-    <LangText text={{ vi: 'Tìm hiểu thêm', en: 'Learn more', km: 'Learn more' }} />
+    <LangText text={{ vi: 'Tìm hiểu thêm', en: 'Learn more', km: 'ស្វែងយល់បន្ថែម' }} />
   </a>
 </article>

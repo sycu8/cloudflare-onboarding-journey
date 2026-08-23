@@ -18,7 +18,7 @@ const featured = getFeaturedDeploymentExamples();
         <p class="text-xs font-semibold uppercase tracking-wide text-[var(--cf-accent)]">
           <span class="lang-vi">Thực hành ngay</span>
           <span class="lang-en">Hands-on</span>
-          <span class="lang-km">Hands-on</span>
+          <span class="lang-km">អនុវត្តភាលៗ</span>
         </p>
         <LangText
           as="h2"
@@ -26,6 +26,7 @@ const featured = getFeaturedDeploymentExamples();
           text={{
             vi: 'Ví dụ triển khai (Cloudflare Resources)',
             en: 'Deployment examples (Cloudflare Resources)',
+            km: 'ឧទាហរណ៍ដាក់បញ្ចូល (Cloudflare Resources)',
           }}
         />
         <LangText
@@ -34,11 +35,12 @@ const featured = getFeaturedDeploymentExamples();
           text={{
             vi: `Tutorial được crawl đầy đủ trên hub (hướng dẫn + lệnh + backlink từng section) — mở docs gốc khi cần ảnh/tab. Catalog: ${cloudflareResources.length} mục (đồng bộ ${RESOURCES_LAST_SYNCED}).`,
             en: `Tutorials are fully synced on the hub (steps, commands, per-section doc links) — open official docs for images/tabs. Catalog: ${cloudflareResources.length} items (synced ${RESOURCES_LAST_SYNCED}).`,
+            km: `Tutorial ត្រូវបាន sync ពេញលើ hub (ជំហាន, ពាក្យបញ្ជា, តំណ doc ក្នុង section) — បើក docs ផ្លូវការនៅពេលត្រូវការរូបភាព/tab។ Catalog៖ ${cloudflareResources.length} ធាតុ (sync ${RESOURCES_LAST_SYNCED})។`,
           }}
         />
       </div>
       <a class="btn btn-primary shrink-0" href="/resources#cloudflare-resources">
-        <LangText text={{ vi: 'Xem toàn bộ catalog', en: 'Browse full catalog', km: 'Browse full catalog' }} />
+        <LangText text={{ vi: 'Xem toàn bộ catalog', en: 'Browse full catalog', km: 'មើល catalog ទាំងមូល' }} />
       </a>
     </div>
 
@@ -67,13 +69,15 @@ const featured = getFeaturedDeploymentExamples();
         Per-lesson picks on{' '}
         <a class="link" href="/tracks/application-services/">learning tracks</a>.
       </span>
-      <span class="lang-km">Source:{' '}
+      <span class="lang-km">
+        ប្រភព៖{' '}
         <a class="link" href={CLOUDFLARE_RESOURCES_URL} target="_blank" rel="noopener noreferrer">
           Cloudflare Resources ↗
         </a>
         {' · '}
-        Per-lesson picks on{' '}
-        <a class="link" href="/tracks/application-services/">learning tracks</a>.</span>
+        ជម្រើសតាមមេរៀនក្នុង{' '}
+        <a class="link" href="/tracks/application-services/">ផ្លូវសិក្សា</a>។
+      </span>
     </p>
   </div>
 </section>
