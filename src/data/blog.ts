@@ -26,6 +26,7 @@ import { postAiSecurityPromptInjectionNguoi } from './blogPosts/ai-security-prom
 import { postLoadBalancingHaWebsiteDon } from './blogPosts/load-balancing-ha-website-don';
 import { postZeroTrustAccessThayVpn } from './blogPosts/zero-trust-access-thay-vpn';
 import { postWorkflowsTacVuDaiTren } from './blogPosts/workflows-tac-vu-dai-tren';
+import { postCapNhatFollowAlongAsDp } from './blogPosts/cap-nhat-follow-along-as-dp';
 
 export type BlogTopic = 'ai' | 'security' | 'cdn' | 'workers' | 'developer-platform';
 export type BlogLevel = 'entry' | 'intermediate';
@@ -147,6 +148,7 @@ export const blogPosts: BlogPost[] = [
   postImageOptimizationCdnTocDo,
   postRateLimitingBaoVeFormLogin,
   postSandboxChayCodeAnToan,
+  postCapNhatFollowAlongAsDp,
 ].sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
 
 export function getBlogPost(slug: string): BlogPost | undefined {
