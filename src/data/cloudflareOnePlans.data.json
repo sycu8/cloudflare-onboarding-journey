@@ -38,10 +38,10 @@
           "name": { "vi": "SLA phản hồi support case", "en": "Support case response SLA" },
           "free": "no",
           "paygo": "no",
-          "enterprise": "Severity-based (contract)",
+          "enterprise": "Standard: P1 ≤2h",
           "note": {
-            "vi": "Pay-as-you-go có chat/ticket nhưng không cam kết thời gian phản hồi case — khách hàng có thể phải chờ rất lâu.",
-            "en": "Pay-as-you-go includes chat/ticket but no committed case response time — customers may wait a long time."
+            "vi": "Enterprise Contract bao gồm Standard Success với SLA phản hồi case theo severity (Asia/LATAM: P1 ≤2h). Premium nâng lên P1 ≤1h. Xem /cheatsheets/enterprise-support-success-packages.",
+            "en": "Enterprise Contract includes Standard Success with severity-based case response SLAs (Asia/LATAM: P1 ≤2h). Premium upgrades to P1 ≤1h. See /cheatsheets/enterprise-support-success-packages."
           }
         },
         {
@@ -49,10 +49,10 @@
           "name": { "vi": "SLA xử lý / giải quyết case", "en": "Support case resolution SLA" },
           "free": "no",
           "paygo": "no",
-          "enterprise": "Severity-based (contract)",
+          "enterprise": "Standard: P1 ≤2h",
           "note": {
-            "vi": "Pay-as-you-go không có SLA xử lý sự cố — thời gian giải quyết phụ thuộc hàng đợi support chung, không theo mức độ nghiêm trọng.",
-            "en": "Pay-as-you-go has no case resolution SLA — fix time depends on the shared support queue, not severity tiers."
+            "vi": "Standard Success (đi kèm Enterprise) có SLA xử lý theo severity; Premium có SLA nhanh hơn. Pay-as-you-go không có SLA resolution.",
+            "en": "Standard Success (included with Enterprise) has severity-based resolution SLAs; Premium is faster. Pay-as-you-go has no resolution SLA."
           }
         }
       ]

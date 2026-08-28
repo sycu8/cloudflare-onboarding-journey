@@ -1,0 +1,270 @@
+{
+  "regionNote": {
+    "vi": "Bảng so sánh cho tổ chức có trụ sở tại châu Á và Mỹ Latinh (Asia & Latin America). Entitlement cụ thể vẫn phụ thuộc hợp đồng.",
+    "en": "Comparison for organizations headquartered in Asia and Latin America. Exact entitlements still depend on your contract."
+  },
+  "packages": [
+    {
+      "id": "standard",
+      "name": { "vi": "Standard Success & Support", "en": "Standard Success & Support" },
+      "pricingHint": { "vi": "Đi kèm mọi hợp đồng Enterprise", "en": "Included with every Enterprise contract" },
+      "acvRange": null
+    },
+    {
+      "id": "premiumT1",
+      "name": { "vi": "Premium (tier 1)", "en": "Premium (tier 1)" },
+      "pricingHint": { "vi": "~20% giá trị hợp đồng/năm", "en": "~20% of annual contract value" },
+      "acvRange": { "vi": "ACV $48k–$100k USD", "en": "ACV $48k–$100k USD" }
+    },
+    {
+      "id": "premiumT2",
+      "name": { "vi": "Premium (tier 2)", "en": "Premium (tier 2)" },
+      "pricingHint": { "vi": "~20% giá trị hợp đồng/năm", "en": "~20% of annual contract value" },
+      "acvRange": { "vi": "ACV $101k–$500k USD", "en": "ACV $101k–$500k USD" }
+    },
+    {
+      "id": "premiumT3",
+      "name": { "vi": "Premium (tier 3)", "en": "Premium (tier 3)" },
+      "pricingHint": { "vi": "~20% giá trị hợp đồng/năm", "en": "~20% of annual contract value" },
+      "acvRange": { "vi": "ACV $501k+ USD", "en": "ACV $501k+ USD" }
+    }
+  ],
+  "categories": [
+    {
+      "id": "getting-started",
+      "title": { "vi": "Getting started", "en": "Getting started" },
+      "features": [
+        {
+          "id": "docs-paths",
+          "name": { "vi": "Cloudflare Docs — Getting Started Learning Paths", "en": "Cloudflare Docs — Getting Started Learning Paths" },
+          "standard": "yes",
+          "premiumT1": "yes",
+          "premiumT2": "yes",
+          "premiumT3": "yes"
+        },
+        {
+          "id": "communities",
+          "name": { "vi": "Communities: Cloudflare & Developer", "en": "Communities: Cloudflare & Developer" },
+          "standard": "yes",
+          "premiumT1": "yes",
+          "premiumT2": "yes",
+          "premiumT3": "yes"
+        },
+        {
+          "id": "success-events",
+          "name": { "vi": "Success events calendar & recording library", "en": "Success events calendar & recording library" },
+          "standard": "yes",
+          "premiumT1": "yes",
+          "premiumT2": "yes",
+          "premiumT3": "yes"
+        },
+        {
+          "id": "expert-setup",
+          "name": { "vi": "Expert-guided solution setup", "en": "Expert-guided solution setup" },
+          "standard": "no",
+          "premiumT1": "Expert-led webinar",
+          "premiumT2": "Focused session (limits apply)",
+          "premiumT3": "Focused session (limits apply)"
+        }
+      ]
+    },
+    {
+      "id": "technical-support",
+      "title": { "vi": "Technical support", "en": "Technical support" },
+      "features": [
+        {
+          "id": "chat-email",
+          "name": { "vi": "24/7 support chat and email", "en": "24/7 support chat and email" },
+          "standard": "yes",
+          "premiumT1": "yes",
+          "premiumT2": "yes",
+          "premiumT3": "yes"
+        },
+        {
+          "id": "emergency-phone",
+          "name": { "vi": "Emergency phone support", "en": "Emergency phone support" },
+          "standard": "yes",
+          "premiumT1": "yes",
+          "premiumT2": "yes",
+          "premiumT3": "yes"
+        },
+        {
+          "id": "under-attack",
+          "name": { "vi": "Support for under-attack scenarios", "en": "Support for under-attack scenarios" },
+          "standard": "yes",
+          "premiumT1": "yes",
+          "premiumT2": "yes",
+          "premiumT3": "yes"
+        },
+        {
+          "id": "premium-queue",
+          "name": { "vi": "Premium support queue", "en": "Premium support queue" },
+          "standard": "no",
+          "premiumT1": "yes",
+          "premiumT2": "yes",
+          "premiumT3": "yes",
+          "note": {
+            "vi": "Pay-as-you-go không có hàng đợi ưu tiên hay SLA phản hồi case — khác hẳn Standard Enterprise.",
+            "en": "Pay-as-you-go has no priority queue or case response SLA — very different from Enterprise Standard."
+          }
+        }
+      ]
+    },
+    {
+      "id": "support-slas",
+      "title": { "vi": "Tech Support SLAs (phản hồi case)", "en": "Tech Support SLAs (case response)" },
+      "features": [
+        {
+          "id": "p1",
+          "name": { "vi": "P1 — Urgent", "en": "P1 — Urgent" },
+          "standard": "≤ 2 hr",
+          "premiumT1": "≤ 1 hr",
+          "premiumT2": "≤ 1 hr",
+          "premiumT3": "≤ 1 hr"
+        },
+        {
+          "id": "p2",
+          "name": { "vi": "P2 — High", "en": "P2 — High" },
+          "standard": "≤ 4 hr",
+          "premiumT1": "≤ 2 hr",
+          "premiumT2": "≤ 2 hr",
+          "premiumT3": "≤ 2 hr"
+        },
+        {
+          "id": "p3",
+          "name": { "vi": "P3 — Normal", "en": "P3 — Normal" },
+          "standard": "≤ 48 hr",
+          "premiumT1": "≤ 24 hr",
+          "premiumT2": "≤ 24 hr",
+          "premiumT3": "≤ 24 hr"
+        },
+        {
+          "id": "p4",
+          "name": { "vi": "P4 — Low", "en": "P4 — Low" },
+          "standard": "≤ 48 hr",
+          "premiumT1": "< 24 hr",
+          "premiumT2": "< 24 hr",
+          "premiumT3": "< 24 hr"
+        }
+      ]
+    },
+    {
+      "id": "success",
+      "title": { "vi": "Solution optimization (Success)", "en": "Solution optimization (Success)" },
+      "features": [
+        {
+          "id": "csm",
+          "name": { "vi": "Customer Success Management", "en": "Customer Success Management" },
+          "standard": "Team",
+          "premiumT1": "Named",
+          "premiumT2": "Named",
+          "premiumT3": "Named"
+        },
+        {
+          "id": "health-check",
+          "name": { "vi": "Annual health check", "en": "Annual health check" },
+          "standard": "yes",
+          "premiumT1": "yes",
+          "premiumT2": "yes",
+          "premiumT3": "yes"
+        },
+        {
+          "id": "executive-briefing",
+          "name": { "vi": "Executive briefing program", "en": "Executive briefing program" },
+          "standard": "Annual",
+          "premiumT1": "Annual",
+          "premiumT2": "Annual",
+          "premiumT3": "Annual"
+        },
+        {
+          "id": "business-reviews",
+          "name": { "vi": "Periodic business reviews", "en": "Periodic business reviews" },
+          "standard": "yes",
+          "premiumT1": "yes",
+          "premiumT2": "yes",
+          "premiumT3": "yes"
+        },
+        {
+          "id": "config-optimization",
+          "name": { "vi": "Configuration optimization with technical experts", "en": "Configuration optimization with technical experts" },
+          "standard": "Webinar",
+          "premiumT1": "Webinar",
+          "premiumT2": "Focused",
+          "premiumT3": "Tailored"
+        },
+        {
+          "id": "roadmap-sneak",
+          "name": { "vi": "Product roadmap sneak peeks", "en": "Product roadmap sneak peeks" },
+          "standard": "Webinar",
+          "premiumT1": "Webinar",
+          "premiumT2": "Focused",
+          "premiumT3": "Tailored"
+        },
+        {
+          "id": "best-practices",
+          "name": { "vi": "Technical best practices workshops", "en": "Technical best practices workshops" },
+          "standard": "Webinar",
+          "premiumT1": "Webinar",
+          "premiumT2": "Focused",
+          "premiumT3": "Tailored"
+        },
+        {
+          "id": "analytics-reporting",
+          "name": { "vi": "Analytics and value reporting", "en": "Analytics and value reporting" },
+          "standard": "yes",
+          "premiumT1": "yes",
+          "premiumT2": "yes",
+          "premiumT3": "yes"
+        }
+      ]
+    },
+    {
+      "id": "availability",
+      "title": { "vi": "Product availability", "en": "Product availability" },
+      "features": [
+        {
+          "id": "sla-credit",
+          "name": { "vi": "Availability SLA service credit", "en": "Availability SLA service credit" },
+          "standard": "10× credit",
+          "premiumT1": "25× credit",
+          "premiumT2": "25× credit",
+          "premiumT3": "25× credit"
+        }
+      ]
+    }
+  ],
+  "addOnServices": [
+    {
+      "id": "ps",
+      "title": { "vi": "Implementation Professional Services", "en": "Implementation Professional Services" },
+      "summary": {
+        "vi": "Triển khai/migration sâu hơn onboarding trong Premium — PM, architect, engineer dẫn dắt theo mục tiêu tổ chức.",
+        "en": "Deeper deployment/migration than Premium onboarding — PMs, architects, and engineers lead toward your organization’s goals."
+      }
+    },
+    {
+      "id": "tam",
+      "title": { "vi": "Technical Account Management (TAM)", "en": "Technical Account Management (TAM)" },
+      "summary": {
+        "vi": "Single point of contact kỹ thuật chiến lược; phản hồi nhanh sự cố khẩn — phù hợp tổ chức có nhu cầu bảo mật/hiệu năng critical và portfolio Cloudflare rộng.",
+        "en": "Strategic technical single point of contact with fast urgent response — for critical security/performance needs and broad Cloudflare portfolios."
+      }
+    },
+    {
+      "id": "socaas",
+      "title": { "vi": "Security Operations Center-as-a-Service (SOCaaS)", "en": "Security Operations Center-as-a-Service (SOCaaS)" },
+      "summary": {
+        "vi": "Cloudflare SOC vận hành giám sát, điều tra và hỗ trợ giảm thiểu sự cố phát hiện từ giải pháp Cloudflare.",
+        "en": "Cloudflare SOC experts monitor, investigate, and help mitigate incidents detected by Cloudflare solutions."
+      }
+    },
+    {
+      "id": "asdp",
+      "title": { "vi": "Authorized Services Delivery Partners (ASDP)", "en": "Authorized Services Delivery Partners (ASDP)" },
+      "summary": {
+        "vi": "Đối tác được Cloudflare công nhận qua validation kỹ thuật — triển khai dịch vụ với chuẩn bảo mật, hiệu năng, độ tin cậy.",
+        "en": "Cloudflare-validated partners for service delivery with security, performance, and reliability standards."
+      }
+    }
+  ]
+}

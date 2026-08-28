@@ -80,32 +80,62 @@ export const enterpriseAdvantages: EnterpriseSection = {
   ],
 };
 
-export const premiumSuccessSection: EnterpriseSection = {
-  id: 'premium-success',
+export const standardSuccessSection: EnterpriseSection = {
+  id: 'standard-success',
   title: {
-    vi: 'Premium Success — lớp thành công sau khi ký hợp đồng',
-    en: 'Premium Success — post-contract success layer',
+    vi: 'Standard Success & Support — đi kèm Enterprise',
+    en: 'Standard Success & Support — included with Enterprise',
   },
   summary: {
-    vi: 'Standard Success đi kèm Enterprise; Premium Success là nâng cấp tùy chọn dành cho tổ chức dùng nhiều sản phẩm Cloudflare. Mục tiêu: phản hồi nhanh hơn với sự cố khẩn, tối ưu cấu hình chủ động, và chia sẻ best practices.',
-    en: 'Standard Success ships with Enterprise; Premium Success is an optional upgrade for organizations with broader Cloudflare portfolios. Goals: faster urgent response, proactive configuration optimization, and expert best practices.',
+    vi: 'Mọi hợp đồng Enterprise bao gồm gói Standard: onboarding modules, hỗ trợ 24/7 chat/email, phone khẩn cấp, hỗ trợ under-attack, và SLA phản hồi case theo severity (P1 urgent ≤2 giờ). Đây là lớp support “có cam kết thời gian” mà Pay-as-you-go không có.',
+    en: 'Every Enterprise contract includes Standard: onboarding modules, 24/7 chat/email support, emergency phone, under-attack support, and severity-based case response SLAs (P1 urgent ≤2 hours). This is the time-bound support layer Pay-as-you-go lacks.',
   },
   bullets: [
     {
-      vi: 'Thời gian phản hồi sự cố khẩn cấp ngắn hơn (theo entitlement Premium — thường dưới một giờ với issue urgent).',
-      en: 'Faster urgent-issue response (per Premium entitlement — often under one hour for urgent issues).',
+      vi: 'Getting started: Docs learning paths, communities, Success events calendar — CSM theo team (không phải named).',
+      en: 'Getting started: Docs learning paths, communities, Success events calendar — team-based CSM (not named).',
     },
     {
-      vi: 'Tối ưu hiệu năng và cấu hình mang tính chủ động — không chỉ chờ ticket.',
-      en: 'Proactive performance and configuration optimization — not only waiting on tickets.',
+      vi: 'Tech Support SLAs (Asia & Latin America): P1 ≤2h · P2 ≤4h · P3/P4 ≤48h.',
+      en: 'Tech Support SLAs (Asia & Latin America): P1 ≤2h · P2 ≤4h · P3/P4 ≤48h.',
     },
     {
-      vi: 'Tiếp cận chuyên gia và best practices; workshop kỹ thuật tùy chỉnh theo tier Premium.',
-      en: 'Access to experts and best practices; customized technical workshops by Premium tier.',
+      vi: 'Solution optimization: annual health check, executive briefing, periodic business reviews, webinar best practices.',
+      en: 'Solution optimization: annual health check, executive briefing, periodic business reviews, webinar best practices.',
     },
     {
-      vi: 'Executive / business review định kỳ (EBR) giúp đo adoption và điều chỉnh roadmap sử dụng.',
-      en: 'Periodic executive / business reviews (EBRs) to measure adoption and adjust the usage roadmap.',
+      vi: 'Availability SLA service credit: 10× (Premium nâng lên 25×).',
+      en: 'Availability SLA service credit: 10× (Premium upgrades to 25×).',
+    },
+  ],
+};
+
+export const premiumSuccessSection: EnterpriseSection = {
+  id: 'premium-success',
+  title: {
+    vi: 'Premium Success & Support — nâng cấp tùy chọn',
+    en: 'Premium Success & Support — optional upgrade',
+  },
+  summary: {
+    vi: 'Premium là nâng cấp mua thêm (~20% giá trị hợp đồng/năm), có 3 tier theo ACV ($48k–100k · $101k–500k · $501k+ USD). Bao gồm premium support queue, SLA nhanh hơn (P1 ≤1h), Named CSM, expert/focused/tailored sessions và credit SLA 25×.',
+    en: 'Premium is an optional add-on (~20% of annual contract value) with three ACV tiers ($48k–100k · $101k–500k · $501k+ USD). It adds a premium support queue, faster SLAs (P1 ≤1h), a named CSM, expert/focused/tailored sessions, and 25× SLA credits.',
+  },
+  bullets: [
+    {
+      vi: 'Premium support queue — ưu tiên xử lý ticket so với Standard.',
+      en: 'Premium support queue — prioritized ticket handling vs Standard.',
+    },
+    {
+      vi: 'SLA nhanh hơn: P1 ≤1h · P2 ≤2h · P3/P4 ≤24h (so với Standard P1 ≤2h).',
+      en: 'Faster SLAs: P1 ≤1h · P2 ≤2h · P3/P4 ≤24h (vs Standard P1 ≤2h).',
+    },
+    {
+      vi: 'Named Customer Success Manager và expert-guided setup (webinar hoặc focused session tùy tier).',
+      en: 'Named Customer Success Manager and expert-guided setup (webinar or focused session by tier).',
+    },
+    {
+      vi: 'Tối ưu cấu hình / roadmap / workshop: webinar → focused → tailored theo tier Premium.',
+      en: 'Configuration / roadmap / workshop optimization: webinar → focused → tailored by Premium tier.',
     },
   ],
 };
@@ -246,6 +276,7 @@ export const indochinaEnterpriseBenefits: IndochinaBenefit[] = [
 export const enterpriseTopicNav: { id: string; label: LocalizedString }[] = [
   { id: 'why-upgrade', label: { vi: 'Vì sao nâng cấp', en: 'Why upgrade' } },
   { id: 'enterprise-advantages', label: { vi: 'Ưu điểm Enterprise', en: 'Enterprise advantages' } },
+  { id: 'standard-success', label: { vi: 'Standard Success', en: 'Standard Success' } },
   { id: 'premium-success', label: { vi: 'Premium Success', en: 'Premium Success' } },
   { id: 'tam', label: { vi: 'TAM', en: 'TAM' } },
   { id: 'professional-services', label: { vi: 'Professional Services', en: 'Professional Services' } },
@@ -254,13 +285,14 @@ export const enterpriseTopicNav: { id: string; label: LocalizedString }[] = [
 ];
 
 export const enterpriseSourceNote: LocalizedString = {
-  vi: 'Nội dung tổng hợp theo hướng dẫn Success Offerings và Enterprise của Cloudflare, kết hợp góc nhìn mua qua đối tác Indochina. Entitlement cụ thể (SLA, TAM, PS) phụ thuộc hợp đồng — luôn xác nhận với Sales / đối tác trước khi mua.',
-  en: 'Summarized from Cloudflare Success Offerings and Enterprise guidance, plus an Indochina partner buying lens. Exact entitlements (SLA, TAM, PS) depend on your contract — always confirm with Sales / your partner before purchase.',
+  vi: 'Nội dung tổng hợp theo Cloudflare Support & Success Packages (Asia & Latin America, SOLMKT 2025) và Success Offerings. Entitlement cụ thể (SLA, TAM, PS) phụ thuộc hợp đồng — luôn xác nhận với Sales / đối tác trước khi mua. Xem bảng chi tiết tại cheatsheet Standard & Premium Success.',
+  en: 'Summarized from Cloudflare Support & Success Packages (Asia & Latin America, SOLMKT 2025) and Success Offerings. Exact entitlements (SLA, TAM, PS) depend on your contract — always confirm with Sales or your partner before purchase. See the Standard & Premium Success cheatsheet for the full matrix.',
 };
 
 export const allEnterpriseSections: EnterpriseSection[] = [
   enterpriseWhyUpgrade,
   enterpriseAdvantages,
+  standardSuccessSection,
   premiumSuccessSection,
   tamSection,
   professionalServicesSection,

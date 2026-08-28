@@ -62,6 +62,11 @@ import {
         <span class="lang-en">Success Offerings ↗</span>
         <span class="lang-km">Success Offerings ↗</span>
       </a>
+      <a class="link" href="/cheatsheets/enterprise-support-success-packages">
+        <span class="lang-vi">Bảng Standard & Premium Success →</span>
+        <span class="lang-en">Standard & Premium Success matrix →</span>
+        <span class="lang-km">Standard & Premium Success matrix →</span>
+      </a>
     </p>
   </header>
 
@@ -97,6 +102,15 @@ import {
               </li>
             ))}
           </ul>
+          {section.id === 'standard-success' || section.id === 'premium-success' ? (
+            <p class="mt-4 text-sm">
+              <a class="link" href="/cheatsheets/enterprise-support-success-packages">
+                <span class="lang-vi">Xem bảng so sánh đầy đủ Standard & Premium (Asia & Latin America) →</span>
+                <span class="lang-en">View full Standard & Premium comparison (Asia & Latin America) →</span>
+                <span class="lang-km">View full Standard & Premium comparison (Asia & Latin America) →</span>
+              </a>
+            </p>
+          ) : null}
           {section.id === 'partner-vietnam' ? (
             <p class="mt-4 flex flex-wrap gap-3 text-sm">
               <a class="link" href={VN_PARTNER_HELPER_URL} target="_blank" rel="noopener noreferrer">
