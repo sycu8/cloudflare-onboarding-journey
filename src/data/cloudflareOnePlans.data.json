@@ -24,10 +24,36 @@
         },
         {
           "id": "uptime-sla",
-          "name": { "vi": "Cam kết uptime (SLA)", "en": "Uptime guarantee (SLA)" },
+          "name": { "vi": "Cam kết uptime nền tảng (SLA)", "en": "Platform uptime guarantee (SLA)" },
           "free": "no",
           "paygo": "100% SLA",
-          "enterprise": "100% SLA"
+          "enterprise": "100% SLA",
+          "note": {
+            "vi": "Đây là SLA uptime dịch vụ (Zero Trust/Gateway), không phải SLA phản hồi hay xử lý support case.",
+            "en": "This is service uptime SLA (Zero Trust/Gateway), not support case response or resolution SLA."
+          }
+        },
+        {
+          "id": "case-response-sla",
+          "name": { "vi": "SLA phản hồi support case", "en": "Support case response SLA" },
+          "free": "no",
+          "paygo": "no",
+          "enterprise": "Severity-based (contract)",
+          "note": {
+            "vi": "Pay-as-you-go có chat/ticket nhưng không cam kết thời gian phản hồi case — khách hàng có thể phải chờ rất lâu.",
+            "en": "Pay-as-you-go includes chat/ticket but no committed case response time — customers may wait a long time."
+          }
+        },
+        {
+          "id": "case-resolution-sla",
+          "name": { "vi": "SLA xử lý / giải quyết case", "en": "Support case resolution SLA" },
+          "free": "no",
+          "paygo": "no",
+          "enterprise": "Severity-based (contract)",
+          "note": {
+            "vi": "Pay-as-you-go không có SLA xử lý sự cố — thời gian giải quyết phụ thuộc hàng đợi support chung, không theo mức độ nghiêm trọng.",
+            "en": "Pay-as-you-go has no case resolution SLA — fix time depends on the shared support queue, not severity tiers."
+          }
         }
       ]
     },
@@ -40,7 +66,11 @@
           "name": { "vi": "Kênh hỗ trợ", "en": "Support channels" },
           "free": "Community & Discord",
           "paygo": "Chat & ticket",
-          "enterprise": "Phone, chat & ticket"
+          "enterprise": "Phone, chat & ticket",
+          "note": {
+            "vi": "Pay-as-you-go mở được ticket nhưng không có SLA phản hồi hay xử lý — khác với Enterprise có cam kết theo severity.",
+            "en": "Pay-as-you-go can open tickets but has no response or resolution SLA — unlike Enterprise severity-based commitments."
+          }
         },
         {
           "id": "professional-services",
@@ -195,6 +225,20 @@
         "vi": "Free giới hạn 50 user — lý do phổ biến để nâng lên Pay-as-you-go.",
         "en": "Free caps at 50 users — a common reason to move to Pay-as-you-go."
       }
+    },
+    {
+      "categoryId": "support",
+      "id": "case-response-sla",
+      "name": { "vi": "SLA phản hồi support case", "en": "Support case response SLA" },
+      "paygo": "no",
+      "enterprise": "Theo severity (hợp đồng)"
+    },
+    {
+      "categoryId": "support",
+      "id": "case-resolution-sla",
+      "name": { "vi": "SLA xử lý / giải quyết case", "en": "Support case resolution SLA" },
+      "paygo": "no",
+      "enterprise": "Theo severity (hợp đồng)"
     },
     {
       "categoryId": "support",

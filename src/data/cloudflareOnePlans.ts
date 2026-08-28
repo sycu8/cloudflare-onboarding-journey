@@ -35,8 +35,38 @@ export const CLOUDFLARE_ONE_PLANS_SOURCE_NOTE: LocalizedString = {
 };
 
 export const cloudflareOnePlansPageIntro: LocalizedString = {
-  vi: 'Cloudflare One (Zero Trust / SASE) có ba lớp billing trên trang chính thức: Free (≤50 user), Pay-as-you-go ($7/user/tháng, tự phục vụ), và Contract Plan (Enterprise — giá tùy chỉnh theo user/năm). Trang này tập trung so sánh Pay-as-you-go với Enterprise khi team vượt free tier hoặc cần DLP/CASB/email/SASE network đầy đủ.',
-  en: 'Cloudflare One (Zero Trust / SASE) has three billing tiers on the official page: Free (≤50 users), Pay-as-you-go ($7/user/month, self-serve), and Contract (Enterprise — custom annual pricing per user). This page focuses on Pay-as-you-go vs Enterprise when you outgrow Free or need full DLP/CASB/email/SASE networking.',
+  vi: 'Cloudflare One (Zero Trust / SASE) có ba lớp billing trên trang chính thức: Free (≤50 user), Pay-as-you-go ($7/user/tháng, tự phục vụ), và Contract Plan (Enterprise — giá tùy chỉnh theo user/năm). Trang này tập trung so sánh Pay-as-you-go với Enterprise khi team vượt free tier hoặc cần DLP/CASB/email/SASE network đầy đủ. Lưu ý: Pay-as-you-go có SLA uptime nền tảng 100% nhưng không có SLA phản hồi hay xử lý support case — khách hàng có thể phải chờ rất lâu khi gặp sự cố.',
+  en: 'Cloudflare One (Zero Trust / SASE) has three billing tiers on the official page: Free (≤50 users), Pay-as-you-go ($7/user/month, self-serve), and Contract (Enterprise — custom annual pricing per user). This page focuses on Pay-as-you-go vs Enterprise when you outgrow Free or need full DLP/CASB/email/SASE networking. Note: Pay-as-you-go includes 100% platform uptime SLA but no support case response or resolution SLA — customers may wait a long time during incidents.',
+};
+
+/** Prominent caveat: Pay-as-you-go support has no case SLAs */
+export const cloudflareOnePaygoSupportWarning: {
+  title: LocalizedString;
+  body: LocalizedString;
+  bullets: LocalizedString[];
+} = {
+  title: {
+    vi: 'Pay-as-you-go: có SLA uptime, không có SLA support case',
+    en: 'Pay-as-you-go: platform uptime SLA, no support case SLA',
+  },
+  body: {
+    vi: 'Gói Pay-as-you-go được quảng bá với cam kết uptime 100% cho dịch vụ Zero Trust — nhưng điều đó không áp dụng cho thời gian phản hồi hay xử lý ticket support. Khách hàng self-serve có thể mở chat/ticket nhưng không được cam kết thời gian phản hồi case hay thời gian giải quyết sự cố; thực tế có thể phải chờ rất lâu, đặc biệt khi outage ảnh hưởng nhiều khách hàng.',
+    en: 'Pay-as-you-go is marketed with 100% uptime SLA for the Zero Trust service — but that does not cover support ticket response or resolution time. Self-serve customers can use chat/ticket with no committed case response or resolution SLA; in practice they may wait a long time, especially during broad outages.',
+  },
+  bullets: [
+    {
+      vi: 'SLA uptime 100% = cam kết dịch vụ chạy; không phải cam kết support phản hồi nhanh.',
+      en: '100% uptime SLA = service availability commitment; not a fast support response guarantee.',
+    },
+    {
+      vi: 'Không có SLA phản hồi case — ticket có thể nằm trong hàng đợi chung không xác định thời gian.',
+      en: 'No case response SLA — tickets may sit in an undifferentiated shared queue.',
+    },
+    {
+      vi: 'Không có SLA xử lý / giải quyết — thời gian fix phụ thuộc support, không theo severity như Enterprise.',
+      en: 'No resolution SLA — fix time depends on support capacity, not Enterprise-style severity tiers.',
+    },
+  ],
 };
 
 export const cloudflareOnePlanTierCards: {
@@ -61,8 +91,8 @@ export const cloudflareOnePlanTierCards: {
     officialName: { vi: 'Pay-as-you-go', en: 'Pay-as-you-go' },
     tagline: { vi: 'SSE self-serve sau 50 user', en: 'Self-serve SSE beyond 50 users' },
     typicalBuyer: {
-      vi: 'Team >50 user cần ZTNA + SWG + DLP predefined, SLA 100%, log 30 ngày — không cần phone support hay SASE network add-on.',
-      en: 'Teams over 50 users needing ZTNA + SWG + predefined DLP, 100% SLA, and 30-day logs — without phone support or SASE network add-ons.',
+      vi: 'Team >50 user cần ZTNA + SWG + DLP predefined, SLA uptime 100%, log 30 ngày — chấp nhận không có SLA phản hồi/xử lý support case (có thể chờ lâu).',
+      en: 'Teams over 50 users needing ZTNA + SWG + predefined DLP, 100% uptime SLA, and 30-day logs — accepting no support case response or resolution SLA (may wait a long time).',
     },
     pricingHint: { vi: '$7/user/tháng', en: '$7/user/month' },
   },
@@ -89,8 +119,8 @@ export const cloudflareOneDecisionGuide: {
     title: { vi: 'Chọn Pay-as-you-go khi…', en: 'Choose Pay-as-you-go when…' },
     bullets: [
       {
-        vi: 'Bạn vượt 50 user trên Free nhưng vẫn self-serve được — chấp nhận chat/ticket thay vì phone support.',
-        en: 'You exceed 50 Free users but can stay self-serve — chat/ticket support is enough vs phone support.',
+        vi: 'Bạn vượt 50 user trên Free nhưng vẫn self-serve được — chấp nhận chat/ticket không có SLA phản hồi hay xử lý case (có thể chờ rất lâu).',
+        en: 'You exceed 50 Free users but can stay self-serve — accepting chat/ticket with no case response or resolution SLA (may wait a long time).',
       },
       {
         vi: 'Use case hẹp: ZTNA + SWG + DLP predefined profiles, log 30 ngày — chưa cần custom DLP hoặc email security.',
@@ -108,6 +138,10 @@ export const cloudflareOneDecisionGuide: {
       {
         vi: 'Cần DLP full-featured (custom profiles), CASB unlimited out-of-band, email security, hoặc RBI trong một gói hợp đồng.',
         en: 'You need full-featured DLP (custom profiles), unlimited out-of-band CASB, email security, or RBI under contract.',
+      },
+      {
+        vi: 'Sự cố production cần phản hồi/xử lý theo severity — Pay-as-you-go không cam kết thời gian; Enterprise có SLA case trong hợp đồng.',
+        en: 'Production incidents need severity-based response and resolution — Pay-as-you-go has no time commitments; Enterprise includes case SLAs in contract.',
       },
       {
         vi: 'Yêu cầu Logpush tới SIEM, retention 6 tháng, phone support, hoặc Professional Services triển khai.',
@@ -173,12 +207,30 @@ export const cloudflareOneKeyDifferentiators: {
     },
   },
   {
-    feature: { vi: 'Hỗ trợ', en: 'Support' },
-    paygo: { vi: 'Chat & ticket', en: 'Chat & ticket' },
-    enterprise: { vi: 'Phone + PS add-on', en: 'Phone + PS add-on' },
+    feature: { vi: 'SLA phản hồi support case', en: 'Support case response SLA' },
+    paygo: { vi: 'Không có', en: 'None' },
+    enterprise: { vi: 'Theo severity (hợp đồng)', en: 'Severity-based (contract)' },
     whyItMatters: {
-      vi: 'Incident khẩn với ZTNA/Gateway outage — phone support và PS thường là lý do Enterprise.',
-      en: 'Urgent ZTNA/Gateway incidents — phone support and PS are common Enterprise drivers.',
+      vi: 'Ticket Pay-as-you-go không cam kết thời gian phản hồi — khách hàng có thể chờ rất lâu trước khi có người xử lý.',
+      en: 'Pay-as-you-go tickets have no response-time commitment — customers may wait a long time before anyone engages.',
+    },
+  },
+  {
+    feature: { vi: 'SLA xử lý / giải quyết case', en: 'Support case resolution SLA' },
+    paygo: { vi: 'Không có', en: 'None' },
+    enterprise: { vi: 'Theo severity (hợp đồng)', en: 'Severity-based (contract)' },
+    whyItMatters: {
+      vi: 'Không có SLA xử lý nghĩa là thời gian fix phụ thuộc hàng đợi chung — rủi ro cao khi ZTNA/Gateway ảnh hưởng vận hành.',
+      en: 'No resolution SLA means fix time follows a shared queue — high risk when ZTNA/Gateway outages affect operations.',
+    },
+  },
+  {
+    feature: { vi: 'Hỗ trợ', en: 'Support' },
+    paygo: { vi: 'Chat & ticket (không SLA case)', en: 'Chat & ticket (no case SLA)' },
+    enterprise: { vi: 'Phone + SLA case + PS add-on', en: 'Phone + case SLA + PS add-on' },
+    whyItMatters: {
+      vi: 'Incident khẩn cần phản hồi và xử lý có cam kết — đây thường là lý do chính nâng từ Pay-as-you-go lên Enterprise.',
+      en: 'Urgent incidents need committed response and resolution — a primary reason to move from Pay-as-you-go to Enterprise.',
     },
   },
 ];
