@@ -99,6 +99,17 @@ export const resources: ResourceCard[] = [
     status: 'available',
   },
   {
+    slug: 'enterprise-success-packages',
+    title: { vi: 'Standard & Premium Success (Enterprise)', en: 'Standard & Premium Success (Enterprise)' },
+    description: {
+      vi: 'Bảng chính thống Asia & Latin America: Standard đi kèm Enterprise, Premium 3 tier theo ACV, SLA support P1–P4.',
+      en: 'Official Asia & Latin America matrix: Standard with Enterprise, Premium 3 ACV tiers, P1–P4 support SLAs.',
+    },
+    type: 'external',
+    href: '/cheatsheets/enterprise-support-success-packages',
+    status: 'available',
+  },
+  {
     slug: 'cloudflare-one-paygo-vs-enterprise',
     title: { vi: 'Cloudflare One: Paygo vs Enterprise', en: 'Cloudflare One: Paygo vs Enterprise' },
     description: {

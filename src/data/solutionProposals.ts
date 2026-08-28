@@ -408,6 +408,7 @@ export const cloudflareOneSaseProposal: SolutionProposal = {
   hubLinks: [
     { href: '/demo-guides#cloudflare-one', label: { vi: 'Dashboard overview Zero Trust', en: 'Zero Trust dashboard overview' } },
     { href: '/cheatsheets/cloudflare-one-enterprise-vs-paygo', label: { vi: 'Pay-as-you-go vs Enterprise', en: 'Pay-as-you-go vs Enterprise' } },
+    { href: '/cheatsheets/enterprise-support-success-packages', label: { vi: 'Standard & Premium Success', en: 'Standard & Premium Success' } },
     { href: '/use-cases/replace-vpn', label: { vi: 'Tình huống thay VPN', en: 'Replace VPN use case' } },
     { href: '/tracks/cloudflare-one', label: { vi: 'Lộ trình Cloudflare One', en: 'Cloudflare One track' } },
   ],

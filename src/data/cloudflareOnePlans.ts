@@ -209,25 +209,34 @@ export const cloudflareOneKeyDifferentiators: {
   {
     feature: { vi: 'SLA phản hồi support case', en: 'Support case response SLA' },
     paygo: { vi: 'Không có', en: 'None' },
-    enterprise: { vi: 'Theo severity (hợp đồng)', en: 'Severity-based (contract)' },
+    enterprise: { vi: 'Standard P1 ≤2h (Premium ≤1h)', en: 'Standard P1 ≤2h (Premium ≤1h)' },
     whyItMatters: {
-      vi: 'Ticket Pay-as-you-go không cam kết thời gian phản hồi — khách hàng có thể chờ rất lâu trước khi có người xử lý.',
-      en: 'Pay-as-you-go tickets have no response-time commitment — customers may wait a long time before anyone engages.',
+      vi: 'Enterprise Contract gồm Standard Success — ticket có SLA phản hồi; Pay-as-you-go không cam kết thời gian.',
+      en: 'Enterprise Contract includes Standard Success — tickets have response SLAs; Pay-as-you-go has no time commitment.',
     },
   },
   {
     feature: { vi: 'SLA xử lý / giải quyết case', en: 'Support case resolution SLA' },
     paygo: { vi: 'Không có', en: 'None' },
-    enterprise: { vi: 'Theo severity (hợp đồng)', en: 'Severity-based (contract)' },
+    enterprise: { vi: 'Standard theo severity', en: 'Standard by severity' },
     whyItMatters: {
-      vi: 'Không có SLA xử lý nghĩa là thời gian fix phụ thuộc hàng đợi chung — rủi ro cao khi ZTNA/Gateway ảnh hưởng vận hành.',
-      en: 'No resolution SLA means fix time follows a shared queue — high risk when ZTNA/Gateway outages affect operations.',
+      vi: 'Standard Success cam kết xử lý theo P1–P4; Pay-as-you-go phụ thuộc hàng đợi chung — có thể chờ rất lâu.',
+      en: 'Standard Success commits to P1–P4 handling; Pay-as-you-go follows a shared queue — may wait a long time.',
+    },
+  },
+  {
+    feature: { vi: 'Premium Success & Support', en: 'Premium Success & Support' },
+    paygo: { vi: 'Không có', en: 'Not available' },
+    enterprise: { vi: 'Add-on (~20% ACV)', en: 'Add-on (~20% ACV)' },
+    whyItMatters: {
+      vi: 'Premium thêm premium queue, Named CSM, SLA P1 ≤1h và expert sessions — xem cheatsheet Success Packages.',
+      en: 'Premium adds priority queue, named CSM, P1 ≤1h SLA, and expert sessions — see Success Packages cheatsheet.',
     },
   },
   {
     feature: { vi: 'Hỗ trợ', en: 'Support' },
     paygo: { vi: 'Chat & ticket (không SLA case)', en: 'Chat & ticket (no case SLA)' },
-    enterprise: { vi: 'Phone + SLA case + PS add-on', en: 'Phone + case SLA + PS add-on' },
+    enterprise: { vi: 'Standard 24/7 + phone khẩn cấp', en: 'Standard 24/7 + emergency phone' },
     whyItMatters: {
       vi: 'Incident khẩn cần phản hồi và xử lý có cam kết — đây thường là lý do chính nâng từ Pay-as-you-go lên Enterprise.',
       en: 'Urgent incidents need committed response and resolution — a primary reason to move from Pay-as-you-go to Enterprise.',
