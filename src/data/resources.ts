@@ -99,6 +99,17 @@ export const resources: ResourceCard[] = [
     status: 'available',
   },
   {
+    slug: 'cloudflare-one-paygo-vs-enterprise',
+    title: { vi: 'Cloudflare One: Paygo vs Enterprise', en: 'Cloudflare One: Paygo vs Enterprise' },
+    description: {
+      vi: 'So sánh Pay-as-you-go ($7/user) và Contract Plan cho ZTNA, SWG, DLP, CASB và SASE network.',
+      en: 'Compare Pay-as-you-go ($7/user) and Contract plans for ZTNA, SWG, DLP, CASB, and SASE networking.',
+    },
+    type: 'external',
+    href: '/cheatsheets/cloudflare-one-enterprise-vs-paygo',
+    status: 'available',
+  },
+  {
     slug: 'enterprise-success',
     title: { vi: 'Enterprise, Premium Success & TAM', en: 'Enterprise, Premium Success & TAM' },
     description: {

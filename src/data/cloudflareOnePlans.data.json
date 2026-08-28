@@ -1,0 +1,235 @@
+{
+  "categories": [
+    {
+      "id": "billing",
+      "title": { "vi": "Thanh toán & quy mô", "en": "Billing & scale" },
+      "features": [
+        {
+          "id": "pricing",
+          "name": { "vi": "Giá công bố", "en": "Published pricing" },
+          "free": "$0",
+          "paygo": "$7/user/month",
+          "enterprise": "Custom / user / year",
+          "note": {
+            "vi": "Trên trang chính thức, Contract Plan (Enterprise) là giá tùy chỉnh theo user/năm. Pay-as-you-go tự phục vụ trên dashboard.",
+            "en": "On the official page, the Contract plan (Enterprise) is custom annual pricing per user. Pay-as-you-go is self-serve in the dashboard."
+          }
+        },
+        {
+          "id": "users",
+          "name": { "vi": "Số user (seat)", "en": "User (seat) count" },
+          "free": "50 user limit",
+          "paygo": "No user limit",
+          "enterprise": "No user limit"
+        },
+        {
+          "id": "uptime-sla",
+          "name": { "vi": "Cam kết uptime (SLA)", "en": "Uptime guarantee (SLA)" },
+          "free": "no",
+          "paygo": "100% SLA",
+          "enterprise": "100% SLA"
+        }
+      ]
+    },
+    {
+      "id": "support",
+      "title": { "vi": "Hỗ trợ & vận hành", "en": "Support & operations" },
+      "features": [
+        {
+          "id": "support-channel",
+          "name": { "vi": "Kênh hỗ trợ", "en": "Support channels" },
+          "free": "Community & Discord",
+          "paygo": "Chat & ticket",
+          "enterprise": "Phone, chat & ticket"
+        },
+        {
+          "id": "professional-services",
+          "name": { "vi": "Professional Services", "en": "Professional Services" },
+          "free": "no",
+          "paygo": "no",
+          "enterprise": "Add-on"
+        },
+        {
+          "id": "log-retention",
+          "name": { "vi": "Lưu log chuẩn", "en": "Standard log retention" },
+          "free": "Up to 24 hours",
+          "paygo": "Up to 30 days",
+          "enterprise": "Up to 6 months"
+        },
+        {
+          "id": "logpush",
+          "name": { "vi": "Logpush → SIEM / cloud storage", "en": "Logpush to SIEM / cloud storage" },
+          "free": "no",
+          "paygo": "no",
+          "enterprise": "yes",
+          "note": {
+            "vi": "Trang pricing ghi “Up to 6 months; Logpush to SIEM/cloud storage” cho Contract Plan.",
+            "en": "The pricing page lists “Up to 6 months; Logpush to SIEM/cloud storage” for the Contract plan."
+          }
+        },
+        {
+          "id": "log-explorer",
+          "name": { "vi": "Log Explorer", "en": "Log Explorer" },
+          "free": "Add-on",
+          "paygo": "Add-on",
+          "enterprise": "Add-on"
+        }
+      ]
+    },
+    {
+      "id": "core",
+      "title": { "vi": "Năng lực lõi (workspace security)", "en": "Core capabilities (workspace security)" },
+      "features": [
+        {
+          "id": "app-connector",
+          "name": { "vi": "Application connector (Tunnel)", "en": "Application connector (Tunnel)" },
+          "free": "yes",
+          "paygo": "yes",
+          "enterprise": "yes"
+        },
+        {
+          "id": "device-client",
+          "name": { "vi": "Cloudflare One Client (WARP agent)", "en": "Cloudflare One Client (WARP agent)" },
+          "free": "yes",
+          "paygo": "yes",
+          "enterprise": "yes"
+        },
+        {
+          "id": "ztna",
+          "name": { "vi": "Zero Trust Network Access (Access / ZTNA)", "en": "Zero Trust Network Access (Access / ZTNA)" },
+          "free": "yes",
+          "paygo": "yes",
+          "enterprise": "yes"
+        },
+        {
+          "id": "swg",
+          "name": { "vi": "Secure Web Gateway (Gateway / SWG)", "en": "Secure Web Gateway (Gateway / SWG)" },
+          "free": "yes",
+          "paygo": "yes",
+          "enterprise": "yes"
+        },
+        {
+          "id": "dex",
+          "name": { "vi": "Digital Experience Monitoring (DEX)", "en": "Digital Experience Monitoring (DEX)" },
+          "free": "yes",
+          "paygo": "yes",
+          "enterprise": "yes"
+        },
+        {
+          "id": "network-flow",
+          "name": { "vi": "Network flow monitoring", "en": "Network flow monitoring" },
+          "free": "yes",
+          "paygo": "yes",
+          "enterprise": "yes"
+        }
+      ]
+    },
+    {
+      "id": "data",
+      "title": { "vi": "Bảo vệ dữ liệu & SaaS", "en": "Data protection & SaaS" },
+      "features": [
+        {
+          "id": "casb",
+          "name": { "vi": "Cloud Access Security Broker (CASB)", "en": "Cloud Access Security Broker (CASB)" },
+          "free": "2 read-only API",
+          "paygo": "2 read-only API",
+          "enterprise": "Unlimited OOB (add-on)",
+          "note": {
+            "vi": "Pay-as-you-go giữ giới hạn 2 tích hợp API read-only. Enterprise mở unlimited out-of-band integrations dưới dạng add-on.",
+            "en": "Pay-as-you-go keeps the 2 read-only API integration limit. Enterprise unlocks unlimited out-of-band integrations as an add-on."
+          }
+        },
+        {
+          "id": "dlp",
+          "name": { "vi": "Data Loss Prevention (DLP)", "en": "Data Loss Prevention (DLP)" },
+          "free": "Limited predefined",
+          "paygo": "Limited predefined",
+          "enterprise": "Full-featured (add-on)",
+          "note": {
+            "vi": "Cả Free và Pay-as-you-go chỉ có predefined DLP profiles. Custom DLP profiles và mở rộng thường cần Contract Plan.",
+            "en": "Free and Pay-as-you-go include predefined DLP profiles only. Custom DLP profiles and expansion typically require the Contract plan."
+          }
+        },
+        {
+          "id": "rbi",
+          "name": { "vi": "Remote Browser Isolation (RBI)", "en": "Remote Browser Isolation (RBI)" },
+          "free": "no",
+          "paygo": "Add-on",
+          "enterprise": "Add-on"
+        },
+        {
+          "id": "email-security",
+          "name": { "vi": "Email security", "en": "Email security" },
+          "free": "no",
+          "paygo": "no",
+          "enterprise": "Add-on"
+        }
+      ]
+    },
+    {
+      "id": "sase",
+      "title": { "vi": "SASE & mạng", "en": "SASE & networking" },
+      "features": [
+        {
+          "id": "network-services",
+          "name": { "vi": "Network services for SASE (WAN, Magic Firewall, …)", "en": "Network services for SASE (WAN, Magic Firewall, …)" },
+          "free": "no",
+          "paygo": "no",
+          "enterprise": "Add-on",
+          "note": {
+            "vi": "Cloudflare One hợp nhất workspace security với network services trên tab pricing riêng. Magic WAN / Firewall thường đi kèm Contract + add-on.",
+            "en": "Cloudflare One converges workspace security with network services on a separate pricing tab. Magic WAN / Firewall is typically Contract plus add-ons."
+          }
+        }
+      ]
+    }
+  ],
+  "highlights": [
+    {
+      "categoryId": "billing",
+      "id": "users",
+      "name": { "vi": "Số user (seat)", "en": "User (seat) count" },
+      "paygo": "No user limit",
+      "enterprise": "No user limit",
+      "note": {
+        "vi": "Free giới hạn 50 user — lý do phổ biến để nâng lên Pay-as-you-go.",
+        "en": "Free caps at 50 users — a common reason to move to Pay-as-you-go."
+      }
+    },
+    {
+      "categoryId": "support",
+      "id": "log-retention",
+      "name": { "vi": "Lưu log chuẩn", "en": "Standard log retention" },
+      "paygo": "Up to 30 days",
+      "enterprise": "Up to 6 months + Logpush"
+    },
+    {
+      "categoryId": "data",
+      "id": "dlp",
+      "name": { "vi": "Data Loss Prevention (DLP)", "en": "Data Loss Prevention (DLP)" },
+      "paygo": "Limited predefined",
+      "enterprise": "Full-featured (add-on)"
+    },
+    {
+      "categoryId": "data",
+      "id": "casb",
+      "name": { "vi": "CASB integrations", "en": "CASB integrations" },
+      "paygo": "2 read-only API",
+      "enterprise": "Unlimited OOB (add-on)"
+    },
+    {
+      "categoryId": "data",
+      "id": "email-security",
+      "name": { "vi": "Email security", "en": "Email security" },
+      "paygo": "no",
+      "enterprise": "Add-on"
+    },
+    {
+      "categoryId": "sase",
+      "id": "network-services",
+      "name": { "vi": "Network services for SASE", "en": "Network services for SASE" },
+      "paygo": "no",
+      "enterprise": "Add-on"
+    }
+  ]
+}
