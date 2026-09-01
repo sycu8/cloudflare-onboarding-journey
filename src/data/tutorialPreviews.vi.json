@@ -1,0 +1,200 @@
+{
+  "/pages/tutorials/add-an-html-form-with-formspree": {
+    "titleVi": "Thêm HTML form với Formspree",
+    "summaryVi": "Học cách thêm HTML form với Formspree — dịch vụ back-end xử lý và lưu dữ liệu form.",
+    "explanationVi": "Thuộc Developer Platform — thực hành triển khai code, API và dữ liệu trên edge/serverless. Tutorial «Thêm HTML form với Formspree» giúp bạn làm quen luồng triển khai thật. Đọc phần tóm tắt và lưu ý trước — sau đó mở docs gốc để copy lệnh và cấu hình chi tiết.",
+    "complete": true,
+    "sections": {
+      "overview": {
+        "titleVi": "Tổng quan",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlVi": "Hầu hết website — dù là trang portfolio HTML đơn giản hay ứng dụng JavaScript phức tạp — đều cần form để thu thập dữ liệu người dùng. <a href=\"https://formspree.io\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Formspree ↗</a> là dịch vụ back-end xử lý và lưu form, giúp developer gắn form lên site mà không phải viết code hay function phía server."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Trong tutorial này, bạn sẽ tạo <code class=\"tutorial-inline-code\">&lt;form&gt;</code> bằng HTML và CSS thuần, rồi thêm vào website HTML tĩnh host trên Cloudflare Pages. Xem <a href=\"https://developers.cloudflare.com/pages/get-started/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Get started guide</a> để làm quen nền tảng. Bạn sẽ dùng Formspree để thu dữ liệu gửi lên và gửi email thông báo khi có submission mới — không cần JavaScript hay back-end coding."
+          }
+        ]
+      },
+      "setup": {
+        "titleVi": "Setup",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlVi": "Bắt đầu bằng cách tạo <a href=\"https://repo.new/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">GitHub repository mới ↗</a>. Sau đó tạo thư mục local trên máy, khởi tạo git, và gắn GitHub làm remote:"
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Cửa sổ Terminal"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Giờ bạn có thể làm việc trong thư mục <code class=\"tutorial-inline-code\">new-project</code> vừa tạo."
+          }
+        ]
+      },
+      "the-website-markup": {
+        "titleVi": "Website markup",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlVi": "Project mẫu này chỉ dùng HTML thuần. Trang chủ sẽ có form Contact Us nhận name, email và message."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Code form được chỉnh từ tutorial HTML Forms. Để hiểu sâu hơn cách HTML form hoạt động và tài nguyên học thêm, xem <a href=\"https://developers.cloudflare.com/pages/tutorials/forms/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">HTML Forms tutorial</a>."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Code form:"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Thuộc tính <code class=\"tutorial-inline-code\">action</code> quyết định nơi gửi dữ liệu form. Bạn sẽ cập nhật sau để gửi tới Formspree. Mọi thẻ <code class=\"tutorial-inline-code\">&lt;input&gt;</code> phải có <code class=\"tutorial-inline-code\">name</code> duy nhất để bắt dữ liệu. Giá trị <code class=\"tutorial-inline-code\">for</code> và <code class=\"tutorial-inline-code\">id</code> phải khớp để nối <code class=\"tutorial-inline-code\">&lt;label&gt;</code> với <code class=\"tutorial-inline-code\">&lt;input&gt;</code> tương ứng — phục vụ công cụ accessibility như screen reader."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Xem <a href=\"https://developers.cloudflare.com/pages/tutorials/forms/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">HTML Forms tutorial</a> để biết cách dựng HTML form."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Để thêm form vào website, trước hết tạo <code class=\"tutorial-inline-code\">public/index.html</code> trong thư mục project. Thư mục <code class=\"tutorial-inline-code\">public</code> chứa mọi asset front-end, và file <code class=\"tutorial-inline-code\">index.html</code> sẽ là trang chủ."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Copy nội dung sau vào <code class=\"tutorial-inline-code\">public/index.html</code>, đã gồm form ở trên:"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Bạn đã có HTML document chứa form Contact Us với vài field. Tuy nhiên chưa đặt <code class=\"tutorial-inline-code\">action</code> tới server xử lý dữ liệu. Bạn sẽ làm điều đó ở phần tiếp theo."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "GitHub Repository"
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Source code ví dụ này <a href=\"https://github.com/formspree/formspree-example-cloudflare-html\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">có trên GitHub ↗</a>. Đây là ứng dụng Pages đang chạy, kèm <a href=\"https://formspree-example-cloudflare-html.pages.dev/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">live demo ↗</a>."
+          }
+        ]
+      },
+      "the-formspree-back-end": {
+        "titleVi": "Formspree back end",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlVi": "HTML form đã xong, nhưng khi user submit, dữ liệu sẽ gửi bằng request <code class=\"tutorial-inline-code\">POST</code> tới URL <code class=\"tutorial-inline-code\">/</code>. Không có server xử lý dữ liệu tại URL đó nên sẽ lỗi. Để sửa, tạo Formspree form mới và copy URL duy nhất vào <code class=\"tutorial-inline-code\">action</code> của form."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Để tạo Formspree form, đăng ký <a href=\"https://formspree.io/register\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">tài khoản trên Formspree ↗</a>."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Tiếp theo, tạo form mới bằng nút <strong>+ New form</strong>. Đặt tên <code class=\"tutorial-inline-code\">Contact-us form</code> và cập nhật email nhận submission. Rồi chọn <strong>Create Form</strong>."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Bạn sẽ thấy hướng dẫn cách gắn form mới."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Copy URL <code class=\"tutorial-inline-code\">Form Endpoint</code> và dán vào thuộc tính <code class=\"tutorial-inline-code\">action</code> của form đã tạo."
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Khi submit form, bạn sẽ được chuyển tới trang Thank You. Dữ liệu form được gửi vào tài khoản trên <a href=\"https://formspree.io/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Formspree.io ↗</a>."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Bạn có thể chỉnh logic xử lý form: đổi <a href=\"https://help.formspree.io/hc/en-us/articles/360012378333--Thank-You-redirect\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">trang redirect ↗</a>, cập nhật <a href=\"https://help.formspree.io/hc/en-us/articles/115008379348-Changing-a-form-email-address\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">email thông báo ↗</a>, hoặc thêm plugin như <a href=\"https://help.formspree.io/hc/en-us/articles/360036563573-Use-Google-Sheets-to-send-your-submissions-to-a-spreadsheet\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Google Sheets ↗</a>, <a href=\"https://help.formspree.io/hc/en-us/articles/360045648933-Send-Slack-notifications\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Slack ↗</a> và các tích hợp khác."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Thêm trợ giúp khi setup Formspree:"
+          },
+          {
+            "type": "list",
+            "itemsVi": [
+              "Trợ giúp chung về Formspree: <a href=\"https://help.formspree.io/hc/en-us\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Formspree help site ↗</a>.",
+              "Ví dụ và cảm hứng cho HTML form: <a href=\"https://formspree.io/library\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Formspree form library ↗</a>.",
+              "Tips gắn Formspree với Next.js, Gatsby, Eleventy: <a href=\"https://formspree.io/guides\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Formspree guides ↗</a>."
+            ]
+          }
+        ]
+      },
+      "deployment": {
+        "titleVi": "Triển khai",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlVi": "Bạn đã sẵn sàng deploy project."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Nếu chưa, lưu tiến độ trong <code class=\"tutorial-inline-code\">git</code> rồi push commit lên GitHub repository:"
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Cửa sổ Terminal"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Code giờ nằm trên GitHub repository — Pages cũng truy cập được."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Nếu đây là project Cloudflare Pages đầu tiên, xem <a href=\"https://developers.cloudflare.com/pages/get-started/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Get started</a> để setup đầy đủ. Sau khi chọn đúng GitHub repository, cấu hình project với build settings sau:"
+          },
+          {
+            "type": "list",
+            "itemsVi": [
+              "<strong>Project name</strong> – Tùy bạn chọn",
+              "<strong>Production branch</strong> – <code class=\"tutorial-inline-code\">main</code>",
+              "<strong>Framework preset</strong> – None",
+              "<strong>Build command</strong> – None / để trống",
+              "<strong>Build output directory</strong> – <code class=\"tutorial-inline-code\">public</code>"
+            ]
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Sau khi chọn <strong>Save and Deploy</strong>, project Pages bắt đầu lần deploy đầu. Khi thành công, bạn nhận subdomain <code class=\"tutorial-inline-code\">*.pages.dev</code> duy nhất và link live demo."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Trong tutorial này, bạn đã build và deploy website bằng Cloudflare Pages và Formspree để xử lý form submission. Bạn tạo HTML tĩnh với form nói chuyện với Formspree để xử lý, lưu request và gửi thông báo."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Source code đầy đủ của ứng dụng này nằm trên <a href=\"https://github.com/formspree/formspree-example-cloudflare-html\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">GitHub ↗</a>."
+          }
+        ]
+      },
+      "related-resources": {
+        "titleVi": "Tài nguyên liên quan"
+      }
+    }
+  }
+}
