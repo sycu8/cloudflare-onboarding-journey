@@ -43,9 +43,4 @@ export const tutorialChrome = {
     km: 'Tutorial មិនទាន់ធ្វើសមកាល។ ត្រឡប់មកវិញបន្ទាប់ពី sync catalog ឬបើកឯកសារផ្លូវការខាងក្រោម។',
   },
   resources: { vi: 'Tài nguyên', en: 'Resources', km: 'ធនធាន' },
-  bodySourceNote: {
-    vi: 'Lệnh và code giữ nguyên tiếng Anh từ docs gốc. Thuật ngữ sản phẩm (Workers, Pages, Wrangler, Formspree) không dịch.',
-    en: 'Commands and code stay in English from the official docs. Product terms (Workers, Pages, Wrangler, Formspree) are not translated.',
-    km: 'ពាក្យបញ្ជា និង code រក្សាភាសាអង់គ្លេសពី docs ផ្លូវការ។ ពាក្យផលិតផល (Workers, Pages, Wrangler, Formspree) មិនបកប្រែ។',
-  },
 } as const satisfies Record<string, LocalizedString>;

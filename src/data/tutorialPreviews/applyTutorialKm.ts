@@ -3,7 +3,7 @@ import type {
   TutorialPreview,
   TutorialSection,
 } from '../tutorialPreviews';
-import { sanitizeTutorialHtml } from '../../lib/sanitizeTutorialHtml';
+import { prepareTutorialHtml, sanitizeTutorialHtml } from '../../lib/sanitizeTutorialHtml';
 import tutorialKmJson from '../tutorialPreviews.km.json';
 import tutorialViJson from '../tutorialPreviews.vi.json';
 
@@ -45,16 +45,24 @@ function sanitizeBlock(block: TutorialContentBlock): TutorialContentBlock {
     return {
       ...block,
       html: sanitizeTutorialHtml(block.html),
-      ...(block.htmlVi ? { htmlVi: sanitizeTutorialHtml(block.htmlVi) } : {}),
-      ...(block.htmlKm ? { htmlKm: sanitizeTutorialHtml(block.htmlKm) } : {}),
+      ...(block.htmlVi ? { htmlVi: prepareTutorialHtml(block.htmlVi, block.html) } : {}),
+      ...(block.htmlKm ? { htmlKm: prepareTutorialHtml(block.htmlKm, block.html) } : {}),
     };
   }
   if (block.type === 'list') {
     return {
       ...block,
       items: block.items.map(sanitizeTutorialHtml),
-      ...(block.itemsVi ? { itemsVi: block.itemsVi.map(sanitizeTutorialHtml) } : {}),
-      ...(block.itemsKm ? { itemsKm: block.itemsKm.map(sanitizeTutorialHtml) } : {}),
+      ...(block.itemsVi
+        ? {
+            itemsVi: block.itemsVi.map((item, i) => prepareTutorialHtml(item, block.items[i] ?? item) ?? item),
+          }
+        : {}),
+      ...(block.itemsKm
+        ? {
+            itemsKm: block.itemsKm.map((item, i) => prepareTutorialHtml(item, block.items[i] ?? item) ?? item),
+          }
+        : {}),
     };
   }
   return block;

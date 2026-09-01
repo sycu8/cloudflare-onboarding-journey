@@ -24,6 +24,12 @@ const checks = [
     km: [],
     viOnly: [],
   },
+  {
+    file: 'tutorials/pages/tutorials/add-an-html-form-with-formspree/index.html',
+    en: ['Almost every website', 'Get started guide', 'action'],
+    km: ['គេហទំព័រស្ទើរតែទាំងអស់', 'Get started guide'],
+    viOnly: ['Hầu hết website'],
+  },
 ];
 
 let failed = 0;
@@ -104,6 +110,31 @@ if (topicKmKeys < 88) {
   failed++;
 } else {
   console.log(`✓ ${topicKmKeys} content roadmap topic KM overlays`);
+}
+
+const formspreeDist = join(dist, 'tutorials/pages/tutorials/add-an-html-form-with-formspree/index.html');
+if (existsSync(formspreeDist)) {
+  const html = readFileSync(formspreeDist, 'utf8');
+  const viChunks = [
+    ...html.matchAll(
+      /<(?:div|p|li|span|h[1-6]|aside)[^>]*class="[^"]*\blang-vi\b[^"]*"[^>]*>([\s\S]*?)<\/(?:div|p|li|span|h[1-6]|aside)>/g,
+    ),
+  ].map((m) => m[1]);
+  if (viChunks.some((chunk) => /[\u1780-\u17FF]/.test(chunk))) {
+    console.error('✗ Formspree tutorial: Khmer leaked into lang-vi');
+    failed++;
+  } else {
+    console.log('✓ Formspree tutorial: lang-vi has no Khmer');
+  }
+  const kmCode = [...html.matchAll(/<code[^>]*>([\s\S]*?)<\/code>/g)].filter((m) =>
+    /[\u1780-\u17FF]/.test(m[1]),
+  );
+  if (kmCode.length) {
+    console.error(`✗ Formspree tutorial: ${kmCode.length} <code> tags still contain Khmer`);
+    failed++;
+  } else {
+    console.log('✓ Formspree tutorial: <code> identifiers stay English');
+  }
 }
 
 if (failed) process.exit(1);
