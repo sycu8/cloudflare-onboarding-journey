@@ -26,7 +26,7 @@
     "assets:sync": "node scripts/sync-static-assets-r2.mjs",
     "diagrams:sync": "node scripts/scrape-ref-arch-diagrams.mjs",
     "resources:sync": "node scripts/sync-cloudflare-resources.mjs",
-    "resources:crawl-previews": "node scripts/crawl-tutorial-previews.mjs",
+    "labs:import": "python3 scripts/import-developer-labs.py",
     "check:diagrams": "node scripts/check-ref-diagram-assets.mjs",
     "review:pr": "node scripts/review-contribution.mjs",
     "blog:today": "node scripts/blog-editorial.mjs",

@@ -117,6 +117,16 @@ test.describe('Cloudflare Starter Hub E2E', () => {
     await expect(page.getByRole('heading', { name: /Developer Labs/i }).first()).toBeVisible();
   });
 
+  test('developer labs hub pages load', async ({ page }) => {
+    await page.goto(`${BASE}/tracks/developer-platform/labs/`);
+    await expect(page.getByRole('heading', { name: /Developer Labs/i }).first()).toBeVisible();
+    await page.goto(`${BASE}/tracks/developer-platform/labs/workers/`);
+    await expect(page.getByRole('heading', { name: /Cloudflare Workers/i }).first()).toBeVisible();
+    await page.goto(`${BASE}/tracks/developer-platform/labs/workers/01-getting-started/`);
+    await expect(page.getByRole('heading', { name: /Bắt đầu|Getting Started/i }).first()).toBeVisible();
+    await expect(page.locator('pre.lab-code').first()).toBeVisible();
+  });
+
   test('changelog and status pages load', async ({ page }) => {
     await page.goto(`${BASE}/changelog`);
     await expect(

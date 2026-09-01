@@ -4,9 +4,11 @@ import DeveloperLabTrackCard from './DeveloperLabTrackCard.astro';
 import {
   DEVELOPER_LABS_URL,
   DEVELOPER_LABS_DISCORD_URL,
+  DEVELOPER_LABS_HUB_PATH,
   developerLabsIntro,
   developerLabTracks,
 } from '../../data/developerLabs';
+import { labChrome } from '../../data/developerLabs.copy';
 
 type Props = {
   /** Extra heading context on the track page vs the resources catalog */
@@ -26,18 +28,14 @@ const totalLabs = developerLabTracks.reduce((sum, t) => sum + t.labCount, 0);
     <LangText
       as="h2"
       class="mt-2 text-xl font-semibold text-white md:text-2xl"
-      text={
-        variant === 'resources'
-          ? { vi: 'Developer Labs — làm rồi mới đọc thêm', en: 'Developer Labs — ship something real', km: 'Developer Labs — ship something real' }
-          : { vi: 'Lab thực hành (nguồn bổ sung)', en: 'Hands-on labs (supplementary)', km: 'Hands-on labs (supplementary)' }
-      }
+      text={variant === 'resources' ? labChrome.resourcesLabs : labChrome.trackLabs}
     />
     <LangText as="p" class="mt-2 max-w-3xl text-sm leading-relaxed text-white/80" text={developerLabsIntro} />
 
     <ol class="developer-labs-spine mt-5" aria-label="Lab track order">
       {developerLabTracks.map((lab, i) => (
         <li class="developer-labs-spine-item">
-          <a class="developer-labs-spine-link" href={`#lab-${lab.id}`}>
+          <a class="developer-labs-spine-link" href={`/tracks/developer-platform/labs/${lab.id}/`}>
             <span class="developer-labs-spine-n">{lab.number}</span>
             <span class="min-w-0">
               <LangText as="span" class="block text-sm font-semibold text-white" text={lab.title} />
@@ -50,10 +48,13 @@ const totalLabs = developerLabTracks.reduce((sum, t) => sum + t.labCount, 0);
     </ol>
 
     <div class="mt-5 flex flex-wrap gap-2">
-      <a class="btn btn-primary" href={DEVELOPER_LABS_URL} target="_blank" rel="noopener noreferrer">
-        <span class="lang-vi">Mở Developer Labs</span>
-        <span class="lang-en">Open Developer Labs</span>
-        <span class="lang-km">Open Developer Labs</span>
+      <a class="btn btn-primary" href={DEVELOPER_LABS_HUB_PATH}>
+        <span class="lang-vi">{labChrome.openOnHub.vi}</span>
+        <span class="lang-en">{labChrome.openOnHub.en}</span>
+        <span class="lang-km">{labChrome.openOnHub.km}</span>
+      </a>
+      <a class="developer-labs-ghost" href={DEVELOPER_LABS_URL} target="_blank" rel="noopener noreferrer">
+        labs.cloudflare.dev
         <span aria-hidden="true">↗</span>
       </a>
       <a class="developer-labs-ghost" href={DEVELOPER_LABS_DISCORD_URL} target="_blank" rel="noopener noreferrer">
@@ -63,7 +64,7 @@ const totalLabs = developerLabTracks.reduce((sum, t) => sum + t.labCount, 0);
       <p class="developer-labs-meta">
         <span class="lang-vi">{developerLabTracks.length} track · {totalLabs} labs guided</span>
         <span class="lang-en">{developerLabTracks.length} tracks · {totalLabs} guided labs</span>
-        <span class="lang-km">{developerLabTracks.length} tracks · {totalLabs} guided labs</span>
+        <span class="lang-km">{developerLabTracks.length} track · {totalLabs} lab មានការណែនាំ</span>
       </p>
     </div>
   </div>

@@ -652,11 +652,11 @@ export const tracks: Track[] = [
       {
         title: { vi: 'Developer Labs (hands-on)', en: 'Developer Labs (hands-on)', km: 'Developer Labs (hands-on)' },
         description: {
-          vi: '4 track guided: Workers, MCP, Agents SDK, Sandbox SDK — ship project thật.',
-          en: 'Four guided tracks: Workers, MCP, Agents SDK, Sandbox SDK — ship a real project.',
-          km: 'Four guided tracks: Workers, MCP, Agents SDK, Sandbox SDK — ship a real project.',
+          vi: '4 track guided trên hub: Workers, MCP, Agents SDK, Sandbox SDK — ship project thật.',
+          en: 'Four guided tracks on this hub: Workers, MCP, Agents SDK, Sandbox SDK — ship a real project.',
+          km: 'Four guided tracks on this hub: Workers, MCP, Agents SDK, Sandbox SDK — ship a real project.',
         },
-        href: 'https://labs.cloudflare.dev/',
+        href: '/tracks/developer-platform/labs/',
       },
     ],
     startHere: {
