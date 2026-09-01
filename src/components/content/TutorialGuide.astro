@@ -1,6 +1,11 @@
 ---
 import LangText from '../ui/LangText.astro';
-import type { TutorialContentBlock, TutorialSection } from '../../data/tutorialPreviews';
+import { tutorialChrome } from '../../data/tutorialCopy';
+import {
+  getTutorialSectionSummaryEn,
+  getTutorialSectionSummaryKm,
+  type TutorialSection,
+} from '../../data/tutorialPreviews';
 
 type Props = {
   sections: TutorialSection[];
@@ -14,7 +19,10 @@ const toc = sections.filter((s) => s.blocks.length > 0);
 <div class="tutorial-guide lg:grid lg:grid-cols-[minmax(0,1fr)_220px] lg:gap-10">
   <div class="tutorial-sections min-w-0 space-y-6">
     {
-      toc.map((section) => (
+      toc.map((section) => {
+        const summaryEn = getTutorialSectionSummaryEn(section);
+        const summaryKm = section.summaryVi ? getTutorialSectionSummaryKm(section) : undefined;
+        return (
         <section
           id={`hub-${section.anchor}`}
           class:list={[
@@ -40,6 +48,12 @@ const toc = sections.filter((s) => s.blocks.length > 0);
               {section.summaryVi ? (
                 <p class="lang-vi mt-2 text-sm leading-relaxed text-[var(--cf-text)]">{section.summaryVi}</p>
               ) : null}
+              {summaryEn ? (
+                <p class="lang-en mt-2 text-sm leading-relaxed text-[var(--cf-text)]">{summaryEn}</p>
+              ) : null}
+              {summaryKm ? (
+                <p class="lang-km mt-2 text-sm leading-relaxed text-[var(--cf-text)]">{summaryKm}</p>
+              ) : null}
             </div>
             <a
               class="btn btn-secondary shrink-0 text-xs sm:text-sm"
@@ -48,7 +62,7 @@ const toc = sections.filter((s) => s.blocks.length > 0);
               rel="noopener noreferrer"
               title={section.title}
             >
-              <LangText text={{ vi: 'Mở section docs gốc ↗', en: 'Open source section ↗', km: 'Open source section ↗' }} />
+              <LangText text={tutorialChrome.openSourceSection} />
             </a>
           </div>
 
@@ -57,19 +71,26 @@ const toc = sections.filter((s) => s.blocks.length > 0);
               if (block.type === 'paragraph') {
                 return (
                   <>
-                    <p class="lang-en" set:html={block.html} />
-                    <p class="lang-km" set:html={block.htmlKm ?? block.html} />
+                    <div class="lang-vi" set:html={block.htmlVi ?? block.html} />
+                    <div class="lang-en" set:html={block.html} />
+                    <div class="lang-km" set:html={block.htmlKm ?? block.html} />
                   </>
                 );
               }
               if (block.type === 'note') {
                 return (
                   <>
-                    <aside class="lang-en rounded-lg border border-amber-500/30 bg-amber-500/5 px-4 py-3 text-amber-900 dark:text-amber-100">
-                      <p set:html={block.html} />
+                    <aside class="lang-vi tutorial-inline-note" role="note">
+                      <p class="tutorial-inline-note-kind">{tutorialChrome.notesKind.vi}</p>
+                      <div class="font-bold" set:html={block.htmlVi ?? block.html} />
                     </aside>
-                    <aside class="lang-km rounded-lg border border-amber-500/30 bg-amber-500/5 px-4 py-3 text-amber-900 dark:text-amber-100">
-                      <p set:html={block.htmlKm ?? block.html} />
+                    <aside class="lang-en tutorial-inline-note" role="note">
+                      <p class="tutorial-inline-note-kind">{tutorialChrome.notesKind.en}</p>
+                      <div class="font-bold" set:html={block.html} />
+                    </aside>
+                    <aside class="lang-km tutorial-inline-note" role="note">
+                      <p class="tutorial-inline-note-kind">{tutorialChrome.notesKind.km}</p>
+                      <div class="font-bold" set:html={block.htmlKm ?? block.html} />
                     </aside>
                   </>
                 );
@@ -77,9 +98,15 @@ const toc = sections.filter((s) => s.blocks.length > 0);
               if (block.type === 'list') {
                 const Tag = block.ordered ? 'ol' : 'ul';
                 const listClass = [block.ordered ? 'list-decimal' : 'list-disc', 'space-y-1 pl-5'];
+                const viItems = block.itemsVi ?? block.items;
                 const kmItems = block.itemsKm ?? block.items;
                 return (
                   <>
+                    <Tag class:list={[...listClass, 'lang-vi']}>
+                      {viItems.map((item) => (
+                        <li set:html={item} />
+                      ))}
+                    </Tag>
                     <Tag class:list={[...listClass, 'lang-en']}>
                       {block.items.map((item) => (
                         <li set:html={item} />
@@ -112,7 +139,7 @@ const toc = sections.filter((s) => s.blocks.length > 0);
           {section.relatedLinks.length > 0 ? (
             <div class="mt-5 rounded-lg border border-[var(--cf-border)] bg-[var(--cf-bg-elevated)]/50 p-4">
               <p class="text-xs font-semibold uppercase tracking-wide text-[var(--cf-accent)]">
-                <LangText text={{ vi: 'Liên kết liên quan (docs Cloudflare)', en: 'Related links (Cloudflare docs)', km: 'Related links (Cloudflare docs)' }} />
+                <LangText text={tutorialChrome.relatedLinks} />
               </p>
               <ul class="mt-2 space-y-1.5 text-sm">
                 {section.relatedLinks.map((link) => (
@@ -126,7 +153,8 @@ const toc = sections.filter((s) => s.blocks.length > 0);
             </div>
           ) : null}
         </section>
-      ))
+        );
+      })
     }
 
   </div>
@@ -138,7 +166,7 @@ const toc = sections.filter((s) => s.blocks.length > 0);
         aria-label="Tutorial table of contents"
       >
         <p class="text-xs font-semibold uppercase tracking-wide text-[var(--cf-text-muted)]">
-          <LangText text={{ vi: 'Mục lục', en: 'On this page', km: 'On this page' }} />
+          <LangText text={tutorialChrome.toc} />
         </p>
         <ol class="mt-3 max-h-[70vh] space-y-1 overflow-y-auto text-xs">
           {toc.map((section) => (
@@ -154,9 +182,7 @@ const toc = sections.filter((s) => s.blocks.length > 0);
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <span class="lang-vi">↗ docs gốc</span>
-                <span class="lang-en">↗ docs</span>
-                <span class="lang-km">↗ docs</span>
+                <LangText text={tutorialChrome.docsGoc} />
               </a>
             </li>
           ))}
@@ -165,3 +191,42 @@ const toc = sections.filter((s) => s.blocks.length > 0);
     </aside>
   ) : null}
 </div>
+
+<style>
+  .tutorial-inline-note {
+    border-radius: 0.85rem;
+    border: 1px solid color-mix(in srgb, var(--cf-accent) 45%, var(--cf-border));
+    border-left-width: 5px;
+    border-left-color: var(--cf-accent);
+    background: color-mix(in srgb, var(--cf-accent) 12%, var(--cf-bg));
+    padding: 0.85rem 1rem;
+  }
+
+  .tutorial-inline-note-kind {
+    display: inline-flex;
+    margin: 0 0 0.45rem;
+    border-radius: 999px;
+    background: #111111;
+    color: #ffffff;
+    padding: 0.14rem 0.5rem;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .tutorial-code {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  .tutorial-body :global(.tutorial-inline-code) {
+    font-size: 0.85em;
+    padding: 0.1em 0.35em;
+    border-radius: 0.25rem;
+    background: var(--cf-bg-elevated);
+    border: 1px solid var(--cf-border);
+  }
+</style>

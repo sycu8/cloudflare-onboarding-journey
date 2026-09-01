@@ -412,7 +412,7 @@
           },
           {
             "type": "paragraph",
-            "htmlKm": "នៅក្នុងមេរៀននេះ អ្នកនឹងបង្កើតសមាសធាតុ <code class=\"tutorial-inline-code\"><form></code> ដោយប្រើ React ហើយបន្ថែមវាទៅក្នុងកម្មវិធីទំព័រតែមួយដែលបង្កើតឡើងដោយ <code class=\"tutorial-inline-code\">create-react-app</code>។ ទោះបីជាអ្នកកំពុងប្រើ <code class=\"tutorial-inline-code\">create-react-app</code> (CRA) ក៏ដោយ ក៏គោលគំនិតនឹងអនុវត្តចំពោះក្របខ័ណ្ឌ React ណាមួយរួមទាំង Next.js, Gatsby និងច្រើនទៀត។ អ្នក​នឹង​ប្រើ Formspree ដើម្បី​ប្រមូល​ទិន្នន័យ​ដែល​បាន​ដាក់​ស្នើ និង​ផ្ញើ​ការ​ជូន​ដំណឹង​តាម​អ៊ីមែល​នៅ​ពេល​ការ​ដាក់​ស្នើ​ថ្មី​មក​ដល់ ដោយ​មិន​ចាំបាច់​តម្រូវ​ឱ្យ​មាន​ការ​សរសេរ​កូដ​ខាង​ម៉ាស៊ីន​មេ​ឡើយ។"
+            "htmlKm": "នៅក្នុងមេរៀននេះ អ្នកនឹងបង្កើតសមាសធាតុ <code class=\"tutorial-inline-code\">&lt;form&gt;</code> ដោយប្រើ React ហើយបន្ថែមវាទៅក្នុងកម្មវិធីទំព័រតែមួយដែលបង្កើតឡើងដោយ <code class=\"tutorial-inline-code\">create-react-app</code>។ ទោះបីជាអ្នកកំពុងប្រើ <code class=\"tutorial-inline-code\">create-react-app</code> (CRA) ក៏ដោយ ក៏គោលគំនិតនឹងអនុវត្តចំពោះក្របខ័ណ្ឌ React ណាមួយរួមទាំង Next.js, Gatsby និងច្រើនទៀត។ អ្នក​នឹង​ប្រើ Formspree ដើម្បី​ប្រមូល​ទិន្នន័យ​ដែល​បាន​ដាក់​ស្នើ និង​ផ្ញើ​ការ​ជូន​ដំណឹង​តាម​អ៊ីមែល​នៅ​ពេល​ការ​ដាក់​ស្នើ​ថ្មី​មក​ដល់ ដោយ​មិន​ចាំបាច់​តម្រូវ​ឱ្យ​មាន​ការ​សរសេរ​កូដ​ខាង​ម៉ាស៊ីន​មេ​ឡើយ។"
           },
           {
             "type": "paragraph",
@@ -1491,15 +1491,16 @@
     "complete": true
   },
   "/pages/tutorials/add-an-html-form-with-formspree": {
-    "titleKm": "បន្ថែមទម្រង់ HTML ជាមួយ Formspree",
-    "summaryKm": "ស្វែងយល់ពីរបៀបបន្ថែមទម្រង់ HTML ជាមួយ Formspree ដែលជាសេវាកម្មផ្នែកខាងក្រោយដែលគ្រប់គ្រងដំណើរការ និងការផ្ទុកទម្រង់។",
-    "introKm": "ស្វែងយល់ពីរបៀបបន្ថែមទម្រង់ HTML ជាមួយ Formspree ដែលជាសេវាកម្មផ្នែកខាងក្រោយដែលគ្រប់គ្រងដំណើរការ និងការផ្ទុកទម្រង់។",
+    "titleKm": "បន្ថែម HTML form ជាមួយ Formspree",
+    "summaryKm": "រៀនរបៀបបន្ថែម HTML form ជាមួយ Formspree — សេវា back-end ដែលដំណើរការ និងរក្សាទុកទិន្នន័យ form។",
+    "introKm": "រៀនរបៀបបន្ថែម HTML form ជាមួយ Formspree — សេវា back-end ដែលដំណើរការ និងរក្សាទុកទិន្នន័យ form។",
     "notesKm": [
-      "នេះគឺជាការសង្ខេបនៅលើ Orange Cloud Learning Hub — វាមិនជំនួសឯកសារផ្លូវការទេ។",
-      "បើកតំណឯកសារផ្លូវការខាងក្រោមសម្រាប់ពាក្យបញ្ជា CLI កូដ snippets និងរូបថតអេក្រង់ពេញ។",
-      "ទាមទារគណនី Cloudflare, Wrangler CLI និង (ជាធម្មតា) បំពេញការណែនាំ Workers/Pages Get started ។",
-      "Cloudflare ឯកសារផ្លាស់ប្តូរជាញឹកញាប់ — ផ្ទៀងផ្ទាត់កាលបរិច្ឆេទដែលបានពិនិត្យចុងក្រោយនៅលើទំព័រផ្លូវការមុនពេលប្រើប្រាស់ផលិតកម្ម។"
+      "នេះជាសេចក្តីសង្ខេបនៅលើ Orange Cloud Learning Hub — មិនជំនួសឯកសារផ្លូវការទេ។",
+      "បើកតំណ docs ផ្លូវការខាងក្រោមសម្រាប់ CLI, snippet code និងរូបថតអេក្រង់ពេញ។",
+      "ត្រូវការ Cloudflare account, Wrangler CLI និង (ជាធម្មតា) បំពេញការណែនាំ Workers/Pages Get started។",
+      "Cloudflare docs ផ្លាស់ប្តូរជាញឹកញាប់ — ផ្ទៀងផ្ទាត់កាលបរិច្ឆេទ Last reviewed នៅលើទំព័រផ្លូវការមុនពេលប្រើ production។"
     ],
+    "complete": true,
     "sections": {
       "overview": {
         "titleKm": "ទិដ្ឋភាពទូទៅ",
@@ -1507,25 +1508,25 @@
         "blocks": [
           {
             "type": "paragraph",
-            "htmlKm": "ស្ទើរតែគ្រប់គេហទំព័រ មិនថាវាជាទំព័រផលប័ត្រ HTML សាមញ្ញ ឬកម្មវិធី JavaScript ស្មុគស្មាញទេ នឹងត្រូវការទម្រង់ដើម្បីប្រមូលទិន្នន័យអ្នកប្រើប្រាស់។ <a href=\"https://formspree.io\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Formspree ↗</a> គឺជាសេវាកម្មផ្នែកខាងក្រោយដែលគ្រប់គ្រងដំណើរការទម្រង់ និងការផ្ទុក ដែលអនុញ្ញាតឱ្យអ្នកអភិវឌ្ឍន៍បញ្ចូលទម្រង់នៅលើគេហទំព័ររបស់ពួកគេដោយមិនចាំបាច់សរសេរកូដ ឬមុខងារផ្នែកខាងម៉ាស៊ីនមេ។"
+            "htmlKm": "គេហទំព័រស្ទើរតែទាំងអស់ — ទោះជាទំព័រ portfolio HTML សាមញ្ញ ឬកម្មវិធី JavaScript ស្មុគស្មាញ — ត្រូវការ form ដើម្បីប្រមូលទិន្នន័យអ្នកប្រើ។ <a href=\"https://formspree.io\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Formspree ↗</a> គឺជាសេវា back-end ដែលដំណើរការ និងរក្សាទុក form ដែលអនុញ្ញាតឱ្យ developer ភ្ជាប់ form លើ website ដោយមិនចាំបាច់សរសេរ code ឬ function ខាង server។"
           },
           {
             "type": "paragraph",
-            "htmlKm": "នៅក្នុងមេរៀននេះ អ្នកនឹងបង្កើត <code class=\"tutorial-inline-code\"><form></code> ដោយប្រើ HTML និង CSS ធម្មតា ហើយបន្ថែមវាទៅគេហទំព័រ HTML ឋិតិវន្តដែលបង្ហោះនៅលើ Cloudflare Pages ។ សូមមើល <a href=\"https://developers.cloudflare.com/pages/get-started/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Get started មគ្គុទ្ទេសក៍</a> ដើម្បីស្គាល់ខ្លួនអ្នកជាមួយវេទិកានេះ។ អ្នក​នឹង​ប្រើ Formspree ដើម្បី​ប្រមូល​ទិន្នន័យ​ដែល​បាន​ដាក់​ស្នើ និង​ផ្ញើ​ការ​ជូន​ដំណឹង​តាម​អ៊ីមែល​នៅ​ពេល​ការ​ដាក់​ស្នើ​ថ្មី​មក​ដល់ ដោយ​មិន​ចាំបាច់​តម្រូវ​ឱ្យ​មាន JavaScript ឬ back-end coding ឡើយ។"
+            "htmlKm": "ក្នុង tutorial នេះ អ្នកនឹងបង្កើត <code class=\"tutorial-inline-code\">&lt;form&gt;</code> ដោយប្រើ HTML និង CSS ធម្មតា រួចបន្ថែមទៅ website HTML ឋិតិវន្តដែល host លើ Cloudflare Pages។ មើល <a href=\"https://developers.cloudflare.com/pages/get-started/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Get started guide</a> ដើម្បីស្គាល់ platform។ អ្នកនឹងប្រើ Formspree ដើម្បីប្រមូលទិន្នន័យដែលបានដាក់ស្នើ និងផ្ញើ email notification នៅពេលមាន submission ថ្មី — ដោយមិនចាំបាច់ JavaScript ឬ back-end coding។"
           }
         ]
       },
       "setup": {
-        "titleKm": "រៀបចំ",
+        "titleKm": "Setup",
         "summaryKm": null,
         "blocks": [
           {
             "type": "paragraph",
-            "htmlKm": "ដើម្បីចាប់ផ្តើម សូមបង្កើត <a href=\"https://repo.new/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">ឃ្លាំង GitHub ថ្មី ↗</a>។ បន្ទាប់មកបង្កើតថតមូលដ្ឋានថ្មីនៅលើម៉ាស៊ីនរបស់អ្នក ចាប់ផ្តើម git និងភ្ជាប់ទីតាំង GitHub ជា destination ពីចម្ងាយ៖"
+            "htmlKm": "ចាប់ផ្តើមដោយបង្កើត <a href=\"https://repo.new/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">GitHub repository ថ្មី ↗</a>។ បន្ទាប់មកបង្កើត directory មូលដ្ឋានលើម៉ាស៊ីន ចាប់ផ្តើម git ហើយភ្ជាប់ GitHub ជា remote៖"
           },
           {
             "type": "paragraph",
-            "htmlKm": "បង្អួចស្ថានីយ"
+            "htmlKm": "វីនដូ Terminal"
           },
           {
             "type": "code",
@@ -1533,25 +1534,25 @@
           },
           {
             "type": "paragraph",
-            "htmlKm": "ឥឡូវនេះ អ្នកអាចចាប់ផ្តើមធ្វើការនៅក្នុងថត <code class=\"tutorial-inline-code\">គម្រោងថ្មី</code> ដែលអ្នកបានបង្កើត។"
+            "htmlKm": "ឥឡូវអ្នកអាចធ្វើការក្នុង directory <code class=\"tutorial-inline-code\">new-project</code> ដែលទើបបង្កើត។"
           }
         ]
       },
       "the-website-markup": {
-        "titleKm": "ការសម្គាល់គេហទំព័រ",
+        "titleKm": "Website markup",
         "summaryKm": null,
         "blocks": [
           {
             "type": "paragraph",
-            "htmlKm": "អ្នកនឹងប្រើ HTML ធម្មតាសម្រាប់គម្រោងឧទាហរណ៍នេះប៉ុណ្ណោះ។ ទំព័រដើមនឹងរួមបញ្ចូលទម្រង់ទំនាក់ទំនងយើង ដែលទទួលយកឈ្មោះ អាសយដ្ឋានអ៊ីមែល និងសារ។"
+            "htmlKm": "Project ឧទាហរណ៍នេះប្រើតែ HTML ធម្មតា។ ទំព័រដើមនឹងមាន form Contact Us ដែលទទួល name, email និង message។"
           },
           {
             "type": "paragraph",
-            "htmlKm": "កូដ​ទម្រង់​ត្រូវ​បាន​កែ​សម្រួល​ពី​ការ​បង្រៀន​ទម្រង់ HTML ។ សម្រាប់​ការ​ពន្យល់​ស៊ីជម្រៅ​បន្ថែម​ទៀត​អំពី​របៀប​ដែល​ទម្រង់ HTML ដំណើរការ និង​ធនធាន​សិក្សា​បន្ថែម សូម​យោង​ទៅ <a href=\"https://developers.cloudflare.com/pages/tutorials/forms/\" class=\"link\" target=\"_blanker\"\"> ការបង្រៀន</a>។"
+            "htmlKm": "Code form ត្រូវបានកែពី tutorial HTML Forms។ ដើម្បីយល់ស៊ីជម្រៅពីរបៀប HTML form ដំណើរការ និងធនធានសិក្សាបន្ថែម សូមមើល <a href=\"https://developers.cloudflare.com/pages/tutorials/forms/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">HTML Forms tutorial</a>។"
           },
           {
             "type": "paragraph",
-            "htmlKm": "កូដទម្រង់៖"
+            "htmlKm": "Code form៖"
           },
           {
             "type": "code",
@@ -1559,19 +1560,19 @@
           },
           {
             "type": "paragraph",
-            "htmlKm": "គុណលក្ខណៈ <code class=\"tutorial-inline-code\">សកម្មភាព</code> កំណត់កន្លែងដែលទិន្នន័យទម្រង់ត្រូវបានផ្ញើ។ អ្នកនឹងធ្វើបច្ចុប្បន្នភាពវានៅពេលក្រោយ ដើម្បីផ្ញើទិន្នន័យទម្រង់ទៅ Formspree ។ ស្លាក <code class=\"tutorial-inline-code\"><input></code> ទាំងអស់ត្រូវតែមាន <code class=\"tutorial-inline-code\">ឈ្មោះ</code> ដើម្បីចាប់យកទិន្នន័យរបស់អ្នកប្រើប្រាស់។ តម្លៃ <code class=\"tutorial-inline-code\">សម្រាប់</code> និង <code class=\"tutorial-inline-code\">id</code> ត្រូវតែផ្គូផ្គង ដើម្បីភ្ជាប់ <code class=\"tutorial-inline-code\"><label></code> ជាមួយ <code class=\"tutorial-inline-code\"><input></code> សម្រាប់ __0ersibility.32"
+            "htmlKm": "គុណលក្ខណៈ <code class=\"tutorial-inline-code\">action</code> កំណត់កន្លែងផ្ញើទិន្នន័យ form។ អ្នកនឹងធ្វើបច្ចុប្បន្នភាពពេលក្រោយដើម្បីផ្ញើទៅ Formspree។ ស្លាក <code class=\"tutorial-inline-code\">&lt;input&gt;</code> ទាំងអស់ត្រូវមាន <code class=\"tutorial-inline-code\">name</code> តែមួយគត់ដើម្បីចាប់ទិន្នន័យ។ តម្លៃ <code class=\"tutorial-inline-code\">for</code> និង <code class=\"tutorial-inline-code\">id</code> ត្រូវផ្គូផ្គង ដើម្បីភ្ជាប់ <code class=\"tutorial-inline-code\">&lt;label&gt;</code> ជាមួយ <code class=\"tutorial-inline-code\">&lt;input&gt;</code> សម្រាប់ accessibility ដូច screen reader។"
           },
           {
             "type": "paragraph",
-            "htmlKm": "សូមមើល <a href=\"https://developers.cloudflare.com/pages/tutorials/forms/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">ការបង្រៀនទម្រង់ HTML</a> អំពីរបៀបបង្កើតទម្រង់ HTML ។"
+            "htmlKm": "មើល <a href=\"https://developers.cloudflare.com/pages/tutorials/forms/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">HTML Forms tutorial</a> អំពីរបៀបបង្កើត HTML form។"
           },
           {
             "type": "paragraph",
-            "htmlKm": "ដើម្បីបន្ថែមទម្រង់បែបបទនេះទៅក្នុងគេហទំព័ររបស់អ្នក ជាដំបូង សូមបង្កើត <code class=\"tutorial-inline-code\">public/index.html</code> នៅក្នុងថតគម្រោងរបស់អ្នក។ ថត <code class=\"tutorial-inline-code\">សាធារណៈ</code> គួរតែមានទ្រព្យសម្បត្តិផ្នែកខាងមុខទាំងអស់ ហើយឯកសារ <code class=\"tutorial-inline-code\">index.html</code> នឹងបម្រើជាទំព័រដើមសម្រាប់គេហទំព័រ។"
+            "htmlKm": "ដើម្បីបន្ថែម form នេះទៅ website ជាដំបូងបង្កើត <code class=\"tutorial-inline-code\">public/index.html</code> ក្នុង directory project។ Directory <code class=\"tutorial-inline-code\">public</code> គួរផ្ទុក asset front-end ទាំងអស់ ហើយ file <code class=\"tutorial-inline-code\">index.html</code> នឹងជាទំព័រដើម។"
           },
           {
             "type": "paragraph",
-            "htmlKm": "ចម្លង និងបិទភ្ជាប់ខ្លឹមសារខាងក្រោមទៅក្នុងឯកសារ <code class=\"tutorial-inline-code\">public/index.html</code> របស់អ្នក ដែលរួមមានទម្រង់ខាងលើ៖"
+            "htmlKm": "Copy និង paste ខ្លឹមសារខាងក្រោមទៅក្នុង <code class=\"tutorial-inline-code\">public/index.html</code> ដែលរួមមាន form ខាងលើ៖"
           },
           {
             "type": "code",
@@ -1579,41 +1580,41 @@
           },
           {
             "type": "paragraph",
-            "htmlKm": "ឥឡូវនេះអ្នកមានឯកសារ HTML ដែលមានទម្រង់ទំនាក់ទំនងយើងជាមួយនឹងវាលជាច្រើនសម្រាប់អ្នកប្រើប្រាស់ដើម្បីបំពេញ។ ទោះយ៉ាងណាក៏ដោយ អ្នកមិនទាន់កំណត់គុណលក្ខណៈ <code class=\"tutorial-inline-code\">សកម្មភាព</code> ទៅម៉ាស៊ីនមេដែលអាចគ្រប់គ្រងទិន្នន័យទម្រង់។ អ្នកនឹងធ្វើវានៅក្នុងផ្នែកបន្ទាប់នៃមេរៀននេះ។"
+            "htmlKm": "ឥឡូវអ្នកមាន HTML document ដែលមាន form Contact Us ជាមួយ field ជាច្រើន។ ប៉ុន្តែមិនទាន់កំណត់គុណលក្ខណៈ <code class=\"tutorial-inline-code\">action</code> ទៅ server ដែលដំណើរការទិន្នន័យ form។ អ្នកនឹងធ្វើវានៅផ្នែកបន្ទាប់។"
           },
           {
             "type": "paragraph",
-            "htmlKm": "ឃ្លាំង GitHub"
+            "htmlKm": "GitHub Repository"
           },
           {
             "type": "paragraph",
-            "htmlKm": "កូដប្រភពសម្រាប់ឧទាហរណ៍នេះគឺ <a href=\"https://github.com/formspree/formspree-example-cloudflare-html\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">មាននៅលើ GitHub ↗</a>។ វាគឺជាកម្មវិធី Pages ផ្ទាល់ដែលមាន <a href=\"https://formspree-example-cloudflare-html.pages.dev/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">ការបង្ហាញផ្ទាល់ផងដែរ ↗"
+            "htmlKm": "Source code សម្រាប់ឧទាហរណ៍នេះ <a href=\"https://github.com/formspree/formspree-example-cloudflare-html\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">មាននៅលើ GitHub ↗</a>។ វាជា Pages application ដែលមាន <a href=\"https://formspree-example-cloudflare-html.pages.dev/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">live demo ↗</a> ផងដែរ។"
           }
         ]
       },
       "the-formspree-back-end": {
-        "titleKm": "ផ្នែកខាងក្រោយ Formspree",
+        "titleKm": "Formspree back end",
         "summaryKm": null,
         "blocks": [
           {
             "type": "paragraph",
-            "htmlKm": "ទម្រង់ HTML ត្រូវបានបញ្ចប់ ទោះជាយ៉ាងណាក៏ដោយ នៅពេលដែលអ្នកប្រើប្រាស់ដាក់ស្នើទម្រង់នេះ ទិន្នន័យនឹងត្រូវបានផ្ញើនៅក្នុងសំណើ <code class=\"tutorial-inline-code\">POST</code> ទៅកាន់ <code class=\"tutorial-inline-code\">/</code> URL។ មិនមានម៉ាស៊ីនមេដើម្បីដំណើរការទិន្នន័យនៅ URL នោះទេ ដូច្នេះវានឹងបង្កបញ្ហា។ ដើម្បីជួសជុលវា បង្កើតទម្រង់ Formspree ថ្មី ហើយចម្លង URL តែមួយគត់របស់វាទៅក្នុង <code class=\"tutorial-inline-code\">សកម្មភាព</code> របស់ទម្រង់។"
+            "htmlKm": "HTML form រួចរាល់ហើយ ប៉ុន្តែពេលអ្នកប្រើ submit form នេះ ទិន្នន័យនឹងត្រូវផ្ញើក្នុង request <code class=\"tutorial-inline-code\">POST</code> ទៅ URL <code class=\"tutorial-inline-code\">/</code>។ មិនមាន server ដំណើរការទិន្នន័យនៅ URL នោះទេ ដូច្នេះនឹងមានកំហុស។ ដើម្បីជួសជុល បង្កើត Formspree form ថ្មី ហើយ copy URL តែមួយគត់ទៅក្នុង <code class=\"tutorial-inline-code\">action</code> របស់ form។"
           },
           {
             "type": "paragraph",
-            "htmlKm": "ដើម្បីបង្កើតទម្រង់បែបបទ Formspree សូមចុះឈ្មោះសម្រាប់ <a href=\"https://formspree.io/register\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">គណនីនៅលើ Formspree ↗</a>។"
+            "htmlKm": "ដើម្បីបង្កើត Formspree form ចុះឈ្មោះ <a href=\"https://formspree.io/register\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">account លើ Formspree ↗</a>។"
           },
           {
             "type": "paragraph",
-            "htmlKm": "បន្ទាប់មក បង្កើតទម្រង់ថ្មីដោយប្រើប៊ូតុង <strong>\\+ ទម្រង់ថ្មី</strong>។ ដាក់ឈ្មោះវាថា <code class=\"tutorial-inline-code\">ទម្រង់ទំនាក់ទំនងយើង</code> ហើយធ្វើបច្ចុប្បន្នភាពអ៊ីមែល recipient ទៅអ៊ីមែលដែលអ្នកចង់ទទួលការបញ្ជូនទម្រង់របស់អ្នក។ បន្ទាប់មកជ្រើសរើស <strong>បង្កើតទម្រង់</strong>។"
+            "htmlKm": "បន្ទាប់មក បង្កើត form ថ្មីដោយប៊ូតុង <strong>+ New form</strong>។ ដាក់ឈ្មោះ <code class=\"tutorial-inline-code\">Contact-us form</code> ហើយធ្វើបច្ចុប្បន្នភាព recipient email ទៅអ៊ីមែលដែលអ្នកចង់ទទួល submission។ បន្ទាប់មកជ្រើស <strong>Create Form</strong>។"
           },
           {
             "type": "paragraph",
-            "htmlKm": "បន្ទាប់មកអ្នកនឹងត្រូវបានបង្ហាញជាមួយនឹងការណែនាំអំពីរបៀបបញ្ចូលទម្រង់ថ្មីរបស់អ្នក។"
+            "htmlKm": "អ្នកនឹងឃើញការណែនាំពីរបៀបភ្ជាប់ form ថ្មី។"
           },
           {
             "type": "paragraph",
-            "htmlKm": "ចម្លង <code class=\"tutorial-inline-code\">ទម្រង់បញ្ចប់</code> URL ហើយបិទភ្ជាប់វាទៅក្នុងគុណលក្ខណៈ <code class=\"tutorial-inline-code\">សកម្មភាព</code> នៃទម្រង់ដែលអ្នកបានបង្កើតខាងលើ។"
+            "htmlKm": "Copy URL <code class=\"tutorial-inline-code\">Form Endpoint</code> ហើយ paste ទៅក្នុងគុណលក្ខណៈ <code class=\"tutorial-inline-code\">action</code> នៃ form ដែលបានបង្កើត។"
           },
           {
             "type": "code",
@@ -1621,23 +1622,23 @@
           },
           {
             "type": "paragraph",
-            "htmlKm": "ឥឡូវនេះ នៅពេលអ្នកដាក់ស្នើទម្រង់របស់អ្នក អ្នកគួរតែត្រូវបានបញ្ជូនបន្តទៅទំព័រអរគុណ។ ទិន្នន័យទម្រង់នឹងត្រូវបានដាក់ជូនទៅគណនីរបស់អ្នកនៅលើ <a href=\"https://formspree.io/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Formspree.io ↗</a>។"
+            "htmlKm": "ឥឡូវពេល submit form អ្នកគួរត្រូវបានបញ្ជូនទៅទំព័រ Thank You។ ទិន្នន័យ form នឹងត្រូវដាក់ស្នើទៅ account របស់អ្នកលើ <a href=\"https://formspree.io/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Formspree.io ↗</a>។"
           },
           {
             "type": "paragraph",
-            "htmlKm": "ឥឡូវនេះ អ្នកអាចកែសម្រួលតក្កវិជ្ជាដំណើរការទម្រង់របស់អ្នក ដើម្បីផ្លាស់ប្តូរ <a href=\"https://help.formspree.io/hc/en-us/articles/360012378333--Thank-You-redirect\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\"> <redirecta page> ↗ href=\"https://help.formspree.io/hc/en-us/articles/115008379348-Changing-a-form-email-address\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">អាសយដ្ឋានអ៊ីមែលជូនដំណឹង ↗</a> ឬបន្ថែមកម្មវិធីជំនួយដូចជា href=\"https://help.formspree.io/hc/en-us/articles/360036563573-Use-Google-Sheets-to-send-your-submissions-to-a-spreadsheet\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer,> ↗ Google\" href=\"https://help.formspree.io/hc/en-us/articles/360045648933-Send-Slack-notifications\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Slack ↗</a> និងច្រើនទៀត។"
+            "htmlKm": "ឥឡូវអ្នកអាចកែ logic ដំណើរការ form៖ ប្តូរ <a href=\"https://help.formspree.io/hc/en-us/articles/360012378333--Thank-You-redirect\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">redirect page ↗</a> ធ្វើបច្ចុប្បន្នភាព <a href=\"https://help.formspree.io/hc/en-us/articles/115008379348-Changing-a-form-email-address\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">notification email address ↗</a> ឬបន្ថែម plugin ដូចជា <a href=\"https://help.formspree.io/hc/en-us/articles/360036563573-Use-Google-Sheets-to-send-your-submissions-to-a-spreadsheet\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Google Sheets ↗</a>, <a href=\"https://help.formspree.io/hc/en-us/articles/360045648933-Send-Slack-notifications\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Slack ↗</a> និងច្រើនទៀត។"
           },
           {
             "type": "paragraph",
-            "htmlKm": "សម្រាប់ជំនួយបន្ថែមក្នុងការដំឡើង Formspree សូមមើលធនធានខាងក្រោម៖"
+            "htmlKm": "ជំនួយបន្ថែមពេល setup Formspree៖"
           },
           {
             "type": "list",
             "ordered": false,
             "itemsKm": [
-              "សម្រាប់ជំនួយទូទៅជាមួយ Formspree សូមមើល <a href=\"https://help.formspree.io/hc/en-us\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">គេហទំព័រជំនួយ Formspree ↗</a>។",
-              "សម្រាប់ឧទាហរណ៍ និងការបំផុសគំនិតសម្រាប់ទម្រង់ HTML ផ្ទាល់ខ្លួនរបស់អ្នក សូមពិនិត្យមើល <a href=\"https://formspree.io/library\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">បណ្ណាល័យទម្រង់ Formspree ↗</a>។",
-              "សម្រាប់ tips លើការរួមបញ្ចូល Formspree ជាមួយវេទិកាពេញនិយមដូចជា Next.js, Gatsby និង Eleventy សូមមើល <a href=\"https://formspree.io/guides\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Formspree guides</a> ។"
+              "ជំនួយទូទៅជាមួយ Formspree៖ <a href=\"https://help.formspree.io/hc/en-us\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Formspree help site ↗</a>។",
+              "ឧទាហរណ៍ និង inspiration សម្រាប់ HTML form ផ្ទាល់ខ្លួន៖ <a href=\"https://formspree.io/library\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Formspree form library ↗</a>។",
+              "Tips ភ្ជាប់ Formspree ជាមួយ Next.js, Gatsby និង Eleventy៖ <a href=\"https://formspree.io/guides\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Formspree guides ↗</a>។"
             ]
           }
         ]
@@ -1648,15 +1649,15 @@
         "blocks": [
           {
             "type": "paragraph",
-            "htmlKm": "ឥឡូវ​នេះ អ្នក​ត្រៀម​ខ្លួន​ជា​ស្រេច​ដើម្បី​ដាក់​ពង្រាយ​គម្រោង​របស់​អ្នក។"
+            "htmlKm": "ឥឡូវអ្នករួចរាល់ដើម្បី deploy project។"
           },
           {
             "type": "paragraph",
-            "htmlKm": "ប្រសិនបើអ្នកមិនទាន់បានធ្វើដូច្នេះទេ សូមរក្សាទុកដំណើរការរបស់អ្នកនៅក្នុង <code class=\"tutorial-inline-code\">git</code> ហើយបន្ទាប់មករុញការប្តេជ្ញាចិត្តទៅកាន់ឃ្លាំង GitHub៖"
+            "htmlKm": "ប្រសិនបើមិនទាន់ធ្វើ សូមរក្សាទុកការងារក្នុង <code class=\"tutorial-inline-code\">git</code> រួច push commit ទៅ GitHub repository៖"
           },
           {
             "type": "paragraph",
-            "htmlKm": "បង្អួចស្ថានីយ"
+            "htmlKm": "វីនដូ Terminal"
           },
           {
             "type": "code",
@@ -1664,47 +1665,47 @@
           },
           {
             "type": "paragraph",
-            "htmlKm": "ការងាររបស់អ្នកឥឡូវនេះស្ថិតនៅក្នុងឃ្លាំង GitHub ដែលមានន័យថា Pages ក៏អាច access ផងដែរ។"
+            "htmlKm": "ការងារឥឡូវស្ថិតក្នុង GitHub repository — Pages ក៏អាច access បានដែរ។"
           },
           {
             "type": "paragraph",
-            "htmlKm": "ប្រសិនបើនេះជាគម្រោង Cloudflare Pages ដំបូងរបស់អ្នក សូមយោងទៅ <a href=\"https://developers.cloudflare.com/pages/get-started/\" class=\"link\" target=\"_blank\" rel=\"Morernoopener\"> no ការណែនាំអំពីការដំឡើងពេញលេញ។ បន្ទាប់ពីជ្រើសរើសឃ្លាំង GitHub ដែលសមស្រប អ្នកត្រូវតែកំណត់រចនាសម្ព័ន្ធគម្រោងរបស់អ្នកជាមួយនឹងការកំណត់ស្ថាបនាខាងក្រោម៖"
+            "htmlKm": "ប្រសិនបើនេះជា project Cloudflare Pages ដំបូង មើល <a href=\"https://developers.cloudflare.com/pages/get-started/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Get started</a> សម្រាប់ setup ពេញលេញ។ បន្ទាប់ពីជ្រើស GitHub repository ត្រឹមត្រូវ កំណត់រចនាសម្ព័ន្ធ project ជាមួយ build settings ខាងក្រោម៖"
           },
           {
             "type": "list",
             "ordered": false,
             "itemsKm": [
-              "<strong>ឈ្មោះគម្រោង</strong> - ជម្រើសរបស់អ្នក។",
-              "<strong>សាខាផលិតកម្ម</strong> – <code class=\"tutorial-inline-code\">ចម្បង</code>",
-              "<strong>ក្របខ័ណ្ឌការងារដែលបានកំណត់ជាមុន</strong> – គ្មានទេ។",
-              "<strong>បង្កើតពាក្យបញ្ជា</strong> – គ្មាន / ទទេ",
-              "<strong>បង្កើតថតលទ្ធផល</strong> – <code class=\"tutorial-inline-code\">សាធារណៈ</code>"
+              "<strong>Project name</strong> – ជម្រើសរបស់អ្នក",
+              "<strong>Production branch</strong> – <code class=\"tutorial-inline-code\">main</code>",
+              "<strong>Framework preset</strong> – None",
+              "<strong>Build command</strong> – None / ទទេ",
+              "<strong>Build output directory</strong> – <code class=\"tutorial-inline-code\">public</code>"
             ]
           },
           {
             "type": "paragraph",
-            "htmlKm": "បន្ទាប់ពីជ្រើសរើស <strong>រក្សាទុក និងដាក់ឱ្យប្រើប្រាស់</strong> គម្រោង Pages របស់អ្នកនឹងចាប់ផ្តើមការដាក់ឱ្យប្រើប្រាស់ដំបូងរបស់វា។ នៅពេលជោគជ័យ អ្នកនឹងត្រូវបានបង្ហាញជាមួយនឹងដែនរង <code class=\"tutorial-inline-code\">*.pages.dev</code> និងតំណទៅកាន់ការសាកល្បងផ្ទាល់របស់អ្នក។"
+            "htmlKm": "បន្ទាប់ពីជ្រើស <strong>Save and Deploy</strong> project Pages នឹងចាប់ផ្តើមការដាក់ពង្រាយដំបូង។ ពេលជោគជ័យ អ្នកនឹងបាន subdomain <code class=\"tutorial-inline-code\">*.pages.dev</code> និងតំណ live demo។"
           },
           {
             "type": "paragraph",
-            "htmlKm": "នៅក្នុងមេរៀននេះ អ្នកបានបង្កើត និងដាក់ពង្រាយគេហទំព័រដោយប្រើ Cloudflare Pages និង Formspree ដើម្បីដោះស្រាយការបញ្ជូនទម្រង់។ អ្នកបានបង្កើតឯកសារ HTML ឋិតិវន្តជាមួយនឹងទម្រង់ដែលទំនាក់ទំនងជាមួយ Formspree ដើម្បីដំណើរការ និងរក្សាទុកសំណើដាក់ស្នើ និងផ្ញើការជូនដំណឹង។"
+            "htmlKm": "ក្នុង tutorial នេះ អ្នកបាន build និង deploy website ដោយប្រើ Cloudflare Pages និង Formspree ដើម្បីដោះស្រាយ form submission។ អ្នកបានបង្កើត HTML ឋិតិវន្តជាមួយ form ដែលទាក់ទង Formspree ដើម្បីដំណើរការ រក្សាទុក request និងផ្ញើ notification។"
           },
           {
             "type": "paragraph",
-            "htmlKm": "ប្រសិនបើអ្នកចង់ពិនិត្យមើលកូដប្រភពពេញលេញសម្រាប់កម្មវិធីនេះ អ្នកអាចស្វែងរកវានៅលើ <a href=\"https://github.com/formspree/formspree-example-cloudflare-html\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">GitHub ↗</a>"
+            "htmlKm": "ប្រសិនបើចង់មើល source code ពេញ ស្វែងរកនៅលើ <a href=\"https://github.com/formspree/formspree-example-cloudflare-html\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">GitHub ↗</a>។"
           }
         ]
       },
       "related-resources": {
-        "titleKm": "ធនធានដែលពាក់ព័ន្ធ",
+        "titleKm": "ធនធានពាក់ព័ន្ធ",
         "summaryKm": null,
         "blocks": [
           {
             "type": "list",
             "ordered": false,
             "itemsKm": [
-              "<a href=\"https://developers.cloudflare.com/pages/tutorials/add-a-react-form-with-formspree/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">បន្ថែមទម្រង់ប្រតិកម្ម</apree>",
-              "<a href=\"https://developers.cloudflare.com/pages/tutorials/forms/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">ទម្រង់ HTML</a>"
+              "<a href=\"https://developers.cloudflare.com/pages/tutorials/add-a-react-form-with-formspree/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Add a React form with Formspree</a>",
+              "<a href=\"https://developers.cloudflare.com/pages/tutorials/forms/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">HTML Forms</a>"
             ]
           },
           {
@@ -1713,8 +1714,7 @@
           }
         ]
       }
-    },
-    "complete": true
+    }
   },
   "/terraform/tutorial/add-page-rules": {
     "titleKm": "បន្ថែមករណីលើកលែងជាមួយ Page Rules",
