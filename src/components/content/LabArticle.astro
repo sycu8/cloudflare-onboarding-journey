@@ -5,6 +5,10 @@ import { tLab } from '../../data/developerLabs.vi';
 type Props = { blocks: LabBlock[] };
 const { blocks } = Astro.props;
 
+function isSectionHeading(level: number) {
+  return level <= 2;
+}
+
 const calloutClass: Record<string, string> = {
   tip: 'lab-callout lab-callout-tip',
   note: 'lab-callout lab-callout-note',
@@ -26,32 +30,48 @@ function youtubeId(src: string): string {
   {
     blocks.map((block) => {
       if (block.type === 'heading') {
-        const Tag = block.level <= 2 ? 'h2' : 'h3';
+        if (isSectionHeading(block.level)) {
+          return (
+            <h2 class="scroll-mt-24 text-lg font-semibold md:text-xl">
+              <span class="lang-vi">{tLab(block.text)}</span>
+              <span class="lang-en">{block.text}</span>
+              <span class="lang-km">{block.text}</span>
+            </h2>
+          );
+        }
         return (
-          <Tag class:list={[block.level <= 2 ? 'text-lg font-semibold md:text-xl' : 'text-base font-semibold', 'scroll-mt-24']}>
+          <h3 class="scroll-mt-24 text-base font-semibold">
             <span class="lang-vi">{tLab(block.text)}</span>
             <span class="lang-en">{block.text}</span>
             <span class="lang-km">{block.text}</span>
-          </Tag>
+          </h3>
         );
       }
       if (block.type === 'p') {
         return (
-          <>
+          <div>
             <p class="lang-vi text-sm leading-relaxed" set:html={block.html} />
             <p class="lang-en text-sm leading-relaxed" set:html={block.html} />
             <p class="lang-km text-sm leading-relaxed" set:html={block.html} />
-          </>
+          </div>
         );
       }
       if (block.type === 'list') {
-        const Tag = block.ordered ? 'ol' : 'ul';
+        if (block.ordered) {
+          return (
+            <ol class="list-decimal space-y-1 pl-5 text-sm leading-relaxed">
+              {block.items.map((item) => (
+                <li set:html={item} />
+              ))}
+            </ol>
+          );
+        }
         return (
-          <Tag class:list={[block.ordered ? 'list-decimal' : 'list-disc', 'space-y-1 pl-5 text-sm leading-relaxed']}>
+          <ul class="list-disc space-y-1 pl-5 text-sm leading-relaxed">
             {block.items.map((item) => (
               <li set:html={item} />
             ))}
-          </Tag>
+          </ul>
         );
       }
       if (block.type === 'code') {

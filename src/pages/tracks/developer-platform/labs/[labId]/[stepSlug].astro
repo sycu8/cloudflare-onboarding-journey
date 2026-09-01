@@ -1,22 +1,22 @@
 ---
-import BaseLayout from '../../../../../../layouts/BaseLayout.astro';
-import Breadcrumbs from '../../../../../../components/chrome/Breadcrumbs.astro';
-import LangText from '../../../../../../components/ui/LangText.astro';
-import LabArticle from '../../../../../../components/content/LabArticle.astro';
+import BaseLayout from '../../../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../../../components/chrome/Breadcrumbs.astro';
+import LangText from '../../../../../components/ui/LangText.astro';
+import LabArticle from '../../../../../components/content/LabArticle.astro';
 import {
   type DeveloperLabId,
   DEVELOPER_LABS_HUB_PATH,
   developerLabHubPath,
   developerLabTracks,
-} from '../../../../../../data/developerLabs';
+} from '../../../../../data/developerLabs';
 import {
   getAdjacentLabArticles,
   getAllLabArticleParams,
   getLabArticle,
   loc,
   locList,
-} from '../../../../../../data/developerLabArticles';
-import { tLab } from '../../../../../../data/developerLabs.vi';
+} from '../../../../../data/developerLabArticles';
+import { tLab } from '../../../../../data/developerLabs.vi';
 
 export function getStaticPaths() {
   return getAllLabArticleParams().map(({ labId, stepId }) => ({
