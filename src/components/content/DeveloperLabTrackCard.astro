@@ -54,7 +54,7 @@ const { lab, trackSlug = 'developer-platform' } = Astro.props;
         {lab.hubModuleIds.map((id) => {
           const label = developerLabsHubModuleLabels[id];
           return (
-            <a class="lab-mod" href={`/tracks/${trackSlug}#${id}`}>
+            <a class="lab-mod" href={`/tracks/${trackSlug}/#${id}`}>
               {label ? <LangText text={label} /> : id}
             </a>
           );
