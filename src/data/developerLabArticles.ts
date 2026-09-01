@@ -8,6 +8,7 @@ import {
   DEVELOPER_LABS_URL,
 } from './developerLabs';
 import { tLab } from './developerLabs.vi';
+import { tLabKm } from './developerLabs.km';
 
 export type LabBlock =
   | { type: 'heading'; level: number; text: string }
@@ -41,7 +42,7 @@ const raw = articlesJson as ArticlesFile;
 export const DEVELOPER_LABS_SOURCE = raw.source || DEVELOPER_LABS_URL;
 
 export function loc(en: string): LocalizedString {
-  return { vi: tLab(en), en, km: en };
+  return { vi: tLab(en), en, km: tLabKm(en) };
 }
 
 export function locList(items: string[]): LocalizedString[] {

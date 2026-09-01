@@ -287,6 +287,156 @@ const LAB_VI: Record<string, string> = {
     'Dựng MCP server chạy được trên Cloudflare Workers',
   'Create a Sandbox SDK project from the official template':
     'Tạo project Sandbox SDK từ template chính thức',
+  'Decide when to use relational storage vs key-value storage in the same application':
+    'Quyết định khi nào dùng storage quan hệ hay key-value trong cùng một app',
+  'Integrate a text generation model into an existing data pipeline':
+    'Gắn model sinh text vào pipeline data có sẵn',
+  'Design AI calls that fail gracefully without blocking core operations':
+    'Thiết kế lời gọi AI fail mà không chặn thao tác lõi',
+  'Evaluate when to run inference inline vs as a background task':
+    'Đánh giá khi nào infer ngay trong request hay chạy nền',
+  'Route AI inference through a managed gateway for observability and cost control':
+    'Đưa inference AI qua gateway để quan sát và kiểm soát chi phí',
+  'Choose cache TTLs based on response stability and freshness requirements':
+    'Chọn TTL cache theo độ ổn định và độ mới của response',
+  'Interpret gateway analytics to identify optimization opportunities':
+    'Đọc analytics Gateway để thấy chỗ tối ưu',
+  'Store sensitive configuration securely using Wrangler secrets':
+    'Lưu cấu hình nhạy cảm bằng Wrangler secrets',
+  'Monitor production traffic and roll back a bad deployment':
+    'Monitor traffic production và rollback bản deploy lỗi',
+  'Understand MCP server basic structure and architecture':
+    'Hiểu cấu trúc và kiến trúc cơ bản của MCP server',
+  'Test MCP tools using the official inspector interface':
+    'Test MCP tool bằng giao diện Inspector chính thức',
+  'Troubleshoot common connection and setup issues':
+    'Xử lý lỗi kết nối và setup thường gặp',
+  'Understand MCP tool schema definition':
+    'Hiểu cách định nghĩa schema tool MCP',
+  'Implement custom tools with input validation':
+    'Viết tool tùy chỉnh có validate input',
+  'Test custom tools using the MCP Inspector':
+    'Test tool tùy chỉnh bằng MCP Inspector',
+  'Handle tool execution errors gracefully':
+    'Xử lý lỗi khi chạy tool mà không sập',
+  'Make HTTP requests from MCP tools':
+    'Gọi HTTP từ MCP tool',
+  'Handle external API responses and errors':
+    'Xử lý response và lỗi từ API ngoài',
+  'Implement fallback mechanisms for reliability':
+    'Làm cơ chế fallback cho độ tin cậy',
+  'Process external data for AI consumption':
+    'Xử lý data ngoài để AI dùng được',
+  'Deploy MCP servers to Cloudflare Workers':
+    'Deploy MCP server lên Cloudflare Workers',
+  'Configure production environment settings':
+    'Cấu hình môi trường production',
+  'Test deployed servers with AI Playground':
+    'Test server đã deploy trên AI Playground',
+  'Monitor and debug production deployments':
+    'Monitor và debug bản deploy production',
+  'Create and configure Cloudflare KV namespaces':
+    'Tạo và cấu hình namespace Cloudflare KV',
+  'Implement data persistence in MCP tools':
+    'Làm persistence data trong MCP tool',
+  'Handle storage operations and errors':
+    'Xử lý thao tác lưu trữ và lỗi',
+  'Build stateful applications with KV':
+    'Xây app có state bằng KV',
+  'Implement full CRUD operations with KV storage':
+    'Implement CRUD đầy đủ trên KV',
+  'Design data structures for complex applications':
+    'Thiết kế cấu trúc data cho app phức tạp',
+  'Handle concurrent operations and data consistency':
+    'Xử lý thao tác đồng thời và tính nhất quán data',
+  'Build user-friendly AI-accessible applications':
+    'Xây app thân thiện, AI gọi được',
+  'Recognize the universal MCP tool pattern':
+    'Nhận ra pattern tool MCP dùng chung',
+  'Connect lab skills to real-world tool ideas':
+    'Nối kỹ năng lab với ý tưởng tool thực tế',
+  'Use AI assistants to accelerate MCP development':
+    'Dùng AI assistant để làm MCP nhanh hơn',
+  'Know where to go next in the MCP ecosystem':
+    'Biết bước tiếp theo trong hệ sinh thái MCP',
+  'Recall that the Agent Framework is model Agnostic':
+    'Nhớ Agent Framework không phụ thuộc một model',
+  'Explore common chat use case':
+    'Khám phá use case chat phổ biến',
+  'Execute tools as defined in the AI SDK':
+    'Chạy tool đúng như định nghĩa trong AI SDK',
+  'Schedule an action for the future':
+    'Schedule một hành động cho tương lai',
+  'Recall that the Agent Framework is evolving fast':
+    'Nhớ Agent Framework đang đổi rất nhanh',
+  'Recall that there are great examples':
+    'Nhớ là có nhiều ví dụ tốt',
+  'Build and run examples':
+    'Build và chạy các ví dụ',
+  'Understand the project structure and architecture':
+    'Hiểu cấu trúc và kiến trúc project',
+  'Run your first sandbox locally with Docker':
+    'Chạy sandbox đầu tiên trên local với Docker',
+  'Execute commands in an isolated environment':
+    'Chạy lệnh trong môi trường cô lập',
+  'Execute shell commands using exec() with options':
+    'Chạy lệnh shell bằng exec() kèm options',
+  'Work with files using writeFile(), readFile(), and listFiles()':
+    'Thao tác file bằng writeFile(), readFile(), listFiles()',
+  'Understand the exec() result object':
+    'Hiểu object kết quả của exec()',
+  'Combine multiple APIs in a single endpoint':
+    'Kết hợp nhiều API trong một endpoint',
+  'Use createCodeContext() for language-specific execution environments':
+    'Dùng createCodeContext() cho môi trường theo ngôn ngữ',
+  'Execute code with runCode() and process structured output':
+    'Chạy code bằng runCode() và xử lý output có cấu trúc',
+  'Accept dynamic code input via POST requests':
+    'Nhận code động qua request POST',
+  'Support multiple programming languages':
+    'Hỗ trợ nhiều ngôn ngữ lập trình',
+  'Handle code execution errors gracefully':
+    'Xử lý lỗi khi chạy code mà không sập',
+  'Add a Workers AI binding to your project':
+    'Thêm binding Workers AI vào project',
+  'Generate code from natural language using an LLM':
+    'Sinh code từ ngôn ngữ tự nhiên bằng LLM',
+  'Robustly extract code blocks from LLM responses':
+    'Trích code block chắc chắn từ response LLM',
+  'Chain AI generation with sandbox execution safely':
+    'Nối sinh code AI với chạy sandbox một cách an toàn',
+  'Handle AI failures gracefully':
+    'Xử lý AI fail mà không sập luồng chính',
+  'Clone repositories into the sandbox with gitCheckout()':
+    'Clone repo vào sandbox bằng gitCheckout()',
+  'Install dependencies and run setup commands':
+    'Cài dependencies và chạy lệnh setup',
+  'Start long-running background processes with startProcess()':
+    'Start process chạy nền bằng startProcess()',
+  'Expose container ports and proxy requests through your Worker':
+    'Expose port container và proxy request qua Worker',
+  'Stream process logs for real-time debugging':
+    'Stream log process để debug realtime',
+  'Validate and sanitize user input to prevent injection attacks':
+    'Validate và sanitize input để chống injection',
+  'Implement per-user sandbox isolation so users never share state':
+    'Cô lập sandbox theo user — không chia state',
+  'Manage environment variables at sandbox, command, and session level':
+    'Quản lý biến môi trường ở mức sandbox, lệnh và session',
+  'Keep secrets in the Worker — never expose them to sandbox code':
+    'Giữ secret trong Worker — không đưa vào code sandbox',
+  'Implement an authentication pattern for production':
+    'Làm pattern xác thực cho production',
+  'Deploy a sandbox application with wrangler deploy':
+    'Deploy app sandbox bằng wrangler deploy',
+  'Implement sandbox cleanup using destroy() in try/finally':
+    'Cleanup sandbox bằng destroy() trong try/finally',
+  'Use setKeepAlive() for long-running operations':
+    'Dùng setKeepAlive() cho thao tác chạy lâu',
+  'Apply the production checklist before going live':
+    'Chạy checklist production trước khi live',
+  'Monitor your deployment from the Cloudflare dashboard':
+    'Monitor bản deploy trên dashboard Cloudflare',
 
   'Scaffold the Bookmark API project, understand the Workers runtime, and test your first Worker locally.':
     'Scaffold project Bookmark API, hiểu runtime Workers, và test Worker đầu tiên trên local.',

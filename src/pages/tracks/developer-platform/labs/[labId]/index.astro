@@ -9,6 +9,7 @@ import {
   developerLabTracks,
 } from '../../../../../data/developerLabs';
 import { getLabArticles, loc } from '../../../../../data/developerLabArticles';
+import { labChrome } from '../../../../../data/developerLabs.copy';
 
 export function getStaticPaths() {
   return developerLabTracks.map((track) => ({ params: { labId: track.id } }));
@@ -25,14 +26,15 @@ const first = articles[0];
   title={{
     vi: `${track.title.vi} · Developer Labs`,
     en: `${track.title.en} · Developer Labs`,
+    km: `${track.title.km ?? track.title.en} · Developer Labs`,
   }}
   description={track.description}
   canonicalPath={developerLabHubPath(labId)}
 >
   <Breadcrumbs
     items={[
-      { href: '/tracks/developer-platform/', label: { vi: 'Developer Platform', en: 'Developer Platform' } },
-      { href: DEVELOPER_LABS_HUB_PATH, label: { vi: 'Developer Labs', en: 'Developer Labs' } },
+      { href: '/tracks/developer-platform/', label: { vi: 'Developer Platform', en: 'Developer Platform', km: 'Developer Platform' } },
+      { href: DEVELOPER_LABS_HUB_PATH, label: { vi: 'Developer Labs', en: 'Developer Labs', km: 'Developer Labs' } },
       { href: developerLabHubPath(labId), label: track.title },
     ]}
   />
@@ -48,9 +50,9 @@ const first = articles[0];
     <div class="mt-5 flex flex-wrap gap-2">
       {first ? (
         <a class="btn btn-primary" href={developerLabHubPath(labId, first.id)}>
-          <span class="lang-vi">Bắt đầu lab 1</span>
-          <span class="lang-en">Start lab 1</span>
-          <span class="lang-km">Start lab 1</span>
+          <span class="lang-vi">{labChrome.startLab1.vi}</span>
+          <span class="lang-en">{labChrome.startLab1.en}</span>
+          <span class="lang-km">{labChrome.startLab1.km}</span>
         </a>
       ) : null}
       <a class="lab-track-ghost" href={track.sourceHref} target="_blank" rel="noopener noreferrer">
@@ -75,7 +77,11 @@ const first = articles[0];
               </span>
             </span>
             {article.durationMin ? (
-              <span class="lab-step-dur">{article.durationMin} min</span>
+              <span class="lab-step-dur">
+                <span class="lang-vi">{article.durationMin} {labChrome.minutes.vi}</span>
+                <span class="lang-en">{article.durationMin} {labChrome.minutes.en}</span>
+                <span class="lang-km">{article.durationMin} {labChrome.minutes.km}</span>
+              </span>
             ) : null}
           </a>
         </li>

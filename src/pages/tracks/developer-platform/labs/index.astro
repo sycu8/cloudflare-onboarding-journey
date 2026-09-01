@@ -11,22 +11,20 @@ import {
   developerLabTracks,
 } from '../../../../data/developerLabs';
 import { totalLabArticleCount } from '../../../../data/developerLabArticles';
+import { labChrome } from '../../../../data/developerLabs.copy';
 
 const totalLabs = totalLabArticleCount();
 ---
 
 <BaseLayout
-  title={{ vi: 'Developer Labs · Developer Platform', en: 'Developer Labs · Developer Platform' }}
-  description={{
-    vi: '23 bài lab guided từ labs.cloudflare.dev — Workers, MCP, Agents SDK, Sandbox SDK — đọc và làm ngay trên hub.',
-    en: '23 guided labs from labs.cloudflare.dev — Workers, MCP, Agents SDK, Sandbox SDK — follow them on this hub.',
-  }}
+  title={labChrome.pageTitle}
+  description={labChrome.indexDesc}
   canonicalPath={DEVELOPER_LABS_HUB_PATH}
 >
   <Breadcrumbs
     items={[
-      { href: '/tracks/developer-platform/', label: { vi: 'Developer Platform', en: 'Developer Platform' } },
-      { href: DEVELOPER_LABS_HUB_PATH, label: { vi: 'Developer Labs', en: 'Developer Labs' } },
+      { href: '/tracks/developer-platform/', label: { vi: 'Developer Platform', en: 'Developer Platform', km: 'Developer Platform' } },
+      { href: DEVELOPER_LABS_HUB_PATH, label: { vi: 'Developer Labs', en: 'Developer Labs', km: 'Developer Labs' } },
     ]}
   />
 
@@ -35,19 +33,17 @@ const totalLabs = totalLabArticleCount();
     <LangText
       as="h1"
       class="mt-2 text-2xl font-semibold text-white md:text-3xl"
-      text={{ vi: 'Developer Labs', en: 'Developer Labs' }}
+      text={{ vi: 'Developer Labs', en: 'Developer Labs', km: 'Developer Labs' }}
     />
     <LangText as="p" class="mt-2 max-w-3xl text-sm leading-relaxed text-white/80" text={developerLabsIntro} />
     <p class="mt-4 text-sm text-white/70">
       <span class="lang-vi">{developerLabTracks.length} track · {totalLabs} bài lab trên hub</span>
       <span class="lang-en">{developerLabTracks.length} tracks · {totalLabs} lab articles on this hub</span>
-      <span class="lang-km">{developerLabTracks.length} tracks · {totalLabs} lab articles on this hub</span>
+      <span class="lang-km">{developerLabTracks.length} track · {totalLabs} អត្ថបទ lab នៅលើ hub នេះ</span>
     </p>
     <div class="mt-5 flex flex-wrap gap-2">
       <a class="btn btn-primary" href={`${DEVELOPER_LABS_HUB_PATH}${developerLabTracks[0].id}/`}>
-        <span class="lang-vi">Bắt đầu từ Workers</span>
-        <span class="lang-en">Start with Workers</span>
-        <span class="lang-km">Start with Workers</span>
+        <LangText text={labChrome.startWorkers} />
       </a>
       <a class="lab-hub-ghost" href={DEVELOPER_LABS_URL} target="_blank" rel="noopener noreferrer">
         labs.cloudflare.dev ↗

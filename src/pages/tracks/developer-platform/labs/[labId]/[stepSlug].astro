@@ -16,7 +16,9 @@ import {
   loc,
   locList,
 } from '../../../../../data/developerLabArticles';
+import { labChrome } from '../../../../../data/developerLabs.copy';
 import { tLab } from '../../../../../data/developerLabs.vi';
+import { tLabKm } from '../../../../../data/developerLabs.km';
 
 export function getStaticPaths() {
   return getAllLabArticleParams().map(({ labId, stepId }) => ({
@@ -39,14 +41,15 @@ const objectives = locList(article.objectives);
   title={{
     vi: `${title.vi} · ${track.title.vi}`,
     en: `${title.en} · ${track.title.en}`,
+    km: `${title.km ?? title.en} · ${track.title.km ?? track.title.en}`,
   }}
   description={description}
   canonicalPath={developerLabHubPath(labId, article.id)}
 >
   <Breadcrumbs
     items={[
-      { href: '/tracks/developer-platform/', label: { vi: 'Developer Platform', en: 'Developer Platform' } },
-      { href: DEVELOPER_LABS_HUB_PATH, label: { vi: 'Developer Labs', en: 'Developer Labs' } },
+      { href: '/tracks/developer-platform/', label: { vi: 'Developer Platform', en: 'Developer Platform', km: 'Developer Platform' } },
+      { href: DEVELOPER_LABS_HUB_PATH, label: { vi: 'Developer Labs', en: 'Developer Labs', km: 'Developer Labs' } },
       { href: developerLabHubPath(labId), label: track.title },
       { href: developerLabHubPath(labId, article.id), label: title },
     ]}
@@ -60,7 +63,13 @@ const objectives = locList(article.objectives);
         <span class="lang-vi"> Lab {article.step}/{track.labCount}</span>
         <span class="lang-en"> Lab {article.step}/{track.labCount}</span>
         <span class="lang-km"> Lab {article.step}/{track.labCount}</span>
-        {article.durationMin ? ` · ${article.durationMin} min` : ''}
+        {article.durationMin ? (
+          <>
+            <span class="lang-vi">{` · ${article.durationMin} ${labChrome.minutes.vi}`}</span>
+            <span class="lang-en">{` · ${article.durationMin} ${labChrome.minutes.en}`}</span>
+            <span class="lang-km">{` · ${article.durationMin} ${labChrome.minutes.km}`}</span>
+          </>
+        ) : null}
       </span>
     </p>
     <p class="font-mono text-sm font-bold text-[var(--cf-accent)]">{String(article.step).padStart(2, '0')}</p>
@@ -68,10 +77,10 @@ const objectives = locList(article.objectives);
     <LangText as="p" class="text-muted mt-3 max-w-3xl text-sm leading-relaxed" text={description} />
     <p class="text-muted mt-3 text-xs leading-relaxed">
       <span class="lang-vi">
-        Nội dung bước (lệnh, code, callout) giữ nguyên tiếng Anh từ nguồn chính thức.{' '}
+        {labChrome.sourceNote.vi}{' '}
       </span>
-      <span class="lang-en">Step body (commands, code, callouts) stays in English from the official source. </span>
-      <span class="lang-km">Step body (commands, code, callouts) stays in English from the official source. </span>
+      <span class="lang-en">{labChrome.sourceNote.en} </span>
+      <span class="lang-km">{labChrome.sourceNote.km} </span>
       <a class="link" href={article.sourceUrl} target="_blank" rel="noopener noreferrer">
         labs.cloudflare.dev ↗
       </a>
@@ -81,7 +90,7 @@ const objectives = locList(article.objectives);
   <div class="mb-8 grid gap-4 md:grid-cols-2">
     {prerequisites.length > 0 ? (
       <section class="card">
-        <LangText as="h2" class="text-sm font-semibold" text={{ vi: 'Cần trước', en: 'Prerequisites', km: 'Prerequisites' }} />
+        <LangText as="h2" class="text-sm font-semibold" text={labChrome.prerequisites} />
         <ul class="mt-3 list-disc space-y-1 pl-5 text-sm leading-relaxed text-[var(--cf-text-muted)]">
           {prerequisites.map((item) => (
             <li><LangText text={item} /></li>
@@ -91,7 +100,7 @@ const objectives = locList(article.objectives);
     ) : null}
     {objectives.length > 0 ? (
       <section class="card">
-        <LangText as="h2" class="text-sm font-semibold" text={{ vi: 'Bạn sẽ làm được', en: 'Learning objectives', km: 'Learning objectives' }} />
+        <LangText as="h2" class="text-sm font-semibold" text={labChrome.objectives} />
         <ul class="mt-3 list-disc space-y-1 pl-5 text-sm leading-relaxed text-[var(--cf-text-muted)]">
           {objectives.map((item) => (
             <li><LangText text={item} /></li>
@@ -110,26 +119,26 @@ const objectives = locList(article.objectives);
       <a class="btn btn-secondary" href={developerLabHubPath(labId, prev.id)}>
         <span class="lang-vi">← {tLab(prev.title)}</span>
         <span class="lang-en">← {prev.title}</span>
-        <span class="lang-km">← {prev.title}</span>
+        <span class="lang-km">← {tLabKm(prev.title)}</span>
       </a>
     ) : (
       <a class="btn btn-secondary" href={developerLabHubPath(labId)}>
         <span class="lang-vi">← Mục lục {track.title.vi}</span>
         <span class="lang-en">← {track.title.en} index</span>
-        <span class="lang-km">← {track.title.en} index</span>
+        <span class="lang-km">← លិបិក្រម {track.title.km ?? track.title.en}</span>
       </a>
     )}
     {next ? (
       <a class="btn btn-primary sm:ml-auto" href={developerLabHubPath(labId, next.id)}>
         <span class="lang-vi">{tLab(next.title)} →</span>
         <span class="lang-en">{next.title} →</span>
-        <span class="lang-km">{next.title} →</span>
+        <span class="lang-km">{tLabKm(next.title)} →</span>
       </a>
     ) : (
       <a class="btn btn-primary sm:ml-auto" href={DEVELOPER_LABS_HUB_PATH}>
-        <span class="lang-vi">Xong · về 4 track lab</span>
-        <span class="lang-en">Done · all lab tracks</span>
-        <span class="lang-km">Done · all lab tracks</span>
+        <span class="lang-vi">{labChrome.doneAll.vi}</span>
+        <span class="lang-en">{labChrome.doneAll.en}</span>
+        <span class="lang-km">{labChrome.doneAll.km}</span>
       </a>
     )}
   </nav>

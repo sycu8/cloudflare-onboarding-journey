@@ -2,6 +2,7 @@
 import LangText from '../ui/LangText.astro';
 import type { DeveloperLabTrack } from '../../data/developerLabs';
 import { developerLabsHubModuleLabels } from '../../data/developerLabs';
+import { labChrome } from '../../data/developerLabs.copy';
 
 type Props = { lab: DeveloperLabTrack; trackSlug?: string };
 const { lab, trackSlug = 'developer-platform' } = Astro.props;
@@ -48,9 +49,9 @@ const { lab, trackSlug = 'developer-platform' } = Astro.props;
 
     <div class="lab-when mt-4">
       <p class="text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-[var(--cf-accent)]">
-        <span class="lang-vi">Ghép với lộ trình hub</span>
-        <span class="lang-en">Fits this hub path</span>
-        <span class="lang-km">Fits this hub path</span>
+        <span class="lang-vi">{labChrome.fitsPath.vi}</span>
+        <span class="lang-en">{labChrome.fitsPath.en}</span>
+        <span class="lang-km">{labChrome.fitsPath.km}</span>
       </p>
       <div class="mt-2 flex flex-wrap gap-1.5">
         {lab.hubModuleIds.map((id) => {
@@ -68,7 +69,7 @@ const { lab, trackSlug = 'developer-platform' } = Astro.props;
     <a class="btn btn-primary mt-4 w-full justify-center" href={lab.href}>
       <span class="lang-vi">Mở {lab.labCount} bài lab</span>
       <span class="lang-en">Open {lab.labCount} lab articles</span>
-      <span class="lang-km">Open {lab.labCount} lab articles</span>
+      <span class="lang-km">បើក {lab.labCount} អត្ថបទ lab</span>
     </a>
   </div>
 </article>

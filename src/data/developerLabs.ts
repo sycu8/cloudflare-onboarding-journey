@@ -1,4 +1,9 @@
 import type { LocalizedString } from '../i18n/types';
+import { tLabKm } from './developerLabs.km';
+
+function withKm(text: LocalizedString): LocalizedString {
+  return { ...text, km: tLabKm(text.en) };
+}
 
 /** Official guided labs — https://labs.cloudflare.dev/ */
 export const DEVELOPER_LABS_URL = 'https://labs.cloudflare.dev/';
@@ -38,14 +43,28 @@ export type DeveloperLabTrack = {
   labs: DeveloperLabStep[];
 };
 
-export const developerLabsIntro: LocalizedString = {
+export const developerLabsIntro: LocalizedString = withKm({
   vi: '23 bài lab guided từ labs.cloudflare.dev — Workers, MCP, Agents SDK, Sandbox SDK — đọc từng bước ngay trên hub. Bổ sung lộ trình, không thay docs hay bài học trong track.',
   en: '23 guided labs from labs.cloudflare.dev — Workers, MCP, Agents SDK, Sandbox SDK — follow each step on this hub. Complements this track; it does not replace docs or the in-track lessons.',
-  km: '23 guided labs from labs.cloudflare.dev — Workers, MCP, Agents SDK, Sandbox SDK — follow each step on this hub. Complements this track; it does not replace docs or the in-track lessons.',
-};
+});
+
+function withKmTrack(track: DeveloperLabTrack): DeveloperLabTrack {
+  return {
+    ...track,
+    title: withKm(track.title),
+    outcome: withKm(track.outcome),
+    description: withKm(track.description),
+    whenInHub: withKm(track.whenInHub),
+    labs: track.labs.map((lab) => ({
+      ...lab,
+      title: withKm(lab.title),
+      summary: withKm(lab.summary),
+    })),
+  };
+}
 
 /** Curated from https://labs.cloudflare.dev/ (Workers, MCP, Agents, Sandbox SDK). */
-export const developerLabTracks: DeveloperLabTrack[] = [
+const developerLabTracksRaw: DeveloperLabTrack[] = [
   {
     id: 'workers',
     number: '01',
@@ -56,12 +75,10 @@ export const developerLabTracks: DeveloperLabTrack[] = [
     outcome: {
       vi: 'Ship Bookmark API',
       en: 'Ship a Bookmark API',
-      km: 'Ship a Bookmark API',
     },
     description: {
       vi: 'Routing, KV, D1 và Workers AI — xây Bookmark API từ zero rồi deploy.',
       en: 'Routing, KV, D1, and Workers AI — build a Bookmark API from scratch, then deploy.',
-      km: 'Routing, KV, D1, and Workers AI — build a Bookmark API from scratch, then deploy.',
     },
     tags: ['HTTP APIs', 'KV', 'D1', 'Workers AI'],
     labCount: 7,
@@ -69,7 +86,6 @@ export const developerLabTracks: DeveloperLabTrack[] = [
     whenInHub: {
       vi: 'Sau Phần 1 (Worker + Wrangler) và Phần 3 (KV/D1). Lab AI + Gateway khớp Phần 5.',
       en: 'After Part 1 (Worker + Wrangler) and Part 3 (KV/D1). The AI + Gateway labs match Part 5.',
-      km: 'After Part 1 (Worker + Wrangler) and Part 3 (KV/D1). The AI + Gateway labs match Part 5.',
     },
     labs: [
       {
@@ -147,12 +163,10 @@ export const developerLabTracks: DeveloperLabTrack[] = [
     outcome: {
       vi: 'Ship MCP server + AI assistant',
       en: 'Ship an MCP server + AI assistant',
-      km: 'Ship an MCP server + AI assistant',
     },
     description: {
       vi: 'Remote MCP trên Workers: tool có type, Zod, API ngoài và KV.',
       en: 'Remote MCP on Workers: typed tools, Zod, external APIs, and KV.',
-      km: 'Remote MCP on Workers: typed tools, Zod, external APIs, and KV.',
     },
     tags: ['Custom Tools', 'Zod', 'External APIs', 'KV'],
     labCount: 7,
@@ -160,7 +174,6 @@ export const developerLabTracks: DeveloperLabTrack[] = [
     whenInHub: {
       vi: 'Sau Phần 5 (tools/agent) và khi đã quen KV ở Phần 3. Luyện schema + authorization phía server.',
       en: 'After Part 5 (tools/agents) and once KV from Part 3 is familiar. Practice schemas and server-side authorization.',
-      km: 'After Part 5 (tools/agents) and once KV from Part 3 is familiar. Practice schemas and server-side authorization.',
     },
     labs: [
       {
@@ -238,12 +251,10 @@ export const developerLabTracks: DeveloperLabTrack[] = [
     outcome: {
       vi: 'Ship agent có state',
       en: 'Ship a stateful agent',
-      km: 'Ship a stateful agent',
     },
     description: {
       vi: 'Agent stateful: memory, schedule task, WebSocket realtime.',
       en: 'A stateful agent: memory, scheduled tasks, and realtime WebSockets.',
-      km: 'A stateful agent: memory, scheduled tasks, and realtime WebSockets.',
     },
     tags: ['Agents SDK', 'State', 'Scheduling', 'WebSockets'],
     labCount: 2,
@@ -251,7 +262,6 @@ export const developerLabTracks: DeveloperLabTrack[] = [
     whenInHub: {
       vi: 'Sau bài Agents ở Phần 5. Phần 6 (Durable Objects) giải thích state theo object phía sau SDK.',
       en: 'After the Agents lesson in Part 5. Part 6 (Durable Objects) explains the per-object state behind the SDK.',
-      km: 'After the Agents lesson in Part 5. Part 6 (Durable Objects) explains the per-object state behind the SDK.',
     },
     labs: [
       {
@@ -284,12 +294,10 @@ export const developerLabTracks: DeveloperLabTrack[] = [
     outcome: {
       vi: 'Ship AI code executor an toàn',
       en: 'Ship a secure AI code executor',
-      km: 'Ship a secure AI code executor',
     },
     description: {
       vi: 'Chạy code trong container cô lập, preview live, gắn Workers AI — từ zero.',
       en: 'Run code in isolated containers, live preview, Workers AI — from scratch.',
-      km: 'Run code in isolated containers, live preview, Workers AI — from scratch.',
     },
     tags: ['Secure Execution', 'AI Code Generation', 'Containers', 'Workers AI'],
     labCount: 7,
@@ -297,7 +305,6 @@ export const developerLabTracks: DeveloperLabTrack[] = [
     whenInHub: {
       vi: 'Sau Phần 5 (AI) và Phần 4 (vận hành/secret). Lab bảo mật khớp golden rules: secret không lên client.',
       en: 'After Part 5 (AI) and Part 4 (operate/secrets). The security labs match the golden rules: secrets stay off the client.',
-      km: 'After Part 5 (AI) and Part 4 (operate/secrets). The security labs match the golden rules: secrets stay off the client.',
     },
     labs: [
       {
@@ -367,6 +374,8 @@ export const developerLabTracks: DeveloperLabTrack[] = [
   },
 ];
 
+export const developerLabTracks: DeveloperLabTrack[] = developerLabTracksRaw.map(withKmTrack);
+
 export function developerLabHref(track: DeveloperLabTrack): string {
   return track.href;
 }
@@ -390,12 +399,12 @@ export function getDeveloperLabsForTrackSlug(
 }
 
 export const developerLabsHubModuleLabels: Record<string, LocalizedString> = {
-  'dp-0': { vi: 'Phần 0', en: 'Part 0' },
-  'dp-1': { vi: 'Phần 1', en: 'Part 1' },
-  'dp-2': { vi: 'Phần 2', en: 'Part 2' },
-  'dp-3': { vi: 'Phần 3', en: 'Part 3' },
-  'dp-4': { vi: 'Phần 4', en: 'Part 4' },
-  'dp-5': { vi: 'Phần 5', en: 'Part 5' },
-  'dp-6': { vi: 'Phần 6', en: 'Part 6' },
-  'dp-7': { vi: 'Phần 7', en: 'Part 7' },
+  'dp-0': { vi: 'Phần 0', en: 'Part 0', km: 'ផ្នែក 0' },
+  'dp-1': { vi: 'Phần 1', en: 'Part 1', km: 'ផ្នែក 1' },
+  'dp-2': { vi: 'Phần 2', en: 'Part 2', km: 'ផ្នែក 2' },
+  'dp-3': { vi: 'Phần 3', en: 'Part 3', km: 'ផ្នែក 3' },
+  'dp-4': { vi: 'Phần 4', en: 'Part 4', km: 'ផ្នែក 4' },
+  'dp-5': { vi: 'Phần 5', en: 'Part 5', km: 'ផ្នែក 5' },
+  'dp-6': { vi: 'Phần 6', en: 'Part 6', km: 'ផ្នែក 6' },
+  'dp-7': { vi: 'Phần 7', en: 'Part 7', km: 'ផ្នែក 7' },
 };

@@ -1,6 +1,8 @@
 ---
 import type { LabBlock } from '../../data/developerLabArticles';
 import { tLab } from '../../data/developerLabs.vi';
+import { tLabKm } from '../../data/developerLabs.km';
+import { labCalloutKindLabel, labChrome } from '../../data/developerLabs.copy';
 
 type Props = { blocks: LabBlock[] };
 const { blocks } = Astro.props;
@@ -24,6 +26,20 @@ function youtubeId(src: string): string {
   const m = src.match(/embed\/([^?&]+)/);
   return m?.[1] ?? 'video';
 }
+
+/** Wrap plain callout bodies in <strong> so notes stay bold even without source markup. */
+function emphasizeCalloutHtml(html: string): string {
+  const trimmed = (html || '').trim();
+  if (!trimmed) return '';
+  const mixed = trimmed.match(/^([^]*?)(<(?:ul|ol|pre|table)\b)/i);
+  if (mixed && mixed[1].trim()) {
+    return `<p class="lab-callout-emph"><strong>${mixed[1].trim()}</strong></p>${trimmed.slice(mixed[1].length)}`;
+  }
+  if (/^<(ul|ol|p|div|pre|table|blockquote)/i.test(trimmed)) {
+    return `<div class="lab-callout-emph">${trimmed}</div>`;
+  }
+  return `<p class="lab-callout-emph"><strong>${trimmed}</strong></p>`;
+}
 ---
 
 <div class="lab-article space-y-5">
@@ -35,16 +51,16 @@ function youtubeId(src: string): string {
             <h2 class="scroll-mt-24 text-lg font-semibold md:text-xl">
               <span class="lang-vi">{tLab(block.text)}</span>
               <span class="lang-en">{block.text}</span>
-              <span class="lang-km">{block.text}</span>
+              <span class="lang-km">{tLabKm(block.text)}</span>
             </h2>
           );
         }
         return (
-          <h3 class="scroll-mt-24 text-base font-semibold">
-            <span class="lang-vi">{tLab(block.text)}</span>
-            <span class="lang-en">{block.text}</span>
-            <span class="lang-km">{block.text}</span>
-          </h3>
+            <h3 class="scroll-mt-24 text-base font-semibold">
+              <span class="lang-vi">{tLab(block.text)}</span>
+              <span class="lang-en">{block.text}</span>
+              <span class="lang-km">{tLabKm(block.text)}</span>
+            </h3>
         );
       }
       if (block.type === 'p') {
@@ -95,7 +111,7 @@ function youtubeId(src: string): string {
                   <dt class="text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-[var(--cf-accent)]">
                     <span class="lang-vi">{tLab(item.label)}</span>
                     <span class="lang-en">{item.label}</span>
-                    <span class="lang-km">{item.label}</span>
+                    <span class="lang-km">{tLabKm(item.label)}</span>
                   </dt>
                 ) : null}
                 <dd class="mt-1 text-sm leading-relaxed" set:html={item.html} />
@@ -106,33 +122,41 @@ function youtubeId(src: string): string {
       }
       if (block.type === 'callout') {
         const cls = calloutClass[block.kind] ?? calloutClass.note;
+        const kindLabel = labCalloutKindLabel[block.kind] ?? labCalloutKindLabel.note;
         return (
-          <aside class={cls}>
-            {block.title ? (
-              <p class="text-sm font-semibold">
-                <span class="lang-vi">{tLab(block.title)}</span>
-                <span class="lang-en">{block.title}</span>
-                <span class="lang-km">{block.title}</span>
-              </p>
-            ) : null}
-            <div class:list={['lab-callout-body text-sm leading-relaxed', block.title && 'mt-2']} set:html={block.html} />
+          <aside class={cls} role="note">
+            <div class="lab-callout-head">
+              <span class="lab-callout-kind">
+                <span class="lang-vi">{kindLabel.vi}</span>
+                <span class="lang-en">{kindLabel.en}</span>
+                <span class="lang-km">{kindLabel.km}</span>
+              </span>
+              {block.title ? (
+                <p class="lab-callout-title">
+                  <span class="lang-vi">{tLab(block.title)}</span>
+                  <span class="lang-en">{block.title}</span>
+                  <span class="lang-km">{tLabKm(block.title)}</span>
+                </p>
+              ) : null}
+            </div>
+            <div class="lab-callout-body" set:html={emphasizeCalloutHtml(block.html)} />
           </aside>
         );
       }
       if (block.type === 'challenge') {
         return (
-          <aside class="lab-challenge">
-            <p class="text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-[var(--cf-accent)]">
-              <span class="lang-vi">Thử thách</span>
-              <span class="lang-en">Challenge</span>
-              <span class="lang-km">Challenge</span>
+          <aside class="lab-challenge" role="note">
+            <p class="lab-callout-kind lab-callout-kind-challenge">
+              <span class="lang-vi">{labChrome.challenge.vi}</span>
+              <span class="lang-en">{labChrome.challenge.en}</span>
+              <span class="lang-km">{labChrome.challenge.km}</span>
             </p>
-            <p class="mt-1 text-base font-semibold">
+            <p class="lab-callout-title mt-2">
               <span class="lang-vi">{tLab(block.title)}</span>
               <span class="lang-en">{block.title}</span>
-              <span class="lang-km">{block.title}</span>
+              <span class="lang-km">{tLabKm(block.title)}</span>
             </p>
-            <div class="lab-challenge-body mt-2 text-sm leading-relaxed" set:html={block.html} />
+            <div class="lab-challenge-body mt-2" set:html={emphasizeCalloutHtml(block.html)} />
           </aside>
         );
       }
@@ -167,27 +191,121 @@ function youtubeId(src: string): string {
   }
 
   .lab-callout {
-    border-radius: 0.9rem;
+    border-radius: 0.95rem;
     border: 1px solid var(--cf-border);
-    background: var(--cf-bg-elevated);
-    padding: 0.9rem 1rem;
+    border-left-width: 5px;
+    border-left-color: var(--cf-accent);
+    background: color-mix(in srgb, var(--cf-accent) 12%, var(--cf-bg));
+    padding: 0.95rem 1.05rem;
+    box-shadow: 0 10px 24px -18px rgba(0, 0, 0, 0.45);
+  }
+
+  .lab-callout-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.55rem 0.7rem;
+  }
+
+  .lab-callout-kind {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.28rem;
+    border-radius: 999px;
+    background: #111111;
+    color: #ffffff;
+    padding: 0.18rem 0.55rem;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .lab-callout-note .lab-callout-kind::before,
+  .lab-callout-tip .lab-callout-kind::before {
+    content: '!';
+    font-weight: 800;
+  }
+
+  .lab-callout-important .lab-callout-kind::before,
+  .lab-callout-caution .lab-callout-kind::before {
+    content: '⚠';
+    letter-spacing: 0;
+  }
+
+  .lab-callout-kind-challenge {
+    background: var(--cf-accent);
+    color: #111111;
+  }
+
+  .lab-callout-title {
+    margin: 0;
+    font-size: 0.98rem;
+    font-weight: 800;
+    line-height: 1.35;
+    color: var(--cf-text);
+  }
+
+  .lab-callout-note {
+    border-left-color: var(--cf-accent);
+    background: color-mix(in srgb, var(--cf-accent) 14%, var(--cf-bg));
   }
 
   .lab-callout-tip,
   .lab-callout-important {
-    border-color: color-mix(in srgb, var(--cf-accent) 45%, var(--cf-border));
-    background: color-mix(in srgb, var(--cf-accent) 10%, var(--cf-bg));
+    border-left-color: var(--cf-accent);
+    background: color-mix(in srgb, var(--cf-accent) 16%, var(--cf-bg));
+  }
+
+  .lab-callout-important .lab-callout-kind {
+    background: var(--cf-accent);
+    color: #111111;
   }
 
   .lab-callout-caution {
-    border-color: color-mix(in srgb, #f59e0b 50%, var(--cf-border));
-    background: color-mix(in srgb, #f59e0b 10%, var(--cf-bg));
+    border-left-color: #dc2626;
+    background: color-mix(in srgb, #f59e0b 18%, var(--cf-bg));
+  }
+
+  .lab-callout-caution .lab-callout-kind {
+    background: #dc2626;
+    color: #ffffff;
   }
 
   .lab-callout-tool {
+    border-left-color: var(--cf-accent);
     border-color: #111111;
     background: #111111;
     color: #ffffff;
+  }
+
+  .lab-callout-tool .lab-callout-title {
+    color: #ffffff;
+  }
+
+  .lab-callout-tool .lab-callout-kind {
+    background: var(--cf-accent);
+    color: #111111;
+  }
+
+  .lab-callout-body,
+  .lab-challenge-body {
+    margin-top: 0.65rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1.55;
+    color: var(--cf-text);
+  }
+
+  .lab-callout-emph,
+  .lab-callout-emph strong,
+  .lab-callout-body :global(strong),
+  .lab-challenge-body :global(strong) {
+    font-weight: 800;
+  }
+
+  .lab-callout-tool .lab-callout-body {
+    color: rgba(255, 255, 255, 0.92);
   }
 
   .lab-callout-body :global(ul),
@@ -233,13 +351,24 @@ function youtubeId(src: string): string {
   .lab-challenge {
     border-radius: 0.9rem;
     border: 1px solid color-mix(in srgb, var(--cf-accent) 50%, var(--cf-border));
-    border-left-width: 4px;
+    border-left-width: 5px;
     border-left-color: var(--cf-accent);
-    background: color-mix(in srgb, var(--cf-accent) 8%, var(--cf-bg));
+    background: color-mix(in srgb, var(--cf-accent) 12%, var(--cf-bg));
     padding: 1rem 1.05rem;
+    box-shadow: 0 10px 24px -18px rgba(0, 0, 0, 0.45);
   }
 
   html.dark .lab-callout-tool {
     background: #000000;
+  }
+
+  html.dark .lab-callout-note,
+  html.dark .lab-callout-tip,
+  html.dark .lab-callout-important {
+    background: color-mix(in srgb, var(--cf-accent) 18%, #0a0a0a);
+  }
+
+  html.dark .lab-callout-caution {
+    background: color-mix(in srgb, #f59e0b 16%, #0a0a0a);
   }
 </style>
