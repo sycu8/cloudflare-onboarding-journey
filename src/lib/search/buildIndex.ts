@@ -10,7 +10,8 @@ import { useCases } from '../../data/useCases';
 import { roleRoadmaps } from '../../data/roleRoadmaps';
 import { contentRoadmapStages } from '../../data/contentRoadmap';
 import { getAllTutorialPreviews, getTutorialHubPath } from '../../data/tutorialPreviews';
-import { developerLabTracks, developerLabsIntro } from '../../data/developerLabs';
+import { developerLabTracks, developerLabsIntro, DEVELOPER_LABS_HUB_PATH, developerLabHubPath } from '../../data/developerLabs';
+import { getLabArticles, loc } from '../../data/developerLabArticles';
 import type { SearchDocument } from '../../types/search';
 
 function doc(
@@ -282,7 +283,7 @@ export function buildSearchDocuments(): SearchDocument[] {
   out.push(
     doc(
       'developer-labs',
-      '/tracks/developer-platform/#developer-labs',
+      DEVELOPER_LABS_HUB_PATH,
       { vi: 'Developer Labs', en: 'Developer Labs', km: 'Developer Labs' },
       developerLabsIntro,
       'Lab',
@@ -294,13 +295,25 @@ export function buildSearchDocuments(): SearchDocument[] {
     out.push(
       doc(
         `developer-lab-${lab.id}`,
-        `/tracks/developer-platform/#lab-${lab.id}`,
+        developerLabHubPath(lab.id),
         lab.title,
         lab.description,
         'Lab',
         `${lab.tags.join(' ')} ${lab.outcome.en}`,
       ),
     );
+    for (const article of getLabArticles(lab.id)) {
+      out.push(
+        doc(
+          `developer-lab-${lab.id}-${article.id}`,
+          developerLabHubPath(lab.id, article.id),
+          loc(article.title),
+          loc(article.description),
+          'Lab',
+          `${lab.id} ${article.title}`,
+        ),
+      );
+    }
   }
 
   for (const resource of resources) {

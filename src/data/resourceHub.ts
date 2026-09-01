@@ -233,10 +233,10 @@ export const resourceHubItems: ResourceHubItem[] = [
     id: 'developer-labs',
     title: { vi: 'Developer Labs', en: 'Developer Labs' },
     description: {
-      vi: 'Lab guided chính thức: Workers, MCP, Agents SDK, Sandbox SDK — ship project trên edge.',
-      en: 'Official guided labs: Workers, MCP, Agents SDK, Sandbox SDK — ship a project on the edge.',
+      vi: 'Lab guided chính thức: Workers, MCP, Agents SDK, Sandbox SDK — đọc từng bước trên hub.',
+      en: 'Official guided labs: Workers, MCP, Agents SDK, Sandbox SDK — follow each step on this hub.',
     },
-    href: '/resources#labs',
+    href: '/tracks/developer-platform/labs/',
     category: 'build',
     relatedTrack: 'developer-platform',
     internal: true,

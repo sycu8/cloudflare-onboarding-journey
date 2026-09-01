@@ -1,0 +1,144 @@
+---
+import BaseLayout from '../../../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../../../components/chrome/Breadcrumbs.astro';
+import LangText from '../../../../../components/ui/LangText.astro';
+import {
+  type DeveloperLabId,
+  DEVELOPER_LABS_HUB_PATH,
+  developerLabHubPath,
+  developerLabTracks,
+} from '../../../../../data/developerLabs';
+import { getLabArticles, loc } from '../../../../../data/developerLabArticles';
+
+export function getStaticPaths() {
+  return developerLabTracks.map((track) => ({ params: { labId: track.id } }));
+}
+
+const { labId } = Astro.params as { labId: DeveloperLabId };
+const track = developerLabTracks.find((item) => item.id === labId);
+if (!track) throw new Error(`Lab track not found: ${labId}`);
+const articles = getLabArticles(labId);
+const first = articles[0];
+---
+
+<BaseLayout
+  title={{
+    vi: `${track.title.vi} · Developer Labs`,
+    en: `${track.title.en} · Developer Labs`,
+  }}
+  description={track.description}
+  canonicalPath={developerLabHubPath(labId)}
+>
+  <Breadcrumbs
+    items={[
+      { href: '/tracks/developer-platform/', label: { vi: 'Developer Platform', en: 'Developer Platform' } },
+      { href: DEVELOPER_LABS_HUB_PATH, label: { vi: 'Developer Labs', en: 'Developer Labs' } },
+      { href: developerLabHubPath(labId), label: track.title },
+    ]}
+  />
+
+  <header class="lab-track-head mb-8">
+    <p class="font-mono text-sm font-bold text-[var(--cf-accent)]">{track.number}</p>
+    <LangText as="h1" class="mt-1 text-2xl font-semibold text-white md:text-3xl" text={track.title} />
+    <p class="mt-1 text-sm font-medium text-[var(--cf-accent)]">
+      <LangText text={track.outcome} />
+    </p>
+    <LangText as="p" class="mt-3 max-w-3xl text-sm leading-relaxed text-white/80" text={track.description} />
+    <LangText as="p" class="mt-3 max-w-3xl text-xs leading-relaxed text-white/60" text={track.whenInHub} />
+    <div class="mt-5 flex flex-wrap gap-2">
+      {first ? (
+        <a class="btn btn-primary" href={developerLabHubPath(labId, first.id)}>
+          <span class="lang-vi">Bắt đầu lab 1</span>
+          <span class="lang-en">Start lab 1</span>
+          <span class="lang-km">Start lab 1</span>
+        </a>
+      ) : null}
+      <a class="lab-track-ghost" href={track.sourceHref} target="_blank" rel="noopener noreferrer">
+        labs.cloudflare.dev{track.path} ↗
+      </a>
+    </div>
+  </header>
+
+  <ol class="space-y-3">
+    {articles.map((article, i) => {
+      const curated = track.labs[i];
+      return (
+        <li>
+          <a class="lab-step-row" href={developerLabHubPath(labId, article.id)}>
+            <span class="lab-step-n">{String(article.step).padStart(2, '0')}</span>
+            <span class="min-w-0 flex-1">
+              <span class="block font-semibold">
+                {curated ? <LangText text={curated.title} /> : <LangText text={loc(article.title)} />}
+              </span>
+              <span class="mt-1 block text-sm leading-relaxed text-[var(--cf-text-muted)]">
+                {curated ? <LangText text={curated.summary} /> : <LangText text={loc(article.description)} />}
+              </span>
+            </span>
+            {article.durationMin ? (
+              <span class="lab-step-dur">{article.durationMin} min</span>
+            ) : null}
+          </a>
+        </li>
+      );
+    })}
+  </ol>
+</BaseLayout>
+
+<style>
+  .lab-track-head {
+    border-radius: 1.15rem;
+    background:
+      radial-gradient(720px 220px at 8% 0%, rgba(246, 130, 26, 0.38), transparent 58%),
+      #111111;
+    border: 1px solid color-mix(in srgb, var(--cf-accent) 45%, #111111);
+    padding: 1.4rem 1.45rem 1.5rem;
+  }
+
+  .lab-track-ghost {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    background: #ffffff;
+    color: #111111;
+    padding: 0.55rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .lab-step-row {
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+    border-radius: 1rem;
+    border: 1px solid var(--cf-border);
+    background: var(--cf-bg-elevated);
+    padding: 1rem 1.05rem;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .lab-step-row:hover {
+    border-color: var(--cf-accent);
+  }
+
+  .lab-step-n {
+    flex-shrink: 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--cf-accent);
+    line-height: 1.4;
+  }
+
+  .lab-step-dur {
+    flex-shrink: 0;
+    border-radius: 999px;
+    border: 1px solid var(--cf-border);
+    padding: 0.15rem 0.55rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--cf-text-muted);
+  }
+</style>

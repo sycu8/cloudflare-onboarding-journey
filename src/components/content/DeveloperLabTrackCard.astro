@@ -34,12 +34,14 @@ const { lab, trackSlug = 'developer-platform' } = Astro.props;
 
     <ol class="lab-steps mt-4 flex-1 space-y-2">
       {lab.labs.map((step, i) => (
-        <li class="flex gap-2.5 text-sm leading-snug">
-          <span class="lab-step-n">{i + 1}</span>
-          <div class="min-w-0">
-            <LangText as="p" class="font-medium text-[var(--cf-text)]" text={step.title} />
-            <LangText as="p" class="mt-0.5 text-xs leading-relaxed text-[var(--cf-text-muted)]" text={step.summary} />
-          </div>
+        <li>
+          <a class="flex gap-2.5 text-sm leading-snug" href={`/tracks/developer-platform/labs/${lab.id}/${step.id}/`}>
+            <span class="lab-step-n">{i + 1}</span>
+            <div class="min-w-0">
+              <LangText as="p" class="font-medium text-[var(--cf-text)]" text={step.title} />
+              <LangText as="p" class="mt-0.5 text-xs leading-relaxed text-[var(--cf-text-muted)]" text={step.summary} />
+            </div>
+          </a>
         </li>
       ))}
     </ol>
@@ -63,11 +65,10 @@ const { lab, trackSlug = 'developer-platform' } = Astro.props;
       <LangText as="p" class="mt-2 text-xs leading-relaxed text-[var(--cf-text-muted)]" text={lab.whenInHub} />
     </div>
 
-    <a class="btn btn-primary mt-4 w-full justify-center" href={lab.href} target="_blank" rel="noopener noreferrer">
-      <span class="lang-vi">Bắt đầu {lab.labCount} labs</span>
-      <span class="lang-en">Start {lab.labCount} labs</span>
-      <span class="lang-km">Start {lab.labCount} labs</span>
-      <span aria-hidden="true">↗</span>
+    <a class="btn btn-primary mt-4 w-full justify-center" href={lab.href}>
+      <span class="lang-vi">Mở {lab.labCount} bài lab</span>
+      <span class="lang-en">Open {lab.labCount} lab articles</span>
+      <span class="lang-km">Open {lab.labCount} lab articles</span>
     </a>
   </div>
 </article>
@@ -120,6 +121,15 @@ const { lab, trackSlug = 'developer-platform' } = Astro.props;
     padding: 0.12rem 0.55rem;
     font-size: 0.7rem;
     font-weight: 600;
+  }
+
+  .lab-steps a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .lab-steps a:hover .font-medium {
+    color: var(--cf-accent);
   }
 
   .lab-step-n {

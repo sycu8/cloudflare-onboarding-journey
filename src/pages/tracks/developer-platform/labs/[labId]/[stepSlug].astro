@@ -1,0 +1,136 @@
+---
+import BaseLayout from '../../../../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../../../../components/chrome/Breadcrumbs.astro';
+import LangText from '../../../../../../components/ui/LangText.astro';
+import LabArticle from '../../../../../../components/content/LabArticle.astro';
+import {
+  type DeveloperLabId,
+  DEVELOPER_LABS_HUB_PATH,
+  developerLabHubPath,
+  developerLabTracks,
+} from '../../../../../../data/developerLabs';
+import {
+  getAdjacentLabArticles,
+  getAllLabArticleParams,
+  getLabArticle,
+  loc,
+  locList,
+} from '../../../../../../data/developerLabArticles';
+import { tLab } from '../../../../../../data/developerLabs.vi';
+
+export function getStaticPaths() {
+  return getAllLabArticleParams().map(({ labId, stepId }) => ({
+    params: { labId, stepSlug: stepId },
+  }));
+}
+
+const { labId, stepSlug } = Astro.params as { labId: DeveloperLabId; stepSlug: string };
+const track = developerLabTracks.find((item) => item.id === labId);
+const article = getLabArticle(labId, stepSlug);
+if (!track || !article) throw new Error(`Lab article not found: ${labId}/${stepSlug}`);
+const { prev, next } = getAdjacentLabArticles(labId, article.id);
+const title = loc(article.title);
+const description = loc(article.description);
+const prerequisites = locList(article.prerequisites);
+const objectives = locList(article.objectives);
+---
+
+<BaseLayout
+  title={{
+    vi: `${title.vi} · ${track.title.vi}`,
+    en: `${title.en} · ${track.title.en}`,
+  }}
+  description={description}
+  canonicalPath={developerLabHubPath(labId, article.id)}
+>
+  <Breadcrumbs
+    items={[
+      { href: '/tracks/developer-platform/', label: { vi: 'Developer Platform', en: 'Developer Platform' } },
+      { href: DEVELOPER_LABS_HUB_PATH, label: { vi: 'Developer Labs', en: 'Developer Labs' } },
+      { href: developerLabHubPath(labId), label: track.title },
+      { href: developerLabHubPath(labId, article.id), label: title },
+    ]}
+  />
+
+  <header class="mb-8">
+    <p class="text-muted mb-2 text-xs font-medium uppercase tracking-wide">
+      <LangText text={track.title} />
+      <span class="opacity-60">
+        ·
+        <span class="lang-vi"> Lab {article.step}/{track.labCount}</span>
+        <span class="lang-en"> Lab {article.step}/{track.labCount}</span>
+        <span class="lang-km"> Lab {article.step}/{track.labCount}</span>
+        {article.durationMin ? ` · ${article.durationMin} min` : ''}
+      </span>
+    </p>
+    <p class="font-mono text-sm font-bold text-[var(--cf-accent)]">{String(article.step).padStart(2, '0')}</p>
+    <LangText as="h1" class="mt-1 text-2xl font-semibold md:text-3xl" text={title} />
+    <LangText as="p" class="text-muted mt-3 max-w-3xl text-sm leading-relaxed" text={description} />
+    <p class="text-muted mt-3 text-xs leading-relaxed">
+      <span class="lang-vi">
+        Nội dung bước (lệnh, code, callout) giữ nguyên tiếng Anh từ nguồn chính thức.{' '}
+      </span>
+      <span class="lang-en">Step body (commands, code, callouts) stays in English from the official source. </span>
+      <span class="lang-km">Step body (commands, code, callouts) stays in English from the official source. </span>
+      <a class="link" href={article.sourceUrl} target="_blank" rel="noopener noreferrer">
+        labs.cloudflare.dev ↗
+      </a>
+    </p>
+  </header>
+
+  <div class="mb-8 grid gap-4 md:grid-cols-2">
+    {prerequisites.length > 0 ? (
+      <section class="card">
+        <LangText as="h2" class="text-sm font-semibold" text={{ vi: 'Cần trước', en: 'Prerequisites', km: 'Prerequisites' }} />
+        <ul class="mt-3 list-disc space-y-1 pl-5 text-sm leading-relaxed text-[var(--cf-text-muted)]">
+          {prerequisites.map((item) => (
+            <li><LangText text={item} /></li>
+          ))}
+        </ul>
+      </section>
+    ) : null}
+    {objectives.length > 0 ? (
+      <section class="card">
+        <LangText as="h2" class="text-sm font-semibold" text={{ vi: 'Bạn sẽ làm được', en: 'Learning objectives', km: 'Learning objectives' }} />
+        <ul class="mt-3 list-disc space-y-1 pl-5 text-sm leading-relaxed text-[var(--cf-text-muted)]">
+          {objectives.map((item) => (
+            <li><LangText text={item} /></li>
+          ))}
+        </ul>
+      </section>
+    ) : null}
+  </div>
+
+  <article class="card mb-8 p-5 md:p-6">
+    <LabArticle blocks={article.blocks} />
+  </article>
+
+  <nav class="mb-8 flex flex-col gap-3 sm:flex-row sm:justify-between">
+    {prev ? (
+      <a class="btn btn-secondary" href={developerLabHubPath(labId, prev.id)}>
+        <span class="lang-vi">← {tLab(prev.title)}</span>
+        <span class="lang-en">← {prev.title}</span>
+        <span class="lang-km">← {prev.title}</span>
+      </a>
+    ) : (
+      <a class="btn btn-secondary" href={developerLabHubPath(labId)}>
+        <span class="lang-vi">← Mục lục {track.title.vi}</span>
+        <span class="lang-en">← {track.title.en} index</span>
+        <span class="lang-km">← {track.title.en} index</span>
+      </a>
+    )}
+    {next ? (
+      <a class="btn btn-primary sm:ml-auto" href={developerLabHubPath(labId, next.id)}>
+        <span class="lang-vi">{tLab(next.title)} →</span>
+        <span class="lang-en">{next.title} →</span>
+        <span class="lang-km">{next.title} →</span>
+      </a>
+    ) : (
+      <a class="btn btn-primary sm:ml-auto" href={DEVELOPER_LABS_HUB_PATH}>
+        <span class="lang-vi">Xong · về 4 track lab</span>
+        <span class="lang-en">Done · all lab tracks</span>
+        <span class="lang-km">Done · all lab tracks</span>
+      </a>
+    )}
+  </nav>
+</BaseLayout>

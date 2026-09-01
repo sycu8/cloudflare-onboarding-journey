@@ -1,0 +1,98 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../../components/chrome/Breadcrumbs.astro';
+import LangText from '../../../../components/ui/LangText.astro';
+import DeveloperLabTrackCard from '../../../../components/content/DeveloperLabTrackCard.astro';
+import {
+  DEVELOPER_LABS_DISCORD_URL,
+  DEVELOPER_LABS_HUB_PATH,
+  DEVELOPER_LABS_URL,
+  developerLabsIntro,
+  developerLabTracks,
+} from '../../../../data/developerLabs';
+import { totalLabArticleCount } from '../../../../data/developerLabArticles';
+
+const totalLabs = totalLabArticleCount();
+---
+
+<BaseLayout
+  title={{ vi: 'Developer Labs · Developer Platform', en: 'Developer Labs · Developer Platform' }}
+  description={{
+    vi: '23 bài lab guided từ labs.cloudflare.dev — Workers, MCP, Agents SDK, Sandbox SDK — đọc và làm ngay trên hub.',
+    en: '23 guided labs from labs.cloudflare.dev — Workers, MCP, Agents SDK, Sandbox SDK — follow them on this hub.',
+  }}
+  canonicalPath={DEVELOPER_LABS_HUB_PATH}
+>
+  <Breadcrumbs
+    items={[
+      { href: '/tracks/developer-platform/', label: { vi: 'Developer Platform', en: 'Developer Platform' } },
+      { href: DEVELOPER_LABS_HUB_PATH, label: { vi: 'Developer Labs', en: 'Developer Labs' } },
+    ]}
+  />
+
+  <header class="lab-hub-banner mb-8">
+    <p class="text-[0.7rem] font-bold uppercase tracking-[0.16em] text-[var(--cf-accent)]">labs.cloudflare.dev</p>
+    <LangText
+      as="h1"
+      class="mt-2 text-2xl font-semibold text-white md:text-3xl"
+      text={{ vi: 'Developer Labs', en: 'Developer Labs' }}
+    />
+    <LangText as="p" class="mt-2 max-w-3xl text-sm leading-relaxed text-white/80" text={developerLabsIntro} />
+    <p class="mt-4 text-sm text-white/70">
+      <span class="lang-vi">{developerLabTracks.length} track · {totalLabs} bài lab trên hub</span>
+      <span class="lang-en">{developerLabTracks.length} tracks · {totalLabs} lab articles on this hub</span>
+      <span class="lang-km">{developerLabTracks.length} tracks · {totalLabs} lab articles on this hub</span>
+    </p>
+    <div class="mt-5 flex flex-wrap gap-2">
+      <a class="btn btn-primary" href={`${DEVELOPER_LABS_HUB_PATH}${developerLabTracks[0].id}/`}>
+        <span class="lang-vi">Bắt đầu từ Workers</span>
+        <span class="lang-en">Start with Workers</span>
+        <span class="lang-km">Start with Workers</span>
+      </a>
+      <a class="lab-hub-ghost" href={DEVELOPER_LABS_URL} target="_blank" rel="noopener noreferrer">
+        labs.cloudflare.dev ↗
+      </a>
+      <a class="lab-hub-ghost" href={DEVELOPER_LABS_DISCORD_URL} target="_blank" rel="noopener noreferrer">
+        Discord ↗
+      </a>
+    </div>
+  </header>
+
+  <div class="grid gap-5 md:grid-cols-2">
+    {developerLabTracks.map((lab) => (
+      <div id={lab.id} class="scroll-mt-28">
+        <DeveloperLabTrackCard lab={lab} />
+      </div>
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+  .lab-hub-banner {
+    border-radius: 1.15rem;
+    background:
+      radial-gradient(720px 220px at 8% 0%, rgba(246, 130, 26, 0.38), transparent 58%),
+      #111111;
+    border: 1px solid color-mix(in srgb, var(--cf-accent) 45%, #111111);
+    padding: 1.4rem 1.45rem 1.5rem;
+  }
+
+  .lab-hub-ghost {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    background: #ffffff;
+    color: #111111;
+    padding: 0.55rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .lab-hub-ghost:hover {
+    background: var(--cf-accent);
+    border-color: var(--cf-accent);
+    color: #ffffff;
+  }
+</style>

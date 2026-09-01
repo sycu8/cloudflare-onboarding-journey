@@ -1,0 +1,225 @@
+---
+import type { LabBlock } from '../../data/developerLabArticles';
+import { tLab } from '../../data/developerLabs.vi';
+
+type Props = { blocks: LabBlock[] };
+const { blocks } = Astro.props;
+
+const calloutClass: Record<string, string> = {
+  tip: 'lab-callout lab-callout-tip',
+  note: 'lab-callout lab-callout-note',
+  important: 'lab-callout lab-callout-important',
+  caution: 'lab-callout lab-callout-caution',
+  warning: 'lab-callout lab-callout-caution',
+  danger: 'lab-callout lab-callout-caution',
+  tool: 'lab-callout lab-callout-tool',
+  globe: 'lab-callout lab-callout-tool',
+};
+
+function youtubeId(src: string): string {
+  const m = src.match(/embed\/([^?&]+)/);
+  return m?.[1] ?? 'video';
+}
+---
+
+<div class="lab-article space-y-5">
+  {
+    blocks.map((block) => {
+      if (block.type === 'heading') {
+        const Tag = block.level <= 2 ? 'h2' : 'h3';
+        return (
+          <Tag class:list={[block.level <= 2 ? 'text-lg font-semibold md:text-xl' : 'text-base font-semibold', 'scroll-mt-24']}>
+            <span class="lang-vi">{tLab(block.text)}</span>
+            <span class="lang-en">{block.text}</span>
+            <span class="lang-km">{block.text}</span>
+          </Tag>
+        );
+      }
+      if (block.type === 'p') {
+        return (
+          <>
+            <p class="lang-vi text-sm leading-relaxed" set:html={block.html} />
+            <p class="lang-en text-sm leading-relaxed" set:html={block.html} />
+            <p class="lang-km text-sm leading-relaxed" set:html={block.html} />
+          </>
+        );
+      }
+      if (block.type === 'list') {
+        const Tag = block.ordered ? 'ol' : 'ul';
+        return (
+          <Tag class:list={[block.ordered ? 'list-decimal' : 'list-disc', 'space-y-1 pl-5 text-sm leading-relaxed']}>
+            {block.items.map((item) => (
+              <li set:html={item} />
+            ))}
+          </Tag>
+        );
+      }
+      if (block.type === 'code') {
+        return (
+          <div class="overflow-x-auto rounded-xl border border-[var(--cf-border)] bg-[#111111]">
+            {block.lang ? (
+              <div class="border-b border-white/10 px-3 py-1 font-mono text-[10px] uppercase tracking-wide text-[var(--cf-accent)]">
+                {block.lang}
+              </div>
+            ) : null}
+            <pre class="lab-code p-3 text-xs leading-relaxed text-white"><code>{block.code}</code></pre>
+          </div>
+        );
+      }
+      if (block.type === 'context') {
+        return (
+          <dl class="lab-context grid gap-3 sm:grid-cols-2">
+            {block.items.map((item) => (
+              <div class="rounded-xl border border-[var(--cf-border)] bg-[var(--cf-bg-elevated)] p-3">
+                {item.label ? (
+                  <dt class="text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-[var(--cf-accent)]">
+                    <span class="lang-vi">{tLab(item.label)}</span>
+                    <span class="lang-en">{item.label}</span>
+                    <span class="lang-km">{item.label}</span>
+                  </dt>
+                ) : null}
+                <dd class="mt-1 text-sm leading-relaxed" set:html={item.html} />
+              </div>
+            ))}
+          </dl>
+        );
+      }
+      if (block.type === 'callout') {
+        const cls = calloutClass[block.kind] ?? calloutClass.note;
+        return (
+          <aside class={cls}>
+            {block.title ? (
+              <p class="text-sm font-semibold">
+                <span class="lang-vi">{tLab(block.title)}</span>
+                <span class="lang-en">{block.title}</span>
+                <span class="lang-km">{block.title}</span>
+              </p>
+            ) : null}
+            <div class:list={['lab-callout-body text-sm leading-relaxed', block.title && 'mt-2']} set:html={block.html} />
+          </aside>
+        );
+      }
+      if (block.type === 'challenge') {
+        return (
+          <aside class="lab-challenge">
+            <p class="text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-[var(--cf-accent)]">
+              <span class="lang-vi">Thử thách</span>
+              <span class="lang-en">Challenge</span>
+              <span class="lang-km">Challenge</span>
+            </p>
+            <p class="mt-1 text-base font-semibold">
+              <span class="lang-vi">{tLab(block.title)}</span>
+              <span class="lang-en">{block.title}</span>
+              <span class="lang-km">{block.title}</span>
+            </p>
+            <div class="lab-challenge-body mt-2 text-sm leading-relaxed" set:html={block.html} />
+          </aside>
+        );
+      }
+      if (block.type === 'youtube') {
+        return (
+          <figure class="lab-video overflow-hidden rounded-xl border border-[var(--cf-border)] bg-[#111111]">
+            <div class="relative aspect-video">
+              <iframe
+                src={block.src}
+                title={block.title}
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+                class="absolute inset-0 h-full w-full"
+                id={`yt-${youtubeId(block.src)}`}
+              />
+            </div>
+            <figcaption class="px-3 py-2 text-xs text-white/70">{block.title}</figcaption>
+          </figure>
+        );
+      }
+      return null;
+    })
+  }
+</div>
+
+<style>
+  .lab-code {
+    margin: 0;
+    white-space: pre;
+    tab-size: 2;
+  }
+
+  .lab-callout {
+    border-radius: 0.9rem;
+    border: 1px solid var(--cf-border);
+    background: var(--cf-bg-elevated);
+    padding: 0.9rem 1rem;
+  }
+
+  .lab-callout-tip,
+  .lab-callout-important {
+    border-color: color-mix(in srgb, var(--cf-accent) 45%, var(--cf-border));
+    background: color-mix(in srgb, var(--cf-accent) 10%, var(--cf-bg));
+  }
+
+  .lab-callout-caution {
+    border-color: color-mix(in srgb, #f59e0b 50%, var(--cf-border));
+    background: color-mix(in srgb, #f59e0b 10%, var(--cf-bg));
+  }
+
+  .lab-callout-tool {
+    border-color: #111111;
+    background: #111111;
+    color: #ffffff;
+  }
+
+  .lab-callout-body :global(ul),
+  .lab-callout-body :global(ol),
+  .lab-challenge-body :global(ul),
+  .lab-challenge-body :global(ol) {
+    margin: 0.4rem 0 0;
+    padding-left: 1.15rem;
+  }
+
+  .lab-callout-body :global(ul),
+  .lab-challenge-body :global(ul) {
+    list-style: disc;
+  }
+
+  .lab-callout-body :global(ol),
+  .lab-challenge-body :global(ol) {
+    list-style: decimal;
+  }
+
+  .lab-callout-body :global(p + p),
+  .lab-challenge-body :global(p + p) {
+    margin-top: 0.5rem;
+  }
+
+  .lab-callout-body :global(code),
+  .lab-challenge-body :global(code),
+  .lab-article :global(p code),
+  .lab-article :global(li code),
+  .lab-context :global(code) {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.8em;
+    border-radius: 0.3rem;
+    background: var(--cf-bg-elevated);
+    padding: 0.05rem 0.3rem;
+  }
+
+  .lab-callout-tool :global(code) {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+  }
+
+  .lab-challenge {
+    border-radius: 0.9rem;
+    border: 1px solid color-mix(in srgb, var(--cf-accent) 50%, var(--cf-border));
+    border-left-width: 4px;
+    border-left-color: var(--cf-accent);
+    background: color-mix(in srgb, var(--cf-accent) 8%, var(--cf-bg));
+    padding: 1rem 1.05rem;
+  }
+
+  html.dark .lab-callout-tool {
+    background: #000000;
+  }
+</style>

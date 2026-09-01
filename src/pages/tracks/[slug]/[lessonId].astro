@@ -21,7 +21,7 @@ import { getProductBySlug } from '../../../data/productPages';
 import { tracks } from '../../../data/tracks';
 import TrackContextBanner from '../../../components/content/TrackContextBanner.astro';
 import TrackSwitcher from '../../../components/content/TrackSwitcher.astro';
-import { getLabsForHubModule, DEVELOPER_LABS_URL } from '../../../data/developerLabs';
+import { getLabsForHubModule, DEVELOPER_LABS_HUB_PATH, DEVELOPER_LABS_URL } from '../../../data/developerLabs';
 
 export function getStaticPaths() {
   return getAllFlatTrackLessons().map((l) => ({
@@ -215,18 +215,17 @@ const relatedLabs = track.slug === 'developer-platform' ? getLabsForHubModule(le
               </p>
               <LangText as="p" class="text-muted mt-1 text-xs leading-relaxed" text={lab.whenInHub} />
             </div>
-            <a class="btn btn-primary shrink-0 self-start" href={lab.href} target="_blank" rel="noopener noreferrer">
-              <span class="lang-vi">Mở {lab.labCount} labs</span>
-              <span class="lang-en">Open {lab.labCount} labs</span>
-              <span class="lang-km">Open {lab.labCount} labs</span>
-              <span aria-hidden="true">↗</span>
+            <a class="btn btn-primary shrink-0 self-start" href={lab.href}>
+              <span class="lang-vi">Mở {lab.labCount} bài lab</span>
+              <span class="lang-en">Open {lab.labCount} lab articles</span>
+              <span class="lang-km">Open {lab.labCount} lab articles</span>
             </a>
           </li>
         ))}
       </ul>
       <p class="mt-3 text-xs">
-        <a class="link" href={`/tracks/${track.slug}/#developer-labs`}>
-          <LangText text={{ vi: 'Xem đủ 4 track lab trong lộ trình →', en: 'See all 4 lab tracks on this path →', km: 'See all 4 lab tracks on this path →' }} />
+        <a class="link" href={DEVELOPER_LABS_HUB_PATH}>
+          <LangText text={{ vi: 'Xem đủ 4 track lab trên hub →', en: 'See all 4 lab tracks on this hub →', km: 'See all 4 lab tracks on this hub →' }} />
         </a>
         {' · '}
         <a class="link" href={DEVELOPER_LABS_URL} target="_blank" rel="noopener noreferrer">labs.cloudflare.dev ↗</a>

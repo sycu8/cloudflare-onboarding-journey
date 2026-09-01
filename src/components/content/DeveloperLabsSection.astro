@@ -4,6 +4,7 @@ import DeveloperLabTrackCard from './DeveloperLabTrackCard.astro';
 import {
   DEVELOPER_LABS_URL,
   DEVELOPER_LABS_DISCORD_URL,
+  DEVELOPER_LABS_HUB_PATH,
   developerLabsIntro,
   developerLabTracks,
 } from '../../data/developerLabs';
@@ -37,7 +38,7 @@ const totalLabs = developerLabTracks.reduce((sum, t) => sum + t.labCount, 0);
     <ol class="developer-labs-spine mt-5" aria-label="Lab track order">
       {developerLabTracks.map((lab, i) => (
         <li class="developer-labs-spine-item">
-          <a class="developer-labs-spine-link" href={`#lab-${lab.id}`}>
+          <a class="developer-labs-spine-link" href={`/tracks/developer-platform/labs/${lab.id}/`}>
             <span class="developer-labs-spine-n">{lab.number}</span>
             <span class="min-w-0">
               <LangText as="span" class="block text-sm font-semibold text-white" text={lab.title} />
@@ -50,10 +51,13 @@ const totalLabs = developerLabTracks.reduce((sum, t) => sum + t.labCount, 0);
     </ol>
 
     <div class="mt-5 flex flex-wrap gap-2">
-      <a class="btn btn-primary" href={DEVELOPER_LABS_URL} target="_blank" rel="noopener noreferrer">
-        <span class="lang-vi">Mở Developer Labs</span>
-        <span class="lang-en">Open Developer Labs</span>
-        <span class="lang-km">Open Developer Labs</span>
+      <a class="btn btn-primary" href={DEVELOPER_LABS_HUB_PATH}>
+        <span class="lang-vi">Mở lab trên hub</span>
+        <span class="lang-en">Open labs on this hub</span>
+        <span class="lang-km">Open labs on this hub</span>
+      </a>
+      <a class="developer-labs-ghost" href={DEVELOPER_LABS_URL} target="_blank" rel="noopener noreferrer">
+        labs.cloudflare.dev
         <span aria-hidden="true">↗</span>
       </a>
       <a class="developer-labs-ghost" href={DEVELOPER_LABS_DISCORD_URL} target="_blank" rel="noopener noreferrer">
