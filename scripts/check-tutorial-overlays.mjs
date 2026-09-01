@@ -48,6 +48,10 @@ for (const [lang, file] of Object.entries(files)) {
       leftover++;
       if (samples.length < 6) samples.push(`${lang} leftover ${path} ${where}`);
     }
+    if (/<!DOCTYPE html|<html[\s>]/i.test(text) || String(text).length > 8000) {
+      leftover++;
+      if (samples.length < 6) samples.push(`${lang} garbage-html ${path} ${where} len=${String(text).length}`);
+    }
     if (isStutter(text)) {
       stutter++;
       if (samples.length < 6) samples.push(`${lang} stutter ${path} ${where}: ${String(text).slice(0, 60)}`);

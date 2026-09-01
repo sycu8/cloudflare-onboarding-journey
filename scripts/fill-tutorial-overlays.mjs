@@ -14,7 +14,7 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { capitalizeHeading, translateEn } from './lib/translate-text.mjs';
+import { capitalizeHeading, isUnusableSource, translateEn } from './lib/translate-text.mjs';
 import { sectionOverlayKey } from './lib/tutorial-overlay-key.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -124,7 +124,7 @@ async function fillTutorial(preview, lang) {
 
   const pending = [];
   const queue = (s) => {
-    if (s?.trim()) pending.push(s);
+    if (s?.trim() && !isUnusableSource(s)) pending.push(s);
   };
   queue(preview.title);
   queue(preview.summaryEn);
@@ -142,22 +142,30 @@ async function fillTutorial(preview, lang) {
   }
   await mapLimit([...new Set(pending)], concurrency, (s) => translateString(s, lang));
 
+  async function localized(s, cap = false) {
+    if (!s?.trim() || isUnusableSource(s)) return undefined;
+    const out = await translateString(s, lang);
+    if (!out) return undefined;
+    return cap ? capitalizeHeading(out) : out;
+  }
+
   const entry = {
-    [titleField]: preview.title ? capitalizeHeading(await translateString(preview.title, lang)) : undefined,
-    [summaryField]: preview.summaryEn ? await translateString(preview.summaryEn, lang) : undefined,
+    [titleField]: await localized(preview.title, true),
+    [summaryField]: await localized(preview.summaryEn),
     sections: {},
   };
   if (lang === 'km') {
-    entry.introKm = preview.introEn ? await translateString(preview.introEn, lang) : undefined;
-    entry.notesKm = preview.notesEn?.length ? await translateStringArray(preview.notesEn, lang) : undefined;
+    entry.introKm = await localized(preview.introEn);
+    const notes = (preview.notesEn ?? []).filter((n) => !isUnusableSource(n));
+    entry.notesKm = notes.length ? await translateStringArray(notes, lang) : undefined;
   }
 
   for (let i = 0; i < (preview.sections ?? []).length; i++) {
     const section = preview.sections[i];
     const key = sectionOverlayKey(preview.sections, i);
     const sec = {
-      [titleField]: section.title ? capitalizeHeading(await translateString(section.title, lang)) : undefined,
-      [summaryField]: section.summaryEn ? await translateString(section.summaryEn, lang) : undefined,
+      [titleField]: await localized(section.title, true),
+      [summaryField]: await localized(section.summaryEn),
       blocks: [],
     };
     for (const block of section.blocks) {
@@ -168,7 +176,7 @@ async function fillTutorial(preview, lang) {
       if (block.type === 'paragraph' || block.type === 'note') {
         sec.blocks.push({
           type: block.type,
-          [htmlField]: await translateString(block.html, lang),
+          [htmlField]: await localized(block.html),
         });
         continue;
       }

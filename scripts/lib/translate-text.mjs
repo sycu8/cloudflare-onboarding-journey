@@ -40,6 +40,15 @@ const WORKERS_AI_LANG = {
  * Translate English text to `vi` or `km`.
  * Env: TRANSLATE_PROVIDER=google|workers-ai|dry-run
  */
+export function isUnusableSource(text) {
+  if (!text || typeof text !== 'string') return true;
+  const t = text.trim();
+  if (!t) return true;
+  if (/<!DOCTYPE html|<html[\s>]/i.test(t)) return true;
+  if (t.length > 8000) return true;
+  return false;
+}
+
 function shouldSkipMachineTranslate(text) {
   const plain = text.replace(/<[^>]+>/g, '').trim();
   if (plain.length <= 8 && /^[A-Za-z0-9._-]+$/.test(plain)) return true;
@@ -65,6 +74,7 @@ export async function translateEn(text, targetLang, { provider = defaultProvider
   const trimmed = text.trim();
   if (!trimmed) return text;
   if (provider === 'dry-run') return text;
+  if (isUnusableSource(trimmed)) return '';
   if (shouldSkipMachineTranslate(trimmed)) return text;
   if (targetLang === 'km' && hasKhmer(trimmed)) return text;
   if (targetLang === 'vi' && hasVietnamese(trimmed) && !/[A-Za-z]{12,}/.test(trimmed)) return text;
