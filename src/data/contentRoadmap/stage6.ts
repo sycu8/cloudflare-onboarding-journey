@@ -41,8 +41,8 @@ export const stage6: ContentRoadmapStage = {
       {
         level: 'beginner',
         filterTags: ['developer'],
-        sourceUrls: [SRC.workers],
-        relatedExistingRoutes: ['/tracks/developer-platform', '/use-cases/build-serverless-app', '/cloudflare-101'],
+        sourceUrls: [SRC.workers, SRC.labs],
+        relatedExistingRoutes: ['/tracks/developer-platform', '/tracks/developer-platform#developer-labs', '/use-cases/build-serverless-app', '/cloudflare-101'],
         relatedCloudflareProducts: ['Workers'],
         relatedTutorialPaths: ['/workers/tutorials/deploy-an-express-app'],
         prerequisites: ['edge-network'],
@@ -169,8 +169,9 @@ export const stage6: ContentRoadmapStage = {
         sourceUrls: [
           'https://developers.cloudflare.com/workers-ai/',
           'https://developers.cloudflare.com/vectorize/',
+          SRC.labs,
         ],
-        relatedExistingRoutes: ['/use-cases/build-ai-applications', '/reference-architecture/ai-rag'],
+        relatedExistingRoutes: ['/use-cases/build-ai-applications', '/reference-architecture/ai-rag', '/tracks/developer-platform#developer-labs'],
         relatedCloudflareProducts: ['Workers AI', 'Vectorize'],
         prerequisites: ['dp-workers'],
       },

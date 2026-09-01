@@ -1,0 +1,200 @@
+---
+import LangText from '../ui/LangText.astro';
+import DeveloperLabTrackCard from './DeveloperLabTrackCard.astro';
+import {
+  DEVELOPER_LABS_URL,
+  DEVELOPER_LABS_DISCORD_URL,
+  developerLabsIntro,
+  developerLabTracks,
+} from '../../data/developerLabs';
+
+type Props = {
+  /** Extra heading context on the track page vs the resources catalog */
+  variant?: 'track' | 'resources';
+  sectionId?: string;
+};
+const { variant = 'track', sectionId = 'developer-labs' } = Astro.props;
+const totalLabs = developerLabTracks.reduce((sum, t) => sum + t.labCount, 0);
+---
+
+<section id={sectionId} class="developer-labs mb-8 scroll-mt-24">
+  <div class="developer-labs-banner">
+    <p class="developer-labs-eyebrow">
+      <span class="developer-labs-dot" aria-hidden="true"></span>
+      labs.cloudflare.dev
+    </p>
+    <LangText
+      as="h2"
+      class="mt-2 text-xl font-semibold text-white md:text-2xl"
+      text={
+        variant === 'resources'
+          ? { vi: 'Developer Labs — làm rồi mới đọc thêm', en: 'Developer Labs — ship something real', km: 'Developer Labs — ship something real' }
+          : { vi: 'Lab thực hành (nguồn bổ sung)', en: 'Hands-on labs (supplementary)', km: 'Hands-on labs (supplementary)' }
+      }
+    />
+    <LangText as="p" class="mt-2 max-w-3xl text-sm leading-relaxed text-white/80" text={developerLabsIntro} />
+
+    <ol class="developer-labs-spine mt-5" aria-label="Lab track order">
+      {developerLabTracks.map((lab, i) => (
+        <li class="developer-labs-spine-item">
+          <a class="developer-labs-spine-link" href={`#lab-${lab.id}`}>
+            <span class="developer-labs-spine-n">{lab.number}</span>
+            <span class="min-w-0">
+              <LangText as="span" class="block text-sm font-semibold text-white" text={lab.title} />
+              <LangText as="span" class="mt-0.5 block text-xs text-white/65" text={lab.outcome} />
+            </span>
+          </a>
+          {i < developerLabTracks.length - 1 ? <span class="developer-labs-spine-arrow" aria-hidden="true">→</span> : null}
+        </li>
+      ))}
+    </ol>
+
+    <div class="mt-5 flex flex-wrap gap-2">
+      <a class="btn btn-primary" href={DEVELOPER_LABS_URL} target="_blank" rel="noopener noreferrer">
+        <span class="lang-vi">Mở Developer Labs</span>
+        <span class="lang-en">Open Developer Labs</span>
+        <span class="lang-km">Open Developer Labs</span>
+        <span aria-hidden="true">↗</span>
+      </a>
+      <a class="developer-labs-ghost" href={DEVELOPER_LABS_DISCORD_URL} target="_blank" rel="noopener noreferrer">
+        Discord
+        <span aria-hidden="true">↗</span>
+      </a>
+      <p class="developer-labs-meta">
+        <span class="lang-vi">{developerLabTracks.length} track · {totalLabs} labs guided</span>
+        <span class="lang-en">{developerLabTracks.length} tracks · {totalLabs} guided labs</span>
+        <span class="lang-km">{developerLabTracks.length} tracks · {totalLabs} guided labs</span>
+      </p>
+    </div>
+  </div>
+
+  <div class="mt-6 grid gap-5 md:grid-cols-2">
+    {developerLabTracks.map((lab) => (
+      <div id={`lab-${lab.id}`} class="scroll-mt-28">
+        <DeveloperLabTrackCard lab={lab} />
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .developer-labs-banner {
+    border-radius: 1.15rem;
+    background:
+      radial-gradient(720px 220px at 8% 0%, rgba(246, 130, 26, 0.38), transparent 58%),
+      radial-gradient(520px 200px at 96% 20%, rgba(255, 255, 255, 0.08), transparent 50%),
+      #111111;
+    border: 1px solid color-mix(in srgb, var(--cf-accent) 45%, #111111);
+    padding: 1.35rem 1.4rem 1.4rem;
+    color: #ffffff;
+  }
+
+  .developer-labs-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--cf-accent);
+  }
+
+  .developer-labs-dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 999px;
+    background: var(--cf-accent);
+    box-shadow: 0 0 0 4px rgba(246, 130, 26, 0.22);
+  }
+
+  .developer-labs-spine {
+    display: grid;
+    gap: 0.65rem;
+  }
+
+  @media (min-width: 768px) {
+    .developer-labs-spine {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      align-items: stretch;
+    }
+  }
+
+  .developer-labs-spine-item {
+    display: flex;
+    align-items: stretch;
+    gap: 0.4rem;
+  }
+
+  .developer-labs-spine-link {
+    display: flex;
+    min-width: 0;
+    flex: 1;
+    align-items: flex-start;
+    gap: 0.65rem;
+    border-radius: 0.85rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.04);
+    padding: 0.7rem 0.75rem;
+    text-decoration: none;
+  }
+
+  .developer-labs-spine-link:hover {
+    border-color: var(--cf-accent);
+    background: rgba(246, 130, 26, 0.14);
+  }
+
+  .developer-labs-spine-n {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--cf-accent);
+    line-height: 1.3;
+  }
+
+  .developer-labs-spine-arrow {
+    display: none;
+    align-self: center;
+    color: var(--cf-accent);
+    font-weight: 700;
+  }
+
+  @media (min-width: 768px) {
+    .developer-labs-spine-arrow {
+      display: none;
+    }
+  }
+
+  .developer-labs-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    background: #ffffff;
+    color: #111111;
+    padding: 0.55rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .developer-labs-ghost:hover {
+    background: var(--cf-accent);
+    border-color: var(--cf-accent);
+    color: #ffffff;
+  }
+
+  .developer-labs-meta {
+    align-self: center;
+    margin-left: 0.25rem;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.62);
+  }
+
+  html.dark .developer-labs-banner {
+    background:
+      radial-gradient(720px 220px at 8% 0%, rgba(255, 140, 56, 0.28), transparent 58%),
+      #000000;
+  }
+</style>

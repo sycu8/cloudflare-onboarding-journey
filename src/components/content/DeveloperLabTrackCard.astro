@@ -1,0 +1,190 @@
+---
+import LangText from '../ui/LangText.astro';
+import type { DeveloperLabTrack } from '../../data/developerLabs';
+import { developerLabsHubModuleLabels } from '../../data/developerLabs';
+
+type Props = { lab: DeveloperLabTrack; trackSlug?: string };
+const { lab, trackSlug = 'developer-platform' } = Astro.props;
+---
+
+<article class="lab-card flex h-full flex-col overflow-hidden rounded-2xl">
+  <header class="lab-card-head">
+    <div class="flex items-start justify-between gap-3">
+      <span class="lab-card-num" aria-hidden="true">{lab.number}</span>
+      <span class="lab-card-count">
+        <span class="lang-vi">{lab.labCount} labs</span>
+        <span class="lang-en">{lab.labCount} labs</span>
+        <span class="lang-km">{lab.labCount} labs</span>
+      </span>
+    </div>
+    <LangText as="h3" class="mt-3 text-lg font-semibold tracking-tight text-white" text={lab.title} />
+    <p class="lab-card-outcome mt-1 text-sm font-medium">
+      <LangText text={lab.outcome} />
+    </p>
+  </header>
+
+  <div class="lab-card-body flex flex-1 flex-col p-5">
+    <LangText as="p" class="text-sm leading-relaxed text-[var(--cf-text-muted)]" text={lab.description} />
+
+    <ul class="mt-3 flex flex-wrap gap-1.5">
+      {lab.tags.map((tag) => (
+        <li class="lab-tag">{tag}</li>
+      ))}
+    </ul>
+
+    <ol class="lab-steps mt-4 flex-1 space-y-2">
+      {lab.labs.map((step, i) => (
+        <li class="flex gap-2.5 text-sm leading-snug">
+          <span class="lab-step-n">{i + 1}</span>
+          <div class="min-w-0">
+            <LangText as="p" class="font-medium text-[var(--cf-text)]" text={step.title} />
+            <LangText as="p" class="mt-0.5 text-xs leading-relaxed text-[var(--cf-text-muted)]" text={step.summary} />
+          </div>
+        </li>
+      ))}
+    </ol>
+
+    <div class="lab-when mt-4">
+      <p class="text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-[var(--cf-accent)]">
+        <span class="lang-vi">Ghép với lộ trình hub</span>
+        <span class="lang-en">Fits this hub path</span>
+        <span class="lang-km">Fits this hub path</span>
+      </p>
+      <div class="mt-2 flex flex-wrap gap-1.5">
+        {lab.hubModuleIds.map((id) => {
+          const label = developerLabsHubModuleLabels[id];
+          return (
+            <a class="lab-mod" href={`/tracks/${trackSlug}#${id}`}>
+              {label ? <LangText text={label} /> : id}
+            </a>
+          );
+        })}
+      </div>
+      <LangText as="p" class="mt-2 text-xs leading-relaxed text-[var(--cf-text-muted)]" text={lab.whenInHub} />
+    </div>
+
+    <a class="btn btn-primary mt-4 w-full justify-center" href={lab.href} target="_blank" rel="noopener noreferrer">
+      <span class="lang-vi">Bắt đầu {lab.labCount} labs</span>
+      <span class="lang-en">Start {lab.labCount} labs</span>
+      <span class="lang-km">Start {lab.labCount} labs</span>
+      <span aria-hidden="true">↗</span>
+    </a>
+  </div>
+</article>
+
+<style>
+  .lab-card {
+    background: var(--cf-bg-elevated);
+    border: 1px solid var(--cf-border);
+    box-shadow: 0 10px 28px -18px rgba(0, 0, 0, 0.45);
+  }
+
+  .lab-card-head {
+    background: #111111;
+    color: #ffffff;
+    padding: 1.15rem 1.25rem 1.05rem;
+  }
+
+  .lab-card-num {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--cf-accent);
+    line-height: 1;
+  }
+
+  .lab-card-count {
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: rgba(255, 255, 255, 0.06);
+    color: #ffffff;
+    border-radius: 999px;
+    padding: 0.15rem 0.6rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .lab-card-outcome {
+    color: var(--cf-accent);
+  }
+
+  .lab-tag {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--cf-accent) 55%, #ffffff);
+    background: color-mix(in srgb, var(--cf-accent) 12%, #ffffff);
+    color: #9a3412;
+    padding: 0.12rem 0.55rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+
+  .lab-step-n {
+    flex-shrink: 0;
+    width: 1.35rem;
+    height: 1.35rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: #111111;
+    color: #ffffff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    margin-top: 0.1rem;
+  }
+
+  .lab-when {
+    border-radius: 0.85rem;
+    border: 1px solid color-mix(in srgb, var(--cf-accent) 35%, var(--cf-border));
+    background: color-mix(in srgb, var(--cf-accent) 8%, var(--cf-bg));
+    padding: 0.75rem 0.85rem;
+  }
+
+  .lab-mod {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    background: #111111;
+    color: #ffffff;
+    padding: 0.12rem 0.55rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .lab-mod:hover {
+    background: var(--cf-accent);
+    color: #ffffff;
+  }
+
+  html.dark .lab-card {
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+      0 16px 36px -16px rgba(0, 0, 0, 0.7);
+  }
+
+  html.dark .lab-card-head {
+    background: #0a0a0a;
+    border-bottom: 1px solid color-mix(in srgb, var(--cf-accent) 40%, transparent);
+  }
+
+  html.dark .lab-tag {
+    background: color-mix(in srgb, var(--cf-accent) 16%, #0f1117);
+    color: #ffb380;
+    border-color: color-mix(in srgb, var(--cf-accent) 45%, transparent);
+  }
+
+  html.dark .lab-step-n {
+    background: var(--cf-accent);
+    color: #111111;
+  }
+
+  html.dark .lab-mod {
+    background: #000000;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+</style>

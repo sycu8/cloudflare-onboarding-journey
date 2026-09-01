@@ -60,6 +60,7 @@ import {
   RESOURCES_LAST_SYNCED,
 } from '../data/cloudflareResources';
 import { blogPosts, blogPostPath, blogTopicLabels } from '../data/blog';
+import DeveloperLabsSection from '../components/content/DeveloperLabsSection.astro';
 
 const featuredBlog = blogPosts.slice(0, 4);
 ---
@@ -67,8 +68,8 @@ const featuredBlog = blogPosts.slice(0, 4);
 <BaseLayout
   title={{ vi: 'Tài nguyên học Cloudflare', en: 'Cloudflare learning resources', km: 'Cloudflare learning resources' }}
   description={{
-    vi: 'Tài nguyên học Cloudflare: Blog, Resource Hub, kiến trúc tham chiếu, GitHub, Learning Center, CloudSecOp — có lọc và phân trang cho danh sách dài.',
-    en: 'Cloudflare learning resources: Blog, Resource Hub, Reference Architecture, GitHub, Learning Center, CloudSecOp — with filters and pagination.',
+    vi: 'Tài nguyên học Cloudflare: Blog, Resource Hub, Developer Labs, kiến trúc tham chiếu, GitHub, Learning Center, CloudSecOp — có lọc và phân trang cho danh sách dài.',
+    en: 'Cloudflare learning resources: Blog, Resource Hub, Developer Labs, Reference Architecture, GitHub, Learning Center, CloudSecOp — with filters and pagination.',
   }}
   canonicalPath="/resources"
   showProgressBar
@@ -91,6 +92,9 @@ const featuredBlog = blogPosts.slice(0, 4);
       </a>
       <a class="btn btn-secondary" href="#blog">
         <LangText text={{ vi: 'Bài mới trên hub', en: 'Latest hub posts' }} />
+      </a>
+      <a class="btn btn-secondary" href="#labs">
+        <LangText text={{ vi: 'Developer Labs', en: 'Developer Labs' }} />
       </a>
     </div>
   </header>
@@ -581,35 +585,5 @@ const featuredBlog = blogPosts.slice(0, 4);
     </div>
   </section>
 
-  <section id="labs" class="mt-10 card">
-    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Hands-on labs (sắp có)', en: 'Hands-on labs (coming soon)', km: 'Hands-on labs (coming soon)' }} />
-    <LangText
-      as="p"
-      class="text-muted mt-2 text-sm"
-      text={{
-        vi: 'Lab thực hành Pages, Workers và Zero Trust sẽ được bổ sung. Trong lúc chờ, hãy đọc chuỗi CloudSecOp, làm checklist và kiểm tra kiến thức.',
-        en: 'Labs for Pages, Workers, and Zero Trust are coming soon. Meanwhile, read the CloudSecOp series, complete the checklist, and take the knowledge check.',
-      }}
-    />
-    <div class="mt-4 flex flex-wrap gap-3">
-      <a class="btn btn-primary" href="/checklists/beginner-cloudflare-checklist">
-        <LangText text={{ vi: 'Mở checklist', en: 'Open checklist', km: 'Open checklist' }} />
-      </a>
-      <a class="btn btn-secondary" href="#resource-hub">
-        <LangText text={{ vi: 'Resource Hub', en: 'Resource Hub', km: 'Resource Hub' }} />
-      </a>
-      <a class="btn btn-secondary" href="/quiz/beginner-readiness">
-        <LangText text={{ vi: 'Kiểm tra kiến thức', en: 'Knowledge check', km: 'Knowledge check' }} />
-      </a>
-      <a class="btn btn-secondary" href="#reference-architecture">
-        <LangText text={{ vi: 'Kiến trúc tham chiếu', en: 'Reference Architecture', km: 'Reference Architecture' }} />
-      </a>
-      <a class="btn btn-secondary" href="#github">
-        <LangText text={{ vi: 'Repo GitHub', en: 'GitHub repos', km: 'GitHub repos' }} />
-      </a>
-      <a class="btn btn-secondary" href="#cloudsecop">
-        <LangText text={{ vi: 'Bài CloudSecOp', en: 'CloudSecOp articles', km: 'CloudSecOp articles' }} />
-      </a>
-    </div>
-  </section>
+  <DeveloperLabsSection variant="resources" sectionId="labs" />
 </BaseLayout>

@@ -229,6 +229,19 @@ export const resourceHubItems: ResourceHubItem[] = [
     category: 'explore',
     relatedTrack: 'developer-platform',
   },
+  {
+    id: 'developer-labs',
+    title: { vi: 'Developer Labs', en: 'Developer Labs' },
+    description: {
+      vi: 'Lab guided chính thức: Workers, MCP, Agents SDK, Sandbox SDK — ship project trên edge.',
+      en: 'Official guided labs: Workers, MCP, Agents SDK, Sandbox SDK — ship a project on the edge.',
+    },
+    href: '/resources#labs',
+    category: 'build',
+    relatedTrack: 'developer-platform',
+    internal: true,
+    featured: true,
+  },
 ];
 
 export function getResourceHubByCategory(category: ResourceHubCategory): ResourceHubItem[] {

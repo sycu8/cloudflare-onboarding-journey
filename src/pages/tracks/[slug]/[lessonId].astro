@@ -21,6 +21,7 @@ import { getProductBySlug } from '../../../data/productPages';
 import { tracks } from '../../../data/tracks';
 import TrackContextBanner from '../../../components/content/TrackContextBanner.astro';
 import TrackSwitcher from '../../../components/content/TrackSwitcher.astro';
+import { getLabsForHubModule, DEVELOPER_LABS_URL } from '../../../data/developerLabs';
 
 export function getStaticPaths() {
   return getAllFlatTrackLessons().map((l) => ({
@@ -43,6 +44,7 @@ const relatedProducts = (enrichment.productSlugs ?? [])
 const deploymentExamples = getDeploymentExamplesForLesson(lesson.id);
 const onboardingPage = track.slug === 'cloudflare-one' ? getOnboardingPageForLesson(lesson.id) : undefined;
 const followAlong = !onboardingPage ? getFollowAlongLesson(lesson.id) : undefined;
+const relatedLabs = track.slug === 'developer-platform' ? getLabsForHubModule(lesson.moduleId) : [];
 ---
 
 <BaseLayout
@@ -183,6 +185,55 @@ const followAlong = !onboardingPage ? getFollowAlongLesson(lesson.id) : undefine
     </section>
   ) : null}
 
+  {relatedLabs.length > 0 ? (
+    <section class="lab-lesson-card mb-6">
+      <p class="text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-[var(--cf-accent)]">
+        labs.cloudflare.dev
+      </p>
+      <LangText
+        as="h2"
+        class="mt-1 text-lg font-semibold"
+        text={{ vi: 'Lab thực hành khớp bài này', en: 'Hands-on labs for this lesson', km: 'Hands-on labs for this lesson' }}
+      />
+      <p class="text-muted mt-2 text-sm leading-relaxed">
+        <span class="lang-vi">
+          Nguồn bổ sung chính thức — làm lab sau khi đọc bài, không thay bước trong hub.
+        </span>
+        <span class="lang-en">
+          Official supplement — run the lab after this lesson; it does not replace the hub steps.
+        </span>
+        <span class="lang-km">Official supplement — run the lab after this lesson; it does not replace the hub steps.</span>
+      </p>
+      <ul class="mt-4 space-y-3">
+        {relatedLabs.map((lab) => (
+          <li class="flex flex-col gap-2 rounded-xl border border-[var(--cf-border)] bg-[var(--cf-bg-elevated)]/70 p-3 sm:flex-row sm:items-center sm:justify-between">
+            <div class="min-w-0">
+              <p class="text-sm font-semibold">
+                <span class="font-mono text-[var(--cf-accent)]">{lab.number}</span>
+                {' '}
+                <LangText text={lab.title} />
+              </p>
+              <LangText as="p" class="text-muted mt-1 text-xs leading-relaxed" text={lab.whenInHub} />
+            </div>
+            <a class="btn btn-primary shrink-0 self-start" href={lab.href} target="_blank" rel="noopener noreferrer">
+              <span class="lang-vi">Mở {lab.labCount} labs</span>
+              <span class="lang-en">Open {lab.labCount} labs</span>
+              <span class="lang-km">Open {lab.labCount} labs</span>
+              <span aria-hidden="true">↗</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="mt-3 text-xs">
+        <a class="link" href={`/tracks/${track.slug}#developer-labs`}>
+          <LangText text={{ vi: 'Xem đủ 4 track lab trong lộ trình →', en: 'See all 4 lab tracks on this path →', km: 'See all 4 lab tracks on this path →' }} />
+        </a>
+        {' · '}
+        <a class="link" href={DEVELOPER_LABS_URL} target="_blank" rel="noopener noreferrer">labs.cloudflare.dev ↗</a>
+      </p>
+    </section>
+  ) : null}
+
   {enrichment.docsLinks.length > 0 ? (
     <section class="card mb-6">
       <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Tài liệu Cloudflare Developers', en: 'Cloudflare Developer docs', km: 'Cloudflare Developer docs' }} />
@@ -281,3 +332,13 @@ const followAlong = !onboardingPage ? getFollowAlongLesson(lesson.id) : undefine
 
   <TrackSwitcher current={track} />
 </BaseLayout>
+
+<style>
+  .lab-lesson-card {
+    border-radius: 1rem;
+    border: 1px solid color-mix(in srgb, var(--cf-accent) 40%, var(--cf-border));
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--cf-accent) 10%, var(--cf-surface)), var(--cf-surface));
+    padding: 1.25rem 1.35rem;
+  }
+</style>

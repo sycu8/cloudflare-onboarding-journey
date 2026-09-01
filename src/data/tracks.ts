@@ -620,7 +620,7 @@ export const tracks: Track[] = [
         'Workers AI + AI Gateway; RAG with ACL; narrow agent tools',
       ],
     },
-    keyConcepts: ['Workers', 'C3', 'Wrangler', 'Pages', 'KV', 'D1', 'R2', 'Durable Objects', 'Workers AI', 'AI Gateway', 'Vectorize'],
+    keyConcepts: ['Workers', 'C3', 'Wrangler', 'Pages', 'KV', 'D1', 'R2', 'Durable Objects', 'Workers AI', 'AI Gateway', 'Vectorize', 'MCP', 'Agents SDK', 'Sandbox SDK'],
     tools: [
       {
         title: { vi: 'Workers learning path', en: 'Workers learning path', km: 'Workers learning path' },
@@ -648,6 +648,15 @@ export const tracks: Track[] = [
           km: 'ពេល Git site រួចរាល់ផ្លាស់ប្តូរទៅ Workers + static assets — អានវា; កុំចម្លងដោយមិនអាន។',
         },
         href: 'https://developers.cloudflare.com/workers/static-assets/migration-guides/migrate-from-pages/',
+      },
+      {
+        title: { vi: 'Developer Labs (hands-on)', en: 'Developer Labs (hands-on)', km: 'Developer Labs (hands-on)' },
+        description: {
+          vi: '4 track guided: Workers, MCP, Agents SDK, Sandbox SDK — ship project thật.',
+          en: 'Four guided tracks: Workers, MCP, Agents SDK, Sandbox SDK — ship a real project.',
+          km: 'Four guided tracks: Workers, MCP, Agents SDK, Sandbox SDK — ship a real project.',
+        },
+        href: 'https://labs.cloudflare.dev/',
       },
     ],
     startHere: {
@@ -958,6 +967,7 @@ export const tracks: Track[] = [
         'Nếu có framework Git: Pages + preview; Functions chỉ khi gắn site',
         'wrangler tail; Turnstile siteverify trước ghi D1',
         'Workers AI một task; AI Gateway; RAG/agent khi boundary rõ',
+        'Thực hành labs.cloudflare.dev: Workers (01) → MCP (02) → Agents (03) → Sandbox (04)',
         'Optional: một trong DO / Queues / Workflows / Hyperdrive',
       ],
       en: [
@@ -968,6 +978,7 @@ export const tracks: Track[] = [
         'If you have a Git framework: Pages + preview; Functions only when tied to the site',
         'wrangler tail; Turnstile siteverify before D1 writes',
         'Workers AI one task; AI Gateway; RAG/agent when boundaries are clear',
+        'Practice on labs.cloudflare.dev: Workers (01) → MCP (02) → Agents (03) → Sandbox (04)',
         'Optional: one of DO / Queues / Workflows / Hyperdrive',
       ],
       km: [
@@ -978,6 +989,7 @@ export const tracks: Track[] = [
         'If you have a Git framework: Pages + preview; Functions only when tied to the site',
         'wrangler tail; Turnstile siteverify before D1 writes',
         'Workers AI one task; AI Gateway; RAG/agent when boundaries are clear',
+        'Practice on labs.cloudflare.dev: Workers (01) → MCP (02) → Agents (03) → Sandbox (04)',
         'Optional: one of DO / Queues / Workflows / Hyperdrive',
       ],
     },

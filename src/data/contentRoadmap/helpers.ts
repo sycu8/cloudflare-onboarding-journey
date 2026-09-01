@@ -14,6 +14,7 @@ export const SRC = {
   ddos: 'https://developers.cloudflare.com/ddos-protection/',
   bots: 'https://developers.cloudflare.com/bots/',
   workers: 'https://developers.cloudflare.com/workers/',
+  labs: 'https://labs.cloudflare.dev/',
   pages: 'https://developers.cloudflare.com/pages/',
   one: 'https://developers.cloudflare.com/cloudflare-one/',
   zeroTrust: 'https://developers.cloudflare.com/cloudflare-one/zero-trust/',
