@@ -122,6 +122,26 @@ async function fillTutorial(preview, lang) {
   const titleField = field(lang, 'titleVi', 'titleKm');
   const summaryField = field(lang, 'summaryVi', 'summaryKm');
 
+  const pending = [];
+  const queue = (s) => {
+    if (s?.trim()) pending.push(s);
+  };
+  queue(preview.title);
+  queue(preview.summaryEn);
+  if (lang === 'km') {
+    queue(preview.introEn);
+    for (const note of preview.notesEn ?? []) queue(note);
+  }
+  for (const section of preview.sections ?? []) {
+    queue(section.title);
+    queue(section.summaryEn);
+    for (const block of section.blocks) {
+      if (block.type === 'paragraph' || block.type === 'note') queue(block.html);
+      if (block.type === 'list') for (const item of block.items) queue(item);
+    }
+  }
+  await mapLimit([...new Set(pending)], concurrency, (s) => translateString(s, lang));
+
   const entry = {
     [titleField]: preview.title ? capitalizeHeading(await translateString(preview.title, lang)) : undefined,
     [summaryField]: preview.summaryEn ? await translateString(preview.summaryEn, lang) : undefined,
@@ -137,25 +157,31 @@ async function fillTutorial(preview, lang) {
     const key = sectionOverlayKey(preview.sections, i);
     const sec = {
       [titleField]: section.title ? capitalizeHeading(await translateString(section.title, lang)) : undefined,
-      [summaryField]: section.summaryEn
-        ? await translateString(section.summaryEn, lang)
-        : undefined,
+      [summaryField]: section.summaryEn ? await translateString(section.summaryEn, lang) : undefined,
       blocks: [],
     };
-    sec.blocks = await mapLimit(section.blocks, concurrency, async (block) => {
-      if (block.type === 'code') return { type: 'code', skip: true };
+    for (const block of section.blocks) {
+      if (block.type === 'code') {
+        sec.blocks.push({ type: 'code', skip: true });
+        continue;
+      }
       if (block.type === 'paragraph' || block.type === 'note') {
-        return { type: block.type, [htmlField]: await translateString(block.html, lang) };
+        sec.blocks.push({
+          type: block.type,
+          [htmlField]: await translateString(block.html, lang),
+        });
+        continue;
       }
       if (block.type === 'list') {
-        return {
+        sec.blocks.push({
           type: 'list',
           ordered: block.ordered,
           [itemsField]: await translateStringArray(block.items, lang),
-        };
+        });
+        continue;
       }
-      return { type: block.type, skip: true };
-    });
+      sec.blocks.push({ type: block.type, skip: true });
+    }
     entry.sections[key] = sec;
   }
 
@@ -181,23 +207,27 @@ async function main() {
       throw new Error(`Unsupported --lang=${lang}`);
     }
     let done = 0;
-    for (const path of paths) {
-      if (done >= limit) {
-        console.log(`limit ${limit} reached for ${lang}`);
-        break;
-      }
-      if (!overlayNeedsWork(overlays[lang][path], lang)) {
-        console.log(`skip (${lang} done) ${path}`);
-        continue;
-      }
-      console.log(`${lang} ${path}`);
-      overlays[lang][path] = await fillTutorial(data[path], lang);
+    const todo = paths.filter((path) => overlayNeedsWork(overlays[lang][path], lang));
+    const limited = todo.slice(0, Number.isFinite(limit) ? limit : todo.length);
+    const skipped = paths.length - todo.length;
+    if (skipped) console.log(`skip (${lang} already complete) ${skipped}`);
+    const tutorialParallel = Math.max(1, Math.min(3, concurrency));
+    for (let i = 0; i < limited.length; i += tutorialParallel) {
+      const batch = limited.slice(i, i + tutorialParallel);
+      await Promise.all(
+        batch.map(async (path) => {
+          console.log(`${lang} ${path}`);
+          try {
+            overlays[lang][path] = await fillTutorial(data[path], lang);
+          } catch (err) {
+            console.warn(`failed ${lang} ${path}:`, err.message);
+          }
+        }),
+      );
       saveJson(overlayPath[lang], overlays[lang]);
-      done++;
-      if (done % 3 === 0) {
-        const complete = Object.values(overlays[lang]).filter((e) => e.complete).length;
-        console.log(`checkpoint ${lang} ${complete}/${Object.keys(data).length}`);
-      }
+      done += batch.length;
+      const complete = Object.values(overlays[lang]).filter((e) => e.complete).length;
+      console.log(`checkpoint ${lang} ${complete}/${Object.keys(data).length} (+${done} this run)`);
     }
     saveJson(overlayPath[lang], overlays[lang]);
     console.log(`Wrote ${overlayPath[lang]} (${paths.length} considered, ${done} updated)`);

@@ -76,10 +76,16 @@ export async function translateEn(text, targetLang, { provider = defaultProvider
   const { text: protectedText, placeholders: termPlaceholders } = protectTerms(markup.text);
 
   let translated;
-  if (provider === 'workers-ai') {
-    translated = await translateBySentences(protectedText, (chunk) => translateWorkersAi(chunk, targetLang));
-  } else {
-    translated = await translateBySentences(protectedText, (chunk) => translateGoogle(chunk, targetLang));
+  try {
+    if (provider === 'workers-ai') {
+      translated = await translateBySentences(protectedText, (chunk) => translateWorkersAi(chunk, targetLang));
+    } else {
+      translated = await translateBySentences(protectedText, (chunk) => translateGoogle(chunk, targetLang));
+    }
+  } catch (err) {
+    console.warn('Translate failed:', trimmed.slice(0, 80).replace(/\s+/g, ' '), err.message);
+    cache.set(cacheKey, trimmed);
+    return text;
   }
 
   const restoredTerms = restoreTerms(translated, termPlaceholders);
@@ -228,9 +234,9 @@ async function translateWorkersAiChunk(text, targetLang, accountId, token) {
   }
   if (!res.ok) throw new Error(`Workers AI HTTP ${res.status}: ${await res.text()}`);
   const data = await res.json();
-  const out = data?.result?.translated_text ?? data?.result?.response;
-  if (!out) throw new Error('Workers AI empty response');
-  await sleep(60);
+  const out = data?.result?.translated_text ?? data?.result?.response ?? '';
+  if (!String(out).trim()) return text;
+  await sleep(20);
   return out;
 }
 

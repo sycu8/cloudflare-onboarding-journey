@@ -41,6 +41,7 @@
     "translate:tutorials": "node scripts/fill-tutorial-overlays.mjs --lang=both",
     "translate:tutorials:vi": "node scripts/fill-tutorial-overlays.mjs --lang=vi",
     "translate:tutorials:report": "node scripts/fill-tutorial-overlays.mjs --report",
+    "translate:tutorials:check": "node scripts/check-tutorial-overlays.mjs",
     "test:tutorial-html": "node --experimental-strip-types scripts/test-sanitize-tutorial-html.mjs",
     "verify:i18n": "node scripts/verify-i18n.mjs",
     "astro": "astro"
