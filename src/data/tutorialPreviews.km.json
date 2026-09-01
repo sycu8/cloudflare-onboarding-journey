@@ -46642,5 +46642,1143 @@
       "Cloudflare បានផ្លាស់ប្តូរជាធម្មតានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅ។"
     ],
     "complete": true
+  },
+  "/workers-ai/guides/tutorials/build-a-workers-ai-whisper-with-chunking": {
+    "titleKm": "ហ្វេសប៊ូតុង-v3-turbo ជាមួយ Cloudflare Workers AI",
+    "summaryKm": "តើធ្វើដូចម្តេចដើម្បីធ្វើតេស្តឯកសារអូឌីយ៉ូធំដោយប្រើ Workers AI?",
+    "sections": {
+      "overview": {
+        "titleKm": "Overview",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlKm": "នៅក្នុង tutorial នេះអ្នកនឹងដឹងពីរបៀបដើម្បី:"
+          },
+          {
+            "type": "list",
+            "ordered": false,
+            "itemsKm": [
+              "<strong>Transcribe large audio files:</strong> ប្រើម៉ូដែល <a href=\"https://developers.cloudflare.com/workers-ai/models/whisper-large-v3-turbo/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Whisper-large-v3-turbo</a> ពី Cloudflare Workers AI ដើម្បីធ្វើការអនុម័តការសរសេរដោយស្វ័យប្រវត្តិ (ASR) ឬការបម្លែង។",
+              "<strong>Handle large files:</strong> ការផ្លាស់ប្តូរឯកសារអូឌីយ៉ូធំទូលំទូលាយទៅក្នុងផ្លាស់ប្តូរទំហំទូលំទូលំទូលំទូលំទូលំទូលំទូលំទូលំទូលំទូលំទូលំទូលំទូលំទូលំទូលំទូលំទូលំទូលំទូលំទូលាយ។",
+              "<strong>Deploy using Cloudflare Workers:</strong> បានបង្កើត pipeline transcription ដែលអាចកាត់បន្ថយទំហំទូលាយនៅក្នុងបរិស្ថានដែលមិនមានសេវាកម្ម។"
+            ]
+          }
+        ]
+      },
+      "1-create-a-new-cloudflare-worker-project": {
+        "titleKm": "1: បង្កើតគម្រោងការងារថ្មី Cloudflare",
+        "blocks": [
+          {
+            "type": "list",
+            "ordered": true,
+            "itemsKm": [
+              "សូមចុះឈ្មោះសម្រាប់ <a href=\"https://dash.cloudflare.com/sign-up/workers-and-pages\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Cloudflare account ↗</a> ។",
+              "ទាញយក <a href=\"https://docs.npmjs.com/downloading-and-installing-node-js-and-npm\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Node.js ↗</a> ។"
+            ]
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "Node.js អ្នកគ្រប់គ្រងកំណែ"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "ប្រើកម្មវិធីគ្រប់គ្រងកំណែ Node ដូចជា <a href=\"https://volta.sh/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Volta ↗</a> ឬ <a href=\"https://github.com/nvm-sh/nvm\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">nvm ↗</a> ដើម្បីជួសជុលបញ្ហាការអនុញ្ញាតនិងផ្លាស់ប្តូរកំណែ Node.js ។ <a href=\"https://developers.cloudflare.com/workers/wrangler/install-and-update/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Wrangler</a> ដែលត្រូវបានពិភាក្សាបន្ទាប់មកនៅក្នុងវគ្គសិក្សានេះត្រូវការកំណែ Node នៃ <code class=\"tutorial-inline-code\">16.17.0</code> ឬបន្ទាប់មក។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "អ្នកនឹងបង្កើតគម្រោងការងារថ្មីដោយប្រើ <code class=\"tutorial-inline-code\">create-cloudflare</code> CLI (C3) ។ <a href=\"https://github.com/cloudflare/workers-sdk/tree/main/packages/create-cloudflare\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">C3 ↗</a> គឺជាឧបករណ៍បន្ទាត់គោលបំណងដែលត្រូវបានរចនាឡើងដើម្បីជួយអ្នកបង្កើតនិងដំឡើងកម្មវិធីថ្មីទៅ Cloudflare ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បានបង្កើតគម្រោងថ្មីដែលមានឈ្មោះ <code class=\"tutorial-inline-code\">whisper-tutorial</code> ដោយធ្វើការ:"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "លក្ខណៈពិសេស NPM"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "ការដំឡើង <code class=\"tutorial-inline-code\">npm create cloudflare@latest</code> នឹងបង្វិលអ្នកដើម្បីដំឡើង <a href=\"https://www.npmjs.com/package/create-cloudflare\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">create-cloudflare package ↗</a> និងនាំអ្នកតាមរយៈការដំឡើង។ C3 នឹងដំឡើង <a href=\"https://developers.cloudflare.com/workers/wrangler/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Wrangler</a>, Cloudflare ប្លាស្ទិចអ្នកអភិវឌ្ឍន៍ CLI ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "សម្រាប់ការដំឡើងអ្នកជ្រើសរើសជម្រើសខាងក្រោម:"
+          },
+          {
+            "type": "list",
+            "ordered": false,
+            "itemsKm": [
+              "សម្រាប់ <em> តើអ្នកចង់ចាប់ផ្តើមជាមួយអ្វី?</em>, ជ្រើស <code class=\"tutorial-inline-code\">Hello World example</code> ។",
+              "សម្រាប់គំរូ <em> តើអ្នកចង់ប្រើគំរូណាមួយ?</em>, ជ្រើស <code class=\"tutorial-inline-code\">Worker only</code> ។",
+              "សម្រាប់ <em> តើអ្នកចង់ប្រើភាសាណាមួយ?</em>, ជ្រើស <code class=\"tutorial-inline-code\">TypeScript</code> ។",
+              "សម្រាប់ <em> តើអ្នកចង់ប្រើ git សម្រាប់ការគ្រប់គ្រងកំណែ?</em>, ជ្រើស <code class=\"tutorial-inline-code\">Yes</code> ។",
+              "សម្រាប់ <em> តើអ្នកចង់ដំឡើងកម្មវិធីរបស់អ្នក?</em>, ជ្រើស <code class=\"tutorial-inline-code\">No</code> (យើងនឹងធ្វើការផ្លាស់ប្តូរមួយចំនួនមុនពេលដំឡើង) ។"
+            ]
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "នេះនឹងបង្កើតអាសយដ្ឋាន <code class=\"tutorial-inline-code\">whisper-tutorial</code> ថ្មី។ សៀវភៅថ្មីរបស់អ្នក <code class=\"tutorial-inline-code\">whisper-tutorial</code> នឹងមាន:"
+          },
+          {
+            "type": "list",
+            "ordered": false,
+            "itemsKm": [
+              "ការ <code class=\"tutorial-inline-code\">&quot;Hello World&quot;</code> <a href=\"https://developers.cloudflare.com/workers/get-started/guide/#3-write-code\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Worker</a> នៅ <code class=\"tutorial-inline-code\">src/index.ts</code> ។",
+              "ទាញយកឯកសារ <a href=\"https://developers.cloudflare.com/workers/wrangler/configuration/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">wrangler.jsonc</a> ។"
+            ]
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "សូមចូលទៅក្នុងកម្មវិធីកម្មវិធីរបស់អ្នក:"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បង្វិល Terminal"
+          },
+          {
+            "type": "code",
+            "skip": true
+          }
+        ]
+      },
+      "2-connect-your-worker-to-workers-ai": {
+        "titleKm": "2 ។ ទូរស័ព្ទដៃរបស់អ្នកទៅ Workers AI",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlKm": "អ្នកត្រូវបង្កើតការបណ្តុះបណ្តាល AI សម្រាប់បុគ្គលិករបស់អ្នកដើម្បីភ្ជាប់ទៅ Workers AI ។ <a href=\"https://developers.cloudflare.com/workers/runtime-apis/bindings/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Bindings</a> អនុញ្ញាតឱ្យ Workers របស់អ្នកដើម្បីចូលរួមជាមួយសម្ភារៈដូចជា Workers AI នៅលើបណ្តាញអភិវឌ្ឍន៍ Cloudflare ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "ដើម្បីបំពាក់ Workers AI ទៅលើ Worker របស់អ្នក, បន្ថែមដូចខាងក្រោមនៅចុងនៃឯកសារកំណត់ Wrangler របស់អ្នក:"
+          },
+          {
+            "type": "list",
+            "ordered": false,
+            "itemsKm": [
+              "<a href=\"#tab-panel-11072\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\"> wrangler.jsonc </a>",
+              "<a href=\"#tab-panel-11073\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\"> wrangler.toml </a>"
+            ]
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "JSONC"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "TOML"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "ការភ្ជាប់របស់អ្នកគឺ <a href=\"https://developers.cloudflare.com/workers/reference/migrate-to-module-workers/#bindings-in-es-modules-format\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">available in your Worker code</a> នៅលើ <a href=\"https://developers.cloudflare.com/workers/runtime-apis/handlers/fetch/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">env.AI</a> ។"
+          }
+        ]
+      },
+      "3-configure-wrangler": {
+        "titleKm": "3 ។ ការកំណត់ Wrangler",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlKm": "ក្នុងឯកសារ wrangler របស់អ្នក, បន្ថែមឬបច្ចុប្បន្នភាពកំណត់ដូចខាងក្រោមដើម្បីអនុញ្ញាតឱ្យ Node.js API និង polyfills (ជាមួយនឹងថ្ងៃសុពលភាពនៃ 2024‐09‐23 ឬបន្ទាប់):"
+          },
+          {
+            "type": "list",
+            "ordered": false,
+            "itemsKm": [
+              "<a href=\"#tab-panel-11074\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\"> wrangler.jsonc </a>",
+              "<a href=\"#tab-panel-11075\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\"> wrangler.toml </a>"
+            ]
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "JSONC"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "TOML"
+          },
+          {
+            "type": "code",
+            "skip": true
+          }
+        ]
+      },
+      "4-handle-large-audio-files-with-chunking": {
+        "titleKm": "4 ។ ការដោះស្រាយឯកសារអូឌីយ៉ូធំជាមួយ Chunking",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlKm": "ការផ្លាស់ប្តូរសម្ភារៈនៃឯកសារ <code class=\"tutorial-inline-code\">src/index.ts</code> របស់អ្នកជាមួយនឹងកូដរួមបញ្ចូលដូចខាងក្រោម។ ការគំរូនេះបង្ហាញពីរបៀបដើម្បី:"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "(1) ការបញ្ចេញ URL នៃឯកសារអូឌីយ៉ូពីទំហំសំណួរ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "(2) ទាញយកឯកសារអូឌីយ៉ូនៅពេលដែលតាមរយៈការបណ្តុះបណ្តាល។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "(3) ការផ្លាស់ប្តូរឯកសារអូឌីយ៉ូទៅក្នុងការផ្លាស់ប្តូរតូចជាងមុន (ដូចជាផ្លាស់ប្តូរ 1 MB) ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "(4) ការផ្លាស់ប្តូរផ្នែកមួយដោយប្រើម៉ូដែល Whisper-large-v3-turbo ដោយប្រើ Cloudflare AI binding ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "(5) ទាញយកសៀវភៅសៀវភៅសៀវភៅសៀវភៅសៀវភៅសៀវភៅសៀវភៅសៀវភៅ"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "កុំព្យូទ័រ"
+          },
+          {
+            "type": "code",
+            "skip": true
+          }
+        ]
+      },
+      "5-deploy-your-worker": {
+        "titleKm": "5 ។ បញ្ចូលការងាររបស់អ្នក",
+        "blocks": [
+          {
+            "type": "list",
+            "ordered": true,
+            "itemsKm": [
+              "<strong>Run the Worker locally:</strong>"
+            ]
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "ប្រើទូទាត់ការអភិវឌ្ឍន៍ wrangler ដើម្បីធ្វើតេស្ត Worker របស់អ្នកនៅទូទាំងពិភពលោក:"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បង្វិល Terminal"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "ទាញយក <a href=\"http://localhost:8787\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">http://localhost:8787 ↗</a> ឬប្រើ curl:"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បង្វិល Terminal"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "ការផ្លាស់ប្តូរទម្រង់ URL ជាមួយនឹងតំណភ្ជាប់ផ្ទាល់ទៅនឹងឯកសារអូឌីយ៉ូរបស់អ្នក។ (សម្រាប់ឯកសារដែលត្រូវបានគេហទំព័រ GitHub សូមប្រាកដថាអ្នកប្រើ URL ដែលជាឯកសារធម្មតា។)"
+          },
+          {
+            "type": "list",
+            "ordered": true,
+            "itemsKm": [
+              "<strong>Deploy the Worker:</strong>"
+            ]
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បន្ទាប់ពីការធ្វើតេស្តបានបញ្ចប់, ការបម្រើបុគ្គលិករបស់អ្នកជាមួយ:"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បង្វិល Terminal"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "list",
+            "ordered": true,
+            "itemsKm": [
+              "<strong>Test the deployed Worker:</strong>"
+            ]
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បន្ទាប់ពីការដំឡើង, ការធ្វើតេស្ត Worker របស់អ្នកដោយផ្ញើ URL អូឌីយ៉ូជាទំហំសំណួរ:"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បង្វិល Terminal"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "សូមផ្លាស់ប្តូរ <code class=\"tutorial-inline-code\">&lt;your-worker-subdomain&gt;</code>, <code class=\"tutorial-inline-code\">your-username</code>, <code class=\"tutorial-inline-code\">your-repo</code> និង <code class=\"tutorial-inline-code\">your-audio-file.mp3</code> ជាមួយនឹងព័ត៌មានរបស់អ្នកពិតប្រាកដ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "ប្រសិនបើវាបានជោគជ័យ, Worker នឹងបង្វិលបញ្ជីនៃឯកសារអូឌីយ៉ូ:"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បង្វិល Terminal"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "code",
+            "skip": true
+          }
+        ]
+      }
+    },
+    "introKm": "តើធ្វើដូចម្តេចដើម្បីធ្វើតេស្តឯកសារអូឌីយ៉ូធំដោយប្រើ Workers AI?",
+    "notesKm": [
+      "នេះគឺជាការបញ្ជាក់អំពី Orange Cloud Learning Hub — វាគឺជាការផ្លាស់ប្តូរនៃឯកសារផ្លូវការ។",
+      "ចុចតំណភ្ជាប់ Docs Official នៅខាងក្រោមសម្រាប់ការបញ្ជា CLI, សៀវភៅកូដនិងរូបថតពេញលេញ។",
+      "តម្រូវឱ្យមានគណនី Cloudflare, Wrangler CLI និង (ប្រហែលជា) ការបញ្ចប់គណនី Workers/Pages Get started ។",
+      "Cloudflare បានផ្លាស់ប្តូរជាធម្មតានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅ។"
+    ],
+    "complete": true
+  },
+  "/secrets-store/integrations/workers": {
+    "titleKm": "Workers ការរួមបញ្ចូល",
+    "summaryKm": "Cloudflare Secrets Store គឺជាកន្លែងដែលមានសុវត្ថិភាពនិងមានមូលដ្ឋានដែលទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យ។ ទិន្នន័យទាំងនេះត្រូវបានកាត់បន្ថយដោយសុវត្ថិភាពនិងត្រូវបានរក្សាទុកតាមរយៈមជ្ឈមណ្ឌលទិន្នន័យទាំងអស់ Cloudflare ។",
+    "sections": {
+      "overview": {
+        "titleKm": "Overview",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlKm": "<a href=\"https://developers.cloudflare.com/secrets-store/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Cloudflare Secrets Store</a> គឺជាកន្លែងដែលមានសុវត្ថិភាពនិងមានមូលដ្ឋានដែលទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យ។ ទិន្នន័យទាំងនេះត្រូវបានកាត់បន្ថយដោយសុវត្ថិភាពនិងត្រូវបានរក្សាទុកតាមរយៈមជ្ឈមណ្ឌលទិន្នន័យទាំងអស់ Cloudflare ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "សូមពិនិត្យមើលដំណោះស្រាយខាងក្រោមដើម្បីរៀនអំពីរបៀបដើម្បីប្រើសម្រាប់ការប្រើសម្រាប់តម្លៃពីការប្រើសម្រាប់គណនីរបស់អ្នកជាមួយ <a href=\"https://developers.cloudflare.com/workers/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Cloudflare Workers</a> ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "នេះគឺជាការផ្សេងគ្នានៃ Workers <a href=\"https://developers.cloudflare.com/workers/configuration/secrets/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Variables and Secrets</a>, នៅពេលដែលអ្នកកំណត់និងគ្រប់គ្រងសិទ្ធិរបស់អ្នកនៅលើកម្រិតបុគ្គលិក។"
+          }
+        ]
+      },
+      "before-you-begin": {
+        "titleKm": "មុនពេលដែលអ្នកចាប់ផ្តើម",
+        "blocks": [
+          {
+            "type": "list",
+            "ordered": false,
+            "itemsKm": [
+              "ប្រសិនបើ <a href=\"#via-dashboard\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">using the Dashboard</a>, សូមបញ្ជាក់ថាអ្នកមានកម្មវិធី Workers ។ សូមពិនិត្យមើល <a href=\"https://developers.cloudflare.com/workers/get-started/dashboard/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Workers get started</a> សម្រាប់សំណួរ។",
+              "អ្នកគួរតែបង្កើតអតិថិជននៅក្រោមប្រភេទ <strong>Secrets Store</strong> នៅលើ Dashboard ។ ទិញដំបូងនៅក្នុងគណនីរបស់អ្នកត្រូវបានបង្កើតដោយស្វ័យប្រវត្តិនៅពេលដែលអ្នកប្រើដែលមាន <a href=\"https://developers.cloudflare.com/secrets-store/access-control/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Super Administrator or Secrets Store Admin role</a> អនុវត្តជាមួយគណនីនេះ។"
+            ]
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "* ប្រសិនបើប្រព័ន្ធផ្សព្វផ្សាយអ៊ីនធឺណិតរបស់អ្នកមិនមានប្រព័ន្ធផ្សព្វផ្សាយអ៊ីនធឺណិតទេហើយអ្នកអាចប្រើ <a href=\"https://developers.cloudflare.com/workers/wrangler/commands/secrets-store/#secrets-store-store\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Wrangler command</a> <code class=\"tutorial-inline-code\">secrets-store store create &lt;name&gt; --remote</code> ដើម្បីបង្កើតប្រព័ន្ធផ្សព្វផ្សាយអ៊ីនធឺណិតរបស់អ្នក។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "លក្ខខណ្ឌនៃការអភិវឌ្ឍ lokal"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "This guide assumes you are working in production. To use Secrets Store locally, you must use <code class=\"tutorial-inline-code\">secrets-store secret</code> <a href=\"https://developers.cloudflare.com/workers/wrangler/commands/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Wrangler commands</a> without the <code class=\"tutorial-inline-code\">--remote</code> flag."
+          }
+        ]
+      },
+      "1-set-up-account-secrets-in-secrets-store": {
+        "titleKm": "1 ។ ទាញយកប្រព័ន្ធប្រតិបត្តិការ Secrets Store",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlKm": "សូមអនុវត្តតាមដំណោះស្រាយខាងក្រោមដើម្បីបង្កើតទិន្នន័យ។ អ្នកគួរតែមាន <a href=\"https://developers.cloudflare.com/secrets-store/access-control/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Super Administrator or a Secrets Store Admin role</a> នៅក្នុងគណនីរបស់អ្នក Cloudflare ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "អ្នកក៏អាចបន្ថែមសញ្ញាបនប័ត្រគណនីដោយផ្ទាល់ពីការកំណត់ Workers នៅលើប្រព័ន្ធប្រតិបត្តិការ។ អ្នកអាចហៅទៅ <a href=\"#via-dashboard\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">step 2</a> ដើម្បីធ្វើដូច្នេះ។"
+          },
+          {
+            "type": "list",
+            "ordered": false,
+            "itemsKm": [
+              "<a href=\"#tab-panel-10284\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\"> Wrangler </a>",
+              "<a href=\"#tab-panel-10285\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\"> Dashboard </a>",
+              "<a href=\"#tab-panel-10286\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\"> API </a>"
+            ]
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "សូមប្រើ <a href=\"https://developers.cloudflare.com/workers/wrangler/commands/secrets-store/#secrets-store-secret\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Wrangler command</a> <code class=\"tutorial-inline-code\">secrets-store secret create</code> ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "ដើម្បីប្រើឧទាហរណ៍ខាងក្រោមនេះ, ការផ្លាស់ប្តូរ ID Store និងឈ្មោះ secret ដោយទិន្នន័យពិតប្រាកដរបស់អ្នក។ អ្នកអាចរកឃើញនិងចម្លង ID Store ពី <a href=\"https://dash.cloudflare.com/?to=/:account/secrets-store/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Secrets Store tab ↗</a> នៅលើប្រព័ន្ធប្រតិបត្តិការឬប្រើ <code class=\"tutorial-inline-code\">wrangler secrets-store store list</code> ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "សូមអរគុណថាឈ្មោះសុវត្ថិភាពមិនអាចមានពន្លឺ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បង្វិល Terminal"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "list",
+            "ordered": true,
+            "itemsKm": [
+              "ក្នុងប្រព័ន្ធប្រតិបត្តិការ Cloudflare សូមចូលទៅក្នុងទំព័រ <strong>Secrets Store</strong> ។"
+            ]
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "<a href=\"https://dash.cloudflare.com/?to=/:account/secrets-store\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\"> Go to <strong>Secrets Store</strong> </a>"
+          },
+          {
+            "type": "list",
+            "ordered": true,
+            "itemsKm": [
+              "សូមជ្រើស <strong>Create secret</strong> ។",
+              "សូមបញ្ជាក់ពីរបៀបដែលអ្នកត្រូវការដើម្បីចុច <em>Workers</em> ដូចជា <strong>Permission scope</strong> ។ បន្ទាប់ពីការសរសេរប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើប្រសិនបើ។",
+              "(គោលបំណង) ជ្រើស <strong>Add additional secret</strong> ដើម្បីបង្កើតសាសនាច្រើនជាងមួយក្នុងមួយពេល។",
+              "ចុច <strong>Save</strong> ដើម្បីបញ្ជាក់។"
+            ]
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "អ្នកអាចរកឃើញនិងចម្លង ID Store ពី <a href=\"https://dash.cloudflare.com/?to=/:account/secrets-store/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Secrets Store tab ↗</a> នៅលើប្រព័ន្ធប្រតិបត្តិការឬប្រើ <a href=\"https://developers.cloudflare.com/workers/wrangler/commands/secrets-store/#secrets-store-store\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Wrangler command</a> ។ សូមប្រាកដថា <code class=\"tutorial-inline-code\">name</code> របស់អ្នកមិនមានបំណង។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "សូមមើល <a href=\"https://developers.cloudflare.com/api/resources/secrets%5Fstore/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Secrets Store API</a> សម្រាប់ឯកសារពេញលេញ API ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "តម្រូវការ API សមត្ថភាព token"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "មានតម្រូវការមួយចំនួននៃ <a href=\"https://developers.cloudflare.com/fundamentals/api/reference/permissions/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">token permissions</a> ដូចខាងក្រោម:"
+          },
+          {
+            "type": "list",
+            "ordered": false,
+            "itemsKm": [
+              "<code class=\"tutorial-inline-code\">Secrets Store Write</code>"
+            ]
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "ការបង្កើតសុវត្ថិភាព"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "សូមពិនិត្យមើល <a href=\"https://developers.cloudflare.com/secrets-store/manage-secrets/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">manage account secrets</a> សម្រាប់ជម្រើសបន្ថែមទៀត។"
+          }
+        ]
+      },
+      "2-bind-an-account-secret-to-your-worker": {
+        "titleKm": "2 ។ ការបកប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែប្រែ",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlKm": "<a href=\"https://developers.cloudflare.com/workers/runtime-apis/bindings/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Bindings</a> អនុញ្ញាតឱ្យបុគ្គលិករបស់អ្នកចូលរួមជាមួយសម្ភារៈនៅលើគណនីរបស់អ្នក Cloudflare ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "To bind an account secret to your Worker, you must have one of the following <a href=\"https://developers.cloudflare.com/secrets-store/access-control/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">roles within your Cloudflare account</a>:"
+          },
+          {
+            "type": "list",
+            "ordered": false,
+            "itemsKm": [
+              "អ្នកគ្រប់គ្រងល្អ",
+              "អ្នកលក់លក់លក់លក់លក់"
+            ]
+          }
+        ]
+      },
+      "via-wrangler": {
+        "titleKm": "ដោយ Wrangler",
+        "blocks": [
+          {
+            "type": "list",
+            "ordered": true,
+            "itemsKm": [
+              "Add a Secrets Store binding to your <a href=\"https://developers.cloudflare.com/workers/wrangler/configuration/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Wrangler configuration file</a>: អានអានអានអានអានអានអានអានអានអានអានអានអានអានអានអានអានអានអានអានអានអានអានអានអានអានអានអានអានអានអានអាន"
+            ]
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "<em> <code class=\"tutorial-inline-code\">binding</code>: ឈ្មោះសៀវភៅសម្រាប់ការភ្ជាប់របស់អ្នក។ នេះនឹងត្រូវបានប្រើនៅក្នុងកម្មវិធី Workers នៅពេល <a href=\"https://developers.cloudflare.com/secrets-store/integrations/workers/#3-access-the-secret-on-the-env-object\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">accessing your secret on the env object</a> ។ </em> <code class=\"tutorial-inline-code\">store<em>id</code>: ID ទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យ។ * <code class=\"tutorial-inline-code\">secret</em>name</code>: ឈ្មោះសម្គាល់តែមួយគត់ដែលបានកំណត់នៅពេលដែលគណនីសម្គាល់របស់អ្នកត្រូវបានបង្កើត។"
+          },
+          {
+            "type": "list",
+            "ordered": false,
+            "itemsKm": [
+              "<a href=\"#tab-panel-10282\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\"> wrangler.jsonc </a>",
+              "<a href=\"#tab-panel-10283\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\"> wrangler.toml </a>"
+            ]
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "JSONC"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "TOML"
+          },
+          {
+            "type": "code",
+            "skip": true
+          }
+        ]
+      },
+      "via-dashboard": {
+        "titleKm": "ដោយ Dashboard",
+        "blocks": [
+          {
+            "type": "list",
+            "ordered": true,
+            "itemsKm": [
+              "នៅលើប្រព័ន្ធប្រតិបត្តិការ Cloudflare សូមចូលទៅ <strong>Workers &amp; Pages</strong> ។"
+            ]
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "<a href=\"https://dash.cloudflare.com/?to=/:account/workers-and-pages\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\"> Go to <strong>Workers &amp; Pages</strong> </a>"
+          },
+          {
+            "type": "list",
+            "ordered": true,
+            "itemsKm": [
+              "ជ្រើសកម្មវិធី Workers ។",
+              "ចុច <strong>Settings</strong> & &gt; <strong>Bindings</strong> ហើយចុច <strong>Add</strong> ។",
+              "នៅលើបណ្តាញខាងលិច <strong>Add a resource binding</strong> ចុច <strong>Secrets Store</strong> ។",
+              "សូមបញ្ជាក់នៅក្នុងឧបករណ៍ដែលត្រូវការ:"
+            ]
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "<em> <strong>Variable name</strong>: ឈ្មោះសម្រាប់ការភ្ជាប់។ នេះនឹងត្រូវបានប្រើសម្រាប់បុគ្គលិករបស់អ្នកទៅ access សៀវភៅ (<a href=\"#3-access-the-secret-on-the-env-object\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">step 3</a> នៅខាងក្រោម). </em> <strong>Secret name</strong>: ជ្រើសពីសៀវភៅសៀវភៅគណនីដែលអាចរកបានដែលបានបង្កើតនៅក្នុង <a href=\"#1-set-up-account-secrets-in-secrets-store\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">step 1</a> ។ * (គោលបំណង - Admins only) ប្រសិនបើគោលបំណងដែលអ្នកត្រូវតែមិនមានទេ, សូមជ្រើស <strong>Create secret</strong> ។ នេះនឹងបន្ថែមប្រសិនបើអ្នកមាន <a href=\"https://developers.cloudflare.com/secrets-store/manage-secrets/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">created it on the Secrets Store</a> ដូចគ្នានេះ។"
+          },
+          {
+            "type": "list",
+            "ordered": true,
+            "itemsKm": [
+              "ចុច <strong>Deploy</strong> ដើម្បីដំឡើងការភ្ជាប់របស់អ្នក។ នៅពេលការដំឡើងមានរយៈពេល ២ វិនាទី។"
+            ]
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "<em> <strong>Deploy:</strong> ទាញយកការបណ្តុះបណ្តុះបណ្តុះបណ្តុះបណ្តុះបណ្តុះបណ្តុះបណ្តុះបណ្តុះបណ្តុះបណ្តុះបណ្តុះបណ្តុះបណ្តុះបណ្តុះបណ្តុះបណ្តុះបណ្តុះបណ្តាល </em> <strong>Save version:</strong> រក្សាទុកកំណែនៃការភ្ជាប់ដែលអ្នកអាចដំឡើងនៅក្នុងអនាគត។"
+          }
+        ]
+      },
+      "3-access-the-secret-on-the-env-object": {
+        "titleKm": "3 ។ Access សញ្ញាបនប័ត្រនៅលើ Object env",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlKm": "<a href=\"https://developers.cloudflare.com/workers/runtime-apis/bindings/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Bindings</a> មានទីតាំងស្ថិតនៅលើអobject <code class=\"tutorial-inline-code\">env</code> ។ ដើម្បី access ការសរសេរសុវត្ថិភាពអ្នកត្រូវការជាលើកដំបូងការសរសេរអាសអាភាស។"
+          }
+        ]
+      },
+      "call-get-on-the-binding-variable": {
+        "titleKm": "Call get() នៅលើទំហំផ្សេងគ្នានេះ",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlKm": "លក្ខខណ្ឌនៃការអភិវឌ្ឍ lokal"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "You cannot access production secrets (created on the dashboard, via API, or with the <code class=\"tutorial-inline-code\">--remote</code> flag) from your local development setup. To use Secrets Store locally, you must use <code class=\"tutorial-inline-code\">secrets-store secret</code> <a href=\"https://developers.cloudflare.com/workers/wrangler/commands/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Wrangler commands</a> without the <code class=\"tutorial-inline-code\">--remote</code> flag."
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "កុំព្យូទ័រ"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "code",
+            "skip": true
+          }
+        ]
+      }
+    },
+    "introKm": "Cloudflare Secrets Store គឺជាកន្លែងដែលមានសុវត្ថិភាពនិងមានមូលដ្ឋានដែលទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យទិន្នន័យ។ ទិន្នន័យទាំងនេះត្រូវបានកាត់បន្ថយដោយសុវត្ថិភាពនិងត្រូវបានរក្សាទុកតាមរយៈមជ្ឈមណ្ឌលទិន្នន័យទាំងអស់ Cloudflare ។",
+    "notesKm": [
+      "នេះគឺជាការបញ្ជាក់អំពី Orange Cloud Learning Hub — វាគឺជាការផ្លាស់ប្តូរនៃឯកសារផ្លូវការ។",
+      "ចុចតំណភ្ជាប់ Docs Official នៅខាងក្រោមសម្រាប់ការបញ្ជា CLI, សៀវភៅកូដនិងរូបថតពេញលេញ។",
+      "តម្រូវឱ្យមានគណនី Cloudflare, Wrangler CLI និង (ប្រហែលជា) ការបញ្ចប់គណនី Workers/Pages Get started ។",
+      "Cloudflare បានផ្លាស់ប្តូរជាធម្មតានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅ។"
+    ],
+    "complete": true
+  },
+  "/cloudflare-one/tutorials/gitlab": {
+    "titleKm": "Zero Trust GitLab SSH & HTTP",
+    "summaryKm": "តើធ្វើដូចម្តេចដើម្បីបន្ថែម Zero Trust ដំណោះស្រាយទៅជាប្រវត្តិសាស្រ្តដោយខ្លួនឯងនៃ GitLab ។ វគ្គបណ្តុះបណ្តាលនេះដំណើរការអ្នកតាមរយៈការដំឡើង GitLab នៅក្នុង DigitalOcean ។",
+    "sections": {
+      "overview": {
+        "titleKm": "Overview",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlKm": "អ្នកអាចប្រើ Cloudflare Access ដើម្បីបន្ថែម Zero Trust វិញ្ញាបនប័ត្រទៅជាប្រវត្តិសាស្រ្តដោយខ្លួនឯងនៃ GitLab ។ ក្នុងការរួមបញ្ចូលជាមួយ Cloudflare Tunnel អ្នកប្រើប្រាស់អាចបណ្តាញតាមរយៈ HTTP និង SSH និងធ្វើការអនុម័តជាមួយអ្នកផ្គត់ផ្គង់អ៊ីនធឺណិតរបស់ក្រុមអ្នក។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "<strong>This walkthrough covers how to:</strong>"
+          },
+          {
+            "type": "list",
+            "ordered": false,
+            "itemsKm": [
+              "ទាញយកប្រព័ន្ធប្រតិបត្តិការ GitLab",
+              "ទាញយកអ៊ីនធឺណិតទាំងអស់ដែលមានការរួមបញ្ចូលទៅនឹងការរួមបញ្ចូលនេះហើយប្រើ Cloudflare Tunnel ដើម្បីកំណត់អ៊ីនធឺណិតទៅ Cloudflare ។",
+              "ការបង្កើតគោលនយោបាយជាមួយ Cloudflare Access ដើម្បីត្រួតពិនិត្យអ្នកដែលអាចចូលទៅ GitLab",
+              "ការភ្ជាប់តាម HTTP និង SSHតាម Cloudflare"
+            ]
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "<strong>Time to complete:</strong>"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "1 ម៉ោង"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "---"
+          }
+        ]
+      },
+      "deploying-gitlab": {
+        "titleKm": "ការដំឡើង GitLab",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlKm": "ផ្នែកនេះធ្វើដំណើរតាមការដំឡើង GitLab នៅក្នុង DigitalOcean ។ ប្រសិនបើអ្នកបានដំឡើង GitLab ដូច្នេះអ្នកអាចបាត់បង់ផ្នែកនេះ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បានបង្កើត Droplet ដែលមាន 16 GB នៃ RAM និង 6 CPUs ។ នេះគួរឱ្យអនុញ្ញាតឱ្យមានការគាំទ្រដល់ 500 អ្នកប្រើប្រាស់ដោយផ្អែកលើ <a href=\"https://docs.gitlab.com/ee/install/requirements.html\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">GitLab's resource recommendations ↗</a> ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "GitLab នឹងផ្តល់ជូននូវ IP អ៊ិនធឺណិតដែលត្រូវបានបង្ហាញនៅលើអ៊ីនធឺណិត (ឥឡូវនេះ) ។ អ្នកនឹងត្រូវការតភ្ជាប់ទៅនឹងសេវាកម្មដែលត្រូវបានដំឡើងដោយប្រើ IP បណ្ដាញខាងក្រៅនេះសម្រាប់ការកំណត់ដំបូង។ អ្នកអាចសុវត្ថិភាពការតភ្ជាប់ទៅ IP ដោយ <a href=\"https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">adding SSH keys ↗</a> ទៅលើគណនី DigitalOcean របស់អ្នក។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "ឧទាហរណ៍នេះប្រើម៉ាស៊ីន macOS ដើម្បីកំណត់កំណត់ Droplet ។ ចម្លងអាសយដ្ឋាន IP ដែលត្រូវបានផ្ដល់ឱ្យម៉ាស៊ីនពី DigitalOcean ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "ទោះជាយ៉ាងណាក៏ដោយវាអាចធ្វើឱ្យប្រសិនបើអ្នកចង់ធ្វើឱ្យប្រសិនបើអ្នកចង់ធ្វើឱ្យប្រសិនបើអ្នកចង់ធ្វើឱ្យប្រសិនបើអ្នកចង់ធ្វើឱ្យប្រសិនបើអ្នកចង់ធ្វើឱ្យប្រសិនបើអ្នកចង់ធ្វើឱ្យប្រសិនបើអ្នកចង់ធ្វើឱ្យប្រសិនបើអ្នកចង់ធ្វើឱ្យប្រសិនបើអ្នកចង់ធ្វើឱ្យប្រសិនបើអ្នកចង់ធ្វើឱ្យប្រសិនបើអ្នកចង់ធ្វើឱ្យប្រសិនបើអ្នកចង់ធ្វើឱ្យប្រសិនបើអ្នកចង់ធ្វើឱ្យប្រសិនបើអ្នកចង់ធ្វើឱ្យប្រសិនបើអ្នកចង់ធ្វើការ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បង្វិល Terminal"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បន្ទាប់មកទាញយក GitLab ។ គំរូនេះប្រើ <a href=\"https://about.gitlab.com/install/#ubuntu\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Ubuntu package ↗</a> និងដំណោះស្រាយនៅក្នុងឯកសារ GitLab ជាមួយនឹងការពិនិត្យឡើងវិញមួយចំនួនដែលបានបង្ហាញនៅក្រោមនេះ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "សូមបញ្ចប់ការបញ្ជាបន្ទាប់ដើម្បីចាប់ផ្តើម។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បង្វិល Terminal"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "ទាញយកកម្មវិធី GitLab ទៅម៉ាស៊ីននេះ។ ឥឡូវនេះអ្នកត្រូវដំឡើងវា។ នេះគឺជាកន្លែងដំបូងដែលវគ្គបណ្តុះបណ្តាលនេះនឹងផ្លាស់ប្តូរពីប្រតិបត្តិការនៅក្នុងឯកសារ GitLab ។ ជំហានបន្ទាប់នៅក្នុងការបណ្តុះបណ្តាលដែលបានផ្តល់ GitLab បានបង្កើតឈ្មោះក្រុមហ៊ុនផ្គត់ផ្គង់ខាងក្រៅ។ អ្នកអាចដំឡើងកម្មវិធីតែប៉ុណ្ណោះ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បង្វិល Terminal"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បន្ទាប់ពីមួយ នាទីឬដូច្នេះ GitLab នឹងត្រូវបានដំឡើង។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "ទោះជាយ៉ាងណាក៏ដោយកម្មវិធីនេះមិនត្រូវបានដំណើរការទេ។ អ្នកអាចពិនិត្យមើលប្រព័ន្ធប្រតិបត្តិការរបស់អ្នកដើម្បីមើលប្រព័ន្ធប្រតិបត្តិការដែលអ្នកកំពុងមើលដើម្បីបញ្ជាក់ដោយប្រើ <code class=\"tutorial-inline-code\">ss</code> ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បង្វិល Terminal"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "លទ្ធផលនេះគួរតែជាសេវាកម្មដែលមានប្រសិទ្ធិភាពនៅពេលនេះនៅលើម៉ាស៊ីន:"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បង្វិល Terminal"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "ដើម្បីចាប់ផ្តើម GitLab, ធ្វើការបញ្ជាបញ្ជា reconfigure នៃកម្មវិធីនេះ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បង្វិល Terminal"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "GitLab នឹងចាប់ផ្តើមសេវាកម្មផ្នែករបស់ខ្លួន។ សូមបញ្ជាក់ថា GitLab មានការដំណើរការនិងការឆ្លើយតបនៅលើប៊ូតុង 22 និង 80 ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បង្វិល Terminal"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "អ្នកប្រើប្រាស់ចូលទៅ GitLab នៅលើ SSH (ផែនទី 22 នៅទីនេះ) និង HTTP សម្រាប់កម្មវិធីបណ្ដាញ (ផែនទី 80) ។ ក្នុងដំណោះស្រាយបន្ទាប់អ្នកនឹងធ្វើឱ្យប្រសិនបើអ្នកអាចធ្វើឱ្យប្រសិនបើអ្នកអាចធ្វើការទាំងពីរតាម Cloudflare Access ។ ខ្ញុំនឹងដោះស្រាយបញ្ហានេះហើយចូលទៅក្នុងបណ្តាញ Cloudflare ។"
+          }
+        ]
+      },
+      "building-zero-trust-policies": {
+        "titleKm": "ការសាងសង់ Zero Trust គោលការណ៍",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlKm": "អ្នកអាចប្រើ Cloudflare Access ដើម្បីបង្កើត Zero Trust ដំណោះស្រាយដើម្បីកំណត់អ្នកដែលអាចចូលរួមជាមួយកម្មវិធីបណ្ដាញរបស់ GitLab (HTTP) និងអ្នកដែលអាចចូលរួមតាម SSH ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "នៅពេលដែលអ្នកប្រើបានធ្វើតម្រូវការទៅគេហទំព័រដែលមានការពារដោយ Access, ការតម្រូវការនេះបង្ហាញ Cloudflare នៃបណ្តាញជាលើកដំបូង។ Access អាចត្រួតពិនិត្យថាតើអ្នកប្រើប្រាស់អាចចូលទៅក្នុងកម្មវិធី។ នៅពេលដែលបានរួមបញ្ចូលជាមួយ Cloudflare Tunnel, ការប្រមូល Zero Trust នឹងមើលដូច្នេះ:"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "ដើម្បីត្រួតពិនិត្យអ្នកដែលអាចចូលទៅក្នុងកម្មវិធីនេះ Cloudflare Access ត្រូវបានផ្អែកលើការរួមបញ្ចូលជាមួយអ្នកផ្គត់ផ្គង់ឯកជនដូចជា Okta, Microsoft Entra ID ឬ Google ដើម្បីបញ្ជូនកាតឯកជនដែលត្រូវបានត្រួតពិនិត្យនៅខាងក្រៅ។ ទោះបីជា VPN អនុញ្ញាតឱ្យអ្នកប្រើប្រាស់នូវតម្រូវការដោយឥតគិតថ្លៃនៅលើបណ្តាញឯកជនប៉ុណ្ណោះប៉ុន្តែប្រសិនបើអ្នកគិតថាតើអ្នកគិតថាតើអ្នកគិតថាតើអ្នកគិតថាតើអ្នកគិតថាតើអ្នកគិតថាតើអ្នកគិតថាតើអ្នកគិតថាតើអ្នកគិតថាតើអ្នកគិតថាតើអ្នកគិតថាតើអ្នកគិតថាតើអ្នកគិតថាតើអ្នកគិតថាតើអ្នកគិតថាតើអ្នកគិតថាតើអ្នកគិតថាតើអ្នកគិតថាតើអ្នកគិតថាតើអ្នកគិតថាតើអ្នកគិតថាតើអ្នកគិតថាតើអ្នកគិតថាតើអ្នកគិតថាតើអ្នកគិតថាត"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "សម្រាប់ GitLab បានចាប់ផ្តើមដោយបង្កើតគោលនយោបាយពីរ។ អ្នកប្រើប្រាស់នឹងតភ្ជាប់ទៅ GitLab នៅក្នុងវិធីមួយចំនួន: នៅក្នុងកម្មវិធីបណ្ដាញនិងតាម SSH ។ បានបង្កើតគោលនយោបាយដើម្បីធានារ៉ាប់រង subdomain មួយសម្រាប់ទាំងអស់។ ជាលើកដំបូង Web App ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "មុនពេលដែលអ្នកបង្កើតគោលដៅនេះអ្នកនឹងត្រូវដំណើរការ <a href=\"https://developers.cloudflare.com/cloudflare-one/setup/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">these instructions</a> ដើម្បីបង្កើតគោលដៅ Cloudflare Access នៅក្នុងគណនីរបស់អ្នក។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "នៅពេលដែលវាត្រូវបានអនុញ្ញាត, សូមចូលទៅក្នុងទំព័រ <strong>Applications</strong> នៅក្នុង Zero Trust ។ សូមជ្រើស <strong>Create new application</strong> ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "សូមជ្រើស <strong>Self-hosted and private</strong> ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "អ្នកនឹងត្រូវបានគេស្គាល់ដើម្បីបន្ថែម subdomain ដែលនឹងបង្ហាញនូវឧបករណ៍នេះ។ នេះគួរតែជាឧបករណ៍នៃឧបករណ៍មួយនៅក្នុងគណនីរបស់អ្នក Cloudflare ។ អ្នកនឹងត្រូវការឧបករណ៍ subdomains សម្រាប់កម្មវិធីបណ្ដាញនិង SSH ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "គំរូនេះប្រើ <code class=\"tutorial-inline-code\">gitlab.widgetcorp.tech</code> សម្រាប់កម្មវិធីបណ្ដាញនិង <code class=\"tutorial-inline-code\">gitlab-ssh.widgetcorp.tech</code> សម្រាប់ការទំនាក់ទំនង SSH ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "អ្នកអាចជ្រើសរើសអ្នកផ្គត់ផ្គង់អ៊ីនធឺណិតដែលនឹងត្រូវបានអនុញ្ញាតឱ្យធ្វើឱ្យប្រាកដ។ ដោយគោលបំណងគ្រប់អ្នកផ្គត់ផ្គង់ដែលបានកំណត់ត្រូវបានអនុញ្ញាត។ លក្ខខណ្ឌដើម្បីកំណត់អ្នកដែលអាចចូលទៅគេហទំព័រនេះ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "ចុច <strong>Create</strong> ដើម្បីបោះពុម្ពកម្មវិធី។ សូមធ្វើដំណើរការទាំងនេះសម្រាប់កម្មវិធីទីពីរ <code class=\"tutorial-inline-code\">gitlab-ssh.widgetcorp.tech</code> ។"
+          }
+        ]
+      },
+      "cloudflare-tunnel": {
+        "titleKm": "កុំព្យូទ័រ T4",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlKm": "Cloudflare Tunnel បានបង្កើតការតភ្ជាប់ដែលមានសុវត្ថិភាពនិងបញ្ចូលគ្នានៅក្នុងរវាងម៉ាស៊ីននេះនិងបណ្តាញរបស់ Cloudflare ។ ជាមួយនឹងម៉ូដែលបញ្ចូលគ្នានេះអ្នកអាចជួសជុល access ដែលផ្ទាល់ទៅនឹងម៉ាស៊ីននេះនិងកាត់បន្ថយទីផ្សារចូលដែលបង្ហាញពីខាងក្រៅ។ ដូច្នេះមិនមានផ្លាស់ប្តូរផ្លាស់ប្តូរផ្លាស់ប្តូរ firewall ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "Cloudflare Tunnel ត្រូវបានធ្វើឱ្យមានប្រសិទ្ធិភាពដោយសារតែ DAEMON ទាបពី Cloudflare ដែលគេស្គាល់ថា <code class=\"tutorial-inline-code\">cloudflared</code> ។ ទាញយកនិងដំឡើង <code class=\"tutorial-inline-code\">cloudflared</code> នៅលើម៉ាស៊ីន DigitalOcean ដោយធ្វើដូចម្តេចដែលបានបង្ហាញនៅលើទំព័រ <a href=\"https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/downloads/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Downloads</a> ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "នៅពេលដែលអ្នកបានដំឡើងវាត្រូវបានត្រួតពិនិត្យដោយ <code class=\"tutorial-inline-code\">cloudflared</code> ជាមួយនឹងការបញ្ជាក់ដូចខាងក្រោម។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បង្វិល Terminal"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "ការបញ្ជានេះនឹងបោះពុម្ព URL ដែលអ្នកត្រូវមើលដើម្បីចូលរួមជាមួយគណនីរបស់អ្នក Cloudflare ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "ជ្រើសគេហទំព័រដែលអ្នកបានបន្ថែមទៅក្នុងគណនីរបស់អ្នក។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បន្ទាប់ពីអ្នកជ្រើសមួយនៃគេហទំព័រនៅក្នុងគណនីរបស់អ្នក Cloudflare នឹងទាញយកឯកសារវិញ្ញាបនប័ត្រដើម្បីអនុញ្ញាតឱ្យប្រសិនបើមាន <code class=\"tutorial-inline-code\">cloudflared</code> នេះ។ ឥឡូវនេះអ្នកអាចប្រើ <code class=\"tutorial-inline-code\">cloudflared</code> ដើម្បីគ្រប់គ្រងការតភ្ជាប់ Cloudflare Tunnel នៅក្នុងគណនី Cloudflare របស់អ្នក។"
+          }
+        ]
+      },
+      "connecting-to-cloudflare": {
+        "titleKm": "ទូរស័ព្ទទៅ Cloudflare",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlKm": "ឥឡូវនេះអ្នកអាចបំពាក់ GitLab ទៅ Cloudflare ដោយប្រើ Cloudflare Tunnel ។"
+          },
+          {
+            "type": "list",
+            "ordered": true,
+            "itemsKm": [
+              "ការបង្កើត Tunnel ថ្មីដោយធ្វើការបញ្ជាបញ្ជាខាងក្រោម។"
+            ]
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បង្វិល Terminal"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "<code class=\"tutorial-inline-code\">cloudflared</code> នឹងបង្កើត ID មួយតែមួយសម្រាប់ Tunnel នេះ, ដូចជា <code class=\"tutorial-inline-code\">6ff42ae2-765d-4adf-8112-31c55c1551ef</code> ។ អ្នកអាចប្រើ Tunnel នេះសម្រាប់ការដឹកជញ្ជូន SSH និង HTTP ។"
+          },
+          {
+            "type": "list",
+            "ordered": true,
+            "itemsKm": [
+              "អ្នកនឹងត្រូវការកំណត់ Cloudflare Tunnel ដើម្បីផ្លាស់ប្តូរការដឹកជញ្ជូន proxy ទៅទាំងពីរគោលដៅ។ ការកំណត់ផែនការខាងក្រោមនឹងទទួលបានការដឹកជញ្ជូនបណ្តាញសម្រាប់ DNS ដំណឹងដែលនឹងត្រូវបានបង្កើតសម្រាប់កម្មវិធីបណ្តាញនិងការ DNS ដំណឹងដើម្បីបង្ហាញការដឹកជញ្ជូន SSH ទៅផែនទីត្រឹមត្រូវ។"
+            ]
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "អ្នកប្រើកម្មវិធីកំណត់សៀវភៅដែលអ្នកជ្រើសរើសដើម្បីដំឡើងឯកសារកំណត់សៀវភៅ។ លក្ខណៈពិសេសនេះគឺ <code class=\"tutorial-inline-code\">Vi</code> ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បង្វិល Terminal"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "list",
+            "ordered": true,
+            "itemsKm": [
+              "ទាញយក Tunnel ដើម្បីបម្រើការដឹកជញ្ជូន។"
+            ]
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "list",
+            "ordered": true,
+            "itemsKm": [
+              "អ្នកអាចធ្វើតេស្តថាឯកសារកំណត់កំណត់កំណត់គឺត្រឹមត្រូវដោយប្រព័ន្ធប្រតិបត្តិការខាងក្រោម:"
+            ]
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បង្វិល Terminal"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "<code class=\"tutorial-inline-code\">cloudflared</code> នឹងបង្ហាញថា Tunnel គឺត្រឹមត្រូវ។ ឥឡូវនេះអ្នកអាចចាប់ផ្តើមដំណើរការ Tunnel ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បង្វិល Terminal"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "វាត្រូវបានអនុវត្តជាសេវាកម្ម <code class=\"tutorial-inline-code\">systemd</code> សម្រាប់ការប្រើប្រាស់រយៈពេលវែង; ប្រសិនបើវាបានបញ្ចប់, GitLab នឹងមិនអាចរកបាន។"
+          }
+        ]
+      },
+      "configure-dns-records": {
+        "titleKm": "ទាញយកឯកសារ DNS",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlKm": "ឥឡូវនេះអ្នកអាចបង្កើតឯកសារ DNS សម្រាប់ GitLab នៅលើប្រព័ន្ធប្រតិបត្តិការ Cloudflare ។ សូមអរគុណថាអ្នកនឹងត្រូវការពីរដំណោះស្រាយ - មួយសម្រាប់កម្មវិធីបណ្ដាញនិងមួយសម្រាប់ការដឹកជញ្ជូន SSH ។"
+          },
+          {
+            "type": "list",
+            "ordered": true,
+            "itemsKm": [
+              "សូមចូលទៅក្នុង <a href=\"https://dash.cloudflare.com/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Cloudflare dashboard ↗</a> និងចូលទៅក្នុងទំព័រ <strong>DNS Records</strong> សម្រាប់ឧបករណ៍របស់អ្នក។"
+            ]
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "<a href=\"https://dash.cloudflare.com/?to=/:account/:zone/dns/records\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\"> Go to <strong>Records</strong> </a>"
+          },
+          {
+            "type": "list",
+            "ordered": true,
+            "itemsKm": [
+              "សូមជ្រើស <strong>Add record</strong> ។ សូមជ្រើស <code class=\"tutorial-inline-code\">CNAME</code> ជាប្រភេទសៀវភៅ។",
+              "ក្នុងឧបករណ៍ <strong>Name</strong>, input <code class=\"tutorial-inline-code\">gitlab</code> ។",
+              "ក្នុងតំបន់ <strong>Target</strong>, input គឺជា ID នៃ Tunnel ដែលបានបង្កើតឡើងបន្ទាប់ពី <code class=\"tutorial-inline-code\">cfargotunnel.com</code> ។ នៅក្នុងឧទាហរណ៍នេះតម្លៃនេះគឺ:"
+            ]
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "list",
+            "ordered": true,
+            "itemsKm": [
+              "សូមជ្រើស <strong>Save</strong> ។",
+              "Repeat the process again by creating a second <code class=\"tutorial-inline-code\">CNAME</code> record, with the same <strong>Target</strong>, but input <code class=\"tutorial-inline-code\">gitlab-ssh</code> for the <strong>Name</strong>. Both records should then appear, pointing to the same Tunnel. The ingress rules defined in the configuration file above will direct traffic to the appropriate port."
+            ]
+          }
+        ]
+      },
+      "connecting-to-the-web-application": {
+        "titleKm": "ការភ្ជាប់ជាមួយកម្មវិធីបណ្ដាញ",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlKm": "ឥឡូវនេះអ្នកអាចធ្វើតេស្តការកំណត់ end-to-end សម្រាប់កម្មវិធីបណ្ដាញ។ សូមចូលទៅក្នុងឧបករណ៍ subdomain ដែលបានបង្កើតឡើងសម្រាប់កម្មវិធីបណ្ដាញ។ Cloudflare Access នឹងផ្តល់ឱ្យអ្នកនូវការអនុញ្ញាត។ Login ជាមួយអ្នកផ្គត់ផ្គង់របស់អ្នក"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "នៅពេលដែលអ្នកបានទទួលបានអនុម័តអ្នកគួរតែមើលកម្មវិធី GitLab ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បានចុះឈ្មោះគណនីរបស់អ្នកនិងបង្កើតគម្រោង Blank ដើម្បីធ្វើតេស្ត SSH ក្នុងដំណោះស្រាយបន្ទាប់។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "GitLab នឹងបង្កើតគម្រោងថ្មីនិង repo ។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "ដើម្បីបង្វិលឬបង្វិលកូដអ្នកត្រូវបន្ថែមគោលដៅ SSH ទៅលើឯកសាររបស់អ្នកនៅក្នុង GitLab ។"
+          }
+        ]
+      },
+      "configuring-ssh": {
+        "titleKm": "ការបង្កើត SSH",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlKm": "ប្រសិនបើអ្នកចង់ទាញយកនិងទាញយកកូដនៅលើ SSH, អ្នកនឹងត្រូវការដំឡើង <code class=\"tutorial-inline-code\">cloudflared</code> នៅលើម៉ាស៊ីនអតិថិជនផងដែរ។ ប្រព័ន្ធ ប្រតិបត្តិការ macOS Laptop ។ នៅលើ macOS អ្នកអាចដំឡើង <code class=\"tutorial-inline-code\">cloudflared</code> ជាមួយនឹងការបញ្ជាក់ខាងក្រោម។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បង្វិល Terminal"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "ប្រសិនបើអ្នកត្រូវការដំឡើង <code class=\"tutorial-inline-code\">cloudflared</code>, អ្នកមិនចាំបាច់ដោះស្រាយបញ្ជា SSH របស់អ្នកនៅក្នុងវិធីមួយគត់ទេ។ ដូច្នេះអ្នកនឹងត្រូវធ្វើការផ្លាស់ប្តូរប្រព័ន្ធប្រតិបត្តិការ SSH របស់អ្នក។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បង្វិល Terminal"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "Input មានគុណសម្បត្តិដូចខាងក្រោម; ការផ្លាស់ប្តូរ <code class=\"tutorial-inline-code\">gitlab-ssh.widgetcorp.tech</code> ដោយឈ្មោះក្រុមហ៊ុនផ្គត់ផ្គង់ដែលអ្នកបានបង្កើត។"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "ឥឡូវនេះអ្នកអាចធ្វើតេស្តដំណើរការ SSH ដោយធ្វើតេស្តដើម្បីកាត់បន្ថយគម្រោងដែលបានបង្កើតមុន។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បង្វិល Terminal"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "<code class=\"tutorial-inline-code\">cloudflared</code> នឹងអនុញ្ញាតឱ្យអ្នកចូលទៅក្នុងក្រុមហ៊ុនផ្គត់ផ្គង់អ៊ីនធឺណិតរបស់ខ្ញុំហើយបន្ទាប់ពីការទទួលបានជោគជ័យអ្នកនឹងផ្តល់នូវ token មួយទៅនឹងឧបករណ៍របស់អ្នកដើម្បីអនុញ្ញាតឱ្យអ្នកធ្វើឱ្យប្រាកដ។"
+          }
+        ]
+      },
+      "lock-down-exposed-ports": {
+        "titleKm": "ការកាត់បន្ថយការបង្វិលបង្វិល",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlKm": "ឥឡូវនេះអ្នកអាចកំណត់រចនាសម្ព័ន្ធកញ្ចក់ DigitalOcean របស់អ្នកជាមួយនឹងច្បាប់មួយតែមួយដើម្បីកាត់បន្ថយការដឹកជញ្ជូនចូលណាមួយដើម្បីជួសជុល access ដោយផ្ទាល់។"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "Cloudflare Tunnel នឹងបន្តធ្វើដំណើរការតភ្ជាប់បញ្ចូលតែមួយហើយខ្ញុំអាចជួសជុលម៉ាស៊ីននេះបានកាត់បន្ថយនៅក្នុងប្រតិបត្តិការការការកាត់បន្ថយគ្រីបឬអ្វីដែលមានលក្ខណៈពិសេសជាងនេះ។"
+          }
+        ]
+      },
+      "view-logs": {
+        "titleKm": "ពិនិត្យឡើងវិញ",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlKm": "អ្នកក៏អាចមើលកំណត់ហេតុបណ្ដាញនៃព្រឹត្តិការណ៍ដែលត្រូវបានអនុញ្ញាតនិងកាត់បន្ថយ។ ចុចទំព័រ <code class=\"tutorial-inline-code\">Access</code> នៃផ្នែក <code class=\"tutorial-inline-code\">Logs</code> នៅក្នុង Zero Trust ។"
+          }
+        ]
+      },
+      "troubleshooting": {
+        "titleKm": "ដំបូង",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlKm": "ប្រសិនបើអ្នកកំពុងប្រើ Git Large File Storage (LFS) សូមអរគុណថា Git LFS មិនត្រូវបានគាំទ្រដោយស្វ័យប្រវត្តិដោយ <code class=\"tutorial-inline-code\">cloudflared</code> ។ ដើម្បី access repozitories ដែលមានការពារដោយ Cloudflare Access អ្នកត្រូវការធ្វើអានដោយផ្ទាល់ដោយធ្វើដំណើរ:"
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "បង្វិល Terminal"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlKm": "សូមផ្លាស់ប្តូរ <code class=\"tutorial-inline-code\">&lt;your-git-access-url&gt;</code> ជាមួយ Cloudflare Access URL ដែលមានការពារ។"
+          },
+          {
+            "type": "code",
+            "skip": true
+          }
+        ]
+      }
+    },
+    "introKm": "តើធ្វើដូចម្តេចដើម្បីបន្ថែម Zero Trust ដំណោះស្រាយទៅជាប្រវត្តិសាស្រ្តដោយខ្លួនឯងនៃ GitLab ។ វគ្គបណ្តុះបណ្តាលនេះដំណើរការអ្នកតាមរយៈការដំឡើង GitLab នៅក្នុង DigitalOcean ។",
+    "notesKm": [
+      "នេះគឺជាការបញ្ជាក់អំពី Orange Cloud Learning Hub — វាគឺជាការផ្លាស់ប្តូរនៃឯកសារផ្លូវការ។",
+      "ចុចតំណភ្ជាប់ Docs Official នៅខាងក្រោមសម្រាប់ការបញ្ជា CLI, សៀវភៅកូដនិងរូបថតពេញលេញ។",
+      "Zero Trust ជាទូទៅតម្រូវការ Cloudflare One អ្នកគ្រប់គ្រងហិរញ្ញវត្ថុ access និង IdP ។",
+      "Cloudflare បានផ្លាស់ប្តូរជាធម្មតានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅពេលវេលានៅ។"
+    ],
+    "complete": true
   }
 }
