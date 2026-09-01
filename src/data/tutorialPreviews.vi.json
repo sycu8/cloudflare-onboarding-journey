@@ -196,5 +196,303 @@
         "titleVi": "Tài nguyên liên quan"
       }
     }
+  },
+  "/pages/tutorials/add-a-react-form-with-formspree": {
+    "titleVi": "Thêm React form với Formspree",
+    "summaryVi": "Tìm hiểu cách thêm React form với Formspree, một dịch vụ back-end xử lý và lưu trữ form.",
+    "sections": {
+      "overview": {
+        "titleVi": "Tổng quan",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlVi": "Hầu như mọi trang web React đều cần form để thu thập dữ liệu người dùng. <a href=\"https://formspree.io/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Formspree ↗</a> là một dịch vụ back-end xử lý và lưu trữ form, cho phép các nhà phát triển bao gồm các biểu mẫu trên trang web của họ mà không cần viết mã hoặc chức năng phía máy chủ."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Trong hướng dẫn này, bạn sẽ tạo một thành phần <code class=\"tutorial-inline-code\">&lt;form&gt;</code> bằng cách sử dụng React và thêm nó vào một ứng dụng trang duy nhất được xây dựng với <code class=\"tutorial-inline-code\">create-react-app</code>. Mặc dù bạn đang sử dụng <code class=\"tutorial-inline-code\">create-react-app</code> (CRA), các khái niệm sẽ áp dụng cho bất kỳ khung React nào bao gồm Next.js, Gatsby và nhiều hơn nữa. Bạn sẽ sử dụng Formspree để thu thập dữ liệu đã gửi và gửi thông báo email khi các bài đăng mới đến, mà không cần bất kỳ mã hóa bên máy chủ nào."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Bạn sẽ triển khai trang web của mình thành Cloudflare Pages. Hãy tham khảo <a href=\"https://developers.cloudflare.com/pages/get-started/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Get started guide</a> để làm quen với nền tảng."
+          }
+        ]
+      },
+      "setup": {
+        "titleVi": "Thiết lập",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlVi": "Để bắt đầu, hãy tạo một dự án React mới trên máy cục bộ của bạn với <code class=\"tutorial-inline-code\">create-react-app</code>. Sau đó tạo <a href=\"https://repo.new/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">new GitHub repository ↗</a>, và đính kèm vị trí GitHub làm điểm đến từ xa:"
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Cửa sổ Terminal"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Bây giờ bạn có thể sửa ứng dụng React trong thư mục <code class=\"tutorial-inline-code\">new-app</code> mà bạn đã tạo."
+          }
+        ]
+      },
+      "the-front-end-code": {
+        "titleVi": "Mã Front-End",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlVi": "Điểm khởi đầu cho <code class=\"tutorial-inline-code\">create-react-app</code> bao gồm một trang web đơn giản Hello World. Bạn sẽ thêm Contact Us form chấp nhận tên, địa chỉ email và tin nhắn. Mã form được điều chỉnh từ hướng dẫn HTML Forms. Để biết thêm thông tin chi tiết về cách thức HTML hoạt động và các tài nguyên học tập bổ sung, hãy tham khảo <a href=\"https://developers.cloudflare.com/pages/tutorials/forms/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">HTML Forms tutorial</a>."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Đầu tiên, tạo một thành phần phản ứng mới có tên <code class=\"tutorial-inline-code\">ContactForm.js</code> và đặt nó vào thư mục <code class=\"tutorial-inline-code\">src</code> bên cạnh <code class=\"tutorial-inline-code\">App.js</code>."
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Tiếp theo, bạn sẽ xây dựng thành phần form bằng cách sử dụng thư viện trợ giúp từ Formspree, <a href=\"https://github.com/formspree/formspree-react\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">@formspree/react ↗</a>. Thư viện này chứa <code class=\"tutorial-inline-code\">useForm</code> để đơn giản hóa quá trình xử lý sự kiện gửi form và quản lý trạng thái form."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Cài đặt nó với:"
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "npm"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Sau đó dán đoạn mã sau vào tệp <code class=\"tutorial-inline-code\">ContactForm.js</code>:"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Hiện tại, form chứa chỗ giữ <code class=\"tutorial-inline-code\">YOUR<em>FORM</em>ID</code>. Bạn thay thế điều này bằng điểm cuối form của riêng bạn sau này trong hướng dẫn này."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Khóa <code class=\"tutorial-inline-code\">useForm</code> trả về đối tượng <code class=\"tutorial-inline-code\">state</code> và hàm <code class=\"tutorial-inline-code\">handleSubmit</code> mà bạn chuyển sang thuộc tính <code class=\"tutorial-inline-code\">onSubmit</code> form. Kết hợp, chúng cung cấp một cách để gửi dữ liệu form thông qua AJAX và cập nhật trạng thái form tùy thuộc vào phản hồi nhận được."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Để rõ ràng, form này không bao gồm bất kỳ kiểu nào, nhưng trong dự án GitHub (<a href=\"https://github.com/formspree/formspree-example-cloudflare-react\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">https://github.com/formspree/formspree-example-cloudflare-react ↗</a>) bạn có thể xem xét một ví dụ về cách áp dụng kiểu cho form."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Các thành phần <code class=\"tutorial-inline-code\">ValidationError</code> là trợ lý hiển thị thông báo lỗi cho lỗi trường, hoặc lỗi form chung (nếu không có thuộc tính <code class=\"tutorial-inline-code\">field</code> được cung cấp). Để biết thêm thông tin về xác thực, hãy tham khảo <a href=\"https://help.formspree.io/hc/en-us/articles/360055613373-The-Formspree-React-library#validation\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Formspree React documentation ↗</a>."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Để thêm form này vào trang web của bạn, hãy nhập thành phần:"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Sau đó chèn form vào trang dưới dạng thành phần phản ứng:"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Ví dụ, bạn có thể cập nhật tệp <code class=\"tutorial-inline-code\">src/App.js</code> của mình để thêm form:"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Bây giờ bạn có một ứng dụng một trang có chứa Contact Us form với nhiều trường để người dùng điền vào. Tuy nhiên, bạn chưa thiết lập form để gửi đến điểm cuối form hợp lệ. Bạn sẽ làm điều đó trong <a href=\"#the-formspree-back-end\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">next section</a>."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "GitHub kho lưu trữ"
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Mã nguồn cho ví dụ này là <a href=\"https://github.com/formspree/formspree-example-cloudflare-react\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">available on GitHub ↗</a>. Nó là một ứng dụng Pages trực tiếp với một <a href=\"https://formspree-example-cloudflare-react.pages.dev/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">live demo ↗</a> cũng có sẵn."
+          }
+        ]
+      },
+      "the-formspree-back-end": {
+        "titleVi": "Các Formspree back end",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlVi": "React form hoàn tất, tuy nhiên, khi người dùng gửi form này, họ sẽ nhận được lỗi <code class=\"tutorial-inline-code\">Form not found</code>. Để khắc phục điều này, hãy tạo Formspree form mới và sao chép ID duy nhất của nó vào cuộc gọi <code class=\"tutorial-inline-code\">useForm</code> của form."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Để tạo Formspree form, hãy đăng ký cho <a href=\"https://formspree.io/register\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">an account on Formspree ↗</a>. Sau đó tạo một form mới với nút <strong>\\+ New form</strong>. Gọi tên form <code class=\"tutorial-inline-code\">Contact-us form</code> mới của bạn và cập nhật email của người nhận đến một email nơi bạn muốn nhận các bài viết của bạn form. Cuối cùng, chọn <strong>Create Form</strong>."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Bạn sẽ được trình bày với hướng dẫn về cách tích hợp form mới của bạn. Sao chép <code class=\"tutorial-inline-code\">hashid</code> của form (những ký tự alfanumeric 8 cuối cùng từ URL) và dán nó vào hàm <code class=\"tutorial-inline-code\">useForm</code> trong thành phần <code class=\"tutorial-inline-code\">ContactForm</code> bạn đã tạo ở trên."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Thành phần của bạn bây giờ nên có một dòng như thế này:"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Bây giờ khi bạn gửi form, bạn nên được hiển thị một tin nhắn cảm ơn. Dữ liệu form sẽ được gửi đến tài khoản của bạn tại <a href=\"https://formspree.io/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Formspree.io ↗</a>."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Từ đây, bạn có thể điều chỉnh logic xử lý form của mình để cập nhật <a href=\"https://help.formspree.io/hc/en-us/articles/115008379348-Changing-a-form-email-address\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">notification email address ↗</a>, hoặc thêm các plugin như <a href=\"https://help.formspree.io/hc/en-us/articles/360036563573-Use-Google-Sheets-to-send-your-submissions-to-a-spreadsheet\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Google Sheets ↗</a>, <a href=\"https://help.formspree.io/hc/en-us/articles/360045648933-Send-Slack-notifications\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Slack ↗</a>, và nhiều hơn nữa."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Để biết thêm trợ giúp thiết lập Formspree, hãy tham khảo các tài nguyên sau:"
+          },
+          {
+            "type": "list",
+            "ordered": false,
+            "itemsVi": [
+              "Để được trợ giúp chung về Formspree, hãy tham khảo <a href=\"https://help.formspree.io/hc/en-us\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Formspree help site ↗</a>.",
+              "Để biết thêm trợ giúp tạo biểu mẫu trong React, hãy tham khảo <a href=\"https://help.formspree.io/hc/en-us/articles/360055613373-The-Formspree-React-library\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">formspree-react documentation ↗</a>",
+              "Để biết các mẹo về việc tích hợp Formspree với các nền tảng phổ biến như Next.js, Gatsby và Eleventy, hãy tham khảo <a href=\"https://formspree.io/guides\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Formspree guides ↗</a>."
+            ]
+          }
+        ]
+      },
+      "deployment": {
+        "titleVi": "triển khai",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlVi": "Bây giờ bạn đã sẵn sàng để triển khai dự án của bạn."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Nếu bạn chưa làm như vậy, hãy lưu tiến độ của bạn trong <code class=\"tutorial-inline-code\">git</code> và sau đó đẩy commit(s) vào kho GitHub:"
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Cửa sổ Terminal"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Công việc của bạn bây giờ nằm trong kho lưu trữ GitHub, có nghĩa là Pages cũng có thể access nó."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Nếu đây là dự án đầu tiên của bạn Cloudflare Pages, hãy tham khảo <a href=\"https://developers.cloudflare.com/pages/get-started/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Get started guide</a> để biết thông tin chi tiết. Sau khi chọn kho GitHub thích hợp, bạn phải cấu hình dự án của mình với các cài đặt xây dựng sau:"
+          },
+          {
+            "type": "list",
+            "ordered": false,
+            "itemsVi": [
+              "<strong>Project name</strong> – Lựa chọn của bạn",
+              "<strong>Production branch</strong> – <code class=\"tutorial-inline-code\">main</code>",
+              "<strong>Framework preset</strong> – Tạo ứng dụng React",
+              "<strong>Build command</strong> – <code class=\"tutorial-inline-code\">npm run build</code>",
+              "<strong>Build output directory</strong> – <code class=\"tutorial-inline-code\">build</code>"
+            ]
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Sau khi chọn <strong>Save and Deploy</strong>, dự án Pages của bạn sẽ bắt đầu triển khai đầu tiên. Khi thành công, bạn sẽ được trình bày với một tên miền con <code class=\"tutorial-inline-code\">*.pages.dev</code> độc đáo và một liên kết đến bản demo trực tiếp của bạn."
+          }
+        ]
+      },
+      "using-environment-variables-with-forms": {
+        "titleVi": "Sử dụng các biến môi trường với hình thức",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "htmlVi": "Đôi khi nó hữu ích để thiết lập hai hình thức, một cho phát triển, và một cho sản xuất. Bằng cách đó, bạn có thể phát triển và thử nghiệm form mà không làm hỏng bộ dữ liệu sản xuất của bạn, hoặc gửi thông báo thử nghiệm cho khách hàng."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Để thiết lập các biểu mẫu sản xuất và phát triển, trước tiên hãy tạo form thứ hai trong Formspree. Đặt tên này form Liên hệ với chúng tôi Kiểm tra, và lưu ý form của <a href=\"https://help.formspree.io/hc/en-us/articles/360015130174-Getting-your-form-s-hashid-\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">hashid ↗</a>."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Sau đó thay đổi <code class=\"tutorial-inline-code\">useForm</code> hook trong tập tin <code class=\"tutorial-inline-code\">ContactForm.js</code> của bạn để nó được khởi tạo với một biến môi trường, thay vì một chuỗi:"
+          },
+          {
+            "type": "code",
+            "skip": true
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Trong cài đặt dự án Cloudflare Pages của bạn, thêm biến môi trường <code class=\"tutorial-inline-code\">REACT<em>APP</em>FORM_ID</code> vào cả môi trường sản xuất và xem trước. Sử dụng <code class=\"tutorial-inline-code\">hashid</code> của form gốc của bạn cho Sản xuất, và <code class=\"tutorial-inline-code\">hashid</code> của bài kiểm tra mới form cho môi trường xem trước:"
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Bây giờ, khi bạn cam kết và đẩy thay đổi cho một chi nhánh của kho lưu trữ git của bạn, một ứng dụng xem trước mới sẽ được tạo ra với một form gửi để kiểm tra form URL. Tuy nhiên, trang web sản xuất của bạn sẽ tiếp tục gửi đến URL gốc form."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Tạo ứng dụng React sử dụng tiền tố <code class=\"tutorial-inline-code\">REACT<em>APP</em></code> để chỉ định các biến môi trường có thể truy cập đến mã JavaScript. Một khung khác sẽ sử dụng một tiền tố khác để phơi bày các biến môi trường. Ví dụ, trong trường hợp Next.js, tiền tố là <code class=\"tutorial-inline-code\">NEXT<em>PUBLIC</em></code>. Xem tài liệu của khung front-end của bạn để xác định làm thế nào để access biến môi trường từ mã React của bạn."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Trong hướng dẫn này, bạn đã xây dựng và triển khai một trang web sử dụng Cloudflare Pages và Formspree để xử lý các bài đăng form. Bạn đã tạo một ứng dụng React với form mà giao tiếp với Formspree để xử lý và lưu trữ yêu cầu gửi và gửi thông báo."
+          },
+          {
+            "type": "paragraph",
+            "htmlVi": "Nếu bạn muốn xem lại mã nguồn đầy đủ cho ứng dụng này, bạn có thể tìm thấy nó trên <a href=\"https://github.com/formspree/formspree-example-cloudflare-react\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">GitHub ↗</a>."
+          }
+        ]
+      },
+      "related-resources": {
+        "titleVi": "Các nguồn tài nguyên liên quan",
+        "blocks": [
+          {
+            "type": "list",
+            "ordered": false,
+            "itemsVi": [
+              "<a href=\"https://developers.cloudflare.com/pages/tutorials/add-an-html-form-with-formspree/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Add an HTML form with Formspree</a>",
+              "<a href=\"https://developers.cloudflare.com/pages/tutorials/forms/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">HTML Forms</a>"
+            ]
+          },
+          {
+            "type": "code",
+            "skip": true
+          }
+        ]
+      }
+    },
+    "complete": true
   }
 }

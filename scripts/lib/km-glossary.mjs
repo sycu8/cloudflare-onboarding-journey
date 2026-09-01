@@ -76,17 +76,44 @@ export const PROTECTED_TERMS = [
   'C3',
   'Turnstile',
   'Authenticated Origin Pulls',
+  'Formspree',
+  'GitHub',
+  'GitLab',
+  'Bitbucket',
+  'Node.js',
+  'JavaScript',
+  'TypeScript',
+  'WebSocket',
+  'GraphQL',
+  'PostgreSQL',
+  'MySQL',
+  'Redis',
+  'Terraform',
+  'Playwright',
+  'Wrangler CLI',
+  'pages.dev',
+  'Save and Deploy',
+  'Create Form',
+  'HTML',
+  'CSS',
+  'form',
+  'action',
+  'input',
+  'label',
 ];
 
-const sorted = [...PROTECTED_TERMS].sort((a, b) => b.length - a.length);
+const sorted = [...new Set(PROTECTED_TERMS)].sort((a, b) => b.length - a.length);
 
 export function protectTerms(text) {
   let out = text;
   const placeholders = new Map();
   sorted.forEach((term, i) => {
-    const re = new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+    const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const re = term.includes(' ')
+      ? new RegExp(escaped, 'gi')
+      : new RegExp(`\\b${escaped}\\b`, 'gi');
     out = out.replace(re, (match) => {
-      const key = `__TERM${i}_${placeholders.size}__`;
+      const key = `#T${i}_${placeholders.size}#`;
       placeholders.set(key, match);
       return key;
     });
@@ -95,10 +122,13 @@ export function protectTerms(text) {
 }
 
 export function restoreTerms(text, placeholders) {
-  let out = text;
+  let out = String(text ?? '');
   for (const [key, value] of placeholders) {
     out = out.split(key).join(value);
   }
+  out = out.replace(/#\s*T\s*(\d+)\s*_(\d+)\s*#/g, (full, i, n) => {
+    return placeholders.get(`#T${i}_${n}#`) ?? full;
+  });
   return out;
 }
 

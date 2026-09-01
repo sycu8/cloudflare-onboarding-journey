@@ -452,7 +452,7 @@ The site is **trilingual** (vi / en / km). Khmer copy lives in:
 - `src/i18n/km.ts` — core UI dictionary
 - `src/data/contentRoadmap/topicKm.ts` — 88 roadmap topic overlays
 - `src/data/roleRoadmaps/stepKm.ts` + `stepTopicsKm.ts` — role week plans
-- `src/data/tutorialPreviews.km.json` — tutorial body overlay (generate with script below)
+- `src/data/tutorialPreviews.vi.json` + `tutorialPreviews.km.json` — tutorial body overlays (generate with script below)
 - Inline `.lang-km` spans across pages (fallback to English when `km` missing)
 
 Regenerate Khmer from English (machine translation; Cloudflare/IT terms preserved):
@@ -460,11 +460,15 @@ Regenerate Khmer from English (machine translation; Cloudflare/IT terms preserve
 ```bash
 npm run translate:km:topics      # content roadmap topics
 npm run translate:km:steps       # role roadmaps
-npm run translate:km:tutorials     # all 164 tutorials (~hours; checkpoints every 5)
+npm run translate:tutorials      # missing VI + KM tutorial bodies (resumes; checkpoints each tutorial)
+npm run translate:tutorials:vi   # Vietnamese bodies only
+npm run translate:km:tutorials   # Khmer bodies only
+npm run translate:tutorials:report
 npm run verify:i18n              # after npm run build
 ```
 
-Set `TRANSLATE_PROVIDER=dry-run` to skip API calls. Optional: `TRANSLATE_PROVIDER=workers-ai` with `CLOUDFLARE_ACCOUNT_ID` + `CLOUDFLARE_API_TOKEN`.
+Set `TRANSLATE_PROVIDER=dry-run` to skip API calls. Default is Workers AI when `CLOUDFLARE_API_TOKEN` is set (account id from env or `wrangler.toml`); otherwise Google Translate. Optional: `TRANSLATE_PROVIDER=workers-ai|google`.
+Bodies without an overlay fall back to English in the matching `lang-vi` / `lang-km` layer; re-run `translate:tutorials` after crawling new docs.
 
 ---
 

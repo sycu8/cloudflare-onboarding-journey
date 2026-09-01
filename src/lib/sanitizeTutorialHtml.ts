@@ -18,7 +18,6 @@ export function sanitizeTutorialHtml(html: string): string {
 
 const CODE_RE = /<code\b([^>]*)>([\s\S]*?)<\/code>/gi;
 const STRONG_RE = /<strong\b([^>]*)>([\s\S]*?)<\/strong>/gi;
-const KHMER_RE = /[\u1780-\u17FF]/;
 
 type Mark = { attrs: string; inner: string };
 
@@ -66,7 +65,7 @@ export function restoreEnglishTermsFromSource(translated: string, english: strin
   let next = replaceMarks(translated, CODE_RE, 'code', collectMarks(english, CODE_RE), () => true);
   next = replaceMarks(next, STRONG_RE, 'strong', collectMarks(english, STRONG_RE), (en, translatedInner) => {
     if (!isEnglishUiLabel(en.inner)) return false;
-    return KHMER_RE.test(translatedInner);
+    return translatedInner !== en.inner;
   });
   return next;
 }

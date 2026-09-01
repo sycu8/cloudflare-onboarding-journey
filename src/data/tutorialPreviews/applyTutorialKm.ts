@@ -107,6 +107,7 @@ function mergeSection(
   };
 }
 
+/** Duplicate-anchor key: `overview`, then `overview#2`. Keep in sync with scripts/lib/tutorial-overlay-key.mjs */
 function sectionOverlayKey(sections: TutorialSection[], sectionIndex: number): string {
   const anchor = sections[sectionIndex].anchor;
   let prior = 0;

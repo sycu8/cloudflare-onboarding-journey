@@ -74,6 +74,7 @@ if (missingNotes) {
 }
 
 const kmJsonPath = 'src/data/tutorialPreviews.km.json';
+const viJsonPath = 'src/data/tutorialPreviews.vi.json';
 if (existsSync(kmJsonPath)) {
   const kmJson = JSON.parse(readFileSync(kmJsonPath, 'utf8'));
   const kmCount = Object.keys(kmJson).length;
@@ -83,6 +84,14 @@ if (existsSync(kmJsonPath)) {
   }
 } else {
   console.warn('⚠ tutorialPreviews.km.json missing');
+}
+if (existsSync(viJsonPath)) {
+  const viJson = JSON.parse(readFileSync(viJsonPath, 'utf8'));
+  const viCount = Object.keys(viJson).length;
+  const viComplete = Object.values(viJson).filter((e) => e.complete).length;
+  console.log(`✓ tutorialPreviews.vi.json has ${viCount} entries (${viComplete} complete)`);
+} else {
+  console.warn('⚠ tutorialPreviews.vi.json missing');
 }
 
 const topicsEn = readFileSync('src/data/roleRoadmaps/stepTopicsEn.ts', 'utf8');

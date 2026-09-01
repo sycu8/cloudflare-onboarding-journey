@@ -37,7 +37,11 @@
     "translate:km": "node scripts/translate-to-km.mjs",
     "translate:km:topics": "node scripts/translate-to-km.mjs --roadmap-topics",
     "translate:km:steps": "node scripts/translate-to-km.mjs --roadmap-steps",
-    "translate:km:tutorials": "node scripts/translate-to-km.mjs --tutorials",
+    "translate:km:tutorials": "node scripts/fill-tutorial-overlays.mjs --lang=km",
+    "translate:tutorials": "node scripts/fill-tutorial-overlays.mjs --lang=both",
+    "translate:tutorials:vi": "node scripts/fill-tutorial-overlays.mjs --lang=vi",
+    "translate:tutorials:report": "node scripts/fill-tutorial-overlays.mjs --report",
+    "test:tutorial-html": "node --experimental-strip-types scripts/test-sanitize-tutorial-html.mjs",
     "verify:i18n": "node scripts/verify-i18n.mjs",
     "astro": "astro"
   },

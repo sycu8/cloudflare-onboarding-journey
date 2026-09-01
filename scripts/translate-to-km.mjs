@@ -9,10 +9,10 @@
  *
  * Env: TRANSLATE_PROVIDER=google|workers-ai|dry-run
  */
-import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { translateEnToKm, hasKhmer } from './lib/translate-km.mjs';
+import { translateEnToKm } from './lib/translate-km.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
@@ -145,64 +145,20 @@ ${topicsBody}
 }
 
 async function generateTutorialKm() {
-  const jsonPath = join(root, 'src/data/tutorialPreviews.data.json');
-  const outPath = join(root, 'src/data/tutorialPreviews.km.json');
-  const data = JSON.parse(readFileSync(jsonPath, 'utf8'));
-  let overlay = existsSync(outPath) ? JSON.parse(readFileSync(outPath, 'utf8')) : {};
-
-  const paths = Object.keys(data).filter((p) => !only || p.includes(only));
-  let count = 0;
-
-  for (const path of paths) {
-    if (overlay[path]?.complete) {
-      console.log(`skip (done) ${path}`);
-      continue;
-    }
-    const preview = data[path];
-    console.log(`tutorial ${path}`);
-    const entry = {
-      titleKm: preview.title ? await translateString(preview.title) : undefined,
-      summaryKm: preview.summaryEn ? await translateString(preview.summaryEn) : undefined,
-      introKm: preview.introEn ? await translateString(preview.introEn) : undefined,
-      notesKm: preview.notesEn?.length ? await translateStringArray(preview.notesEn) : undefined,
-      sections: {},
-    };
-
-    if (preview.sections?.length) {
-      for (const section of preview.sections) {
-        const sec = {
-          titleKm: section.title ? await translateString(section.title) : undefined,
-          summaryKm: section.summaryEn ? await translateString(section.summaryEn) : undefined,
-          blocks: [],
-        };
-        for (const block of section.blocks) {
-          if (block.type === 'code') {
-            sec.blocks.push({ type: 'code', skip: true });
-            continue;
-          }
-          if (block.type === 'paragraph' || block.type === 'note') {
-            sec.blocks.push({ type: block.type, htmlKm: await translateString(block.html) });
-          } else if (block.type === 'list') {
-            sec.blocks.push({
-              type: 'list',
-              ordered: block.ordered,
-              itemsKm: await translateStringArray(block.items),
-            });
-          }
-        }
-        entry.sections[section.anchor] = sec;
-      }
-    }
-
-    entry.complete = true;
-    overlay[path] = entry;
-    writeFileSync(outPath, `${JSON.stringify(overlay, null, 2)}\n`, 'utf8');
-    count++;
-    if (count % 5 === 0) console.log(`checkpoint ${Object.keys(overlay).filter((k) => overlay[k].complete).length}/164`);
-  }
-
-  writeFileSync(outPath, `${JSON.stringify(overlay, null, 2)}\n`, 'utf8');
-  console.log(`Wrote tutorialPreviews.km.json (${paths.length} tutorials)`);
+  const { spawn } = await import('node:child_process');
+  const extra = [];
+  if (only) extra.push(`--only=${only}`);
+  await new Promise((resolve, reject) => {
+    const child = spawn(
+      process.execPath,
+      [join(root, 'scripts/fill-tutorial-overlays.mjs'), '--lang=km', ...extra],
+      { stdio: 'inherit' },
+    );
+    child.on('exit', (code) =>
+      code === 0 ? resolve() : reject(new Error(`fill-tutorial-overlays exit ${code}`)),
+    );
+    child.on('error', reject);
+  });
 }
 
 async function generateGlossaryKm() {
