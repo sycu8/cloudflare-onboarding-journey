@@ -10,6 +10,7 @@ import { useCases } from '../../data/useCases';
 import { roleRoadmaps } from '../../data/roleRoadmaps';
 import { contentRoadmapStages } from '../../data/contentRoadmap';
 import { getAllTutorialPreviews, getTutorialHubPath } from '../../data/tutorialPreviews';
+import { developerLabTracks, developerLabsIntro } from '../../data/developerLabs';
 import type { SearchDocument } from '../../types/search';
 
 function doc(
@@ -276,6 +277,30 @@ export function buildSearchDocuments(): SearchDocument[] {
         ),
       );
     }
+  }
+
+  out.push(
+    doc(
+      'developer-labs',
+      '/tracks/developer-platform/#developer-labs',
+      { vi: 'Developer Labs', en: 'Developer Labs', km: 'Developer Labs' },
+      developerLabsIntro,
+      'Lab',
+      'labs.cloudflare.dev workers mcp agents sandbox',
+    ),
+  );
+
+  for (const lab of developerLabTracks) {
+    out.push(
+      doc(
+        `developer-lab-${lab.id}`,
+        `/tracks/developer-platform/#lab-${lab.id}`,
+        lab.title,
+        lab.description,
+        'Lab',
+        `${lab.tags.join(' ')} ${lab.outcome.en}`,
+      ),
+    );
   }
 
   for (const resource of resources) {

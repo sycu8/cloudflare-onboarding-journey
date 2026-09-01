@@ -18,7 +18,7 @@ type Props = {
 const { module, trackSlug } = Astro.props;
 ---
 
-<article class="card">
+<article class="card" id={module.id}>
   <div class="flex flex-wrap items-center gap-2">
     {module.role ? (
       <span class="badge badge-accent">

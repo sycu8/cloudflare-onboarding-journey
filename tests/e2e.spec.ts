@@ -112,6 +112,9 @@ test.describe('Cloudflare Starter Hub E2E', () => {
     await expect(page.locator('#reference-diagrams')).toBeVisible();
     await page.goto(`${BASE}/resources#github`);
     await expect(page.locator('#github')).toBeVisible();
+    await page.goto(`${BASE}/resources#labs`);
+    await expect(page.locator('#labs')).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Developer Labs/i }).first()).toBeVisible();
   });
 
   test('changelog and status pages load', async ({ page }) => {

@@ -199,14 +199,14 @@ export const resources: ResourceCard[] = [
   },
   {
     slug: 'hands-on-labs',
-    title: { vi: 'Hands-on labs', en: 'Hands-on labs' },
+    title: { vi: 'Developer Labs (Workers · MCP · Agents · Sandbox)', en: 'Developer Labs (Workers · MCP · Agents · Sandbox)' },
     description: {
-      vi: 'Lab thực hành Pages, Workers, Zero Trust (đang phát triển).',
-      en: 'Hands-on labs for Pages, Workers, Zero Trust (in development).',
+      vi: '22 lab guided từ labs.cloudflare.dev — Bookmark API, MCP server, Agents SDK, Sandbox. Gắn với track Developer Platform.',
+      en: '22 guided labs from labs.cloudflare.dev — Bookmark API, MCP server, Agents SDK, Sandbox. Mapped to the Developer Platform track.',
     },
     type: 'lab',
     href: '/resources#labs',
-    status: 'coming-soon',
+    status: 'available',
   },
   {
     slug: 'first-week',
