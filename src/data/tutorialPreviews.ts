@@ -1,14 +1,14 @@
 import type { CloudflareResource } from './cloudflareResources';
-import { applyTutorialKm } from './tutorialPreviews/applyTutorialKm';
+import { applyTutorialI18n } from './tutorialPreviews/applyTutorialKm';
 import previewsJson from './tutorialPreviews.data.json';
 import { getDiagramBySlug } from './referenceDiagrams';
 import { pickLocalizedText } from '../i18n';
 import type { Language } from '../i18n/types';
 
 export type TutorialContentBlock =
-  | { type: 'paragraph'; html: string; htmlKm?: string }
-  | { type: 'note'; html: string; htmlKm?: string }
-  | { type: 'list'; ordered: boolean; items: string[]; itemsKm?: string[] }
+  | { type: 'paragraph'; html: string; htmlVi?: string; htmlKm?: string }
+  | { type: 'note'; html: string; htmlVi?: string; htmlKm?: string }
+  | { type: 'list'; ordered: boolean; items: string[]; itemsVi?: string[]; itemsKm?: string[] }
   | { type: 'code'; language: string; code: string };
 
 export type TutorialSection = {
@@ -71,7 +71,7 @@ export function getTutorialPreviewByPath(path: string): TutorialPreview | undefi
   const key = path.startsWith('/') ? path : `/${path}`;
   const preview =
     previewsByPath[key.replace(/\/$/, '')] ?? previewsByPath[`${key.replace(/\/$/, '')}/`];
-  return preview ? applyTutorialKm(preview) : undefined;
+  return preview ? applyTutorialI18n(preview) : undefined;
 }
 
 export function getTutorialPreviewForResource(
@@ -86,7 +86,7 @@ export function hasTutorialPreview(resource: Pick<CloudflareResource, 'path'>): 
 
 export function getAllTutorialPreviews(): TutorialPreview[] {
   return Object.values(previewsByPath)
-    .map(applyTutorialKm)
+    .map(applyTutorialI18n)
     .sort((a, b) => a.title.localeCompare(b.title));
 }
 
@@ -119,6 +119,15 @@ export function getTutorialSectionSummaryEn(
   if (section.summaryEn) return section.summaryEn;
   if (!section.summaryVi) return undefined;
   return `Read the "${section.title}" section below — open the official docs link for full screenshots and configuration tabs.`;
+}
+
+/** Khmer section blurb — uses summaryKm when present, else a concise default from the section title. */
+export function getTutorialSectionSummaryKm(
+  section: Pick<TutorialSection, 'title' | 'titleKm' | 'summaryKm' | 'summaryEn'>,
+): string | undefined {
+  if (section.summaryKm) return section.summaryKm;
+  const title = section.titleKm ?? section.title;
+  return `អានផ្នែក «${title}» ខាងក្រោម — បើកតំណ docs ផ្លូវការសម្រាប់រូបភាព និង tab កំណត់។`;
 }
 
 export function getTutorialTitleForResource(

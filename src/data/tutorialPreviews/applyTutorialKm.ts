@@ -3,59 +3,97 @@ import type {
   TutorialPreview,
   TutorialSection,
 } from '../tutorialPreviews';
+import { sanitizeTutorialHtml } from '../../lib/sanitizeTutorialHtml';
 import tutorialKmJson from '../tutorialPreviews.km.json';
+import tutorialViJson from '../tutorialPreviews.vi.json';
 
-type TutorialKmBlockOverlay =
-  | { type: 'paragraph' | 'note'; htmlKm?: string; skip?: boolean }
-  | { type: 'list'; ordered?: boolean; itemsKm?: string[]; skip?: boolean }
-  | { type: 'code'; skip?: boolean };
-
-type TutorialKmSectionOverlay = {
-  titleKm?: string;
-  summaryKm?: string;
-  blocks?: TutorialKmBlockOverlay[];
+type TutorialBlockOverlay = {
+  type?: string;
+  htmlVi?: string;
+  htmlKm?: string;
+  itemsVi?: string[];
+  itemsKm?: string[];
+  skip?: boolean;
 };
 
-type TutorialKmOverlay = {
+type TutorialSectionOverlay = {
+  titleVi?: string;
   titleKm?: string;
+  summaryVi?: string;
+  summaryKm?: string;
+  blocks?: TutorialBlockOverlay[];
+};
+
+type TutorialLangOverlay = {
+  titleVi?: string;
+  titleKm?: string;
+  summaryVi?: string;
   summaryKm?: string;
   introKm?: string;
+  explanationVi?: string;
+  notesVi?: string[];
   notesKm?: string[];
-  sections?: Record<string, TutorialKmSectionOverlay>;
+  sections?: Record<string, TutorialSectionOverlay>;
   complete?: boolean;
 };
 
-const tutorialKmByPath = tutorialKmJson as Record<string, TutorialKmOverlay>;
+const tutorialKmByPath = tutorialKmJson as Record<string, TutorialLangOverlay>;
+const tutorialViByPath = tutorialViJson as Record<string, TutorialLangOverlay>;
+
+function sanitizeBlock(block: TutorialContentBlock): TutorialContentBlock {
+  if (block.type === 'paragraph' || block.type === 'note') {
+    return {
+      ...block,
+      html: sanitizeTutorialHtml(block.html),
+      ...(block.htmlVi ? { htmlVi: sanitizeTutorialHtml(block.htmlVi) } : {}),
+      ...(block.htmlKm ? { htmlKm: sanitizeTutorialHtml(block.htmlKm) } : {}),
+    };
+  }
+  if (block.type === 'list') {
+    return {
+      ...block,
+      items: block.items.map(sanitizeTutorialHtml),
+      ...(block.itemsVi ? { itemsVi: block.itemsVi.map(sanitizeTutorialHtml) } : {}),
+      ...(block.itemsKm ? { itemsKm: block.itemsKm.map(sanitizeTutorialHtml) } : {}),
+    };
+  }
+  return block;
+}
 
 function mergeBlock(
   block: TutorialContentBlock,
-  overlay?: TutorialKmBlockOverlay,
+  overlay?: TutorialBlockOverlay,
 ): TutorialContentBlock {
-  if (!overlay || overlay.skip) return block;
+  if (!overlay || overlay.skip) return sanitizeBlock(block);
   if (block.type === 'paragraph' || block.type === 'note') {
-    if (overlay.type === block.type && overlay.htmlKm) {
-      return { ...block, htmlKm: overlay.htmlKm };
-    }
-    return block;
+    if (overlay.type && overlay.type !== block.type) return sanitizeBlock(block);
+    return sanitizeBlock({
+      ...block,
+      ...(overlay.htmlVi ? { htmlVi: overlay.htmlVi } : {}),
+      ...(overlay.htmlKm ? { htmlKm: overlay.htmlKm } : {}),
+    });
   }
   if (block.type === 'list') {
-    if (overlay.type === 'list' && overlay.itemsKm) {
-      return { ...block, itemsKm: overlay.itemsKm };
-    }
-    return block;
+    return sanitizeBlock({
+      ...block,
+      ...(overlay.itemsVi ? { itemsVi: overlay.itemsVi } : {}),
+      ...(overlay.itemsKm ? { itemsKm: overlay.itemsKm } : {}),
+    });
   }
   return block;
 }
 
 function mergeSection(
   section: TutorialSection,
-  overlay?: TutorialKmSectionOverlay,
+  overlay?: TutorialSectionOverlay,
 ): TutorialSection {
-  if (!overlay) return section;
-  const blocks = section.blocks.map((block, i) => mergeBlock(block, overlay.blocks?.[i]));
+  const blocks = section.blocks.map((block, i) => mergeBlock(block, overlay?.blocks?.[i]));
+  if (!overlay) return { ...section, blocks };
   return {
     ...section,
+    ...(overlay.titleVi ? { titleVi: overlay.titleVi } : {}),
     ...(overlay.titleKm ? { titleKm: overlay.titleKm } : {}),
+    ...(overlay.summaryVi ? { summaryVi: overlay.summaryVi } : {}),
     ...(overlay.summaryKm ? { summaryKm: overlay.summaryKm } : {}),
     blocks,
   };
@@ -70,24 +108,44 @@ function sectionOverlayKey(sections: TutorialSection[], sectionIndex: number): s
   return prior === 0 ? anchor : `${anchor}#${prior + 1}`;
 }
 
-export function applyTutorialKm(preview: TutorialPreview): TutorialPreview {
-  const km = tutorialKmByPath[preview.path];
-  if (!km) return preview;
+function applyOverlay(preview: TutorialPreview, overlay?: TutorialLangOverlay): TutorialPreview {
+  if (!overlay) {
+    return {
+      ...preview,
+      sections: preview.sections?.map((section) => ({
+        ...section,
+        blocks: section.blocks.map(sanitizeBlock),
+      })),
+    };
+  }
   return {
     ...preview,
-    ...(km.titleKm ? { titleKm: km.titleKm } : {}),
-    ...(km.summaryKm ? { summaryKm: km.summaryKm } : {}),
-    ...(km.introKm ? { introKm: km.introKm } : {}),
-    ...(km.notesKm ? { notesKm: km.notesKm } : {}),
-    ...(preview.sections && km.sections
+    ...(overlay.titleVi ? { titleVi: overlay.titleVi } : {}),
+    ...(overlay.titleKm ? { titleKm: overlay.titleKm } : {}),
+    ...(overlay.summaryVi ? { summaryVi: overlay.summaryVi } : {}),
+    ...(overlay.summaryKm ? { summaryKm: overlay.summaryKm } : {}),
+    ...(overlay.introKm ? { introKm: overlay.introKm } : {}),
+    ...(overlay.explanationVi ? { explanationVi: overlay.explanationVi } : {}),
+    ...(overlay.notesVi ? { notesVi: overlay.notesVi } : {}),
+    ...(overlay.notesKm ? { notesKm: overlay.notesKm } : {}),
+    ...(preview.sections
       ? {
           sections: preview.sections.map((section, sectionIndex) =>
             mergeSection(
               section,
-              km.sections?.[sectionOverlayKey(preview.sections!, sectionIndex)],
+              overlay.sections?.[sectionOverlayKey(preview.sections!, sectionIndex)],
             ),
           ),
         }
       : {}),
   };
 }
+
+/** Apply Vietnamese + Khmer overlays, then sanitize HTML so lang wrappers cannot leak. */
+export function applyTutorialI18n(preview: TutorialPreview): TutorialPreview {
+  const withVi = applyOverlay(preview, tutorialViByPath[preview.path]);
+  return applyOverlay(withVi, tutorialKmByPath[preview.path]);
+}
+
+/** @deprecated Use applyTutorialI18n */
+export const applyTutorialKm = applyTutorialI18n;

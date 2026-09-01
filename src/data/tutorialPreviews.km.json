@@ -412,7 +412,7 @@
           },
           {
             "type": "paragraph",
-            "htmlKm": "នៅក្នុងមេរៀននេះ អ្នកនឹងបង្កើតសមាសធាតុ <code class=\"tutorial-inline-code\"><form></code> ដោយប្រើ React ហើយបន្ថែមវាទៅក្នុងកម្មវិធីទំព័រតែមួយដែលបង្កើតឡើងដោយ <code class=\"tutorial-inline-code\">create-react-app</code>។ ទោះបីជាអ្នកកំពុងប្រើ <code class=\"tutorial-inline-code\">create-react-app</code> (CRA) ក៏ដោយ ក៏គោលគំនិតនឹងអនុវត្តចំពោះក្របខ័ណ្ឌ React ណាមួយរួមទាំង Next.js, Gatsby និងច្រើនទៀត។ អ្នក​នឹង​ប្រើ Formspree ដើម្បី​ប្រមូល​ទិន្នន័យ​ដែល​បាន​ដាក់​ស្នើ និង​ផ្ញើ​ការ​ជូន​ដំណឹង​តាម​អ៊ីមែល​នៅ​ពេល​ការ​ដាក់​ស្នើ​ថ្មី​មក​ដល់ ដោយ​មិន​ចាំបាច់​តម្រូវ​ឱ្យ​មាន​ការ​សរសេរ​កូដ​ខាង​ម៉ាស៊ីន​មេ​ឡើយ។"
+            "htmlKm": "នៅក្នុងមេរៀននេះ អ្នកនឹងបង្កើតសមាសធាតុ <code class=\"tutorial-inline-code\">&lt;form&gt;</code> ដោយប្រើ React ហើយបន្ថែមវាទៅក្នុងកម្មវិធីទំព័រតែមួយដែលបង្កើតឡើងដោយ <code class=\"tutorial-inline-code\">create-react-app</code>។ ទោះបីជាអ្នកកំពុងប្រើ <code class=\"tutorial-inline-code\">create-react-app</code> (CRA) ក៏ដោយ ក៏គោលគំនិតនឹងអនុវត្តចំពោះក្របខ័ណ្ឌ React ណាមួយរួមទាំង Next.js, Gatsby និងច្រើនទៀត។ អ្នក​នឹង​ប្រើ Formspree ដើម្បី​ប្រមូល​ទិន្នន័យ​ដែល​បាន​ដាក់​ស្នើ និង​ផ្ញើ​ការ​ជូន​ដំណឹង​តាម​អ៊ីមែល​នៅ​ពេល​ការ​ដាក់​ស្នើ​ថ្មី​មក​ដល់ ដោយ​មិន​ចាំបាច់​តម្រូវ​ឱ្យ​មាន​ការ​សរសេរ​កូដ​ខាង​ម៉ាស៊ីន​មេ​ឡើយ។"
           },
           {
             "type": "paragraph",
@@ -1511,7 +1511,7 @@
           },
           {
             "type": "paragraph",
-            "htmlKm": "នៅក្នុងមេរៀននេះ អ្នកនឹងបង្កើត <code class=\"tutorial-inline-code\"><form></code> ដោយប្រើ HTML និង CSS ធម្មតា ហើយបន្ថែមវាទៅគេហទំព័រ HTML ឋិតិវន្តដែលបង្ហោះនៅលើ Cloudflare Pages ។ សូមមើល <a href=\"https://developers.cloudflare.com/pages/get-started/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Get started មគ្គុទ្ទេសក៍</a> ដើម្បីស្គាល់ខ្លួនអ្នកជាមួយវេទិកានេះ។ អ្នក​នឹង​ប្រើ Formspree ដើម្បី​ប្រមូល​ទិន្នន័យ​ដែល​បាន​ដាក់​ស្នើ និង​ផ្ញើ​ការ​ជូន​ដំណឹង​តាម​អ៊ីមែល​នៅ​ពេល​ការ​ដាក់​ស្នើ​ថ្មី​មក​ដល់ ដោយ​មិន​ចាំបាច់​តម្រូវ​ឱ្យ​មាន JavaScript ឬ back-end coding ឡើយ។"
+            "htmlKm": "នៅក្នុងមេរៀននេះ អ្នកនឹងបង្កើត <code class=\"tutorial-inline-code\">&lt;form&gt;</code> ដោយប្រើ HTML និង CSS ធម្មតា ហើយបន្ថែមវាទៅគេហទំព័រ HTML ឋិតិវន្តដែលបង្ហោះនៅលើ Cloudflare Pages។ សូមមើល <a href=\"https://developers.cloudflare.com/pages/get-started/\" class=\"link\" target=\"_blank\" rel=\"noopener noreferrer\">Get started guide</a> ដើម្បីស្គាល់វេទិកានេះ។ អ្នកនឹងប្រើ Formspree ដើម្បីប្រមូលទិន្នន័យដែលបានដាក់ស្នើ និងផ្ញើការជូនដំណឹងតាមអ៊ីមែលនៅពេលមាន submission ថ្មី — ដោយមិនចាំបាច់ JavaScript ឬ back-end coding។"
           }
         ]
       },
@@ -1533,7 +1533,7 @@
           },
           {
             "type": "paragraph",
-            "htmlKm": "ឥឡូវនេះ អ្នកអាចចាប់ផ្តើមធ្វើការនៅក្នុងថត <code class=\"tutorial-inline-code\">គម្រោងថ្មី</code> ដែលអ្នកបានបង្កើត។"
+            "htmlKm": "ឥឡូវនេះ អ្នកអាចចាប់ផ្តើមធ្វើការនៅក្នុងថត <code class=\"tutorial-inline-code\">new-project</code> ដែលអ្នកបានបង្កើត។"
           }
         ]
       },
@@ -1559,7 +1559,7 @@
           },
           {
             "type": "paragraph",
-            "htmlKm": "គុណលក្ខណៈ <code class=\"tutorial-inline-code\">សកម្មភាព</code> កំណត់កន្លែងដែលទិន្នន័យទម្រង់ត្រូវបានផ្ញើ។ អ្នកនឹងធ្វើបច្ចុប្បន្នភាពវានៅពេលក្រោយ ដើម្បីផ្ញើទិន្នន័យទម្រង់ទៅ Formspree ។ ស្លាក <code class=\"tutorial-inline-code\"><input></code> ទាំងអស់ត្រូវតែមាន <code class=\"tutorial-inline-code\">ឈ្មោះ</code> ដើម្បីចាប់យកទិន្នន័យរបស់អ្នកប្រើប្រាស់។ តម្លៃ <code class=\"tutorial-inline-code\">សម្រាប់</code> និង <code class=\"tutorial-inline-code\">id</code> ត្រូវតែផ្គូផ្គង ដើម្បីភ្ជាប់ <code class=\"tutorial-inline-code\"><label></code> ជាមួយ <code class=\"tutorial-inline-code\"><input></code> សម្រាប់ __0ersibility.32"
+            "htmlKm": "គុណលក្ខណៈ <code class=\"tutorial-inline-code\">action</code> កំណត់កន្លែងដែលទិន្នន័យទម្រង់ត្រូវបានផ្ញើ។ អ្នកនឹងធ្វើបច្ចុប្បន្នភាពវានៅពេលក្រោយ ដើម្បីផ្ញើទិន្នន័យទម្រង់ទៅ Formspree។ ស្លាក <code class=\"tutorial-inline-code\">&lt;input&gt;</code> ទាំងអស់ត្រូវតែមាន <code class=\"tutorial-inline-code\">name</code> ដើម្បីចាប់យកទិន្នន័យអ្នកប្រើ។ តម្លៃ <code class=\"tutorial-inline-code\">for</code> និង <code class=\"tutorial-inline-code\">id</code> ត្រូវតែផ្គូផ្គង ដើម្បីភ្ជាប់ <code class=\"tutorial-inline-code\">&lt;label&gt;</code> ជាមួយ <code class=\"tutorial-inline-code\">&lt;input&gt;</code> សម្រាប់ accessibility ដូច screen reader។"
           },
           {
             "type": "paragraph",
