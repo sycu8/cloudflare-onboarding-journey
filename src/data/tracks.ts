@@ -356,11 +356,11 @@ export const tracks: Track[] = [
           {
             title: { vi: 'Speed & Images', en: 'Speed & Images', km: 'Speed & Images' },
             body: {
-              vi: 'Brotli, Early Hints, HTTP/3; resize ảnh WebP/AVIF tại edge.',
-              en: 'Brotli, Early Hints, HTTP/3; resize images to WebP/AVIF at the edge.',
-              km: 'Brotli, Early Hints, HTTP/3; ប្តូរទំហំរូបភាពទៅ WebP/AVIF នៅ edge។',
+              vi: 'Brotli, Early Hints, HTTP/3; resize ảnh WebP/AVIF tại edge. Marketing: thêm Zaraz & Cloudflare Fonts.',
+              en: 'Brotli, Early Hints, HTTP/3; resize images to WebP/AVIF at the edge. Marketing: also Zaraz & Cloudflare Fonts.',
+              km: 'Brotli, Early Hints, HTTP/3; ប្តូរទំហំរូបភាពទៅ WebP/AVIF នៅ edge។ Marketing: Zaraz & Cloudflare Fonts។',
             },
-            hubLink: '/content-delivery#speed-optimization',
+            hubLink: '/content-delivery#zaraz-tags',
           },
           {
             title: { vi: 'Đo hit ratio & Core Web Vitals', en: 'Measure hit ratio & Core Web Vitals', km: 'វាស់ hit ratio និង Core Web Vitals' },
@@ -483,6 +483,14 @@ export const tracks: Track[] = [
       { href: '/use-cases/protect-website/', label: { vi: 'Bảo vệ website', en: 'Protect a website', km: 'ការពារ website' } },
       { href: '/use-cases/secure-api/', label: { vi: 'Bảo vệ API', en: 'Secure an API', km: 'ការពារ API' } },
       { href: '/use-cases/defend-ddos-attacks/', label: { vi: 'Chống DDoS', en: 'Defend against DDoS', km: 'ការពារ DDoS' } },
+      {
+        href: '/use-cases/optimize-marketing-site/',
+        label: {
+          vi: 'Tối ưu landing marketing',
+          en: 'Optimize marketing site',
+          km: 'Optimize marketing site',
+        },
+      },
     ],
     commonMistakes: {
       vi: [

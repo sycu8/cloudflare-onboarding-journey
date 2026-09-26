@@ -622,6 +622,19 @@ export const topicKmById: Record<string, Partial<TopicKmOverlay>> = {
     suggestedExerciseKm:
       'ប្រៀបធៀប TTFB/LCP before/after enable cache rule /assets/*។',
   },
+  'uc-optimize-marketing-site': {
+    summaryKm:
+      'Landing slow from GTM/pixel + Google Fonts: enable basic Speed, Cloudflare Fonts, migrate tags to Zaraz, measure LCP/INP with Web Analytics — dashboard-first, no code.',
+    whyItMattersKm:
+      'Persona marketing/growth — /use-cases/optimize-marketing-site and Content delivery #zaraz-tags / #cloudflare-fonts.',
+    suggestedExerciseKm:
+      'List tags on a landing page; add one tool in Zaraz and compare third-party requests before/after.',
+    commonMistakesKm: [
+      'Stack every pixel client-side before using Zaraz',
+      'Enable Auto Minify/Rocket Loader without staging tests',
+      'Only watch Lighthouse lab, skip RUM after campaign',
+    ],
+  },
   'uc-secure-api': {
     summaryKm:
       'API proxied Cloudflare៖ rate limit, WAF OWASP, API Shield schema validation (បើមាន), mTLS/token partner។ log និង alert anomaly។',

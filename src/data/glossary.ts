@@ -299,6 +299,36 @@ export const glossary: GlossaryTerm[] = [
     },
   },
   {
+    term: 'Tag manager',
+    category: 'Analytics',
+    relatedTrack: 'application-services',
+    definition: {
+      vi: 'Tag manager là nơi cấu hình analytics/ads (GA, pixel…) mà không sửa HTML mỗi lần — trên Cloudflare, Zaraz làm việc này phía edge/server thay vì chạy hết script trên browser.',
+      en: 'A tag manager configures analytics/ads (GA, pixels…) without editing HTML every time — on Cloudflare, Zaraz does this at the edge/server instead of running every script in the browser.',
+      km: 'Tag manager កំណត់ analytics/ads (GA, pixel…) ដោយមិនកែ HTML រាល់លើក — នៅ Cloudflare, Zaraz ធ្វើនៅ edge/server ជំនួស script ទាំងអស់លើ browser។',
+    },
+  },
+  {
+    term: 'Zaraz',
+    category: 'Analytics',
+    relatedTrack: 'application-services',
+    definition: {
+      vi: 'Zaraz là tag manager của Cloudflare: tool third-party chạy phía server/edge — giảm JS trên trang, thường cải thiện tốc độ và kiểm soát consent tốt hơn GTM client-side.',
+      en: 'Zaraz is Cloudflare’s tag manager: third-party tools run server/edge-side — less JS on the page, often better speed and consent control than client-side GTM.',
+      km: 'Zaraz is Cloudflare tag manager: third-party tools run at server/edge — less page JS; often better speed and consent than client-side GTM.',
+    },
+  },
+  {
+    term: 'Cloudflare Fonts',
+    category: 'Core',
+    relatedTrack: 'application-services',
+    definition: {
+      vi: 'Cloudflare Fonts phục vụ web font (ví dụ Google Fonts) qua edge Cloudflare — giảm gọi thẳng third-party font CDN, giúp privacy và thường cải thiện thời gian tải font.',
+      en: 'Cloudflare Fonts serves web fonts (e.g. Google Fonts) via the Cloudflare edge — fewer direct third-party font CDN calls, better privacy, and often faster font load.',
+      km: 'Cloudflare Fonts serves web fonts (e.g. Google Fonts) via Cloudflare edge — fewer direct third-party font CDN calls; helps privacy and often faster font load.',
+    },
+  },
+  {
     term: 'Hyperdrive',
     category: 'Developer Platform',
     relatedTrack: 'developer-platform',

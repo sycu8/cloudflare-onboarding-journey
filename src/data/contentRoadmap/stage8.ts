@@ -55,6 +55,35 @@ export const stage8: ContentRoadmapStage = {
       },
     ),
     topic(
+      'uc-optimize-marketing-site',
+      'Optimize marketing site (tags & fonts)',
+      'Optimize marketing site (tags & fonts)',
+      'Landing chậm vì GTM/pixel + Google Fonts: bật Speed cơ bản, Cloudflare Fonts, migrate tag sang Zaraz, đo LCP/INP bằng Web Analytics — chỉnh từ dashboard, không cần code.',
+      'Persona marketing/growth — tình huống /use-cases/optimize-marketing-site và Content delivery #zaraz-tags / #cloudflare-fonts.',
+      {
+        level: 'beginner',
+        filterTags: ['performance'],
+        sourceUrls: [
+          'https://developers.cloudflare.com/zaraz/',
+          'https://developers.cloudflare.com/speed/optimization/content/fonts/',
+        ],
+        relatedExistingRoutes: [
+          '/use-cases/optimize-marketing-site',
+          '/content-delivery#zaraz-tags',
+          '/content-delivery#cloudflare-fonts',
+        ],
+        relatedCloudflareProducts: ['Zaraz', 'Cloudflare Fonts', 'Speed', 'Web Analytics'],
+        prerequisites: ['uc-speed-up-website'],
+        suggestedExerciseVi:
+          'Liệt kê tag đang load trên landing; thêm 1 tool vào Zaraz và so sánh số request third-party trước/sau.',
+        commonMistakesVi: [
+          'Nhồi hết pixel client-side trước khi dùng Zaraz',
+          'Bật Auto Minify/Rocket Loader không test staging',
+          'Chỉ nhìn Lighthouse lab, bỏ RUM sau campaign',
+        ],
+      },
+    ),
+    topic(
       'uc-secure-api',
       'Secure an API',
       'Secure an API',

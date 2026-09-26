@@ -734,6 +734,17 @@ export const productFlows: ProductFlowDef[] = [
     L('Tag chạy phía server qua Zaraz — giảm JS nặng trên browser.', 'Tags run server-side via Zaraz — less heavy JS in the browser.'),
   ),
   pathFlow(
+    'fonts',
+    L('Cloudflare Fonts', 'Cloudflare Fonts'),
+    [
+      ['page', L('Page', 'Page'), 'client'],
+      ['fonts', L('Cloudflare Fonts', 'Cloudflare Fonts'), 'product'],
+      ['edge', L('Edge cache', 'Edge cache'), 'edge'],
+    ],
+    ['page', 'fonts', 'edge'],
+    L('Font được phục vụ qua Cloudflare edge — ít kết nối third-party, cache gần user.', 'Fonts are served via the Cloudflare edge — fewer third-party connections, cached near the user.'),
+  ),
+  pathFlow(
     'web-analytics',
     L('Beacon analytics', 'Beacon analytics'),
     [

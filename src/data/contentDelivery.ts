@@ -10,8 +10,8 @@ export type DeliveryTopic = {
 };
 
 export const contentDeliveryIntro: LocalizedString = {
-  vi: 'Hướng dẫn tăng tốc website với Cloudflare: CDN, cache rules, tối ưu delivery và đo lường — song song bảo mật trên cùng proxy (orange cloud). Phù hợp SME sau khi đã onboard DNS/SSL.',
-  en: 'Speed up websites with Cloudflare: CDN, cache rules, delivery optimizations, and measurement — on the same proxied (orange cloud) path as security. Ideal for SMEs after DNS/SSL onboarding.',
+  vi: 'Hướng dẫn tăng tốc website với Cloudflare: CDN, cache rules, tối ưu delivery, Zaraz/Fonts và đo lường — song song bảo mật trên cùng proxy (orange cloud). Phù hợp SME, marketing/growth và Web Ops sau khi đã onboard DNS/SSL — phần lớn chỉnh từ dashboard, không cần sửa code app.',
+  en: 'Speed up websites with Cloudflare: CDN, cache rules, delivery optimizations, Zaraz/Fonts, and measurement — on the same proxied (orange cloud) path as security. Ideal for SMEs, marketing/growth, and Web Ops after DNS/SSL onboarding — mostly dashboard toggles, no app code changes.',
 };
 
 export const contentDeliveryMentalModel: LocalizedString = {
@@ -125,6 +125,58 @@ export const deliveryTopics: DeliveryTopic[] = [
     docsHref: 'https://developers.cloudflare.com/speed/',
   },
   {
+    id: 'zaraz-tags',
+    title: { vi: 'Zaraz — tag manager phía edge', en: 'Zaraz — edge tag manager' },
+    summary: {
+      vi: 'Zaraz là tag manager của Cloudflare: tool analytics/ads (GA, Meta…) chạy phía server/edge thay vì nhồi GTM + pixel trên browser. Giữ tracking cho marketing, giảm JS → LCP/INP tốt hơn.',
+      en: 'Zaraz is Cloudflare’s tag manager: analytics/ads tools (GA, Meta…) run server/edge-side instead of dumping GTM + pixels in the browser. Keep marketing tracking with less JS → better LCP/INP.',
+    },
+    steps: [
+      {
+        vi: 'Tag Administration / Zaraz: thêm tool cần thiết (Google Analytics, Meta Pixel…)',
+        en: 'Tag Administration / Zaraz: add the tools you need (Google Analytics, Meta Pixel…)',
+      },
+      {
+        vi: 'Cấu hình trigger/event theo conversion — tránh load mọi tag trên mọi trang',
+        en: 'Configure triggers/events per conversion — avoid loading every tag on every page',
+      },
+      {
+        vi: 'Bật consent nếu thị trường yêu cầu GDPR/PDPA — rồi gỡ dần script GTM/pixel khỏi HTML',
+        en: 'Enable consent where GDPR/PDPA applies — then gradually remove GTM/pixel scripts from HTML',
+      },
+      {
+        vi: 'So sánh trước/sau: số request third-party và LCP trên Web Analytics / Observatory',
+        en: 'Compare before/after: third-party request count and LCP in Web Analytics / Observatory',
+      },
+    ],
+    dashboardPath: 'Tag Administration / Zaraz',
+    docsHref: 'https://developers.cloudflare.com/zaraz/',
+  },
+  {
+    id: 'cloudflare-fonts',
+    title: { vi: 'Cloudflare Fonts', en: 'Cloudflare Fonts' },
+    summary: {
+      vi: 'Phục vụ font (ví dụ Google Fonts) qua Cloudflare thay third-party font CDN — ít kết nối phụ, cache tại edge, giảm rủi ro privacy khi browser gọi thẳng Google.',
+      en: 'Serve fonts (e.g. Google Fonts) through Cloudflare instead of a third-party font CDN — fewer extra connections, edge cache, less privacy risk from browsers calling Google directly.',
+    },
+    steps: [
+      {
+        vi: 'Speed > Optimization (hoặc Fonts): bật Cloudflare Fonts trên zone đã proxy',
+        en: 'Speed > Optimization (or Fonts): enable Cloudflare Fonts on a proxied zone',
+      },
+      {
+        vi: 'Giữ thẻ link/CSS font như hiện tại — Cloudflare rewrite để tải từ edge khi phù hợp',
+        en: 'Keep existing font link/CSS tags — Cloudflare rewrites so fonts load from the edge when applicable',
+      },
+      {
+        vi: 'Kiểm tra Network tab: font về từ domain của bạn / Cloudflare, không còn fonts.googleapis.com nếu đã rewrite',
+        en: 'Check the Network tab: fonts from your domain / Cloudflare, not fonts.googleapis.com when rewritten',
+      },
+    ],
+    dashboardPath: 'Speed > Optimization',
+    docsHref: 'https://developers.cloudflare.com/speed/optimization/content/fonts/',
+  },
+  {
     id: 'images',
     title: { vi: 'Cloudflare Images & resize', en: 'Cloudflare Images & resizing' },
     summary: {
@@ -176,6 +228,8 @@ export const deliveryChecklist: { vi: string; en: string }[] = [
   { vi: 'Cache rules: bypass dynamic, cache static assets', en: 'Cache rules: bypass dynamic paths, cache static assets' },
   { vi: 'Purge plan khi release (URL hoặc tag nếu Enterprise)', en: 'Purge plan on release (URL or tags on Enterprise)' },
   { vi: 'Bật Brotli + HTTP/3', en: 'Enable Brotli + HTTP/3' },
+  { vi: 'Review Zaraz: migrate tag nặng khỏi HTML (GTM/pixel)', en: 'Review Zaraz: migrate heavy tags off HTML (GTM/pixels)' },
+  { vi: 'Bật Cloudflare Fonts nếu đang dùng Google Fonts / third-party font CDN', en: 'Enable Cloudflare Fonts if you use Google Fonts / a third-party font CDN' },
   { vi: 'Review Images / polish cho media nặng', en: 'Review Images / polish for heavy media' },
   { vi: 'Theo dõi hit ratio & Core Web Vitals 2 tuần', en: 'Monitor hit ratio & Core Web Vitals for 2 weeks' },
 ];
@@ -200,6 +254,13 @@ export const deliveryMistakes: { title: LocalizedString; detail: LocalizedString
     detail: {
       vi: 'Tối ưu ảnh hero và critical CSS — Web Analytics cho bức tranh đầy đủ.',
       en: 'Optimize hero images and critical CSS — use Web Analytics for the full picture.',
+    },
+  },
+  {
+    title: { vi: 'Nhồi pixel trước khi tối ưu tag/font', en: 'Stacking pixels before fixing tags/fonts' },
+    detail: {
+      vi: 'GTM + nhiều pixel + Google Fonts CDN thường “ăn” LCP trước khi cache giúp được. Zaraz + Cloudflare Fonts trước, rồi mới tinh chỉnh cache/ảnh.',
+      en: 'GTM + many pixels + Google Fonts CDN often hurt LCP before cache can help. Do Zaraz + Cloudflare Fonts first, then tune cache/images.',
     },
   },
 ];

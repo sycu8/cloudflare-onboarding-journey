@@ -218,6 +218,75 @@ export const platformDemoVignettes: DemoVignette[] = [
     ],
     docsLinks: [{ label: 'Cache', href: 'https://developers.cloudflare.com/cache/' }],
   },
+  {
+    id: 'marketing-tags-fonts-route',
+    track: 'platform',
+    title: {
+      vi: 'Dashboard: Zaraz, Fonts & Web Analytics',
+      en: 'Dashboard: Zaraz, Fonts & Web Analytics',
+    },
+    personas: ['Marketing', 'Growth', 'Web Ops'],
+    valueDriver: {
+      vi: 'Giữ tracking/ads và font đẹp mà không “bóp” LCP — tag manager phía edge + font qua Cloudflare + đo RUM.',
+      en: 'Keep tracking/ads and fonts without crushing LCP — edge tag manager + Cloudflare Fonts + RUM measurement.',
+    },
+    opening: {
+      vi: 'Route marketing: Tag Administration (Zaraz) → Speed / Fonts → Web Analytics hoặc Speed Observatory.',
+      en: 'Marketing route: Tag Administration (Zaraz) → Speed / Fonts → Web Analytics or Speed Observatory.',
+    },
+    whenToUse: {
+      vi: 'Khi landing/campaign chậm vì GTM + pixel + Google Fonts, hoặc team marketing cần giải thích Zaraz/Fonts cho non-tech.',
+      en: 'When landings/campaigns are slow from GTM + pixels + Google Fonts, or marketing needs to explain Zaraz/Fonts to non-tech stakeholders.',
+    },
+    dashboardPaths: ['Tag Administration / Zaraz', 'Speed > Optimization', 'Web Analytics'],
+    steps: [
+      {
+        title: { vi: 'Zaraz — thêm tool', en: 'Zaraz — add tools' },
+        detail: {
+          vi: 'Thêm GA / Meta Pixel trong Zaraz; giải thích: tag chạy phía server/edge, không nhồi JS trên browser như GTM cổ điển.',
+          en: 'Add GA / Meta Pixel in Zaraz; explain: tags run server/edge-side, not heavy browser JS like classic GTM.',
+        },
+        dashboardPath: 'Tag Administration / Zaraz',
+      },
+      {
+        title: { vi: 'Cloudflare Fonts', en: 'Cloudflare Fonts' },
+        detail: {
+          vi: 'Bật Fonts trên zone đã proxy — font về từ edge, giảm gọi fonts.googleapis.com và rủi ro privacy.',
+          en: 'Enable Fonts on a proxied zone — fonts from the edge, fewer fonts.googleapis.com calls and privacy risk.',
+        },
+        dashboardPath: 'Speed > Optimization',
+      },
+      {
+        title: { vi: 'Đo bằng Web Analytics', en: 'Measure with Web Analytics' },
+        detail: {
+          vi: 'So sánh LCP/INP trước và sau khi migrate tag/font — chứng minh cho stakeholder khi chạy ads.',
+          en: 'Compare LCP/INP before/after tag/font migration — prove the win to stakeholders while ads run.',
+        },
+        dashboardPath: 'Web Analytics / Speed > Observatory',
+      },
+    ],
+    demoTips: [
+      {
+        vi: 'Mở Network tab trước/sau: đếm request third-party — số giảm là tín hiệu dễ nhìn cho marketing.',
+        en: 'Open the Network tab before/after: count third-party requests — a drop is an easy signal for marketing.',
+      },
+      {
+        vi: 'Nhắc consent/privacy trước khi bật ads tool trên Zaraz ở thị trường GDPR/PDPA.',
+        en: 'Call out consent/privacy before enabling ad tools in Zaraz in GDPR/PDPA markets.',
+      },
+    ],
+    keyTakeaways: [
+      {
+        vi: 'Zaraz = tag manager của Cloudflare; Fonts = font qua edge — cả hai chỉnh từ dashboard cho non-tech.',
+        en: 'Zaraz = Cloudflare’s tag manager; Fonts = fonts via the edge — both are dashboard toggles for non-tech teams.',
+      },
+    ],
+    docsLinks: [
+      { label: 'Zaraz', href: 'https://developers.cloudflare.com/zaraz/' },
+      { label: 'Cloudflare Fonts', href: 'https://developers.cloudflare.com/speed/optimization/content/fonts/' },
+      { label: 'Hub use case', href: '/use-cases/optimize-marketing-site/' },
+    ],
+  },
 ];
 
 /** Application Security dashboard overviews → Application Services track */

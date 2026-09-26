@@ -7,6 +7,7 @@ export type UseCaseSlug =
   | 'secure-api'
   | 'defend-ddos-attacks'
   | 'accelerate-content-delivery'
+  | 'optimize-marketing-site'
   | 'ecommerce-security-performance'
   | 'media-streaming-delivery'
   | 'build-serverless-app'
@@ -248,6 +249,98 @@ export const useCases: UseCase[] = [
     nextCta: {
       href: '/content-delivery',
       label: { vi: 'Hướng dẫn Content delivery', en: 'Content delivery guide' },
+    },
+  },
+  {
+    slug: 'optimize-marketing-site',
+    hubCategory: 'secure-accelerate',
+    officialUrl: 'https://developers.cloudflare.com/zaraz/',
+    title: {
+      vi: 'Tối ưu landing & marketing (tag, font, tốc độ)',
+      en: 'Optimize marketing & landing pages (tags, fonts, speed)',
+    },
+    problem: {
+      vi: 'Landing và trang campaign chậm vì quá nhiều tag phía browser (GTM, Meta Pixel, TikTok…), font tải từ Google Fonts CDN, và team marketing không đo được LCP/INP thực tế sau khi chạy ads.',
+      en: 'Landing and campaign pages feel slow because too many browser tags (GTM, Meta Pixel, TikTok…), fonts load from Google Fonts CDN, and marketing cannot see real LCP/INP after ads go live.',
+    },
+    architecture: {
+      vi: 'Visitor → CDN + Speed + Fonts + Zaraz → Origin / vendor APIs',
+      en: 'Visitor → CDN + Speed + Fonts + Zaraz → Origin / vendor APIs',
+    },
+    steps: {
+      vi: [
+        'Xác nhận domain đã proxy (orange cloud) — không proxy thì Speed/Zaraz/Fonts không áp dụng',
+        'Speed > Optimization: bật Brotli và Early Hints; Auto Minify chỉ sau khi test staging',
+        'Bật Cloudflare Fonts để phục vụ font qua edge thay third-party font CDN',
+        'Tag Administration / Zaraz: thêm tool (GA, Meta…) và dần tắt script GTM/pixel trên HTML',
+        'Bật Web Analytics hoặc Speed Observatory — so sánh LCP/INP trước và sau campaign',
+      ],
+      en: [
+        'Confirm the domain is proxied (orange cloud) — without proxy, Speed/Zaraz/Fonts do not apply',
+        'Speed > Optimization: enable Brotli and Early Hints; Auto Minify only after staging tests',
+        'Enable Cloudflare Fonts so fonts are served from the edge instead of a third-party font CDN',
+        'Tag Administration / Zaraz: add tools (GA, Meta…) and gradually remove GTM/pixel scripts from HTML',
+        'Turn on Web Analytics or Speed Observatory — compare LCP/INP before and after the campaign',
+      ],
+    },
+    bullets: {
+      vi: [
+        'Zaraz = tag manager phía edge/server: giữ tracking & ads, giảm JS nặng trên browser',
+        'Cloudflare Fonts: privacy + ít kết nối phụ + cache font tại PoP gần user',
+        'Speed (Brotli, Early Hints, HTTP/3): tối ưu delivery từ dashboard, không cần sửa code app',
+        'Web Analytics / RUM: chứng minh cải thiện Core Web Vitals cho stakeholder',
+        'Song song CDN/cache static (xem tình huống tăng tốc CDN) khi asset nặng',
+      ],
+      en: [
+        'Zaraz = edge/server tag manager: keep tracking & ads, fewer heavy scripts in the browser',
+        'Cloudflare Fonts: privacy, fewer extra connections, fonts cached at a nearby PoP',
+        'Speed (Brotli, Early Hints, HTTP/3): delivery tweaks from the dashboard — no app code changes',
+        'Web Analytics / RUM: prove Core Web Vitals gains to stakeholders',
+        'Pair with CDN/cache for heavy assets (see the accelerate content delivery scenario)',
+      ],
+    },
+    commonMistakes: {
+      vi: [
+        {
+          title: 'Nhồi hết pixel/GTM phía client rồi mới nghĩ tới tốc độ',
+          detail: 'Mỗi tag thêm JS và request. Ưu tiên Zaraz (hoặc giảm số tool) trước khi tối ưu ảnh/hero.',
+        },
+        {
+          title: 'Bật Auto Minify hoặc Rocket Loader không test staging',
+          detail: 'Có thể làm gãy tracking hoặc layout. Bật từng bước trên staging/preview, rồi mới production.',
+        },
+        {
+          title: 'Quên consent / privacy khi migrate tag',
+          detail: 'Zaraz hỗ trợ quản lý consent — cấu hình trước khi chạy ads ở thị trường có GDPR/PDPA.',
+        },
+        {
+          title: 'Chỉ nhìn Lighthouse lab, bỏ RUM sau campaign',
+          detail: 'Lab khác traffic thật. Dùng Web Analytics hoặc Speed Observatory khi ads đang chạy để thấy LCP/INP thực tế.',
+        },
+      ],
+      en: [
+        {
+          title: 'Dumping every pixel/GTM client-side before thinking about speed',
+          detail: 'Each tag adds JS and requests. Prefer Zaraz (or fewer tools) before polishing hero images.',
+        },
+        {
+          title: 'Enabling Auto Minify or Rocket Loader without staging tests',
+          detail: 'Can break tracking or layout. Flip settings one at a time on staging/preview, then production.',
+        },
+        {
+          title: 'Forgetting consent / privacy when migrating tags',
+          detail: 'Zaraz supports consent management — configure it before running ads in GDPR/PDPA markets.',
+        },
+        {
+          title: 'Only watching Lighthouse lab scores, not RUM after the campaign',
+          detail: 'Lab ≠ real traffic. Use Web Analytics or Speed Observatory while ads run to see real LCP/INP.',
+        },
+      ],
+    },
+    relatedTrack: 'application-services',
+    nextCta: {
+      href: '/content-delivery#zaraz-tags',
+      label: { vi: 'Zaraz & Fonts trên Content delivery', en: 'Zaraz & Fonts in Content delivery' },
     },
   },
   {
