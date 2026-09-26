@@ -620,6 +620,19 @@ export const topicEnById: Record<string, Partial<TopicEnOverlay>> = {
     suggestedExerciseEn:
       'Compare TTFB/LCP before and after enabling a cache rule for /assets/*.',
   },
+  'uc-optimize-marketing-site': {
+    summaryEn:
+      'Slow landings from GTM/pixels + Google Fonts: enable basic Speed, Cloudflare Fonts, migrate tags to Zaraz, measure LCP/INP with Web Analytics — dashboard-first, no code.',
+    whyItMattersEn:
+      'Marketing/growth persona — /use-cases/optimize-marketing-site and Content delivery #zaraz-tags / #cloudflare-fonts.',
+    suggestedExerciseEn:
+      'List tags loading on a landing page; add one tool in Zaraz and compare third-party request count before/after.',
+    commonMistakesEn: [
+      'Stacking every pixel client-side before using Zaraz',
+      'Enabling Auto Minify/Rocket Loader without staging tests',
+      'Only watching Lighthouse lab, skipping RUM after the campaign',
+    ],
+  },
   'uc-secure-api': {
     summaryEn:
       'API proxied through Cloudflare: rate limits, WAF OWASP, API Shield schema validation (if available), mTLS/token for partners. Log and alert on anomalies.',

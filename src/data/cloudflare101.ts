@@ -470,10 +470,19 @@ export const cf101Categories: Cf101Category[] = [
         id: 'zaraz',
         name: { vi: 'Zaraz', en: 'Zaraz' },
         summary: {
-          vi: 'Tag manager phía server/edge — giảm script third-party chạy trên browser.',
-          en: 'Server/edge tag manager — fewer third-party scripts in the browser.',
+          vi: 'Tag manager phía server/edge — thay GTM/pixel chạy nặng trên browser; giữ analytics & ads, cải thiện LCP/INP.',
+          en: 'Server/edge tag manager — replaces heavy browser GTM/pixels; keep analytics & ads, improve LCP/INP.',
         },
         docsPath: '/zaraz/',
+      },
+      {
+        id: 'fonts',
+        name: { vi: 'Cloudflare Fonts', en: 'Cloudflare Fonts' },
+        summary: {
+          vi: 'Phục vụ Google Fonts / web fonts qua Cloudflare — privacy, cache edge, ít kết nối third-party.',
+          en: 'Serve Google Fonts / web fonts via Cloudflare — privacy, edge cache, fewer third-party connections.',
+        },
+        docsPath: '/speed/optimization/content/fonts/',
       },
     ],
   },
