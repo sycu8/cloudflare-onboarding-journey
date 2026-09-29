@@ -197,7 +197,8 @@ npm run test:e2e   # Playwright — local preview on :4321 (uses E2E_BASE_URL, n
 npm run deploy:uat      # build + deploy to UAT Pages project (maintainer)
 npm run deploy          # build + deploy production (maintainer)
 npm run deploy:verify   # smoke production domains
-npm run access:workshop-admin  # optional: create Access apps for /admin
+npm run access:workshop-admin  # optional: create Access apps for /admin (via cf CLI)
+npm run cf:whoami               # Cloudflare API auth check (cf CLI)
 npm run resources:sync  # refresh developers.cloudflare.com link catalog (JSON)
 npm run resources:crawl-previews  # crawl tutorials → tutorialPreviews.data.json
 npm run diagrams:sync   # refresh Reference Architecture diagram metadata
@@ -209,6 +210,10 @@ npm run review:pr -- 12 # maintainer: fetch PR, diff, zone map (see Contributing
 
 ## Cloudflare setup
 
+API-side setup (zones, Access, listing D1/KV/R2/Pages) prefers the **[`cf` CLI](https://github.com/cloudflare/cf)** — see [docs/CF-CLI.md](docs/CF-CLI.md). Auth with `CLOUDFLARE_API_TOKEN` or `npx cf auth login` (`npm run cf:whoami`).
+
+Wrangler remains for **Pages deploy**, **`wrangler pages dev`**, and **local** D1/R2.
+
 ### 1. Pages project
 
 1. Create a [Cloudflare Pages](https://developers.cloudflare.com/pages/) project connected to this repo, **or** deploy with Wrangler:
@@ -218,6 +223,8 @@ npm run review:pr -- 12 # maintainer: fetch PR, diff, zone map (see Contributing
    # or: npm run build && npx wrangler pages deploy dist --project-name=cloudflare-starter-hub
    npm run deploy:verify
    ```
+
+   Inspect existing projects: `npx cf pages projects list`
 
 2. **Build settings**
    - Build command: `npm run build`
@@ -229,6 +236,7 @@ npm run review:pr -- 12 # maintainer: fetch PR, diff, zone map (see Contributing
 ```bash
 npx wrangler d1 create cloudflare-starter-hub-db
 # Put database_id into wrangler.toml
+# Or list with: npx cf d1 list
 
 npx wrangler d1 migrations apply cloudflare-starter-hub-db --remote
 ```
@@ -239,6 +247,7 @@ Migrations: `migrations/0001_init.sql`, `migrations/0002_workshop_events.sql`.
 
 ```bash
 npx wrangler kv namespace create SITE_CONFIG
+# Or: npx cf kv namespaces create --title SITE_CONFIG
 # Put id into wrangler.toml
 ```
 
@@ -246,6 +255,7 @@ npx wrangler kv namespace create SITE_CONFIG
 
 ```bash
 npx wrangler r2 bucket create cloudflare-starter-hub-resources
+# Or: npx cf r2 buckets create --name cloudflare-starter-hub-resources
 npm run assets:sync   # uploads public/*.svg, favicon.ico → R2 static/*
 ```
 

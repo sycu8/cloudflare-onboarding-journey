@@ -51,17 +51,20 @@ When the whole hostname is behind Access, static files (`/_astro/*`, `/styles/si
 
 Verify after deploy: `curl -I https://<host>/styles/site.css` must return `Content-Type: text/css` (not `text/html` or `302` Access login).
 
-## Automated setup (API)
+## Automated setup (`cf` CLI)
 
-Token needs **Account → Access: Apps and Policies → Edit**.
+Uses the Cloudflare [`cf`](https://github.com/cloudflare/cf) CLI (see [CF-CLI.md](CF-CLI.md)). Token needs **Account → Access: Apps and Policies → Edit**.
 
 ```bash
-set CLOUDFLARE_API_TOKEN=...
-set CLOUDFLARE_ACCOUNT_ID=...
+export CLOUDFLARE_API_TOKEN=...   # or: npx cf auth login
+# CLOUDFLARE_ACCOUNT_ID optional — cf picks the authenticated account
+npm run cf:whoami
 npm run access:workshop-admin
 ```
 
 Creates Access apps for `/admin` and legacy `/workshop/admin`.
+
+Dry run: `node scripts/setup-workshop-admin-access.mjs --dry-run`
 
 ## Pages environment
 

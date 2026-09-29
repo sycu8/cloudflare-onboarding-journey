@@ -30,11 +30,13 @@ After user merges on GitHub: `git pull origin main` → `npm run build` → `npm
 - Minimize scope; match existing Astro/React patterns in `src/`
 - Blog visuals: prefer `diagramSlugs` → `public/ref-diagrams/` (official Cloudflare diagrams). Dashboard screenshots go in `public/images/blog/` via post `images` / `sections[].image` — see that folder’s README.
 - Blog cadence: **1 post / 2 days** via email to `sycu.lee@gmail.com` (approve by reply `APPROVE` or link). See [docs/BLOG_SCHEDULE.md](docs/BLOG_SCHEDULE.md).
+- **Cloudflare API:** use the [`cf`](https://github.com/cloudflare/cf) CLI (`scripts/lib/cf.mjs`, `npx cf …`) — not raw `fetch` to `api.cloudflare.com`. See [docs/CF-CLI.md](docs/CF-CLI.md). Wrangler stays for Pages `dev`/`deploy` and local D1/R2.
 
 ## Cursor Cloud specific instructions
 
 Standard commands live in `package.json` and `README.md` (Quick start). Notes below are the non-obvious caveats for running/testing this Astro 6 + Cloudflare Pages site in the cloud VM. The startup update script only runs `npm install`; the steps below are not automated.
 
+- **Cloudflare API (`cf`):** with `CLOUDFLARE_API_TOKEN` set, run `npm run cf:whoami` or `npx cf auth whoami`. Discover commands with `npx cf cli search "<task>"` (no nested `--help` chains). Maintainer API scripts (`dns-aid:setup`, `access:workshop-admin`) call `cf` via `scripts/lib/cf.mjs`.
 - **Local config (one-time per VM):** `cp .env.example .env` and `cp wrangler.toml.example wrangler.toml` (both are gitignored, local-only). `npm run dev` works without them, but `wrangler pages dev` reads `wrangler.toml`.
 - **Two ways to run:**
   - `npm run dev` (astro dev) serves **static pages only** — Pages Functions (`/api/*`, `/admin/*`, `/assets/*`) are NOT available, so signup/quiz/site-config APIs 404 under it. It binds to `localhost` (IPv6 `::1`); use `http://localhost:4321`, not `127.0.0.1`.

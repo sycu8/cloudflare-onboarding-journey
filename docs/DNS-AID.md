@@ -63,18 +63,26 @@ TXT:
 
 > **Note:** Manually added HTTPS records on **proxied** hostnames are not served by Cloudflare. These names are discovery-only (no orange-cloud proxy); keep them DNS-only.
 
-## Automated setup (API)
+## Automated setup (`cf` CLI)
 
-Token needs **Zone → DNS → Edit** on `orangecloud.vn` (read-only zone access is not enough).
+Uses the Cloudflare [`cf`](https://github.com/cloudflare/cf) CLI (see [CF-CLI.md](CF-CLI.md)). Token needs **Zone → DNS → Edit** on `orangecloud.vn` (read-only zone access is not enough).
 
 ```bash
-set PUBLIC_SITE_URL=https://onboarding.orangecloud.vn
-set CLOUDFLARE_API_TOKEN=...
+export PUBLIC_SITE_URL=https://onboarding.orangecloud.vn
+export CLOUDFLARE_API_TOKEN=...   # or: npx cf auth login
+npm run cf:whoami
 npm run dns-aid:setup
 npm run dns-aid:verify
 ```
 
 Dry run (prints zone, no API): `node scripts/setup-dns-aid.mjs --dry-run`
+
+Equivalent manual `cf` calls (after auth):
+
+```bash
+npx cf zones list --name orangecloud.vn
+npx cf dns records list -z <zone-id> --type HTTPS --name-contains _agents
+```
 
 ## DNSSEC
 
