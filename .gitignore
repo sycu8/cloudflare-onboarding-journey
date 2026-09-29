@@ -27,6 +27,7 @@ scripts/proposals-slices.json
 !.env.example
 .dev.vars
 .wrangler/
+.cloudflare/
 *.pem
 *.key
 credentials.json

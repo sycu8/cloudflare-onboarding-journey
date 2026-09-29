@@ -1,10 +1,13 @@
 /**
  * Create DNS-AID records in Cloudflare for onboarding.orangecloud.vn
- * Requires CLOUDFLARE_API_TOKEN with Zone.DNS Edit on orangecloud.vn
+ * Uses the `cf` CLI (CLOUDFLARE_API_TOKEN or `cf auth login`).
+ * Token needs Zone.DNS Edit on orangecloud.vn.
  *
  * Usage:
  *   node scripts/setup-dns-aid.mjs [--dry-run] [--print-zone]
  */
+import { cf, cfBody, ensureCfAuth, CfError } from './lib/cf.mjs';
+
 const ZONE_NAME = 'orangecloud.vn';
 const ORIGIN = (process.env.PUBLIC_SITE_URL || 'https://onboarding.orangecloud.vn').replace(/\/$/, '');
 const HOST = new URL(ORIGIN).hostname;
@@ -77,38 +80,17 @@ if (printZone) {
 
 if (dryRun) {
   console.log(bindZone());
-  console.log('\n(dry-run: no API calls; set CLOUDFLARE_API_TOKEN and omit --dry-run to create records)');
+  console.log('\n(dry-run: no API calls; set CLOUDFLARE_API_TOKEN or `cf auth login`, then omit --dry-run)');
   process.exit(0);
 }
 
-const token = process.env.CLOUDFLARE_API_TOKEN;
-if (!token) {
-  console.error('Set CLOUDFLARE_API_TOKEN with Zone.DNS Edit for', ZONE_NAME);
-  console.error('Or add records manually:\n');
-  console.log(bindZone());
-  process.exit(1);
-}
-
-const api = async (path, init = {}) => {
-  const res = await fetch(`https://api.cloudflare.com/client/v4${path}`, {
-    ...init,
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-      ...(init.headers || {}),
-    },
-  });
-  const json = await res.json();
-  if (!json.success) {
-    const err = new Error(JSON.stringify(json.errors || json));
-    err.code = json.errors?.[0]?.code;
-    throw err;
-  }
-  return json.result;
-};
-
 try {
-  const zone = (await api(`/zones?name=${ZONE_NAME}`))[0];
+  ensureCfAuth();
+
+  const zones = /** @type {Array<{ id: string; name: string }>} */ (
+    cf(['zones', 'list', '--name', ZONE_NAME])
+  );
+  const zone = Array.isArray(zones) ? zones[0] : null;
   if (!zone) throw new Error(`Zone not found: ${ZONE_NAME}`);
   console.log(`Zone ${zone.name} (${zone.id})`);
 
@@ -116,11 +98,12 @@ try {
     const qname = `${rec.name}.${ZONE_NAME}`;
     let existing;
     try {
-      existing = await api(
-        `/zones/${zone.id}/dns_records?type=${rec.type}&name=${encodeURIComponent(qname)}`,
+      existing = cf(
+        ['dns', 'records', 'list', '--type', rec.type, '--name', qname],
+        { zone: zone.id },
       );
     } catch (e) {
-      if (e.code === 10000) {
+      if (e instanceof CfError && (e.code === 10000 || /Authentication error|403/i.test(e.message))) {
         console.error('\nAPI token lacks Zone.DNS Edit. Add records manually:\n');
         console.log(bindZone());
         process.exit(1);
@@ -128,7 +111,8 @@ try {
       throw e;
     }
 
-    if (existing?.length) {
+    const list = Array.isArray(existing) ? existing : existing ? [existing] : [];
+    if (list.length) {
       console.log(`✓ exists ${rec.type} ${qname}`);
       continue;
     }
@@ -138,13 +122,13 @@ try {
         ? { type: 'HTTPS', name: rec.name, data: rec.data, comment: rec.comment, ttl: 3600, proxied: false }
         : { type: 'TXT', name: rec.name, content: rec.content, comment: rec.comment, ttl: 3600 };
 
-    await api(`/zones/${zone.id}/dns_records`, { method: 'POST', body: JSON.stringify(body) });
+    cfBody(['dns', 'records', 'create'], body, { zone: zone.id });
     console.log(`✓ created ${rec.type} ${qname}`);
   }
 
   console.log('\nEnable DNSSEC: Dashboard → DNS → Settings → DNSSEC → Enable');
   console.log('Verify: npm run dns-aid:verify');
 } catch (e) {
-  console.error(e.message);
+  console.error(e instanceof Error ? e.message : e);
   process.exit(1);
 }

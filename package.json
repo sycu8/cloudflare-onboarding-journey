@@ -11,8 +11,11 @@
     "build:sitemap": "node scripts/build.mjs --sitemap-only",
     "search:index": "npx astro build",
     "agent-discovery:build": "node scripts/build-agent-discovery.mjs",
+    "cf:whoami": "npx cf auth whoami",
+    "cf:search": "npx cf cli search",
     "dns-aid:setup": "node scripts/setup-dns-aid.mjs",
     "dns-aid:print-zone": "node scripts/setup-dns-aid.mjs --print-zone",
+    "dns-aid:verify": "node scripts/verify-dns-aid.mjs",
     "access:workshop-admin": "node scripts/setup-workshop-admin-access.mjs",
     "preview": "astro preview",
     "preview:ci": "cp wrangler.ci.toml wrangler.toml && npx wrangler pages dev dist --ip 127.0.0.1 --port 4321",
@@ -61,6 +64,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.52.0",
+    "cf": "^1.0.0-beta.5",
     "sharp": "^0.35.3",
     "wrangler": "^4.114.0"
   }
