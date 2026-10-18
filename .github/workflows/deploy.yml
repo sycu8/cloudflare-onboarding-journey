@@ -236,8 +236,11 @@ jobs:
         run: |
           PROJECT="${{ vars.CF_PAGES_PROJECT_PROD || 'cloudflare-starter-hub' }}"
           LOG=$(mktemp)
+          # actions/checkout is detached HEAD, so Wrangler would name the
+          # branch HEAD and publish the "head" preview instead of production.
           npx wrangler pages deploy dist \
             --project-name="$PROJECT" \
+            --branch=main \
             --commit-dirty=true 2>&1 | tee "$LOG"
           URL=$(grep 'Deployment complete' "$LOG" | grep -oE 'https://[a-z0-9-]+\.[a-z0-9.-]+\.pages\.dev' | head -1)
           if [ -z "$URL" ]; then
