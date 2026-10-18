@@ -481,5 +481,97 @@
       "sandbox",
       "workers"
     ]
+  },
+  {
+    "date": "2026-09-28",
+    "slug": "queues-hang-doi-message-tren-workers",
+    "topic": "workers",
+    "level": "entry",
+    "workingTitle": {
+      "vi": "Cloudflare Queues: hàng đợi message để Worker không làm hết trong một request",
+      "en": "Cloudflare Queues: a message line so a Worker does not finish everything in one request"
+    },
+    "angle": {
+      "vi": "Producer gửi, consumer xử lý theo lô, ack/retry/dead-letter; khác Workflows và KV.",
+      "en": "Producer sends, consumer batches, ack/retry/dead-letter; different from Workflows and KV."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/tag/queues/",
+      "https://developers.cloudflare.com/queues/"
+    ],
+    "relatedTrack": "developer-platform",
+    "relatedProductSlugs": [
+      "queues",
+      "workers"
+    ]
+  },
+  {
+    "date": "2026-09-30",
+    "slug": "durable-objects-phoi-hop-trang-thai-edge",
+    "topic": "workers",
+    "level": "intermediate",
+    "workingTitle": {
+      "vi": "Durable Objects: một nơi duy nhất giữ trạng thái cho từng phòng hoặc phiên",
+      "en": "Durable Objects: one place that holds state for each room or session"
+    },
+    "angle": {
+      "vi": "Một instance mỗi ID, SQLite nhất quán, WebSocket và alarm; khác KV/D1/Queues.",
+      "en": "One instance per ID, consistent SQLite, WebSockets and alarms; versus KV/D1/Queues."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/introducing-workers-durable-objects/",
+      "https://developers.cloudflare.com/durable-objects/"
+    ],
+    "relatedTrack": "developer-platform",
+    "relatedProductSlugs": [
+      "durable-objects",
+      "workers"
+    ]
+  },
+  {
+    "date": "2026-10-02",
+    "slug": "turnstile-thay-captcha-bao-ve-form",
+    "topic": "security",
+    "level": "entry",
+    "workingTitle": {
+      "vi": "Turnstile: thay CAPTCHA và vẫn bắt server kiểm tra token",
+      "en": "Turnstile: replace the CAPTCHA and still validate the token on the server"
+    },
+    "angle": {
+      "vi": "Widget Managed/Invisible; Siteverify bắt buộc; token một lần; đi cùng rate limit và WAF.",
+      "en": "Managed/Invisible widgets; Siteverify is mandatory; single-use tokens; pair with rate limiting and WAF."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/tag/turnstile/",
+      "https://developers.cloudflare.com/turnstile/"
+    ],
+    "relatedTrack": "application-services",
+    "relatedProductSlugs": [
+      "turnstile",
+      "waf"
+    ]
+  },
+  {
+    "date": "2026-10-04",
+    "slug": "tunnel-cloudflared-khong-mo-port",
+    "topic": "security",
+    "level": "entry",
+    "workingTitle": {
+      "vi": "Cloudflare Tunnel: publish app nội bộ mà không mở port inbound",
+      "en": "Cloudflare Tunnel: publish an internal app without opening inbound ports"
+    },
+    "angle": {
+      "vi": "cloudflared kết nối đi ra; published application; ghép Access để không public vô tình.",
+      "en": "cloudflared dials out; published applications; pair with Access so the URL is not accidentally public."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/tag/cloudflare-tunnel/",
+      "https://developers.cloudflare.com/tunnel/"
+    ],
+    "relatedTrack": "cloudflare-one",
+    "relatedProductSlugs": [
+      "tunnel",
+      "access"
+    ]
   }
 ]

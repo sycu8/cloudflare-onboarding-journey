@@ -26,6 +26,10 @@ import { postAiSecurityPromptInjectionNguoi } from './blogPosts/ai-security-prom
 import { postLoadBalancingHaWebsiteDon } from './blogPosts/load-balancing-ha-website-don';
 import { postZeroTrustAccessThayVpn } from './blogPosts/zero-trust-access-thay-vpn';
 import { postWorkflowsTacVuDaiTren } from './blogPosts/workflows-tac-vu-dai-tren';
+import { postQueuesHangDoiMessageTrenWorkers } from './blogPosts/queues-hang-doi-message';
+import { postDurableObjectsPhoiHopTrangThaiEdge } from './blogPosts/durable-objects-trang-thai';
+import { postTurnstileThayCaptchaBaoVeForm } from './blogPosts/turnstile-thay-captcha';
+import { postTunnelCloudflaredKhongMoPort } from './blogPosts/tunnel-cloudflared-port';
 
 export type BlogTopic = 'ai' | 'security' | 'cdn' | 'workers' | 'developer-platform';
 export type BlogLevel = 'entry' | 'intermediate';
@@ -118,7 +122,7 @@ export const blogSourceNote: LocalizedString = {
   en: 'Content is rewritten for clarity; always read the original posts on blog.cloudflare.com and official docs for technical detail or the latest updates.',
 };
 
-/** All scheduled blog posts (6 seed + 21 bi-daily queue). */
+/** All scheduled blog posts (6 seed + 25 bi-daily posts). */
 export const blogPosts: BlogPost[] = [
   postCdnCache,
   postWafBeginner,
@@ -147,6 +151,10 @@ export const blogPosts: BlogPost[] = [
   postImageOptimizationCdnTocDo,
   postRateLimitingBaoVeFormLogin,
   postSandboxChayCodeAnToan,
+  postQueuesHangDoiMessageTrenWorkers,
+  postDurableObjectsPhoiHopTrangThaiEdge,
+  postTurnstileThayCaptchaBaoVeForm,
+  postTunnelCloudflaredKhongMoPort,
 ].sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
 
 export function getBlogPost(slug: string): BlogPost | undefined {
