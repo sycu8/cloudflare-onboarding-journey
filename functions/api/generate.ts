@@ -6,21 +6,26 @@ import {
   dropEmptyHeadings,
   ensureSaveAnswer,
   gatherVerdicts,
+  dedupePlanRows,
+  hasCapitalLogGrant,
   hasInventedNameserverHost,
   isAiErrorText,
   isHeadingOnly,
   isSddPronounFollowUp,
+  isWafLogAction,
   retryBackoffMs,
   resolveLearnerPlan,
   reviewPlanClaims,
   shortDocsFallback,
+  tableConfirms,
+  tableContradicts,
   tableDerivedFallback,
   waitMs,
 } from './planFeatures.ts';
 
 const MODEL = '@cf/meta/llama-3.1-8b-instruct-fp8';
 /** Explicit output cap for a short lesson (5 bullets + one next step). */
-const MAX_TOKENS = 512;
+const MAX_TOKENS = 384;
 
 type Lang = GenerateLang;
 
@@ -49,15 +54,27 @@ export function nameserverOverviewInstruction(lang: Lang): string {
 }
 
 export function logEnterpriseInstruction(lang: Lang): string {
+  return lang === 'en' ? 'Log is only available on Enterprise.' : 'Log chỉ có trên Enterprise.';
+}
+
+function logInsteadInstruction(lang: Lang): string {
   return lang === 'en'
-    ? 'Log is only available on Enterprise. On Free, Pro, and Business, use Managed Challenge instead of Log.'
-    : 'Log chỉ có trên Enterprise. Trên Free, Pro và Business, hãy dùng Managed Challenge thay cho Log.';
+    ? 'On Free, Pro, and Business, use Managed Challenge instead of Log.'
+    : 'Trên Free, Pro và Business, hãy dùng Managed Challenge thay cho Log.';
+}
+
+/** The question is about the WAF Log action or a custom-rule action, not a logging product. */
+export function promptAsksLogAction(prompt: string): boolean {
+  const folded = foldGenerated(prompt);
+  if (isWafLogAction(prompt) || hasCapitalLogGrant(prompt)) return true;
+  if (/\b(?:custom rule|firewall rule|action nao|which action|what action|hanh dong nao)\b/.test(folded)) return true;
+  return false;
 }
 
 function enterpriseFeatureInstruction(lang: Lang): string {
   return lang === 'en'
-    ? 'Log and Sensitive Data Detection are Enterprise-only. Do not upgrade to Pro or Business for them. Use Managed Challenge instead of Log.'
-    : 'Log và Sensitive Data Detection chỉ có trên Enterprise. Đừng nâng cấp lên Pro hoặc Business để có chúng. Hãy dùng Managed Challenge thay cho Log.';
+    ? 'Log and Sensitive Data Detection are Enterprise-only. Do not upgrade to Pro or Business for them.'
+    : 'Log và Sensitive Data Detection chỉ có trên Enterprise. Đừng nâng cấp lên Pro hoặc Business để có chúng.';
 }
 
 /** Strip characters that hide a hostname, then fold full-width ASCII to ASCII. */
@@ -178,44 +195,13 @@ function isLogActionLabel(folded: string): boolean {
  * a mode, a chosen action, the action left sitting on Log, or Log as an item
  * in an action list (including when the list ends on a period).
  */
-function isLoggingProductSentence(sentence: string): boolean {
-  const folded = foldGenerated(sentence);
-  return /\blogpush\b|\blog explorer\b|\binstant logs?\b|\blog fields?\b|\blogs\b|\bnhat ky\b|\blogging\b/.test(folded);
-}
-
 function namesLogAsWafAction(sentence: string): boolean {
-  if (isLoggingProductSentence(sentence)) return false;
-  const folded = hideLogpush(withoutLogin(foldGenerated(sentence)));
-  if (!/\blog\b/.test(folded)) return false;
-  if (splitClauses(folded).every((clause) => !/\blog\b/.test(clause) || claimIsDenied(clause, /\blog\b/))) return false;
-  if (isLogActionLabel(folded)) return true;
-  if (/\blog\s+mode\b|\bin\s+log\s+mode\b|\bmode\s+log\b/.test(folded)) return true;
-  if (/\b(?:chon|select|pick|choose|use|using|dung|su dung|bat|dat|gan|ap|ap dung|kich hoat|chuyen|lua)\s+["'(]*log\b/.test(folded)) return true;
-  if (/\b(?:hanh dong|action)\s*[:=,]?\s*log\b/.test(folded)) return true;
-  // Copula: "hành động là Log", "đây là Log", "quyền chọn là Log", "action is Log".
-  if (/\b(?:hanh dong|action)\b[\s\S]{0,40}\b(?:la|is)\s+["'(]*log\b/.test(folded)) return true;
-  if (/\b(?:la|thi|chinh la|day la|do la|is)\s+["'(]*log\b/.test(folded)) return true;
-  // Menu option: "mục Log", "menu Log", "option Log", "vào phần Log".
-  if (/\b(?:menu|option|muc|lua chon|tuy chon|quyen chon|vao phan|phan)\s+["'(]*log\b/.test(folded)) return true;
-  // Copula after Log: "Log là ở mục", "Log nằm ở", "Log có tại", "Log có ở".
-  if (/\blog\b[\s\S]{0,40}\b(?:la\s+(?:o|nam|tai)|nam o|co tai|co o)\b/.test(folded)) return true;
-  if (/\b(?:nam o|co tai)\b[\s\S]{0,40}\blog\b/.test(folded)) return true;
-  if (/\blog\s+(?:action|mode|menu|option|muc)\b/.test(folded)) return true;
-  if (/\bto\s+log\b|\bsang\s+log\b|\bde\s+log\b/.test(folded)) return true;
-  // "để ở Log", "ở Log", "leave it at Log" — the action is left on Log.
-  if (/\bo\s+log\b/.test(folded)) return true;
-  if (/\b(?:leave|keep|put|set|place)\b[\s\S]{0,24}\bat\s+log\b/.test(folded)) return true;
-  // Log as a verb: "Log the matching requests", "should log", "Hãy log request", "log lại", "ghi log".
-  if (/\blog\s+(?:the|a|an|these|those|matching|matched|request|requests|match|matches|traffic|hits|lai)\b/.test(folded)) {
-    return true;
+  if (tableConfirms(sentence)) return false;
+  const folded = foldGenerated(sentence);
+  if (/\binstead of\b|\bthay cho\b|\bnot available\b|\bdoes not\b|\bkhong co\b|\bkhong ho tro\b|\benterprise-only\b|\bchi co tren enterprise\b/.test(folded)) {
+    return false;
   }
-  if (/\b(?:should|can|may|will|must|hay|co the)\s+log\b/.test(folded)) return true;
-  if (/\bghi\s+log\b/.test(folded)) return true;
-  // Log as one list item. A trailing period still ends the item: "Block, Challenge, Log."
-  return (
-    /(?:^|[,/;|]|\b(?:and|or|va|hoac)\s+)\s*log\b\s*(?:[,/;|]|[.!?…]|$|\s+\b(?:and|or|va|hoac)\b)/.test(folded) &&
-    /\b(?:block|challenge|skip|allow|action|hanh dong)\b/.test(folded)
-  );
+  return isWafLogAction(sentence) || hasCapitalLogGrant(sentence);
 }
 
 /**
@@ -223,7 +209,7 @@ function namesLogAsWafAction(sentence: string): boolean {
  * Logpush is not the Log action. A clause that denies the pairing stays.
  */
 function pairsLowerPlanWithLog(sentence: string, prompt: string): boolean {
-  if (isLoggingProductSentence(sentence)) return false;
+  if (!namesLogAsWafAction(sentence)) return false;
   const folded = hideLogpush(withoutLogin(foldGenerated(sentence)));
   if (!/\blog\b/.test(folded)) return false;
   if (isLogActionLabel(folded) && statedPlan(prompt) !== 'enterprise') {
@@ -383,7 +369,7 @@ function subsetSentence(lang: Lang): string {
   return lang === 'en' ? 'The deployment runs a subset of rules.' : 'Bản deployment chỉ chạy một phần rule.';
 }
 
-const INVENTED_ACTION = /\b(?:simulate|quarantine|monitor|tarpit|captcha|sinkhole|observe)\b/;
+const INVENTED_ACTION = /\b(?:simulate|quarantine|monitor|tarpit|captcha|sinkhole|observe)\b|non-interactive challenge/;
 
 function knownActionsInstruction(lang: Lang): string {
   return lang === 'en'
@@ -397,6 +383,7 @@ function inventsWafAction(sentence: string): boolean {
   if (!INVENTED_ACTION.test(folded)) return false;
   if (/\bnot an action\b|\bkhong phai action\b/.test(folded)) return false;
   if (claimIsDenied(folded, INVENTED_ACTION)) return false;
+  if (/non-interactive challenge/.test(folded)) return true;
   return (
     /\b(?:action|hanh dong|mode)\b[\s\S]{0,48}(?:simulate|quarantine|monitor|tarpit|captcha|sinkhole|observe)\b/.test(
       folded,
@@ -432,6 +419,20 @@ function cleanupGaps(text: string): string {
     .trim();
 }
 
+function isRefusalOpener(sentence: string): boolean {
+  const folded = foldGenerated(sentence);
+  return /^(?:i (?:can(?:not|'t)|am unable|am sorry)|sorry[, ]|i'm sorry|im sorry|unable to|toi khong the|minh khong the|em khong the|xin loi|toi xin loi)\b/.test(
+    folded,
+  );
+}
+
+/** "Turn on SDD to confirm Enterprise" is not a dashboard step. */
+function inventedEnterpriseProbe(sentence: string): boolean {
+  const folded = foldGenerated(sentence);
+  if (!/\bsdd\b|sensitive data|du lieu nhay cam|phat hien the/.test(folded)) return false;
+  return /confirm|verify|xac nhan|de chung minh|to prove|kiem tra/.test(folded) && /enterprise|plan|goi/.test(folded);
+}
+
 export function rewritePlanGatedActions(text: string, lang: Lang, prompt: string): string {
   const plan = statedPlan(prompt);
   const logLine = logEnterpriseInstruction(lang);
@@ -448,6 +449,7 @@ export function rewritePlanGatedActions(text: string, lang: Lang, prompt: string
   let sawLogpush = false;
   let sawBusinessCmr = false;
   const rewritten = rewriteSentences(source, (sentence) => {
+    if (isRefusalOpener(sentence) || inventedEnterpriseProbe(sentence)) return '';
     if (inventsWafAction(sentence)) return knownActionsInstruction(lang);
     if (deniesBusinessManagedRuleset(sentence)) {
       sawBusinessCmr = true;
@@ -486,7 +488,10 @@ export function rewritePlanGatedActions(text: string, lang: Lang, prompt: string
   });
   let next = cleanupGaps(rewritten);
   if (sawUpsell || sawSdd) next = appendMissing(next, featureLine);
-  else if (sawLog && plan !== 'enterprise') next = appendMissing(next, logLine);
+  else if (sawLog && plan !== 'enterprise') {
+    next = appendMissing(next, logLine);
+    if (promptAsksLogAction(prompt)) next = appendMissing(next, logInsteadInstruction(lang));
+  }
   if (sawSave) next = appendMissing(next, saveLine);
   else if (sawSaveLimit && !hasSubsetPoint(next)) next = appendMissing(next, subsetSentence(lang));
   if (sawBot) next = appendMissing(next, botManagementInstruction(lang));
@@ -726,7 +731,7 @@ export function guardGenerateText(text: string, lang: Lang, prompt = ''): string
     if (fallback) guarded = fallback;
   }
   guarded = correctBackwardsNameservers(guarded, lang, prompt);
-  return ensureRequiredSteps(guarded, lang, prompt);
+  return dedupePlanRows(ensureRequiredSteps(guarded, lang, prompt));
 }
 
 function rewriteChoice(choice: unknown, lang: Lang, prompt: string): unknown {
@@ -800,9 +805,11 @@ async function reviewText(
     text,
     lang,
     async (claims) => {
-      const map = await gatherVerdicts(claims, async (group) => {
+      const open = claims.filter((claim) => !tableConfirms(claim.text) && !tableContradicts(claim.text, prompt));
+      if (!open.length) return claims.map((claim) => ({ id: claim.id, verdict: 'ok' as const }));
+      const map = await gatherVerdicts(open, async (group) => {
         const reviewedGroup = await run(MODEL, {
-          max_tokens: 256,
+          max_tokens: 96,
           messages: claimCheckMessages(group, lang),
         });
         if (aiResponseFailed(reviewedGroup)) throw new Error('ai-502');

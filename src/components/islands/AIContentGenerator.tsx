@@ -98,7 +98,14 @@ export default function AIContentGenerator() {
         {output ? (
           <pre
             className="whitespace-pre-wrap rounded-xl border p-4 text-sm"
-            style={{ borderColor: 'var(--cf-border)', background: 'var(--cf-surface)', color: 'var(--cf-text)' }}
+            style={{
+              borderColor: 'var(--cf-border)',
+              background: 'var(--cf-surface)',
+              color: 'var(--cf-text)',
+              overflowWrap: 'anywhere',
+              wordBreak: 'break-word',
+              maxWidth: '100%',
+            }}
           >
             {output}
           </pre>
