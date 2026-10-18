@@ -99,9 +99,15 @@ const HOSTNAME =
 
 const DOCS_HOST = /^(?:dash|developers|www)\.cloudflare\.com$/;
 
-/** "Log là ở mục", "nằm ở", "có tại", "ở mục Log", "vào phần Log". */
+/** "Log là ở mục", "nằm ở", "có tại", "ở mục Log", "vào phần Log", "thì Log", "Log có ở". */
 const LOG_MENU =
-  /\blog\b[\s\S]{0,40}\b(?:la\s+(?:o|nam|tai)|nam o|co tai)\b|\b(?:o muc|vao phan|nam o|co tai)\b[\s\S]{0,40}\blog\b|\bla\s+["'(]*log\b/;
+  /\blog\b[\s\S]{0,40}\b(?:la\s+(?:o|nam|tai)|nam o|co tai|co o)\b|\b(?:o muc|vao phan|nam o|co tai)\b[\s\S]{0,40}\blog\b|\b(?:la|thi|is)\s+["'(]*log\b/;
+
+const NEGATION =
+  /\b(?:not|no|never|don't|dont|doesn't|doesnt|isn't|isnt|without|khong|chang)\b/;
+
+const ENTERPRISE_ONLY_SHAPE =
+  /enterprise-only|only on enterprise|only available on enterprise|chi co tren enterprise|chi co o enterprise|chi co\b[\s\S]{0,20}\benterprise|only enterprise/;
 
 const AVAILABILITY =
   /\b(?:available|included|includes|include|ships with|comes with|supported|ho tro|co tren|co san|only on|chi co)\b/;
@@ -110,11 +116,16 @@ function hideLogpush(folded: string): string {
   return folded.replace(/\blog(?:ging)?\s+in\b/g, ' ').replace(/\blogin\b/g, ' ').replace(/logpush/g, ' ');
 }
 
-/** Any concrete nameserver hostname. Docs and dashboard hosts are not nameservers. */
+/** NS records, nameservers, or "bản ghi NS", in either language. */
+function namesNameserverTopic(folded: string): boolean {
+  return /\bnameservers?\b|\bname servers?\b|\bns records?\b|\bban ghi ns\b|\brecord ns\b|\bmay chu ten\b|\bns\b/.test(folded);
+}
+
+/** Any concrete nameserver hostname, whatever the sentence calls the record. Docs hosts stay. */
 export function hasInventedNameserverHost(sentence: string): boolean {
   const folded = foldFeature(sentence);
   if (CONCRETE_NAMESERVER.test(folded) || NS_SHAPED_HOST.test(folded)) return true;
-  if (!/\bnameservers?\b|\bname servers?\b/.test(folded)) return false;
+  if (!namesNameserverTopic(folded)) return false;
   HOSTNAME.lastIndex = 0;
   for (const match of folded.matchAll(HOSTNAME)) {
     if (DOCS_HOST.test(match[0])) continue;
@@ -157,6 +168,14 @@ function isSaveClaim(folded: string): boolean {
   return /\bsav(?:e|ing)\b/.test(folded) && SAVE_QUANTIFIER.test(folded) && /\brules?\b/.test(folded);
 }
 
+/** "tất cả rule đều chạy" / "all rules run" contradicts the Save row, even without the word Save. */
+function claimsAllRulesRun(folded: string): boolean {
+  if (!/tat ca (?:cac )?rules? deu chay|all rules run|every rule runs|moi rule deu chay|runs every rule|chay het rule|tat ca rules? chay/.test(folded)) {
+    return false;
+  }
+  return !NEGATION.test(folded);
+}
+
 function mentionsManagedRuleset(folded: string): boolean {
   return /cloudflare managed ruleset|managed ruleset/.test(folded);
 }
@@ -181,16 +200,19 @@ export function businessManagedRulesetLine(lang: GenerateLang): string {
   return PLAN_FEATURE_ROWS.find((row) => row.id === 'business-cmr')?.[lang] ?? '';
 }
 
-function learnerPlan(text: string): 'enterprise' | 'business' | 'pro' | 'free' | 'unknown' {
+/**
+ * The learner's own plan: a profile line or a first-person statement.
+ * The first match wins. A plan named later, in passing, does not replace it.
+ */
+function ownPlan(text: string): 'enterprise' | 'business' | 'pro' | 'free' | 'unknown' {
   const folded = foldFeature(text);
-  const re =
-    /\b(?:i am on|im on|on the|on a|using|goi|dang dung|toi dung|dung goi)\s+(?:the\s+|goi\s+)?(enterprise|business|pro|free)\b|\b(enterprise|business|pro|free)\s+plan\b|\bplan\s+(enterprise|business|pro|free)\b/g;
-  let found: 'enterprise' | 'business' | 'pro' | 'free' | 'unknown' = 'unknown';
-  for (const match of folded.matchAll(re)) {
-    const plan = match[1] || match[2] || match[3];
-    if (plan === 'enterprise' || plan === 'business' || plan === 'pro' || plan === 'free') found = plan;
-  }
-  return found;
+  const match =
+    /\b(?:i am on|im on|i'm on|i use|i'm using|my plan is|toi dung|toi dang|minh dung|em dung|dang dung goi|dung goi|goi cua toi(?: la)?|plan cua toi(?: la)?)\s+(?:the\s+|goi\s+|la\s+)?(enterprise|business|pro|free)\b/.exec(
+      folded,
+    );
+  const plan = match?.[1];
+  if (plan === 'enterprise' || plan === 'business' || plan === 'pro' || plan === 'free') return plan;
+  return 'unknown';
 }
 
 /** Log named as the action, including "Log là ở mục" and "vào phần Log". */
@@ -215,22 +237,28 @@ function featureAvailabilityClaim(folded: string): boolean {
 
 /**
  * A sentence the claim check must classify.
- * A menu path stays in the sentence. A hostname-free nameserver step is not a claim.
- * Mentioning a plan or a feature, with no availability claim, is not a claim either.
+ * Every plan mention and every Log mention is a claim, including plan-only sentences
+ * and Log with no action word. A hostname-free nameserver paste step is not a claim.
  */
 export function mentionsPlanOrFeature(sentence: string, context = ''): boolean {
   if (hasInventedNameserverHost(sentence)) return true;
   if (isProceduralStep(sentence)) return false;
   const folded = foldFeature(sentence);
+  const hidden = hideLogpush(folded);
+  if (PLAN.test(folded) || LOG_ACTION.test(hidden)) return true;
+  if (claimsAllRulesRun(folded)) return true;
   if (isManagedChallengeRecordOnly(sentence)) return true;
   if (isSddPronounFollowUp(sentence, context)) return true;
   if (isSaveClaim(folded)) return true;
-  if (NAMESERVER.test(folded) && !isProceduralStep(sentence)) return true;
+  if (NAMESERVER.test(folded) || (namesNameserverTopic(folded) && hasInventedNameserverHost(sentence))) return true;
   if (INVENTED.test(folded) && /\b(?:action|hanh dong|mode)\b/.test(folded)) return true;
   if (logPlanClaim(folded)) return true;
   if (featureAvailabilityClaim(folded)) return true;
   if (SDD.test(folded) && (PLAN.test(folded) || /\b(?:enable|turn|bat|already|included)\b/.test(folded))) return true;
   if (BOT.test(folded) && (PLAN.test(folded) || /\b(?:enable|turn|bat|included|available)\b/.test(folded))) return true;
+  if (/super bot fight mode|bot fight mode/.test(folded) && (PLAN.test(folded) || NEGATION.test(folded) || ENTERPRISE_ONLY_SHAPE.test(folded))) {
+    return true;
+  }
   if (LOGPUSH.test(folded) && (PLAN.test(folded) || AVAILABILITY.test(folded) || /\benterprise\b/.test(folded))) return true;
   if (RULESET.test(folded)) {
     if (/\b(?:available|included|includes|only on|not on|needs pro|pro or above|pro tro len|khong co|lacks|lack|upgrade|nang cap)\b/.test(folded)) {
@@ -311,8 +339,15 @@ export function tableConfirms(sentence: string): boolean {
   if (BOT.test(folded) && /\benterprise\b/.test(folded) && !LOWER_PLAN.test(folded) && !/not available|does not|khong/.test(folded)) {
     return true;
   }
-  if (/super bot fight mode/.test(folded) && /\b(?:pro|business|enterprise)\b/.test(folded) && !/\bfree\b/.test(folded)) {
-    if (!/not available|does not|khong co|khong ho tro/.test(folded)) return true;
+  if (
+    /super bot fight mode/.test(folded) &&
+    /\b(?:pro|business)\b/.test(folded) &&
+    /\b(?:included|include|available|use|dung)\b/.test(folded) &&
+    !/\bfree\b/.test(folded) &&
+    !NEGATION.test(folded) &&
+    !ENTERPRISE_ONLY_SHAPE.test(folded)
+  ) {
+    return true;
   }
   if (/managed challenge/.test(folded) && /not a record-only|not record-only|khong phai action chi ghi/.test(folded)) return true;
   if (RULESET.test(folded) && /pro or above|pro tro len|needs pro|can pro|not on the free|khong co tren/.test(folded)) {
@@ -329,6 +364,30 @@ export function tableConfirms(sentence: string): boolean {
     return true;
   }
   return false;
+}
+
+/** Log named as an action in a Managed Challenge step. The action challenges; it is not Log. */
+function logUnderManagedChallenge(sentence: string): boolean {
+  const folded = foldFeature(sentence);
+  const hidden = hideLogpush(folded);
+  if (!/managed challenge/.test(folded) || !LOG_ACTION.test(hidden)) return false;
+  return !/instead of|thay cho|not a record-only|khong phai action chi ghi|enterprise only|enterprise-only|chi co tren enterprise|have no log|khong co log|\bno log\b/.test(
+    folded,
+  );
+}
+
+/**
+ * Log paired with a non-Enterprise plan, or with no plan when the learner is not on Enterprise.
+ * The table must confirm it. Otherwise it is a contradiction, including when the verdict is ok.
+ */
+function logGrantUnconfirmed(sentence: string, context: string): boolean {
+  const folded = foldFeature(sentence);
+  const hidden = hideLogpush(folded);
+  if (!LOG_ACTION.test(hidden) || tableConfirms(sentence)) return false;
+  if (NEGATION.test(folded) || /instead of|thay cho/.test(folded)) return false;
+  // A passing mention of Enterprise does not make the learner an Enterprise user.
+  if (ownPlan(context) === 'enterprise' && !LOWER_PLAN.test(folded)) return false;
+  return LOWER_PLAN.test(folded) || ownPlan(context) !== 'enterprise';
 }
 
 /** The sentence conflicts with the table. This wins over an ok verdict. */
@@ -355,7 +414,10 @@ export function tableContradicts(sentence: string, context = ''): boolean {
   ) {
     return true;
   }
-  const enterpriseUse = learnerPlan(`${context}\n${sentence}`) === 'enterprise' && !LOWER_PLAN.test(folded);
+  if (claimsAllRulesRun(folded)) return true;
+  if (logUnderManagedChallenge(sentence)) return true;
+  if (logGrantUnconfirmed(sentence, context)) return true;
+  const enterpriseUse = ownPlan(context) === 'enterprise' && !LOWER_PLAN.test(folded);
   if (
     LOG_ACTION.test(hidden) &&
     !enterpriseUse &&
@@ -397,12 +459,12 @@ export function rewriteFromTable(sentence: string, lang: GenerateLang, context =
     ids.push('waf-actions');
   }
   if (SDD.test(folded) || isSddPronounFollowUp(sentence, context)) ids.push('sdd');
-  if (BOT.test(folded)) ids.push('bots');
+  if (BOT.test(folded) || /super bot fight mode|bot fight mode/.test(folded)) ids.push('bots');
   if (deniesBusinessManagedRuleset(sentence)) ids.push('business-cmr');
   else if (RULESET.test(folded)) ids.push('rulesets');
   if (LOGPUSH.test(folded)) ids.push('logpush');
   if (NAMESERVER.test(folded) || hasInventedNameserverHost(sentence)) ids.push('nameservers');
-  if (isSaveClaim(folded)) ids.push('save');
+  if (isSaveClaim(folded) || claimsAllRulesRun(folded)) ids.push('save');
   if (!ids.length && PLAN.test(folded)) return '';
   const lines = ids.map((id) => PLAN_FEATURE_ROWS.find((row) => row.id === id)?.[lang] ?? '').filter(Boolean);
   return lines.join(' ');

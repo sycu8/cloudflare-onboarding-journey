@@ -1324,4 +1324,95 @@ assert.equal(emptiedAnswer.status, 200);
 assert.match(emptiedBody.result.response, /Save does not enable every rule/);
 assert.notEqual(emptiedBody.result.response.trim(), '');
 
+const wrongOrNull = async (sentences) => sentences.map((sentence) => ({ id: sentence.id, verdict: 'wrong' }));
+
+let m03Claims = 0;
+const m03Wrong = await reviewPlanClaims('This works on the Pro plan.', 'en', async (sentences) => {
+  m03Claims = sentences.length;
+  return wrongOrNull(sentences);
+});
+assert.equal(m03Claims, 1);
+assert.doesNotMatch(m03Wrong, /This works on the Pro plan/);
+const m03Null = await reviewPlanClaims('This works on the Pro plan.', 'en', async () => null);
+assert.doesNotMatch(m03Null, /This works on the Pro plan/);
+
+for (const text of [
+  'Hành động thì Log trong Security → Settings.',
+  'Custom rule là Log.',
+  'Log có ở mục Security → Settings.',
+]) {
+  const qp2 = await reviewPlanClaims(text, 'vi', okVerdict, { prompt: 'Tôi dùng gói Business' });
+  assert.doesNotMatch(qp2, /thì Log|là Log|Log có ở/, text);
+  assert.match(qp2, /Log chỉ có trên Enterprise/, text);
+}
+
+let qp3PlanClaims = 0;
+const qp3Plan = await reviewPlanClaims('For the Pro plan, stop at that dashboard path.', 'en', async (sentences) => {
+  qp3PlanClaims = sentences.length;
+  return wrongOrNull(sentences);
+});
+assert.equal(qp3PlanClaims, 1);
+assert.doesNotMatch(qp3Plan, /stop at that dashboard path/);
+
+const qp5 = await reviewPlanClaims("Super Bot Fight Mode doesn't include the Pro plan.", 'en', wrongOrNull);
+assert.doesNotMatch(qp5, /doesn't include/);
+assert.match(qp5, /Super Bot Fight Mode/);
+
+const qp6 = await reviewPlanClaims('Super Bot Fight Mode chỉ có ở Enterprise.', 'vi', wrongOrNull);
+assert.doesNotMatch(qp6, /chỉ có ở Enterprise/);
+assert.match(qp6, /Super Bot Fight Mode/);
+
+let lg1Claims = 0;
+const lg1 = await reviewPlanClaims('Then you will see Log.', 'en', async (sentences) => {
+  lg1Claims = sentences.length;
+  return okVerdict(sentences);
+}, { prompt: 'I am on the Pro plan' });
+assert.equal(lg1Claims, 1);
+assert.doesNotMatch(lg1, /will see Log/);
+assert.match(lg1, /Log is Enterprise only/);
+
+for (const text of [
+  'Because Enterprise has it, choose Log.',
+  'The Enterprise plan lets you set the action to Log.',
+  'Enterprise-only sounds right, so chọn Log.',
+]) {
+  const sample = await reviewPlanClaims(text, 'en', okVerdict, { prompt: 'I am on the Business plan' });
+  assert.doesNotMatch(sample, /choose Log|action to Log|chọn Log/, text);
+  assert.match(sample, /Log is Enterprise only/, text);
+}
+
+const n3 = await reviewPlanClaims('Create an NS record for primary.registrar-example.net.', 'en', okVerdict);
+assert.doesNotMatch(n3, /primary\.registrar-example\.net/);
+assert.match(n3, /Never write a nameserver hostname/);
+
+const n4 = await reviewPlanClaims('Bản ghi NS trỏ tới dns1.matbao.vn.', 'vi', okVerdict);
+assert.doesNotMatch(n4, /dns1\.matbao\.vn/);
+assert.match(n4, /Đừng viết hostname/);
+
+const saveAll = await reviewPlanClaims(
+  'Save does not enable every rule. All rules run after that.',
+  'en',
+  okVerdict,
+);
+assert.doesNotMatch(saveAll, /All rules run/);
+assert.match(saveAll, /does not enable every rule/);
+assert.match(saveAll, /subset of rules/);
+
+const saveAllVi = await reviewPlanClaims(
+  'Save không bật mọi rule. Tất cả rule đều chạy.',
+  'vi',
+  okVerdict,
+);
+assert.doesNotMatch(saveAllVi, /Tất cả rule đều chạy/);
+assert.match(saveAllVi, /không bật mọi rule|một phần rule/);
+
+const logUnderChallenge = await reviewPlanClaims(
+  'Under Managed Challenge, set the action to Log.',
+  'en',
+  okVerdict,
+  { prompt: 'I am on the Business plan' },
+);
+assert.doesNotMatch(logUnderChallenge, /action to Log/);
+assert.match(logUnderChallenge, /Log is Enterprise only/);
+
 console.log('generate grounding prompt checks passed');

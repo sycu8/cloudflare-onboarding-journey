@@ -195,11 +195,11 @@ function namesLogAsWafAction(sentence: string): boolean {
   if (/\b(?:hanh dong|action)\s*[:=,]?\s*log\b/.test(folded)) return true;
   // Copula: "hành động là Log", "đây là Log", "quyền chọn là Log", "action is Log".
   if (/\b(?:hanh dong|action)\b[\s\S]{0,40}\b(?:la|is)\s+["'(]*log\b/.test(folded)) return true;
-  if (/\b(?:la|chinh la|day la|do la|is)\s+["'(]*log\b/.test(folded)) return true;
+  if (/\b(?:la|thi|chinh la|day la|do la|is)\s+["'(]*log\b/.test(folded)) return true;
   // Menu option: "mục Log", "menu Log", "option Log", "vào phần Log".
   if (/\b(?:menu|option|muc|lua chon|tuy chon|quyen chon|vao phan|phan)\s+["'(]*log\b/.test(folded)) return true;
-  // Copula after Log: "Log là ở mục", "Log nằm ở", "Log có tại".
-  if (/\blog\b[\s\S]{0,40}\b(?:la\s+(?:o|nam|tai)|nam o|co tai)\b/.test(folded)) return true;
+  // Copula after Log: "Log là ở mục", "Log nằm ở", "Log có tại", "Log có ở".
+  if (/\blog\b[\s\S]{0,40}\b(?:la\s+(?:o|nam|tai)|nam o|co tai|co o)\b/.test(folded)) return true;
   if (/\b(?:nam o|co tai)\b[\s\S]{0,40}\blog\b/.test(folded)) return true;
   if (/\blog\s+(?:action|mode|menu|option|muc)\b/.test(folded)) return true;
   if (/\bto\s+log\b|\bsang\s+log\b|\bde\s+log\b/.test(folded)) return true;
