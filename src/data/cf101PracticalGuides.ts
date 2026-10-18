@@ -48,16 +48,47 @@ export const basicConfigurationSections: PracticalGuideSection[] = [
     id: 'waf-lab',
     title: { vi: 'Cấu hình WAF (lab)', en: 'WAF configuration (lab)' },
     summary: {
-      vi: 'Managed Ruleset bảo vệ nhanh; Custom rules và Rate limiting cho policy riêng.',
-      en: 'Managed Ruleset for quick protection; custom rules and rate limiting for your policies.',
+      vi: 'Free đã có WAF: Free Managed Ruleset (bật sẵn) và custom rules. Cloudflare Managed Ruleset cần Pro trở lên. OWASP Core Ruleset cần Pro trở lên.',
+      en: 'Free already has WAF: the Free Managed Ruleset (already on) and custom rules. The Cloudflare Managed Ruleset needs Pro or above. The OWASP Core Ruleset needs Pro or above.',
     },
-    docsPath: '/waf/',
+    docsPath: '/waf/managed-rules/',
     bullets: [
-      { text: { vi: 'Bật Cloudflare Managed Ruleset — chặn path nhạy cảm (.git, secrets) ngay.', en: 'Enable Managed Ruleset — blocks sensitive paths (.git, secrets) quickly.' } },
-      { text: { vi: 'Actions: Block, Managed Challenge, JS Challenge, Interactive Challenge, Log.', en: 'Actions: Block, Managed Challenge, JS Challenge, Interactive Challenge, Log.' } },
-      { text: { vi: 'Managed Challenge cấp cookie cf_clearance — request sau không bị challenge lại.', en: 'Managed Challenge sets cf_clearance — subsequent requests skip re-challenge.' } },
-      { text: { vi: 'Rate limiting: ví dụ 5 req/phút/IP cho /login — block 429 khi vượt ngưỡng.', en: 'Rate limiting: e.g. 5 req/min/IP on /login — 429 when exceeded.' } },
-      { text: { vi: 'Xem Security → Analytics → Events để phân tích block theo IP, country, rule.', en: 'Use Security → Analytics → Events to analyze blocks by IP, country, rule.' } },
+      {
+        text: {
+          vi: 'Free đã có WAF: Cloudflare Free Managed Ruleset có trên mọi plan và được bật sẵn, cùng custom rules. Không bật Cloudflare Managed Ruleset hay OWASP Core Ruleset trên Free — hai ruleset đó cần Pro trở lên. Sensitive Data Detection chỉ có trên Enterprise.',
+          en: 'Free already has WAF: the Cloudflare Free Managed Ruleset is on every plan and is already deployed, plus custom rules. Do not turn on the Cloudflare Managed Ruleset or the OWASP Core Ruleset on Free — both need Pro or above. Sensitive Data Detection is Enterprise only.',
+        },
+      },
+      {
+        text: {
+          vi: 'Pro và Business: Cloudflare Managed Ruleset không bật sẵn và cần Pro trở lên. Vào Security → Settings, lọc Web application exploits, rồi bật Cloudflare managed ruleset. OWASP Core là tùy chọn và cũng cần Pro trở lên. Xem deployment settings rồi Save. Save không bật mọi rule. Sau khi bật, chỉ một phần rule chạy. Không override mọi rule sang Block.',
+          en: 'Pro and Business: the Cloudflare Managed Ruleset is not already on, and it needs Pro or above. Go to Security → Settings, filter by Web application exploits, then turn on Cloudflare managed ruleset. OWASP Core is optional and also needs Pro or above. Review the deployment settings, then Save. Save does not enable every rule. After you turn it on, only a subset of rules runs. Do not override every rule to Block.',
+        },
+      },
+      {
+        text: {
+          vi: 'Enterprise: cùng đường Security → Settings. Muốn xem rule mới trước khi chặn thì dùng action Log, rồi xem Security Events. Log và Sensitive Data Detection chỉ có trên Enterprise — đừng nâng cấp lên Pro hoặc Business để có chúng. Free, Pro và Business không có Log: bắt đầu bằng Managed Challenge, xem Security Events, rồi mới đổi sang Block. Simulate không phải action.',
+          en: 'Enterprise: same Security → Settings path. To watch a new rule before blocking, use the Log action, then review Security Events. Log and Sensitive Data Detection are Enterprise-only — do not upgrade to Pro or Business for them. Free, Pro, and Business have no Log: start with Managed Challenge, review Security Events, then switch to Block. Simulate is not an action.',
+        },
+      },
+      {
+        text: {
+          vi: 'Sau khi đã bật ruleset: Security → Security rules, lọc Managed rules, mở rule có action Execute nếu cần đổi scope hoặc override.',
+          en: 'After a ruleset is on: Security → Security rules, filter Managed rules, and open the rule whose action is Execute when you need to change scope or an override.',
+        },
+      },
+      {
+        text: {
+          vi: 'Action khi override: Block, Managed Challenge, Non-Interactive Challenge, Interactive Challenge. Log chỉ có trên Enterprise.',
+          en: 'Override actions: Block, Managed Challenge, Non-Interactive Challenge, Interactive Challenge. Log is Enterprise-only.',
+        },
+      },
+      {
+        text: {
+          vi: 'WAF chỉ thấy HTTP khi hostname đang proxied (đám mây cam). Không bật WAF trong cài đặt WordPress.',
+          en: 'WAF only sees HTTP when the hostname is proxied (orange cloud). Do not enable WAF inside WordPress settings.',
+        },
+      },
     ],
   },
   {

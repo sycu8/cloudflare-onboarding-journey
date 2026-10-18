@@ -130,6 +130,8 @@ jobs:
             exit 0
           fi
           PROJECT="${{ vars.CF_PAGES_PROJECT_UAT || 'cloudflare-starter-hub-uat' }}"
+          # pull_request github.sha is the merge commit. The preview is built from the PR head.
+          HEAD_SHA="${{ github.event.pull_request.head.sha || github.sha }}"
           if [ "${{ github.event_name }}" = "pull_request" ]; then
             BRANCH="pr-${{ github.event.pull_request.number }}"
           else
@@ -139,17 +141,26 @@ jobs:
           npx wrangler pages deploy dist \
             --project-name="$PROJECT" \
             --branch="$BRANCH" \
+            --commit-hash="$HEAD_SHA" \
+            --commit-message="UAT $HEAD_SHA" \
             --commit-dirty=true 2>&1 | tee "$LOG"
-          URL=$(grep 'Deployment complete' "$LOG" | grep -oE 'https://[a-z0-9-]+\.[a-z0-9.-]+\.pages\.dev' | head -1)
+          # Unique deployment URL from this run ("Deployment complete"), not the branch alias
+          # (pr-N / head / main), which can later point at a different deploy.
+          URL=$(grep 'Deployment complete' "$LOG" | grep -oE 'https://[a-z0-9]+\.[a-z0-9.-]+\.pages\.dev' | tail -1)
           if [ -z "$URL" ]; then
-            URL=$(grep -oE 'https://[a-z0-9-]+\.[a-z0-9.-]+\.pages\.dev' "$LOG" | grep -vE 'https://(head|main)\.' | head -1)
+            URL=$(grep -oE 'https://[a-z0-9]+\.[a-z0-9.-]+\.pages\.dev' "$LOG" | tail -1)
           fi
           if [ -z "$URL" ]; then
             echo "Could not parse deployment URL from wrangler output"
             exit 1
           fi
+          HASH=$(printf '%s\n' "$URL" | sed -E 's#https://([a-z0-9]+)\..*#\1#')
           echo "deployment-url=$URL" >> "$GITHUB_OUTPUT"
-          echo "Deployed UAT: $URL (branch $BRANCH)"
+          echo "deployment-hash=$HASH" >> "$GITHUB_OUTPUT"
+          echo "deployment-commit=$HEAD_SHA" >> "$GITHUB_OUTPUT"
+          echo "Deployed UAT: $URL"
+          echo "UAT deployment hash: $HASH"
+          echo "UAT commit: $HEAD_SHA (branch $BRANCH)"
 
       - name: Smoke test UAT
         if: steps.deploy.outputs.deployment-url != ''
@@ -173,8 +184,10 @@ jobs:
         with:
           script: |
             const url = '${{ steps.deploy.outputs.deployment-url }}';
+            const hash = '${{ steps.deploy.outputs.deployment-hash }}';
+            const commit = '${{ steps.deploy.outputs.deployment-commit }}';
             const pr = context.payload.pull_request.number;
-            const body = `## UAT deployed\n\n**Preview:** ${url}\n\nApproved via environment \`uat\`. Re-test after new commits — Stage 1 approval is required again.\n\nWhen UAT looks good, merge to \`main\` and approve **production** in the Deploy workflow.`;
+            const body = `## UAT deployed\n\n**Preview:** ${url}\n**Deployment hash:** \`${hash}\`\n**Commit:** \`${commit}\`\n\nThis preview is the unique deployment Wrangler created for that commit. Re-test this hash, not an older alias.\n\nApproved via environment \`uat\`. Re-test after new commits — Stage 1 approval is required again.\n\nWhen UAT looks good, merge to \`main\` and approve **production** in the Deploy workflow.`;
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,

@@ -6,14 +6,17 @@ import { spawnSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const retiredModelTest = spawnSync(
-  process.execPath,
-  ['--experimental-strip-types', join(dirname(fileURLToPath(import.meta.url)), 'test-retired-ai-models.mjs')],
-  { stdio: 'inherit' },
-);
-if (retiredModelTest.status !== 0) {
-  process.exit(retiredModelTest.status ?? 1);
+const scriptsDir = dirname(fileURLToPath(import.meta.url));
+
+function runNodeScript(name) {
+  const result = spawnSync(process.execPath, ['--experimental-strip-types', join(scriptsDir, name)], {
+    stdio: 'inherit',
+  });
+  if (result.status !== 0) process.exit(result.status ?? 1);
 }
+
+runNodeScript('test-retired-ai-models.mjs');
+runNodeScript('test-generate-grounding.mjs');
 
 const BASE = (process.argv[2] || 'http://127.0.0.1:4321').replace(/\/$/, '');
 const IS_LOCAL_PREVIEW = /^https?:\/\/(?:127\.0\.0\.1|localhost)(?::\d+)?$/i.test(BASE);
