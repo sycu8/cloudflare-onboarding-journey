@@ -1,4 +1,5 @@
 import { buildGenerateMessages, curatedOnboardingContext, type GenerateLang } from './generateGrounding.ts';
+import { claimCheckMessages, parseClaimVerdicts, reviewPlanClaims } from './planFeatures.ts';
 
 const MODEL = '@cf/meta/llama-3.1-8b-instruct-fp8';
 /** Explicit output cap for a short lesson (5 bullets + one next step). */
@@ -30,7 +31,7 @@ const ZERO_WIDTH = /[\u200B-\u200D\uFEFF\u2060\u180E]/g;
  * dash.cloudflare.com and developers.cloudflare.com do not match.
  */
 const INVENTED_NAMESERVER =
-  /(?<![a-z0-9])(?:_?ns(?:-?\d+[a-z]?)?|[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.ns)\.cloudflare\.(?:com|net)/i;
+  /(?<![a-z0-9])(?:_?ns(?:-?\d+[a-z]?|-[a-z0-9]+)?|[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.ns)\.cloudflare\.(?:com|net)/i;
 
 export function nameserverOverviewInstruction(lang: Lang): string {
   return lang === 'en'
@@ -52,15 +53,17 @@ function enterpriseFeatureInstruction(lang: Lang): string {
 
 /** Strip characters that hide a hostname, then fold full-width ASCII to ASCII. */
 export function normalizeGeneratedText(text: string): string {
-  return text.replace(ZERO_WIDTH, '').replace(/[\u2018\u2019]/g, "'").normalize('NFKC');
+  return text
+    .replace(ZERO_WIDTH, '')
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[\u201C\u201D]/g, '"')
+    .normalize('NFKC');
 }
 
 function foldGenerated(text: string): string {
-  return normalizeGeneratedText(text)
-    .normalize('NFD')
-    .replace(/\p{M}/gu, '')
-    .toLowerCase()
-    .replace(/đ/g, 'd');
+  // Keep đừng distinct from dùng. Both would otherwise fold to "dung".
+  const marked = normalizeGeneratedText(text).replace(/đừng/gi, ' dungneg ');
+  return marked.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().replace(/đ/g, 'd');
 }
 
 export type StatedPlan = 'enterprise' | 'business' | 'pro' | 'free' | 'unknown';
@@ -122,21 +125,51 @@ function splitClauses(folded: string): string[] {
   return folded.split(/\s*(?:,|;|\b(?:but|however|nhung)\b)\s*/).filter((part) => part.length > 0);
 }
 
-/** Negation that governs this clause, not a later contrast ("all rules, not a subset"). */
-function claimClauseNegated(clause: string): boolean {
-  return /\b(?:not|no|never|cannot|can't|dont|don't|doesn't|doesnt|isn't|isnt|without|khong|chua|chang|neither)\b|\binstead of\b|\bthay cho\b|\benterprise-only\b|\bchi co tren enterprise\b|\bonly available on enterprise\b/.test(
+/**
+ * Clause-level denial that does not use without / chưa / đừng.
+ * Those three only deny a claim when that claim is what they govern.
+ */
+function hardClauseNegated(clause: string): boolean {
+  return /\b(?:not|no|never|cannot|can't|dont|don't|doesn't|doesnt|isn't|isnt|khong|chang|neither)\b|\binstead of\b|\bthay cho\b|\benterprise-only\b|\bchi co tren enterprise\b|\bonly available on enterprise\b/.test(
     clause,
   );
+}
+
+/**
+ * without negates the words that follow it.
+ * chưa and đừng also negate a claim that sits immediately before them
+ * ("OWASP chưa có", "Log thì đừng").
+ */
+function softNegatorDenies(clause: string, claim: RegExp): boolean {
+  const re = /\b(?:without|chua|dungneg)\b/g;
+  for (const match of clause.matchAll(re)) {
+    const after = clause.slice(match.index, match.index + 48);
+    const word = match[0];
+    const before =
+      word === 'without' ? '' : clause.slice(Math.max(0, match.index - 32), match.index + word.length);
+    if (claim.test(after) || (before && claim.test(before))) return true;
+  }
+  return false;
+}
+
+function claimIsDenied(clause: string, claim: RegExp): boolean {
+  if (!claim.test(clause)) return false;
+  return hardClauseNegated(clause) || softNegatorDenies(clause, claim);
 }
 
 function plainLine(folded: string): string {
   return folded.replace(/\*\*|__/g, '');
 }
 
-/** Bulleted or bold list item whose label is the WAF Log action ("Log:", "**Log:**"). */
+/** Log as a label: a bullet, a bold item, a quote, or parentheses. */
 function isLogActionLabel(folded: string): boolean {
   const plain = plainLine(folded);
-  return /(?:^|\n)\s*(?:[-*]\s+)?log\s*:/.test(plain) || /(?:^|\n)\s*[-*]\s+log\s*[.!?…]?\s*$/.test(plain);
+  return (
+    /(?:^|\n)\s*(?:[-*]\s+)?log\s*:/.test(plain) ||
+    /(?:^|\n)\s*[-*]\s+log\s*[.!?…]?\s*$/.test(plain) ||
+    /["']log["']/.test(plain) ||
+    /\(\s*log(?:\s+action)?\s*\)/.test(plain)
+  );
 }
 
 /**
@@ -147,13 +180,15 @@ function isLogActionLabel(folded: string): boolean {
 function namesLogAsWafAction(sentence: string): boolean {
   const folded = hideLogpush(withoutLogin(foldGenerated(sentence)));
   if (!/\blog\b/.test(folded)) return false;
-  if (splitClauses(folded).every((clause) => !/\blog\b/.test(clause) || claimClauseNegated(clause))) return false;
+  if (splitClauses(folded).every((clause) => !/\blog\b/.test(clause) || claimIsDenied(clause, /\blog\b/))) return false;
   if (isLogActionLabel(folded)) return true;
   if (/\blog\s+mode\b|\bin\s+log\s+mode\b|\bmode\s+log\b/.test(folded)) return true;
-  if (/\b(?:chon|select|pick|choose)\s+log\b/.test(folded)) return true;
+  if (/\b(?:chon|select|pick|choose|use|using|dung|su dung)\s+["'(]*log\b/.test(folded)) return true;
   if (/\b(?:hanh dong|action)\s*[:=,]?\s*log\b/.test(folded)) return true;
+  // "hành động là Log" and "action is Log", including a short phrase between them.
+  if (/\b(?:hanh dong|action)\b[\s\S]{0,40}\b(?:la|is)\s+["'(]*log\b/.test(folded)) return true;
   if (/\blog\s+(?:action|mode)\b/.test(folded)) return true;
-  if (/\bto\s+log\b|\bsang\s+log\b/.test(folded)) return true;
+  if (/\bto\s+log\b|\bsang\s+log\b|\bde\s+log\b/.test(folded)) return true;
   // "để ở Log", "ở Log", "leave it at Log" — the action is left on Log.
   if (/\bo\s+log\b/.test(folded)) return true;
   if (/\b(?:leave|keep|put|set|place)\b[\s\S]{0,24}\bat\s+log\b/.test(folded)) return true;
@@ -172,12 +207,14 @@ function pairsLowerPlanWithLog(sentence: string, prompt: string): boolean {
   const folded = hideLogpush(withoutLogin(foldGenerated(sentence)));
   if (!/\blog\b/.test(folded)) return false;
   if (isLogActionLabel(folded) && statedPlan(prompt) !== 'enterprise') {
-    const labelClause = splitClauses(plainLine(folded)).find((clause) => /(?:^|\s)log\s*:/.test(clause)) ?? folded;
-    if (!claimClauseNegated(labelClause)) return true;
+    const labelClause =
+      splitClauses(plainLine(folded)).find((clause) => /(?:^|\s)log\s*:|["']log["']|\(\s*log\b/.test(clause)) ??
+      folded;
+    if (!claimIsDenied(labelClause, /\blog\b/)) return true;
   }
   const plan = statedPlan(prompt);
   return splitClauses(folded).some((clause) => {
-    if (!/\blog\b/.test(clause) || claimClauseNegated(clause)) return false;
+    if (!/\blog\b/.test(clause) || claimIsDenied(clause, /\blog\b/)) return false;
     if (LOWER_PLAN.test(clause)) return true;
     return plan !== 'enterprise' && namesLogAsWafAction(clause);
   });
@@ -185,17 +222,23 @@ function pairsLowerPlanWithLog(sentence: string, prompt: string): boolean {
 
 const LOWER_PLAN = /\b(?:free|pro|business)\b/;
 
-const ENABLE_VERB = /\b(?:enable|deploy|activate|switch on|turn on|bat|kich hoat)\b/;
+const ENABLE_VERB = /\b(?:enable|deploy|activate|switch on|turn on|bat|kich hoat|ships with|included|includes|include|co)\b/;
 
-/** SDD paired with a lower plan, or an enable verb when the learner is not on Enterprise. */
+const SDD_CLAIM =
+  /\bsdd\b|sensitive data|card detection|credit card|payment card|the tin dung|phat hien the|du lieu nhay cam/;
+
+const BOT_MGMT = /\bbot management\b|\bbot mgmt\b|bot-management/;
+
+/** SDD, including card detection, paired with a lower plan or an enable verb off Enterprise. */
 function misstatesSdd(sentence: string, prompt: string): boolean {
   const folded = foldGenerated(sentence);
-  if (!/\bsdd\b|sensitive data/.test(folded)) return false;
+  if (!SDD_CLAIM.test(folded)) return false;
   const plan = statedPlan(prompt);
+  const sentenceHasLower = LOWER_PLAN.test(folded);
   return splitClauses(folded).some((clause) => {
-    if (!/\bsdd\b|sensitive data/.test(clause) || claimClauseNegated(clause)) return false;
+    if (!SDD_CLAIM.test(clause) || claimIsDenied(clause, SDD_CLAIM)) return false;
     if (/\benterprise\b/.test(clause) && !LOWER_PLAN.test(clause)) return false;
-    if (LOWER_PLAN.test(clause)) return true;
+    if (LOWER_PLAN.test(clause) || sentenceHasLower) return true;
     return plan !== 'enterprise' && ENABLE_VERB.test(clause);
   });
 }
@@ -203,10 +246,10 @@ function misstatesSdd(sentence: string, prompt: string): boolean {
 /** Bot Management offered on Free, Pro, or Business. Super Bot Fight Mode stays. */
 function misstatesBotManagement(sentence: string, prompt: string): boolean {
   const folded = foldGenerated(sentence);
-  if (!/\bbot management\b/.test(folded)) return false;
+  if (!BOT_MGMT.test(folded)) return false;
   const plan = statedPlan(prompt);
   return splitClauses(folded).some((clause) => {
-    if (!/\bbot management\b/.test(clause) || claimClauseNegated(clause)) return false;
+    if (!BOT_MGMT.test(clause) || claimIsDenied(clause, BOT_MGMT)) return false;
     if (/\benterprise\b/.test(clause) && !LOWER_PLAN.test(clause)) return false;
     if (LOWER_PLAN.test(clause)) return true;
     return plan !== 'enterprise' && ENABLE_VERB.test(clause);
@@ -218,7 +261,7 @@ function inventsLoggingToggle(sentence: string): boolean {
   const folded = foldGenerated(sentence);
   if (/logpush|payload logging/.test(folded)) return false;
   return splitClauses(folded).some((clause) => {
-    if (!/\blogging\b/.test(clause) || claimClauseNegated(clause)) return false;
+    if (!/\blogging\b/.test(clause) || claimIsDenied(clause, /\blogging\b/)) return false;
     return (
       /\blogging toggle\b|\blogging switch\b|\blogging setting\b|\blogging option\b|\blogging\s*:/.test(clause) ||
       ENABLE_VERB.test(clause)
@@ -236,17 +279,19 @@ function misstatesLogpush(sentence: string, fullText: string): boolean {
       if (!/logpush/.test(clause)) return false;
       const grants =
         /\b(?:available|included|includes|include|co san|usage-based|dung bao nhieu)\b/.test(clause) &&
-        !claimClauseNegated(clause);
-      if (grants) return false;
+        !claimIsDenied(clause, /logpush/);
       const exclusive =
         /\benterprise\b/.test(clause) &&
-        /\b(?:only|required|requires|need|needs|must|phai|can|exclusive|chi)\b/.test(clause);
-      return exclusive || (claimClauseNegated(clause) && LOWER_PLAN.test(clause));
+        (/\b(?:only|required|requires|need|needs|must|phai|can|exclusive|chi|alone|tinh nang)\b/.test(clause) ||
+          /\(\s*enterprise\s*\)/.test(clause) ||
+          !grants);
+      if (exclusive && !(grants && LOWER_PLAN.test(clause) && !/\bonly\b|\bchi\b|\balone\b/.test(clause))) return true;
+      return claimIsDenied(clause, /logpush/) && LOWER_PLAN.test(clause);
     });
   }
   // "You need Enterprise." after a Logpush denial is the same false claim.
   return splitClauses(folded).some((clause) => {
-    if (claimClauseNegated(clause)) return false;
+    if (hardClauseNegated(clause)) return false;
     if (/\blog\b|sensitive data|\bsdd\b|bot management|\bwaf\b/.test(clause)) return false;
     return /\b(?:need|needs|require|requires|required|must|only|phai|can)\b[\s\S]{0,40}\benterprise\b|\benterprise\b[\s\S]{0,30}\b(?:only|required)\b/.test(
       clause,
@@ -265,7 +310,7 @@ function offersProOrBusiness(folded: string): boolean {
 
 function misstatesEnterpriseFeature(sentence: string, fullText: string): boolean {
   const folded = withoutLogin(foldGenerated(sentence));
-  if (/\b(?:do not|don't|dung|khong|never)\b[\s\S]{0,40}\b(?:upgrad\w*|nang cap)\b/.test(folded)) return false;
+  if (/\b(?:do not|don't|dung|dungneg|khong|never)\b[\s\S]{0,40}\b(?:upgrad\w*|nang cap)\b/.test(folded)) return false;
   if (!offersProOrBusiness(folded)) return false;
   const featureHere = /\blog\b|sensitive data|\bsdd\b/.test(folded);
   const featureNearby = /\blog\b|sensitive data|\bsdd\b|enterprise-only|chi co tren enterprise/.test(
@@ -290,14 +335,14 @@ function isAllRulesClaim(clause: string): boolean {
 function misstatesSave(sentence: string): boolean {
   const clauses = splitClauses(foldGenerated(sentence));
   if (!clauses.some((clause) => /\bsav(?:e|ing)\b/.test(clause))) return false;
-  return clauses.some((clause) => isAllRulesClaim(clause) && !claimClauseNegated(clause));
+  return clauses.some((clause) => isAllRulesClaim(clause) && !claimIsDenied(clause, /\b(?:all|every|moi|tat ca)\b/));
 }
 
 function statesSaveLimit(sentence: string): boolean {
   const clauses = splitClauses(foldGenerated(sentence));
   if (!clauses.some((clause) => /\bsav(?:e|ing)\b/.test(clause))) return false;
   const claims = clauses.filter(isAllRulesClaim);
-  return claims.length > 0 && claims.every(claimClauseNegated);
+  return claims.length > 0 && claims.every((clause) => claimIsDenied(clause, /\b(?:all|every|moi|tat ca)\b/));
 }
 
 export function saveSubsetInstruction(lang: Lang): string {
@@ -308,6 +353,30 @@ export function saveSubsetInstruction(lang: Lang): string {
 
 function subsetSentence(lang: Lang): string {
   return lang === 'en' ? 'The deployment runs a subset of rules.' : 'Bản deployment chỉ chạy một phần rule.';
+}
+
+const INVENTED_ACTION = /\b(?:simulate|quarantine|monitor|tarpit|captcha|sinkhole|observe)\b/;
+
+function knownActionsInstruction(lang: Lang): string {
+  return lang === 'en'
+    ? 'Real WAF actions are Block, Managed Challenge, JS Challenge, Interactive Challenge, and Skip. Log is Enterprise-only. Simulate is not an action.'
+    : 'Action WAF thật là Block, Managed Challenge, JS Challenge, Interactive Challenge và Skip. Log chỉ có trên Enterprise. Simulate không phải action.';
+}
+
+/** A named WAF action that is not in the plan-feature table (LG7). */
+function inventsWafAction(sentence: string): boolean {
+  const folded = hideLogpush(withoutLogin(foldGenerated(sentence)));
+  if (!INVENTED_ACTION.test(folded)) return false;
+  if (/\bnot an action\b|\bkhong phai action\b/.test(folded)) return false;
+  if (claimIsDenied(folded, INVENTED_ACTION)) return false;
+  return (
+    /\b(?:action|hanh dong|mode)\b[\s\S]{0,48}(?:simulate|quarantine|monitor|tarpit|captcha|sinkhole|observe)\b/.test(
+      folded,
+    ) ||
+    /\b(?:use|using|chon|select|pick|choose|set|dung|dat)\s+(?:the\s+|action\s+)?(?:simulate|quarantine|monitor|tarpit|captcha|sinkhole|observe)\b/.test(
+      folded,
+    )
+  );
 }
 
 function hasSubsetPoint(text: string): boolean {
@@ -350,6 +419,7 @@ export function rewritePlanGatedActions(text: string, lang: Lang, prompt: string
   let sawLogging = false;
   let sawLogpush = false;
   const rewritten = rewriteSentences(source, (sentence) => {
+    if (inventsWafAction(sentence)) return knownActionsInstruction(lang);
     if (misstatesSave(sentence)) {
       sawSave = true;
       return '';
@@ -472,7 +542,7 @@ function recommendsPaidRulesetOnFree(sentence: string, prompt: string): boolean 
   for (const clause of splitClauses(folded)) {
     const pronoun = /\benable it\b|\bturn it on\b|\bbat no\b/.test(clause) && asksPaidRulesetOnFree(prompt);
     if (!rulesetClause(clause) && !pronoun) continue;
-    if (claimClauseNegated(clause)) continue;
+    if (claimIsDenied(clause, /\bowasp\b|core ruleset|core rule|cloudflare managed ruleset/)) continue;
     if (ENABLE_VERB.test(clause) || pronoun) return true;
     if (/\bfree\b/.test(clause) && rulesetClause(clause) && /\b(?:include|includes|included|has|have|available|co)\b/.test(clause)) {
       return true;
@@ -591,7 +661,7 @@ export function isBareRefusal(text: string): boolean {
 /** Instructions aimed at the model, not dashboard steps a learner should follow. */
 function isModelFacingStep(step: string): boolean {
   const folded = foldGenerated(step);
-  return /name the plan before|noi ro plan truoc|do not tell the learner|dung bao nguoi hoc|say the next step once|noi buoc tiep theo mot lan|use only those steps|use only these steps|chi dung cac buoc/.test(
+  return /name the plan before|noi ro plan truoc|do not tell the learner|dungneg bao nguoi hoc|say the next step once|noi buoc tiep theo mot lan|use only those steps|use only these steps|chi dung cac buoc/.test(
     folded,
   );
 }
@@ -674,6 +744,78 @@ export function aiResponseFailed(result: unknown): boolean {
   return false;
 }
 
+const CLAIM_CHECK_TIMEOUT_MS = 8000;
+
+function modelText(result: unknown): string {
+  if (typeof result === 'string') return result;
+  if (!result || typeof result !== 'object') return '';
+  const value = result as {
+    response?: unknown;
+    choices?: Array<{ message?: { content?: unknown }; text?: unknown }>;
+  };
+  if (typeof value.response === 'string') return value.response;
+  const content = value.choices?.[0]?.message?.content ?? value.choices?.[0]?.text;
+  return typeof content === 'string' ? content : '';
+}
+
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error('claim-check-timeout')), ms);
+    promise.then(
+      (value) => {
+        clearTimeout(timer);
+        resolve(value);
+      },
+      (error) => {
+        clearTimeout(timer);
+        reject(error);
+      },
+    );
+  });
+}
+
+async function reviewText(
+  text: string,
+  lang: Lang,
+  run: (model: string, input: unknown) => Promise<unknown>,
+): Promise<string> {
+  return reviewPlanClaims(text, lang, async (sentences) => {
+    const reviewed = await withTimeout(
+      run(MODEL, { max_tokens: 256, messages: claimCheckMessages(sentences, lang) }),
+      CLAIM_CHECK_TIMEOUT_MS,
+    );
+    return parseClaimVerdicts(modelText(reviewed), sentences.length);
+  });
+}
+
+/** Second pass. A timeout, throw, or unreadable verdict drops the claim sentence. */
+export async function reviewGenerateResult(
+  result: unknown,
+  lang: Lang,
+  run: (model: string, input: unknown) => Promise<unknown>,
+): Promise<unknown> {
+  if (typeof result === 'string') return reviewText(result, lang, run);
+  if (!result || typeof result !== 'object') return result;
+  const next = { ...(result as Record<string, unknown>) };
+  if (typeof next.response === 'string') next.response = await reviewText(next.response, lang, run);
+  if (Array.isArray(next.choices)) {
+    next.choices = await Promise.all(
+      next.choices.map(async (choice) => {
+        if (!choice || typeof choice !== 'object') return choice;
+        const item = { ...(choice as Record<string, unknown>) };
+        if (typeof item.text === 'string') item.text = await reviewText(item.text, lang, run);
+        if (item.message && typeof item.message === 'object') {
+          const message = { ...(item.message as Record<string, unknown>) };
+          if (typeof message.content === 'string') message.content = await reviewText(message.content, lang, run);
+          item.message = message;
+        }
+        return item;
+      }),
+    );
+  }
+  return next;
+}
+
 export const onRequestPost: PagesFunction<{
   AI: {
     run: (model: string, input: unknown) => Promise<unknown>;
@@ -718,5 +860,7 @@ export const onRequestPost: PagesFunction<{
     return json({ error: aiFailureMessage(lang) }, 502);
   }
 
-  return json({ result: guardGenerateResult(result, lang, prompt) });
+  const guarded = guardGenerateResult(result, lang, prompt);
+  const reviewed = await reviewGenerateResult(guarded, lang, (model, input) => env.AI.run(model, input));
+  return json({ result: reviewed });
 };

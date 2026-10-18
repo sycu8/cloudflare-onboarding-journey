@@ -13,9 +13,10 @@ const { buildGenerateMessages, curatedOnboardingContext, generateSystemPrompt } 
   '../functions/api/generateGrounding.ts'
 );
 const { basicConfigurationSections } = await import('../src/data/cf101PracticalGuides.ts');
-const { guardGenerateResult, onRequestPost, rewriteInventedNameservers, statedPlan } = await import(
+const { guardGenerateResult, onRequestPost, reviewGenerateResult, rewriteInventedNameservers, statedPlan } = await import(
   '../functions/api/generate.ts'
 );
+const { reviewPlanClaims } = await import('../functions/api/planFeatures.ts');
 
 const EN_RULES = [
   'nameserver change and DNS records',
@@ -125,6 +126,11 @@ assert.match(generateSystemPrompt('en'), /Logpush is available on Free, Pro, and
 assert.match(generateSystemPrompt('en'), /Do not say that Pro lacks Logpush/);
 assert.match(generateSystemPrompt('vi'), /Đừng nói Pro không có Logpush/);
 assert.match(generateSystemPrompt('en'), /The deployment runs a subset of rules/);
+assert.match(generateSystemPrompt('en'), /Plan-feature table/);
+assert.match(generateSystemPrompt('en'), /Nameservers come from the zone Overview/);
+assert.match(generateSystemPrompt('en'), /credit-card detection, is Enterprise only/);
+assert.match(generateSystemPrompt('vi'), /Bảng plan-feature/);
+assert.match(generateSystemPrompt('vi'), /Nameserver chỉ lấy từ trang Overview/);
 
 const freeOwasp = buildGenerateMessages(
   'Tôi dùng gói Free, bật OWASP Core Ruleset ở đâu và nên để action Log trước không?',
@@ -242,7 +248,19 @@ assert.equal(
 async function generate(body, response) {
   const res = await onRequestPost({
     request: request(body),
-    env: { AI: { run: async () => response } },
+    env: {
+      AI: {
+        run: async (_model, input) => {
+          const blob = JSON.stringify(input ?? {});
+          if (blob.includes('CLAIM_VERDICTS')) {
+            const last = input?.messages?.[input.messages.length - 1]?.content ?? '';
+            const n = typeof last === 'string' ? (last.match(/^\d+\. /gm) ?? []).length || 1 : 1;
+            return { response: JSON.stringify({ verdicts: Array.from({ length: n }, () => 'ok') }) };
+          }
+          return response;
+        },
+      },
+    },
   });
   return { status: res.status, data: await res.json() };
 }
@@ -758,5 +776,136 @@ const owaspDedupe = await generate(
 );
 assert.doesNotMatch(owaspDedupe.data.result.response, /Bật OWASP Core Ruleset trên Free/);
 assert.equal((owaspDedupe.data.result.response.match(/cần Pro trở lên/g) ?? []).length, 1);
+
+const logHeldOut = [
+  ['I am on the Business plan', 'Run the custom rule in "Log" tonight.', /in "Log"/],
+  ['I am on the Pro plan', 'The action (Log) records every match.', /\(Log\)/],
+  ['Tôi dùng gói Business', 'Hành động là Log cho rule này.', /Hành động là Log/],
+  ['I am on the Free plan', 'Use Log without blocking first.', /Use Log without/],
+  ['Tôi dùng gói Pro', 'Chưa chuyển sang Block, hãy để Log.', /hãy để Log/],
+  ['Tôi dùng gói Business', 'Đừng dùng Challenge; chọn Log.', /chọn Log/],
+  ['I am on the Pro plan', 'Custom rule action → “Log”.', /“Log”|Log”/],
+  ['I am on the Business plan', 'Business zone: (Log) until you are sure.', /\(Log\)/],
+  ['Tôi dùng gói Free', 'Đặt hành động là Log rồi xem thử.', /hành động là Log/i],
+  ['I am on the Free plan', "Pick the 'Log' action for this rule.", /'Log'/],
+];
+assert.equal(logHeldOut.length, 10);
+let logCaught = 0;
+for (const [prompt, response, bad] of logHeldOut) {
+  const sample = await generate({ prompt, lang: 'en' }, { response });
+  assert.doesNotMatch(sample.data.result.response, bad, response);
+  assert.match(sample.data.result.response, /Log is only available on Enterprise/, response);
+  logCaught += 1;
+}
+assert.equal(logCaught, 10);
+
+const inventedAction = await generate(
+  { prompt: 'I am on the Pro plan. Which WAF action should I use?', lang: 'en' },
+  { response: 'Set the custom rule action to Quarantine.' },
+);
+assert.doesNotMatch(inventedAction.data.result.response, /Quarantine/);
+assert.match(inventedAction.data.result.response, /Simulate is not an action/);
+assert.equal(
+  await generate({ prompt: 'What is a WAF action?', lang: 'en' }, { response: 'Simulate is not an action.' }).then(
+    (sample) => sample.data.result.response,
+  ),
+  'Simulate is not an action.',
+);
+
+const cardFree = await generate(
+  { prompt: 'I am on the Free plan', lang: 'en' },
+  { response: 'On Free, card detection is already on.' },
+);
+assert.doesNotMatch(cardFree.data.result.response, /card detection is already/);
+assert.match(cardFree.data.result.response, /Sensitive Data Detection are Enterprise-only/);
+assert.doesNotMatch(cardFree.data.result.response, /Upgrade to Business to enable/);
+
+const sddEnPrompt = await generate(
+  { prompt: 'Does the Free plan include Sensitive Data Detection?', lang: 'vi' },
+  { response: 'Tôi không chắc.' },
+);
+assert.doesNotMatch(sddEnPrompt.data.result.response, /không chắc/);
+assert.match(sddEnPrompt.data.result.response, /Sensitive Data Detection chỉ có trên Enterprise/);
+assert.match(sddEnPrompt.data.result.response, /sensitive-data-detection/);
+assert.doesNotMatch(sddEnPrompt.data.result.response, /Nói rõ plan|Đừng bảo người học/);
+
+const sddViPrompt = await generate(
+  { prompt: 'Gói Free có phát hiện thẻ tín dụng không?', lang: 'en' },
+  { response: "I'm not sure." },
+);
+assert.doesNotMatch(sddViPrompt.data.result.response, /not sure/i);
+assert.match(sddViPrompt.data.result.response, /Sensitive Data Detection is Enterprise-only/);
+assert.match(sddViPrompt.data.result.response, /sensitive-data-detection/);
+assert.doesNotMatch(sddViPrompt.data.result.response, /Name the plan before|Do not tell the learner/);
+
+const botShips = await generate(
+  { prompt: 'Which bot feature is on my zone?', lang: 'en' },
+  { response: 'The Pro plan ships with Bot Management.' },
+);
+assert.doesNotMatch(botShips.data.result.response, /ships with Bot Management/);
+assert.match(botShips.data.result.response, /Enterprise add-on/);
+
+const botMgmtVi = await generate(
+  { prompt: 'Bot trên Pro', lang: 'vi' },
+  { response: 'Gói Pro có Bot Mgmt.' },
+);
+assert.doesNotMatch(botMgmtVi.data.result.response, /Bot Mgmt/);
+assert.match(botMgmtVi.data.result.response, /add-on Enterprise/);
+
+const prefixedNs = await generate(
+  { prompt: 'How do I change nameservers?', lang: 'en' },
+  { response: 'Point DNS at NS-primary.cloudflare.com and NS-secondary.cloudflare.com.' },
+);
+assert.doesNotMatch(prefixedNs.data.result.response, /NS-primary\.cloudflare\.com/i);
+assert.doesNotMatch(prefixedNs.data.result.response, /NS-secondary\.cloudflare\.com/i);
+assert.match(prefixedNs.data.result.response, /Copy the two nameservers shown on the zone Overview page/);
+
+for (const response of ['Logpush (Enterprise).', 'Logpush là tính năng Enterprise.', 'Only Enterprise includes Logpush.']) {
+  const sample = await generate({ prompt: 'Does Pro include Logpush?', lang: 'en' }, { response });
+  assert.doesNotMatch(sample.data.result.response, /Logpush \(Enterprise\)|tính năng Enterprise|Only Enterprise includes Logpush/, response);
+  assert.match(sample.data.result.response, /Logpush is available on Free, Pro, and Business/, response);
+  assert.equal((sample.data.result.response.match(/Logpush is available on Free, Pro, and Business/g) ?? []).length, 1, response);
+}
+
+const wrongClaim = await reviewPlanClaims(
+  'Pro includes Logpush only on Enterprise. Open the DNS records page.',
+  'en',
+  async () => ['wrong'],
+);
+assert.doesNotMatch(wrongClaim, /only on Enterprise/);
+assert.match(wrongClaim, /Logpush is available on Free, Pro, and Business/);
+assert.equal((wrongClaim.match(/Logpush is available on Free, Pro, and Business/g) ?? []).length, 1);
+assert.match(wrongClaim, /Open the DNS records page/);
+
+const unsureClaim = await reviewPlanClaims('Maybe Log works on Pro.', 'en', async () => ['unsure']);
+assert.doesNotMatch(unsureClaim, /Maybe Log works on Pro/);
+assert.match(unsureClaim, /Log is Enterprise only/);
+
+const droppedClaim = await reviewPlanClaims(
+  'Turn on card detection on Free. Keep the orange cloud on.',
+  'en',
+  async () => {
+    throw new Error('claim-check-timeout');
+  },
+);
+assert.equal(droppedClaim, 'Keep the orange cloud on.');
+
+const handlerDrop = await onRequestPost({
+  request: request({ prompt: 'I am on the Pro plan', lang: 'en' }),
+  env: {
+    AI: {
+      run: async (_model, input) => {
+        const blob = JSON.stringify(input ?? {});
+        if (blob.includes('CLAIM_VERDICTS')) return { response: 'not json' };
+        return { response: 'Enable Log on this Pro zone. Open the DNS records page.' };
+      },
+    },
+  },
+});
+const handlerBody = await handlerDrop.json();
+assert.equal(handlerDrop.status, 200);
+assert.doesNotMatch(handlerBody.result.response, /Enable Log on this Pro zone/);
+assert.match(handlerBody.result.response, /Open the DNS records page/);
+assert.doesNotMatch(handlerBody.result.response, /Log is only available on Enterprise/);
 
 console.log('generate grounding prompt checks passed');

@@ -1,4 +1,5 @@
 import { basicConfigurationSections } from '../../src/data/cf101PracticalGuides.ts';
+import { formatPlanFeatureTable } from './planFeatures.ts';
 
 export type GenerateLang = 'vi' | 'en';
 
@@ -122,7 +123,7 @@ const TOPICS: Topic[] = [
     // the prompt so the model does not see the notes twice.
     guideId: '',
     pattern:
-      /\bwaf\b|firewall|tuong lua|managed rule|rule set|wordpress|security setting|bao mat|owasp|ruleset|core rule|\blog\b(?!\s+in\b)|simulate|goi free|free plan|on free|sensitive data|\bsdd\b/,
+      /\bwaf\b|firewall|tuong lua|managed rule|rule set|wordpress|security setting|bao mat|owasp|ruleset|core rule|\blog\b(?!\s+in\b)|simulate|goi free|free plan|on free|sensitive data|\bsdd\b|du lieu nhay cam|phat hien the|the tin dung|card detection|credit card/,
   },
   {
     id: 'logs',
@@ -163,6 +164,8 @@ export function generateSystemPrompt(lang: GenerateLang): string {
       '- Logpush is available on Free, Pro, and Business with usage-based pricing. Only the WAF custom-rule Log action is Enterprise-only. Do not say that Pro lacks Logpush. There is no Logging toggle. Bot Management is an Enterprise add-on; on Pro and Business use Super Bot Fight Mode. https://developers.cloudflare.com/logs/logpush/pricing/',
       '- If you are not sure a control exists, say you are not sure and point the learner to the Cloudflare dashboard or https://developers.cloudflare.com instead of guessing.',
       '- When curated onboarding notes are included, use only those steps. Do not add filler steps the notes do not contain: no DNS cache, no DNS buffer, and no “DNS map” action. Say the next step once. Do not repeat it.',
+      '',
+      formatPlanFeatureTable('en'),
     ].join('\n');
   }
 
@@ -176,6 +179,8 @@ export function generateSystemPrompt(lang: GenerateLang): string {
       '- Logpush có trên Free, Pro và Business theo giá dùng bao nhiêu tính bấy nhiêu. Chỉ action Log của custom rule WAF là Enterprise-only. Đừng nói Pro không có Logpush. Không có công tắc tên Logging. Bot Management là add-on Enterprise; trên Pro và Business dùng Super Bot Fight Mode. https://developers.cloudflare.com/logs/logpush/pricing/',
     '- Nếu không chắc một nút hay một bước có tồn tại, hãy nói là không chắc và hướng người học tới dashboard Cloudflare hoặc https://developers.cloudflare.com, đừng đoán.',
     '- Khi có ghi chú onboarding đi kèm, chỉ dùng các bước đó. Không thêm bước đệm mà ghi chú không có: không bộ đệm DNS, không DNS cache, và không hành động “DNS map”. Nói bước tiếp theo một lần. Đừng lặp lại.',
+    '',
+    formatPlanFeatureTable('vi'),
   ].join('\n');
 }
 
