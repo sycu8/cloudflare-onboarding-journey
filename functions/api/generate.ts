@@ -114,10 +114,29 @@ function withoutLogin(folded: string): string {
   return folded.replace(/\blog(?:ging)?\s+in\b/g, ' ').replace(/\blogin\b/g, ' ');
 }
 
-function deniesLogAction(folded: string): boolean {
-  return /\binstead of log\b|\bthay cho log\b|\bdo not use\b|\bdon't use\b|\bkhong dung log\b|\bkhong co log\b|\bonly available on enterprise\b|\bchi co tren enterprise\b|\benterprise-only\b/.test(
-    folded,
+function hideLogpush(folded: string): string {
+  return folded.replace(/logpush/g, ' ');
+}
+
+function splitClauses(folded: string): string[] {
+  return folded.split(/\s*(?:,|;|\b(?:but|however|nhung)\b)\s*/).filter((part) => part.length > 0);
+}
+
+/** Negation that governs this clause, not a later contrast ("all rules, not a subset"). */
+function claimClauseNegated(clause: string): boolean {
+  return /\b(?:not|no|never|cannot|can't|dont|don't|doesn't|doesnt|isn't|isnt|without|khong|chua|chang|neither)\b|\binstead of\b|\bthay cho\b|\benterprise-only\b|\bchi co tren enterprise\b|\bonly available on enterprise\b/.test(
+    clause,
   );
+}
+
+function plainLine(folded: string): string {
+  return folded.replace(/\*\*|__/g, '');
+}
+
+/** Bulleted or bold list item whose label is the WAF Log action ("Log:", "**Log:**"). */
+function isLogActionLabel(folded: string): boolean {
+  const plain = plainLine(folded);
+  return /(?:^|\n)\s*(?:[-*]\s+)?log\s*:/.test(plain) || /(?:^|\n)\s*[-*]\s+log\s*[.!?…]?\s*$/.test(plain);
 }
 
 /**
@@ -126,8 +145,10 @@ function deniesLogAction(folded: string): boolean {
  * in an action list (including when the list ends on a period).
  */
 function namesLogAsWafAction(sentence: string): boolean {
-  const folded = withoutLogin(foldGenerated(sentence));
-  if (deniesLogAction(folded)) return false;
+  const folded = hideLogpush(withoutLogin(foldGenerated(sentence)));
+  if (!/\blog\b/.test(folded)) return false;
+  if (splitClauses(folded).every((clause) => !/\blog\b/.test(clause) || claimClauseNegated(clause))) return false;
+  if (isLogActionLabel(folded)) return true;
   if (/\blog\s+mode\b|\bin\s+log\s+mode\b|\bmode\s+log\b/.test(folded)) return true;
   if (/\b(?:chon|select|pick|choose)\s+log\b/.test(folded)) return true;
   if (/\b(?:hanh dong|action)\s*[:=,]?\s*log\b/.test(folded)) return true;
@@ -143,27 +164,94 @@ function namesLogAsWafAction(sentence: string): boolean {
   );
 }
 
-const LOWER_PLAN = /\b(?:free|pro|business)\b/;
-const ENTERPRISE_ONLY_FEATURE = /\blog\b|\bsdd\b|sensitive data/;
-const AVAILABILITY_GRANT =
-  /\b(?:available|support(?:s|ed)?|includ(?:e|es|ed)|comes with|can use|co the|ho tro|bao gom|di kem|kem theo|co san|has|have|offers)\b|\bco\b/;
-const GRANT_NEGATION =
-  /\b(?:not|no|never|cannot|can't|dont|don't|doesn't|doesnt|isn't|isnt|without|khong|chua|chang)\b(?:\s+\w+){0,5}\s+(?:available|support|includ|come|co\b|has\b|have\b|offer|ho tro|bao gom|dung\b|use\b|san\b)/;
-
 /**
- * Enterprise-only Log or Sensitive Data Detection described as available,
- * supported, or included on Free, Pro, or Business.
- * "Log is available on Enterprise" and "does not support Log" stay.
+ * A non-Enterprise plan paired with the WAF Log action in the same clause.
+ * Logpush is not the Log action. A clause that denies the pairing stays.
  */
-function claimsFeatureOnLowerPlan(sentence: string, prompt: string): boolean {
-  const folded = withoutLogin(foldGenerated(sentence));
-  if (!ENTERPRISE_ONLY_FEATURE.test(folded) || !AVAILABILITY_GRANT.test(folded)) return false;
-  if (deniesLogAction(folded) || GRANT_NEGATION.test(folded)) return false;
-  const namesLower = LOWER_PLAN.test(folded);
-  const namesEnterprise = /\benterprise\b/.test(folded);
-  if (namesEnterprise && !namesLower) return false;
-  if (namesLower) return true;
-  return statedPlan(prompt) !== 'enterprise';
+function pairsLowerPlanWithLog(sentence: string, prompt: string): boolean {
+  const folded = hideLogpush(withoutLogin(foldGenerated(sentence)));
+  if (!/\blog\b/.test(folded)) return false;
+  if (isLogActionLabel(folded) && statedPlan(prompt) !== 'enterprise') {
+    const labelClause = splitClauses(plainLine(folded)).find((clause) => /(?:^|\s)log\s*:/.test(clause)) ?? folded;
+    if (!claimClauseNegated(labelClause)) return true;
+  }
+  const plan = statedPlan(prompt);
+  return splitClauses(folded).some((clause) => {
+    if (!/\blog\b/.test(clause) || claimClauseNegated(clause)) return false;
+    if (LOWER_PLAN.test(clause)) return true;
+    return plan !== 'enterprise' && namesLogAsWafAction(clause);
+  });
+}
+
+const LOWER_PLAN = /\b(?:free|pro|business)\b/;
+
+const ENABLE_VERB = /\b(?:enable|deploy|activate|switch on|turn on|bat|kich hoat)\b/;
+
+/** SDD paired with a lower plan, or an enable verb when the learner is not on Enterprise. */
+function misstatesSdd(sentence: string, prompt: string): boolean {
+  const folded = foldGenerated(sentence);
+  if (!/\bsdd\b|sensitive data/.test(folded)) return false;
+  const plan = statedPlan(prompt);
+  return splitClauses(folded).some((clause) => {
+    if (!/\bsdd\b|sensitive data/.test(clause) || claimClauseNegated(clause)) return false;
+    if (/\benterprise\b/.test(clause) && !LOWER_PLAN.test(clause)) return false;
+    if (LOWER_PLAN.test(clause)) return true;
+    return plan !== 'enterprise' && ENABLE_VERB.test(clause);
+  });
+}
+
+/** Bot Management offered on Free, Pro, or Business. Super Bot Fight Mode stays. */
+function misstatesBotManagement(sentence: string, prompt: string): boolean {
+  const folded = foldGenerated(sentence);
+  if (!/\bbot management\b/.test(folded)) return false;
+  const plan = statedPlan(prompt);
+  return splitClauses(folded).some((clause) => {
+    if (!/\bbot management\b/.test(clause) || claimClauseNegated(clause)) return false;
+    if (/\benterprise\b/.test(clause) && !LOWER_PLAN.test(clause)) return false;
+    if (LOWER_PLAN.test(clause)) return true;
+    return plan !== 'enterprise' && ENABLE_VERB.test(clause);
+  });
+}
+
+/** A dashboard control named Logging. Payload logging and Logpush are real. */
+function inventsLoggingToggle(sentence: string): boolean {
+  const folded = foldGenerated(sentence);
+  if (/logpush|payload logging/.test(folded)) return false;
+  return splitClauses(folded).some((clause) => {
+    if (!/\blogging\b/.test(clause) || claimClauseNegated(clause)) return false;
+    return (
+      /\blogging toggle\b|\blogging switch\b|\blogging setting\b|\blogging option\b|\blogging\s*:/.test(clause) ||
+      ENABLE_VERB.test(clause)
+    );
+  });
+}
+
+/** Logpush described as missing on a lower plan, or as something that needs Enterprise. */
+function misstatesLogpush(sentence: string, fullText: string): boolean {
+  const folded = foldGenerated(sentence);
+  const aboutLogpush = /\blogpush\b/.test(foldGenerated(fullText));
+  if (!aboutLogpush) return false;
+  if (/\blogpush\b/.test(folded)) {
+    return splitClauses(folded).some((clause) => {
+      if (!/logpush/.test(clause)) return false;
+      const grants =
+        /\b(?:available|included|includes|include|co san|usage-based|dung bao nhieu)\b/.test(clause) &&
+        !claimClauseNegated(clause);
+      if (grants) return false;
+      const exclusive =
+        /\benterprise\b/.test(clause) &&
+        /\b(?:only|required|requires|need|needs|must|phai|can|exclusive|chi)\b/.test(clause);
+      return exclusive || (claimClauseNegated(clause) && LOWER_PLAN.test(clause));
+    });
+  }
+  // "You need Enterprise." after a Logpush denial is the same false claim.
+  return splitClauses(folded).some((clause) => {
+    if (claimClauseNegated(clause)) return false;
+    if (/\blog\b|sensitive data|\bsdd\b|bot management|\bwaf\b/.test(clause)) return false;
+    return /\b(?:need|needs|require|requires|required|must|only|phai|can)\b[\s\S]{0,40}\benterprise\b|\benterprise\b[\s\S]{0,30}\b(?:only|required)\b/.test(
+      clause,
+    );
+  });
 }
 
 function offersProOrBusiness(folded: string): boolean {
@@ -190,19 +278,26 @@ function misstatesEnterpriseFeature(sentence: string, fullText: string): boolean
   return featureHere || (vagueFeatures && featureNearby);
 }
 
-function saveClaimIsNegated(folded: string): boolean {
-  return /\b(?:not|no|never|cannot|can't|dont|don't|doesn't|doesnt|isn't|isnt|without|khong|chua|chang)\b/.test(
-    folded,
-  );
+function isAllRulesClaim(clause: string): boolean {
+  return /\brules?\b/.test(clause) && /\b(?:all|every|moi|tat ca)\b/.test(clause);
 }
 
-/** Save is said to turn every rule on. A sentence that already negates that claim stays. */
+/**
+ * Save is said to turn every rule on. "After Save, every rule runs" still counts
+ * when Save sits in a neighboring clause. Negation counts only inside the clause
+ * that claims all rules, so "Save enables all rules, not a subset" stays false.
+ */
 function misstatesSave(sentence: string): boolean {
-  const folded = foldGenerated(sentence);
-  if (!/\bsave\b/.test(folded) || !/\brules?\b/.test(folded) || !/\b(?:all|every|moi|tat ca)\b/.test(folded)) {
-    return false;
-  }
-  return !saveClaimIsNegated(folded);
+  const clauses = splitClauses(foldGenerated(sentence));
+  if (!clauses.some((clause) => /\bsav(?:e|ing)\b/.test(clause))) return false;
+  return clauses.some((clause) => isAllRulesClaim(clause) && !claimClauseNegated(clause));
+}
+
+function statesSaveLimit(sentence: string): boolean {
+  const clauses = splitClauses(foldGenerated(sentence));
+  if (!clauses.some((clause) => /\bsav(?:e|ing)\b/.test(clause))) return false;
+  const claims = clauses.filter(isAllRulesClaim);
+  return claims.length > 0 && claims.every(claimClauseNegated);
 }
 
 export function saveSubsetInstruction(lang: Lang): string {
@@ -211,9 +306,19 @@ export function saveSubsetInstruction(lang: Lang): string {
     : 'Save không bật mọi rule. Bản deployment chỉ chạy một phần rule.';
 }
 
-function statesLogLimit(text: string): boolean {
-  const folded = foldGenerated(text);
-  return /only available on enterprise|chi co tren enterprise|enterprise-only/.test(folded) && /managed challenge/.test(folded);
+function subsetSentence(lang: Lang): string {
+  return lang === 'en' ? 'The deployment runs a subset of rules.' : 'Bản deployment chỉ chạy một phần rule.';
+}
+
+function hasSubsetPoint(text: string): boolean {
+  return /subset of rules|mot phan rule/.test(foldGenerated(text));
+}
+
+function appendMissing(base: string, addition: string): string {
+  const have = foldGenerated(base);
+  const missing = splitSentences(addition).filter((sentence) => sentence && !have.includes(foldGenerated(sentence)));
+  if (!missing.length) return base;
+  return [base, missing.join(' ')].filter(Boolean).join('\n');
 }
 
 /**
@@ -237,47 +342,72 @@ export function rewritePlanGatedActions(text: string, lang: Lang, prompt: string
   const saveLine = saveSubsetInstruction(lang);
   const source = normalizeGeneratedText(text);
   let sawUpsell = false;
-  let sawFeature = false;
-  let sawLogGrant = false;
-  let sawLogAction = false;
+  let sawSdd = false;
+  let sawLog = false;
   let sawSave = false;
+  let sawSaveLimit = false;
+  let sawBot = false;
+  let sawLogging = false;
+  let sawLogpush = false;
   const rewritten = rewriteSentences(source, (sentence) => {
     if (misstatesSave(sentence)) {
       sawSave = true;
+      return '';
+    }
+    if (statesSaveLimit(sentence)) sawSaveLimit = true;
+    if (misstatesLogpush(sentence, source)) {
+      sawLogpush = true;
+      return '';
+    }
+    if (inventsLoggingToggle(sentence)) {
+      sawLogging = true;
+      return '';
+    }
+    if (misstatesBotManagement(sentence, prompt)) {
+      sawBot = true;
       return '';
     }
     if (misstatesEnterpriseFeature(sentence, source)) {
       sawUpsell = true;
       return '';
     }
-    if (claimsFeatureOnLowerPlan(sentence, prompt)) {
-      const folded = withoutLogin(foldGenerated(sentence));
-      if (/\bsdd\b|sensitive data/.test(folded)) sawFeature = true;
-      if (/\blog\b/.test(folded)) sawLogGrant = true;
+    if (misstatesSdd(sentence, prompt)) {
+      sawSdd = true;
       return '';
     }
-    if (plan !== 'enterprise' && namesLogAsWafAction(sentence)) {
-      sawLogAction = true;
+    if (pairsLowerPlanWithLog(sentence, prompt) || (plan !== 'enterprise' && namesLogAsWafAction(sentence))) {
+      sawLog = true;
       return '';
     }
     return sentence;
   });
-  const parts = [cleanupGaps(rewritten)];
-  const remaining = parts[0] ?? '';
-  if ((sawUpsell || sawFeature) && !statesFeatureLimit(remaining)) {
-    parts.push(featureLine);
-  } else if ((sawLogGrant || sawLogAction) && !statesLogLimit(remaining) && (sawLogGrant || plan !== 'enterprise')) {
-    parts.push(logLine);
-  }
-  if (sawSave && !foldGenerated(parts.join('\n')).includes(foldGenerated(saveLine))) {
-    parts.push(saveLine);
-  }
-  return parts.filter(Boolean).join('\n');
+  let next = cleanupGaps(rewritten);
+  if (sawUpsell || sawSdd) next = appendMissing(next, featureLine);
+  else if (sawLog && plan !== 'enterprise') next = appendMissing(next, logLine);
+  if (sawSave) next = appendMissing(next, saveLine);
+  else if (sawSaveLimit && !hasSubsetPoint(next)) next = appendMissing(next, subsetSentence(lang));
+  if (sawBot) next = appendMissing(next, botManagementInstruction(lang));
+  if (sawLogging) next = appendMissing(next, loggingToggleInstruction(lang));
+  if (sawLogpush) next = appendMissing(next, logpushInstruction(lang));
+  return next.trim();
 }
 
-function statesFeatureLimit(text: string): boolean {
-  const folded = foldGenerated(text);
-  return /enterprise-only|chi co tren enterprise/.test(folded) && /sensitive data|\bsdd\b/.test(folded);
+function botManagementInstruction(lang: Lang): string {
+  return lang === 'en'
+    ? 'Bot Management is an Enterprise add-on. On Pro and Business, use Super Bot Fight Mode instead. https://developers.cloudflare.com/bots/get-started/super-bot-fight-mode/'
+    : 'Bot Management là add-on Enterprise. Trên Pro và Business, hãy dùng Super Bot Fight Mode. https://developers.cloudflare.com/bots/get-started/super-bot-fight-mode/';
+}
+
+function loggingToggleInstruction(lang: Lang): string {
+  return lang === 'en'
+    ? 'There is no Logging toggle. Logpush exports logs on Free, Pro, and Business. The WAF Log action is Enterprise-only.'
+    : 'Không có công tắc tên Logging. Logpush xuất log trên Free, Pro và Business. Action Log của WAF chỉ có trên Enterprise.';
+}
+
+function logpushInstruction(lang: Lang): string {
+  return lang === 'en'
+    ? 'Logpush is available on Free, Pro, and Business with usage-based pricing. Only the WAF custom-rule Log action is Enterprise-only. https://developers.cloudflare.com/logs/logpush/pricing/'
+    : 'Logpush có trên Free, Pro và Business theo giá dùng bao nhiêu tính bấy nhiêu. Chỉ action Log của custom rule WAF là Enterprise-only. https://developers.cloudflare.com/logs/logpush/pricing/';
 }
 
 export function registrarPasteInstruction(lang: Lang): string {
@@ -288,8 +418,8 @@ export function registrarPasteInstruction(lang: Lang): string {
 
 export function owaspFreeInstruction(lang: Lang): string {
   return lang === 'en'
-    ? 'The OWASP Core Ruleset is not on the Free plan. It needs Pro or above. Free keeps the Cloudflare Free Managed Ruleset and custom rules. On Pro or above, turn it on at Security → Settings. https://developers.cloudflare.com/waf/managed-rules/'
-    : 'OWASP Core Ruleset không có trên gói Free và cần Pro trở lên. Free giữ Cloudflare Free Managed Ruleset và custom rules. Từ Pro trở lên, bật tại Security → Settings. https://developers.cloudflare.com/waf/managed-rules/';
+    ? 'The Cloudflare Managed Ruleset and the OWASP Core Ruleset are not on the Free plan. Each needs Pro or above. Free keeps the Cloudflare Free Managed Ruleset and custom rules. https://developers.cloudflare.com/waf/managed-rules/'
+    : 'Cloudflare Managed Ruleset và OWASP Core Ruleset không có trên gói Free. Cả hai cần Pro trở lên. Free giữ Cloudflare Free Managed Ruleset và custom rules. https://developers.cloudflare.com/waf/managed-rules/';
 }
 
 /** Moving a domain onto Cloudflare, including a registrar such as Mắt Bão. */
@@ -308,52 +438,139 @@ function statesRegistrarPaste(text: string): boolean {
   );
 }
 
-function asksOwaspOnFree(prompt: string): boolean {
+function asksPaidRulesetOnFree(prompt: string): boolean {
   const folded = foldGenerated(prompt);
-  if (!/\bowasp\b|core ruleset|core rule/.test(folded)) return false;
   const plan = statedPlan(prompt);
   if (plan === 'pro' || plan === 'business' || plan === 'enterprise') return false;
+  const topic = /\bowasp\b|core ruleset|core rule|cloudflare managed ruleset/.test(folded);
+  if (!topic) return false;
   return plan === 'free' || /\bfree\b/.test(folded);
 }
 
-function statesOwaspGate(text: string): boolean {
+function statesPaidRulesetGate(text: string): boolean {
   const folded = foldGenerated(text);
-  if (!/\bowasp\b|core ruleset|core rule/.test(folded)) return false;
+  if (!/\bowasp\b|core ruleset|core rule|cloudflare managed ruleset/.test(folded)) return false;
   return /pro or above|pro tro len|needs pro\b|can pro\b|not on the free|khong co tren/.test(folded);
 }
 
-/** Tells a Free learner to turn OWASP on, without the Pro+ gate. */
-function instructsOwaspOnFree(sentence: string): boolean {
+function isFreeManagedOnly(clause: string): boolean {
+  return /free managed ruleset/.test(clause) && !/cloudflare managed ruleset/.test(clause.replace(/free managed ruleset/g, ' '));
+}
+
+/** Tells a Free learner to turn on OWASP or the Cloudflare Managed Ruleset. */
+function recommendsPaidRulesetOnFree(sentence: string, prompt: string): boolean {
   const folded = foldGenerated(sentence);
-  if (!/\bowasp\b|core ruleset|core rule/.test(folded) && !/\benable it\b|\bturn it on\b|\bbat no\b/.test(folded)) {
-    return false;
+  const plan = statedPlan(prompt);
+  if ((plan === 'pro' || plan === 'business' || plan === 'enterprise') && !/\bfree\b/.test(folded)) return false;
+  if (/\b(?:upgrad\w*|nang cap)\b/.test(folded) && /\bpro\b/.test(folded)) return false;
+  if (/needs pro\b|pro or above|pro tro len|can pro\b|not on the free|khong co tren/.test(folded)) return false;
+  const onFree = plan === 'free' || /\bfree\b/.test(folded) || /\bfree\b/.test(foldGenerated(prompt));
+  if (!onFree) return false;
+  const rulesetClause = (clause: string) =>
+    /\bowasp\b|core ruleset|core rule/.test(clause) ||
+    (/cloudflare managed ruleset/.test(clause) && !isFreeManagedOnly(clause));
+  for (const clause of splitClauses(folded)) {
+    const pronoun = /\benable it\b|\bturn it on\b|\bbat no\b/.test(clause) && asksPaidRulesetOnFree(prompt);
+    if (!rulesetClause(clause) && !pronoun) continue;
+    if (claimClauseNegated(clause)) continue;
+    if (ENABLE_VERB.test(clause) || pronoun) return true;
+    if (/\bfree\b/.test(clause) && rulesetClause(clause) && /\b(?:include|includes|included|has|have|available|co)\b/.test(clause)) {
+      return true;
+    }
   }
-  if (/\b(?:not|never|khong|chua|don't|do not|avoid)\b/.test(folded)) return false;
-  if (/pro or above|pro tro len|needs pro\b|can pro\b/.test(folded)) return false;
-  return /\b(?:enable|deploy|activate|switch on|turn on|bat|kich hoat)\b/.test(folded);
+  return false;
+}
+
+function isOverviewCopy(folded: string): boolean {
+  return /overview/.test(folded) && /copy|chep/.test(folded);
+}
+
+function isRegistrarStep(folded: string): boolean {
+  if (isOverviewCopy(folded) && /registrar|mat bao/.test(folded)) return false;
+  if (/doi nameserver|change nameserver|set nameserver|cap nhat nameserver|thay nameserver/.test(folded)) return true;
+  return /nameserver/.test(folded) && /registrar|mat bao/.test(folded) && /paste|\bdan\b|nhap|set|change|doi|thay/.test(folded);
+}
+
+function copiesNamesFromRegistrar(folded: string): boolean {
+  return (
+    /nameserver/.test(folded) &&
+    /(?:from|tu)\s+(?:the\s+)?(?:registrar|mat bao)/.test(folded) &&
+    /copy|chep|lay|get|take|paste|\bdan\b|nhap/.test(folded)
+  );
+}
+
+function isTemporalBackwards(folded: string): boolean {
+  return (
+    /overview/.test(folded) &&
+    (/(?:doi nameserver|change nameserver|registrar|mat bao)[\s\S]{0,80}(?:truoc|before|first)[\s\S]{0,80}overview/.test(
+      folded,
+    ) ||
+      /(?:truoc|first|dau tien)[\s\S]{0,50}(?:doi nameserver|change nameserver)[\s\S]{0,80}overview/.test(folded))
+  );
+}
+
+type NameserverKind = 'overview' | 'registrar' | 'backwards' | 'other';
+
+function classifyNameserverSentence(sentence: string): NameserverKind {
+  const folded = foldGenerated(sentence);
+  if (copiesNamesFromRegistrar(folded) || isTemporalBackwards(folded)) return 'backwards';
+  if (isOverviewCopy(folded)) return 'overview';
+  if (isRegistrarStep(folded)) return 'registrar';
+  return 'other';
 }
 
 /**
- * A cutover answer must say to paste the Overview nameservers at the registrar.
- * An OWASP-on-Free answer must state the documented Pro+ gate.
+ * Replace nameserver steps that run the registrar change before the Overview copy,
+ * or that take the names from the registrar. A missing paste step is appended later.
+ */
+export function correctBackwardsNameservers(text: string, lang: Lang, prompt: string): string {
+  if (!isZoneCutoverPrompt(prompt)) return text;
+  const lines = text.split('\n');
+  const sequence = lines.flatMap((line) => splitSentences(line).map((sentence) => classifyNameserverSentence(sentence)));
+  let seenOverview = false;
+  let backwards = false;
+  for (const kind of sequence) {
+    if (kind === 'backwards' || (kind === 'registrar' && !seenOverview)) backwards = true;
+    if (kind === 'overview') seenOverview = true;
+  }
+  if (!backwards) return text;
+  let inserted = false;
+  const rebuilt = lines.map((line) => {
+    const kept: string[] = [];
+    for (const sentence of splitSentences(line)) {
+      const kind = classifyNameserverSentence(sentence);
+      if (kind === 'other') {
+        kept.push(sentence);
+        continue;
+      }
+      if (!inserted) {
+        inserted = true;
+        kept.push(nameserverOverviewInstruction(lang), registrarPasteInstruction(lang));
+      }
+    }
+    return kept.join(' ');
+  });
+  return cleanupGaps(rebuilt.join('\n'));
+}
+
+/**
+ * Remove a Free-plan recommendation of OWASP or the Cloudflare Managed Ruleset,
+ * then add the Pro+ gate once. Append a registrar paste step only when the
+ * cutover answer never states one.
  */
 export function ensureRequiredSteps(text: string, lang: Lang, prompt: string): string {
-  let next = text;
-  if (asksOwaspOnFree(prompt)) {
-    let removed = false;
-    next = rewriteSentences(next, (sentence) => {
-      if (!instructsOwaspOnFree(sentence)) return sentence;
-      removed = true;
-      return '';
-    });
-    next = cleanupGaps(next);
-    if (removed || !statesOwaspGate(next)) {
-      const line = owaspFreeInstruction(lang);
-      if (!foldGenerated(next).includes(foldGenerated(line))) next = [next, line].filter(Boolean).join('\n');
-    }
+  let removed = false;
+  let next = rewriteSentences(text, (sentence) => {
+    if (!recommendsPaidRulesetOnFree(sentence, prompt)) return sentence;
+    removed = true;
+    return '';
+  });
+  next = cleanupGaps(next);
+  if ((removed || asksPaidRulesetOnFree(prompt)) && !statesPaidRulesetGate(next)) {
+    next = appendMissing(next, owaspFreeInstruction(lang));
   }
   if (isZoneCutoverPrompt(prompt) && !statesRegistrarPaste(next)) {
-    next = [next, registrarPasteInstruction(lang)].filter(Boolean).join('\n');
+    next = appendMissing(next, registrarPasteInstruction(lang));
   }
   return next;
 }
@@ -371,16 +588,31 @@ export function isBareRefusal(text: string): boolean {
   );
 }
 
+/** Instructions aimed at the model, not dashboard steps a learner should follow. */
+function isModelFacingStep(step: string): boolean {
+  const folded = foldGenerated(step);
+  return /name the plan before|noi ro plan truoc|do not tell the learner|dung bao nguoi hoc|say the next step once|noi buoc tiep theo mot lan|use only those steps|use only these steps|chi dung cac buoc/.test(
+    folded,
+  );
+}
+
 export function curatedStepsFallback(prompt: string, lang: Lang): string {
   const notes = curatedOnboardingContext(prompt, lang);
   if (!notes) return '';
   const body = notes.split('\n\n').slice(1).join('\n\n').trim();
-  if (!body) return '';
+  const lines = body
+    .split('\n')
+    .map((line) => line.trim())
+    .filter((line) => {
+      const content = line.replace(/^\s*-\s*/, '').trim();
+      return content.length > 0 && !isModelFacingStep(content);
+    });
+  if (!lines.length) return '';
   const intro =
     lang === 'en'
       ? 'Follow these Cloudflare dashboard steps:'
       : 'Làm theo các bước sau trên dashboard Cloudflare:';
-  return `${intro}\n${body}`;
+  return `${intro}\n${lines.join('\n')}`;
 }
 
 export function guardGenerateText(text: string, lang: Lang, prompt = ''): string {
@@ -389,6 +621,7 @@ export function guardGenerateText(text: string, lang: Lang, prompt = ''): string
     const fallback = curatedStepsFallback(prompt, lang);
     if (fallback) guarded = fallback;
   }
+  guarded = correctBackwardsNameservers(guarded, lang, prompt);
   return ensureRequiredSteps(guarded, lang, prompt);
 }
 
