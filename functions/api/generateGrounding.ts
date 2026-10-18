@@ -59,16 +59,24 @@ const LESSON_STEPS: Record<TopicId, { vi: string[]; en: string[] }> = {
   },
   waf: {
     vi: [
-      'Security → WAF → Managed rules. Bật Cloudflare Managed Ruleset / OWASP.',
-      'Đặt action mặc định là Log / Simulate trong 24–48h — không Block ngay.',
-      'Security Events: lọc path /login, /admin, /api trước khi chuyển sang Block.',
-      'WAF không chạy nếu hostname còn grey-cloud. Không bật WAF trong cài đặt WordPress.',
+      'Nói rõ plan trước khi chỉ bước. Simulate không phải action. Log chỉ có trên Enterprise.',
+      'Free: Cloudflare Free Managed Ruleset có trên mọi plan và được bật sẵn trên Free. Không bật Cloudflare Managed Ruleset hay OWASP Core trên Free — hai ruleset đó cần Pro trở lên. Sensitive Data Detection chỉ có trên Enterprise.',
+      'Pro và Business: Security → Settings, lọc Web application exploits, bật Cloudflare managed ruleset. OWASP Core là tùy chọn và cũng cần Pro trở lên. Xem deployment settings rồi Save. Mặc định chỉ bật một phần rule. Không override mọi rule sang Block.',
+      'Enterprise: cùng đường Security → Settings. Muốn xem rule mới trước khi chặn thì dùng action Log, rồi xem Security Events. Free, Pro và Business không có Log: bắt đầu bằng Managed Challenge, xem Security Events, rồi mới đổi sang Block.',
+      'Sau khi đã bật ruleset: Security → Security rules, lọc Managed rules, mở rule có action Execute nếu cần đổi scope hoặc override.',
+      'Action thật khi override: Block, Managed Challenge, Non-Interactive Challenge, Interactive Challenge. Log chỉ Enterprise. Không gọi Simulate.',
+      'WAF chỉ thấy HTTP khi hostname đang proxied (đám mây cam). Không bật WAF trong cài đặt WordPress.',
+      'Docs: https://developers.cloudflare.com/waf/managed-rules/ https://developers.cloudflare.com/waf/get-started/ https://developers.cloudflare.com/waf/managed-rules/deploy-zone-dashboard/ https://developers.cloudflare.com/waf/custom-rules/create-dashboard/ https://developers.cloudflare.com/security/rules/',
     ],
     en: [
-      'Security → WAF → Managed rules. Enable the Cloudflare Managed Ruleset / OWASP.',
-      'Set the default action to Log / Simulate for 24–48h — do not Block immediately.',
-      'Security Events: filter /login, /admin, and /api before switching to Block.',
-      'WAF does not run if the hostname is still grey-cloud. Do not enable WAF inside WordPress settings.',
+      'Name the plan before you give a step. Simulate is not an action. Log is Enterprise-only.',
+      'Free: the Cloudflare Free Managed Ruleset is on every plan and is already deployed on Free. Do not turn on the Cloudflare Managed Ruleset or OWASP Core on Free — both need Pro or above. Sensitive Data Detection is Enterprise only.',
+      'Pro and Business: Security → Settings, filter by Web application exploits, turn on Cloudflare managed ruleset. OWASP Core is optional and also needs Pro or above. Review the deployment settings, then Save. The default enables a subset of rules. Do not override every rule to Block.',
+      'Enterprise: same Security → Settings path. To watch a new rule before blocking, use the Log action, then review Security Events. Free, Pro, and Business have no Log: start with Managed Challenge, review Security Events, then switch to Block.',
+      'After a ruleset is on: Security → Security rules, filter Managed rules, and open the rule whose action is Execute when you need to change scope or an override.',
+      'Real override actions: Block, Managed Challenge, Non-Interactive Challenge, Interactive Challenge. Log is Enterprise-only. Do not call anything Simulate.',
+      'WAF only sees HTTP when the hostname is proxied (orange cloud). Do not enable WAF inside WordPress settings.',
+      'Docs: https://developers.cloudflare.com/waf/managed-rules/ https://developers.cloudflare.com/waf/get-started/ https://developers.cloudflare.com/waf/managed-rules/deploy-zone-dashboard/ https://developers.cloudflare.com/waf/custom-rules/create-dashboard/ https://developers.cloudflare.com/security/rules/',
     ],
   },
 };
@@ -91,7 +99,9 @@ const TOPICS: Topic[] = [
   },
   {
     id: 'waf',
-    guideId: 'waf-lab',
+    // Practical-guide waf-lab still says "block now" and lists Log as a general action.
+    // Keep that page copy out of the prompt; the plan-gated steps above are the source.
+    guideId: '',
     pattern: /\bwaf\b|firewall|tuong lua|managed rule|wordpress|security setting|bao mat/,
   },
 ];
@@ -117,7 +127,7 @@ export function generateSystemPrompt(lang: GenerateLang): string {
       'You are a Cloudflare learning assistant. Be concise, beginner-friendly, and actionable.',
       '',
       'Grounding rules — follow all of them:',
-      '- Only describe Cloudflare steps that really exist: a nameserver change and DNS records, the orange-cloud proxy toggle, the SSL/TLS mode, and WAF managed rules and security settings in the Cloudflare dashboard (dash.cloudflare.com).',
+      '- Only describe Cloudflare steps that really exist: a nameserver change and DNS records, the orange-cloud proxy toggle, the SSL/TLS mode, and WAF managed rules and security settings in the Cloudflare dashboard (dash.cloudflare.com). Gate WAF by plan: Free uses the Cloudflare Free Managed Ruleset; the Cloudflare Managed Ruleset and OWASP Core need Pro or above. Log is Enterprise-only. Simulate is not an action.',
       '- Never invent credentials, passwords, or plugin or API-key steps. There is no DNS password. WAF is not turned on by adding an API key in WordPress settings. Do not invent nameserver hostnames; tell the learner to copy the two names the dashboard shows.',
       '- If you are not sure a control exists, say you are not sure and point the learner to the Cloudflare dashboard or https://developers.cloudflare.com instead of guessing.',
       '- When curated onboarding notes are included, prefer those steps and do not add steps they do not contain.',
@@ -128,7 +138,7 @@ export function generateSystemPrompt(lang: GenerateLang): string {
     'Bạn là trợ lý học Cloudflare. Viết ngắn gọn, dễ hiểu cho người mới và có bước hành động rõ ràng.',
     '',
     'Quy tắc bám sự thật — làm đủ các ý sau:',
-    '- Chỉ mô tả bước Cloudflare có thật: đổi nameserver và bản ghi DNS, công tắc proxy đám mây cam (orange cloud), chế độ SSL/TLS, và WAF managed rules cùng security settings trong dashboard Cloudflare (dash.cloudflare.com).',
+    '- Chỉ mô tả bước Cloudflare có thật: đổi nameserver và bản ghi DNS, công tắc proxy đám mây cam (orange cloud), chế độ SSL/TLS, và WAF managed rules cùng security settings trong dashboard Cloudflare (dash.cloudflare.com). Gắn WAF theo plan: Free dùng Cloudflare Free Managed Ruleset; Cloudflare Managed Ruleset và OWASP Core cần Pro trở lên. Log chỉ có trên Enterprise. Simulate không phải action.',
     '- Không bịa thông tin đăng nhập, mật khẩu, bước cài plugin, hoặc bước API key. Không có mật khẩu DNS. Không bật WAF bằng cách thêm API key trong phần cài đặt WordPress. Không bịa hostname nameserver; bảo người học copy đúng hai tên mà dashboard hiển thị.',
     '- Nếu không chắc một nút hay một bước có tồn tại, hãy nói là không chắc và hướng người học tới dashboard Cloudflare hoặc https://developers.cloudflare.com, đừng đoán.',
     '- Khi có ghi chú onboarding đi kèm, ưu tiên các bước đó và không thêm bước mà ghi chú không có.',

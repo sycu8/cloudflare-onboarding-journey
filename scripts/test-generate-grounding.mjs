@@ -19,6 +19,9 @@ const EN_RULES = [
   'orange-cloud proxy toggle',
   'SSL/TLS mode',
   'WAF managed rules and security settings',
+  'Pro or above',
+  'Log is Enterprise-only',
+  'Simulate is not an action',
   'Never invent credentials, passwords, or plugin or API-key steps',
   'There is no DNS password',
   'Do not invent nameserver hostnames',
@@ -30,6 +33,9 @@ const VI_RULES = [
   'đám mây cam (orange cloud)',
   'SSL/TLS',
   'WAF managed rules',
+  'Pro trở lên',
+  'Log chỉ có trên Enterprise',
+  'Simulate không phải action',
   'Không bịa thông tin đăng nhập, mật khẩu, bước cài plugin, hoặc bước API key',
   'Không có mật khẩu DNS',
   'Không bịa hostname nameserver',
@@ -46,13 +52,28 @@ for (const phrase of VI_RULES) {
 const enMessages = buildGenerateMessages('How do I enable the WAF on WordPress?', 'en');
 assert.equal(enMessages[0].role, 'system');
 assert.equal(enMessages[0].content, generateSystemPrompt('en'));
-assert.match(enMessages[1].content, /Security → WAF → Managed rules/);
+assert.match(enMessages[1].content, /Security → Settings/);
+assert.match(enMessages[1].content, /Security → Security rules/);
+assert.match(enMessages[1].content, /Free Managed Ruleset/);
+assert.match(enMessages[1].content, /Pro or above/);
+assert.match(enMessages[1].content, /Enterprise-only/);
+assert.match(enMessages[1].content, /Simulate is not an action/);
+assert.match(enMessages[1].content, /https:\/\/developers\.cloudflare\.com\/waf\/managed-rules\//);
+assert.doesNotMatch(enMessages[1].content, /Security → WAF → Managed rules/);
+assert.doesNotMatch(enMessages[1].content, /Log \/ Simulate/);
+assert.doesNotMatch(enMessages[1].content, /blocks sensitive paths/i);
 assert.match(enMessages.map((message) => message.content).join('\n'), /orange-cloud proxy toggle/);
 assert.doesNotMatch(enMessages[1].content, /DNS password/i);
 
 const viMessages = buildGenerateMessages('Làm sao bật WAF cho website WordPress?', 'vi');
 assert.equal(viMessages[0].content, generateSystemPrompt('vi'));
-assert.match(viMessages[1].content, /Security → WAF → Managed rules/);
+assert.match(viMessages[1].content, /Security → Settings/);
+assert.match(viMessages[1].content, /Security → Security rules/);
+assert.match(viMessages[1].content, /Pro trở lên/);
+assert.match(viMessages[1].content, /Simulate không phải action/);
+assert.doesNotMatch(viMessages[1].content, /Security → WAF → Managed rules/);
+assert.doesNotMatch(viMessages[1].content, /Log \/ Simulate/);
+assert.doesNotMatch(viMessages[1].content, /chặn path nhạy cảm/);
 assert.match(viMessages.map((message) => message.content).join('\n'), /đám mây cam \(orange cloud\)/);
 
 const dns = curatedOnboardingContext('đổi nameserver và bản ghi DNS', 'vi');
@@ -92,7 +113,9 @@ const sent = seen[0].input.messages.map((message) => message.content).join('\n')
 for (const phrase of VI_RULES) {
   assert.ok(sent.includes(phrase), `Workers AI prompt missing: ${phrase}`);
 }
-assert.match(sent, /Security → WAF → Managed rules/);
+assert.match(sent, /Security → Settings/);
+assert.doesNotMatch(sent, /Log \/ Simulate/);
+assert.doesNotMatch(sent, /Security → WAF → Managed rules/);
 assert.doesNotMatch(sent, /mật khẩu DNS là/);
 
 const robots = readFileSync(join(root, 'public/robots.txt'), 'utf8');

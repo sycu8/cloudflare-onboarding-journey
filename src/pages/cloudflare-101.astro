@@ -5,6 +5,7 @@ import LangText from '../components/ui/LangText.astro';
 import CTASection from '../components/content/CTASection.astro';
 import Cloudflare101Catalog from '../components/content/Cloudflare101Catalog.astro';
 import Cloudflare101PracticalGuides from '../components/content/Cloudflare101PracticalGuides';
+import AIContentGenerator from '../components/islands/AIContentGenerator';
 import Cloudflare101Terminology from '../components/content/Cloudflare101Terminology.astro';
 import ReferenceDiagramFigure from '../components/content/ReferenceDiagramFigure.astro';
 import { cf101Categories, cf101Foundations, developerDocsHome, docsUrl } from '../data/cloudflare101';
@@ -70,6 +71,7 @@ const cf101Diagrams = getDiagramsForHubPage('/cloudflare-101');
       { id: 'foundations', vi: 'Nền tảng', en: 'Foundations' },
       { id: 'terminology', vi: 'Thuật ngữ', en: 'Terminology' },
       { id: 'practical-guides', vi: 'Cấu hình & WAF', en: 'Config & WAF' },
+      { id: 'generate', vi: 'Tạo giải thích', en: 'Generate' },
       ...cf101Categories.map((c) => ({ id: c.id, vi: c.title.vi, en: c.title.en })),
     ].map((s) => (
       <a href={`#${s.id}`} class="badge hover:border-[var(--cf-accent)]">
@@ -167,6 +169,10 @@ const cf101Diagrams = getDiagramsForHubPage('/cloudflare-101');
       configSections={basicConfigurationSections}
       wafPractices={wafBestPractices}
     />
+  </section>
+
+  <section id="generate" class="mt-10 scroll-mt-24 border-t pt-10" style="border-color: var(--cf-border)">
+    <AIContentGenerator client:load />
   </section>
 
   <div class="mt-10 border-t pt-10" style="border-color: var(--cf-border)">
