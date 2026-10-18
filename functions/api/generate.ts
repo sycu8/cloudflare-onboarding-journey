@@ -1,7 +1,10 @@
 import { buildGenerateMessages, curatedOnboardingContext, type GenerateLang } from './generateGrounding.ts';
 import {
+  CUSTOM_RULE_ACTIONS,
+  OVERRIDE_ACTIONS,
   businessManagedRulesetLine,
   claimCheckMessages,
+  claimsUnknownWafAction,
   deniesBusinessManagedRuleset,
   dropEmptyHeadings,
   ensureSaveAnswer,
@@ -117,15 +120,15 @@ function rewriteSentences(text: string, edit: (sentence: string) => string): str
     .join('\n');
 }
 
-function hasInventedNameserver(sentence: string): boolean {
-  return hasInventedNameserverHost(sentence);
+function hasInventedNameserver(sentence: string, prompt = ''): boolean {
+  return hasInventedNameserverHost(sentence, prompt);
 }
 
 /** Replace each sentence or bullet that contains an invented nameserver hostname. */
-export function rewriteInventedNameservers(text: string, lang: Lang): string {
+export function rewriteInventedNameservers(text: string, lang: Lang, prompt = ''): string {
   const instruction = nameserverOverviewInstruction(lang);
   return rewriteSentences(normalizeGeneratedText(text), (sentence) => {
-    if (!hasInventedNameserver(sentence)) return sentence;
+    if (!hasInventedNameserver(sentence, prompt)) return sentence;
     const bullet = sentence.match(/^(\s*[-*]\s+)/);
     return `${bullet?.[1] ?? ''}${instruction}`;
   });
@@ -369,29 +372,15 @@ function subsetSentence(lang: Lang): string {
   return lang === 'en' ? 'The deployment runs a subset of rules.' : 'Bản deployment chỉ chạy một phần rule.';
 }
 
-const INVENTED_ACTION = /\b(?:simulate|quarantine|monitor|tarpit|captcha|sinkhole|observe)\b|non-interactive challenge/;
-
 function knownActionsInstruction(lang: Lang): string {
   return lang === 'en'
-    ? 'Real WAF actions are Block, Managed Challenge, JS Challenge, Interactive Challenge, and Skip. Log is Enterprise-only. Simulate is not an action.'
-    : 'Action WAF thật là Block, Managed Challenge, JS Challenge, Interactive Challenge và Skip. Log chỉ có trên Enterprise. Simulate không phải action.';
+    ? `${CUSTOM_RULE_ACTIONS.en} ${OVERRIDE_ACTIONS.en} Simulate is not an action.`
+    : `${CUSTOM_RULE_ACTIONS.vi} ${OVERRIDE_ACTIONS.vi} Simulate không phải action.`;
 }
 
-/** A named WAF action that is not in the plan-feature table (LG7). */
+/** A named WAF action that is not in the plan-feature table. Logging-only names stay visible. */
 function inventsWafAction(sentence: string): boolean {
-  const folded = hideLogpush(withoutLogin(foldGenerated(sentence)));
-  if (!INVENTED_ACTION.test(folded)) return false;
-  if (/\bnot an action\b|\bkhong phai action\b/.test(folded)) return false;
-  if (claimIsDenied(folded, INVENTED_ACTION)) return false;
-  if (/non-interactive challenge/.test(folded)) return true;
-  return (
-    /\b(?:action|hanh dong|mode)\b[\s\S]{0,48}(?:simulate|quarantine|monitor|tarpit|captcha|sinkhole|observe)\b/.test(
-      folded,
-    ) ||
-    /\b(?:use|using|chon|select|pick|choose|set|dung|dat)\s+(?:the\s+|action\s+)?(?:simulate|quarantine|monitor|tarpit|captcha|sinkhole|observe)\b/.test(
-      folded,
-    )
-  );
+  return claimsUnknownWafAction(sentence);
 }
 
 function hasSubsetPoint(text: string): boolean {
@@ -725,7 +714,7 @@ export function curatedStepsFallback(prompt: string, lang: Lang): string {
 }
 
 export function guardGenerateText(text: string, lang: Lang, prompt = ''): string {
-  let guarded = rewritePlanGatedActions(rewriteInventedNameservers(text, lang), lang, prompt);
+  let guarded = rewritePlanGatedActions(rewriteInventedNameservers(text, lang, prompt), lang, prompt);
   if (isBareRefusal(guarded)) {
     const fallback = curatedStepsFallback(prompt, lang);
     if (fallback) guarded = fallback;
@@ -805,11 +794,20 @@ async function reviewText(
     text,
     lang,
     async (claims) => {
-      const open = claims.filter((claim) => !tableConfirms(claim.text) && !tableContradicts(claim.text, prompt));
+      const walked: string[] = [];
+      const decided = new Set<string>();
+      for (const line of text.split('\n')) {
+        for (const sentence of splitSentences(line)) {
+          const context = `${prompt}\n${walked.join(' ')}`;
+          if (tableConfirms(sentence) || tableContradicts(sentence, context)) decided.add(sentence);
+          walked.push(sentence);
+        }
+      }
+      const open = claims.filter((claim) => !decided.has(claim.text));
       if (!open.length) return claims.map((claim) => ({ id: claim.id, verdict: 'ok' as const }));
       const map = await gatherVerdicts(open, async (group) => {
         const reviewedGroup = await run(MODEL, {
-          max_tokens: 96,
+          max_tokens: 512,
           messages: claimCheckMessages(group, lang),
         });
         if (aiResponseFailed(reviewedGroup)) throw new Error('ai-502');

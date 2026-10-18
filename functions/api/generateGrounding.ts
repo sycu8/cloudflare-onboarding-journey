@@ -1,5 +1,5 @@
 import { basicConfigurationSections } from '../../src/data/cf101PracticalGuides.ts';
-import { formatPlanFeatureTable } from './planFeatures.ts';
+import { CUSTOM_RULE_ACTIONS, OVERRIDE_ACTIONS, formatPlanFeatureTable } from './planFeatures.ts';
 
 export type GenerateLang = 'vi' | 'en';
 
@@ -66,7 +66,7 @@ const LESSON_STEPS: Record<TopicId, { vi: string[]; en: string[] }> = {
       'Pro và Business: Cloudflare Managed Ruleset không bật sẵn. Vào Security → Settings, lọc Web application exploits, rồi bật Cloudflare managed ruleset. OWASP Core là tùy chọn và cũng cần Pro trở lên. Xem deployment settings rồi Save. Save không bật mọi rule. Sau khi bật, chỉ một phần rule chạy. Không override mọi rule sang Block.',
       'Enterprise: cùng đường Security → Settings. Muốn xem rule mới trước khi chặn thì dùng action Log, rồi xem Security Events. Free, Pro và Business không có Log: bắt đầu bằng Managed Challenge, xem Security Events, rồi mới đổi sang Block.',
       'Sau khi đã bật ruleset: Security → Security rules, lọc Managed rules, mở rule có action Execute nếu cần đổi scope hoặc override.',
-      'Action thật khi override: Block, Managed Challenge, JS Challenge, Interactive Challenge, Skip. Log chỉ Enterprise. Không gọi Simulate. Non-Interactive Challenge không phải action của custom rule.',
+      `${CUSTOM_RULE_ACTIONS.vi} ${OVERRIDE_ACTIONS.vi}`,
       'WAF chỉ thấy HTTP khi hostname đang proxied (đám mây cam). Không bật WAF trong cài đặt WordPress.',
       'Docs: https://developers.cloudflare.com/waf/managed-rules/ https://developers.cloudflare.com/waf/custom-rules/ https://developers.cloudflare.com/ruleset-engine/rules-language/actions/ https://developers.cloudflare.com/waf/managed-rules/deploy-zone-dashboard/ https://developers.cloudflare.com/security/rules/',
     ],
@@ -77,7 +77,7 @@ const LESSON_STEPS: Record<TopicId, { vi: string[]; en: string[] }> = {
       'Pro and Business: the Cloudflare Managed Ruleset is not already on. Go to Security → Settings, filter by Web application exploits, then turn on Cloudflare managed ruleset. OWASP Core is optional and also needs Pro or above. Review the deployment settings, then Save. Save does not enable every rule. After you turn it on, only a subset of rules runs. Do not override every rule to Block.',
       'Enterprise: same Security → Settings path. To watch a new rule before blocking, use the Log action, then review Security Events. Free, Pro, and Business have no Log: start with Managed Challenge, review Security Events, then switch to Block.',
       'After a ruleset is on: Security → Security rules, filter Managed rules, and open the rule whose action is Execute when you need to change scope or an override.',
-      'Real override actions: Block, Managed Challenge, JS Challenge, Interactive Challenge, Skip. Log is Enterprise-only. Do not call anything Simulate. Non-Interactive Challenge is not a custom-rule action.',
+      `${CUSTOM_RULE_ACTIONS.en} ${OVERRIDE_ACTIONS.en}`,
       'WAF only sees HTTP when the hostname is proxied (orange cloud). Do not enable WAF inside WordPress settings.',
       'Docs: https://developers.cloudflare.com/waf/managed-rules/ https://developers.cloudflare.com/waf/custom-rules/ https://developers.cloudflare.com/ruleset-engine/rules-language/actions/ https://developers.cloudflare.com/waf/managed-rules/deploy-zone-dashboard/ https://developers.cloudflare.com/security/rules/',
     ],

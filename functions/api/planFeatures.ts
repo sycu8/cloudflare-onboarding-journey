@@ -4,11 +4,23 @@ type GenerateLang = 'vi' | 'en';
  * Authoritative plan-feature facts. The system prompt includes this table.
  * The second pass rewrites a sentence from these rows. It does not append.
  */
+/** Custom-rule actions. Non-Interactive Challenge and JS Challenge are one action (`js_challenge`). */
+export const CUSTOM_RULE_ACTIONS = {
+  en: 'WAF custom-rule actions: Block, Managed Challenge, Non-Interactive Challenge, Interactive Challenge, Skip, and Log. Non-Interactive Challenge and JS Challenge are the same action (js_challenge). Log is Enterprise only.',
+  vi: 'Action của custom rule WAF: Block, Managed Challenge, Non-Interactive Challenge, Interactive Challenge, Skip và Log. Non-Interactive Challenge và JS Challenge là cùng một action (js_challenge). Log chỉ có trên Enterprise.',
+} as const;
+
+/** Managed-rule override actions. Skip is a custom-rule action, not an override. */
+export const OVERRIDE_ACTIONS = {
+  en: 'Managed-rule override actions: Block, Log, Non-Interactive Challenge, Managed Challenge, and Interactive Challenge. Skip is not an override action.',
+  vi: 'Action khi override managed rule: Block, Log, Non-Interactive Challenge, Managed Challenge và Interactive Challenge. Skip không phải action override.',
+} as const;
+
 export const PLAN_FEATURE_ROWS = [
   {
     id: 'waf-actions',
-    en: 'WAF custom-rule actions on Free, Pro, and Business: Block, Managed Challenge, JS Challenge, Interactive Challenge, Skip. Managed Challenge challenges the visitor. It is not a record-only action. Log is Enterprise only. Simulate is not an action. Do not invent an action name.',
-    vi: 'Action của custom rule WAF trên Free, Pro và Business: Block, Managed Challenge, JS Challenge, Interactive Challenge, Skip. Managed Challenge thách thức người truy cập, không phải action chỉ ghi. Log chỉ có trên Enterprise. Simulate không phải action. Đừng bịa tên action.',
+    en: `${CUSTOM_RULE_ACTIONS.en} ${OVERRIDE_ACTIONS.en} Managed Challenge challenges the visitor. It is not a record-only action. Skip is not a record-only action. Simulate is not an action. Do not invent an action name.`,
+    vi: `${CUSTOM_RULE_ACTIONS.vi} ${OVERRIDE_ACTIONS.vi} Managed Challenge thách thức người truy cập, không phải action chỉ ghi. Skip không phải action chỉ ghi. Simulate không phải action. Đừng bịa tên action.`,
   },
   {
     id: 'sdd',
@@ -80,7 +92,7 @@ const LOGPUSH = /\blogpush\b/;
 const NAMESERVER = /\bnameservers?\b/;
 const PLAN = /\b(?:free|pro|business|enterprise)\b/;
 const LOWER_PLAN = /\b(?:free|pro|business)\b/;
-const INVENTED = /\b(?:simulate|quarantine|monitor|tarpit|captcha|sinkhole|observe)\b|non-interactive challenge/;
+const INVENTED = /\b(?:simulate|quarantine|monitor|tarpit|captcha|sinkhole|observe)\b/;
 const SAVE_QUANTIFIER = /\b(?:all|every|moi|tat ca|subset|mot phan)\b/;
 
 const CONCRETE_NAMESERVER =
@@ -197,12 +209,16 @@ function namesNameserverTopic(folded: string): boolean {
   return /\bnameservers?\b|\bname servers?\b|\bns records?\b|\bban ghi ns\b|\brecord ns\b|\bmay chu ten\b|\bns\b/.test(folded);
 }
 
-/** Any concrete nameserver hostname, whatever the sentence calls the record. Docs hosts stay. */
-export function hasInventedNameserverHost(sentence: string): boolean {
+/**
+ * Any concrete nameserver hostname, whatever the sentence calls the record. Docs hosts stay.
+ * The host has to be in the sentence. DNS or registrar words may be only in the prompt.
+ */
+export function hasInventedNameserverHost(sentence: string, context = ''): boolean {
   const folded = foldFeature(sentence);
   if (CONCRETE_NAMESERVER.test(folded) || NS_SHAPED_HOST.test(folded)) return true;
-  if (disallowedCloudflareHost(folded)) return true;
-  if (!namesNameserverTopic(folded)) return false;
+  const scope = `${folded}\n${foldFeature(context)}`;
+  if (disallowedCloudflareHost(folded, scope)) return true;
+  if (!namesNameserverTopic(scope)) return false;
   HOSTNAME.lastIndex = 0;
   for (const match of folded.matchAll(HOSTNAME)) {
     if (DOCS_HOST.test(match[0])) continue;
@@ -211,11 +227,11 @@ export function hasInventedNameserverHost(sentence: string): boolean {
   return false;
 }
 
-/** Any *.cloudflare.com host in a DNS or registrar sentence, except dash, developers, and www. */
-function disallowedCloudflareHost(folded: string): boolean {
-  if (!/\bdns\b|registrar|nameserver|name server|ban ghi|mat bao/.test(folded)) return false;
+/** Any *.cloudflare.com host in the sentence when the sentence or the prompt is about DNS. */
+function disallowedCloudflareHost(sentenceFolded: string, scope: string): boolean {
+  if (!/\bdns\b|registrar|nameserver|name server|ban ghi|mat bao/.test(scope)) return false;
   HOSTNAME.lastIndex = 0;
-  for (const match of folded.matchAll(HOSTNAME)) {
+  for (const match of sentenceFolded.matchAll(HOSTNAME)) {
     if (!/(?:^|\.)cloudflare\.com$/.test(match[0])) continue;
     if (DOCS_HOST.test(match[0])) continue;
     return true;
@@ -233,14 +249,47 @@ export function isProceduralStep(sentence: string): boolean {
   return NAMESERVER.test(folded) && /overview|registrar|paste|\bdan\b|copy|chep/.test(folded);
 }
 
+const RECORD_ONLY =
+  /record-only|records only|only records|just records|only logs|only logging|merely records|log-only|log only|chi ghi|chi de ghi|de ghi|ghi nhan|ghi lai|la de ghi|does not challenge|without challenging|khong challenge|pass(?:es|ing)? traffic|lets? traffic|allows? traffic|cho (?:traffic|luu luong) (?:di )?qua|chi (?:de )?log|only log|records (?:the |a )?(?:match|matches|request|requests|hit|hits)\b/;
+
 /** "Managed Challenge only records" is a plan claim. The action challenges; it does not only record. */
-export function isManagedChallengeRecordOnly(sentence: string): boolean {
+export function isManagedChallengeRecordOnly(sentence: string, context = ''): boolean {
   const folded = foldFeature(sentence);
-  if (!/managed challenge/.test(folded)) return false;
-  if (/not a record-only|not record-only|khong phai action chi ghi|khong chi ghi|challenges the visitor|thach thuc nguoi/.test(folded)) return false;
-  return /record-only|records only|only records|just records|only logs|only logging|merely records|log-only|log only|chi ghi|chi de ghi|de ghi|ghi nhan|ghi lai|la de ghi|does not challenge|without challenging|khong challenge|pass(?:es|ing)? traffic|lets? traffic|cho (?:traffic|luu luong) (?:di )?qua|chi (?:de )?log|only log|records (?:the |a )?(?:match|matches|request|requests|hit|hits)\b/.test(
-    folded,
-  );
+  if (/not a record-only|not record-only|khong phai action chi ghi|khong chi ghi|challenges the visitor|thach thuc nguoi/.test(folded)) {
+    return false;
+  }
+  const named = /managed challenge/.test(folded);
+  const fromContext = !named && /managed challenge/.test(foldFeature(context));
+  if (!named && !fromContext) return false;
+  if (!named) {
+    return /\b(?:it|this|that)\b[\s\S]{0,48}\b(?:only logs|only records|just records|records only|passes traffic|lets traffic|allows traffic)|chi (?:ghi|log)\b|khong chan|only logs|only records/.test(
+      folded,
+    );
+  }
+  return RECORD_ONLY.test(folded);
+}
+
+/** Skip is a real custom-rule action. It is not a record-only action. */
+function isSkipRecordOnly(sentence: string, context = ''): boolean {
+  const folded = foldFeature(sentence);
+  if (/not a record-only|not record-only|khong phai action chi ghi|is not a record-only/.test(folded)) return false;
+  const named = /\bskip\b/.test(folded);
+  const fromContext = !named && /\bskip\b/.test(foldFeature(context));
+  if (!named && !fromContext) return false;
+  if (!named) return /\bonly logs|only records|just records|record-only|chi ghi|chi log\b/.test(folded);
+  return RECORD_ONLY.test(folded);
+}
+
+/** Skip is not a managed-rule override action. */
+function listsSkipAsOverride(folded: string): boolean {
+  if (!/\bskip\b/.test(folded) || !/override/.test(folded)) return false;
+  return !/not an override|is not an override|khong phai action override|khong phai override/.test(folded);
+}
+
+/** Non-Interactive Challenge and JS Challenge are one real action. A denial is a claim. */
+function deniesJsChallenge(folded: string): boolean {
+  if (!/non-interactive challenge|js challenge/.test(folded)) return false;
+  return /not an action|khong phai action|not a custom-rule|khong phai action cua|is not a real|isn't a real/.test(folded);
 }
 
 /** "Turn it on" / "bật nó" when the prompt or an earlier sentence is about SDD. */
@@ -257,16 +306,17 @@ function isSaveClaim(folded: string): boolean {
   return /\bsav(?:e|ing)\b/.test(folded) && SAVE_QUANTIFIER.test(folded) && /\brules?\b/.test(folded);
 }
 
-/** "tất cả rule đều chạy" / "all rules run" contradicts the Save row, even without the word Save. */
+/** "tất cả rule đều chạy" / "all rules are on" contradicts the Save row, even without the word Save. */
 function claimsAllRulesRun(folded: string): boolean {
-  if (
-    !/tat ca (?:cac )?rules? deu (?:chay|duoc bat|bat|hoat dong)|all rules run|every rule runs|all of the rules run|rules all run|moi rule deu (?:chay|duoc bat|bat|hoat dong)|runs every rule|chay het rule|tat ca rules? chay|bat het rule|bat moi rule|all rules are (?:enabled|on|active)|every rule is (?:enabled|on|active)|rules are all (?:on|enabled|active)|turns every rule on|saving turns every rule/.test(
-      folded,
-    )
-  ) {
-    return false;
-  }
-  return !NEGATION.test(folded);
+  if (NEGATION.test(folded)) return false;
+  if (/rule nao cung|bat het|chay het/.test(folded)) return true;
+  if (/luu xong/.test(folded) && /\b(?:bat|chay|rules?)\b/.test(folded)) return true;
+  const all = /\b(?:all|every|moi|tat ca)\b/.test(folded);
+  const rules = /\brules?\b/.test(folded);
+  if (!all || !rules) return false;
+  return /\b(?:enabled|enable|enables|active|activates|run|runs|running|chay|bat|hoat dong)\b|\b(?:are|is|gets|get|becomes|become|stay|stays|turned)\s+on\b|\bturns?\b[\s\S]{0,32}\bon\b/.test(
+    folded,
+  );
 }
 
 function mentionsManagedRuleset(folded: string): boolean {
@@ -302,7 +352,10 @@ function asLearnerPlan(value: string | undefined): LearnerPlan {
 
 /** Keep đừng distinct from dùng so a warning is not read as the learner's plan. */
 function foldPlanText(text: string): string {
-  const marked = text.normalize('NFKC').replace(/đừng/gi, ' dungneg ');
+  const marked = text
+    .normalize('NFKC')
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/đừng/gi, ' dungneg ');
   return marked.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().replace(/đ/g, 'd');
 }
 
@@ -320,15 +373,30 @@ function planClauses(text: string): string[] {
     .filter(Boolean);
 }
 
-/** A question does not state the learner's plan. */
-function isPlanQuestion(clause: string): boolean {
-  if (/\?\s*$/.test(clause)) return true;
-  if (/^\s*(?:is|are|can|could|do|does|did|what|which|how|whose)\b/.test(clause)) return true;
-  return /\bco\b[\s\S]{0,48}\bkhong\b/.test(clause);
+function firstPersonPlan(clause: string): LearnerPlan {
+  const match =
+    /\b(?:i am on|im on|i'm on|i use|i'm using|im using|we are on|we're on|my plan is|our plan is|toi dung|toi dang|minh dung|em dung|chung toi(?: dang)?|chung ta(?: dang)?|dang dung goi|dung goi|goi cua toi(?: la)?|plan cua toi(?: la)?)\b[\s\S]{0,32}\b(enterprise|business|pro|free)\b/.exec(
+      clause,
+    );
+  return asLearnerPlan(match?.[1]);
+}
+
+/**
+ * A pure plan question does not state the learner's plan.
+ * "I'm on Enterprise, where is Log?" is not pure: the first-person plan still counts.
+ */
+function isPurePlanQuestion(clause: string): boolean {
+  const asks =
+    /\?\s*$/.test(clause) ||
+    /^\s*(?:is|are|can|could|do|does|did|what|which|how|whose|where)\b/.test(clause) ||
+    /\bco\b[\s\S]{0,48}\bkhong\b/.test(clause);
+  if (!asks) return false;
+  return firstPersonPlan(clause) === 'unknown';
 }
 
 export function resolveLearnerPlan(text: string): LearnerPlan {
-  const clauses = planClauses(text).filter((clause) => !isPlanQuestion(clause));
+  const allClauses = planClauses(text);
+  const clauses = allClauses.filter((clause) => !isPurePlanQuestion(clause));
   const folded = clauses.join(' ');
   const profile =
     /\b(?:selected plan|onboarding plan|profile plan|learner plan|plan da chon|goi da chon)\s*[:=]?\s*(enterprise|business|pro|free)\b|\bplan\s*[:=]\s*(enterprise|business|pro|free)\b/.exec(
@@ -336,6 +404,12 @@ export function resolveLearnerPlan(text: string): LearnerPlan {
     );
   const fromProfile = asLearnerPlan(profile?.[1] || profile?.[2]);
   if (fromProfile !== 'unknown') return fromProfile;
+  // A plan inside a question still counts: "I'm on Enterprise, where is Log?"
+  // A pure plan question ("Is Log on Enterprise?") was already removed.
+  for (const clause of allClauses) {
+    const fromQuestion = firstPersonPlan(clause);
+    if (fromQuestion !== 'unknown') return fromQuestion;
+  }
 
   const firstPerson =
     /\b(?:i am on|im on|i'm on|i use|i'm using|my plan is|toi dung|toi dang|minh dung|em dung|dang dung goi|dung goi|goi cua toi(?: la)?|plan cua toi(?: la)?)\s+(?:the\s+|goi\s+|la\s+)?(enterprise|business|pro|free)\b/.exec(
@@ -411,18 +485,22 @@ function featureAvailabilityClaim(folded: string): boolean {
  * and Log with no action word. A hostname-free nameserver paste step is not a claim.
  */
 export function mentionsPlanOrFeature(sentence: string, context = ''): boolean {
-  if (isManagedChallengeRecordOnly(sentence)) return true;
-  if (hasInventedNameserverHost(sentence)) return true;
+  if (isManagedChallengeRecordOnly(sentence, context)) return true;
+  if (isSkipRecordOnly(sentence, context) || listsSkipAsOverride(foldFeature(sentence)) || deniesJsChallenge(foldFeature(sentence))) {
+    return true;
+  }
+  if (namesUnknownAction(sentence)) return true;
+  if (hasInventedNameserverHost(sentence, context)) return true;
   if (isProceduralStep(sentence)) return false;
   const folded = foldFeature(sentence);
   if (PLAN.test(folded) || isWafLogAction(sentence) || hasCapitalLogGrant(sentence)) return true;
   if (actionsPaidOnly(folded) || sbfmOnFree(folded)) return true;
   if (/\bpaid plans?\b/.test(folded) && (SDD.test(folded) || /\bwaf\b|\bactions?\b|\bblock\b/.test(folded))) return true;
   if (claimsAllRulesRun(folded)) return true;
-  if (isManagedChallengeRecordOnly(sentence)) return true;
   if (isSddPronounFollowUp(sentence, context)) return true;
+  if (planForbidsGatedFeature(sentence, context)) return true;
   if (isSaveClaim(folded)) return true;
-  if (NAMESERVER.test(folded) || (namesNameserverTopic(folded) && hasInventedNameserverHost(sentence))) return true;
+  if (NAMESERVER.test(folded) || (namesNameserverTopic(folded) && hasInventedNameserverHost(sentence, context))) return true;
   if (namesInventedAction(folded)) return true;
   if (logPlanClaim(folded)) return true;
   if (featureAvailabilityClaim(folded)) return true;
@@ -569,6 +647,64 @@ function actionsPaidOnly(folded: string): boolean {
   return /\b(?:actions?|hanh dong|custom rules?|block|managed challenge|\bwaf\b)\b/.test(folded);
 }
 
+const KNOWN_ACTION_TARGET =
+  /^(?:block|managed challenge|non interactive challenge|js challenge|interactive challenge|skip|log)\b/;
+
+/**
+ * An action name that is not in the table. Checked before logging-product tokens are hidden,
+ * so "Logging" and "logging-only" stay visible. "Do not invent an action name" is not a claim.
+ */
+function namesUnknownAction(sentence: string): boolean {
+  const folded = foldFeature(sentence);
+  if (/\bnot an action\b|\bkhong phai action\b|\bdo not invent\b|\bdung bia\b|\bdungneg bia\b/.test(folded)) return false;
+  if (/not a record-only|not record-only|khong phai action chi ghi/.test(folded)) return false;
+  if (/\b(?:logging-only|log-only|logging only)\b/.test(folded) && /\b(?:action|hanh dong)\b/.test(folded)) return true;
+  const match =
+    /\b(?:set|dat|chon|select|pick|choose|use|using|dung)\s+(?:the\s+)?(?:action|hanh dong)\s+(?:to|la|thanh|sang)\s+([a-z0-9-]+(?:\s+[a-z0-9-]+){0,3})/.exec(
+      folded,
+    ) ||
+    /\b(?:use|using|chon|select|pick|set|dung)\s+([a-z0-9-]+)\s+as\s+(?:the\s+)?(?:action|hanh dong)\b/.exec(folded) ||
+    /\b(?:action|hanh dong)\s+(?:named|called)\s+([a-z0-9-]+(?:\s+[a-z0-9-]+){0,2})/.exec(folded);
+  if (!match?.[1]) return false;
+  const target = match[1].replace(/-/g, ' ').replace(/\s+/g, ' ').trim();
+  if (/^(?:name|names|the|custom|override|only|enterprise|visitor|record|records|invent)$/.test(target)) return false;
+  return !KNOWN_ACTION_TARGET.test(target);
+}
+
+/** Free keeps the Cloudflare Free Managed Ruleset. The full Managed Ruleset is Pro and above. */
+function freePaidRulesetOn(sentence: string, context: string): boolean {
+  const folded = foldFeature(sentence);
+  if (!/managed ruleset/.test(folded) || /free managed ruleset/.test(folded)) return false;
+  if (/needs pro|pro or above|pro tro len|not on the free|khong co tren|does not include|not included|isn't included|isnt included/.test(folded)) {
+    return false;
+  }
+  if (ownPlan(`${context}\n${sentence}`) !== 'free') return false;
+  if (NEGATION.test(folded)) return false;
+  const statesOn = /\b(?:is on|already on|turned on|is enabled|already enabled|bat san|da bat|dang bat)\b/;
+  if (/\b(?:pro|business|enterprise)\b/.test(folded) && !statesOn.test(folded)) return false;
+  return statesOn.test(folded) || /\b(?:turn on|enable|hay bat)\b/.test(folded);
+}
+
+/**
+ * Log, SDD, Bot Management, or the paid Managed Ruleset granted while the learner's plan forbids it.
+ * The plan comes from the prompt, not only from a plan word in the sentence.
+ */
+function planForbidsGatedFeature(sentence: string, context: string): 'sdd' | 'bots' | 'rulesets' | null {
+  if (tableConfirms(sentence)) return null;
+  const folded = foldFeature(sentence);
+  if (freePaidRulesetOn(sentence, context)) return 'rulesets';
+  const plan = ownPlan(context);
+  if (plan === 'unknown' || plan === 'enterprise') return null;
+  if (NEGATION.test(folded) || /instead of|thay cho|not available|does not|khong co|khong ho tro|enterprise-only|enterprise only|chi co tren enterprise/.test(folded)) {
+    return null;
+  }
+  const grant = /\b(?:enable|turn|bat|kich hoat|use|using|included|include|includes|available|already|get|gets|have|has|comes with|ships with)\b/;
+  if (!grant.test(folded)) return null;
+  if (SDD.test(folded)) return 'sdd';
+  if (BOT.test(folded) && !/super bot fight mode/.test(folded)) return 'bots';
+  return null;
+}
+
 function logGrantUnconfirmed(sentence: string, context: string): boolean {
   const folded = foldFeature(sentence);
   const hidden = stripViLogUses(hideLoggingProducts(folded));
@@ -584,9 +720,13 @@ function logGrantUnconfirmed(sentence: string, context: string): boolean {
 export function tableContradicts(sentence: string, context = ''): boolean {
   if (tableConfirms(sentence)) return false;
   const folded = foldFeature(sentence);
-  if (hasInventedNameserverHost(sentence)) return true;
+  if (hasInventedNameserverHost(sentence, context)) return true;
   if (deniesBusinessManagedRuleset(sentence)) return true;
-  if (isManagedChallengeRecordOnly(sentence)) return true;
+  if (isManagedChallengeRecordOnly(sentence, context)) return true;
+  if (isSkipRecordOnly(sentence, context) || listsSkipAsOverride(folded) || deniesJsChallenge(folded) || namesUnknownAction(sentence)) {
+    return true;
+  }
+  if (planForbidsGatedFeature(sentence, context)) return true;
   if (isSddPronounFollowUp(sentence, context) && (LOWER_PLAN.test(folded) || /\b(?:enable|turn|bat|kich hoat)\b/.test(folded))) {
     return true;
   }
@@ -644,10 +784,12 @@ export function tableContradicts(sentence: string, context = ''): boolean {
 function namesInventedAction(folded: string): boolean {
   if (!INVENTED.test(folded)) return false;
   if (/\bnot an action\b|\bkhong phai action\b/.test(folded)) return false;
-  return (
-    /\b(?:action|hanh dong|mode|use|using|chon|select|pick|choose|set|dung|dat)\b/.test(folded) ||
-    /non-interactive challenge/.test(folded)
-  );
+  return /\b(?:action|hanh dong|mode|use|using|chon|select|pick|choose|set|dung|dat)\b/.test(folded);
+}
+
+/** A named WAF action that is not in the table, including a logging-only name. */
+export function claimsUnknownWafAction(sentence: string): boolean {
+  return namesUnknownAction(sentence) || namesInventedAction(foldFeature(sentence));
 }
 
 export function rewriteFromTable(sentence: string, lang: GenerateLang, context = ''): string {
@@ -659,18 +801,26 @@ export function rewriteFromTable(sentence: string, lang: GenerateLang, context =
     isWafLogAction(sentence) ||
     hasCapitalLogGrant(sentence) ||
     planNamesLog ||
-    isManagedChallengeRecordOnly(sentence) ||
+    isManagedChallengeRecordOnly(sentence, context) ||
+    isSkipRecordOnly(sentence, context) ||
+    listsSkipAsOverride(folded) ||
+    deniesJsChallenge(folded) ||
     namesInventedAction(folded) ||
+    namesUnknownAction(sentence) ||
     actionsPaidOnly(folded)
   ) {
     ids.push('waf-actions');
   }
+  const forbidden = planForbidsGatedFeature(sentence, context);
+  if (forbidden === 'sdd') ids.push('sdd');
+  if (forbidden === 'bots') ids.push('bots');
+  if (forbidden === 'rulesets') ids.push('rulesets');
   if (SDD.test(folded) || isSddPronounFollowUp(sentence, context)) ids.push('sdd');
   if (BOT.test(folded) || /super bot fight mode|bot fight mode/.test(folded)) ids.push('bots');
   if (deniesBusinessManagedRuleset(sentence)) ids.push('business-cmr');
   else if (RULESET.test(folded)) ids.push('rulesets');
   if (LOGPUSH.test(folded)) ids.push('logpush');
-  if (NAMESERVER.test(folded) || hasInventedNameserverHost(sentence)) ids.push('nameservers');
+  if (NAMESERVER.test(folded) || hasInventedNameserverHost(sentence, context)) ids.push('nameservers');
   if (isSaveClaim(folded) || claimsAllRulesRun(folded)) ids.push('save');
   if (!ids.length && PLAN.test(folded)) return '';
   const unique = [...new Set(ids)];
@@ -934,12 +1084,7 @@ function resolveSentence(
     return settle(sentence, lang, context);
   }
   if (verdict === 'ok' || tableConfirms(sentence)) return { text: sentence, action: 'kept' };
-  // Null or unsure keeps a sentence only when the table confirms it.
-  // A how-to that names a plan only as context also stays. Logging products do not earn a keep.
-  const folded = foldFeature(sentence);
-  if (isPlanContextOnly(folded) && !isWafLogAction(sentence) && !hasCapitalLogGrant(sentence)) {
-    return { text: sentence, action: 'kept' };
-  }
+  // A failed or unsure check fails closed. tableConfirms already kept its sentence above.
   return settle(sentence, lang, context);
 }
 

@@ -16,7 +16,8 @@ const { basicConfigurationSections } = await import('../src/data/cf101PracticalG
 const { guardGenerateResult, onRequestPost, reviewGenerateResult, rewriteInventedNameservers, statedPlan } = await import(
   '../functions/api/generate.ts'
 );
-const { gatherVerdicts, parseClaimVerdicts, reviewPlanClaims } = await import('../functions/api/planFeatures.ts');
+const { CUSTOM_RULE_ACTIONS, OVERRIDE_ACTIONS, formatPlanFeatureTable, gatherVerdicts, parseClaimVerdicts, reviewPlanClaims } =
+  await import('../functions/api/planFeatures.ts');
 
 const EN_RULES = [
   'nameserver change and DNS records',
@@ -232,6 +233,8 @@ assert.doesNotMatch(wafCopy, /Log \/ Simulate/);
 assert.doesNotMatch(wafCopy, /blocks sensitive paths/i);
 assert.doesNotMatch(wafCopy, /chặn path nhạy cảm/);
 assert.doesNotMatch(wafCopy, /JS Challenge/);
+assert.ok(wafCopy.includes(OVERRIDE_ACTIONS.en));
+assert.ok(wafCopy.includes(OVERRIDE_ACTIONS.vi));
 assert.doesNotMatch(wafCopy, /Security → WAF → Managed rules/);
 
 const robots = readFileSync(join(root, 'public/robots.txt'), 'utf8');
@@ -1467,7 +1470,7 @@ const c08 = await reviewPlanClaims(
   'en',
   async () => null,
 );
-assert.match(c08, /open Security → Settings/);
+assert.doesNotMatch(c08, /On the Business plan/);
 assert.match(c08, /Turn on the managed ruleset/);
 assert.match(c08, /click Save/);
 assert.doesNotMatch(c08, /Use the Cloudflare dashboard for this step/);
@@ -1547,8 +1550,9 @@ for (const [id, sentence] of [
   ['LB2', 'You get Log.'],
   ['LB3', 'Next is Log.'],
 ]) {
+  const escaped = sentence.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   await expectCase(id, sentence, 'en', okVerdict, proPrompt, {
-    absent: new RegExp(sentence.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')),
+    absent: new RegExp(id === 'LB1' ? `^${escaped}$` : escaped),
     present: /Log is Enterprise only/,
   });
 }
@@ -1558,7 +1562,7 @@ await expectCase('W7', 'On the Free plan, turn on Super Bot Fight Mode.', 'en', 
 });
 await expectCase('CX1', 'With paid plans, set the action to Block.', 'en', wrongVerdict, '', {
   absent: /paid plans/,
-  present: /Free, Pro, and Business/,
+  present: /Block, Managed Challenge/,
 });
 await expectCase('CX2', 'Trên gói Free, Super Bot Fight Mode dùng được.', 'vi', wrongVerdict, '', {
   absent: /dùng được/,
@@ -1566,7 +1570,7 @@ await expectCase('CX2', 'Trên gói Free, Super Bot Fight Mode dùng được.',
 });
 await expectCase('CX5', 'For the Pro plan, Block is only with paid plans.', 'en', wrongVerdict, '', {
   absent: /paid plans/,
-  present: /Free, Pro, and Business/,
+  present: /Block, Managed Challenge/,
 });
 await expectCase('LN2', 'Hãy log request này vào nhật ký.', 'vi', okVerdict, bizPrompt, {
   exact: 'Hãy log request này vào nhật ký.',
@@ -1577,11 +1581,11 @@ await expectCase('QP3', 'Managed Challenge passes traffic and only logs the matc
 });
 await expectCase('W6', 'WAF actions are only with paid plans.', 'en', okVerdict, '', {
   absent: /paid plans/,
-  present: /Free, Pro, and Business/,
+  present: /Block, Managed Challenge/,
 });
 await expectCase('W8', 'On the Free plan, Block needs a paid plan.', 'en', okVerdict, '', {
   absent: /needs a paid plan/,
-  present: /Free, Pro, and Business/,
+  present: /Block, Managed Challenge/,
 });
 await expectCase('PD1', 'Sensitive Data Detection comes with paid plans.', 'en', okVerdict, '', {
   absent: /comes with paid plans/,
@@ -1644,9 +1648,9 @@ caseActual.push(
 );
 
 const ec4 = await generate({ prompt: 'Which WAF action should I use?', lang: 'en' }, { response: 'Use Non-Interactive Challenge.' });
-caseActual.push({ id: 'EC4', expected: 'no Non-Interactive Challenge recommendation', actual: ec4.data.result.response });
-assert.doesNotMatch(ec4.data.result.response, /Use Non-Interactive Challenge/);
-assert.match(ec4.data.result.response, /Simulate is not an action|JS Challenge/);
+caseActual.push({ id: 'E9a', expected: 'keep Use Non-Interactive Challenge', actual: ec4.data.result.response });
+assert.match(ec4.data.result.response, /Use Non-Interactive Challenge/);
+assert.doesNotMatch(ec4.data.result.response, /not a custom-rule action|is not an action/);
 
 const ev4 = await generate(
   { prompt: 'How do I open Security settings?', lang: 'en' },
@@ -1701,7 +1705,137 @@ assert.equal(liveChecks, 1);
 const generatorSource = readFileSync(join(root, 'src/components/islands/AIContentGenerator.tsx'), 'utf8');
 assert.match(generatorSource, /overflowWrap: 'anywhere'/);
 assert.match(readFileSync(join(root, 'src/styles/global.css'), 'utf8'), /overflow-wrap: anywhere/);
-assert.doesNotMatch(curatedOnboardingContext('How do I write a WAF rule?', 'en'), /Non-Interactive Challenge, Interactive/);
+const enGuide = curatedOnboardingContext('How do I write a WAF rule?', 'en');
+const viGuide = curatedOnboardingContext('Cách viết WAF rule?', 'vi');
+assert.ok(enGuide.includes(CUSTOM_RULE_ACTIONS.en));
+assert.ok(enGuide.includes(OVERRIDE_ACTIONS.en));
+assert.ok(viGuide.includes(CUSTOM_RULE_ACTIONS.vi));
+assert.ok(viGuide.includes(OVERRIDE_ACTIONS.vi));
+assert.ok(formatPlanFeatureTable('en').includes(CUSTOM_RULE_ACTIONS.en));
+assert.ok(formatPlanFeatureTable('en').includes(OVERRIDE_ACTIONS.en));
+assert.ok(formatPlanFeatureTable('vi').includes(CUSTOM_RULE_ACTIONS.vi));
+assert.ok(formatPlanFeatureTable('vi').includes(OVERRIDE_ACTIONS.vi));
+assert.doesNotMatch(OVERRIDE_ACTIONS.en, /Skip, and Log|Skip và Log/);
+assert.match(CUSTOM_RULE_ACTIONS.en, /\bSkip\b/);
+assert.match(OVERRIDE_ACTIONS.en, /Skip is not an override action/);
+
+assert.equal(statedPlan("I'm on Enterprise, where is Log?"), 'enterprise', 'LK03');
+assert.equal(statedPlan('Is Log on Enterprise?'), 'unknown', 'O9e');
+assert.equal(statedPlan('Where is Log on Enterprise?'), 'unknown', 'O9e-where');
+const lk03 = await generate(
+  { prompt: "I'm on Enterprise, where is Log?", lang: 'en' },
+  { response: 'Set the action to Log.' },
+);
+caseActual.push({ id: 'LK03', expected: 'enterprise; keep Set the action to Log', actual: lk03.data.result.response });
+assert.match(lk03.data.result.response, /Set the action to Log/);
+assert.doesNotMatch(lk03.data.result.response, /instead of Log/);
+const o9e = await generate({ prompt: 'Is Log on Enterprise?', lang: 'en' }, { response: 'Set the action to Log.' });
+caseActual.push({ id: 'O9e', expected: 'unknown; Log step removed', actual: o9e.data.result.response });
+assert.equal(statedPlan('Is Log on Enterprise?'), 'unknown');
+assert.doesNotMatch(o9e.data.result.response, /Set the action to Log/);
+assert.match(o9e.data.result.response, /Log is only available on Enterprise/);
+
+const e9b = await generate({ prompt: 'Which WAF action should I use?', lang: 'en' }, { response: 'Use JS Challenge.' });
+caseActual.push({ id: 'E9b', expected: 'keep Use JS Challenge', actual: e9b.data.result.response });
+assert.match(e9b.data.result.response, /Use JS Challenge/);
+const e9c = await generate(
+  { prompt: 'Which WAF action should I use?', lang: 'en' },
+  { response: 'Non-Interactive Challenge runs in the browser.' },
+);
+caseActual.push({ id: 'E9c', expected: 'keep Non-Interactive Challenge sentence', actual: e9c.data.result.response });
+assert.match(e9c.data.result.response, /Non-Interactive Challenge runs in the browser/);
+
+await expectCase('LG6', 'Managed-rule override actions include Skip.', 'en', okVerdict, '', {
+  absent: /override actions include Skip/,
+  present: /Skip is not an override action/,
+});
+await expectCase('LG7', 'Skip only records the request.', 'en', okVerdict, '', {
+  absent: /only records the request/,
+  present: /Skip is not a record-only action/,
+});
+await expectCase('QP3b', 'Use Managed Challenge. It only logs the match.', 'en', okVerdict, '', {
+  absent: /only logs the match/,
+  present: /not a record-only action/,
+});
+await expectCase('LG1', 'Set the action to Logging.', 'en', okVerdict, '', {
+  absent: /action to Logging/,
+  present: /Do not invent an action name/,
+});
+await expectCase('LG1b', 'Use a logging-only action.', 'en', okVerdict, 'I am on the Free plan', {
+  absent: /logging-only action/,
+  present: /Do not invent an action name/,
+});
+await expectCase('M9L1', 'Turn on Sensitive Data Detection.', 'en', okVerdict, 'I am on the Free plan', {
+  absent: /Turn on Sensitive Data Detection/,
+  present: /Enterprise only/,
+});
+await expectCase('M9L1b', 'Enable Bot Management.', 'en', okVerdict, 'I am on the Pro plan', {
+  absent: /Enable Bot Management/,
+  present: /Enterprise add-on/,
+});
+await expectCase('R2M1', 'The Managed Ruleset is on.', 'en', okVerdict, 'I am on the Free plan', {
+  absent: /Managed Ruleset is on/,
+  present: /Free Managed Ruleset|Pro or above/,
+});
+await expectCase('R2M1b', 'The Cloudflare Free Managed Ruleset is already on.', 'en', okVerdict, 'I am on the Free plan', {
+  exact: 'The Cloudflare Free Managed Ruleset is already on.',
+});
+await expectCase('S4b', 'All rules are on.', 'en', okVerdict, '', {
+  absent: /All rules are on/,
+  present: /subset of rules/,
+});
+await expectCase('SVb2', 'Lưu xong thì rule nào cũng bật.', 'vi', okVerdict, '', {
+  absent: /rule nào cũng bật/,
+  present: /một phần rule|không bật mọi rule/,
+});
+await expectCase('N6c2', 'Use bob.cloudflare.com.', 'en', okVerdict, 'Which nameserver do I paste at the registrar?', {
+  absent: /bob\.cloudflare\.com/,
+  present: /Never write a nameserver hostname/,
+});
+const v08 = await reviewPlanClaims('On the Business plan, open Security → Settings.', 'en', async (sentences) =>
+  sentences.map((sentence) => ({ id: sentence.id, verdict: 'unsure' })),
+);
+caseActual.push({ id: 'V08', expected: 'unsure plan-context dropped', actual: v08 });
+assert.doesNotMatch(v08, /On the Business plan/);
+
+let nineCalls = 0;
+const nineClaims = Array.from({ length: 9 }, (_, index) => ({
+  id: `s${index}`,
+  text: `On the Business plan, read panel ${index}.`,
+}));
+const nineMap = await gatherVerdicts(nineClaims, async (group) => {
+  nineCalls += 1;
+  assert.equal(group.length, 9);
+  return JSON.stringify({ verdicts: group.map((item) => ({ id: item.id, v: 'ok' })) });
+});
+assert.equal(nineCalls, 1);
+assert.equal(nineMap.get('s8'), 'ok');
+
+let sentClaims = '';
+const filteredBatch = await onRequestPost({
+  request: request({
+    prompt: 'I am on the Pro plan',
+    lang: 'en',
+  }),
+  env: {
+    AI: {
+      run: async (_model, input) => {
+        const blob = JSON.stringify(input ?? {});
+        if (blob.includes('CLAIM_VERDICTS')) {
+          sentClaims = input?.messages?.[input.messages.length - 1]?.content ?? '';
+          return { response: JSON.stringify({ verdicts: [{ id: 's0', v: 'ok' }] }) };
+        }
+        return {
+          response:
+            'Logpush is available on Pro with usage-based pricing. On the Business plan, open the account home and read the title before you continue.',
+        };
+      },
+    },
+  },
+});
+assert.equal(filteredBatch.status, 200);
+assert.doesNotMatch(sentClaims, /Logpush is available on Pro/);
+assert.match(sentClaims, /open the account home/);
 
 console.log('CASE_TABLE');
 for (const row of caseActual) console.log(`${row.id}\t${row.expected}\t${row.actual.replace(/\s+/g, ' ')}`);
