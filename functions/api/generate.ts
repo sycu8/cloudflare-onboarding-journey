@@ -1,8 +1,10 @@
+import { buildGenerateMessages, type GenerateLang } from './generateGrounding.ts';
+
 const MODEL = '@cf/meta/llama-3.1-8b-instruct-fp8';
 /** Explicit output cap for a short lesson (5 bullets + one next step). */
 const MAX_TOKENS = 512;
 
-type Lang = 'vi' | 'en';
+type Lang = GenerateLang;
 
 function json(data: unknown, status = 200) {
   return new Response(JSON.stringify(data), {
@@ -74,25 +76,11 @@ export const onRequestPost: PagesFunction<{
     );
   }
 
-  const system =
-    lang === 'en'
-      ? 'You are a Cloudflare learning assistant. Be concise, beginner-friendly, and actionable.'
-      : 'Bạn là trợ lý học Cloudflare. Viết ngắn gọn, dễ hiểu cho người mới và có bước hành động rõ ràng.';
-
   let result: unknown;
   try {
     result = await env.AI.run(MODEL, {
       max_tokens: MAX_TOKENS,
-      messages: [
-        { role: 'system', content: system },
-        {
-          role: 'user',
-          content:
-            lang === 'en'
-              ? `Generate learning content for: ${prompt}\nFormat: 5 bullets + 1 next-step CTA.`
-              : `Tạo nội dung học cho chủ đề: ${prompt}\nĐịnh dạng: 5 gạch đầu dòng + 1 CTA bước tiếp theo.`,
-        },
-      ],
+      messages: buildGenerateMessages(prompt, lang),
     });
   } catch (err) {
     console.error('Workers AI generate failed', err instanceof Error ? err.message : 'unknown');
