@@ -61,8 +61,8 @@ export const basicConfigurationSections: PracticalGuideSection[] = [
       },
       {
         text: {
-          vi: 'Pro và Business: Cloudflare Managed Ruleset không bật sẵn và cần Pro trở lên. Vào Security → Settings, lọc Web application exploits, rồi bật Cloudflare managed ruleset. OWASP Core là tùy chọn và cũng cần Pro trở lên. Xem deployment settings rồi Save. Sau khi bật, chỉ một phần rule chạy. Không override mọi rule sang Block.',
-          en: 'Pro and Business: the Cloudflare Managed Ruleset is not already on, and it needs Pro or above. Go to Security → Settings, filter by Web application exploits, then turn on Cloudflare managed ruleset. OWASP Core is optional and also needs Pro or above. Review the deployment settings, then Save. After you turn it on, only a subset of rules runs. Do not override every rule to Block.',
+          vi: 'Pro và Business: Cloudflare Managed Ruleset không bật sẵn và cần Pro trở lên. Vào Security → Settings, lọc Web application exploits, rồi bật Cloudflare managed ruleset. OWASP Core là tùy chọn và cũng cần Pro trở lên. Xem deployment settings rồi Save. Save không bật mọi rule. Sau khi bật, chỉ một phần rule chạy. Không override mọi rule sang Block.',
+          en: 'Pro and Business: the Cloudflare Managed Ruleset is not already on, and it needs Pro or above. Go to Security → Settings, filter by Web application exploits, then turn on Cloudflare managed ruleset. OWASP Core is optional and also needs Pro or above. Review the deployment settings, then Save. Save does not enable every rule. After you turn it on, only a subset of rules runs. Do not override every rule to Block.',
         },
       },
       {

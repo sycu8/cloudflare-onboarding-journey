@@ -1,4 +1,4 @@
-import { buildGenerateMessages, type GenerateLang } from './generateGrounding.ts';
+import { buildGenerateMessages, curatedOnboardingContext, type GenerateLang } from './generateGrounding.ts';
 
 const MODEL = '@cf/meta/llama-3.1-8b-instruct-fp8';
 /** Explicit output cap for a short lesson (5 bullets + one next step). */
@@ -59,7 +59,8 @@ function foldGenerated(text: string): string {
   return normalizeGeneratedText(text)
     .normalize('NFD')
     .replace(/\p{M}/gu, '')
-    .toLowerCase();
+    .toLowerCase()
+    .replace(/đ/g, 'd');
 }
 
 export type StatedPlan = 'enterprise' | 'business' | 'pro' | 'free' | 'unknown';
@@ -113,33 +114,65 @@ function withoutLogin(folded: string): string {
   return folded.replace(/\blog(?:ging)?\s+in\b/g, ' ').replace(/\blogin\b/g, ' ');
 }
 
-function recommendsLogAction(sentence: string): boolean {
+function namesLogAsWafAction(sentence: string): boolean {
   const folded = withoutLogin(foldGenerated(sentence));
-  if (/\binstead of log\b|\bthay cho log\b|\bdo not use\b|\bdon't use\b|\bkhong dung\b|\bkhong co log\b/.test(folded)) {
+  if (
+    /\binstead of log\b|\bthay cho log\b|\bdo not use\b|\bdon't use\b|\bkhong dung log\b|\bkhong co log\b|\bonly available on enterprise\b|\bchi co tren enterprise\b|\benterprise-only\b/.test(
+      folded,
+    )
+  ) {
     return false;
   }
-  if (/\benterprise\b/.test(folded) && /\bmanaged challenge\b/.test(folded)) return false;
+  if (/\blog\s+mode\b|\bin\s+log\s+mode\b|\bmode\s+log\b/.test(folded)) return true;
+  if (/\b(?:chon|select|pick|choose)\s+log\b/.test(folded)) return true;
+  if (/\b(?:hanh dong|action)\s*[:=,]?\s*log\b/.test(folded)) return true;
+  if (/\blog\s+(?:action|mode)\b/.test(folded)) return true;
+  if (/\bto\s+log\b|\bsang\s+log\b/.test(folded)) return true;
+  // Log as one item in an action list: "Block, Log, Managed Challenge" / "Block or Log".
   return (
-    /\baction\s*[:=]?\s*log\b/.test(folded) ||
-    /\blog\s+action\b/.test(folded) ||
-    /\b(?:change|set|switch|use|enable|turn|doi|dung|dat|chuyen|bat|hay|de)\b[\s\S]{0,80}\blog\b/.test(folded) ||
-    /\bto\s+log\b/.test(folded) ||
-    /\bsang\s+log\b/.test(folded)
+    /(?:^|[,/;|]|\b(?:and|or|va|hoac)\s+)\s*log\s*(?:[,/;|]|\s*(?:\b(?:and|or|va|hoac)\b|$))/.test(folded) &&
+    /\b(?:block|challenge|skip|allow|action|hanh dong)\b/.test(folded)
   );
 }
 
-function misstatesEnterpriseFeature(sentence: string): boolean {
-  const folded = withoutLogin(foldGenerated(sentence));
-  if (/\b(?:do not|don't|dung|khong|never)\b[\s\S]{0,40}\b(?:upgrad\w*|nang cap)\b/.test(folded)) return false;
-  if (!/\blog\b|sensitive data|\bsdd\b/.test(folded)) return false;
-  const offersLowerPlan =
+function offersProOrBusiness(folded: string): boolean {
+  return (
     /\b(?:upgrad\w*|nang cap|need|needs|required|requires|switch to|move to|chuyen sang|len goi|phai co)\b[\s\S]{0,60}\b(?:pro|business)\b/.test(
       folded,
     ) ||
-    /\b(?:pro|business)\b[\s\S]{0,40}\b(?:is required|required|for|de co|de dung|de bat)\b[\s\S]{0,30}\b(?:log|sensitive data|sdd)\b/.test(
+    /\b(?:pro|business)\b[\s\S]{0,40}\b(?:is required|required|for|de co|de dung|de bat)\b/.test(folded)
+  );
+}
+
+function misstatesEnterpriseFeature(sentence: string, fullText: string): boolean {
+  const folded = withoutLogin(foldGenerated(sentence));
+  if (/\b(?:do not|don't|dung|khong|never)\b[\s\S]{0,40}\b(?:upgrad\w*|nang cap)\b/.test(folded)) return false;
+  if (!offersProOrBusiness(folded)) return false;
+  const featureHere = /\blog\b|sensitive data|\bsdd\b/.test(folded);
+  const featureNearby = /\blog\b|sensitive data|\bsdd\b|enterprise-only|chi co tren enterprise/.test(
+    withoutLogin(foldGenerated(fullText)),
+  );
+  const vagueFeatures =
+    /\bthese features\b|\bthose features\b|\bthis feature\b|\bcac tinh nang\b|\btinh nang nay\b|\btinh nang do\b|\bnhung tinh nang\b/.test(
       folded,
     );
-  return offersLowerPlan;
+  return featureHere || (vagueFeatures && featureNearby);
+}
+
+function misstatesSave(sentence: string): boolean {
+  const folded = foldGenerated(sentence);
+  return /\bsave\b/.test(folded) && /\brules?\b/.test(folded) && /\b(?:all|every|moi|tat ca)\b/.test(folded);
+}
+
+export function saveSubsetInstruction(lang: Lang): string {
+  return lang === 'en'
+    ? 'Save does not enable every rule. The deployment runs a subset of rules.'
+    : 'Save không bật mọi rule. Bản deployment chỉ chạy một phần rule.';
+}
+
+function statesLogLimit(text: string): boolean {
+  const folded = foldGenerated(text);
+  return /only available on enterprise|chi co tren enterprise|enterprise-only/.test(folded) && /managed challenge/.test(folded);
 }
 
 /**
@@ -147,32 +180,81 @@ function misstatesEnterpriseFeature(sentence: string): boolean {
  * learner to use it, replace that sentence and state the Managed Challenge alternative.
  * Also drop advice to buy Pro or Business for Log or Sensitive Data Detection.
  */
+function cleanupGaps(text: string): string {
+  return text
+    .split('\n')
+    .map((line) => line.replace(/[ \t]{2,}/g, ' ').replace(/\s+$/g, ''))
+    .filter((line) => line.trim() !== '')
+    .join('\n')
+    .trim();
+}
+
 export function rewritePlanGatedActions(text: string, lang: Lang, prompt: string): string {
   const plan = statedPlan(prompt);
   const logLine = logEnterpriseInstruction(lang);
   const featureLine = enterpriseFeatureInstruction(lang);
-  let mentionedLog = false;
-  const rewritten = rewriteSentences(normalizeGeneratedText(text), (sentence) => {
-    if (misstatesEnterpriseFeature(sentence)) {
-      mentionedLog = true;
-      const bullet = sentence.match(/^(\s*[-*]\s+)/);
-      return `${bullet?.[1] ?? ''}${featureLine}`;
+  const saveLine = saveSubsetInstruction(lang);
+  const source = normalizeGeneratedText(text);
+  let sawUpsell = false;
+  let sawLog = false;
+  let sawSave = false;
+  const rewritten = rewriteSentences(source, (sentence) => {
+    if (misstatesSave(sentence)) {
+      sawSave = true;
+      return '';
     }
-    if (plan !== 'enterprise' && recommendsLogAction(sentence)) {
-      mentionedLog = true;
-      const bullet = sentence.match(/^(\s*[-*]\s+)/);
-      return `${bullet?.[1] ?? ''}${logLine}`;
+    if (misstatesEnterpriseFeature(sentence, source)) {
+      sawUpsell = true;
+      return '';
+    }
+    if (plan !== 'enterprise' && namesLogAsWafAction(sentence)) {
+      sawLog = true;
+      return '';
     }
     return sentence;
   });
-  if (mentionedLog && plan !== 'enterprise' && !rewritten.includes(logLine) && !rewritten.includes(featureLine)) {
-    return `${rewritten.trim()}\n${logLine}`;
+  const parts = [cleanupGaps(rewritten)];
+  if ((sawUpsell || sawLog) && plan !== 'enterprise' && !statesLogLimit(parts[0])) {
+    parts.push(sawUpsell ? featureLine : logLine);
   }
-  return rewritten;
+  if (sawSave && !foldGenerated(parts.join('\n')).includes(foldGenerated(saveLine))) {
+    parts.push(saveLine);
+  }
+  return parts.filter(Boolean).join('\n');
+}
+
+/** True when the model declined instead of giving the dashboard steps. */
+export function isBareRefusal(text: string): boolean {
+  const folded = foldGenerated(text);
+  const hasSteps =
+    /overview|nameserver|security\s*→|managed challenge|full \(strict\)|orange cloud|dam may|ban ghi|free managed ruleset/.test(
+      folded,
+    );
+  if (hasSteps) return false;
+  return /\b(?:khong chac|khong biet|khong the|khong ro|toi khong|i am not sure|im not sure|i'm not sure|not sure|do not know|don't know|cannot help|can't help|unable to|xin loi)\b/.test(
+    folded,
+  );
+}
+
+export function curatedStepsFallback(prompt: string, lang: Lang): string {
+  const notes = curatedOnboardingContext(prompt, lang);
+  if (!notes) return '';
+  const body = notes.split('\n\n').slice(1).join('\n\n').trim();
+  if (!body) return '';
+  const intro =
+    lang === 'en'
+      ? 'Follow these Cloudflare dashboard steps:'
+      : 'Làm theo các bước sau trên dashboard Cloudflare:';
+  return `${intro}\n${body}`;
 }
 
 export function guardGenerateText(text: string, lang: Lang, prompt = ''): string {
-  return rewritePlanGatedActions(rewriteInventedNameservers(text, lang), lang, prompt);
+  const guarded = rewritePlanGatedActions(rewriteInventedNameservers(text, lang), lang, prompt);
+  if (isBareRefusal(guarded)) {
+    const fallback = curatedStepsFallback(prompt, lang);
+    if (fallback) return fallback;
+  }
+  return guarded;
 }
 
 function rewriteChoice(choice: unknown, lang: Lang, prompt: string): unknown {

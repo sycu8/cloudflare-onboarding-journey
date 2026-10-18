@@ -35,6 +35,7 @@ const EN_RULES = [
   'Say the next step once',
   'Do not tell the learner to upgrade to Pro or Business for Log',
   'The Cloudflare Managed Ruleset needs Pro or above',
+  'Save does not enable every rule',
   'say you are not sure',
 ];
 
@@ -56,6 +57,7 @@ const VI_RULES = [
   'Nói bước tiếp theo một lần',
   'Đừng bảo người học nâng cấp lên Pro hoặc Business',
   'Cloudflare Managed Ruleset cần Pro trở lên',
+  'Save không bật mọi rule',
   'không chắc',
 ];
 
@@ -198,6 +200,9 @@ assert.match(wafCopy, /Pro trở lên/);
 assert.match(wafCopy, /is not already on/);
 assert.doesNotMatch(wafCopy, /on by default/i);
 assert.doesNotMatch(wafCopy, /The default enables/);
+assert.match(wafCopy, /Save does not enable every rule/);
+assert.match(wafCopy, /Save không bật mọi rule/);
+assert.doesNotMatch(wafCopy, /Save enables all rules/i);
 assert.match(wafCopy, /do not upgrade to Pro or Business/i);
 assert.match(wafCopy, /Pro or above/);
 assert.match(wafCopy, /Simulate không phải action/);
@@ -342,5 +347,80 @@ const login = await generate(
   { response: 'Log in at dash.cloudflare.com.' },
 );
 assert.equal(login.data.result.response, 'Log in at dash.cloudflare.com.');
+
+const businessPrompt = 'Tôi dùng gói Business. Tạo custom rule thử nghiệm thế nào?';
+const viLogForms = [
+  'Trong phần Action, chọn Log để tạo rule thử nghiệm.',
+  'Đặt hành động Log cho rule này.',
+  'Chọn Log.',
+];
+for (const response of viLogForms) {
+  const sample = await generate({ prompt: businessPrompt, lang: 'vi' }, { response });
+  assert.match(sample.data.result.response, /Log chỉ có trên Enterprise/, response);
+  assert.match(sample.data.result.response, /Managed Challenge/, response);
+  assert.doesNotMatch(sample.data.result.response, /chọn Log|hành động Log/i, response);
+  assert.equal((sample.data.result.response.match(/Log chỉ có trên Enterprise/g) ?? []).length, 1, response);
+}
+
+const enLogForms = [
+  '- run your custom rule in Log mode',
+  'Select Log.',
+  'Pick Log to test the rule.',
+  'Choose Log.',
+  'Actions: Block, Log, Managed Challenge.',
+];
+for (const response of enLogForms) {
+  const sample = await generate(
+    { prompt: 'I am on the Business plan. How do I test a custom rule?', lang: 'en' },
+    { response },
+  );
+  assert.match(sample.data.result.response, /Log is only available on Enterprise/, response);
+  assert.match(sample.data.result.response, /Managed Challenge/, response);
+  assert.doesNotMatch(sample.data.result.response, /Log mode|Select Log|Pick Log|Choose Log|Block, Log/i, response);
+  assert.equal((sample.data.result.response.match(/Log is only available on Enterprise/g) ?? []).length, 1, response);
+}
+
+const doubled = await generate(
+  { prompt: 'I am on the Business plan', lang: 'en' },
+  { response: 'Select Log to test. Choose Log for the rule.' },
+);
+assert.equal((doubled.data.result.response.match(/Log is only available on Enterprise/g) ?? []).length, 1);
+
+const upsellAside = await generate(
+  { prompt: 'I am on Business', lang: 'en' },
+  { response: 'Log and Sensitive Data Detection are the features you want. Upgrade to Pro/Business for these features.' },
+);
+assert.doesNotMatch(upsellAside.data.result.response, /Upgrade to Pro\/Business for these features/);
+assert.match(upsellAside.data.result.response, /Do not upgrade to Pro or Business/);
+assert.equal((upsellAside.data.result.response.match(/Do not upgrade to Pro or Business/g) ?? []).length, 1);
+
+const dnsRefusal = await generate(
+  { prompt: 'Cách đổi nameserver sang Cloudflare cho tên miền mua ở Mắt Bão', lang: 'vi' },
+  { response: 'Tôi không chắc.' },
+);
+assert.match(dnsRefusal.data.result.response, /Overview/);
+assert.match(dnsRefusal.data.result.response, /dash\.cloudflare\.com/);
+assert.match(dnsRefusal.data.result.response, /registrar/);
+assert.doesNotMatch(dnsRefusal.data.result.response, /không chắc/);
+
+const keptSteps = await generate(
+  { prompt: 'Cách đổi nameserver sang Cloudflare cho tên miền mua ở Mắt Bão', lang: 'vi' },
+  { response: 'Mở trang Overview của zone và copy hai nameserver.' },
+);
+assert.match(keptSteps.data.result.response, /Overview/);
+assert.doesNotMatch(keptSteps.data.result.response, /Làm theo các bước sau/);
+
+const otherRefusal = await generate(
+  { prompt: 'Durable Objects là gì?', lang: 'vi' },
+  { response: 'Tôi không chắc.' },
+);
+assert.equal(otherRefusal.data.result.response, 'Tôi không chắc.');
+
+const saveClaim = await generate(
+  { prompt: 'How do I turn on the Cloudflare Managed Ruleset on Business?', lang: 'en' },
+  { response: 'Click Save. Save enables all rules.' },
+);
+assert.doesNotMatch(saveClaim.data.result.response, /enables all rules/i);
+assert.match(saveClaim.data.result.response, /Save does not enable every rule/);
 
 console.log('generate grounding prompt checks passed');
