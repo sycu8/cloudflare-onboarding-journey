@@ -4,13 +4,16 @@ import {
   claimCheckMessages,
   deniesBusinessManagedRuleset,
   dropEmptyHeadings,
+  ensureSaveAnswer,
   gatherVerdicts,
+  hasInventedNameserverHost,
   isAiErrorText,
   isHeadingOnly,
   isSddPronounFollowUp,
   retryBackoffMs,
   reviewPlanClaims,
   shortDocsFallback,
+  tableDerivedFallback,
   waitMs,
 } from './planFeatures.ts';
 
@@ -37,14 +40,6 @@ function aiFailureMessage(lang: Lang) {
 }
 
 const ZERO_WIDTH = /[\u200B-\u200D\uFEFF\u2060\u180E]/g;
-
-/**
- * Concrete nameserver hostnames after NFKC and zero-width stripping.
- * Matches ns1, _ns1, ns1a, ns-1, and <label>.ns on cloudflare.com or .net.
- * dash.cloudflare.com and developers.cloudflare.com do not match.
- */
-const INVENTED_NAMESERVER =
-  /(?<![a-z0-9])(?:_?ns(?:-?\d+[a-z]?|-[a-z0-9]+)?|[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.ns)\.cloudflare\.(?:com|net)/i;
 
 export function nameserverOverviewInstruction(lang: Lang): string {
   return lang === 'en'
@@ -113,7 +108,7 @@ function rewriteSentences(text: string, edit: (sentence: string) => string): str
 }
 
 function hasInventedNameserver(sentence: string): boolean {
-  return INVENTED_NAMESERVER.test(normalizeGeneratedText(sentence));
+  return hasInventedNameserverHost(sentence);
 }
 
 /** Replace each sentence or bullet that contains an invented nameserver hostname. */
@@ -201,8 +196,11 @@ function namesLogAsWafAction(sentence: string): boolean {
   // Copula: "hành động là Log", "đây là Log", "quyền chọn là Log", "action is Log".
   if (/\b(?:hanh dong|action)\b[\s\S]{0,40}\b(?:la|is)\s+["'(]*log\b/.test(folded)) return true;
   if (/\b(?:la|chinh la|day la|do la|is)\s+["'(]*log\b/.test(folded)) return true;
-  // Menu option: "mục Log", "menu Log", "option Log".
-  if (/\b(?:menu|option|muc|lua chon|tuy chon|quyen chon)\s+["'(]*log\b/.test(folded)) return true;
+  // Menu option: "mục Log", "menu Log", "option Log", "vào phần Log".
+  if (/\b(?:menu|option|muc|lua chon|tuy chon|quyen chon|vao phan|phan)\s+["'(]*log\b/.test(folded)) return true;
+  // Copula after Log: "Log là ở mục", "Log nằm ở", "Log có tại".
+  if (/\blog\b[\s\S]{0,40}\b(?:la\s+(?:o|nam|tai)|nam o|co tai)\b/.test(folded)) return true;
+  if (/\b(?:nam o|co tai)\b[\s\S]{0,40}\blog\b/.test(folded)) return true;
   if (/\blog\s+(?:action|mode|menu|option|muc)\b/.test(folded)) return true;
   if (/\bto\s+log\b|\bsang\s+log\b|\bde\s+log\b/.test(folded)) return true;
   // "để ở Log", "ở Log", "leave it at Log" — the action is left on Log.
@@ -816,8 +814,10 @@ async function reviewText(
     },
     { prompt },
   );
-  const cleaned = dropEmptyHeadings(reviewed);
-  if (isHeadingOnly(cleaned)) return shortDocsFallback(prompt, lang);
+  let cleaned = dropEmptyHeadings(reviewed);
+  if (!cleaned.trim() || isHeadingOnly(cleaned)) cleaned = tableDerivedFallback(prompt, lang);
+  cleaned = ensureSaveAnswer(cleaned, prompt, lang);
+  if (!cleaned.trim()) cleaned = shortDocsFallback(prompt, lang);
   return cleaned;
 }
 

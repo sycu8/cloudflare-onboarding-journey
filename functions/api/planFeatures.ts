@@ -86,8 +86,41 @@ const SAVE_QUANTIFIER = /\b(?:all|every|moi|tat ca|subset|mot phan)\b/;
 const CONCRETE_NAMESERVER =
   /(?<![a-z0-9])(?:_?ns(?:-?\d+[a-z]?|-[a-z0-9]+)?|[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.ns)\.cloudflare\.(?:com|net)/;
 
+/**
+ * A nameserver-shaped host on any domain: ns1.example.net, ada.ns.cloudflare.com.
+ * Cloudflare assigns <name>.ns.cloudflare.com per zone. A model cannot know that pair,
+ * so every concrete host is dropped and the Overview instruction is used instead.
+ */
+const NS_SHAPED_HOST =
+  /(?<![a-z0-9.])(?:_?ns\d*|[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.ns)\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z]{2,})+/;
+
+const HOSTNAME =
+  /(?<![a-z0-9@])(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+(?:com|net|org|io|vn|dev)(?![a-z0-9])/g;
+
+const DOCS_HOST = /^(?:dash|developers|www)\.cloudflare\.com$/;
+
+/** "Log là ở mục", "nằm ở", "có tại", "ở mục Log", "vào phần Log". */
+const LOG_MENU =
+  /\blog\b[\s\S]{0,40}\b(?:la\s+(?:o|nam|tai)|nam o|co tai)\b|\b(?:o muc|vao phan|nam o|co tai)\b[\s\S]{0,40}\blog\b|\bla\s+["'(]*log\b/;
+
+const AVAILABILITY =
+  /\b(?:available|included|includes|include|ships with|comes with|supported|ho tro|co tren|co san|only on|chi co)\b/;
+
 function hideLogpush(folded: string): string {
   return folded.replace(/\blog(?:ging)?\s+in\b/g, ' ').replace(/\blogin\b/g, ' ').replace(/logpush/g, ' ');
+}
+
+/** Any concrete nameserver hostname. Docs and dashboard hosts are not nameservers. */
+export function hasInventedNameserverHost(sentence: string): boolean {
+  const folded = foldFeature(sentence);
+  if (CONCRETE_NAMESERVER.test(folded) || NS_SHAPED_HOST.test(folded)) return true;
+  if (!/\bnameservers?\b|\bname servers?\b/.test(folded)) return false;
+  HOSTNAME.lastIndex = 0;
+  for (const match of folded.matchAll(HOSTNAME)) {
+    if (DOCS_HOST.test(match[0])) continue;
+    return true;
+  }
+  return false;
 }
 
 /**
@@ -96,7 +129,7 @@ function hideLogpush(folded: string): string {
  */
 export function isProceduralStep(sentence: string): boolean {
   const folded = foldFeature(sentence);
-  if (CONCRETE_NAMESERVER.test(folded)) return false;
+  if (hasInventedNameserverHost(sentence)) return false;
   return NAMESERVER.test(folded) && /overview|registrar|paste|\bdan\b|copy|chep/.test(folded);
 }
 
@@ -105,7 +138,7 @@ export function isManagedChallengeRecordOnly(sentence: string): boolean {
   const folded = foldFeature(sentence);
   if (!/managed challenge/.test(folded)) return false;
   if (/not a record-only|not record-only|khong phai action chi ghi|khong chi ghi/.test(folded)) return false;
-  return /record-only|records only|only records|just records|only logs|merely records|chi ghi|chi de ghi|ghi nhan|does not challenge|without challenging|khong challenge|records (?:the |a )?(?:match|matches|request|requests|hit|hits)\b/.test(
+  return /record-only|records only|only records|just records|only logs|merely records|log-only|log only|chi ghi|chi de ghi|de ghi|ghi nhan|ghi lai|la de ghi|does not challenge|without challenging|khong challenge|records (?:the |a )?(?:match|matches|request|requests|hit|hits)\b/.test(
     folded,
   );
 }
@@ -148,26 +181,64 @@ export function businessManagedRulesetLine(lang: GenerateLang): string {
   return PLAN_FEATURE_ROWS.find((row) => row.id === 'business-cmr')?.[lang] ?? '';
 }
 
-/** A sentence the claim check must classify. A menu path stays in the sentence; only a hostname-free nameserver step is excluded. */
-export function mentionsPlanOrFeature(sentence: string, context = ''): boolean {
-  const foldedFull = foldFeature(sentence);
-  if (CONCRETE_NAMESERVER.test(foldedFull)) return true;
-  if (isProceduralStep(sentence)) return false;
-  const folded = foldedFull;
+function learnerPlan(text: string): 'enterprise' | 'business' | 'pro' | 'free' | 'unknown' {
+  const folded = foldFeature(text);
+  const re =
+    /\b(?:i am on|im on|on the|on a|using|goi|dang dung|toi dung|dung goi)\s+(?:the\s+|goi\s+)?(enterprise|business|pro|free)\b|\b(enterprise|business|pro|free)\s+plan\b|\bplan\s+(enterprise|business|pro|free)\b/g;
+  let found: 'enterprise' | 'business' | 'pro' | 'free' | 'unknown' = 'unknown';
+  for (const match of folded.matchAll(re)) {
+    const plan = match[1] || match[2] || match[3];
+    if (plan === 'enterprise' || plan === 'business' || plan === 'pro' || plan === 'free') found = plan;
+  }
+  return found;
+}
+
+/** Log named as the action, including "Log là ở mục" and "vào phần Log". */
+function logPlanClaim(folded: string): boolean {
   const hidden = hideLogpush(folded);
-  if (isManagedChallengeRecordOnly(sentence)) return true;
-  if (isSddPronounFollowUp(sentence, context)) return true;
-  if (isSaveClaim(folded)) return true;
-  if (NAMESERVER.test(folded) && !isProceduralStep(sentence)) return true;
-  return (
-    PLAN.test(folded) ||
+  if (!LOG_ACTION.test(hidden)) return false;
+  if (LOG_AS_VERB.test(hidden) || LOG_MENU.test(hidden)) return true;
+  if (PLAN.test(folded) || AVAILABILITY.test(folded)) return true;
+  return /\b(?:action|hanh dong|mode|menu|option|muc|chon|select|pick|use|bat)\b/.test(hidden);
+}
+
+function featureAvailabilityClaim(folded: string): boolean {
+  const feature =
     SDD.test(folded) ||
     BOT.test(folded) ||
     RULESET.test(folded) ||
     LOGPUSH.test(folded) ||
-    INVENTED.test(folded) ||
-    LOG_ACTION.test(hidden)
-  );
+    LOG_ACTION.test(hideLogpush(folded)) ||
+    /super bot fight mode|bot fight mode/.test(folded);
+  return feature && PLAN.test(folded) && AVAILABILITY.test(folded);
+}
+
+/**
+ * A sentence the claim check must classify.
+ * A menu path stays in the sentence. A hostname-free nameserver step is not a claim.
+ * Mentioning a plan or a feature, with no availability claim, is not a claim either.
+ */
+export function mentionsPlanOrFeature(sentence: string, context = ''): boolean {
+  if (hasInventedNameserverHost(sentence)) return true;
+  if (isProceduralStep(sentence)) return false;
+  const folded = foldFeature(sentence);
+  if (isManagedChallengeRecordOnly(sentence)) return true;
+  if (isSddPronounFollowUp(sentence, context)) return true;
+  if (isSaveClaim(folded)) return true;
+  if (NAMESERVER.test(folded) && !isProceduralStep(sentence)) return true;
+  if (INVENTED.test(folded) && /\b(?:action|hanh dong|mode)\b/.test(folded)) return true;
+  if (logPlanClaim(folded)) return true;
+  if (featureAvailabilityClaim(folded)) return true;
+  if (SDD.test(folded) && (PLAN.test(folded) || /\b(?:enable|turn|bat|already|included)\b/.test(folded))) return true;
+  if (BOT.test(folded) && (PLAN.test(folded) || /\b(?:enable|turn|bat|included|available)\b/.test(folded))) return true;
+  if (LOGPUSH.test(folded) && (PLAN.test(folded) || AVAILABILITY.test(folded) || /\benterprise\b/.test(folded))) return true;
+  if (RULESET.test(folded)) {
+    if (/\b(?:available|included|includes|only on|not on|needs pro|pro or above|pro tro len|khong co|lacks|lack|upgrade|nang cap)\b/.test(folded)) {
+      return true;
+    }
+    if (/\bfree\b/.test(folded) && /\b(?:enable|turn on|bat|deploy|include|available|co)\b/.test(folded)) return true;
+  }
+  return false;
 }
 
 /** The sentence already states a table fact. */
@@ -191,29 +262,81 @@ export function tableConfirms(sentence: string): boolean {
   ) {
     return true;
   }
-  if (LOGPUSH.test(folded) && /available|co tren|usage-based|dung bao nhieu/.test(folded) && LOWER_PLAN.test(folded)) {
-    if (!/does not|khong co|lacks|enterprise-only|chi co tren enterprise|only enterprise/.test(folded)) return true;
+  if (LOGPUSH.test(folded) && /available|co tren|usage-based|dung bao nhieu|included/.test(folded) && LOWER_PLAN.test(folded)) {
+    if (!/does not|khong co|lacks|enterprise-only|chi co tren enterprise|only enterprise|only on enterprise/.test(folded)) return true;
+  }
+  if (
+    LOGPUSH.test(folded) &&
+    /available|co tren|included/.test(folded) &&
+    /\benterprise\b/.test(folded) &&
+    !/only|chi\b|enterprise-only/.test(folded)
+  ) {
+    return true;
+  }
+  if (
+    LOG_ACTION.test(hidden) &&
+    LOWER_PLAN.test(folded) &&
+    /not available|does not support|does not include|isn't available|isnt available|khong co|khong ho tro/.test(folded)
+  ) {
+    return true;
+  }
+  if (
+    LOG_ACTION.test(hidden) &&
+    /\benterprise\b/.test(folded) &&
+    /available|included|co tren/.test(folded) &&
+    !LOWER_PLAN.test(folded) &&
+    !/not available|does not|khong/.test(folded)
+  ) {
+    return true;
   }
   if (SDD.test(folded) && /enterprise/.test(folded) && !LOWER_PLAN.test(folded)) return true;
+  if (
+    SDD.test(folded) &&
+    LOWER_PLAN.test(folded) &&
+    /not included|not available|does not|isn't included|isnt included|khong co|khong ho tro|no toggle|khong bao gom/.test(folded)
+  ) {
+    return true;
+  }
   if (BOT.test(folded) && /enterprise/.test(folded) && /add-on|addon/.test(folded) && !LOWER_PLAN.test(folded)) return true;
   if (businessHasManagedRuleset(folded)) return true;
+  if (
+    RULESET.test(folded) &&
+    AVAILABILITY.test(folded) &&
+    /\b(?:pro|business|enterprise)\b/.test(folded) &&
+    !/\bfree\b/.test(folded) &&
+    !/does not|khong|lacks\b|lack\b|not available|not included/.test(folded)
+  ) {
+    return true;
+  }
+  if (BOT.test(folded) && /\benterprise\b/.test(folded) && !LOWER_PLAN.test(folded) && !/not available|does not|khong/.test(folded)) {
+    return true;
+  }
+  if (/super bot fight mode/.test(folded) && /\b(?:pro|business|enterprise)\b/.test(folded) && !/\bfree\b/.test(folded)) {
+    if (!/not available|does not|khong co|khong ho tro/.test(folded)) return true;
+  }
   if (/managed challenge/.test(folded) && /not a record-only|not record-only|khong phai action chi ghi/.test(folded)) return true;
   if (RULESET.test(folded) && /pro or above|pro tro len|needs pro|can pro|not on the free|khong co tren/.test(folded)) {
     return true;
   }
-  if (isSaveClaim(folded) && /not|khong|subset|mot phan/.test(folded) && !/enables all|bat tat ca|bat moi/.test(folded)) return true;
-  if (NAMESERVER.test(folded) && /overview/.test(folded) && /copy|chep/.test(folded) && !CONCRETE_NAMESERVER.test(folded)) {
+  if (
+    isSaveClaim(folded) &&
+    /\b(?:not|no|never|don't|dont|doesn't|doesnt|isn't|isnt|khong)\b|subset|mot phan/.test(folded) &&
+    !/enables all|bat tat ca|bat moi/.test(folded)
+  ) {
+    return true;
+  }
+  if (NAMESERVER.test(folded) && /overview/.test(folded) && /copy|chep/.test(folded) && !hasInventedNameserverHost(sentence)) {
     return true;
   }
   return false;
 }
 
-/** The sentence conflicts with the table, so a missing verdict still rewrites it. */
+/** The sentence conflicts with the table. This wins over an ok verdict. */
 export function tableContradicts(sentence: string, context = ''): boolean {
   if (tableConfirms(sentence)) return false;
   const folded = foldFeature(sentence);
   const hidden = hideLogpush(folded);
-  if (CONCRETE_NAMESERVER.test(folded)) return true;
+  if (hasInventedNameserverHost(sentence)) return true;
   if (deniesBusinessManagedRuleset(sentence)) return true;
   if (isManagedChallengeRecordOnly(sentence)) return true;
   if (isSddPronounFollowUp(sentence, context) && (LOWER_PLAN.test(folded) || /\b(?:enable|turn|bat|kich hoat)\b/.test(folded))) {
@@ -225,18 +348,39 @@ export function tableContradicts(sentence: string, context = ''): boolean {
   if (LOGPUSH.test(folded) && LOWER_PLAN.test(folded) && /does not|khong co|lacks|khong bao gom/.test(folded)) return true;
   if (SDD.test(folded) && LOWER_PLAN.test(folded) && !/not|khong|no toggle|khong co/.test(folded)) return true;
   if (BOT.test(folded) && LOWER_PLAN.test(folded) && !/not|khong|instead|super bot/.test(folded)) return true;
-  if (isSaveClaim(folded) && /\b(?:all|every|moi|tat ca)\b/.test(folded) && !/not|khong|subset|mot phan/.test(folded)) return true;
+  if (
+    isSaveClaim(folded) &&
+    /\b(?:all|every|moi|tat ca)\b/.test(folded) &&
+    !/\b(?:not|no|never|don't|dont|doesn't|doesnt|isn't|isnt|khong)\b|subset|mot phan/.test(folded)
+  ) {
+    return true;
+  }
+  const enterpriseUse = learnerPlan(`${context}\n${sentence}`) === 'enterprise' && !LOWER_PLAN.test(folded);
   if (
     LOG_ACTION.test(hidden) &&
-    (LOWER_PLAN.test(folded) || LOG_AS_VERB.test(hidden) || /\b(?:use|using|chon|select|pick|choose|bat|dat)\s+["'(]*log\b/.test(hidden)) &&
-    !/instead of|thay cho|not available|does not|khong co|khong ho tro|enterprise-only|only available on enterprise/.test(folded)
+    !enterpriseUse &&
+    (LOWER_PLAN.test(folded) ||
+      LOG_AS_VERB.test(hidden) ||
+      LOG_MENU.test(hidden) ||
+      /\b(?:use|using|chon|select|pick|choose|bat|dat)\s+["'(]*log\b/.test(hidden)) &&
+    !/instead of|thay cho|not available|does not|khong co|khong ho tro|enterprise-only|only available on enterprise|chi co tren enterprise/.test(
+      folded,
+    )
   ) {
     return true;
   }
   if (INVENTED.test(folded) && /\b(?:action|hanh dong|mode)\b/.test(folded) && !/not an action|khong phai action/.test(folded)) {
     return true;
   }
-  if (RULESET.test(folded) && /\bfree\b/.test(folded) && /\b(?:enable|turn on|bat|deploy|include|co)\b/.test(folded)) return true;
+  if (
+    RULESET.test(folded) &&
+    /\bfree\b/.test(folded) &&
+    /\b(?:enable|turn on|bat|deploy|include|available|co)\b/.test(folded) &&
+    !/\b(?:not|no|never|don't|dont|doesn't|doesnt|khong|without)\b/.test(folded)
+  ) {
+    return true;
+  }
+  if (featureAvailabilityClaim(folded) && !tableConfirms(sentence)) return true;
   return false;
 }
 
@@ -257,7 +401,7 @@ export function rewriteFromTable(sentence: string, lang: GenerateLang, context =
   if (deniesBusinessManagedRuleset(sentence)) ids.push('business-cmr');
   else if (RULESET.test(folded)) ids.push('rulesets');
   if (LOGPUSH.test(folded)) ids.push('logpush');
-  if (NAMESERVER.test(folded) || CONCRETE_NAMESERVER.test(folded)) ids.push('nameservers');
+  if (NAMESERVER.test(folded) || hasInventedNameserverHost(sentence)) ids.push('nameservers');
   if (isSaveClaim(folded)) ids.push('save');
   if (!ids.length && PLAN.test(folded)) return '';
   const lines = ids.map((id) => PLAN_FEATURE_ROWS.find((row) => row.id === id)?.[lang] ?? '').filter(Boolean);
@@ -506,11 +650,17 @@ function resolveSentence(
   lang: GenerateLang,
   context: string,
 ): { text: string; action: SentenceAction } {
-  if (verdict === 'ok') return { text: sentence, action: 'kept' };
+  // The table wins over the model. A contradiction is rewritten even when the verdict is ok.
+  // An "available on plan X" claim that the table does not confirm is rewritten too.
   // Null or unsure keeps a sentence only when the table confirms it.
   // Term-free sentences are not claims, so they never reach this function.
-  // A confirmed sentence also survives an explicit wrong verdict.
-  if (tableConfirms(sentence)) return { text: sentence, action: 'kept' };
+  if (tableContradicts(sentence, context) || (featureAvailabilityClaim(foldFeature(sentence)) && !tableConfirms(sentence))) {
+    const forced = rewriteFromTable(sentence, lang, context);
+    if (!forced) return { text: '', action: 'dropped' };
+    if (foldFeature(forced) === foldFeature(sentence)) return { text: sentence, action: 'kept' };
+    return { text: forced, action: 'rewritten' };
+  }
+  if (verdict === 'ok' || tableConfirms(sentence)) return { text: sentence, action: 'kept' };
   const replacement = rewriteFromTable(sentence, lang, context);
   if (!replacement) return { text: '', action: 'dropped' };
   if (foldFeature(replacement) === foldFeature(sentence)) return { text: sentence, action: 'kept' };
@@ -573,6 +723,42 @@ export function shortDocsFallback(prompt: string, lang: GenerateLang): string {
     : `Dùng dashboard Cloudflare cho bước này. Tài liệu: ${url}`;
 }
 
+/** Rows that answer the prompt. Used when the model answer was dropped or never addressed Save. */
+export function tableRowsForPrompt(prompt: string, lang: GenerateLang): string[] {
+  const folded = foldFeature(prompt);
+  const ids: Array<(typeof PLAN_FEATURE_ROWS)[number]['id']> = [];
+  if (/\bsave\b|\bluu\b/.test(folded)) ids.push('save');
+  if (SDD.test(folded)) ids.push('sdd');
+  if (LOGPUSH.test(folded)) ids.push('logpush');
+  if (BOT.test(folded) || /super bot|bot fight/.test(folded)) ids.push('bots');
+  if (RULESET.test(folded)) ids.push('rulesets');
+  if (NAMESERVER.test(folded) || /mat bao/.test(folded)) ids.push('nameservers');
+  if (LOG_ACTION.test(hideLogpush(folded)) || /managed challenge|\bwaf\b|custom rule/.test(folded)) ids.push('waf-actions');
+  return ids.map((id) => PLAN_FEATURE_ROWS.find((row) => row.id === id)?.[lang] ?? '').filter(Boolean);
+}
+
+/** A short answer built from the plan table, plus the docs link. Never empty. */
+export function tableDerivedFallback(prompt: string, lang: GenerateLang): string {
+  const lines = tableRowsForPrompt(prompt, lang);
+  const docs = shortDocsFallback(prompt, lang);
+  return lines.length ? `${lines.join(' ')} ${docs}` : docs;
+}
+
+export function statesSaveFact(text: string): boolean {
+  const folded = foldFeature(text);
+  return /does not enable every rule|subset of rules|khong bat moi rule|mot phan rule/.test(folded);
+}
+
+/** Save questions get the table row even when the model only said "Click Save." */
+export function ensureSaveAnswer(text: string, prompt: string, lang: GenerateLang): string {
+  if (!/\bsave\b|\bluu\b/.test(foldFeature(prompt))) return text;
+  if (statesSaveFact(text)) return text;
+  const line = PLAN_FEATURE_ROWS.find((row) => row.id === 'save')?.[lang] ?? '';
+  const trimmed = text.trim();
+  if (!trimmed || isHeadingOnly(trimmed)) return tableDerivedFallback(prompt, lang);
+  return `${trimmed}\n${line}`;
+}
+
 /**
  * Second pass. The classifier may return a partial id map or throw.
  * Counts are logged as kept, dropped, and rewritten.
@@ -587,7 +773,7 @@ export async function reviewPlanClaims(
   const claims = claimSentences(text, prompt);
   if (!claims.length) {
     console.log('claim check kept=0 dropped=0 rewritten=0');
-    return dropEmptyHeadings(text);
+    return finishClaimReview(dropEmptyHeadings(text), prompt, lang);
   }
   const verdicts = new Map<string, ClaimVerdict | null>();
   try {
@@ -603,5 +789,14 @@ export async function reviewPlanClaims(
   console.log(
     `claim check kept=${applied.counts.kept} dropped=${applied.counts.dropped} rewritten=${applied.counts.rewritten}`,
   );
-  return applied.text;
+  return finishClaimReview(applied.text, prompt, lang);
+}
+
+/** A dropped or heading-only answer becomes a table row. Save questions always get the Save row. */
+function finishClaimReview(text: string, prompt: string, lang: GenerateLang): string {
+  let next = text.trim();
+  if (!next || isHeadingOnly(next)) next = tableDerivedFallback(prompt, lang);
+  next = ensureSaveAnswer(next, prompt, lang);
+  if (!next.trim()) next = tableDerivedFallback(prompt, lang);
+  return next;
 }

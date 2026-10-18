@@ -1035,9 +1035,15 @@ assert.equal(headingOnly.status, 200);
 assert.match(headingBody.result.response, /https:\/\/developers\.cloudflare\.com\/logs\/logpush\//);
 assert.doesNotMatch(headingBody.result.response, /## Next steps/);
 
-const logpushHeading = await reviewPlanClaims('## Logpush', 'en', async () => null);
-assert.doesNotMatch(logpushHeading, /## Logpush/);
-assert.match(logpushHeading, /Logpush is available on Free, Pro, and Business/);
+const logpushHeading = await onRequestPost({
+  request: request({ prompt: 'How do I use Logpush?', lang: 'en' }),
+  env: { AI: { run: async () => ({ response: '## Logpush' }) } },
+});
+const logpushHeadingBody = await logpushHeading.json();
+assert.equal(logpushHeading.status, 200);
+assert.doesNotMatch(logpushHeadingBody.result.response, /## Logpush/);
+assert.match(logpushHeadingBody.result.response, /Logpush is available on Free, Pro, and Business/);
+assert.match(logpushHeadingBody.result.response, /https:\/\/developers\.cloudflare\.com\/logs\/logpush\//);
 
 const ef3 = await reviewPlanClaims(
   'On Business, Log the matching requests before you block.',
@@ -1217,5 +1223,105 @@ const recoveredBody = await recovered.json();
 assert.equal(recovered.status, 200);
 assert.equal(recoveredBody.result.response, 'Use a WAF.');
 assert.equal(generateCalls, 2);
+
+const okVerdict = async (sentences) => sentences.map((sentence) => ({ id: sentence.id, verdict: 'ok' }));
+
+const qp1 = await reviewPlanClaims(
+  'Open Security → Settings and choose Log on the Business plan.',
+  'en',
+  okVerdict,
+  { prompt: 'I am on the Business plan' },
+);
+assert.doesNotMatch(qp1, /choose Log/);
+assert.match(qp1, /Log is Enterprise only/);
+
+const qp2 = await reviewPlanClaims(
+  'Vào Security → Settings, Log là ở mục hành động.',
+  'vi',
+  okVerdict,
+  { prompt: 'Tôi dùng gói Business' },
+);
+assert.doesNotMatch(qp2, /Log là ở mục/);
+assert.match(qp2, /Log chỉ có trên Enterprise/);
+
+for (const response of [
+  'Log nằm ở mục Security → Settings.',
+  'Log có tại phần hành động.',
+  'Vào phần Log trong Security → Settings.',
+]) {
+  const sample = await generate({ prompt: 'Tôi dùng gói Business', lang: 'vi' }, { response });
+  assert.doesNotMatch(sample.data.result.response, /nằm ở mục|có tại phần|Vào phần Log/, response);
+  assert.match(sample.data.result.response, /Log chỉ có trên Enterprise/, response);
+}
+
+const qp3 = await reviewPlanClaims(
+  'Trong Security → Settings, Managed Challenge là để ghi nhận request.',
+  'en',
+  okVerdict,
+);
+assert.doesNotMatch(qp3, /để ghi|la de ghi|ghi nhận/i);
+assert.match(qp3, /not a record-only action/);
+
+const lg3 = await reviewPlanClaims('Managed Challenge chỉ để ghi log, không challenge.', 'en', okVerdict);
+assert.doesNotMatch(lg3, /chỉ để ghi/);
+assert.match(lg3, /not a record-only action/);
+
+const inventedHost = await reviewPlanClaims(
+  'At the registrar, set the nameserver to primary.dns-host.net.',
+  'en',
+  okVerdict,
+);
+assert.doesNotMatch(inventedHost, /primary\.dns-host\.net/);
+assert.doesNotMatch(inventedHost, /ns1\.cloudflare\.com/);
+assert.match(inventedHost, /Never write a nameserver hostname/);
+
+const shapedHost = await reviewPlanClaims('Point DNS at ns1.example.net before you continue.', 'en', okVerdict);
+assert.doesNotMatch(shapedHost, /ns1\.example\.net/);
+assert.match(shapedHost, /Never write a nameserver hostname/);
+
+const keptPath = await reviewPlanClaims(
+  'Turn on the Cloudflare Managed Ruleset under Security → Settings. Open the DNS records page.',
+  'en',
+  async () => null,
+);
+assert.match(keptPath, /Turn on the Cloudflare Managed Ruleset under Security → Settings/);
+assert.match(keptPath, /Open the DNS records page/);
+
+const availableOnWrongPlan = await reviewPlanClaims(
+  'Bot Management is available on the Business plan. Sensitive Data Detection is available on Pro.',
+  'en',
+  okVerdict,
+);
+assert.doesNotMatch(availableOnWrongPlan, /available on the Business plan/);
+assert.doesNotMatch(availableOnWrongPlan, /available on Pro/);
+assert.match(availableOnWrongPlan, /Enterprise add-on/);
+assert.match(availableOnWrongPlan, /Enterprise only/);
+
+const saveQuestion = await generate(
+  { prompt: 'What does Save do to a managed ruleset?', lang: 'en' },
+  { response: 'Click Save.' },
+);
+assert.match(saveQuestion.data.result.response, /Click Save/);
+assert.match(saveQuestion.data.result.response, /Save does not enable every rule/);
+assert.match(saveQuestion.data.result.response, /subset of rules/);
+
+const saveQuestionVi = await generate(
+  { prompt: 'Save có bật mọi rule không?', lang: 'vi' },
+  { response: 'Bấm Save là xong.' },
+);
+assert.match(saveQuestionVi.data.result.response, /Bấm Save là xong/);
+assert.match(saveQuestionVi.data.result.response, /Save không bật mọi rule/);
+assert.match(saveQuestionVi.data.result.response, /một phần rule/);
+
+const emptied = await reviewPlanClaims('## Notes', 'en', async () => null, { prompt: 'What does Save do?' });
+assert.notEqual(emptied.trim(), '');
+const emptiedAnswer = await onRequestPost({
+  request: request({ prompt: 'What does Save do?', lang: 'en' }),
+  env: { AI: { run: async () => ({ response: '## Notes' }) } },
+});
+const emptiedBody = await emptiedAnswer.json();
+assert.equal(emptiedAnswer.status, 200);
+assert.match(emptiedBody.result.response, /Save does not enable every rule/);
+assert.notEqual(emptiedBody.result.response.trim(), '');
 
 console.log('generate grounding prompt checks passed');
