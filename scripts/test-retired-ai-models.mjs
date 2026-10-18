@@ -156,6 +156,7 @@ for (const lang of ['en', 'vi']) {
     assert.equal(typeof failed.data.error, 'string');
     assert.ok(failed.data.error.length > 10);
     assert.equal(failed.data.result, undefined);
+    assert.equal(failed.seen.length, 2);
   }
 }
 

@@ -16,7 +16,7 @@ const { basicConfigurationSections } = await import('../src/data/cf101PracticalG
 const { guardGenerateResult, onRequestPost, reviewGenerateResult, rewriteInventedNameservers, statedPlan } = await import(
   '../functions/api/generate.ts'
 );
-const { gatherVerdicts, reviewPlanClaims } = await import('../functions/api/planFeatures.ts');
+const { gatherVerdicts, parseClaimVerdicts, reviewPlanClaims } = await import('../functions/api/planFeatures.ts');
 
 const EN_RULES = [
   'nameserver change and DNS records',
@@ -131,6 +131,10 @@ assert.match(generateSystemPrompt('en'), /Nameservers come from the zone Overvie
 assert.match(generateSystemPrompt('en'), /credit-card detection, is Enterprise only/);
 assert.match(generateSystemPrompt('vi'), /Bảng plan-feature/);
 assert.match(generateSystemPrompt('vi'), /Nameserver chỉ lấy từ trang Overview/);
+assert.match(generateSystemPrompt('en'), /Business does not lack the Cloudflare Managed Ruleset/);
+assert.match(generateSystemPrompt('en'), /Save does not enable every rule/);
+assert.match(generateSystemPrompt('vi'), /Business không thiếu Cloudflare Managed Ruleset/);
+assert.match(generateSystemPrompt('vi'), /Save không bật mọi rule/);
 
 const freeOwasp = buildGenerateMessages(
   'Tôi dùng gói Free, bật OWASP Core Ruleset ở đâu và nên để action Log trước không?',
@@ -977,7 +981,7 @@ const gathered = await gatherVerdicts(
     inflight -= 1;
     return JSON.stringify({ verdicts: [{ id: group[0].id, v: group[0].id === 's0' ? 'ok' : 'wrong' }] });
   },
-  { chunkSize: 1, timeoutMs: 1000 },
+  { chunkSize: 1, timeoutMs: 1000, backoffMs: 0 },
 );
 assert.equal(gathered.get('s0'), 'ok');
 assert.equal(gathered.get('s1'), 'wrong');
@@ -995,7 +999,7 @@ const retried = await gatherVerdicts(
     if (retryAttempts === 1) return '{"verdicts":[{"id":"s0","v":"ok"}]}';
     return '{"verdicts":[{"id":"s1","v":"wrong"}]}';
   },
-  { chunkSize: 4, timeoutMs: 1000 },
+  { chunkSize: 4, timeoutMs: 1000, backoffMs: 0 },
 );
 assert.equal(retried.get('s0'), 'ok');
 assert.equal(retried.get('s1'), 'wrong');
@@ -1024,11 +1028,194 @@ assert.match(handlerBody.result.response, /Log is only available on Enterprise/)
 
 const headingOnly = await onRequestPost({
   request: request({ prompt: 'How do I use Logpush?', lang: 'en' }),
-  env: { AI: { run: async () => ({ response: '## Logpush' }) } },
+  env: { AI: { run: async () => ({ response: '## Next steps' }) } },
 });
 const headingBody = await headingOnly.json();
 assert.equal(headingOnly.status, 200);
 assert.match(headingBody.result.response, /https:\/\/developers\.cloudflare\.com\/logs\/logpush\//);
-assert.doesNotMatch(headingBody.result.response, /## Logpush/);
+assert.doesNotMatch(headingBody.result.response, /## Next steps/);
+
+const logpushHeading = await reviewPlanClaims('## Logpush', 'en', async () => null);
+assert.doesNotMatch(logpushHeading, /## Logpush/);
+assert.match(logpushHeading, /Logpush is available on Free, Pro, and Business/);
+
+const ef3 = await reviewPlanClaims(
+  'On Business, Log the matching requests before you block.',
+  'en',
+  async () => null,
+);
+assert.doesNotMatch(ef3, /Log the matching/);
+assert.match(ef3, /Log is Enterprise only/);
+
+const unsureKept = await reviewPlanClaims(
+  'Logpush is available on Pro with usage-based pricing.',
+  'en',
+  async (sentences) => sentences.map((sentence) => ({ id: sentence.id, verdict: 'unsure' })),
+);
+assert.equal(unsureKept, 'Logpush is available on Pro with usage-based pricing.');
+
+let pathOnlyClaims = -1;
+const pathOnly = await reviewPlanClaims('Go to Security → Settings.', 'en', async (sentences) => {
+  pathOnlyClaims = sentences.length;
+  return sentences.map((sentence) => ({ id: sentence.id, verdict: 'wrong' }));
+});
+assert.equal(pathOnlyClaims, -1);
+assert.match(pathOnly, /Security → Settings/);
+
+let pathLogClaims = [];
+const pathLog = await reviewPlanClaims(
+  'Go to Security → Settings and Log the request on Business.',
+  'en',
+  async (sentences) => {
+    pathLogClaims = sentences.map((sentence) => sentence.text);
+    return null;
+  },
+);
+assert.equal(pathLogClaims.length, 1);
+assert.match(pathLogClaims[0], /Log the request/);
+assert.doesNotMatch(pathLog, /Log the request/);
+assert.match(pathLog, /Log is Enterprise only/);
+
+const inventedNs = await reviewPlanClaims(
+  'Open https://dash.cloudflare.com/abc → DNS and use ada.ns.cloudflare.com.',
+  'en',
+  async () => null,
+);
+assert.doesNotMatch(inventedNs, /ada\.ns\.cloudflare\.com/);
+assert.doesNotMatch(inventedNs, /ns1\.cloudflare\.com/);
+assert.match(inventedNs, /Never write a nameserver hostname/);
+
+const businessLacks = await reviewPlanClaims(
+  'The Business plan does not include the Cloudflare Managed Ruleset.',
+  'en',
+  async () => null,
+);
+assert.doesNotMatch(businessLacks, /does not include the Cloudflare Managed Ruleset/);
+assert.match(businessLacks, /does not lack the Cloudflare Managed Ruleset/);
+
+const businessLacksVi = await generate(
+  { prompt: 'Cách bật Cloudflare Managed Ruleset trên Business?', lang: 'vi' },
+  { response: 'Gói Business không có Cloudflare Managed Ruleset.' },
+);
+assert.doesNotMatch(businessLacksVi.data.result.response, /không có Cloudflare Managed Ruleset/);
+assert.match(businessLacksVi.data.result.response, /không thiếu Cloudflare Managed Ruleset/);
+
+const businessKept = await reviewPlanClaims(
+  'Business does not lack the Cloudflare Managed Ruleset: it is on Pro, Business, and Enterprise, it is not already on, turn it on under Security → Settings, and Free does not include it.',
+  'en',
+  async () => null,
+);
+assert.match(businessKept, /does not lack the Cloudflare Managed Ruleset/);
+
+const lg6 = await reviewPlanClaims('Managed Challenge records the request.', 'en', async (sentences) => {
+  assert.equal(sentences.length, 1);
+  return sentences.map((sentence) => ({ id: sentence.id, verdict: 'wrong' }));
+});
+assert.doesNotMatch(lg6, /records the request/);
+assert.match(lg6, /not a record-only action/);
+
+const lg6Null = await reviewPlanClaims('Managed Challenge ghi nhận request.', 'en', async () => null);
+assert.doesNotMatch(lg6Null, /ghi nhận/);
+assert.match(lg6Null, /not a record-only action/);
+
+const challengeFact = await reviewPlanClaims(
+  'Managed Challenge is not a record-only action.',
+  'en',
+  async () => null,
+);
+assert.match(challengeFact, /not a record-only action/);
+assert.doesNotMatch(challengeFact, /Log is Enterprise only/);
+
+const ef5 = await reviewPlanClaims(
+  'Sensitive Data Detection is included with the Business plan.',
+  'en',
+  async () => null,
+);
+assert.doesNotMatch(ef5, /included with the Business/);
+assert.match(ef5, /is Enterprise only/);
+
+const ef5Already = await reviewPlanClaims('You already have Sensitive Data Detection.', 'en', async () => null);
+assert.doesNotMatch(ef5Already, /already have/);
+assert.match(ef5Already, /is Enterprise only/);
+
+const ef5Pre = await generate(
+  { prompt: 'I am on the Business plan', lang: 'en' },
+  { response: 'You already have Sensitive Data Detection.' },
+);
+assert.doesNotMatch(ef5Pre.data.result.response, /already have Sensitive Data Detection/);
+assert.match(ef5Pre.data.result.response, /Enterprise-only/);
+
+for (const [prompt, lang, response, banned, line] of [
+  ['I am on the Business plan', 'en', 'Log the matching requests before you block.', /Log the matching/, /Log is only available on Enterprise/],
+  ['I am on the Business plan', 'en', 'You should log the matches on this zone.', /should log/, /Log is only available on Enterprise/],
+  ['Tôi dùng gói Business', 'vi', 'Hãy log request trước khi chặn.', /log request/i, /Log chỉ có trên Enterprise/],
+  ['Tôi dùng gói Business', 'vi', 'Có thể log lại request trên zone này.', /log lại/i, /Log chỉ có trên Enterprise/],
+  ['Tôi dùng gói Pro', 'vi', 'Ghi log các match rồi mới Block.', /Ghi log/i, /Log chỉ có trên Enterprise/],
+]) {
+  const sample = await generate({ prompt, lang }, { response });
+  assert.doesNotMatch(sample.data.result.response, banned, response);
+  assert.match(sample.data.result.response, line, response);
+}
+
+const enterpriseLogVerb = await generate(
+  { prompt: 'I am on the Enterprise plan', lang: 'en' },
+  { response: 'Log the matching requests before you block.' },
+);
+assert.equal(enterpriseLogVerb.data.result.response, 'Log the matching requests before you block.');
+
+assert.equal(parseClaimVerdicts('Workers AI generate failed 502', [{ id: 's0', text: 'Log on Business' }]).size, 0);
+assert.equal(
+  parseClaimVerdicts('{"success":false,"errors":[{"code":502,"message":"s0: ok"}]}', [{ id: 's0', text: 'Log on Business' }]).size,
+  0,
+);
+
+let aiFailures = 0;
+const startedRetry = Date.now();
+const retried502 = await gatherVerdicts(
+  [{ id: 's0', text: 'On Business, Log the matching requests.' }],
+  async () => {
+    aiFailures += 1;
+    if (aiFailures === 1) return '{"success":false,"errors":[{"code":502,"message":"s0: ok"}]}';
+    return '{"verdicts":[{"id":"s0","v":"wrong"}]}';
+  },
+  { chunkSize: 4, timeoutMs: 1000 },
+);
+assert.equal(retried502.get('s0'), 'wrong');
+assert.equal(aiFailures, 2);
+assert.ok(Date.now() - startedRetry >= 90);
+
+let budgetCalls = 0;
+const budgeted = await gatherVerdicts(
+  [
+    { id: 's0', text: 'Log is Enterprise only.' },
+    { id: 's1', text: 'Sensitive Data Detection is included on Free.' },
+  ],
+  async () => {
+    budgetCalls += 1;
+    return '{"verdicts":[{"id":"s0","v":"ok"}]}';
+  },
+  { chunkSize: 4, timeoutMs: 1000, budgetMs: 200, backoffMs: 0 },
+);
+assert.equal(budgeted.get('s0'), 'ok');
+assert.equal(budgeted.get('s1'), null);
+assert.equal(budgetCalls, 1);
+
+let generateCalls = 0;
+const recovered = await onRequestPost({
+  request: request({ prompt: 'What is WAF?', lang: 'en' }),
+  env: {
+    AI: {
+      run: async () => {
+        generateCalls += 1;
+        if (generateCalls === 1) return { success: false, errors: [{ code: 502 }] };
+        return { response: 'Use a WAF.' };
+      },
+    },
+  },
+});
+const recoveredBody = await recovered.json();
+assert.equal(recovered.status, 200);
+assert.equal(recoveredBody.result.response, 'Use a WAF.');
+assert.equal(generateCalls, 2);
 
 console.log('generate grounding prompt checks passed');

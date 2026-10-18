@@ -40,6 +40,11 @@ export const PLAN_FEATURE_ROWS = [
     en: 'Save does not enable every rule. The deployment runs a subset of rules.',
     vi: 'Save không bật mọi rule. Bản deployment chỉ chạy một phần rule.',
   },
+  {
+    id: 'business-cmr',
+    en: 'Business does not lack the Cloudflare Managed Ruleset: it is on Pro, Business, and Enterprise, it is not already on, turn it on under Security → Settings, and Free does not include it.',
+    vi: 'Business không thiếu Cloudflare Managed Ruleset: ruleset có trên Pro, Business và Enterprise, chưa bật sẵn, hãy bật trong Security → Settings, và Free không có ruleset này.',
+  },
 ] as const;
 
 export type ClaimVerdict = 'ok' | 'wrong' | 'unsure';
@@ -66,6 +71,8 @@ function foldFeature(text: string): string {
 }
 
 const LOG_ACTION = /\blog\b/;
+const LOG_AS_VERB =
+  /\blog\s+(?:the|a|an|these|those|matching|matched|request|requests|match|matches|traffic|hits|lai)\b|\b(?:should|can|may|will|must|hay|co the)\s+log\b|\bghi\s+log\b/;
 const SDD = /\bsdd\b|sensitive data|card detection|credit card|payment card|the tin dung|phat hien the|du lieu nhay cam/;
 const BOT = /\bbot management\b|\bbot mgmt\b|bot-management/;
 const RULESET = /\bowasp\b|core ruleset|cloudflare managed ruleset|managed ruleset/;
@@ -83,21 +90,22 @@ function hideLogpush(folded: string): string {
   return folded.replace(/\blog(?:ging)?\s+in\b/g, ' ').replace(/\blogin\b/g, ' ').replace(/logpush/g, ' ');
 }
 
-/** Dashboard path or nameserver copy/paste step. These are not plan claims. */
+/**
+ * A nameserver copy/paste step with no concrete hostname.
+ * A menu path (→, ->, or a dashboard URL) is not a reason to skip the sentence.
+ */
 export function isProceduralStep(sentence: string): boolean {
   const folded = foldFeature(sentence);
-  if (/→|->|dash\.cloudflare\.com/.test(sentence)) return true;
-  if (NAMESERVER.test(folded) && /overview|registrar|paste|\bdan\b|copy|chep/.test(folded) && !CONCRETE_NAMESERVER.test(folded)) {
-    return true;
-  }
-  return false;
+  if (CONCRETE_NAMESERVER.test(folded)) return false;
+  return NAMESERVER.test(folded) && /overview|registrar|paste|\bdan\b|copy|chep/.test(folded);
 }
 
 /** "Managed Challenge only records" is a plan claim. The action challenges; it does not only record. */
 export function isManagedChallengeRecordOnly(sentence: string): boolean {
   const folded = foldFeature(sentence);
   if (!/managed challenge/.test(folded)) return false;
-  return /record-only|record only|only records|just records|only logs|chi ghi|chi de ghi|does not challenge|without challenging|khong challenge/.test(
+  if (/not a record-only|not record-only|khong phai action chi ghi|khong chi ghi/.test(folded)) return false;
+  return /record-only|records only|only records|just records|only logs|merely records|chi ghi|chi de ghi|ghi nhan|does not challenge|without challenging|khong challenge|records (?:the |a )?(?:match|matches|request|requests|hit|hits)\b/.test(
     folded,
   );
 }
@@ -116,10 +124,36 @@ function isSaveClaim(folded: string): boolean {
   return /\bsav(?:e|ing)\b/.test(folded) && SAVE_QUANTIFIER.test(folded) && /\brules?\b/.test(folded);
 }
 
-/** A sentence the claim check must classify. Procedural UI and nameserver steps are excluded. */
-export function mentionsPlanOrFeature(sentence: string, context = ''): boolean {
-  if (isProceduralStep(sentence)) return false;
+function mentionsManagedRuleset(folded: string): boolean {
+  return /cloudflare managed ruleset|managed ruleset/.test(folded);
+}
+
+/** The Business plan includes the Cloudflare Managed Ruleset. It does not lack it. */
+function businessHasManagedRuleset(folded: string): boolean {
+  if (!mentionsManagedRuleset(folded) || !/\bbusiness\b/.test(folded)) return false;
+  return /does not lack|do not lack|khong thieu|not missing/.test(folded);
+}
+
+/** Says Business is missing the Cloudflare Managed Ruleset. */
+export function deniesBusinessManagedRuleset(sentence: string): boolean {
   const folded = foldFeature(sentence);
+  if (!mentionsManagedRuleset(folded) || !/\bbusiness\b/.test(folded)) return false;
+  if (businessHasManagedRuleset(folded)) return false;
+  return /does not include|doesn't include|do not include|not included|not available|lacks\b|lack\b|missing|without|khong co|khong bao gom|thieu|khong ho tro|khong dung/.test(
+    folded,
+  );
+}
+
+export function businessManagedRulesetLine(lang: GenerateLang): string {
+  return PLAN_FEATURE_ROWS.find((row) => row.id === 'business-cmr')?.[lang] ?? '';
+}
+
+/** A sentence the claim check must classify. A menu path stays in the sentence; only a hostname-free nameserver step is excluded. */
+export function mentionsPlanOrFeature(sentence: string, context = ''): boolean {
+  const foldedFull = foldFeature(sentence);
+  if (CONCRETE_NAMESERVER.test(foldedFull)) return true;
+  if (isProceduralStep(sentence)) return false;
+  const folded = foldedFull;
   const hidden = hideLogpush(folded);
   if (isManagedChallengeRecordOnly(sentence)) return true;
   if (isSddPronounFollowUp(sentence, context)) return true;
@@ -162,6 +196,8 @@ export function tableConfirms(sentence: string): boolean {
   }
   if (SDD.test(folded) && /enterprise/.test(folded) && !LOWER_PLAN.test(folded)) return true;
   if (BOT.test(folded) && /enterprise/.test(folded) && /add-on|addon/.test(folded) && !LOWER_PLAN.test(folded)) return true;
+  if (businessHasManagedRuleset(folded)) return true;
+  if (/managed challenge/.test(folded) && /not a record-only|not record-only|khong phai action chi ghi/.test(folded)) return true;
   if (RULESET.test(folded) && /pro or above|pro tro len|needs pro|can pro|not on the free|khong co tren/.test(folded)) {
     return true;
   }
@@ -177,6 +213,8 @@ export function tableContradicts(sentence: string, context = ''): boolean {
   if (tableConfirms(sentence)) return false;
   const folded = foldFeature(sentence);
   const hidden = hideLogpush(folded);
+  if (CONCRETE_NAMESERVER.test(folded)) return true;
+  if (deniesBusinessManagedRuleset(sentence)) return true;
   if (isManagedChallengeRecordOnly(sentence)) return true;
   if (isSddPronounFollowUp(sentence, context) && (LOWER_PLAN.test(folded) || /\b(?:enable|turn|bat|kich hoat)\b/.test(folded))) {
     return true;
@@ -190,7 +228,7 @@ export function tableContradicts(sentence: string, context = ''): boolean {
   if (isSaveClaim(folded) && /\b(?:all|every|moi|tat ca)\b/.test(folded) && !/not|khong|subset|mot phan/.test(folded)) return true;
   if (
     LOG_ACTION.test(hidden) &&
-    (LOWER_PLAN.test(folded) || /\b(?:use|using|chon|select|pick|choose|bat|dat)\s+["'(]*log\b/.test(hidden)) &&
+    (LOWER_PLAN.test(folded) || LOG_AS_VERB.test(hidden) || /\b(?:use|using|chon|select|pick|choose|bat|dat)\s+["'(]*log\b/.test(hidden)) &&
     !/instead of|thay cho|not available|does not|khong co|khong ho tro|enterprise-only|only available on enterprise/.test(folded)
   ) {
     return true;
@@ -216,9 +254,10 @@ export function rewriteFromTable(sentence: string, lang: GenerateLang, context =
   }
   if (SDD.test(folded) || isSddPronounFollowUp(sentence, context)) ids.push('sdd');
   if (BOT.test(folded)) ids.push('bots');
-  if (RULESET.test(folded)) ids.push('rulesets');
+  if (deniesBusinessManagedRuleset(sentence)) ids.push('business-cmr');
+  else if (RULESET.test(folded)) ids.push('rulesets');
   if (LOGPUSH.test(folded)) ids.push('logpush');
-  if (NAMESERVER.test(folded)) ids.push('nameservers');
+  if (NAMESERVER.test(folded) || CONCRETE_NAMESERVER.test(folded)) ids.push('nameservers');
   if (isSaveClaim(folded)) ids.push('save');
   if (!ids.length && PLAN.test(folded)) return '';
   const lines = ids.map((id) => PLAN_FEATURE_ROWS.find((row) => row.id === id)?.[lang] ?? '').filter(Boolean);
@@ -274,9 +313,19 @@ function absorbJson(value: unknown, found: Map<string, ClaimVerdict>, ids: Set<s
   }
 }
 
-/** Read id-keyed verdicts out of messy model text. A missing id stays missing. */
+/** A Workers AI error body, including HTTP 502, is not a verdict. */
+export function isAiErrorText(raw: string): boolean {
+  const text = raw.trim();
+  if (!text) return false;
+  if (/"success"\s*:\s*false/i.test(text)) return true;
+  if (/\b5028\b/.test(text)) return true;
+  return /\b502\b/.test(text) && /error|failed|workers ai|bad gateway|unavailable/i.test(text);
+}
+
+/** Read id-keyed verdicts out of messy model text. A missing id stays missing. A 502 body stays empty. */
 export function parseClaimVerdicts(raw: string, claims: ClaimSentence[]): Map<string, ClaimVerdict> {
   const found = new Map<string, ClaimVerdict>();
+  if (isAiErrorText(raw)) return found;
   const ids = new Set(claims.map((claim) => claim.id));
   const text = raw.replace(/```(?:json)?/gi, '');
   const objStart = text.indexOf('{');
@@ -364,7 +413,19 @@ export function claimCheckMessages(claims: ClaimSentence[], lang: GenerateLang) 
   ];
 }
 
-const CLAIM_CHECK_TIMEOUT_MS = 5000;
+const CLAIM_CHECK_TIMEOUT_MS = 3500;
+const CLAIM_CHECK_BUDGET_MS = 8000;
+const RETRY_MIN_REMAINING_MS = 400;
+
+/** One jittered backoff, 100–400ms, before the single claim-check retry. */
+export function retryBackoffMs(): number {
+  return 100 + Math.floor(Math.random() * 301);
+}
+
+export function waitMs(ms: number): Promise<void> {
+  if (ms <= 0) return Promise.resolve();
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   return new Promise((resolve, reject) => {
@@ -390,23 +451,35 @@ function chunkClaims<T>(items: T[], size: number): T[][] {
 
 /**
  * Classify claims in parallel batches, keyed by sentence id.
- * A timeout or parse miss leaves that id null and does not move the others.
- * Missing ids are retried once.
+ * A timeout, 502, or parse miss leaves that id null and does not move the others.
+ * Missing ids are retried once, after a jittered backoff, while the budget remains.
  */
 export async function gatherVerdicts(
   claims: ClaimSentence[],
   ask: (group: ClaimSentence[]) => Promise<string>,
-  options?: { chunkSize?: number; timeoutMs?: number },
+  options?: { chunkSize?: number; timeoutMs?: number; budgetMs?: number; backoffMs?: number },
 ): Promise<Map<string, ClaimVerdict | null>> {
   const chunkSize = options?.chunkSize ?? 4;
   const timeoutMs = options?.timeoutMs ?? CLAIM_CHECK_TIMEOUT_MS;
+  const budgetMs = options?.budgetMs ?? CLAIM_CHECK_BUDGET_MS;
+  const started = Date.now();
+  const remaining = () => budgetMs - (Date.now() - started);
   const map = new Map<string, ClaimVerdict | null>();
   const fill = async (group: ClaimSentence[]) => {
     const chunks = chunkClaims(group, chunkSize);
     await Promise.all(
       chunks.map(async (chunk) => {
+        const slice = Math.min(timeoutMs, remaining());
+        if (slice < 50) {
+          for (const claim of chunk) if (!map.has(claim.id)) map.set(claim.id, null);
+          return;
+        }
         try {
-          const raw = await withTimeout(ask(chunk), timeoutMs);
+          const raw = await withTimeout(ask(chunk), slice);
+          if (isAiErrorText(raw)) {
+            for (const claim of chunk) if (!map.has(claim.id)) map.set(claim.id, null);
+            return;
+          }
           const parsed = parseClaimVerdicts(raw, chunk);
           for (const claim of chunk) map.set(claim.id, parsed.get(claim.id) ?? map.get(claim.id) ?? null);
         } catch {
@@ -417,7 +490,11 @@ export async function gatherVerdicts(
   };
   await fill(claims);
   const missing = claims.filter((claim) => map.get(claim.id) == null);
-  if (missing.length && missing.length < claims.length + 1) await fill(missing);
+  if (!missing.length || remaining() <= RETRY_MIN_REMAINING_MS) return map;
+  const backoff = options?.backoffMs ?? retryBackoffMs();
+  await waitMs(Math.min(backoff, Math.max(0, remaining() - RETRY_MIN_REMAINING_MS)));
+  if (remaining() <= 50) return map;
+  await fill(missing);
   return map;
 }
 
@@ -430,13 +507,10 @@ function resolveSentence(
   context: string,
 ): { text: string; action: SentenceAction } {
   if (verdict === 'ok') return { text: sentence, action: 'kept' };
-  const confirmed = tableConfirms(sentence);
-  const contradicts = tableContradicts(sentence, context);
-  if (verdict == null || verdict === 'unsure') {
-    if (confirmed || !contradicts) return { text: sentence, action: 'kept' };
-  } else if (confirmed) {
-    return { text: sentence, action: 'kept' };
-  }
+  // Null or unsure keeps a sentence only when the table confirms it.
+  // Term-free sentences are not claims, so they never reach this function.
+  // A confirmed sentence also survives an explicit wrong verdict.
+  if (tableConfirms(sentence)) return { text: sentence, action: 'kept' };
   const replacement = rewriteFromTable(sentence, lang, context);
   if (!replacement) return { text: '', action: 'dropped' };
   if (foldFeature(replacement) === foldFeature(sentence)) return { text: sentence, action: 'kept' };
@@ -444,8 +518,9 @@ function resolveSentence(
 }
 
 /**
- * Apply one verdict per sentence id. A null verdict keeps a sentence the table
- * confirms or that the pre-pass left in place, and rewrites a sentence the table contradicts.
+ * Apply one verdict per sentence id. A null or unsure verdict keeps a sentence
+ * only when the table confirms it. Every other claim is rewritten or dropped.
+ * Term-free sentences are left as they are.
  */
 export function applyClaimVerdicts(
   text: string,

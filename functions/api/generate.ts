@@ -1,12 +1,17 @@
 import { buildGenerateMessages, curatedOnboardingContext, type GenerateLang } from './generateGrounding.ts';
 import {
+  businessManagedRulesetLine,
   claimCheckMessages,
+  deniesBusinessManagedRuleset,
+  dropEmptyHeadings,
   gatherVerdicts,
+  isAiErrorText,
+  isHeadingOnly,
   isSddPronounFollowUp,
+  retryBackoffMs,
   reviewPlanClaims,
   shortDocsFallback,
-  dropEmptyHeadings,
-  isHeadingOnly,
+  waitMs,
 } from './planFeatures.ts';
 
 const MODEL = '@cf/meta/llama-3.1-8b-instruct-fp8';
@@ -203,6 +208,12 @@ function namesLogAsWafAction(sentence: string): boolean {
   // "để ở Log", "ở Log", "leave it at Log" — the action is left on Log.
   if (/\bo\s+log\b/.test(folded)) return true;
   if (/\b(?:leave|keep|put|set|place)\b[\s\S]{0,24}\bat\s+log\b/.test(folded)) return true;
+  // Log as a verb: "Log the matching requests", "should log", "Hãy log request", "log lại", "ghi log".
+  if (/\blog\s+(?:the|a|an|these|those|matching|matched|request|requests|match|matches|traffic|hits|lai)\b/.test(folded)) {
+    return true;
+  }
+  if (/\b(?:should|can|may|will|must|hay|co the)\s+log\b/.test(folded)) return true;
+  if (/\bghi\s+log\b/.test(folded)) return true;
   // Log as one list item. A trailing period still ends the item: "Block, Challenge, Log."
   return (
     /(?:^|[,/;|]|\b(?:and|or|va|hoac)\s+)\s*log\b\s*(?:[,/;|]|[.!?…]|$|\s+\b(?:and|or|va|hoac)\b)/.test(folded) &&
@@ -255,6 +266,9 @@ function misstatesSdd(sentence: string, prompt: string, fullText = ''): boolean 
     if (!SDD_CLAIM.test(clause) || claimIsDenied(clause, SDD_CLAIM)) return false;
     if (/\benterprise\b/.test(clause) && !LOWER_PLAN.test(clause)) return false;
     if (LOWER_PLAN.test(clause) || sentenceHasLower) return true;
+    if (/\balready\b/.test(clause) || /\bavailable\s+(?:on|with|for|in)\b/.test(clause) || /\bco san\b|\bda co\b/.test(clause)) {
+      return true;
+    }
     return plan !== 'enterprise' && ENABLE_VERB.test(clause);
   });
 }
@@ -434,8 +448,13 @@ export function rewritePlanGatedActions(text: string, lang: Lang, prompt: string
   let sawBot = false;
   let sawLogging = false;
   let sawLogpush = false;
+  let sawBusinessCmr = false;
   const rewritten = rewriteSentences(source, (sentence) => {
     if (inventsWafAction(sentence)) return knownActionsInstruction(lang);
+    if (deniesBusinessManagedRuleset(sentence)) {
+      sawBusinessCmr = true;
+      return '';
+    }
     if (misstatesSave(sentence)) {
       sawSave = true;
       return '';
@@ -475,6 +494,7 @@ export function rewritePlanGatedActions(text: string, lang: Lang, prompt: string
   if (sawBot) next = appendMissing(next, botManagementInstruction(lang));
   if (sawLogging) next = appendMissing(next, loggingToggleInstruction(lang));
   if (sawLogpush) next = appendMissing(next, logpushInstruction(lang));
+  if (sawBusinessCmr) next = appendMissing(next, businessManagedRulesetLine(lang));
   return next.trim();
 }
 
@@ -787,7 +807,10 @@ async function reviewText(
           max_tokens: 256,
           messages: claimCheckMessages(group, lang),
         });
-        return modelText(reviewedGroup);
+        if (aiResponseFailed(reviewedGroup)) throw new Error('ai-502');
+        const text = modelText(reviewedGroup);
+        if (isAiErrorText(text)) throw new Error('ai-502');
+        return text;
       });
       return claims.map((claim) => ({ id: claim.id, verdict: map.get(claim.id) ?? null }));
     },
@@ -856,15 +879,19 @@ export const onRequestPost: PagesFunction<{
     );
   }
 
-  let result: unknown;
-  try {
-    result = await env.AI.run(MODEL, {
-      max_tokens: MAX_TOKENS,
-      messages: buildGenerateMessages(prompt, lang),
-    });
-  } catch (err) {
-    console.error('Workers AI generate failed', err instanceof Error ? err.message : 'unknown');
-    return json({ error: aiFailureMessage(lang) }, 502);
+  let result: unknown = null;
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    if (attempt === 1) await waitMs(retryBackoffMs());
+    try {
+      result = await env.AI.run(MODEL, {
+        max_tokens: MAX_TOKENS,
+        messages: buildGenerateMessages(prompt, lang),
+      });
+      if (!aiResponseFailed(result)) break;
+    } catch (err) {
+      console.error('Workers AI generate failed', err instanceof Error ? err.message : 'unknown');
+      result = null;
+    }
   }
 
   if (aiResponseFailed(result)) {
