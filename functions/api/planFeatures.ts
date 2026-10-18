@@ -2,14 +2,13 @@ type GenerateLang = 'vi' | 'en';
 
 /**
  * Authoritative plan-feature facts. The system prompt includes this table.
- * The second-pass claim check rewrites or drops a sentence from these rows.
- * It never appends a correction after the original sentence.
+ * The second pass rewrites a sentence from these rows. It does not append.
  */
 export const PLAN_FEATURE_ROWS = [
   {
     id: 'waf-actions',
-    en: 'WAF custom-rule actions on Free, Pro, and Business: Block, Managed Challenge, JS Challenge, Interactive Challenge, Skip. Log is Enterprise only. Simulate is not an action. Do not invent an action name.',
-    vi: 'Action của custom rule WAF trên Free, Pro và Business: Block, Managed Challenge, JS Challenge, Interactive Challenge, Skip. Log chỉ có trên Enterprise. Simulate không phải action. Đừng bịa tên action.',
+    en: 'WAF custom-rule actions on Free, Pro, and Business: Block, Managed Challenge, JS Challenge, Interactive Challenge, Skip. Managed Challenge challenges the visitor. It is not a record-only action. Log is Enterprise only. Simulate is not an action. Do not invent an action name.',
+    vi: 'Action của custom rule WAF trên Free, Pro và Business: Block, Managed Challenge, JS Challenge, Interactive Challenge, Skip. Managed Challenge thách thức người truy cập, không phải action chỉ ghi. Log chỉ có trên Enterprise. Simulate không phải action. Đừng bịa tên action.',
   },
   {
     id: 'sdd',
@@ -36,9 +35,18 @@ export const PLAN_FEATURE_ROWS = [
     en: 'Nameservers come from the zone Overview in the dashboard only. Copy the two names shown there. Never write a nameserver hostname.',
     vi: 'Nameserver chỉ lấy từ trang Overview của zone trên dashboard. Copy đúng hai tên đang hiện. Đừng viết hostname nameserver.',
   },
+  {
+    id: 'save',
+    en: 'Save does not enable every rule. The deployment runs a subset of rules.',
+    vi: 'Save không bật mọi rule. Bản deployment chỉ chạy một phần rule.',
+  },
 ] as const;
 
 export type ClaimVerdict = 'ok' | 'wrong' | 'unsure';
+
+export type ClaimSentence = { id: string; text: string };
+
+export type ClaimCheckCounts = { kept: number; dropped: number; rewritten: number };
 
 export function formatPlanFeatureTable(lang: GenerateLang): string {
   const title = lang === 'en' ? 'Plan-feature table (authoritative):' : 'Bảng plan-feature (chuẩn):';
@@ -64,132 +72,461 @@ const RULESET = /\bowasp\b|core ruleset|cloudflare managed ruleset|managed rules
 const LOGPUSH = /\blogpush\b/;
 const NAMESERVER = /\bnameservers?\b/;
 const PLAN = /\b(?:free|pro|business|enterprise)\b/;
-const INVENTED =
-  /\b(?:simulate|quarantine|monitor|tarpit|captcha|sinkhole|observe)\b/;
+const LOWER_PLAN = /\b(?:free|pro|business)\b/;
+const INVENTED = /\b(?:simulate|quarantine|monitor|tarpit|captcha|sinkhole|observe)\b/;
+const SAVE_QUANTIFIER = /\b(?:all|every|moi|tat ca|subset|mot phan)\b/;
 
-/** A sentence the claim check must classify. Bare "WAF" or "orange cloud" does not qualify. */
-export function mentionsPlanOrFeature(sentence: string): boolean {
-  const folded = foldFeature(sentence).replace(/\blog(?:ging)?\s+in\b/g, ' ').replace(/\blogin\b/g, ' ');
-  const hidden = folded.replace(/logpush/g, ' ');
+const CONCRETE_NAMESERVER =
+  /(?<![a-z0-9])(?:_?ns(?:-?\d+[a-z]?|-[a-z0-9]+)?|[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.ns)\.cloudflare\.(?:com|net)/;
+
+function hideLogpush(folded: string): string {
+  return folded.replace(/\blog(?:ging)?\s+in\b/g, ' ').replace(/\blogin\b/g, ' ').replace(/logpush/g, ' ');
+}
+
+/** Dashboard path or nameserver copy/paste step. These are not plan claims. */
+export function isProceduralStep(sentence: string): boolean {
+  const folded = foldFeature(sentence);
+  if (/→|->|dash\.cloudflare\.com/.test(sentence)) return true;
+  if (NAMESERVER.test(folded) && /overview|registrar|paste|\bdan\b|copy|chep/.test(folded) && !CONCRETE_NAMESERVER.test(folded)) {
+    return true;
+  }
+  return false;
+}
+
+/** "Managed Challenge only records" is a plan claim. The action challenges; it does not only record. */
+export function isManagedChallengeRecordOnly(sentence: string): boolean {
+  const folded = foldFeature(sentence);
+  if (!/managed challenge/.test(folded)) return false;
+  return /record-only|record only|only records|just records|only logs|chi ghi|chi de ghi|does not challenge|without challenging|khong challenge/.test(
+    folded,
+  );
+}
+
+/** "Turn it on" / "bật nó" when the prompt or an earlier sentence is about SDD. */
+export function isSddPronounFollowUp(sentence: string, context: string): boolean {
+  const folded = foldFeature(sentence);
+  if (SDD.test(folded)) return false;
+  if (!SDD.test(foldFeature(context))) return false;
+  return /\b(?:enable|turn|switch)\s+it\b|\bturn it on\b|\bit is included\b|\bit comes with\b|\bbat no\b|\bkich hoat no\b/.test(
+    folded,
+  );
+}
+
+function isSaveClaim(folded: string): boolean {
+  return /\bsav(?:e|ing)\b/.test(folded) && SAVE_QUANTIFIER.test(folded) && /\brules?\b/.test(folded);
+}
+
+/** A sentence the claim check must classify. Procedural UI and nameserver steps are excluded. */
+export function mentionsPlanOrFeature(sentence: string, context = ''): boolean {
+  if (isProceduralStep(sentence)) return false;
+  const folded = foldFeature(sentence);
+  const hidden = hideLogpush(folded);
+  if (isManagedChallengeRecordOnly(sentence)) return true;
+  if (isSddPronounFollowUp(sentence, context)) return true;
+  if (isSaveClaim(folded)) return true;
+  if (NAMESERVER.test(folded) && !isProceduralStep(sentence)) return true;
   return (
     PLAN.test(folded) ||
     SDD.test(folded) ||
     BOT.test(folded) ||
     RULESET.test(folded) ||
     LOGPUSH.test(folded) ||
-    NAMESERVER.test(folded) ||
     INVENTED.test(folded) ||
     LOG_ACTION.test(hidden)
   );
 }
 
-/** Replace a wrong or unsure sentence with the table rows it touches. Unknown claims are dropped. */
-export function rewriteFromTable(sentence: string, lang: GenerateLang): string {
-  const folded = foldFeature(sentence).replace(/\blog(?:ging)?\s+in\b/g, ' ');
-  const hidden = folded.replace(/logpush/g, ' ');
+/** The sentence already states a table fact. */
+export function tableConfirms(sentence: string): boolean {
+  const folded = foldFeature(sentence);
+  const hidden = hideLogpush(folded);
+  if (/\bnot an action\b|\bkhong phai action\b/.test(folded) && /simulate/.test(folded)) return true;
+  if (
+    LOG_ACTION.test(hidden) &&
+    /instead of|thay cho/.test(folded) &&
+    /managed challenge/.test(folded) &&
+    !/only records|record-only|chi ghi/.test(folded)
+  ) {
+    return true;
+  }
+  if (
+    LOG_ACTION.test(hidden) &&
+    /enterprise/.test(folded) &&
+    /only|chi co|enterprise-only|instead of|thay cho|khong co tren/.test(folded) &&
+    !/\b(?:use|chon|select|pick|bat|dat)\s+log\b/.test(hidden)
+  ) {
+    return true;
+  }
+  if (LOGPUSH.test(folded) && /available|co tren|usage-based|dung bao nhieu/.test(folded) && LOWER_PLAN.test(folded)) {
+    if (!/does not|khong co|lacks|enterprise-only|chi co tren enterprise|only enterprise/.test(folded)) return true;
+  }
+  if (SDD.test(folded) && /enterprise/.test(folded) && !LOWER_PLAN.test(folded)) return true;
+  if (BOT.test(folded) && /enterprise/.test(folded) && /add-on|addon/.test(folded) && !LOWER_PLAN.test(folded)) return true;
+  if (RULESET.test(folded) && /pro or above|pro tro len|needs pro|can pro|not on the free|khong co tren/.test(folded)) {
+    return true;
+  }
+  if (isSaveClaim(folded) && /not|khong|subset|mot phan/.test(folded) && !/enables all|bat tat ca|bat moi/.test(folded)) return true;
+  if (NAMESERVER.test(folded) && /overview/.test(folded) && /copy|chep/.test(folded) && !CONCRETE_NAMESERVER.test(folded)) {
+    return true;
+  }
+  return false;
+}
+
+/** The sentence conflicts with the table, so a missing verdict still rewrites it. */
+export function tableContradicts(sentence: string, context = ''): boolean {
+  if (tableConfirms(sentence)) return false;
+  const folded = foldFeature(sentence);
+  const hidden = hideLogpush(folded);
+  if (isManagedChallengeRecordOnly(sentence)) return true;
+  if (isSddPronounFollowUp(sentence, context) && (LOWER_PLAN.test(folded) || /\b(?:enable|turn|bat|kich hoat)\b/.test(folded))) {
+    return true;
+  }
+  if (LOGPUSH.test(folded) && /enterprise/.test(folded) && !(/available|usage-based|dung bao nhieu/.test(folded) && LOWER_PLAN.test(folded))) {
+    return true;
+  }
+  if (LOGPUSH.test(folded) && LOWER_PLAN.test(folded) && /does not|khong co|lacks|khong bao gom/.test(folded)) return true;
+  if (SDD.test(folded) && LOWER_PLAN.test(folded) && !/not|khong|no toggle|khong co/.test(folded)) return true;
+  if (BOT.test(folded) && LOWER_PLAN.test(folded) && !/not|khong|instead|super bot/.test(folded)) return true;
+  if (isSaveClaim(folded) && /\b(?:all|every|moi|tat ca)\b/.test(folded) && !/not|khong|subset|mot phan/.test(folded)) return true;
+  if (
+    LOG_ACTION.test(hidden) &&
+    (LOWER_PLAN.test(folded) || /\b(?:use|using|chon|select|pick|choose|bat|dat)\s+["'(]*log\b/.test(hidden)) &&
+    !/instead of|thay cho|not available|does not|khong co|khong ho tro|enterprise-only|only available on enterprise/.test(folded)
+  ) {
+    return true;
+  }
+  if (INVENTED.test(folded) && /\b(?:action|hanh dong|mode)\b/.test(folded) && !/not an action|khong phai action/.test(folded)) {
+    return true;
+  }
+  if (RULESET.test(folded) && /\bfree\b/.test(folded) && /\b(?:enable|turn on|bat|deploy|include|co)\b/.test(folded)) return true;
+  return false;
+}
+
+/** Replace a wrong sentence with the table rows it touches. Unknown claims return ''. */
+export function rewriteFromTable(sentence: string, lang: GenerateLang, context = ''): string {
+  const folded = foldFeature(sentence);
+  const hidden = hideLogpush(folded);
   const ids: Array<(typeof PLAN_FEATURE_ROWS)[number]['id']> = [];
-  if (LOG_ACTION.test(hidden) || (INVENTED.test(folded) && /\b(?:action|hanh dong|mode)\b/.test(folded))) ids.push('waf-actions');
-  if (SDD.test(folded)) ids.push('sdd');
+  if (
+    LOG_ACTION.test(hidden) ||
+    isManagedChallengeRecordOnly(sentence) ||
+    (INVENTED.test(folded) && /\b(?:action|hanh dong|mode)\b/.test(folded))
+  ) {
+    ids.push('waf-actions');
+  }
+  if (SDD.test(folded) || isSddPronounFollowUp(sentence, context)) ids.push('sdd');
   if (BOT.test(folded)) ids.push('bots');
   if (RULESET.test(folded)) ids.push('rulesets');
   if (LOGPUSH.test(folded)) ids.push('logpush');
   if (NAMESERVER.test(folded)) ids.push('nameservers');
+  if (isSaveClaim(folded)) ids.push('save');
   if (!ids.length && PLAN.test(folded)) return '';
-  const lines = ids.map((id) => PLAN_FEATURE_ROWS.find((row) => row.id === id)?.[lang] ?? '');
-  return lines.filter(Boolean).join(' ');
+  const lines = ids.map((id) => PLAN_FEATURE_ROWS.find((row) => row.id === id)?.[lang] ?? '').filter(Boolean);
+  return lines.join(' ');
 }
 
-export function parseClaimVerdicts(raw: string, count: number): ClaimVerdict[] | null {
-  const match = raw.match(/\{[\s\S]*\}/);
-  if (!match) return null;
-  let data: unknown;
-  try {
-    data = JSON.parse(match[0]);
-  } catch {
-    return null;
+const VERDICT_WORD: Record<string, ClaimVerdict> = {
+  ok: 'ok',
+  okay: 'ok',
+  correct: 'ok',
+  true: 'ok',
+  yes: 'ok',
+  wrong: 'wrong',
+  false: 'wrong',
+  bad: 'wrong',
+  incorrect: 'wrong',
+  unsure: 'unsure',
+  unknown: 'unsure',
+  uncertain: 'unsure',
+};
+
+function asVerdict(value: unknown): ClaimVerdict | null {
+  if (typeof value !== 'string') return null;
+  return VERDICT_WORD[value.trim().toLowerCase()] ?? null;
+}
+
+function absorbVerdict(found: Map<string, ClaimVerdict>, ids: Set<string>, id: unknown, verdict: unknown) {
+  if (typeof id !== 'string' && typeof id !== 'number') return;
+  const key = String(id).trim().toLowerCase();
+  const normalized = /^s\d+$/.test(key) ? key : `s${key}`;
+  if (!ids.has(normalized) && !ids.has(key)) return;
+  const parsed = asVerdict(verdict);
+  if (!parsed) return;
+  found.set(ids.has(normalized) ? normalized : key, parsed);
+}
+
+function absorbJson(value: unknown, found: Map<string, ClaimVerdict>, ids: Set<string>) {
+  if (!value || typeof value !== 'object') return;
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      if (!item || typeof item !== 'object') continue;
+      const record = item as Record<string, unknown>;
+      absorbVerdict(found, ids, record.id ?? record.sentenceId ?? record.i ?? record.n, record.v ?? record.verdict ?? record.label ?? record.result);
+    }
+    return;
   }
-  if (!data || typeof data !== 'object' || !Array.isArray((data as { verdicts?: unknown }).verdicts)) return null;
-  const list = (data as { verdicts: unknown[] }).verdicts;
-  if (list.length !== count) return null;
-  const verdicts: ClaimVerdict[] = [];
-  for (const item of list) {
-    if (item !== 'ok' && item !== 'wrong' && item !== 'unsure') return null;
-    verdicts.push(item);
+  const record = value as Record<string, unknown>;
+  if (record.verdicts && typeof record.verdicts === 'object') absorbJson(record.verdicts, found, ids);
+  if (record.claims && typeof record.claims === 'object') absorbJson(record.claims, found, ids);
+  for (const [key, item] of Object.entries(record)) {
+    if (!/^s?\d+$/.test(key)) continue;
+    absorbVerdict(found, ids, key, item);
   }
-  return verdicts;
+}
+
+/** Read id-keyed verdicts out of messy model text. A missing id stays missing. */
+export function parseClaimVerdicts(raw: string, claims: ClaimSentence[]): Map<string, ClaimVerdict> {
+  const found = new Map<string, ClaimVerdict>();
+  const ids = new Set(claims.map((claim) => claim.id));
+  const text = raw.replace(/```(?:json)?/gi, '');
+  const objStart = text.indexOf('{');
+  const objEnd = text.lastIndexOf('}');
+  if (objStart >= 0 && objEnd > objStart) {
+    try {
+      absorbJson(JSON.parse(text.slice(objStart, objEnd + 1)), found, ids);
+    } catch {
+      /* try the line scan */
+    }
+  }
+  const arrStart = text.indexOf('[');
+  const arrEnd = text.lastIndexOf(']');
+  if (arrStart >= 0 && arrEnd > arrStart) {
+    try {
+      absorbJson(JSON.parse(text.slice(arrStart, arrEnd + 1)), found, ids);
+    } catch {
+      /* line scan still runs */
+    }
+  }
+  for (const line of text.split(/\n/)) {
+    const match = line.match(
+      /\b(s\d+)\b\s*[:=,\-–]?\s*["']?(ok|okay|correct|true|yes|wrong|false|bad|incorrect|unsure|unknown|uncertain)\b/i,
+    );
+    if (!match || !ids.has(match[1].toLowerCase())) continue;
+    const verdict = asVerdict(match[2]);
+    if (verdict) found.set(match[1].toLowerCase(), verdict);
+  }
+  return found;
 }
 
 function splitSentences(line: string): string[] {
   return line.split(/(?<=[.!?])\s+/).filter((part) => part.length > 0);
 }
 
-function cleanup(text: string): string {
-  return text
-    .split('\n')
-    .map((line) => line.replace(/[ \t]{2,}/g, ' ').replace(/\s+$/g, ''))
-    .filter((line) => line.trim() !== '')
-    .join('\n')
-    .trim();
+export function isHeadingLine(line: string): boolean {
+  const trimmed = line.trim();
+  if (!trimmed) return false;
+  return /^(#{1,6}\s+\S.*|[*_]{2}[^*_\n]+[*_]{2}\s*:?)$/.test(trimmed) || /^[A-Za-z0-9][^.]{0,48}:\s*$/.test(trimmed);
 }
 
-/**
- * Apply verdicts in place. wrong and unsure rewrite from the table or drop.
- * A missing verdict list drops every plan or feature sentence. Nothing is appended.
- */
-export function applyClaimVerdicts(text: string, lang: GenerateLang, verdicts: ClaimVerdict[] | null): string {
-  let index = 0;
-  const next = text
-    .split('\n')
-    .map((line) =>
-      splitSentences(line)
-        .map((sentence) => {
-          if (!mentionsPlanOrFeature(sentence)) return sentence;
-          if (!verdicts) return '';
-          const verdict = verdicts[index++];
-          if (verdict === 'ok') return sentence;
-          if (verdict === 'wrong' || verdict === 'unsure') return rewriteFromTable(sentence, lang);
-          return '';
-        })
-        .filter(Boolean)
-        .join(' '),
-    )
-    .join('\n');
-  return cleanup(next);
+export function isHeadingOnly(text: string): boolean {
+  const lines = text.split('\n').map((line) => line.trim()).filter(Boolean);
+  return lines.length === 0 || lines.every(isHeadingLine);
 }
 
-export function claimCheckMessages(sentences: string[], lang: GenerateLang) {
-  const ask =
-    lang === 'en'
-      ? 'Classify each sentence against the plan-feature table. Reply with JSON only: {"verdicts":["ok","wrong","unsure"]}. ok means the sentence matches the table. wrong means it contradicts the table. unsure means you cannot tell. CLAIM_VERDICTS'
-      : 'Phân loại từng câu theo bảng plan-feature. Chỉ trả JSON: {"verdicts":["ok","wrong","unsure"]}. ok là câu đúng với bảng. wrong là câu trái bảng. unsure là không chắc. CLAIM_VERDICTS';
-  return [
-    { role: 'system', content: `${ask}\n\n${formatPlanFeatureTable(lang)}` },
-    { role: 'user', content: sentences.map((sentence, i) => `${i}. ${sentence}`).join('\n') },
-  ];
+/** Drop a heading whose following body was removed, and collapse duplicate lines. */
+export function dropEmptyHeadings(text: string): string {
+  const lines = text.split('\n').map((line) => line.replace(/[ \t]{2,}/g, ' ').replace(/\s+$/g, ''));
+  const kept: string[] = [];
+  for (let i = 0; i < lines.length; i += 1) {
+    const line = lines[i];
+    if (!line.trim()) continue;
+    if (isHeadingLine(line)) {
+      const next = lines.slice(i + 1).find((item) => item.trim());
+      if (!next || isHeadingLine(next)) continue;
+    }
+    if (kept[kept.length - 1] === line) continue;
+    kept.push(line);
+  }
+  return kept.join('\n').trim();
 }
 
-export function claimSentences(text: string): string[] {
-  const found: string[] = [];
+export function claimSentences(text: string, prompt = ''): ClaimSentence[] {
+  const found: ClaimSentence[] = [];
+  const prior: string[] = [];
   for (const line of text.split('\n')) {
     for (const sentence of splitSentences(line)) {
-      if (mentionsPlanOrFeature(sentence)) found.push(sentence);
+      const context = `${prompt}\n${prior.join(' ')}`;
+      if (mentionsPlanOrFeature(sentence, context)) found.push({ id: `s${found.length}`, text: sentence });
+      prior.push(sentence);
     }
   }
   return found;
 }
 
-/** Fail closed: a thrown classifier or a null verdict list drops plan and feature sentences. */
+export function claimCheckMessages(claims: ClaimSentence[], lang: GenerateLang) {
+  const ask =
+    lang === 'en'
+      ? 'Classify each sentence id against the plan-feature table. Reply with JSON only: {"verdicts":[{"id":"s0","v":"ok"}]}. Use the sentence id, not the array position. ok means the sentence matches the table. wrong means it contradicts the table. unsure means you cannot tell. CLAIM_VERDICTS'
+      : 'Phân loại từng id câu theo bảng plan-feature. Chỉ trả JSON: {"verdicts":[{"id":"s0","v":"ok"}]}. Dùng id của câu, không dùng vị trí trong mảng. ok là câu đúng với bảng. wrong là câu trái bảng. unsure là không chắc. CLAIM_VERDICTS';
+  return [
+    { role: 'system', content: `${ask}\n\n${formatPlanFeatureTable(lang)}` },
+    { role: 'user', content: claims.map((claim) => `${claim.id}. ${claim.text}`).join('\n') },
+  ];
+}
+
+const CLAIM_CHECK_TIMEOUT_MS = 5000;
+
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error('claim-check-timeout')), ms);
+    promise.then(
+      (value) => {
+        clearTimeout(timer);
+        resolve(value);
+      },
+      (error) => {
+        clearTimeout(timer);
+        reject(error);
+      },
+    );
+  });
+}
+
+function chunkClaims<T>(items: T[], size: number): T[][] {
+  const chunks: T[][] = [];
+  for (let i = 0; i < items.length; i += size) chunks.push(items.slice(i, i + size));
+  return chunks;
+}
+
+/**
+ * Classify claims in parallel batches, keyed by sentence id.
+ * A timeout or parse miss leaves that id null and does not move the others.
+ * Missing ids are retried once.
+ */
+export async function gatherVerdicts(
+  claims: ClaimSentence[],
+  ask: (group: ClaimSentence[]) => Promise<string>,
+  options?: { chunkSize?: number; timeoutMs?: number },
+): Promise<Map<string, ClaimVerdict | null>> {
+  const chunkSize = options?.chunkSize ?? 4;
+  const timeoutMs = options?.timeoutMs ?? CLAIM_CHECK_TIMEOUT_MS;
+  const map = new Map<string, ClaimVerdict | null>();
+  const fill = async (group: ClaimSentence[]) => {
+    const chunks = chunkClaims(group, chunkSize);
+    await Promise.all(
+      chunks.map(async (chunk) => {
+        try {
+          const raw = await withTimeout(ask(chunk), timeoutMs);
+          const parsed = parseClaimVerdicts(raw, chunk);
+          for (const claim of chunk) map.set(claim.id, parsed.get(claim.id) ?? map.get(claim.id) ?? null);
+        } catch {
+          for (const claim of chunk) if (!map.has(claim.id)) map.set(claim.id, null);
+        }
+      }),
+    );
+  };
+  await fill(claims);
+  const missing = claims.filter((claim) => map.get(claim.id) == null);
+  if (missing.length && missing.length < claims.length + 1) await fill(missing);
+  return map;
+}
+
+type SentenceAction = 'kept' | 'dropped' | 'rewritten';
+
+function resolveSentence(
+  sentence: string,
+  verdict: ClaimVerdict | null | undefined,
+  lang: GenerateLang,
+  context: string,
+): { text: string; action: SentenceAction } {
+  if (verdict === 'ok') return { text: sentence, action: 'kept' };
+  const confirmed = tableConfirms(sentence);
+  const contradicts = tableContradicts(sentence, context);
+  if (verdict == null || verdict === 'unsure') {
+    if (confirmed || !contradicts) return { text: sentence, action: 'kept' };
+  } else if (confirmed) {
+    return { text: sentence, action: 'kept' };
+  }
+  const replacement = rewriteFromTable(sentence, lang, context);
+  if (!replacement) return { text: '', action: 'dropped' };
+  if (foldFeature(replacement) === foldFeature(sentence)) return { text: sentence, action: 'kept' };
+  return { text: replacement, action: 'rewritten' };
+}
+
+/**
+ * Apply one verdict per sentence id. A null verdict keeps a sentence the table
+ * confirms or that the pre-pass left in place, and rewrites a sentence the table contradicts.
+ */
+export function applyClaimVerdicts(
+  text: string,
+  lang: GenerateLang,
+  verdicts: Map<string, ClaimVerdict | null>,
+  prompt = '',
+): { text: string; counts: ClaimCheckCounts } {
+  const counts: ClaimCheckCounts = { kept: 0, dropped: 0, rewritten: 0 };
+  const prior: string[] = [];
+  let claimIndex = 0;
+  const seen = new Set<string>();
+  const next = text
+    .split('\n')
+    .map((line) =>
+      splitSentences(line)
+        .map((sentence) => {
+          const context = `${prompt}\n${prior.join(' ')}`;
+          prior.push(sentence);
+          if (!mentionsPlanOrFeature(sentence, context)) return sentence;
+          const id = `s${claimIndex}`;
+          claimIndex += 1;
+          const verdict = verdicts.has(id) ? verdicts.get(id) : null;
+          const resolved = resolveSentence(sentence, verdict ?? null, lang, context);
+          const folded = foldFeature(resolved.text);
+          if (resolved.action === 'rewritten' && folded && seen.has(folded)) {
+            counts.rewritten += 1;
+            return '';
+          }
+          if (folded) seen.add(folded);
+          counts[resolved.action] += 1;
+          return resolved.text;
+        })
+        .filter(Boolean)
+        .join(' '),
+    )
+    .join('\n');
+  return { text: dropEmptyHeadings(next), counts };
+}
+
+export function shortDocsFallback(prompt: string, lang: GenerateLang): string {
+  const folded = foldFeature(prompt);
+  let url = 'https://developers.cloudflare.com';
+  if (/logpush/.test(folded)) url = 'https://developers.cloudflare.com/logs/logpush/';
+  else if (SDD.test(folded)) url = 'https://developers.cloudflare.com/waf/managed-rules/reference/sensitive-data-detection/';
+  else if (/nameserver|mat bao/.test(folded)) url = 'https://developers.cloudflare.com/dns/zone-setups/full-setup/setup/';
+  else if (/bot/.test(folded)) url = 'https://developers.cloudflare.com/bots/get-started/super-bot-fight-mode/';
+  else if (/owasp|managed ruleset|\bwaf\b|\blog\b/.test(folded)) url = 'https://developers.cloudflare.com/waf/custom-rules/';
+  return lang === 'en'
+    ? `Use the Cloudflare dashboard for this step. Docs: ${url}`
+    : `Dùng dashboard Cloudflare cho bước này. Tài liệu: ${url}`;
+}
+
+/**
+ * Second pass. The classifier may return a partial id map or throw.
+ * Counts are logged as kept, dropped, and rewritten.
+ */
 export async function reviewPlanClaims(
   text: string,
   lang: GenerateLang,
-  classify: (sentences: string[]) => Promise<ClaimVerdict[] | null>,
+  classify: (sentences: ClaimSentence[]) => Promise<Array<{ id: string; verdict: ClaimVerdict | null }> | null>,
+  options?: { prompt?: string },
 ): Promise<string> {
-  const sentences = claimSentences(text);
-  if (!sentences.length) return text;
-  try {
-    const verdicts = await classify(sentences);
-    return applyClaimVerdicts(text, lang, verdicts);
-  } catch {
-    return applyClaimVerdicts(text, lang, null);
+  const prompt = options?.prompt ?? '';
+  const claims = claimSentences(text, prompt);
+  if (!claims.length) {
+    console.log('claim check kept=0 dropped=0 rewritten=0');
+    return dropEmptyHeadings(text);
   }
+  const verdicts = new Map<string, ClaimVerdict | null>();
+  try {
+    const listed = await classify(claims);
+    if (listed) {
+      for (const item of listed) verdicts.set(item.id, item.verdict);
+    }
+  } catch {
+    /* each claim stays null */
+  }
+  for (const claim of claims) if (!verdicts.has(claim.id)) verdicts.set(claim.id, null);
+  const applied = applyClaimVerdicts(text, lang, verdicts, prompt);
+  console.log(
+    `claim check kept=${applied.counts.kept} dropped=${applied.counts.dropped} rewritten=${applied.counts.rewritten}`,
+  );
+  return applied.text;
 }

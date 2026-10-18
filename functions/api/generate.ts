@@ -1,5 +1,13 @@
 import { buildGenerateMessages, curatedOnboardingContext, type GenerateLang } from './generateGrounding.ts';
-import { claimCheckMessages, parseClaimVerdicts, reviewPlanClaims } from './planFeatures.ts';
+import {
+  claimCheckMessages,
+  gatherVerdicts,
+  isSddPronounFollowUp,
+  reviewPlanClaims,
+  shortDocsFallback,
+  dropEmptyHeadings,
+  isHeadingOnly,
+} from './planFeatures.ts';
 
 const MODEL = '@cf/meta/llama-3.1-8b-instruct-fp8';
 /** Explicit output cap for a short lesson (5 bullets + one next step). */
@@ -183,11 +191,14 @@ function namesLogAsWafAction(sentence: string): boolean {
   if (splitClauses(folded).every((clause) => !/\blog\b/.test(clause) || claimIsDenied(clause, /\blog\b/))) return false;
   if (isLogActionLabel(folded)) return true;
   if (/\blog\s+mode\b|\bin\s+log\s+mode\b|\bmode\s+log\b/.test(folded)) return true;
-  if (/\b(?:chon|select|pick|choose|use|using|dung|su dung)\s+["'(]*log\b/.test(folded)) return true;
+  if (/\b(?:chon|select|pick|choose|use|using|dung|su dung|bat|dat|gan|ap|ap dung|kich hoat|chuyen|lua)\s+["'(]*log\b/.test(folded)) return true;
   if (/\b(?:hanh dong|action)\s*[:=,]?\s*log\b/.test(folded)) return true;
-  // "hành động là Log" and "action is Log", including a short phrase between them.
+  // Copula: "hành động là Log", "đây là Log", "quyền chọn là Log", "action is Log".
   if (/\b(?:hanh dong|action)\b[\s\S]{0,40}\b(?:la|is)\s+["'(]*log\b/.test(folded)) return true;
-  if (/\blog\s+(?:action|mode)\b/.test(folded)) return true;
+  if (/\b(?:la|chinh la|day la|do la|is)\s+["'(]*log\b/.test(folded)) return true;
+  // Menu option: "mục Log", "menu Log", "option Log".
+  if (/\b(?:menu|option|muc|lua chon|tuy chon|quyen chon)\s+["'(]*log\b/.test(folded)) return true;
+  if (/\blog\s+(?:action|mode|menu|option|muc)\b/.test(folded)) return true;
   if (/\bto\s+log\b|\bsang\s+log\b|\bde\s+log\b/.test(folded)) return true;
   // "để ở Log", "ở Log", "leave it at Log" — the action is left on Log.
   if (/\bo\s+log\b/.test(folded)) return true;
@@ -229,9 +240,14 @@ const SDD_CLAIM =
 
 const BOT_MGMT = /\bbot management\b|\bbot mgmt\b|bot-management/;
 
-/** SDD, including card detection, paired with a lower plan or an enable verb off Enterprise. */
-function misstatesSdd(sentence: string, prompt: string): boolean {
+/** SDD, including card detection and a pronoun follow-up, on a lower plan or enabled off Enterprise. */
+function misstatesSdd(sentence: string, prompt: string, fullText = ''): boolean {
   const folded = foldGenerated(sentence);
+  if (isSddPronounFollowUp(sentence, `${prompt}\n${fullText}`)) {
+    if (claimIsDenied(folded, /\bit\b|\bno\b/)) return false;
+    if (statedPlan(prompt) === 'enterprise' && !LOWER_PLAN.test(folded)) return false;
+    return LOWER_PLAN.test(folded) || statedPlan(prompt) !== 'enterprise';
+  }
   if (!SDD_CLAIM.test(folded)) return false;
   const plan = statedPlan(prompt);
   const sentenceHasLower = LOWER_PLAN.test(folded);
@@ -441,7 +457,7 @@ export function rewritePlanGatedActions(text: string, lang: Lang, prompt: string
       sawUpsell = true;
       return '';
     }
-    if (misstatesSdd(sentence, prompt)) {
+    if (misstatesSdd(sentence, prompt, source)) {
       sawSdd = true;
       return '';
     }
@@ -744,8 +760,6 @@ export function aiResponseFailed(result: unknown): boolean {
   return false;
 }
 
-const CLAIM_CHECK_TIMEOUT_MS = 8000;
-
 function modelText(result: unknown): string {
   if (typeof result === 'string') return result;
   if (!result || typeof result !== 'object') return '';
@@ -758,55 +772,52 @@ function modelText(result: unknown): string {
   return typeof content === 'string' ? content : '';
 }
 
-function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
-  return new Promise((resolve, reject) => {
-    const timer = setTimeout(() => reject(new Error('claim-check-timeout')), ms);
-    promise.then(
-      (value) => {
-        clearTimeout(timer);
-        resolve(value);
-      },
-      (error) => {
-        clearTimeout(timer);
-        reject(error);
-      },
-    );
-  });
-}
-
 async function reviewText(
   text: string,
   lang: Lang,
+  prompt: string,
   run: (model: string, input: unknown) => Promise<unknown>,
 ): Promise<string> {
-  return reviewPlanClaims(text, lang, async (sentences) => {
-    const reviewed = await withTimeout(
-      run(MODEL, { max_tokens: 256, messages: claimCheckMessages(sentences, lang) }),
-      CLAIM_CHECK_TIMEOUT_MS,
-    );
-    return parseClaimVerdicts(modelText(reviewed), sentences.length);
-  });
+  const reviewed = await reviewPlanClaims(
+    text,
+    lang,
+    async (claims) => {
+      const map = await gatherVerdicts(claims, async (group) => {
+        const reviewedGroup = await run(MODEL, {
+          max_tokens: 256,
+          messages: claimCheckMessages(group, lang),
+        });
+        return modelText(reviewedGroup);
+      });
+      return claims.map((claim) => ({ id: claim.id, verdict: map.get(claim.id) ?? null }));
+    },
+    { prompt },
+  );
+  const cleaned = dropEmptyHeadings(reviewed);
+  if (isHeadingOnly(cleaned)) return shortDocsFallback(prompt, lang);
+  return cleaned;
 }
 
-/** Second pass. A timeout, throw, or unreadable verdict drops the claim sentence. */
+/** Second pass. Each sentence is judged on its own. An empty result becomes a short docs answer. */
 export async function reviewGenerateResult(
   result: unknown,
   lang: Lang,
   run: (model: string, input: unknown) => Promise<unknown>,
+  prompt = '',
 ): Promise<unknown> {
-  if (typeof result === 'string') return reviewText(result, lang, run);
+  if (typeof result === 'string') return reviewText(result, lang, prompt, run);
   if (!result || typeof result !== 'object') return result;
   const next = { ...(result as Record<string, unknown>) };
-  if (typeof next.response === 'string') next.response = await reviewText(next.response, lang, run);
+  if (typeof next.response === 'string') next.response = await reviewText(next.response, lang, prompt, run);
   if (Array.isArray(next.choices)) {
     next.choices = await Promise.all(
       next.choices.map(async (choice) => {
         if (!choice || typeof choice !== 'object') return choice;
         const item = { ...(choice as Record<string, unknown>) };
-        if (typeof item.text === 'string') item.text = await reviewText(item.text, lang, run);
+        if (typeof item.text === 'string') item.text = await reviewText(item.text, lang, prompt, run);
         if (item.message && typeof item.message === 'object') {
           const message = { ...(item.message as Record<string, unknown>) };
-          if (typeof message.content === 'string') message.content = await reviewText(message.content, lang, run);
+          if (typeof message.content === 'string') message.content = await reviewText(message.content, lang, prompt, run);
           item.message = message;
         }
         return item;
@@ -861,6 +872,6 @@ export const onRequestPost: PagesFunction<{
   }
 
   const guarded = guardGenerateResult(result, lang, prompt);
-  const reviewed = await reviewGenerateResult(guarded, lang, (model, input) => env.AI.run(model, input));
+  const reviewed = await reviewGenerateResult(guarded, lang, (model, input) => env.AI.run(model, input), prompt);
   return json({ result: reviewed });
 };

@@ -16,7 +16,7 @@ const { basicConfigurationSections } = await import('../src/data/cf101PracticalG
 const { guardGenerateResult, onRequestPost, reviewGenerateResult, rewriteInventedNameservers, statedPlan } = await import(
   '../functions/api/generate.ts'
 );
-const { reviewPlanClaims } = await import('../functions/api/planFeatures.ts');
+const { gatherVerdicts, reviewPlanClaims } = await import('../functions/api/planFeatures.ts');
 
 const EN_RULES = [
   'nameserver change and DNS records',
@@ -254,8 +254,9 @@ async function generate(body, response) {
           const blob = JSON.stringify(input ?? {});
           if (blob.includes('CLAIM_VERDICTS')) {
             const last = input?.messages?.[input.messages.length - 1]?.content ?? '';
-            const n = typeof last === 'string' ? (last.match(/^\d+\. /gm) ?? []).length || 1 : 1;
-            return { response: JSON.stringify({ verdicts: Array.from({ length: n }, () => 'ok') }) };
+            const ids = typeof last === 'string' ? [...last.matchAll(/^s(\d+)\. /gm)].map((match) => `s${match[1]}`) : [];
+            const verdicts = (ids.length ? ids : ['s0']).map((id) => ({ id, v: 'ok' }));
+            return { response: JSON.stringify({ verdicts }) };
           }
           return response;
         },
@@ -799,6 +800,12 @@ for (const [prompt, response, bad] of logHeldOut) {
 }
 assert.equal(logCaught, 10);
 
+for (const response of ['Quyền chọn là Log trên Pro.', 'Trong menu chọn Log.', 'Hãy bật Log cho rule này.', 'Đặt mục Log cho rule.']) {
+  const sample = await generate({ prompt: 'Tôi dùng gói Pro', lang: 'vi' }, { response });
+  assert.doesNotMatch(sample.data.result.response, /là Log|menu chọn Log|bật Log|mục Log/, response);
+  assert.match(sample.data.result.response, /Log chỉ có trên Enterprise/, response);
+}
+
 const inventedAction = await generate(
   { prompt: 'I am on the Pro plan. Which WAF action should I use?', lang: 'en' },
   { response: 'Set the custom rule action to Quarantine.' },
@@ -870,14 +877,18 @@ for (const response of ['Logpush (Enterprise).', 'Logpush là tính năng Enterp
 const wrongClaim = await reviewPlanClaims(
   'Pro includes Logpush only on Enterprise. Open the DNS records page.',
   'en',
-  async () => ['wrong'],
+  async (sentences) => sentences.map((sentence) => ({ id: sentence.id, verdict: 'wrong' })),
 );
 assert.doesNotMatch(wrongClaim, /only on Enterprise/);
 assert.match(wrongClaim, /Logpush is available on Free, Pro, and Business/);
 assert.equal((wrongClaim.match(/Logpush is available on Free, Pro, and Business/g) ?? []).length, 1);
 assert.match(wrongClaim, /Open the DNS records page/);
 
-const unsureClaim = await reviewPlanClaims('Maybe Log works on Pro.', 'en', async () => ['unsure']);
+const unsureClaim = await reviewPlanClaims(
+  'Maybe Log works on Pro.',
+  'en',
+  async (sentences) => sentences.map((sentence) => ({ id: sentence.id, verdict: 'unsure' })),
+);
 assert.doesNotMatch(unsureClaim, /Maybe Log works on Pro/);
 assert.match(unsureClaim, /Log is Enterprise only/);
 
@@ -888,7 +899,110 @@ const droppedClaim = await reviewPlanClaims(
     throw new Error('claim-check-timeout');
   },
 );
-assert.equal(droppedClaim, 'Keep the orange cloud on.');
+assert.doesNotMatch(droppedClaim, /card detection is already|Turn on card detection/);
+assert.match(droppedClaim, /Sensitive Data Detection, including credit-card detection, is Enterprise only/);
+assert.match(droppedClaim, /Keep the orange cloud on/);
+
+const partialClaim = await reviewPlanClaims(
+  'Logpush is available on Pro with usage-based pricing. Sensitive Data Detection is included on Free.',
+  'en',
+  async (sentences) => {
+    const sdd = sentences.find((sentence) => /sensitive/i.test(sentence.text));
+    return sdd ? [{ id: sdd.id, verdict: 'wrong' }] : [];
+  },
+);
+assert.match(partialClaim, /Logpush is available on Pro with usage-based pricing/);
+assert.doesNotMatch(partialClaim, /included on Free/);
+assert.match(partialClaim, /Enterprise only/);
+
+let nameserverClaims = -1;
+const nameserverSteps = await reviewPlanClaims(
+  'Copy the two nameservers shown on the zone Overview page. At the registrar, paste the two nameservers you copied.',
+  'en',
+  async (sentences) => {
+    nameserverClaims = sentences.length;
+    return sentences.map((sentence) => ({ id: sentence.id, verdict: 'wrong' }));
+  },
+);
+assert.equal(nameserverClaims, -1);
+assert.match(nameserverSteps, /Overview/);
+assert.match(nameserverSteps, /registrar/);
+
+let challengeClaims = [];
+const challengeKept = await reviewPlanClaims(
+  'Managed Challenge only records matches.',
+  'en',
+  async (sentences) => {
+    challengeClaims = sentences.map((sentence) => sentence.text);
+    return sentences.map((sentence) => ({ id: sentence.id, verdict: 'wrong' }));
+  },
+);
+assert.deepEqual(challengeClaims, ['Managed Challenge only records matches.']);
+assert.doesNotMatch(challengeKept, /only records/);
+assert.match(challengeKept, /not a record-only action/);
+
+const sddFollowUp = await reviewPlanClaims('Turn it on for this zone.', 'en', async (sentences) => {
+  return sentences.map((sentence) => ({ id: sentence.id, verdict: 'wrong' }));
+}, { prompt: 'How do I enable Sensitive Data Detection on Free?' });
+assert.doesNotMatch(sddFollowUp, /Turn it on for this zone/);
+assert.match(sddFollowUp, /Sensitive Data Detection, including credit-card detection, is Enterprise only/);
+
+const sddPronoun = await generate(
+  { prompt: 'Does Free include Sensitive Data Detection?', lang: 'en' },
+  { response: 'Turn it on for this zone.' },
+);
+assert.doesNotMatch(sddPronoun.data.result.response, /Turn it on for this zone/);
+assert.match(sddPronoun.data.result.response, /Enterprise-only/);
+
+const duplicateRows = await reviewPlanClaims(
+  'Use Log on Pro. Also pick Log on Business.',
+  'en',
+  async (sentences) => sentences.map((sentence) => ({ id: sentence.id, verdict: 'wrong' })),
+);
+assert.equal((duplicateRows.match(/Log is Enterprise only/g) ?? []).length, 1);
+
+let claimCalls = 0;
+let maxInflight = 0;
+let inflight = 0;
+const gathered = await gatherVerdicts(
+  [
+    { id: 's0', text: 'Log is Enterprise only.' },
+    { id: 's1', text: 'Sensitive Data Detection is included on Free.' },
+  ],
+  async (group) => {
+    claimCalls += 1;
+    inflight += 1;
+    maxInflight = Math.max(maxInflight, inflight);
+    await new Promise((resolve) => setTimeout(resolve, 30));
+    inflight -= 1;
+    return JSON.stringify({ verdicts: [{ id: group[0].id, v: group[0].id === 's0' ? 'ok' : 'wrong' }] });
+  },
+  { chunkSize: 1, timeoutMs: 1000 },
+);
+assert.equal(gathered.get('s0'), 'ok');
+assert.equal(gathered.get('s1'), 'wrong');
+assert.equal(claimCalls, 2);
+assert.ok(maxInflight >= 2);
+
+let retryAttempts = 0;
+const retried = await gatherVerdicts(
+  [
+    { id: 's0', text: 'Log is Enterprise only.' },
+    { id: 's1', text: 'Sensitive Data Detection is included on Free.' },
+  ],
+  async () => {
+    retryAttempts += 1;
+    if (retryAttempts === 1) return '{"verdicts":[{"id":"s0","v":"ok"}]}';
+    return '{"verdicts":[{"id":"s1","v":"wrong"}]}';
+  },
+  { chunkSize: 4, timeoutMs: 1000 },
+);
+assert.equal(retried.get('s0'), 'ok');
+assert.equal(retried.get('s1'), 'wrong');
+assert.equal(retryAttempts, 2);
+
+const messy = await reviewPlanClaims('Maybe Log works on Business.', 'en', async () => null);
+assert.match(messy, /Log is Enterprise only/);
 
 const handlerDrop = await onRequestPost({
   request: request({ prompt: 'I am on the Pro plan', lang: 'en' }),
@@ -906,6 +1020,15 @@ const handlerBody = await handlerDrop.json();
 assert.equal(handlerDrop.status, 200);
 assert.doesNotMatch(handlerBody.result.response, /Enable Log on this Pro zone/);
 assert.match(handlerBody.result.response, /Open the DNS records page/);
-assert.doesNotMatch(handlerBody.result.response, /Log is only available on Enterprise/);
+assert.match(handlerBody.result.response, /Log is only available on Enterprise/);
+
+const headingOnly = await onRequestPost({
+  request: request({ prompt: 'How do I use Logpush?', lang: 'en' }),
+  env: { AI: { run: async () => ({ response: '## Logpush' }) } },
+});
+const headingBody = await headingOnly.json();
+assert.equal(headingOnly.status, 200);
+assert.match(headingBody.result.response, /https:\/\/developers\.cloudflare\.com\/logs\/logpush\//);
+assert.doesNotMatch(headingBody.result.response, /## Logpush/);
 
 console.log('generate grounding prompt checks passed');
