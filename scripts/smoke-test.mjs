@@ -399,29 +399,43 @@ for (const path of toCheck) {
 }
 
 const PERSON_ID = 'https://orangecloud.vn/#person';
-const SITE_ORIGIN = 'https://onboarding.orangecloud.vn';
 
 function canonicalHref(html) {
   const m = html.match(/<link rel="canonical" href="([^"]+)"/i);
   return m ? m[1] : '';
 }
 
+/** Path only — UAT builds use PUBLIC_SITE_URL=https://uat.onboarding.orangecloud.vn. */
 const CANONICAL_CHECKS = [
-  ['/', `${SITE_ORIGIN}/`],
-  ['/glossary', `${SITE_ORIGIN}/glossary/`],
-  ['/products/workers', `${SITE_ORIGIN}/products/workers/`],
-  ['/changelog', `${SITE_ORIGIN}/changelog/`],
-  ['/tracks/application-services', `${SITE_ORIGIN}/tracks/application-services/`],
-  ['/blog/dns-proxy-dam-may-cam-cho-nguoi-moi/', `${SITE_ORIGIN}/blog/dns-proxy-dam-may-cam-cho-nguoi-moi/`],
+  ['/', '/'],
+  ['/glossary', '/glossary/'],
+  ['/products/workers', '/products/workers/'],
+  ['/changelog', '/changelog/'],
+  ['/tracks/application-services', '/tracks/application-services/'],
+  ['/blog/dns-proxy-dam-may-cam-cho-nguoi-moi/', '/blog/dns-proxy-dam-may-cam-cho-nguoi-moi/'],
 ];
 
-for (const [path, expected] of CANONICAL_CHECKS) {
+let canonicalOrigin = '';
+for (const [path, expectedPath] of CANONICAL_CHECKS) {
   try {
     const { status, text, ok } = await fetchPathResolved(path);
     const href = canonicalHref(text);
+    let pathname = '';
+    let origin = '';
+    try {
+      const url = new URL(href);
+      pathname = url.pathname;
+      origin = url.origin;
+    } catch {
+      /* missing or relative */
+    }
+    if (!canonicalOrigin && origin) canonicalOrigin = origin;
     if (!ok) errors.push(`canonical ${path} → HTTP ${status}`);
-    else if (href !== expected) errors.push(`canonical ${path} → ${href || '(missing)'} (expected ${expected})`);
-    else console.log(`✓ (canonical) ${path}`);
+    else if (pathname !== expectedPath) {
+      errors.push(`canonical ${path} → ${href || '(missing)'} (expected path ${expectedPath})`);
+    } else if (canonicalOrigin && origin !== canonicalOrigin) {
+      errors.push(`canonical ${path} → origin ${origin} (expected ${canonicalOrigin})`);
+    } else console.log(`✓ (canonical) ${path}`);
   } catch (e) {
     errors.push(`canonical ${path} → ${e.message}`);
   }
@@ -431,6 +445,7 @@ try {
   const home = await fetchPath('/');
   if (!home.ok) errors.push(`seo / → HTTP ${home.status}`);
   else {
+    const before = errors.length;
     if (/<meta name="twitter:site"/i.test(home.text)) errors.push('seo / → twitter:site is still present');
     if (!home.text.includes('Not a Cloudflare, Inc. publication.')) {
       errors.push('seo / → missing non-affiliation disclaimer');
@@ -439,7 +454,7 @@ try {
     if (/"worksFor"\s*:/.test(home.text) || /"jobTitle"\s*:/.test(home.text)) {
       errors.push('seo / → schema includes a Cloudflare role (worksFor or jobTitle)');
     }
-    console.log('✓ (seo) homepage schema, disclaimer, no twitter:site');
+    if (errors.length === before) console.log('✓ (seo) homepage schema, disclaimer, no twitter:site');
   }
 } catch (e) {
   errors.push(`seo / → ${e.message}`);
@@ -465,9 +480,17 @@ try {
   else if (!/noindex/i.test(missing.text)) errors.push('soft-404 page → missing noindex');
   else if (!missing.text.includes('Not a Cloudflare, Inc. publication.')) {
     errors.push('soft-404 page → missing disclaimer');
-  }   else if (canonicalHref(missing.text) !== `${SITE_ORIGIN}/404`) {
-    errors.push(`soft-404 page → canonical ${canonicalHref(missing.text) || '(missing)'} (expected ${SITE_ORIGIN}/404)`);
-  } else console.log('✓ (seo) unknown URL returns 404');
+  } else {
+    let pathname = '';
+    try {
+      pathname = new URL(canonicalHref(missing.text)).pathname;
+    } catch {
+      pathname = '';
+    }
+    if (pathname !== '/404') {
+      errors.push(`soft-404 page → canonical ${canonicalHref(missing.text) || '(missing)'} (expected path /404)`);
+    } else console.log('✓ (seo) unknown URL returns 404');
+  }
 } catch (e) {
   errors.push(`soft-404 → ${e.message}`);
 }
