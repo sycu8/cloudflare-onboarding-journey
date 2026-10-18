@@ -108,13 +108,19 @@ assert.match(dns, /nameserver/i);
 assert.match(dns, /dash\.cloudflare\.com/);
 assert.match(dns, /Overview/);
 assert.match(dns, /một lần/);
+assert.match(dns, /dán đúng hai nameserver/);
+assert.match(dns, /https:\/\/developers\.cloudflare\.com\/dns\/zone-setups\/full-setup\/setup\//);
 assert.doesNotMatch(dns, /ns1\.cloudflare\.com/i);
 assert.doesNotMatch(dns, /<tên>\.ns\.cloudflare\.com/);
 assert.doesNotMatch(dns, /<name>\.ns\.cloudflare\.com/);
 assert.doesNotMatch(dns, /DNS map/);
 assert.doesNotMatch(dns, /\*\.ns\.cloudflare\.com/);
 const dnsEn = curatedOnboardingContext('change nameservers at the registrar', 'en');
+assert.match(dnsEn, /paste the two nameservers/);
 assert.equal((dnsEn.match(/change nameservers once/g) ?? []).length, 1);
+assert.match(curatedOnboardingContext('Tên miền mua ở Mắt Bão', 'vi'), /dán đúng hai nameserver/);
+assert.match(generateSystemPrompt('en'), /paste those two names at the registrar/);
+assert.match(generateSystemPrompt('vi'), /dán hai tên đó tại registrar/);
 
 const freeOwasp = buildGenerateMessages(
   'Tôi dùng gói Free, bật OWASP Core Ruleset ở đâu và nên để action Log trước không?',
@@ -266,6 +272,7 @@ assert.doesNotMatch(guardedEn.data.result.response, /ns12\.cloudflare\.com/i);
 assert.doesNotMatch(guardedEn.data.result.choices[0].message.content, /foo\.ns\.cloudflare\.com/i);
 assert.doesNotMatch(guardedEn.data.result.choices[0].text, /ns\.cloudflare\.com/i);
 assert.match(guardedEn.data.result.response, /Copy the two nameservers shown on the zone Overview page/);
+assert.match(guardedEn.data.result.response, /paste the two nameservers you copied from the zone Overview page/);
 assert.doesNotMatch(guardedEn.data.result.response, /Set copy/);
 assert.match(guardedEn.data.result.choices[0].message.content, /Overview/);
 assert.match(guardedEn.data.result.choices[0].text, /Overview/);
@@ -401,6 +408,9 @@ const dnsRefusal = await generate(
 assert.match(dnsRefusal.data.result.response, /Overview/);
 assert.match(dnsRefusal.data.result.response, /dash\.cloudflare\.com/);
 assert.match(dnsRefusal.data.result.response, /registrar/);
+assert.match(dnsRefusal.data.result.response, /dán đúng hai nameserver/);
+assert.match(dnsRefusal.data.result.response, /full-setup\/setup/);
+assert.equal((dnsRefusal.data.result.response.match(/dán đúng hai nameserver/g) ?? []).length, 1);
 assert.doesNotMatch(dnsRefusal.data.result.response, /không chắc/);
 
 const keptSteps = await generate(
@@ -408,7 +418,30 @@ const keptSteps = await generate(
   { response: 'Mở trang Overview của zone và copy hai nameserver.' },
 );
 assert.match(keptSteps.data.result.response, /Overview/);
+assert.match(keptSteps.data.result.response, /dán hai nameserver vừa copy/);
+assert.match(keptSteps.data.result.response, /registrar/);
 assert.doesNotMatch(keptSteps.data.result.response, /Làm theo các bước sau/);
+assert.equal((keptSteps.data.result.response.match(/dán hai nameserver vừa copy/g) ?? []).length, 1);
+
+const alreadyPasted = await generate(
+  { prompt: 'Cách đổi nameserver sang Cloudflare cho tên miền mua ở Mắt Bão', lang: 'vi' },
+  { response: 'Tại registrar, dán hai nameserver vừa copy từ trang Overview của zone.' },
+);
+assert.equal((alreadyPasted.data.result.response.match(/dán hai nameserver vừa copy/g) ?? []).length, 1);
+
+const pointDomain = await generate(
+  { prompt: 'How do I point my domain at Cloudflare?', lang: 'en' },
+  { response: 'Open the zone Overview and copy the two names shown there.' },
+);
+assert.match(pointDomain.data.result.response, /Overview/);
+assert.match(pointDomain.data.result.response, /paste the two nameservers you copied/);
+assert.equal((pointDomain.data.result.response.match(/paste the two nameservers you copied/g) ?? []).length, 1);
+
+const registrarLock = await generate(
+  { prompt: 'What does the registrar lock mean?', lang: 'en' },
+  { response: 'The registrar lock stops a transfer.' },
+);
+assert.equal(registrarLock.data.result.response, 'The registrar lock stops a transfer.');
 
 const otherRefusal = await generate(
   { prompt: 'Durable Objects là gì?', lang: 'vi' },
@@ -422,5 +455,159 @@ const saveClaim = await generate(
 );
 assert.doesNotMatch(saveClaim.data.result.response, /enables all rules/i);
 assert.match(saveClaim.data.result.response, /Save does not enable every rule/);
+
+const businessPlan = 'Tôi dùng gói Business. Tạo custom rule thử nghiệm thế nào?';
+const enBusiness = 'I am on the Business plan. How do I test a custom rule?';
+const reportedLog = [
+  'Business có thể dùng Log.',
+  'The Business plan supports Log.',
+  'Log is available on Business.',
+  'Hãy để ở Log.',
+  'Actions: Block, Managed Challenge, Log.',
+];
+for (const response of reportedLog) {
+  const sample = await generate({ prompt: response.includes('Business có') || response.includes('để ở') ? businessPlan : enBusiness, lang: response.includes('có') || response.includes('để') ? 'vi' : 'en' }, { response });
+  const line = /có|để/.test(response) ? /Log chỉ có trên Enterprise/ : /Log is only available on Enterprise/;
+  assert.match(sample.data.result.response, line, response);
+  assert.match(sample.data.result.response, /Managed Challenge/, response);
+  assert.doesNotMatch(sample.data.result.response, /có thể dùng Log|supports Log|available on Business|để ở Log|Challenge, Log/i, response);
+  assert.equal((sample.data.result.response.match(line) ?? []).length, 1, response);
+}
+
+const heldOutLog = [
+  { prompt: businessPlan, lang: 'vi', response: 'Gói Business hỗ trợ action Log.', banned: /hỗ trợ action Log/ },
+  { prompt: enBusiness, lang: 'en', response: 'Pro includes Log.', banned: /includes Log/ },
+  { prompt: enBusiness, lang: 'en', response: 'You can leave the action at Log for a day.', banned: /at Log/ },
+  { prompt: enBusiness, lang: 'en', response: 'Skip, Allow, or Log.', banned: /or Log/ },
+  { prompt: businessPlan, lang: 'vi', response: 'Các action gồm Block, Managed Challenge và Log.', banned: /và Log/ },
+];
+for (const sampleCase of heldOutLog) {
+  const sample = await generate({ prompt: sampleCase.prompt, lang: sampleCase.lang }, { response: sampleCase.response });
+  const line = sampleCase.lang === 'vi' ? /Log chỉ có trên Enterprise/ : /Log is only available on Enterprise/;
+  assert.match(sample.data.result.response, line, sampleCase.response);
+  assert.match(sample.data.result.response, /Managed Challenge/, sampleCase.response);
+  assert.doesNotMatch(sample.data.result.response, sampleCase.banned, sampleCase.response);
+  assert.equal((sample.data.result.response.match(line) ?? []).length, 1, sampleCase.response);
+}
+
+for (const kept of [
+  { prompt: enBusiness, lang: 'en', response: 'Log is not available on Business.' },
+  { prompt: enBusiness, lang: 'en', response: 'The Business plan does not support Log.' },
+  { prompt: businessPlan, lang: 'vi', response: 'Business không có Log.' },
+  { prompt: 'Tôi dùng gói Enterprise', lang: 'vi', response: 'Để ở Log.' },
+  { prompt: 'I am on the Enterprise plan', lang: 'en', response: 'Log is available on Enterprise.' },
+]) {
+  const sample = await generate({ prompt: kept.prompt, lang: kept.lang }, { response: kept.response });
+  assert.equal(sample.data.result.response, kept.response, kept.response);
+}
+
+const reportedSdd = await generate(
+  { prompt: 'I am on the Business plan', lang: 'en' },
+  { response: 'SDD included with Business.' },
+);
+assert.doesNotMatch(reportedSdd.data.result.response, /included with Business/i);
+assert.match(reportedSdd.data.result.response, /Sensitive Data Detection are Enterprise-only/);
+assert.match(reportedSdd.data.result.response, /Do not upgrade to Pro or Business/);
+assert.equal((reportedSdd.data.result.response.match(/Do not upgrade to Pro or Business/g) ?? []).length, 1);
+
+for (const sampleCase of [
+  { lang: 'en', response: 'Sensitive Data Detection comes with the Business plan.', line: /Enterprise-only/ },
+  { lang: 'en', response: 'Pro includes SDD.', line: /Enterprise-only/ },
+  { lang: 'vi', response: 'Sensitive Data Detection đã có trong gói Business.', line: /chỉ có trên Enterprise/ },
+]) {
+  const sample = await generate({ prompt: 'I am on Business', lang: sampleCase.lang }, { response: sampleCase.response });
+  assert.doesNotMatch(sample.data.result.response, /comes with the Business plan|includes SDD|đã có trong gói Business/, sampleCase.response);
+  assert.match(sample.data.result.response, sampleCase.line, sampleCase.response);
+  const upgrade = sampleCase.lang === 'vi' ? /Đừng nâng cấp lên Pro hoặc Business/ : /Do not upgrade to Pro or Business/;
+  assert.equal((sample.data.result.response.match(upgrade) ?? []).length, 1, sampleCase.response);
+}
+
+for (const kept of [
+  { lang: 'en', response: 'Log is only available on Enterprise. On Free, Pro, and Business, use Managed Challenge instead of Log.' },
+  { lang: 'vi', response: 'Log chỉ có trên Enterprise. Trên Free, Pro và Business, hãy dùng Managed Challenge thay cho Log.' },
+  { lang: 'en', response: 'Log and Sensitive Data Detection are Enterprise-only. Do not upgrade to Pro or Business for them. Use Managed Challenge instead of Log.' },
+]) {
+  const sample = await generate({ prompt: 'I am on the Business plan', lang: kept.lang }, { response: kept.response });
+  assert.equal(sample.data.result.response, kept.response, kept.response);
+}
+
+for (const kept of [
+  'SDD is not included with Business.',
+  'Sensitive Data Detection is Enterprise-only.',
+  'Business không hỗ trợ Log.',
+]) {
+  const sample = await generate({ prompt: 'I am on the Business plan', lang: 'en' }, { response: kept });
+  assert.equal(sample.data.result.response, kept, kept);
+}
+
+for (const kept of [
+  ['Save does not enable every rule. The deployment runs a subset of rules.', 'Save does not enable every rule. The deployment runs a subset of rules.'],
+  ['Save doesn\u2019t enable all rules.', "Save doesn't enable all rules."],
+  ['Saving will not turn every rule on.', 'Saving will not turn every rule on.'],
+  ['Save không bật mọi rule.', 'Save không bật mọi rule.'],
+  ['Save không bật tất cả rule.', 'Save không bật tất cả rule.'],
+]) {
+  const sample = await generate(
+    { prompt: 'How do I turn on the Cloudflare Managed Ruleset on Business?', lang: 'en' },
+    { response: kept[0] },
+  );
+  assert.equal(sample.data.result.response, kept[1], kept[0]);
+}
+
+for (const response of ['Sau khi Save, mọi rule đều chạy.', 'Save bật tất cả rule.']) {
+  const sample = await generate(
+    { prompt: 'Cách bật Cloudflare Managed Ruleset trên Business?', lang: 'vi' },
+    { response },
+  );
+  assert.doesNotMatch(sample.data.result.response, /mọi rule đều chạy|bật tất cả rule/, response);
+  assert.match(sample.data.result.response, /Save không bật mọi rule/, response);
+  assert.equal((sample.data.result.response.match(/Save không bật mọi rule/g) ?? []).length, 1, response);
+}
+
+const owaspFree = await generate(
+  { prompt: 'Tôi dùng gói Free. Bật OWASP Core Ruleset ở đâu?', lang: 'vi' },
+  { response: 'Bật OWASP Core Ruleset trong Security → Settings.' },
+);
+assert.doesNotMatch(owaspFree.data.result.response, /Bật OWASP Core Ruleset trong/);
+assert.match(owaspFree.data.result.response, /cần Pro trở lên/);
+assert.match(owaspFree.data.result.response, /Cloudflare Free Managed Ruleset/);
+assert.match(owaspFree.data.result.response, /https:\/\/developers\.cloudflare\.com\/waf\/managed-rules\//);
+assert.equal((owaspFree.data.result.response.match(/cần Pro trở lên/g) ?? []).length, 1);
+
+const owaspHeldOut = await generate(
+  { prompt: 'I am on the Free plan. Should I deploy the OWASP Core Ruleset?', lang: 'en' },
+  { response: 'On the Free plan, deploy the OWASP Core Ruleset for this zone.' },
+);
+assert.doesNotMatch(owaspHeldOut.data.result.response, /deploy the OWASP Core Ruleset/i);
+assert.match(owaspHeldOut.data.result.response, /needs Pro or above/);
+assert.match(owaspHeldOut.data.result.response, /not on the Free plan/);
+assert.match(owaspHeldOut.data.result.response, /https:\/\/developers\.cloudflare\.com\/waf\/managed-rules\//);
+
+const owaspShort = await generate(
+  { prompt: 'On the Free plan, where is the OWASP Core Ruleset?', lang: 'en' },
+  { response: 'Enable it under Security → Settings.' },
+);
+assert.doesNotMatch(owaspShort.data.result.response, /Enable it under Security/);
+assert.match(owaspShort.data.result.response, /needs Pro or above/);
+
+const owaspKept = await generate(
+  { prompt: 'Tôi dùng gói Free. OWASP Core Ruleset có trên Free không?', lang: 'vi' },
+  { response: 'OWASP Core Ruleset cần Pro trở lên.' },
+);
+assert.equal(owaspKept.data.result.response, 'OWASP Core Ruleset cần Pro trở lên.');
+
+const owaspPro = await generate(
+  { prompt: 'I am on the Pro plan. How do I enable the OWASP Core Ruleset?', lang: 'en' },
+  { response: 'Turn on the OWASP Core Ruleset under Security → Settings.' },
+);
+assert.equal(owaspPro.data.result.response, 'Turn on the OWASP Core Ruleset under Security → Settings.');
+
+const owaspRefusal = await generate(
+  { prompt: 'Tôi dùng gói Free, bật OWASP Core Ruleset ở đâu?', lang: 'vi' },
+  { response: 'Tôi không chắc.' },
+);
+assert.doesNotMatch(owaspRefusal.data.result.response, /không chắc/);
+assert.match(owaspRefusal.data.result.response, /Pro trở lên/);
+assert.match(owaspRefusal.data.result.response, /https:\/\/developers\.cloudflare\.com\/waf\/managed-rules\//);
 
 console.log('generate grounding prompt checks passed');

@@ -22,13 +22,13 @@ const LESSON_STEPS: Record<TopicId, { vi: string[]; en: string[] }> = {
       'Đăng nhập dash.cloudflare.com → Onboard a domain / Add a site.',
       'Review từng record trước khi continue. A/AAAA/CNAME trỏ origin thật; MX cho email; TXT cho SPF/DKIM/DMARC.',
       'Cloudflare tự gán hai nameserver riêng cho từng zone và không đổi được. Mở đúng zone → trang Overview và copy nguyên hai tên đang hiện. Không đoán hostname.',
-      'Hạ TTL trên DNS cũ (nếu còn quyền). Tại registrar, đổi nameserver một lần bằng đúng hai tên vừa copy từ Overview.',
+      'Hạ TTL trên DNS cũ (nếu còn quyền). Tại registrar, dán đúng hai nameserver vừa copy từ trang Overview. Chỉ đổi nameserver một lần. https://developers.cloudflare.com/dns/zone-setups/full-setup/setup/',
     ],
     en: [
       'Sign in at dash.cloudflare.com → Onboard a domain / Add a site.',
       'Review every record before continue. A/AAAA/CNAME point at the real origin; MX for email; TXT for SPF/DKIM/DMARC.',
       'Cloudflare assigns two nameservers to each zone and the assignment cannot be changed. Open that zone → Overview page and copy the two names shown there. Do not guess a hostname.',
-      'Lower TTL on old DNS (if you still can). At the registrar, change nameservers once, using the two names copied from Overview.',
+      'Lower TTL on old DNS (if you still can). At the registrar, paste the two nameservers copied from the zone Overview page, and change nameservers once. https://developers.cloudflare.com/dns/zone-setups/full-setup/setup/',
     ],
   },
   proxy: {
@@ -86,7 +86,7 @@ const TOPICS: Topic[] = [
     id: 'dns',
     // The public DNS accordion summary says "DNS map", which the model repeats as a filler step.
     guideId: '',
-    pattern: /nameserver|\bdns\b|ban ghi|ten mien|\bdomain\b|registrar|\bzone\b/,
+    pattern: /nameserver|\bdns\b|ban ghi|ten mien|\bdomain\b|registrar|\bzone\b|mat bao/,
   },
   {
     id: 'proxy',
@@ -130,7 +130,7 @@ export function generateSystemPrompt(lang: GenerateLang): string {
       '',
       'Grounding rules — follow all of them:',
       '- Only describe Cloudflare steps that really exist: a nameserver change and DNS records, the orange-cloud proxy toggle, the SSL/TLS mode, and WAF managed rules and security settings in the Cloudflare dashboard (dash.cloudflare.com). WAF is available on Free: the Cloudflare Free Managed Ruleset and custom rules. The Cloudflare Managed Ruleset needs Pro or above. The OWASP Core Ruleset needs Pro or above. Log is Enterprise-only. Sensitive Data Detection is Enterprise-only. Simulate is not an action.',
-      '- Never invent credentials, passwords, or plugin or API-key steps. There is no DNS password. WAF is not turned on by adding an API key in WordPress settings. Do not invent nameserver hostnames. Never write a concrete nameserver hostname. Tell the learner to copy the two nameservers shown on that zone’s Overview page. A guessed pair takes the domain and its email offline.',
+      '- Never invent credentials, passwords, or plugin or API-key steps. There is no DNS password. WAF is not turned on by adding an API key in WordPress settings. Do not invent nameserver hostnames. Never write a concrete nameserver hostname. Tell the learner to copy the two nameservers shown on that zone’s Overview page, then paste those two names at the registrar. A guessed pair takes the domain and its email offline.',
       '- Do not tell the learner to upgrade to Pro or Business for Log or Sensitive Data Detection. Both are Enterprise-only. When the plan is not Enterprise, use Managed Challenge instead of Log. The Cloudflare Managed Ruleset is not already on for Pro or Business. Save does not enable every rule.',
       '- If you are not sure a control exists, say you are not sure and point the learner to the Cloudflare dashboard or https://developers.cloudflare.com instead of guessing.',
       '- When curated onboarding notes are included, use only those steps. Do not add filler steps the notes do not contain: no DNS cache, no DNS buffer, and no “DNS map” action. Say the next step once. Do not repeat it.',
@@ -142,7 +142,7 @@ export function generateSystemPrompt(lang: GenerateLang): string {
     '',
     'Quy tắc bám sự thật — làm đủ các ý sau:',
     '- Chỉ mô tả bước Cloudflare có thật: đổi nameserver và bản ghi DNS, công tắc proxy đám mây cam (orange cloud), chế độ SSL/TLS, và WAF managed rules cùng security settings trong dashboard Cloudflare (dash.cloudflare.com). Free đã có WAF: Cloudflare Free Managed Ruleset và custom rules. Cloudflare Managed Ruleset cần Pro trở lên. OWASP Core Ruleset cần Pro trở lên. Log chỉ có trên Enterprise. Sensitive Data Detection chỉ có trên Enterprise. Simulate không phải action.',
-    '- Không bịa thông tin đăng nhập, mật khẩu, bước cài plugin, hoặc bước API key. Không có mật khẩu DNS. Không bật WAF bằng cách thêm API key trong phần cài đặt WordPress. Không bịa hostname nameserver. Không viết hostname nameserver cụ thể. Bảo người học copy đúng hai nameserver đang hiện trên trang Overview của zone đó. Đoán sai cặp nameserver làm tên miền và email ngừng phân giải.',
+      '- Không bịa thông tin đăng nhập, mật khẩu, bước cài plugin, hoặc bước API key. Không có mật khẩu DNS. Không bật WAF bằng cách thêm API key trong phần cài đặt WordPress. Không bịa hostname nameserver. Không viết hostname nameserver cụ thể. Bảo người học copy đúng hai nameserver đang hiện trên trang Overview của zone đó, rồi dán hai tên đó tại registrar. Đoán sai cặp nameserver làm tên miền và email ngừng phân giải.',
     '- Đừng bảo người học nâng cấp lên Pro hoặc Business để có Log hoặc Sensitive Data Detection. Cả hai chỉ có trên Enterprise. Khi plan không phải Enterprise, dùng Managed Challenge thay cho Log. Cloudflare Managed Ruleset không bật sẵn trên Pro hoặc Business. Save không bật mọi rule.',
     '- Nếu không chắc một nút hay một bước có tồn tại, hãy nói là không chắc và hướng người học tới dashboard Cloudflare hoặc https://developers.cloudflare.com, đừng đoán.',
     '- Khi có ghi chú onboarding đi kèm, chỉ dùng các bước đó. Không thêm bước đệm mà ghi chú không có: không bộ đệm DNS, không DNS cache, và không hành động “DNS map”. Nói bước tiếp theo một lần. Đừng lặp lại.',
