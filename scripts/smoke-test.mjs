@@ -95,6 +95,7 @@ const ROUTES = [
   '/use-cases/govern-enterprise-ai/',
   '/use-cases/operate-cloudflare-workloads/',
   '/use-cases/operational-excellence/',
+  '/use-cases/ai-security-adoption/',
   '/use-cases/build-saas-platform/',
   '/use-cases/company-wide-security/',
   '/checklists/beginner-cloudflare-checklist',
@@ -395,6 +396,131 @@ for (const path of toCheck) {
   } catch (e) {
     errors.push(`discovered link ${path} → ${e.message}`);
   }
+}
+
+const PERSON_ID = 'https://orangecloud.vn/#person';
+
+function canonicalHref(html) {
+  const m = html.match(/<link rel="canonical" href="([^"]+)"/i);
+  return m ? m[1] : '';
+}
+
+/** Path only — UAT builds use PUBLIC_SITE_URL=https://uat.onboarding.orangecloud.vn. */
+const CANONICAL_CHECKS = [
+  ['/', '/'],
+  ['/glossary', '/glossary/'],
+  ['/products/workers', '/products/workers/'],
+  ['/changelog', '/changelog/'],
+  ['/tracks/application-services', '/tracks/application-services/'],
+  ['/blog/dns-proxy-dam-may-cam-cho-nguoi-moi/', '/blog/dns-proxy-dam-may-cam-cho-nguoi-moi/'],
+];
+
+let canonicalOrigin = '';
+for (const [path, expectedPath] of CANONICAL_CHECKS) {
+  try {
+    const { status, text, ok } = await fetchPathResolved(path);
+    const href = canonicalHref(text);
+    let pathname = '';
+    let origin = '';
+    try {
+      const url = new URL(href);
+      pathname = url.pathname;
+      origin = url.origin;
+    } catch {
+      /* missing or relative */
+    }
+    if (!canonicalOrigin && origin) canonicalOrigin = origin;
+    if (!ok) errors.push(`canonical ${path} → HTTP ${status}`);
+    else if (pathname !== expectedPath) {
+      errors.push(`canonical ${path} → ${href || '(missing)'} (expected path ${expectedPath})`);
+    } else if (canonicalOrigin && origin !== canonicalOrigin) {
+      errors.push(`canonical ${path} → origin ${origin} (expected ${canonicalOrigin})`);
+    } else console.log(`✓ (canonical) ${path}`);
+  } catch (e) {
+    errors.push(`canonical ${path} → ${e.message}`);
+  }
+}
+
+try {
+  const home = await fetchPath('/');
+  if (!home.ok) errors.push(`seo / → HTTP ${home.status}`);
+  else {
+    const before = errors.length;
+    if (/<meta name="twitter:site"/i.test(home.text)) errors.push('seo / → twitter:site is still present');
+    if (!home.text.includes('Not a Cloudflare, Inc. publication.')) {
+      errors.push('seo / → missing non-affiliation disclaimer');
+    }
+    if (!home.text.includes(PERSON_ID)) errors.push(`seo / → WebSite JSON-LD missing ${PERSON_ID}`);
+    if (/"worksFor"\s*:/.test(home.text) || /"jobTitle"\s*:/.test(home.text)) {
+      errors.push('seo / → schema includes a Cloudflare role (worksFor or jobTitle)');
+    }
+    if (errors.length === before) console.log('✓ (seo) homepage schema, disclaimer, no twitter:site');
+  }
+} catch (e) {
+  errors.push(`seo / → ${e.message}`);
+}
+
+try {
+  const post = await fetchPath('/blog/dns-proxy-dam-may-cam-cho-nguoi-moi/');
+  if (!post.ok) errors.push(`seo blog post → HTTP ${post.status}`);
+  else if (!/"@type":"BlogPosting"/.test(post.text)) errors.push('seo blog post → missing BlogPosting');
+  else if (!post.text.includes(PERSON_ID)) errors.push('seo blog post → BlogPosting does not reference the Person @id');
+  else if (/"worksFor"\s*:/.test(post.text) || /"jobTitle"\s*:/.test(post.text)) {
+    errors.push('seo blog post → schema includes a Cloudflare role');
+  } else if (/<meta name="twitter:site"/i.test(post.text)) {
+    errors.push('seo blog post → twitter:site is still present');
+  } else console.log('✓ (seo) blog post BlogPosting');
+} catch (e) {
+  errors.push(`seo blog post → ${e.message}`);
+}
+
+try {
+  const missing = await fetchPath('/this-page-does-not-exist-xyz/');
+  if (missing.status !== 404) errors.push(`soft-404 /this-page-does-not-exist-xyz/ → HTTP ${missing.status} (expected 404)`);
+  else if (!/noindex/i.test(missing.text)) errors.push('soft-404 page → missing noindex');
+  else if (!missing.text.includes('Not a Cloudflare, Inc. publication.')) {
+    errors.push('soft-404 page → missing disclaimer');
+  } else {
+    let pathname = '';
+    try {
+      pathname = new URL(canonicalHref(missing.text)).pathname;
+    } catch {
+      pathname = '';
+    }
+    if (pathname !== '/404') {
+      errors.push(`soft-404 page → canonical ${canonicalHref(missing.text) || '(missing)'} (expected path /404)`);
+    } else console.log('✓ (seo) unknown URL returns 404');
+  }
+} catch (e) {
+  errors.push(`soft-404 → ${e.message}`);
+}
+
+try {
+  const llmsRes = await siteFetch(`${BASE}/llms.txt`, { redirect: 'manual' });
+  const llmsText = await llmsRes.text();
+  const llmsType = (llmsRes.headers.get('content-type') || '').toLowerCase();
+  if (llmsRes.status !== 200) errors.push(`/llms.txt → HTTP ${llmsRes.status}`);
+  else if (llmsType.includes('text/html') || llmsText.includes('<html')) {
+    errors.push('/llms.txt → HTML soft-404');
+  } else if (!llmsType.includes('text/plain')) {
+    errors.push(`/llms.txt → expected text/plain, got ${llmsType || '(none)'}`);
+  } else if (!llmsText.includes('Not a publication of Cloudflare, Inc.')) {
+    errors.push('/llms.txt → missing non-affiliation line');
+  } else console.log('✓ (seo) /llms.txt');
+} catch (e) {
+  errors.push(`/llms.txt → ${e.message}`);
+}
+
+try {
+  const robotsRes = await siteFetch(`${BASE}/robots.txt`, { redirect: 'follow' });
+  const robotsText = await robotsRes.text();
+  const signal = 'Content-Signal: ai-train=no, search=yes, ai-input=no';
+  if (!robotsRes.ok) errors.push(`/robots.txt → HTTP ${robotsRes.status}`);
+  else if (!robotsText.includes(signal)) errors.push(`/robots.txt → Content-Signal changed (${robotsText.trim()})`);
+  else if (/ai-input=yes/.test(robotsText)) errors.push('/robots.txt → ai-input=yes must stay no');
+  else console.log('✓ (seo) robots Content-Signal unchanged');
+} catch (e) {
+  errors.push(`/robots.txt → ${e.message}`);
 }
 
 console.log('\n--- Summary ---');

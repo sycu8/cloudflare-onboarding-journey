@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import { assetUrl } from '../lib/assets';
 import { siteSeo, formatTitle } from '../lib/seo';
+import NonAffiliationNote from '../components/chrome/NonAffiliationNote.astro';
 
 const faviconHref = assetUrl('favicon.svg');
 const siteName = siteSeo.name;
@@ -48,5 +49,8 @@ const titleEn = formatTitle('Admin', siteName);
   </head>
   <body class="admin-body">
     <slot />
+    <div class="container py-6">
+      <NonAffiliationNote />
+    </div>
   </body>
 </html>
