@@ -48,16 +48,47 @@ export const basicConfigurationSections: PracticalGuideSection[] = [
     id: 'waf-lab',
     title: { vi: 'Cấu hình WAF (lab)', en: 'WAF configuration (lab)' },
     summary: {
-      vi: 'Managed Ruleset bảo vệ nhanh; Custom rules và Rate limiting cho policy riêng.',
-      en: 'Managed Ruleset for quick protection; custom rules and rate limiting for your policies.',
+      vi: 'Free dùng Free Managed Ruleset (bật sẵn). Cloudflare Managed Ruleset và OWASP Core cần Pro trở lên.',
+      en: 'Free uses the Free Managed Ruleset (already on). The Cloudflare Managed Ruleset and OWASP Core need Pro or above.',
     },
-    docsPath: '/waf/',
+    docsPath: '/waf/managed-rules/',
     bullets: [
-      { text: { vi: 'Bật Cloudflare Managed Ruleset — chặn path nhạy cảm (.git, secrets) ngay.', en: 'Enable Managed Ruleset — blocks sensitive paths (.git, secrets) quickly.' } },
-      { text: { vi: 'Actions: Block, Managed Challenge, JS Challenge, Interactive Challenge, Log.', en: 'Actions: Block, Managed Challenge, JS Challenge, Interactive Challenge, Log.' } },
-      { text: { vi: 'Managed Challenge cấp cookie cf_clearance — request sau không bị challenge lại.', en: 'Managed Challenge sets cf_clearance — subsequent requests skip re-challenge.' } },
-      { text: { vi: 'Rate limiting: ví dụ 5 req/phút/IP cho /login — block 429 khi vượt ngưỡng.', en: 'Rate limiting: e.g. 5 req/min/IP on /login — 429 when exceeded.' } },
-      { text: { vi: 'Xem Security → Analytics → Events để phân tích block theo IP, country, rule.', en: 'Use Security → Analytics → Events to analyze blocks by IP, country, rule.' } },
+      {
+        text: {
+          vi: 'Free: Cloudflare Free Managed Ruleset có trên mọi plan và được bật sẵn. Không bật Cloudflare Managed Ruleset hay OWASP Core trên Free — hai ruleset đó cần Pro trở lên. Sensitive Data Detection chỉ có trên Enterprise.',
+          en: 'Free: the Cloudflare Free Managed Ruleset is on every plan and is already deployed. Do not turn on the Cloudflare Managed Ruleset or OWASP Core on Free — both need Pro or above. Sensitive Data Detection is Enterprise only.',
+        },
+      },
+      {
+        text: {
+          vi: 'Pro và Business: Security → Settings, lọc Web application exploits, bật Cloudflare managed ruleset. OWASP Core là tùy chọn và cũng cần Pro trở lên. Xem deployment settings rồi Save. Mặc định chỉ bật một phần rule. Không override mọi rule sang Block.',
+          en: 'Pro and Business: Security → Settings, filter by Web application exploits, turn on Cloudflare managed ruleset. OWASP Core is optional and also needs Pro or above. Review the deployment settings, then Save. The default enables a subset of rules. Do not override every rule to Block.',
+        },
+      },
+      {
+        text: {
+          vi: 'Enterprise: cùng đường Security → Settings. Muốn xem rule mới trước khi chặn thì dùng action Log, rồi xem Security Events. Free, Pro và Business không có Log: bắt đầu bằng Managed Challenge, xem Security Events, rồi mới đổi sang Block. Simulate không phải action.',
+          en: 'Enterprise: same Security → Settings path. To watch a new rule before blocking, use the Log action, then review Security Events. Free, Pro, and Business have no Log: start with Managed Challenge, review Security Events, then switch to Block. Simulate is not an action.',
+        },
+      },
+      {
+        text: {
+          vi: 'Sau khi đã bật ruleset: Security → Security rules, lọc Managed rules, mở rule có action Execute nếu cần đổi scope hoặc override.',
+          en: 'After a ruleset is on: Security → Security rules, filter Managed rules, and open the rule whose action is Execute when you need to change scope or an override.',
+        },
+      },
+      {
+        text: {
+          vi: 'Action khi override: Block, Managed Challenge, Non-Interactive Challenge, Interactive Challenge. Log chỉ có trên Enterprise.',
+          en: 'Override actions: Block, Managed Challenge, Non-Interactive Challenge, Interactive Challenge. Log is Enterprise-only.',
+        },
+      },
+      {
+        text: {
+          vi: 'WAF chỉ thấy HTTP khi hostname đang proxied (đám mây cam). Không bật WAF trong cài đặt WordPress.',
+          en: 'WAF only sees HTTP when the hostname is proxied (orange cloud). Do not enable WAF inside WordPress settings.',
+        },
+      },
     ],
   },
   {

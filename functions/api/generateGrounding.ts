@@ -99,8 +99,8 @@ const TOPICS: Topic[] = [
   },
   {
     id: 'waf',
-    // Practical-guide waf-lab still says "block now" and lists Log as a general action.
-    // Keep that page copy out of the prompt; the plan-gated steps above are the source.
+    // The public waf-lab accordion uses the same plan-gated steps. Keep them out of
+    // the prompt so the model does not see the notes twice.
     guideId: '',
     pattern: /\bwaf\b|firewall|tuong lua|managed rule|wordpress|security setting|bao mat/,
   },

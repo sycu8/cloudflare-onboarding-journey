@@ -12,6 +12,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const { buildGenerateMessages, curatedOnboardingContext, generateSystemPrompt } = await import(
   '../functions/api/generateGrounding.ts'
 );
+const { basicConfigurationSections } = await import('../src/data/cf101PracticalGuides.ts');
 const { onRequestPost } = await import('../functions/api/generate.ts');
 
 const EN_RULES = [
@@ -117,6 +118,24 @@ assert.match(sent, /Security → Settings/);
 assert.doesNotMatch(sent, /Log \/ Simulate/);
 assert.doesNotMatch(sent, /Security → WAF → Managed rules/);
 assert.doesNotMatch(sent, /mật khẩu DNS là/);
+
+const wafLab = basicConfigurationSections.find((section) => section.id === 'waf-lab');
+assert.ok(wafLab);
+const wafCopy = [wafLab.summary.vi, wafLab.summary.en, ...wafLab.bullets.flatMap((bullet) => [bullet.text.vi, bullet.text.en])].join(
+  '\n',
+);
+assert.match(wafCopy, /Security → Settings/);
+assert.match(wafCopy, /Security → Security rules/);
+assert.match(wafCopy, /Pro trở lên/);
+assert.match(wafCopy, /Pro or above/);
+assert.match(wafCopy, /Simulate không phải action/);
+assert.match(wafCopy, /Simulate is not an action/);
+assert.equal(wafLab.docsPath, '/waf/managed-rules/');
+assert.doesNotMatch(wafCopy, /Log \/ Simulate/);
+assert.doesNotMatch(wafCopy, /blocks sensitive paths/i);
+assert.doesNotMatch(wafCopy, /chặn path nhạy cảm/);
+assert.doesNotMatch(wafCopy, /JS Challenge/);
+assert.doesNotMatch(wafCopy, /Security → WAF → Managed rules/);
 
 const robots = readFileSync(join(root, 'public/robots.txt'), 'utf8');
 assert.match(robots, /Content-Signal:.*ai-input=no/);
