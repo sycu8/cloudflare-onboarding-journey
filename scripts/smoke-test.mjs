@@ -2,6 +2,19 @@
  * Smoke test: all static routes + internal links + API health.
  * Usage: node scripts/smoke-test.mjs [baseUrl]
  */
+import { spawnSync } from 'node:child_process';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const retiredModelTest = spawnSync(
+  process.execPath,
+  ['--experimental-strip-types', join(dirname(fileURLToPath(import.meta.url)), 'test-retired-ai-models.mjs')],
+  { stdio: 'inherit' },
+);
+if (retiredModelTest.status !== 0) {
+  process.exit(retiredModelTest.status ?? 1);
+}
+
 const BASE = (process.argv[2] || 'http://127.0.0.1:4321').replace(/\/$/, '');
 const IS_LOCAL_PREVIEW = /^https?:\/\/(?:127\.0\.0\.1|localhost)(?::\d+)?$/i.test(BASE);
 /** Deploy hash / branch aliases on Pages lack R2 bindings for /assets/* (503). */
