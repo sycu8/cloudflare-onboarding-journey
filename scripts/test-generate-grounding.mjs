@@ -13,7 +13,7 @@ const { buildGenerateMessages, curatedOnboardingContext, generateSystemPrompt } 
   '../functions/api/generateGrounding.ts'
 );
 const { basicConfigurationSections } = await import('../src/data/cf101PracticalGuides.ts');
-const { guardGenerateResult, onRequestPost, rewriteInventedNameservers } = await import(
+const { guardGenerateResult, onRequestPost, rewriteInventedNameservers, statedPlan } = await import(
   '../functions/api/generate.ts'
 );
 
@@ -32,6 +32,9 @@ const EN_RULES = [
   'WAF is available on Free',
   'custom rules',
   'no “DNS map” action',
+  'Say the next step once',
+  'Do not tell the learner to upgrade to Pro or Business for Log',
+  'The Cloudflare Managed Ruleset needs Pro or above',
   'say you are not sure',
 ];
 
@@ -50,6 +53,9 @@ const VI_RULES = [
   'Free đã có WAF',
   'custom rules',
   'không hành động “DNS map”',
+  'Nói bước tiếp theo một lần',
+  'Đừng bảo người học nâng cấp lên Pro hoặc Business',
+  'Cloudflare Managed Ruleset cần Pro trở lên',
   'không chắc',
 ];
 
@@ -68,6 +74,10 @@ assert.equal(enMessages[0].content, generateSystemPrompt('en'));
 assert.match(enMessages[1].content, /Security → Settings/);
 assert.match(enMessages[1].content, /Security → Security rules/);
 assert.match(enMessages[1].content, /Free Managed Ruleset/);
+assert.match(enMessages[1].content, /The Cloudflare Managed Ruleset needs Pro or above/);
+assert.match(enMessages[1].content, /is not already on/);
+assert.doesNotMatch(enMessages[1].content, /on by default/i);
+assert.doesNotMatch(enMessages[1].content, /The default enables/);
 assert.match(enMessages[1].content, /Pro or above/);
 assert.match(enMessages[1].content, /Enterprise-only/);
 assert.match(enMessages[1].content, /Simulate is not an action/);
@@ -82,6 +92,8 @@ const viMessages = buildGenerateMessages('Làm sao bật WAF cho website WordPre
 assert.equal(viMessages[0].content, generateSystemPrompt('vi'));
 assert.match(viMessages[1].content, /Security → Settings/);
 assert.match(viMessages[1].content, /Security → Security rules/);
+assert.match(viMessages[1].content, /Cloudflare Managed Ruleset cần Pro trở lên/);
+assert.match(viMessages[1].content, /không bật sẵn/);
 assert.match(viMessages[1].content, /Pro trở lên/);
 assert.match(viMessages[1].content, /Simulate không phải action/);
 assert.doesNotMatch(viMessages[1].content, /Security → WAF → Managed rules/);
@@ -93,9 +105,14 @@ const dns = curatedOnboardingContext('đổi nameserver và bản ghi DNS', 'vi'
 assert.match(dns, /nameserver/i);
 assert.match(dns, /dash\.cloudflare\.com/);
 assert.match(dns, /Overview/);
-assert.match(dns, /ns1\.cloudflare\.com/);
+assert.match(dns, /một lần/);
+assert.doesNotMatch(dns, /ns1\.cloudflare\.com/i);
+assert.doesNotMatch(dns, /<tên>\.ns\.cloudflare\.com/);
+assert.doesNotMatch(dns, /<name>\.ns\.cloudflare\.com/);
 assert.doesNotMatch(dns, /DNS map/);
 assert.doesNotMatch(dns, /\*\.ns\.cloudflare\.com/);
+const dnsEn = curatedOnboardingContext('change nameservers at the registrar', 'en');
+assert.equal((dnsEn.match(/change nameservers once/g) ?? []).length, 1);
 
 const freeOwasp = buildGenerateMessages(
   'Tôi dùng gói Free, bật OWASP Core Ruleset ở đâu và nên để action Log trước không?',
@@ -121,6 +138,11 @@ assert.match(logFirst[1].content, /Security → Settings/);
 assert.match(logFirst[1].content, /Log is Enterprise-only/);
 assert.match(logFirst[1].content, /Simulate is not an action/);
 assert.doesNotMatch(logFirst[1].content, /to enable WAF/i);
+
+assert.equal(curatedOnboardingContext('How do I log in to the dashboard?', 'en'), '');
+assert.match(curatedOnboardingContext('Where is the managed rule set?', 'en'), /The Cloudflare Managed Ruleset needs Pro or above/);
+assert.match(curatedOnboardingContext('I am on Free', 'en'), /The Cloudflare Managed Ruleset needs Pro or above/);
+assert.match(curatedOnboardingContext('I am on Free', 'en'), /is not already on/);
 
 const unrelated = curatedOnboardingContext('Durable Objects là gì?', 'en');
 assert.equal(unrelated, '');
@@ -173,6 +195,10 @@ assert.doesNotMatch(wafCopy, /to enable WAF/i);
 assert.match(wafCopy, /Security → Settings/);
 assert.match(wafCopy, /Security → Security rules/);
 assert.match(wafCopy, /Pro trở lên/);
+assert.match(wafCopy, /is not already on/);
+assert.doesNotMatch(wafCopy, /on by default/i);
+assert.doesNotMatch(wafCopy, /The default enables/);
+assert.match(wafCopy, /do not upgrade to Pro or Business/i);
 assert.match(wafCopy, /Pro or above/);
 assert.match(wafCopy, /Simulate không phải action/);
 assert.match(wafCopy, /Simulate is not an action/);
@@ -234,12 +260,87 @@ assert.equal(guarded.response, guardedEn.data.result.response);
 assert.doesNotMatch(guardedEn.data.result.response, /ns12\.cloudflare\.com/i);
 assert.doesNotMatch(guardedEn.data.result.choices[0].message.content, /foo\.ns\.cloudflare\.com/i);
 assert.doesNotMatch(guardedEn.data.result.choices[0].text, /ns\.cloudflare\.com/i);
-assert.match(guardedEn.data.result.response, /copy the two nameservers shown on the zone Overview page/);
+assert.match(guardedEn.data.result.response, /Copy the two nameservers shown on the zone Overview page/);
+assert.doesNotMatch(guardedEn.data.result.response, /Set copy/);
 assert.match(guardedEn.data.result.choices[0].message.content, /Overview/);
 assert.match(guardedEn.data.result.choices[0].text, /Overview/);
 
 const plain = await generate({ prompt: 'What is orange cloud?', lang: 'en' }, 'Keep the orange cloud on.');
 assert.equal(plain.status, 200);
 assert.equal(plain.data.result, 'Keep the orange cloud on.');
+
+assert.equal(
+  rewriteInventedNameservers('<tên>.ns.cloudflare.com', 'vi'),
+  'Hãy copy hai nameserver đang hiện trên trang Overview của zone.',
+);
+assert.equal(
+  rewriteInventedNameservers('Set ns1.cloudflare.com at the registrar.', 'en'),
+  'Copy the two nameservers shown on the zone Overview page.',
+);
+assert.equal(
+  rewriteInventedNameservers('See https://ns1.cloudflare.com/docs.', 'en'),
+  'Copy the two nameservers shown on the zone Overview page.',
+);
+for (const sample of [
+  'Use _ns1.cloudflare.com.',
+  'Use ns1.cloudflare.net.',
+  'Use ns1a.cloudflare.com.',
+  'Use ns-1.cloudflare.com.',
+  `Use ns1${'\u200B'}.cloudflare.com.`,
+  'Use ｎｓ１．ｃｌｏｕｄｆｌａｒｅ．ｃｏｍ.',
+]) {
+  const cleaned = rewriteInventedNameservers(sample, 'en');
+  assert.equal(cleaned, 'Copy the two nameservers shown on the zone Overview page.', sample);
+  assert.doesNotMatch(cleaned, /cloudflare\.(com|net)/i);
+  assert.doesNotMatch(cleaned, /Set copy|https:\/\/copy|<tên>\.copy/);
+}
+
+assert.equal(statedPlan('I am on the Business plan'), 'business');
+assert.equal(statedPlan('Tôi dùng gói Enterprise'), 'enterprise');
+assert.equal(statedPlan('Should I use Log?'), 'unknown');
+
+const businessLog = await generate(
+  { prompt: 'I am on the Business plan. Should I change the WAF action to Log?', lang: 'en' },
+  { response: 'Yes, change the action to Log and watch events for a day.' },
+);
+assert.equal(businessLog.status, 200);
+assert.match(businessLog.data.result.response, /Log is only available on Enterprise/);
+assert.match(businessLog.data.result.response, /Managed Challenge/);
+assert.doesNotMatch(businessLog.data.result.response, /change the action to Log/i);
+assert.doesNotMatch(businessLog.data.result.response, /upgrade to Pro or Business/i);
+
+const unknownLog = await generate(
+  { prompt: 'Nên đổi action sang Log không?', lang: 'vi' },
+  { response: 'Hãy đổi action sang Log.' },
+);
+assert.match(unknownLog.data.result.response, /Log chỉ có trên Enterprise/);
+assert.match(unknownLog.data.result.response, /Managed Challenge/);
+assert.doesNotMatch(unknownLog.data.result.response, /đổi action sang Log/i);
+
+const enterpriseLog = await generate(
+  { prompt: 'I am on the Enterprise plan. Should I change the action to Log?', lang: 'en' },
+  { response: 'Change the action to Log, then review Security Events.' },
+);
+assert.match(enterpriseLog.data.result.response, /Change the action to Log/);
+
+const upgrade = await generate(
+  { prompt: 'I am on Free. Can I use Sensitive Data Detection?', lang: 'en' },
+  { response: 'Upgrade to Pro or Business for Sensitive Data Detection.' },
+);
+assert.doesNotMatch(upgrade.data.result.response, /^Upgrade to Pro or Business/);
+assert.match(upgrade.data.result.response, /Enterprise-only/);
+assert.match(upgrade.data.result.response, /Do not upgrade to Pro or Business/);
+
+const cmrUpgrade = await generate(
+  { prompt: 'I am on Free', lang: 'en' },
+  { response: 'Upgrade to Pro to turn on the Cloudflare Managed Ruleset.' },
+);
+assert.equal(cmrUpgrade.data.result.response, 'Upgrade to Pro to turn on the Cloudflare Managed Ruleset.');
+
+const login = await generate(
+  { prompt: 'How do I log in?', lang: 'en' },
+  { response: 'Log in at dash.cloudflare.com.' },
+);
+assert.equal(login.data.result.response, 'Log in at dash.cloudflare.com.');
 
 console.log('generate grounding prompt checks passed');

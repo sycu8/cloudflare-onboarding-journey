@@ -48,8 +48,8 @@ export const basicConfigurationSections: PracticalGuideSection[] = [
     id: 'waf-lab',
     title: { vi: 'Cấu hình WAF (lab)', en: 'WAF configuration (lab)' },
     summary: {
-      vi: 'Free đã có WAF: Free Managed Ruleset (bật sẵn) và custom rules. Cloudflare Managed Ruleset và OWASP Core Ruleset cần Pro trở lên.',
-      en: 'Free already has WAF: the Free Managed Ruleset (already on) and custom rules. The Cloudflare Managed Ruleset and the OWASP Core Ruleset need Pro or above.',
+      vi: 'Free đã có WAF: Free Managed Ruleset (bật sẵn) và custom rules. Cloudflare Managed Ruleset cần Pro trở lên. OWASP Core Ruleset cần Pro trở lên.',
+      en: 'Free already has WAF: the Free Managed Ruleset (already on) and custom rules. The Cloudflare Managed Ruleset needs Pro or above. The OWASP Core Ruleset needs Pro or above.',
     },
     docsPath: '/waf/managed-rules/',
     bullets: [
@@ -61,14 +61,14 @@ export const basicConfigurationSections: PracticalGuideSection[] = [
       },
       {
         text: {
-          vi: 'Pro và Business: Security → Settings, lọc Web application exploits, bật Cloudflare managed ruleset. OWASP Core là tùy chọn và cũng cần Pro trở lên. Xem deployment settings rồi Save. Mặc định chỉ bật một phần rule. Không override mọi rule sang Block.',
-          en: 'Pro and Business: Security → Settings, filter by Web application exploits, turn on Cloudflare managed ruleset. OWASP Core is optional and also needs Pro or above. Review the deployment settings, then Save. The default enables a subset of rules. Do not override every rule to Block.',
+          vi: 'Pro và Business: Cloudflare Managed Ruleset không bật sẵn và cần Pro trở lên. Vào Security → Settings, lọc Web application exploits, rồi bật Cloudflare managed ruleset. OWASP Core là tùy chọn và cũng cần Pro trở lên. Xem deployment settings rồi Save. Sau khi bật, chỉ một phần rule chạy. Không override mọi rule sang Block.',
+          en: 'Pro and Business: the Cloudflare Managed Ruleset is not already on, and it needs Pro or above. Go to Security → Settings, filter by Web application exploits, then turn on Cloudflare managed ruleset. OWASP Core is optional and also needs Pro or above. Review the deployment settings, then Save. After you turn it on, only a subset of rules runs. Do not override every rule to Block.',
         },
       },
       {
         text: {
-          vi: 'Enterprise: cùng đường Security → Settings. Muốn xem rule mới trước khi chặn thì dùng action Log, rồi xem Security Events. Free, Pro và Business không có Log: bắt đầu bằng Managed Challenge, xem Security Events, rồi mới đổi sang Block. Simulate không phải action.',
-          en: 'Enterprise: same Security → Settings path. To watch a new rule before blocking, use the Log action, then review Security Events. Free, Pro, and Business have no Log: start with Managed Challenge, review Security Events, then switch to Block. Simulate is not an action.',
+          vi: 'Enterprise: cùng đường Security → Settings. Muốn xem rule mới trước khi chặn thì dùng action Log, rồi xem Security Events. Log và Sensitive Data Detection chỉ có trên Enterprise — đừng nâng cấp lên Pro hoặc Business để có chúng. Free, Pro và Business không có Log: bắt đầu bằng Managed Challenge, xem Security Events, rồi mới đổi sang Block. Simulate không phải action.',
+          en: 'Enterprise: same Security → Settings path. To watch a new rule before blocking, use the Log action, then review Security Events. Log and Sensitive Data Detection are Enterprise-only — do not upgrade to Pro or Business for them. Free, Pro, and Business have no Log: start with Managed Challenge, review Security Events, then switch to Block. Simulate is not an action.',
         },
       },
       {
