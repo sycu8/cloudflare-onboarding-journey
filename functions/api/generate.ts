@@ -22,6 +22,49 @@ function aiFailureMessage(lang: Lang) {
     : 'Workers AI không trả về phản hồi. Vui lòng thử lại.';
 }
 
+/**
+ * Concrete Cloudflare nameserver hostnames. A zone is assigned its own
+ * `<name>.ns.cloudflare.com` pair; `ns1.cloudflare.com` is not that pair.
+ * `developers.cloudflare.com` and `dash.cloudflare.com` do not match.
+ */
+const INVENTED_NAMESERVER =
+  /\b(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.ns\.cloudflare\.com|ns\d*\.cloudflare\.com)\b/gi;
+
+export function nameserverOverviewInstruction(lang: Lang): string {
+  return lang === 'en'
+    ? 'copy the two nameservers shown on the zone Overview page'
+    : 'copy hai nameserver đang hiện trên trang Overview của zone';
+}
+
+/** Replace invented nameserver hostnames with the Overview-page instruction. */
+export function rewriteInventedNameservers(text: string, lang: Lang): string {
+  return text.replace(INVENTED_NAMESERVER, nameserverOverviewInstruction(lang));
+}
+
+function rewriteChoice(choice: unknown, lang: Lang): unknown {
+  if (!choice || typeof choice !== 'object') return choice;
+  const next = { ...(choice as Record<string, unknown>) };
+  if (typeof next.text === 'string') next.text = rewriteInventedNameservers(next.text, lang);
+  if (next.message && typeof next.message === 'object') {
+    const message = { ...(next.message as Record<string, unknown>) };
+    if (typeof message.content === 'string') {
+      message.content = rewriteInventedNameservers(message.content, lang);
+    }
+    next.message = message;
+  }
+  return next;
+}
+
+/** Apply the nameserver guard to the string shapes the generator UI renders. */
+export function guardGenerateResult(result: unknown, lang: Lang): unknown {
+  if (typeof result === 'string') return rewriteInventedNameservers(result, lang);
+  if (!result || typeof result !== 'object') return result;
+  const next = { ...(result as Record<string, unknown>) };
+  if (typeof next.response === 'string') next.response = rewriteInventedNameservers(next.response, lang);
+  if (Array.isArray(next.choices)) next.choices = next.choices.map((choice) => rewriteChoice(choice, lang));
+  return next;
+}
+
 /** True when Workers AI returns nothing usable or an error payload (including code 5028). */
 export function aiResponseFailed(result: unknown): boolean {
   if (result == null) return true;
@@ -91,5 +134,5 @@ export const onRequestPost: PagesFunction<{
     return json({ error: aiFailureMessage(lang) }, 502);
   }
 
-  return json({ result });
+  return json({ result: guardGenerateResult(result, lang) });
 };

@@ -48,15 +48,15 @@ export const basicConfigurationSections: PracticalGuideSection[] = [
     id: 'waf-lab',
     title: { vi: 'Cấu hình WAF (lab)', en: 'WAF configuration (lab)' },
     summary: {
-      vi: 'Free dùng Free Managed Ruleset (bật sẵn). Cloudflare Managed Ruleset và OWASP Core cần Pro trở lên.',
-      en: 'Free uses the Free Managed Ruleset (already on). The Cloudflare Managed Ruleset and OWASP Core need Pro or above.',
+      vi: 'Free đã có WAF: Free Managed Ruleset (bật sẵn) và custom rules. Cloudflare Managed Ruleset và OWASP Core Ruleset cần Pro trở lên.',
+      en: 'Free already has WAF: the Free Managed Ruleset (already on) and custom rules. The Cloudflare Managed Ruleset and the OWASP Core Ruleset need Pro or above.',
     },
     docsPath: '/waf/managed-rules/',
     bullets: [
       {
         text: {
-          vi: 'Free: Cloudflare Free Managed Ruleset có trên mọi plan và được bật sẵn. Không bật Cloudflare Managed Ruleset hay OWASP Core trên Free — hai ruleset đó cần Pro trở lên. Sensitive Data Detection chỉ có trên Enterprise.',
-          en: 'Free: the Cloudflare Free Managed Ruleset is on every plan and is already deployed. Do not turn on the Cloudflare Managed Ruleset or OWASP Core on Free — both need Pro or above. Sensitive Data Detection is Enterprise only.',
+          vi: 'Free đã có WAF: Cloudflare Free Managed Ruleset có trên mọi plan và được bật sẵn, cùng custom rules. Không bật Cloudflare Managed Ruleset hay OWASP Core Ruleset trên Free — hai ruleset đó cần Pro trở lên. Sensitive Data Detection chỉ có trên Enterprise.',
+          en: 'Free already has WAF: the Cloudflare Free Managed Ruleset is on every plan and is already deployed, plus custom rules. Do not turn on the Cloudflare Managed Ruleset or the OWASP Core Ruleset on Free — both need Pro or above. Sensitive Data Detection is Enterprise only.',
         },
       },
       {

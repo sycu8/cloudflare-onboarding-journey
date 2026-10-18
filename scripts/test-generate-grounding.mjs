@@ -13,7 +13,9 @@ const { buildGenerateMessages, curatedOnboardingContext, generateSystemPrompt } 
   '../functions/api/generateGrounding.ts'
 );
 const { basicConfigurationSections } = await import('../src/data/cf101PracticalGuides.ts');
-const { onRequestPost } = await import('../functions/api/generate.ts');
+const { guardGenerateResult, onRequestPost, rewriteInventedNameservers } = await import(
+  '../functions/api/generate.ts'
+);
 
 const EN_RULES = [
   'nameserver change and DNS records',
@@ -26,6 +28,10 @@ const EN_RULES = [
   'Never invent credentials, passwords, or plugin or API-key steps',
   'There is no DNS password',
   'Do not invent nameserver hostnames',
+  'zone’s Overview page',
+  'WAF is available on Free',
+  'custom rules',
+  'no “DNS map” action',
   'say you are not sure',
 ];
 
@@ -40,6 +46,10 @@ const VI_RULES = [
   'Không bịa thông tin đăng nhập, mật khẩu, bước cài plugin, hoặc bước API key',
   'Không có mật khẩu DNS',
   'Không bịa hostname nameserver',
+  'trang Overview của zone',
+  'Free đã có WAF',
+  'custom rules',
+  'không hành động “DNS map”',
   'không chắc',
 ];
 
@@ -49,6 +59,8 @@ for (const phrase of EN_RULES) {
 for (const phrase of VI_RULES) {
   assert.ok(generateSystemPrompt('vi').includes(phrase), `vi prompt missing: ${phrase}`);
 }
+assert.doesNotMatch(generateSystemPrompt('en'), /to enable WAF/i);
+assert.doesNotMatch(generateSystemPrompt('vi'), /để bật WAF/);
 
 const enMessages = buildGenerateMessages('How do I enable the WAF on WordPress?', 'en');
 assert.equal(enMessages[0].role, 'system');
@@ -80,6 +92,35 @@ assert.match(viMessages.map((message) => message.content).join('\n'), /đám mâ
 const dns = curatedOnboardingContext('đổi nameserver và bản ghi DNS', 'vi');
 assert.match(dns, /nameserver/i);
 assert.match(dns, /dash\.cloudflare\.com/);
+assert.match(dns, /Overview/);
+assert.match(dns, /ns1\.cloudflare\.com/);
+assert.doesNotMatch(dns, /DNS map/);
+assert.doesNotMatch(dns, /\*\.ns\.cloudflare\.com/);
+
+const freeOwasp = buildGenerateMessages(
+  'Tôi dùng gói Free, bật OWASP Core Ruleset ở đâu và nên để action Log trước không?',
+  'vi',
+);
+assert.match(freeOwasp[1].content, /Free đã có WAF/);
+assert.match(freeOwasp[1].content, /custom rules/i);
+assert.match(freeOwasp[1].content, /OWASP Core Ruleset/);
+assert.match(freeOwasp[1].content, /Pro trở lên/);
+assert.match(freeOwasp[1].content, /Security → Settings/);
+assert.match(freeOwasp[1].content, /Security → Security rules/);
+assert.match(freeOwasp[1].content, /Log chỉ có trên Enterprise/);
+assert.match(freeOwasp[1].content, /Simulate không phải action/);
+assert.doesNotMatch(freeOwasp[1].content, /Security → WAF → Managed rules/);
+assert.doesNotMatch(freeOwasp[1].content, /để bật WAF/);
+
+const logFirst = buildGenerateMessages('On the Free plan, should I set the Log action before Block?', 'en');
+assert.match(logFirst[1].content, /Free already has WAF/);
+assert.match(logFirst[1].content, /custom rules/i);
+assert.match(logFirst[1].content, /OWASP Core Ruleset/);
+assert.match(logFirst[1].content, /Pro or above/);
+assert.match(logFirst[1].content, /Security → Settings/);
+assert.match(logFirst[1].content, /Log is Enterprise-only/);
+assert.match(logFirst[1].content, /Simulate is not an action/);
+assert.doesNotMatch(logFirst[1].content, /to enable WAF/i);
 
 const unrelated = curatedOnboardingContext('Durable Objects là gì?', 'en');
 assert.equal(unrelated, '');
@@ -124,6 +165,11 @@ assert.ok(wafLab);
 const wafCopy = [wafLab.summary.vi, wafLab.summary.en, ...wafLab.bullets.flatMap((bullet) => [bullet.text.vi, bullet.text.en])].join(
   '\n',
 );
+assert.match(wafCopy, /Free đã có WAF/);
+assert.match(wafCopy, /Free already has WAF/);
+assert.match(wafCopy, /custom rules/i);
+assert.doesNotMatch(wafCopy, /để bật WAF/);
+assert.doesNotMatch(wafCopy, /to enable WAF/i);
 assert.match(wafCopy, /Security → Settings/);
 assert.match(wafCopy, /Security → Security rules/);
 assert.match(wafCopy, /Pro trở lên/);
@@ -139,5 +185,61 @@ assert.doesNotMatch(wafCopy, /Security → WAF → Managed rules/);
 
 const robots = readFileSync(join(root, 'public/robots.txt'), 'utf8');
 assert.match(robots, /Content-Signal:.*ai-input=no/);
+
+const invented =
+  'Hãy copy nguyên hai tên như sau: ns1.cloudflare.com và ns2.cloudflare.com. Ví dụ ada.ns.cloudflare.com.';
+const rewritten = rewriteInventedNameservers(invented, 'vi');
+assert.doesNotMatch(rewritten, /ns1\.cloudflare\.com/i);
+assert.doesNotMatch(rewritten, /ns2\.cloudflare\.com/i);
+assert.doesNotMatch(rewritten, /ada\.ns\.cloudflare\.com/i);
+assert.match(rewritten, /Overview/);
+assert.equal(
+  rewriteInventedNameservers('See https://developers.cloudflare.com and dash.cloudflare.com.', 'en'),
+  'See https://developers.cloudflare.com and dash.cloudflare.com.',
+);
+
+async function generate(body, response) {
+  const res = await onRequestPost({
+    request: request(body),
+    env: { AI: { run: async () => response } },
+  });
+  return { status: res.status, data: await res.json() };
+}
+
+const guardedVi = await generate(
+  { prompt: 'Cách đổi nameserver sang Cloudflare cho tên miền mua ở Mắt Bão', lang: 'vi' },
+  {
+    response:
+      'Hãy copy nguyên hai tên như sau: NS1.cloudflare.com và ns2.cloudflare.com. Hoặc kate.ns.cloudflare.com. Docs: https://developers.cloudflare.com/dns/nameservers/ trên dash.cloudflare.com.',
+  },
+);
+assert.equal(guardedVi.status, 200);
+assert.doesNotMatch(guardedVi.data.result.response, /ns1\.cloudflare\.com/i);
+assert.doesNotMatch(guardedVi.data.result.response, /ns2\.cloudflare\.com/i);
+assert.doesNotMatch(guardedVi.data.result.response, /kate\.ns\.cloudflare\.com/i);
+assert.match(guardedVi.data.result.response, /copy hai nameserver đang hiện trên trang Overview của zone/);
+assert.match(guardedVi.data.result.response, /developers\.cloudflare\.com/);
+assert.match(guardedVi.data.result.response, /dash\.cloudflare\.com/);
+
+const guardedEn = await generate(
+  { prompt: 'Change nameservers', lang: 'en' },
+  {
+    response: 'Set ns12.cloudflare.com at the registrar.',
+    choices: [{ message: { content: 'Use foo.ns.cloudflare.com' }, text: 'Also ns.cloudflare.com' }],
+  },
+);
+assert.equal(guardedEn.status, 200);
+const guarded = guardGenerateResult(guardedEn.data.result, 'en');
+assert.equal(guarded.response, guardedEn.data.result.response);
+assert.doesNotMatch(guardedEn.data.result.response, /ns12\.cloudflare\.com/i);
+assert.doesNotMatch(guardedEn.data.result.choices[0].message.content, /foo\.ns\.cloudflare\.com/i);
+assert.doesNotMatch(guardedEn.data.result.choices[0].text, /ns\.cloudflare\.com/i);
+assert.match(guardedEn.data.result.response, /copy the two nameservers shown on the zone Overview page/);
+assert.match(guardedEn.data.result.choices[0].message.content, /Overview/);
+assert.match(guardedEn.data.result.choices[0].text, /Overview/);
+
+const plain = await generate({ prompt: 'What is orange cloud?', lang: 'en' }, 'Keep the orange cloud on.');
+assert.equal(plain.status, 200);
+assert.equal(plain.data.result, 'Keep the orange cloud on.');
 
 console.log('generate grounding prompt checks passed');

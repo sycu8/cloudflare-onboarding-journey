@@ -21,14 +21,16 @@ const LESSON_STEPS: Record<TopicId, { vi: string[]; en: string[] }> = {
     vi: [
       'Đăng nhập dash.cloudflare.com → Onboard a domain / Add a site.',
       'Review từng record trước khi continue. A/AAAA/CNAME trỏ origin thật; MX cho email; TXT cho SPF/DKIM/DMARC.',
-      'Hạ TTL trên DNS cũ (nếu còn quyền) rồi đổi nameserver tại registrar theo đúng hai hostname Cloudflare đưa.',
-      'Hai nameserver dạng *.ns.cloudflare.com — copy nguyên, không đoán.',
+      'Cloudflare tự gán hai nameserver cho từng zone và không đổi được. Mở đúng zone → trang Overview và copy nguyên hai tên đang hiện. Dạng gán là <tên>.ns.cloudflare.com, khác nhau theo zone.',
+      'Không điền ns1.cloudflare.com hay ns2.cloudflare.com. Đó không phải nameserver của zone. Trỏ nhầm làm website và email ngừng phân giải.',
+      'Hạ TTL trên DNS cũ (nếu còn quyền) rồi, tại registrar, thay nameserver bằng đúng hai tên vừa copy từ Overview.',
     ],
     en: [
       'Sign in at dash.cloudflare.com → Onboard a domain / Add a site.',
       'Review every record before continue. A/AAAA/CNAME point at the real origin; MX for email; TXT for SPF/DKIM/DMARC.',
-      'Lower TTL on old DNS (if you still can), then change nameservers at the registrar to the two hostnames Cloudflare shows.',
-      'Two nameservers like *.ns.cloudflare.com — copy exactly, do not guess.',
+      'Cloudflare assigns two nameservers to each zone and the assignment cannot be changed. Open that zone → Overview page and copy the two names shown there. Assignments look like <name>.ns.cloudflare.com and differ per zone.',
+      'Do not enter ns1.cloudflare.com or ns2.cloudflare.com. Those are not this zone’s nameservers. A wrong pair takes the website and email offline.',
+      'Lower TTL on old DNS (if you still can), then at the registrar replace the nameservers with the two names copied from Overview.',
     ],
   },
   proxy: {
@@ -60,7 +62,7 @@ const LESSON_STEPS: Record<TopicId, { vi: string[]; en: string[] }> = {
   waf: {
     vi: [
       'Nói rõ plan trước khi chỉ bước. Simulate không phải action. Log chỉ có trên Enterprise.',
-      'Free: Cloudflare Free Managed Ruleset có trên mọi plan và được bật sẵn trên Free. Không bật Cloudflare Managed Ruleset hay OWASP Core trên Free — hai ruleset đó cần Pro trở lên. Sensitive Data Detection chỉ có trên Enterprise.',
+      'Free đã có WAF. Cloudflare Free Managed Ruleset có trên mọi plan và được bật sẵn trên Free. Custom rules cũng có trên Free. Không bật Cloudflare Managed Ruleset hay OWASP Core Ruleset trên Free — hai ruleset đó cần Pro trở lên. Sensitive Data Detection chỉ có trên Enterprise.',
       'Pro và Business: Security → Settings, lọc Web application exploits, bật Cloudflare managed ruleset. OWASP Core là tùy chọn và cũng cần Pro trở lên. Xem deployment settings rồi Save. Mặc định chỉ bật một phần rule. Không override mọi rule sang Block.',
       'Enterprise: cùng đường Security → Settings. Muốn xem rule mới trước khi chặn thì dùng action Log, rồi xem Security Events. Free, Pro và Business không có Log: bắt đầu bằng Managed Challenge, xem Security Events, rồi mới đổi sang Block.',
       'Sau khi đã bật ruleset: Security → Security rules, lọc Managed rules, mở rule có action Execute nếu cần đổi scope hoặc override.',
@@ -70,7 +72,7 @@ const LESSON_STEPS: Record<TopicId, { vi: string[]; en: string[] }> = {
     ],
     en: [
       'Name the plan before you give a step. Simulate is not an action. Log is Enterprise-only.',
-      'Free: the Cloudflare Free Managed Ruleset is on every plan and is already deployed on Free. Do not turn on the Cloudflare Managed Ruleset or OWASP Core on Free — both need Pro or above. Sensitive Data Detection is Enterprise only.',
+      'Free already has WAF. The Cloudflare Free Managed Ruleset is on every plan and is already deployed on Free. Custom rules are also available on Free. Do not turn on the Cloudflare Managed Ruleset or the OWASP Core Ruleset on Free — both need Pro or above. Sensitive Data Detection is Enterprise only.',
       'Pro and Business: Security → Settings, filter by Web application exploits, turn on Cloudflare managed ruleset. OWASP Core is optional and also needs Pro or above. Review the deployment settings, then Save. The default enables a subset of rules. Do not override every rule to Block.',
       'Enterprise: same Security → Settings path. To watch a new rule before blocking, use the Log action, then review Security Events. Free, Pro, and Business have no Log: start with Managed Challenge, review Security Events, then switch to Block.',
       'After a ruleset is on: Security → Security rules, filter Managed rules, and open the rule whose action is Execute when you need to change scope or an override.',
@@ -84,7 +86,8 @@ const LESSON_STEPS: Record<TopicId, { vi: string[]; en: string[] }> = {
 const TOPICS: Topic[] = [
   {
     id: 'dns',
-    guideId: 'dns',
+    // The public DNS accordion summary says "DNS map", which the model repeats as a filler step.
+    guideId: '',
     pattern: /nameserver|\bdns\b|ban ghi|ten mien|\bdomain\b|registrar|\bzone\b/,
   },
   {
@@ -102,7 +105,8 @@ const TOPICS: Topic[] = [
     // The public waf-lab accordion uses the same plan-gated steps. Keep them out of
     // the prompt so the model does not see the notes twice.
     guideId: '',
-    pattern: /\bwaf\b|firewall|tuong lua|managed rule|wordpress|security setting|bao mat/,
+    pattern:
+      /\bwaf\b|firewall|tuong lua|managed rule|wordpress|security setting|bao mat|owasp|ruleset|core rule|\blog\b|simulate|goi free|free plan/,
   },
 ];
 
@@ -127,10 +131,10 @@ export function generateSystemPrompt(lang: GenerateLang): string {
       'You are a Cloudflare learning assistant. Be concise, beginner-friendly, and actionable.',
       '',
       'Grounding rules — follow all of them:',
-      '- Only describe Cloudflare steps that really exist: a nameserver change and DNS records, the orange-cloud proxy toggle, the SSL/TLS mode, and WAF managed rules and security settings in the Cloudflare dashboard (dash.cloudflare.com). Gate WAF by plan: Free uses the Cloudflare Free Managed Ruleset; the Cloudflare Managed Ruleset and OWASP Core need Pro or above. Log is Enterprise-only. Simulate is not an action.',
-      '- Never invent credentials, passwords, or plugin or API-key steps. There is no DNS password. WAF is not turned on by adding an API key in WordPress settings. Do not invent nameserver hostnames; tell the learner to copy the two names the dashboard shows.',
+      '- Only describe Cloudflare steps that really exist: a nameserver change and DNS records, the orange-cloud proxy toggle, the SSL/TLS mode, and WAF managed rules and security settings in the Cloudflare dashboard (dash.cloudflare.com). WAF is available on Free: the Cloudflare Free Managed Ruleset and custom rules. Only the Cloudflare Managed Ruleset and the OWASP Core Ruleset need Pro or above. Log is Enterprise-only. Simulate is not an action.',
+      '- Never invent credentials, passwords, or plugin or API-key steps. There is no DNS password. WAF is not turned on by adding an API key in WordPress settings. Do not invent nameserver hostnames. Never write ns1.cloudflare.com, ns2.cloudflare.com, or any other concrete ns*.cloudflare.com or <name>.ns.cloudflare.com hostname. Tell the learner to copy the two nameservers shown on that zone’s Overview page. A guessed pair takes the domain and its email offline.',
       '- If you are not sure a control exists, say you are not sure and point the learner to the Cloudflare dashboard or https://developers.cloudflare.com instead of guessing.',
-      '- When curated onboarding notes are included, prefer those steps and do not add steps they do not contain.',
+      '- When curated onboarding notes are included, use only those steps. Do not add filler steps the notes do not contain: no DNS cache, no DNS buffer, and no “DNS map” action. The next step is one action from the notes.',
     ].join('\n');
   }
 
@@ -138,10 +142,10 @@ export function generateSystemPrompt(lang: GenerateLang): string {
     'Bạn là trợ lý học Cloudflare. Viết ngắn gọn, dễ hiểu cho người mới và có bước hành động rõ ràng.',
     '',
     'Quy tắc bám sự thật — làm đủ các ý sau:',
-    '- Chỉ mô tả bước Cloudflare có thật: đổi nameserver và bản ghi DNS, công tắc proxy đám mây cam (orange cloud), chế độ SSL/TLS, và WAF managed rules cùng security settings trong dashboard Cloudflare (dash.cloudflare.com). Gắn WAF theo plan: Free dùng Cloudflare Free Managed Ruleset; Cloudflare Managed Ruleset và OWASP Core cần Pro trở lên. Log chỉ có trên Enterprise. Simulate không phải action.',
-    '- Không bịa thông tin đăng nhập, mật khẩu, bước cài plugin, hoặc bước API key. Không có mật khẩu DNS. Không bật WAF bằng cách thêm API key trong phần cài đặt WordPress. Không bịa hostname nameserver; bảo người học copy đúng hai tên mà dashboard hiển thị.',
+    '- Chỉ mô tả bước Cloudflare có thật: đổi nameserver và bản ghi DNS, công tắc proxy đám mây cam (orange cloud), chế độ SSL/TLS, và WAF managed rules cùng security settings trong dashboard Cloudflare (dash.cloudflare.com). Free đã có WAF: Cloudflare Free Managed Ruleset và custom rules. Chỉ Cloudflare Managed Ruleset và OWASP Core Ruleset cần Pro trở lên. Log chỉ có trên Enterprise. Simulate không phải action.',
+    '- Không bịa thông tin đăng nhập, mật khẩu, bước cài plugin, hoặc bước API key. Không có mật khẩu DNS. Không bật WAF bằng cách thêm API key trong phần cài đặt WordPress. Không bịa hostname nameserver. Không viết ns1.cloudflare.com, ns2.cloudflare.com, hay hostname cụ thể dạng ns*.cloudflare.com hoặc <tên>.ns.cloudflare.com. Bảo người học copy đúng hai nameserver đang hiện trên trang Overview của zone đó. Đoán sai cặp nameserver làm tên miền và email ngừng phân giải.',
     '- Nếu không chắc một nút hay một bước có tồn tại, hãy nói là không chắc và hướng người học tới dashboard Cloudflare hoặc https://developers.cloudflare.com, đừng đoán.',
-    '- Khi có ghi chú onboarding đi kèm, ưu tiên các bước đó và không thêm bước mà ghi chú không có.',
+    '- Khi có ghi chú onboarding đi kèm, chỉ dùng các bước đó. Không thêm bước đệm mà ghi chú không có: không bộ đệm DNS, không DNS cache, và không hành động “DNS map”. Bước tiếp theo là một việc có trong ghi chú.',
   ].join('\n');
 }
 
