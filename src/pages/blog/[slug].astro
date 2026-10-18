@@ -18,7 +18,7 @@ import {
 import { getDiagramBySlug } from '../../data/referenceDiagrams';
 import { getProductBySlug } from '../../data/productPages';
 import { tracks } from '../../data/tracks';
-import { siteSeo } from '../../lib/seo';
+import { personId, siteSeo, websiteId } from '../../lib/seo';
 
 export function getStaticPaths() {
   return blogPosts.map((post) => ({ params: { slug: post.slug } }));
@@ -61,9 +61,9 @@ const jsonLdImage = ogImage ? new URL(ogImage, siteOrigin).href : undefined;
 const articleJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
-  headline: post.title.en,
-  alternativeHeadline: post.title.vi,
-  description: post.description.en,
+  headline: post.title.vi,
+  alternativeHeadline: post.title.en,
+  description: post.description.vi,
   datePublished: post.date,
   dateModified: post.updated ?? post.date,
   inLanguage: ['vi', 'en'],
@@ -71,16 +71,11 @@ const articleJsonLd = {
   url: canonicalUrl,
   keywords: `${post.keywords.en}, ${post.keywords.vi}`,
   ...(jsonLdImage ? { image: [jsonLdImage] } : {}),
-  author: {
-    '@type': 'Organization',
-    name: siteSeo.name,
-    url: siteOrigin,
-  },
-  publisher: {
-    '@type': 'Organization',
-    name: siteSeo.name,
-    url: siteOrigin,
-  },
+  author: { '@id': personId },
+  publisher: { '@id': personId },
+  isPartOf: { '@id': websiteId(siteOrigin) },
+  disambiguatingDescription:
+    'Independent Vietnamese learning article. Not a publication of Cloudflare, Inc.',
   isBasedOn: post.sources.map((s) => s.href),
   speakable: {
     '@type': 'SpeakableSpecification',

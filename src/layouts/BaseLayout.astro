@@ -5,7 +5,7 @@ import Footer from '../components/chrome/Footer.astro';
 import ProgressBar from '../components/ui/ProgressBar';
 import BackToTop from '../components/ui/BackToTop';
 import { assetUrl } from '../lib/assets';
-import { siteSeo, formatTitle } from '../lib/seo';
+import { siteSeo, formatTitle, canonicalUrl, websiteJsonLd } from '../lib/seo';
 
 const faviconHref = assetUrl('favicon.svg');
 
@@ -33,7 +33,8 @@ const {
 const enableWebMcp = canonicalPath === '/' || Astro.url.pathname === '/';
 const siteName = siteSeo.name;
 const siteOrigin = Astro.site ?? siteSeo.origin;
-const canonical = new URL(canonicalPath ?? Astro.url.pathname, siteOrigin);
+const canonical = canonicalUrl(canonicalPath ?? Astro.url.pathname, siteOrigin);
+const websiteLd = websiteJsonLd(siteOrigin);
 const titleVi = formatTitle(title.vi, siteName);
 const titleEn = formatTitle(title.en, siteName);
 const titleKm = formatTitle(title.km ?? title.en, siteName);
@@ -124,10 +125,11 @@ const imageUrl = new URL(ogImage ?? siteSeo.defaultImage, siteOrigin).href;
     <meta property="og:image" content={imageUrl} />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content={siteSeo.twitterHandle} />
     <meta name="twitter:title" content={titleVi} />
     <meta name="twitter:description" content={description.vi} />
     <meta name="twitter:image" content={imageUrl} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(websiteLd)} />
 
     <slot name="head" />
 

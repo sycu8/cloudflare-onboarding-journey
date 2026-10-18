@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LangText from '../components/ui/LangText.astro';
+import NonAffiliationNote from '../components/chrome/NonAffiliationNote.astro';
+---
+
+<BaseLayout
+  title={{ vi: 'Không tìm thấy trang', en: 'Page not found', km: 'រកមិនឃើញទំព័រ' }}
+  description={{
+    vi: 'Đường dẫn này không có trên OrangeCloud Onboarding.',
+    en: 'This path does not exist on OrangeCloud Onboarding.',
+    km: 'ផ្លូវនេះមិនមាននៅលើ OrangeCloud Onboarding ទេ។',
+  }}
+  canonicalPath="/404"
+  noindex
+>
+  <div class="card mx-auto max-w-xl p-8 text-center">
+    <LangText
+      as="h1"
+      class="text-2xl font-semibold"
+      text={{ vi: 'Không tìm thấy trang', en: 'Page not found', km: 'រកមិនឃើញទំព័រ' }}
+    />
+    <LangText
+      as="p"
+      class="text-muted mt-3 text-sm"
+      text={{
+        vi: 'Đường dẫn không có trên hub. Quay về trang chủ để tiếp tục học.',
+        en: 'That path is not on this hub. Go back to the homepage to keep learning.',
+        km: 'ផ្លូវនោះមិនមាននៅលើ hub នេះទេ។ ត្រឡប់ទៅទំព័រដើមដើម្បីបន្តរៀន។',
+      }}
+    />
+    <a class="btn btn-primary mt-6 inline-flex" href="/">
+      <LangText text={{ vi: 'Về trang chủ', en: 'Back to home', km: 'ត្រឡប់ទៅទំព័រដើម' }} />
+    </a>
+    <div class="mt-6 text-left">
+      <NonAffiliationNote />
+    </div>
+  </div>
+</BaseLayout>

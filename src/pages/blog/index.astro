@@ -11,7 +11,7 @@ import {
   blogTopicLabels,
   type BlogTopic,
 } from '../../data/blog';
-import { siteSeo } from '../../lib/seo';
+import { personId, siteSeo, websiteId } from '../../lib/seo';
 
 const topics = Object.keys(blogTopicLabels) as BlogTopic[];
 const siteOrigin = Astro.site ?? siteSeo.origin;
@@ -19,16 +19,27 @@ const siteOrigin = Astro.site ?? siteSeo.origin;
 const itemListJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Blog',
-  name: 'Cloudflare Starter Hub Blog',
+  '@id': new URL('/blog/#blog', siteOrigin).href,
+  name: 'OrangeCloud Onboarding Blog',
   description: blogIntro.en,
   url: new URL('/blog/', siteOrigin).href,
-  inLanguage: ['vi', 'en'],
+  inLanguage: 'vi',
+  isPartOf: { '@id': websiteId(siteOrigin) },
+  author: { '@id': personId },
+  publisher: { '@id': personId },
+  disambiguatingDescription:
+    'Independent Vietnamese learning blog. Not a publication of Cloudflare, Inc.',
   blogPost: blogPosts.map((post) => ({
     '@type': 'BlogPosting',
-    headline: post.title.en,
+    headline: post.title.vi,
+    alternativeHeadline: post.title.en,
     datePublished: post.date,
+    dateModified: post.updated ?? post.date,
+    inLanguage: 'vi',
     url: new URL(`/blog/${post.slug}/`, siteOrigin).href,
-    description: post.description.en,
+    description: post.description.vi,
+    author: { '@id': personId },
+    publisher: { '@id': personId },
   })),
 };
 ---
