@@ -11,6 +11,7 @@ import {
   isHeadingOnly,
   isSddPronounFollowUp,
   retryBackoffMs,
+  resolveLearnerPlan,
   reviewPlanClaims,
   shortDocsFallback,
   tableDerivedFallback,
@@ -78,15 +79,7 @@ export type StatedPlan = 'enterprise' | 'business' | 'pro' | 'free' | 'unknown';
 
 /** Plan the learner says they are on. A bare "Enterprise-only" mention stays unknown. */
 export function statedPlan(prompt: string): StatedPlan {
-  const folded = foldGenerated(prompt);
-  const re =
-    /\b(?:i am on|im on|i'm on|on the|on a|using|goi|dang dung|toi dung|dung goi)\s+(?:the\s+|goi\s+)?(enterprise|business|pro|free)\b|\b(enterprise|business|pro|free)\s+plan\b|\bplan\s+(enterprise|business|pro|free)\b|\b(?:for|as a)\s+(?:a\s+)?(enterprise|business|pro|free)\s+(?:user|customer|zone|account)\b/g;
-  let found: StatedPlan = 'unknown';
-  for (const match of folded.matchAll(re)) {
-    const plan = match[1] || match[2] || match[3] || match[4];
-    if (plan === 'enterprise' || plan === 'business' || plan === 'pro' || plan === 'free') found = plan;
-  }
-  return found;
+  return resolveLearnerPlan(prompt);
 }
 
 function splitSentences(line: string): string[] {
@@ -185,7 +178,13 @@ function isLogActionLabel(folded: string): boolean {
  * a mode, a chosen action, the action left sitting on Log, or Log as an item
  * in an action list (including when the list ends on a period).
  */
+function isLoggingProductSentence(sentence: string): boolean {
+  const folded = foldGenerated(sentence);
+  return /\blogpush\b|\blog explorer\b|\binstant logs?\b|\blog fields?\b|\blogs\b|\bnhat ky\b|\blogging\b/.test(folded);
+}
+
 function namesLogAsWafAction(sentence: string): boolean {
+  if (isLoggingProductSentence(sentence)) return false;
   const folded = hideLogpush(withoutLogin(foldGenerated(sentence)));
   if (!/\blog\b/.test(folded)) return false;
   if (splitClauses(folded).every((clause) => !/\blog\b/.test(clause) || claimIsDenied(clause, /\blog\b/))) return false;
@@ -224,6 +223,7 @@ function namesLogAsWafAction(sentence: string): boolean {
  * Logpush is not the Log action. A clause that denies the pairing stays.
  */
 function pairsLowerPlanWithLog(sentence: string, prompt: string): boolean {
+  if (isLoggingProductSentence(sentence)) return false;
   const folded = hideLogpush(withoutLogin(foldGenerated(sentence)));
   if (!/\blog\b/.test(folded)) return false;
   if (isLogActionLabel(folded) && statedPlan(prompt) !== 'enterprise') {

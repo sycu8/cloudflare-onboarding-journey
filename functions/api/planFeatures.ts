@@ -95,7 +95,7 @@ const NS_SHAPED_HOST =
   /(?<![a-z0-9.])(?:_?ns\d*|[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.ns)\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z]{2,})+/;
 
 const HOSTNAME =
-  /(?<![a-z0-9@])(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+(?:com|net|org|io|vn|dev)(?![a-z0-9])/g;
+  /(?<![a-z0-9@])(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}(?![a-z0-9])/g;
 
 const DOCS_HOST = /^(?:dash|developers|www)\.cloudflare\.com$/;
 
@@ -114,6 +114,42 @@ const AVAILABILITY =
 
 function hideLogpush(folded: string): string {
   return folded.replace(/\blog(?:ging)?\s+in\b/g, ' ').replace(/\blogin\b/g, ' ').replace(/logpush/g, ' ');
+}
+
+/** Logging products are not the WAF custom-rule action named Log. */
+function hideLoggingProducts(folded: string): string {
+  return hideLogpush(folded)
+    .replace(/\blog explorer\b/g, ' ')
+    .replace(/\binstant logs?\b/g, ' ')
+    .replace(/\blog fields?\b/g, ' ')
+    .replace(/\bnhat ky\b/g, ' ')
+    .replace(/\blogs\b/g, ' ')
+    .replace(/\blogging\b/g, ' ');
+}
+
+function isLoggingProduct(folded: string): boolean {
+  return /\blogpush\b|\blog explorer\b|\binstant logs?\b|\blog fields?\b|\blogs\b|\bnhat ky\b|\blogging\b/.test(folded);
+}
+
+/**
+ * The WAF/firewall rule action Log. An action word has to sit next to rule or action context.
+ * Logpush, logs, log fields, Log Explorer, Instant Logs, and nhật ký do not count.
+ */
+export function isWafLogAction(sentence: string): boolean {
+  const folded = foldFeature(sentence);
+  if (isLoggingProduct(folded)) return false;
+  const hidden = hideLoggingProducts(folded);
+  if (!/\blog\b/.test(hidden)) return false;
+  if (LOG_AS_VERB.test(hidden) || LOG_MENU.test(hidden)) return true;
+  if (/\b(?:action|hanh dong|mode)\b[\s\S]{0,32}\blog\b|\blog\b[\s\S]{0,16}\b(?:action|hanh dong|mode)\b/.test(hidden)) {
+    return true;
+  }
+  if (/\b(?:chon|select|pick|choose|set|dat|bat|use|using|enable|kich hoat)\b[\s\S]{0,32}\blog\b/.test(hidden)) return true;
+  if (/\bset\s+(?:it\s+|the action\s+)?to\s+log\b|\bo\s+log\b|\bat\s+log\b/.test(hidden)) return true;
+  return (
+    /(?:^|[,/;|]|\b(?:and|or|va|hoac)\s+)\s*log\b/.test(hidden) &&
+    /\b(?:block|challenge|skip|allow|rule|action|hanh dong)\b/.test(hidden)
+  );
 }
 
 /** NS records, nameservers, or "bản ghi NS", in either language. */
@@ -170,7 +206,11 @@ function isSaveClaim(folded: string): boolean {
 
 /** "tất cả rule đều chạy" / "all rules run" contradicts the Save row, even without the word Save. */
 function claimsAllRulesRun(folded: string): boolean {
-  if (!/tat ca (?:cac )?rules? deu chay|all rules run|every rule runs|moi rule deu chay|runs every rule|chay het rule|tat ca rules? chay/.test(folded)) {
+  if (
+    !/tat ca (?:cac )?rules? deu (?:chay|duoc bat)|all rules run|every rule runs|all of the rules run|rules all run|moi rule deu (?:chay|duoc bat)|runs every rule|chay het rule|tat ca rules? chay|bat het rule|bat moi rule/.test(
+      folded,
+    )
+  ) {
     return false;
   }
   return !NEGATION.test(folded);
@@ -200,19 +240,73 @@ export function businessManagedRulesetLine(lang: GenerateLang): string {
   return PLAN_FEATURE_ROWS.find((row) => row.id === 'business-cmr')?.[lang] ?? '';
 }
 
+type LearnerPlan = 'enterprise' | 'business' | 'pro' | 'free' | 'unknown';
+
+function asLearnerPlan(value: string | undefined): LearnerPlan {
+  if (value === 'enterprise' || value === 'business' || value === 'pro' || value === 'free') return value;
+  return 'unknown';
+}
+
+/** Keep đừng distinct from dùng so a warning is not read as the learner's plan. */
+function foldPlanText(text: string): string {
+  const marked = text.normalize('NFKC').replace(/đừng/gi, ' dungneg ');
+  return marked.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().replace(/đ/g, 'd');
+}
+
 /**
- * The learner's own plan: a profile line or a first-person statement.
- * The first match wins. A plan named later, in passing, does not replace it.
+ * The learner's plan, in order:
+ * 1. profile or onboarding-selected plan (`plan: Enterprise`)
+ * 2. a first-person statement
+ * 3. a declarative on/with/gói sentence about their own account or zone
+ * A plan named only inside a question about another plan does not count.
  */
-function ownPlan(text: string): 'enterprise' | 'business' | 'pro' | 'free' | 'unknown' {
-  const folded = foldFeature(text);
-  const match =
+export function resolveLearnerPlan(text: string): LearnerPlan {
+  const folded = foldPlanText(text);
+  const profile =
+    /\b(?:selected plan|onboarding plan|profile plan|learner plan|plan da chon|goi da chon)\s*[:=]?\s*(enterprise|business|pro|free)\b|\bplan\s*[:=]\s*(enterprise|business|pro|free)\b/.exec(
+      folded,
+    );
+  const fromProfile = asLearnerPlan(profile?.[1] || profile?.[2]);
+  if (fromProfile !== 'unknown') return fromProfile;
+
+  const firstPerson =
     /\b(?:i am on|im on|i'm on|i use|i'm using|my plan is|toi dung|toi dang|minh dung|em dung|dang dung goi|dung goi|goi cua toi(?: la)?|plan cua toi(?: la)?)\s+(?:the\s+|goi\s+|la\s+)?(enterprise|business|pro|free)\b/.exec(
       folded,
     );
-  const plan = match?.[1];
-  if (plan === 'enterprise' || plan === 'business' || plan === 'pro' || plan === 'free') return plan;
+  const fromSelf = asLearnerPlan(firstPerson?.[1]);
+  if (fromSelf !== 'unknown') return fromSelf;
+
+  const clauses = folded.split(/[.!?\n]/);
+  for (const clause of clauses) {
+    if (/\b(?:does|do|did|what|which|how|whose|co khong|co phai|the nao|la gi)\b/.test(clause)) continue;
+    const owned =
+      /\btai khoan\s+(enterprise|business|pro|free)\b|\b(?:our|my)\s+(enterprise|business|pro|free)\s+(?:zone|account)\b/.exec(
+        clause,
+      );
+    const fromOwned = asLearnerPlan(owned?.[1] || owned?.[2]);
+    if (fromOwned !== 'unknown') return fromOwned;
+    const declared =
+      /\b(?:on|with)\s+(?:the\s+|goi\s+)?(enterprise|business|pro|free)\s+(?:plan|zone|account|goi)\b|\bgoi\s+(enterprise|business|pro|free)\b/.exec(
+        clause,
+      );
+    const fromDeclared = asLearnerPlan(declared?.[1] || declared?.[2]);
+    if (fromDeclared !== 'unknown') return fromDeclared;
+  }
   return 'unknown';
+}
+
+function ownPlan(text: string): LearnerPlan {
+  return resolveLearnerPlan(text);
+}
+
+/** A how-to step that names a plan only as context, not as an availability claim. */
+function isPlanContextOnly(folded: string): boolean {
+  if (!PLAN.test(folded)) return false;
+  if (AVAILABILITY.test(folded) || ENTERPRISE_ONLY_SHAPE.test(folded)) return false;
+  if (/\b(?:works on|lacks|lack|missing|upgrade|nang cap|not on|khong ho tro|khong bao gom|only)\b/.test(folded)) {
+    return false;
+  }
+  return /\b(?:on|with|goi|for)\b/.test(folded);
 }
 
 /** Log named as the action, including "Log là ở mục" and "vào phần Log". */
@@ -244,8 +338,7 @@ export function mentionsPlanOrFeature(sentence: string, context = ''): boolean {
   if (hasInventedNameserverHost(sentence)) return true;
   if (isProceduralStep(sentence)) return false;
   const folded = foldFeature(sentence);
-  const hidden = hideLogpush(folded);
-  if (PLAN.test(folded) || LOG_ACTION.test(hidden)) return true;
+  if (PLAN.test(folded) || isWafLogAction(sentence)) return true;
   if (claimsAllRulesRun(folded)) return true;
   if (isManagedChallengeRecordOnly(sentence)) return true;
   if (isSddPronounFollowUp(sentence, context)) return true;
@@ -382,10 +475,12 @@ function logUnderManagedChallenge(sentence: string): boolean {
  */
 function logGrantUnconfirmed(sentence: string, context: string): boolean {
   const folded = foldFeature(sentence);
-  const hidden = hideLogpush(folded);
-  if (!LOG_ACTION.test(hidden) || tableConfirms(sentence)) return false;
+  if (isLoggingProduct(folded) || isLoggingProduct(foldFeature(context))) return false;
+  const hidden = hideLoggingProducts(folded);
+  const planNamesLog = PLAN.test(folded) && /\blog\b/.test(hidden) && !isPlanContextOnly(folded);
+  if (!isWafLogAction(sentence) && !planNamesLog) return false;
+  if (tableConfirms(sentence)) return false;
   if (NEGATION.test(folded) || /instead of|thay cho/.test(folded)) return false;
-  // A passing mention of Enterprise does not make the learner an Enterprise user.
   if (ownPlan(context) === 'enterprise' && !LOWER_PLAN.test(folded)) return false;
   return LOWER_PLAN.test(folded) || ownPlan(context) !== 'enterprise';
 }
@@ -394,7 +489,6 @@ function logGrantUnconfirmed(sentence: string, context: string): boolean {
 export function tableContradicts(sentence: string, context = ''): boolean {
   if (tableConfirms(sentence)) return false;
   const folded = foldFeature(sentence);
-  const hidden = hideLogpush(folded);
   if (hasInventedNameserverHost(sentence)) return true;
   if (deniesBusinessManagedRuleset(sentence)) return true;
   if (isManagedChallengeRecordOnly(sentence)) return true;
@@ -417,14 +511,13 @@ export function tableContradicts(sentence: string, context = ''): boolean {
   if (claimsAllRulesRun(folded)) return true;
   if (logUnderManagedChallenge(sentence)) return true;
   if (logGrantUnconfirmed(sentence, context)) return true;
+  if (/super bot fight mode/.test(folded) && (ENTERPRISE_ONLY_SHAPE.test(folded) || (NEGATION.test(folded) && PLAN.test(folded)))) {
+    return true;
+  }
   const enterpriseUse = ownPlan(context) === 'enterprise' && !LOWER_PLAN.test(folded);
   if (
-    LOG_ACTION.test(hidden) &&
+    isWafLogAction(sentence) &&
     !enterpriseUse &&
-    (LOWER_PLAN.test(folded) ||
-      LOG_AS_VERB.test(hidden) ||
-      LOG_MENU.test(hidden) ||
-      /\b(?:use|using|chon|select|pick|choose|bat|dat)\s+["'(]*log\b/.test(hidden)) &&
     !/instead of|thay cho|not available|does not|khong co|khong ho tro|enterprise-only|only available on enterprise|chi co tren enterprise/.test(
       folded,
     )
@@ -449,12 +542,16 @@ export function tableContradicts(sentence: string, context = ''): boolean {
 /** Replace a wrong sentence with the table rows it touches. Unknown claims return ''. */
 export function rewriteFromTable(sentence: string, lang: GenerateLang, context = ''): string {
   const folded = foldFeature(sentence);
-  const hidden = hideLogpush(folded);
+  const aboutLogging = isLoggingProduct(folded) || isLoggingProduct(foldFeature(context));
+  const hidden = hideLoggingProducts(folded);
+  const planNamesLog = !aboutLogging && PLAN.test(folded) && /\blog\b/.test(hidden) && !isPlanContextOnly(folded);
   const ids: Array<(typeof PLAN_FEATURE_ROWS)[number]['id']> = [];
   if (
-    LOG_ACTION.test(hidden) ||
-    isManagedChallengeRecordOnly(sentence) ||
-    (INVENTED.test(folded) && /\b(?:action|hanh dong|mode)\b/.test(folded))
+    !aboutLogging &&
+    (isWafLogAction(sentence) ||
+      planNamesLog ||
+      isManagedChallengeRecordOnly(sentence) ||
+      (INVENTED.test(folded) && /\b(?:action|hanh dong|mode)\b/.test(folded)))
   ) {
     ids.push('waf-actions');
   }
@@ -665,7 +762,7 @@ export async function gatherVerdicts(
   ask: (group: ClaimSentence[]) => Promise<string>,
   options?: { chunkSize?: number; timeoutMs?: number; budgetMs?: number; backoffMs?: number },
 ): Promise<Map<string, ClaimVerdict | null>> {
-  const chunkSize = options?.chunkSize ?? 4;
+  const chunkSize = options?.chunkSize ?? Math.max(claims.length, 1);
   const timeoutMs = options?.timeoutMs ?? CLAIM_CHECK_TIMEOUT_MS;
   const budgetMs = options?.budgetMs ?? CLAIM_CHECK_BUDGET_MS;
   const started = Date.now();
@@ -723,6 +820,12 @@ function resolveSentence(
     return { text: forced, action: 'rewritten' };
   }
   if (verdict === 'ok' || tableConfirms(sentence)) return { text: sentence, action: 'kept' };
+  // Null or wrong still fails closed for a real claim.
+  // A how-to that names a plan only as context, and a logging-product sentence, stay.
+  const folded = foldFeature(sentence);
+  if ((isPlanContextOnly(folded) || isLoggingProduct(folded)) && !isWafLogAction(sentence)) {
+    return { text: sentence, action: 'kept' };
+  }
   const replacement = rewriteFromTable(sentence, lang, context);
   if (!replacement) return { text: '', action: 'dropped' };
   if (foldFeature(replacement) === foldFeature(sentence)) return { text: sentence, action: 'kept' };

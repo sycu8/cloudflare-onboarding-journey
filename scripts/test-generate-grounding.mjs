@@ -1352,7 +1352,7 @@ const qp3Plan = await reviewPlanClaims('For the Pro plan, stop at that dashboard
   return wrongOrNull(sentences);
 });
 assert.equal(qp3PlanClaims, 1);
-assert.doesNotMatch(qp3Plan, /stop at that dashboard path/);
+assert.equal(qp3Plan, 'For the Pro plan, stop at that dashboard path.');
 
 const qp5 = await reviewPlanClaims("Super Bot Fight Mode doesn't include the Pro plan.", 'en', wrongOrNull);
 assert.doesNotMatch(qp5, /doesn't include/);
@@ -1363,12 +1363,12 @@ assert.doesNotMatch(qp6, /chỉ có ở Enterprise/);
 assert.match(qp6, /Super Bot Fight Mode/);
 
 let lg1Claims = 0;
-const lg1 = await reviewPlanClaims('Then you will see Log.', 'en', async (sentences) => {
+const lg1 = await reviewPlanClaims('Set the action to Log.', 'en', async (sentences) => {
   lg1Claims = sentences.length;
   return okVerdict(sentences);
 }, { prompt: 'I am on the Pro plan' });
 assert.equal(lg1Claims, 1);
-assert.doesNotMatch(lg1, /will see Log/);
+assert.doesNotMatch(lg1, /Set the action to Log/);
 assert.match(lg1, /Log is Enterprise only/);
 
 for (const text of [
@@ -1414,5 +1414,98 @@ const logUnderChallenge = await reviewPlanClaims(
 );
 assert.doesNotMatch(logUnderChallenge, /action to Log/);
 assert.match(logUnderChallenge, /Log is Enterprise only/);
+
+const loggingKept = [
+  ['EC1', 'How do I use Logpush?', 'en', 'Logpush sends the log fields you select.'],
+  ['EV1', 'Logpush hoạt động thế nào?', 'vi', 'Logpush xuất nhật ký theo log field.'],
+  ['R2P1', 'How do I search logs?', 'en', 'Use Log Explorer to search the logs.'],
+  ['LG5', 'I am on the Pro plan', 'en', 'Instant Logs shows the request log.'],
+];
+for (const [name, prompt, lang, response] of loggingKept) {
+  const sample = await reviewPlanClaims(response, lang, okVerdict, { prompt });
+  assert.equal(sample, response, name);
+  assert.doesNotMatch(sample, /WAF custom-rule actions|Action của custom rule/, name);
+}
+const r2p2 = await reviewPlanClaims(
+  'Open Logpush. Pick the log fields, then save the job.',
+  'en',
+  okVerdict,
+  { prompt: 'How do I use Logpush?' },
+);
+assert.match(r2p2, /Open Logpush/);
+assert.match(r2p2, /Pick the log fields/);
+assert.doesNotMatch(r2p2, /WAF custom-rule actions/);
+const qp7 = await reviewPlanClaims('Open Security Events and review the log.', 'en', okVerdict, {
+  prompt: 'I am on the Pro plan',
+});
+assert.equal(qp7, 'Open Security Events and review the log.');
+
+for (const [name, prompt] of [
+  ['EN1', 'Our Enterprise zone needs a custom rule.'],
+  ['EN2', 'Tài khoản Enterprise.'],
+  ['EN3', 'plan: Enterprise'],
+  ['EN4', 'On the Enterprise plan, add a custom rule.'],
+]) {
+  const sample = await generate({ prompt, lang: 'en' }, { response: 'Set the action to Log.' });
+  assert.match(sample.data.result.response, /Set the action to Log/, name);
+  assert.doesNotMatch(sample.data.result.response, /instead of Log|Managed Challenge/, name);
+}
+const qn1 = await generate(
+  { prompt: 'Tài khoản Enterprise. Custom rule nên dùng action nào?', lang: 'vi' },
+  { response: 'Hãy chọn Log.' },
+);
+assert.match(qn1.data.result.response, /chọn Log/);
+assert.doesNotMatch(qn1.data.result.response, /thay cho Log|instead of Log/);
+
+const c08 = await reviewPlanClaims(
+  'On the Business plan, open Security → Settings. Turn on the managed ruleset. Then click Save.',
+  'en',
+  async () => null,
+);
+assert.match(c08, /open Security → Settings/);
+assert.match(c08, /Turn on the managed ruleset/);
+assert.match(c08, /click Save/);
+assert.doesNotMatch(c08, /Use the Cloudflare dashboard for this step/);
+
+const qp3Live = await reviewPlanClaims('Trong Security → Settings, Managed Challenge là Log.', 'vi', okVerdict, {
+  prompt: 'Tôi dùng gói Business',
+});
+assert.doesNotMatch(qp3Live, /là Log/);
+assert.match(qp3Live, /không phải action chỉ ghi|Log chỉ có trên Enterprise/);
+
+const sbOnly = await reviewPlanClaims('Super Bot Fight Mode chỉ có ở Enterprise.', 'vi', okVerdict);
+assert.doesNotMatch(sbOnly, /chỉ có ở Enterprise/);
+assert.match(sbOnly, /Super Bot Fight Mode/);
+const saveShapes = await reviewPlanClaims(
+  'Sau khi Save, mọi rule đều được bật. All of the rules run.',
+  'en',
+  okVerdict,
+);
+assert.doesNotMatch(saveShapes, /mọi rule đều được bật|All of the rules run/);
+assert.match(saveShapes, /subset of rules|không bật mọi rule|một phần rule/);
+const nsb = await reviewPlanClaims('Đặt NS thành primary.example.co.uk.', 'vi', okVerdict);
+assert.doesNotMatch(nsb, /primary\.example\.co\.uk/);
+assert.match(nsb, /hostname/);
+const nsc = await reviewPlanClaims('The NS target is edge.provider.example.', 'en', okVerdict);
+assert.doesNotMatch(nsc, /edge\.provider\.example/);
+assert.match(nsc, /Never write a nameserver hostname/);
+
+let claimBatches = 0;
+const batched = await gatherVerdicts(
+  [
+    { id: 's0', text: 'Log is Enterprise only.' },
+    { id: 's1', text: 'Sensitive Data Detection is Enterprise only.' },
+    { id: 's2', text: 'Bot Management is an Enterprise add-on.' },
+    { id: 's3', text: 'Logpush is available on Pro.' },
+    { id: 's4', text: 'Save does not enable every rule.' },
+  ],
+  async (group) => {
+    claimBatches += 1;
+    assert.equal(group.length, 5);
+    return JSON.stringify({ verdicts: group.map((item) => ({ id: item.id, v: 'ok' })) });
+  },
+);
+assert.equal(claimBatches, 1);
+assert.equal(batched.get('s4'), 'ok');
 
 console.log('generate grounding prompt checks passed');
