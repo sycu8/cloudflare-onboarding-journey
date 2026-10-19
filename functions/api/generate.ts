@@ -5,6 +5,7 @@ import {
   OVERRIDE_ACTIONS,
   asksLogpush,
   detachActionRows,
+  isDanglingPronounSentence,
   isWafActionsAnswer,
   businessManagedRulesetLine,
   claimCheckMessages,
@@ -72,8 +73,24 @@ function isRetiredInsteadLine(sentence: string): boolean {
   return /use managed challenge instead of log|managed challenge thay cho log/.test(foldGenerated(sentence));
 }
 
+/** Drop a list marker and a leading "Instead," before the watch-line test. */
+function unwrapWatchSentence(sentence: string): string {
+  return sentence
+    .replace(/^\s*(?:[-*•]|\d+[.)])\s*/, '')
+    .replace(/^(?:Instead|Thay vào đó)\s*,?\s*/i, '')
+    .trim();
+}
+
+function watchCaveat(lang: Lang): string {
+  return lang === 'en'
+    ? 'Managed Challenge challenges real visitors; it does not only record.'
+    : 'Managed Challenge thách thức người truy cập thật, không chỉ ghi lại.';
+}
+
 function isWatchLine(sentence: string): boolean {
-  const folded = foldGenerated(sentence);
+  const folded = foldGenerated(unwrapWatchSentence(sentence));
+  if (/start with managed challenge[\s\S]{0,120}switch to block/.test(folded)) return true;
+  if (/bat dau (?:bang|voi) managed challenge[\s\S]{0,120}(?:doi sang|chuyen sang) block/.test(folded)) return true;
   return [LOG_WATCH.en, LOG_WATCH.vi].some((block) =>
     block.split(/(?<=[.!?])\s+/).some((part) => part && foldGenerated(part) === folded),
   );
@@ -132,9 +149,20 @@ function rewriteSentences(text: string, edit: (sentence: string) => string): str
     .split('\n')
     .map((line) => {
       const collapsed: string[] = [];
-      for (const sentence of splitSentences(line).map(edit)) {
-        if (collapsed[collapsed.length - 1] === sentence) continue;
-        collapsed.push(sentence);
+      let antecedentKept = true;
+      for (const sentence of splitSentences(line)) {
+        const edited = edit(sentence);
+        if (!edited.trim()) {
+          antecedentKept = false;
+          continue;
+        }
+        if (!antecedentKept && isDanglingPronounSentence(edited)) {
+          antecedentKept = true;
+          continue;
+        }
+        antecedentKept = edited === sentence;
+        if (collapsed[collapsed.length - 1] === edited) continue;
+        collapsed.push(edited);
       }
       return collapsed.join(' ');
     })
@@ -462,9 +490,11 @@ export function rewritePlanGatedActions(text: string, lang: Lang, prompt: string
   const watch = showLogWatch(plan, prompt);
   const rewritten = rewriteSentences(source, (sentence) => {
     if (isRefusalOpener(sentence) || inventedEnterpriseProbe(sentence)) return '';
-    if (isRetiredInsteadLine(sentence) || (isWatchLine(sentence) && !watch)) {
-      if (watch) sawWatch = true;
-      return '';
+    if (isRetiredInsteadLine(sentence)) return '';
+    if (isWatchLine(sentence)) {
+      if (!watch || asksLogpush(prompt)) return '';
+      sawWatch = true;
+      return unwrapWatchSentence(sentence);
     }
     if (asksLogpush(prompt) && (isWatchLine(sentence) || isRetiredInsteadLine(sentence) || isWafActionsAnswer(sentence))) return '';
     if (inventsWafAction(sentence) && !asksLogpush(prompt)) return knownActionsInstruction(lang);
@@ -509,7 +539,10 @@ export function rewritePlanGatedActions(text: string, lang: Lang, prompt: string
     next = appendMissing(next, logLine);
     if (watch) sawWatch = true;
   }
-  if (sawWatch || watch && sawLog) next = appendMissing(next, logInsteadInstruction(lang));
+  if (watch && sawLog && !isWatchLine(next)) next = appendMissing(next, logInsteadInstruction(lang));
+  if (sawWatch && !foldGenerated(next).includes(foldGenerated(watchCaveat(lang)))) {
+    next = appendMissing(next, watchCaveat(lang));
+  }
   if (sawSave) next = appendMissing(next, saveLine);
   else if (sawSaveLimit && !hasSubsetPoint(next)) next = appendMissing(next, subsetSentence(lang));
   if (sawBot) next = appendMissing(next, botManagementInstruction(lang));
@@ -743,24 +776,26 @@ export function curatedStepsFallback(prompt: string, lang: Lang): string {
 }
 
 function hasDashboardSteps(folded: string): boolean {
-  return /security\s*(?:→|->)|overview|nameserver|managed challenge|\bblock\b|orange cloud|full \(strict\)|dash\.cloudflare|\bsave\b|logpush|super bot|bot fight|custom rule|free managed|interactive challenge/.test(
+  return /security\s*(?:→|->)|overview|nameserver|managed challenge|non-interactive challenge|js challenge|\bblock\b|\bskip\b|orange cloud|full \(strict\)|dash\.cloudflare|\bsav(?:e|ing|ed)\b|\bluu\b|logpush|super bot|bot fight|custom rule|free managed|interactive challenge|\baction\b|hanh dong|security events/.test(
     folded,
   );
 }
 
-/** An offer to help, with no dashboard step left in the answer. */
-function isOfferOrMeta(text: string): boolean {
+/** No dashboard step left. A confirmed table fact, including Log on Enterprise, is still an answer. */
+function hasNoDashboardStep(text: string): boolean {
   const folded = foldGenerated(text);
-  if (hasDashboardSteps(folded)) return false;
-  if (/\blog is only available on enterprise\b|\blog is enterprise only\b|\blog chi co tren enterprise\b/.test(folded)) return false;
-  return /\b(?:i can help|i'd be happy|id be happy|happy to|let me|sure[,! ]|of course|here is an overview|here's an overview|i will explain|toi co the giup|minh se|de minh|chac chan)\b/.test(
-    folded,
-  );
+  if (!folded.trim() || hasDashboardSteps(folded)) return false;
+  const sentences = text
+    .split('\n')
+    .flatMap((line) => splitSentences(line))
+    .filter((sentence) => sentence.trim());
+  if (sentences.length > 0 && sentences.every((sentence) => tableConfirms(sentence))) return false;
+  return true;
 }
 
 export function guardGenerateText(text: string, lang: Lang, prompt = ''): string {
   let guarded = rewritePlanGatedActions(rewriteInventedNameservers(text, lang, prompt), lang, prompt);
-  if (isBareRefusal(guarded) || isOfferOrMeta(guarded)) {
+  if (isBareRefusal(guarded) || hasNoDashboardStep(guarded)) {
     const fallback = curatedStepsFallback(prompt, lang);
     if (fallback) guarded = fallback;
   }

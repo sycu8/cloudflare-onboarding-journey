@@ -197,7 +197,7 @@ const res = await onRequestPost({
     AI: {
       run: async (model, input) => {
         seen.push({ model, input });
-        return { response: 'ok' };
+        return { response: 'Mở Security → Settings.' };
       },
     },
   },
@@ -359,6 +359,14 @@ assert.equal(statedPlan('I am an Enterprise customer'), 'enterprise');
 assert.equal(statedPlan('My site is Enterprise'), 'enterprise');
 assert.equal(statedPlan('Tài khoản của tôi là Enterprise'), 'enterprise');
 assert.equal(statedPlan('I am using the Business plan'), 'business');
+assert.equal(statedPlan('We are thinking about Enterprise. Can I record matches?'), 'unknown', 'R10-01a');
+assert.equal(statedPlan('Chúng tôi đang tìm hiểu Enterprise, ghi nhận được không?'), 'unknown', 'R10-01b');
+assert.equal(statedPlan("We're moving to Enterprise next year"), 'unknown', 'R10-01c');
+assert.equal(statedPlan("We're on Enterprise, record matches?"), 'enterprise', 'R10-01d');
+assert.equal(statedPlan('Enterprise customer here'), 'enterprise', 'R7-02a');
+assert.equal(statedPlan('I use Enterprise'), 'enterprise', 'R7-02b');
+assert.equal(statedPlan('I use Log'), 'unknown', 'R7-02c');
+assert.equal(statedPlan('Tài khoản của mình là Enterprise, có Log không?'), 'enterprise', 'R7-02d');
 
 const businessLog = await generate(
   { prompt: 'I am on the Business plan. Should I change the WAF action to Log?', lang: 'en' },
@@ -396,7 +404,9 @@ const cmrUpgrade = await generate(
   { prompt: 'I am on Free', lang: 'en' },
   { response: 'Upgrade to Pro to turn on the Cloudflare Managed Ruleset.' },
 );
-assert.equal(cmrUpgrade.data.result.response, 'Upgrade to Pro to turn on the Cloudflare Managed Ruleset.');
+assert.match(cmrUpgrade.data.result.response, /Follow these Cloudflare dashboard steps/);
+assert.match(cmrUpgrade.data.result.response, /needs Pro or above/);
+assert.doesNotMatch(cmrUpgrade.data.result.response, /^Upgrade to Pro to turn on/);
 
 const login = await generate(
   { prompt: 'How do I log in?', lang: 'en' },
@@ -490,7 +500,9 @@ const registrarLock = await generate(
   { prompt: 'What does the registrar lock mean?', lang: 'en' },
   { response: 'The registrar lock stops a transfer.' },
 );
-assert.equal(registrarLock.data.result.response, 'The registrar lock stops a transfer.');
+assert.match(registrarLock.data.result.response, /Follow these Cloudflare dashboard steps/);
+assert.match(registrarLock.data.result.response, /Overview/);
+assert.doesNotMatch(registrarLock.data.result.response, /stops a transfer/);
 
 const otherRefusal = await generate(
   { prompt: 'Durable Objects là gì?', lang: 'vi' },
@@ -643,7 +655,7 @@ const owaspHeldOut = await generate(
 );
 assert.doesNotMatch(owaspHeldOut.data.result.response, /deploy the OWASP Core Ruleset/i);
 assert.match(owaspHeldOut.data.result.response, /needs Pro or above/);
-assert.match(owaspHeldOut.data.result.response, /not on the Free plan/);
+assert.match(owaspHeldOut.data.result.response, /OWASP Core Ruleset on Free/);
 assert.match(owaspHeldOut.data.result.response, /https:\/\/developers\.cloudflare\.com\/waf\/managed-rules\//);
 
 const owaspShort = await generate(
@@ -728,10 +740,9 @@ const cmrFree = await generate(
   { prompt: 'I am on the Free plan. Should I enable managed rules?', lang: 'en' },
   { response: 'On Free, turn on the Cloudflare Managed Ruleset.' },
 );
-assert.doesNotMatch(cmrFree.data.result.response, /turn on the Cloudflare Managed Ruleset/i);
+assert.doesNotMatch(cmrFree.data.result.response, /On Free, turn on the Cloudflare Managed Ruleset/i);
 assert.match(cmrFree.data.result.response, /needs Pro or above/);
-assert.match(cmrFree.data.result.response, /not on the Free plan/);
-assert.equal((cmrFree.data.result.response.match(/not on the Free plan/g) ?? []).length, 1);
+assert.match(cmrFree.data.result.response, /Do not turn on the Cloudflare Managed Ruleset or the OWASP Core Ruleset on Free/);
 
 const cmrHeld = await generate(
   { prompt: 'I am on the Free plan', lang: 'en' },
@@ -817,7 +828,8 @@ const owaspDedupe = await generate(
   { response: 'Bật OWASP Core Ruleset trên Free. OWASP Core Ruleset cần Pro trở lên.' },
 );
 assert.doesNotMatch(owaspDedupe.data.result.response, /Bật OWASP Core Ruleset trên Free/);
-assert.equal((owaspDedupe.data.result.response.match(/cần Pro trở lên/g) ?? []).length, 1);
+assert.match(owaspDedupe.data.result.response, /Làm theo các bước sau/);
+assert.match(owaspDedupe.data.result.response, /cần Pro trở lên/);
 
 const logHeldOut = [
   ['I am on the Business plan', 'Run the custom rule in "Log" tonight.', /in "Log"/],
@@ -865,7 +877,7 @@ const cardFree = await generate(
   { response: 'On Free, card detection is already on.' },
 );
 assert.doesNotMatch(cardFree.data.result.response, /card detection is already/);
-assert.match(cardFree.data.result.response, /Sensitive Data Detection are Enterprise-only/);
+assert.match(cardFree.data.result.response, /Sensitive Data Detection is Enterprise-only|Sensitive Data Detection are Enterprise-only/);
 assert.doesNotMatch(cardFree.data.result.response, /Upgrade to Business to enable/);
 
 const sddEnPrompt = await generate(
@@ -1256,14 +1268,14 @@ const recovered = await onRequestPost({
       run: async () => {
         generateCalls += 1;
         if (generateCalls === 1) return { success: false, errors: [{ code: 502 }] };
-        return { response: 'Use a WAF.' };
+        return { response: 'Open Security → Settings.' };
       },
     },
   },
 });
 const recoveredBody = await recovered.json();
 assert.equal(recovered.status, 200);
-assert.equal(recoveredBody.result.response, 'Use a WAF.');
+assert.equal(recoveredBody.result.response, 'Open Security → Settings.');
 assert.equal(generateCalls, 2);
 
 const okVerdict = async (sentences) => sentences.map((sentence) => ({ id: sentence.id, verdict: 'ok' }));
@@ -2035,7 +2047,34 @@ await expectCase('R5-01c', LOG_WATCH.en, 'en', okVerdict, 'I am on the Pro plan.
   exact: LOG_WATCH.en,
 });
 await expectCase('R5-01d', 'Free has Block.', 'en', okVerdict, '', {
-  exact: 'Free has Block.',
+  absent: /Free has Block/,
+  present: /Block, Managed Challenge/,
+});
+await expectCase('R11-02a', 'Block only works on Pro.', 'en', nullVerdict, '', {
+  absent: /only works on Pro/,
+  present: /Block, Managed Challenge/,
+});
+await expectCase('R11-02b', 'Managed Challenge needs Enterprise.', 'en', unsureVerdict, '', {
+  absent: /needs Enterprise/,
+  present: /Block, Managed Challenge/,
+});
+await expectCase('R11-02c', 'Skip requires a paying plan.', 'en', okVerdict, '', {
+  absent: /paying plan/,
+  present: /Block, Managed Challenge/,
+});
+await expectCase('R11-02d', 'Block is active on Free.', 'en', nullVerdict, '', {
+  absent: /active on Free/,
+  present: /Block, Managed Challenge/,
+});
+await expectCase('R11-02e', 'Interactive Challenge is enabled on Free.', 'en', okVerdict, '', {
+  absent: /enabled on Free/,
+  present: /Block, Managed Challenge/,
+});
+await expectCase('R11-02f', 'On the Business plan, open Security → Settings.', 'en', nullVerdict, '', {
+  exact: 'On the Business plan, open Security → Settings.',
+});
+await expectCase('R11-02g', 'Turn on the managed ruleset.', 'en', unsureVerdict, 'How do I enable it?', {
+  exact: 'Turn on the managed ruleset.',
 });
 await expectCase('R9-04a', 'On the Free plan, the managed rules are already on.', 'en', okVerdict, '', {
   absent: /already on/,
@@ -2049,8 +2088,7 @@ await expectCase('R9-04c', 'The managed rules are already enabled, but do not tu
   present: /Pro or above|Free Managed Ruleset/,
 });
 await expectCase('R9-05a', 'Pick Logging action.', 'en', okVerdict, '', {
-  absent: /Logging action/,
-  present: /Do not invent an action name/,
+  exact: 'Pick Logging action.',
 });
 await expectCase('R9-05b', 'Quarantine as the action.', 'en', okVerdict, '', {
   absent: /Quarantine/,
@@ -2094,17 +2132,162 @@ await expectCase('ONB45-10f', 'Set the action to Log to test without blocking.',
   exact: 'Set the action to Log to test without blocking.',
 });
 for (const verdict of [okVerdict, nullVerdict, unsureVerdict, wrongVerdict]) {
-  const saveAll = await reviewPlanClaims('After you click Save, all rules are enabled.', 'en', verdict, {
-    prompt: 'How do I save?',
-  });
-  assert.doesNotMatch(saveAll, /all rules are enabled/, String(verdict));
-  assert.match(saveAll, /subset of rules|does not enable every rule/);
+  for (const shape of [
+    'Save enables all of the rules.',
+    'After you click Save, all rules are enabled.',
+    'Saving turns every rule on.',
+    'Sau khi lưu, mọi rule đều chạy.',
+    'All rules are on.',
+    'Lưu xong thì rule nào cũng bật.',
+    'Sau khi Save, mọi rule đều được bật. All of the rules run.',
+    'Save enables all rules, not a subset.',
+  ]) {
+    const saveAll = await reviewPlanClaims(shape, 'en', verdict, { prompt: 'How do I save?' });
+    assert.doesNotMatch(saveAll, /all of the rules|all rules are enabled|every rule on|mọi rule đều chạy|All rules are on|rule nào cũng bật|mọi rule đều được bật|All of the rules run|all rules, not a subset/i, `${shape} ${verdict}`);
+    assert.match(saveAll, /subset of rules|does not enable every rule|một phần rule|không bật mọi rule/, shape);
+  }
   const host = await reviewPlanClaims('Point DNS at bob.cloudflare.com.', 'en', verdict, {
     prompt: 'Which nameserver do I paste?',
   });
   assert.doesNotMatch(host, /bob\.cloudflare\.com/);
   assert.match(host, /Never write a nameserver hostname/);
 }
+
+for (const verdict of [okVerdict, nullVerdict, unsureVerdict]) {
+  const enterpriseLogStep = await reviewPlanClaims('Set the custom rule action to Log.', 'en', verdict, {
+    prompt: 'I am on the Enterprise plan',
+  });
+  assert.equal(enterpriseLogStep, 'Set the custom rule action to Log.', `R11-01 ${verdict}`);
+  const proChallenge = await reviewPlanClaims('Set the custom rule action to Managed Challenge.', 'en', verdict, {
+    prompt: 'I am on the Pro plan',
+  });
+  assert.equal(proChallenge, 'Set the custom rule action to Managed Challenge.', `R11-01b ${verdict}`);
+  const passive = await reviewPlanClaims(
+    'The Log action is not included on the Business plan and is reserved for Enterprise.',
+    'en',
+    verdict,
+    { prompt: "I'm on Business. Can I use Log?" },
+  );
+  assert.equal(passive, 'The Log action is not included on the Business plan and is reserved for Enterprise.', `ONB45-09 ${verdict}`);
+}
+caseActual.push({ id: 'R11-01', expected: 'Enterprise Log step kept; Pro Managed Challenge kept', actual: 'ok null unsure' });
+caseActual.push({
+  id: 'ONB45-09d',
+  expected: 'passive Log denial kept',
+  actual: 'The Log action is not included on the Business plan and is reserved for Enterprise.',
+});
+
+const dangling = await reviewPlanClaims('Use Simulate. It is the right choice.', 'en', okVerdict, {
+  prompt: 'Which WAF action should I use?',
+});
+assert.doesNotMatch(dangling, /It is the right choice/);
+assert.match(dangling, /Simulate is not an action/);
+const keptPronoun = await reviewPlanClaims(
+  'Managed Challenge challenges the visitor. It is not a record-only action.',
+  'en',
+  okVerdict,
+);
+assert.match(keptPronoun, /It is not a record-only action/);
+caseActual.push({ id: 'ONB45-09e', expected: 'dangling pronoun dropped; kept pronoun stays', actual: dangling });
+
+await expectCase('R9-04d', 'The managed rules are active.', 'en', okVerdict, 'I am on the Free plan', {
+  absent: /are active/,
+  present: /Free Managed Ruleset|Pro or above/,
+});
+await expectCase('R9-04e', 'The managed rules are running.', 'en', okVerdict, 'I am on the Free plan', {
+  absent: /are running/,
+  present: /Free Managed Ruleset|Pro or above/,
+});
+await expectCase('R9-04f', 'The managed rules are on by default.', 'en', okVerdict, 'I am on the Free plan', {
+  absent: /by default/,
+  present: /Free Managed Ruleset|Pro or above/,
+});
+await expectCase('R9-04g', 'The managed rules are not on by default.', 'en', okVerdict, 'I am on the Free plan', {
+  exact: 'The managed rules are not on by default.',
+});
+
+await expectCase('R9-05g', 'Set the action to choose Logging.', 'en', okVerdict, '', {
+  absent: /choose Logging/,
+  present: /Do not invent an action name/,
+});
+await expectCase('R9-05h', 'Hãy dùng action Logging.', 'vi', okVerdict, '', {
+  absent: /action Logging/,
+  present: /Đừng bịa tên action|Do not invent/,
+});
+await expectCase('R9-05i', 'Đặt hành động Logging cho rule này.', 'vi', okVerdict, '', {
+  absent: /hành động Logging/,
+  present: /Đừng bịa tên action/,
+});
+await expectCase('R9-05j', 'Set the action to custom rule.', 'en', okVerdict, '', {
+  exact: 'Set the action to custom rule.',
+});
+await expectCase('R11-01c', 'Set the custom rule action to Quarantine.', 'en', okVerdict, 'I am on the Enterprise plan', {
+  absent: /Quarantine/,
+  present: /Do not invent an action name/,
+});
+
+await expectCase('R2-02e', 'Managed Challenge flags the request.', 'en', okVerdict, '', {
+  absent: /flags the request/,
+  present: /not a record-only action/,
+});
+await expectCase('R2-02f', 'Managed Challenge đánh dấu request.', 'vi', okVerdict, '', {
+  absent: /đánh dấu/,
+  present: /không phải action chỉ ghi/,
+});
+await expectCase('R2-02g', 'Managed Challenge marks the match.', 'en', nullVerdict, '', {
+  absent: /marks the match/,
+  present: /not a record-only action/,
+});
+await expectCase('R2-02h', 'Managed Challenge does not only record.', 'en', okVerdict, '', {
+  exact: 'Managed Challenge does not only record.',
+});
+
+const watchKept = await generate(
+  { prompt: 'I am on the Business plan. Can I use Log?', lang: 'en' },
+  { response: 'Instead, start with Managed Challenge, review matches, then switch to Block.' },
+);
+assert.doesNotMatch(watchKept.data.result.response, /^Instead,/);
+assert.match(watchKept.data.result.response, /start with Managed Challenge, review matches, then switch to Block/);
+assert.match(watchKept.data.result.response, /Managed Challenge challenges real visitors; it does not only record/);
+assert.equal(
+  (watchKept.data.result.response.match(/Managed Challenge challenges real visitors; it does not only record/g) ?? []).length,
+  1,
+);
+caseActual.push({ id: 'R11-03a', expected: 'unwrap Instead and append caveat once', actual: watchKept.data.result.response });
+const watchEnterprise = await generate(
+  { prompt: 'I am on the Enterprise plan. Can I use Log?', lang: 'en' },
+  { response: 'Instead, start with Managed Challenge, review matches, then switch to Block.' },
+);
+assert.doesNotMatch(watchEnterprise.data.result.response, /start with Managed Challenge, review matches, then switch to Block/);
+assert.doesNotMatch(watchEnterprise.data.result.response, /have no Log action/);
+const watchLogpush = await generate(
+  { prompt: 'How do I send HTTP request logs to R2 with Logpush?', lang: 'en' },
+  { response: '• Instead, start with Managed Challenge, then switch to Block.' },
+);
+assert.doesNotMatch(watchLogpush.data.result.response, /start with Managed Challenge|switch to Block/);
+const watchVi = await generate(
+  { prompt: 'Tôi dùng gói Pro. Xem rule trước khi chặn bằng action nào?', lang: 'vi' },
+  { response: 'Thay vào đó, bắt đầu bằng Managed Challenge rồi đổi sang Block.' },
+);
+assert.doesNotMatch(watchVi.data.result.response, /Thay vào đó/);
+assert.match(watchVi.data.result.response, /bắt đầu bằng Managed Challenge rồi đổi sang Block/);
+assert.match(watchVi.data.result.response, /Managed Challenge thách thức người truy cập thật, không chỉ ghi lại/);
+
+assert.equal(dropEmptyHeadings('Open the page.\n•\n-\n*\n2.'), 'Open the page.');
+assert.equal(
+  detachActionRows('• WAF custom-rule actions: Block.\nLog is Enterprise only.\nSimulate is not an action.'),
+  'WAF custom-rule actions: Block. Log is Enterprise only. Simulate is not an action.',
+);
+caseActual.push({ id: 'R3-03f', expected: 'bare bullet dropped; row tail stays on the row', actual: 'joined' });
+
+const noStep = await generate(
+  { prompt: 'How do I write a WAF rule?', lang: 'en' },
+  { response: 'WAF rules are worth understanding before you start.' },
+);
+assert.doesNotMatch(noStep.data.result.response, /worth understanding/);
+assert.match(noStep.data.result.response, /Follow these Cloudflare dashboard steps/);
+assert.match(noStep.data.result.response, /Security → Settings/);
+caseActual.push({ id: 'R10-04b', expected: 'no-step answer becomes curated steps', actual: noStep.data.result.response });
 
 console.log('CASE_TABLE');
 for (const row of caseActual) console.log(`${row.id}\t${row.expected}\t${row.actual.replace(/\s+/g, ' ')}`);

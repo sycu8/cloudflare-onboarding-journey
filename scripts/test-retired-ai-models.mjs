@@ -132,9 +132,9 @@ async function call(body, run, raw) {
   return { status: res.status, data: await res.json(), seen };
 }
 
-const ok = await call({ prompt: 'What is WAF?', lang: 'en' }, async () => ({ response: 'Use a WAF.' }));
+const ok = await call({ prompt: 'What is WAF?', lang: 'en' }, async () => ({ response: 'Open Security → Settings.' }));
 assert.equal(ok.status, 200);
-assert.equal(ok.data.result.response, 'Use a WAF.');
+assert.equal(ok.data.result.response, 'Open Security → Settings.');
 assert.equal(ok.seen.length, 1);
 assert.equal(ok.seen[0].model, ACTIVE_MODEL);
 assert.equal(typeof ok.seen[0].input.max_tokens, 'number');
