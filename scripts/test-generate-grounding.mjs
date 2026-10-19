@@ -16,8 +16,17 @@ const { basicConfigurationSections } = await import('../src/data/cf101PracticalG
 const { guardGenerateResult, onRequestPost, reviewGenerateResult, rewriteInventedNameservers, statedPlan } = await import(
   '../functions/api/generate.ts'
 );
-const { CUSTOM_RULE_ACTIONS, OVERRIDE_ACTIONS, formatPlanFeatureTable, gatherVerdicts, parseClaimVerdicts, reviewPlanClaims } =
-  await import('../functions/api/planFeatures.ts');
+const {
+  CUSTOM_RULE_ACTIONS,
+  LOG_WATCH,
+  OVERRIDE_ACTIONS,
+  detachActionRows,
+  dropEmptyHeadings,
+  formatPlanFeatureTable,
+  gatherVerdicts,
+  parseClaimVerdicts,
+  reviewPlanClaims,
+} = await import('../functions/api/planFeatures.ts');
 
 const EN_RULES = [
   'nameserver change and DNS records',
@@ -340,6 +349,16 @@ for (const sample of [
 assert.equal(statedPlan('I am on the Business plan'), 'business');
 assert.equal(statedPlan('Tôi dùng gói Enterprise'), 'enterprise');
 assert.equal(statedPlan('Should I use Log?'), 'unknown');
+assert.equal(statedPlan('Do we need Enterprise for Log, or can Pro do it?'), 'unknown');
+assert.equal(statedPlan('We run Business today; does Log need Enterprise?'), 'business');
+assert.equal(statedPlan('Mình đang dùng Enterprise, ghi nhận thế nào?'), 'enterprise');
+assert.equal(statedPlan('I use Log on Enterprise?'), 'unknown');
+assert.equal(statedPlan('We are considering Enterprise'), 'unknown');
+assert.equal(statedPlan("We're not on Enterprise, we're on Pro"), 'pro');
+assert.equal(statedPlan('I am an Enterprise customer'), 'enterprise');
+assert.equal(statedPlan('My site is Enterprise'), 'enterprise');
+assert.equal(statedPlan('Tài khoản của tôi là Enterprise'), 'enterprise');
+assert.equal(statedPlan('I am using the Business plan'), 'business');
 
 const businessLog = await generate(
   { prompt: 'I am on the Business plan. Should I change the WAF action to Log?', lang: 'en' },
@@ -356,7 +375,7 @@ const unknownLog = await generate(
   { response: 'Hãy đổi action sang Log.' },
 );
 assert.match(unknownLog.data.result.response, /Log chỉ có trên Enterprise/);
-assert.match(unknownLog.data.result.response, /Managed Challenge/);
+assert.doesNotMatch(unknownLog.data.result.response, /Managed Challenge|không có action Log/);
 assert.doesNotMatch(unknownLog.data.result.response, /đổi action sang Log/i);
 
 const enterpriseLog = await generate(
@@ -553,12 +572,26 @@ for (const sampleCase of [
 }
 
 for (const kept of [
-  { lang: 'en', response: 'Log is only available on Enterprise. On Free, Pro, and Business, use Managed Challenge instead of Log.' },
-  { lang: 'vi', response: 'Log chỉ có trên Enterprise. Trên Free, Pro và Business, hãy dùng Managed Challenge thay cho Log.' },
-  { lang: 'en', response: 'Log and Sensitive Data Detection are Enterprise-only. Do not upgrade to Pro or Business for them. Use Managed Challenge instead of Log.' },
+  {
+    lang: 'en',
+    response: 'Log is only available on Enterprise. On Free, Pro, and Business, use Managed Challenge instead of Log.',
+    expected: 'Log is only available on Enterprise.',
+  },
+  {
+    lang: 'vi',
+    response: 'Log chỉ có trên Enterprise. Trên Free, Pro và Business, hãy dùng Managed Challenge thay cho Log.',
+    expected: 'Log chỉ có trên Enterprise.',
+  },
+  {
+    lang: 'en',
+    response:
+      'Log and Sensitive Data Detection are Enterprise-only. Do not upgrade to Pro or Business for them. Use Managed Challenge instead of Log.',
+    expected: 'Log and Sensitive Data Detection are Enterprise-only. Do not upgrade to Pro or Business for them.',
+  },
 ]) {
   const sample = await generate({ prompt: 'I am on the Business plan', lang: kept.lang }, { response: kept.response });
-  assert.equal(sample.data.result.response, kept.response, kept.response);
+  assert.equal(sample.data.result.response, kept.expected, kept.response);
+  assert.doesNotMatch(sample.data.result.response, /instead of Log|thay cho Log|have no Log action|không có action Log/);
 }
 
 for (const kept of [
@@ -661,7 +694,8 @@ const logLabelHeld = await generate(
   { prompt: 'I am on the Pro plan. Which custom rule action should I pick?', lang: 'en' },
   { response: 'Pro plan — Log action' },
 );
-assert.doesNotMatch(logLabelHeld.data.result.response, /Log action/);
+assert.doesNotMatch(logLabelHeld.data.result.response, /Pro plan — Log action/);
+assert.match(logLabelHeld.data.result.response, /have no Log action/);
 assert.match(logLabelHeld.data.result.response, /Managed Challenge/);
 
 const sddEnable = await generate(
@@ -1470,7 +1504,7 @@ const c08 = await reviewPlanClaims(
   'en',
   async () => null,
 );
-assert.doesNotMatch(c08, /On the Business plan/);
+assert.match(c08, /On the Business plan, open Security → Settings/);
 assert.match(c08, /Turn on the managed ruleset/);
 assert.match(c08, /click Save/);
 assert.doesNotMatch(c08, /Use the Cloudflare dashboard for this step/);
@@ -1718,6 +1752,30 @@ assert.ok(formatPlanFeatureTable('vi').includes(OVERRIDE_ACTIONS.vi));
 assert.doesNotMatch(OVERRIDE_ACTIONS.en, /Skip, and Log|Skip và Log/);
 assert.match(CUSTOM_RULE_ACTIONS.en, /\bSkip\b/);
 assert.match(OVERRIDE_ACTIONS.en, /Skip is not an override action/);
+assert.equal(
+  CUSTOM_RULE_ACTIONS.en,
+  'WAF custom-rule actions: Block, Managed Challenge, Non-Interactive Challenge, Interactive Challenge, Skip, and Log. Non-Interactive Challenge and JS Challenge are the same action (js_challenge). Log is Enterprise only.',
+);
+assert.equal(
+  CUSTOM_RULE_ACTIONS.vi,
+  'Action của custom rule WAF: Block, Managed Challenge, Non-Interactive Challenge, Interactive Challenge, Skip và Log. Non-Interactive Challenge và JS Challenge là cùng một action (js_challenge). Log chỉ có trên Enterprise.',
+);
+assert.equal(
+  OVERRIDE_ACTIONS.en,
+  'Managed-rule override actions: Block, Log, Non-Interactive Challenge, Managed Challenge, and Interactive Challenge. Skip is not an override action. Log is Enterprise only.',
+);
+assert.equal(
+  OVERRIDE_ACTIONS.vi,
+  'Action khi override managed rule: Block, Log, Non-Interactive Challenge, Managed Challenge và Interactive Challenge. Skip không phải action override. Log chỉ có trên Enterprise.',
+);
+assert.equal(
+  LOG_WATCH.en,
+  'Free, Pro, and Business have no Log action. Start with Managed Challenge, review Security Events, then switch to Block. Managed Challenge challenges real visitors; it does not only record.',
+);
+assert.equal(
+  LOG_WATCH.vi,
+  'Free, Pro và Business không có action Log. Bắt đầu bằng Managed Challenge, xem Security Events, rồi mới đổi sang Block. Managed Challenge thách thức người truy cập thật, không chỉ ghi lại.',
+);
 
 assert.equal(statedPlan("I'm on Enterprise, where is Log?"), 'enterprise', 'LK03');
 assert.equal(statedPlan('Is Log on Enterprise?'), 'unknown', 'O9e');
@@ -1728,12 +1786,13 @@ const lk03 = await generate(
 );
 caseActual.push({ id: 'LK03', expected: 'enterprise; keep Set the action to Log', actual: lk03.data.result.response });
 assert.match(lk03.data.result.response, /Set the action to Log/);
-assert.doesNotMatch(lk03.data.result.response, /instead of Log/);
+assert.doesNotMatch(lk03.data.result.response, /instead of Log|have no Log action/);
 const o9e = await generate({ prompt: 'Is Log on Enterprise?', lang: 'en' }, { response: 'Set the action to Log.' });
-caseActual.push({ id: 'O9e', expected: 'unknown; Log step removed', actual: o9e.data.result.response });
+caseActual.push({ id: 'O9e', expected: 'unknown; Log step removed; no watch paragraph', actual: o9e.data.result.response });
 assert.equal(statedPlan('Is Log on Enterprise?'), 'unknown');
 assert.doesNotMatch(o9e.data.result.response, /Set the action to Log/);
 assert.match(o9e.data.result.response, /Log is only available on Enterprise/);
+assert.doesNotMatch(o9e.data.result.response, /have no Log action|Start with Managed Challenge/);
 
 const e9b = await generate({ prompt: 'Which WAF action should I use?', lang: 'en' }, { response: 'Use JS Challenge.' });
 caseActual.push({ id: 'E9b', expected: 'keep Use JS Challenge', actual: e9b.data.result.response });
@@ -1795,8 +1854,8 @@ await expectCase('N6c2', 'Use bob.cloudflare.com.', 'en', okVerdict, 'Which name
 const v08 = await reviewPlanClaims('On the Business plan, open Security → Settings.', 'en', async (sentences) =>
   sentences.map((sentence) => ({ id: sentence.id, verdict: 'unsure' })),
 );
-caseActual.push({ id: 'V08', expected: 'unsure plan-context dropped', actual: v08 });
-assert.doesNotMatch(v08, /On the Business plan/);
+caseActual.push({ id: 'V08', expected: 'unsure plan-context kept', actual: v08 });
+assert.match(v08, /On the Business plan, open Security → Settings/);
 
 let nineCalls = 0;
 const nineClaims = Array.from({ length: 9 }, (_, index) => ({
@@ -1836,6 +1895,216 @@ const filteredBatch = await onRequestPost({
 assert.equal(filteredBatch.status, 200);
 assert.doesNotMatch(sentClaims, /Logpush is available on Pro/);
 assert.match(sentClaims, /open the account home/);
+
+const nullVerdict = async () => null;
+const unsureVerdict = async (sentences) => sentences.map((sentence) => ({ id: sentence.id, verdict: 'unsure' }));
+for (const shared of [CUSTOM_RULE_ACTIONS.en, CUSTOM_RULE_ACTIONS.vi, OVERRIDE_ACTIONS.en, OVERRIDE_ACTIONS.vi]) {
+  for (const verdict of [okVerdict, nullVerdict, unsureVerdict]) {
+    const kept = await reviewPlanClaims(shared, shared.includes('Action') ? 'vi' : 'en', verdict, {
+      prompt: 'I am on the Pro plan',
+    });
+    assert.equal(kept, shared, shared.slice(0, 48));
+  }
+}
+for (const [id, sentence] of [
+  ['R10-09a', 'Business does not include the Log action; it is only on Enterprise.'],
+  ['R10-09b', 'Gói Business không có action Log; Log chỉ có trên Enterprise.'],
+  ['R10-09c', 'On Pro, use Super Bot Fight Mode.'],
+]) {
+  const prompts = {
+    'R10-09a': "I'm on Business. Can I use Log?",
+    'R10-09b': 'Mình dùng gói Business, có Log không?',
+    'R10-09c': 'Pro plan, which bot tool?',
+  };
+  const lang = id === 'R10-09b' ? 'vi' : 'en';
+  for (const verdict of [okVerdict, nullVerdict, unsureVerdict]) {
+    const kept = await reviewPlanClaims(sentence, lang, verdict, { prompt: prompts[id] });
+    assert.equal(kept, sentence, id);
+    assert.equal((kept.match(sentence.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')) ?? []).length || (kept === sentence ? 1 : 0), 1, id);
+  }
+  caseActual.push({ id, expected: 'kept verbatim on ok, null, unsure', actual: sentence });
+}
+
+const logpushAnswer = await generate(
+  { prompt: 'Pro plan. How do I send HTTP request logs to R2 with Logpush?', lang: 'en' },
+  { response: `${LOG_WATCH.en} ${CUSTOM_RULE_ACTIONS.en} ${OVERRIDE_ACTIONS.en} Logpush can send the HTTP request logs to R2.` },
+);
+caseActual.push({ id: 'R3-03a', expected: 'no watch paragraph; no WAF actions row', actual: logpushAnswer.data.result.response });
+assert.equal(statedPlan('Pro plan. How do I send HTTP request logs to R2 with Logpush?'), 'pro');
+assert.match(logpushAnswer.data.result.response, /Logpush can send the HTTP request logs to R2/);
+assert.doesNotMatch(logpushAnswer.data.result.response, /have no Log action|WAF custom-rule actions|Managed-rule override actions|Managed Challenge/);
+
+const enterpriseWatch = await generate(
+  { prompt: 'Enterprise here. How do I record WAF matches before I block?', lang: 'en' },
+  { response: `${LOG_WATCH.en} Set the action to Log.` },
+);
+caseActual.push({ id: 'R3-03b', expected: 'keep Log step; no Free/Pro/Business line', actual: enterpriseWatch.data.result.response });
+assert.equal(statedPlan('Enterprise here. How do I record WAF matches before I block?'), 'enterprise');
+assert.match(enterpriseWatch.data.result.response, /Set the action to Log/);
+assert.doesNotMatch(enterpriseWatch.data.result.response, /have no Log action|Free, Pro, and Business/);
+
+const duplicated = await generate(
+  { prompt: 'I am on the Business plan. How do I test a custom rule?', lang: 'en' },
+  {
+    response: `Log is only available on Enterprise. Log is Enterprise only. ${CUSTOM_RULE_ACTIONS.en} ${CUSTOM_RULE_ACTIONS.en}`,
+  },
+);
+const logOnlyHits = duplicated.data.result.response.match(/Log is only available on Enterprise\.|Log is Enterprise only\./g) ?? [];
+caseActual.push({ id: 'R3-03c', expected: 'one Log-only sentence', actual: duplicated.data.result.response });
+assert.equal(logOnlyHits.length, 1);
+assert.equal((duplicated.data.result.response.match(/WAF custom-rule actions:/g) ?? []).length, 1);
+
+const emptiedHeading = await generate(
+  { prompt: 'What is orange cloud?', lang: 'en' },
+  { response: 'Keep the orange cloud on.\nNext step:\n2.' },
+);
+caseActual.push({ id: 'R3-03d', expected: 'no bare 2. and no empty Next step', actual: emptiedHeading.data.result.response });
+assert.match(emptiedHeading.data.result.response, /Keep the orange cloud on/);
+assert.doesNotMatch(emptiedHeading.data.result.response, /Next step:/);
+assert.doesNotMatch(emptiedHeading.data.result.response, /^\s*2\.\s*$/m);
+assert.equal(dropEmptyHeadings('Open the page.\nNext step:\n2.'), 'Open the page.');
+
+const bulletRow = await generate(
+  { prompt: 'Which WAF action should I use?', lang: 'en' },
+  { response: '- Read the page title. Use Simulate.' },
+);
+caseActual.push({ id: 'R3-03e', expected: 'WAF actions row on its own line', actual: bulletRow.data.result.response });
+assert.match(bulletRow.data.result.response, /Read the page title/);
+assert.match(bulletRow.data.result.response, /^WAF custom-rule actions:/m);
+assert.doesNotMatch(bulletRow.data.result.response, /^- .*WAF custom-rule actions:/m);
+assert.equal(
+  detachActionRows('- Read the page title. WAF custom-rule actions: Block.'),
+  '- Read the page title.\nWAF custom-rule actions: Block.',
+);
+assert.equal(detachActionRows('- WAF custom-rule actions: Block.'), 'WAF custom-rule actions: Block.');
+assert.equal(detachActionRows('2. WAF custom-rule actions: Block.'), 'WAF custom-rule actions: Block.');
+
+const offer = await generate(
+  { prompt: 'How do I write a WAF rule?', lang: 'en' },
+  { response: 'Sure, I can help with that.' },
+);
+caseActual.push({ id: 'R10-04', expected: 'offer-only becomes curated steps', actual: offer.data.result.response });
+assert.doesNotMatch(offer.data.result.response, /Sure, I can help/);
+assert.match(offer.data.result.response, /Follow these Cloudflare dashboard steps/);
+assert.match(offer.data.result.response, /Security → Settings/);
+const factOnly = await generate(
+  { prompt: 'Is Log on Enterprise?', lang: 'en' },
+  { response: 'Log is only available on Enterprise.' },
+);
+assert.equal(factOnly.data.result.response, 'Log is only available on Enterprise.');
+
+await expectCase('R9-03a', 'Skip counts each match.', 'en', okVerdict, '', {
+  absent: /counts each match/,
+  present: /Skip is not a record-only action/,
+});
+await expectCase('R9-03b', 'What Skip will do is record the request.', 'en', okVerdict, '', {
+  absent: /record the request/,
+  present: /Skip is not a record-only action/,
+});
+await expectCase('R9-03c', 'Skip để theo dõi request.', 'vi', okVerdict, '', {
+  absent: /theo dõi/,
+  present: /Skip không phải action chỉ ghi/,
+});
+await expectCase('R9-03d', 'Skip does not record the request.', 'en', okVerdict, '', {
+  exact: 'Skip does not record the request.',
+});
+await expectCase('R2-02a', 'Managed Challenge lets the traffic through.', 'en', okVerdict, '', {
+  absent: /lets the traffic through/,
+  present: /not a record-only action/,
+});
+await expectCase('R2-02b', 'Managed Challenge chỉ ghi nhận request.', 'vi', okVerdict, '', {
+  absent: /ghi nhận/,
+  present: /không phải action chỉ ghi/,
+});
+await expectCase('R2-02c', 'It only logs.', 'en', okVerdict, 'Use Managed Challenge for this rule.', {
+  absent: /only logs/,
+  present: /not a record-only action/,
+});
+await expectCase('R2-02d', 'Managed Challenge challenges real visitors; it does not only record.', 'en', nullVerdict, '', {
+  exact: 'Managed Challenge challenges real visitors; it does not only record.',
+});
+await expectCase('R5-01a', 'Block is only on Pro.', 'en', okVerdict, '', {
+  absent: /only on Pro/,
+  present: /Block, Managed Challenge/,
+});
+await expectCase('R5-01b', 'Free cannot use Managed Challenge.', 'en', okVerdict, '', {
+  absent: /cannot use Managed Challenge/,
+  present: /Block, Managed Challenge/,
+});
+await expectCase('R5-01c', LOG_WATCH.en, 'en', okVerdict, 'I am on the Pro plan. Can I use Log?', {
+  exact: LOG_WATCH.en,
+});
+await expectCase('R5-01d', 'Free has Block.', 'en', okVerdict, '', {
+  exact: 'Free has Block.',
+});
+await expectCase('R9-04a', 'On the Free plan, the managed rules are already on.', 'en', okVerdict, '', {
+  absent: /already on/,
+  present: /Pro or above|Free Managed Ruleset/,
+});
+await expectCase('R9-04b', 'The managed ruleset is not already on.', 'en', okVerdict, 'I am on the Free plan', {
+  exact: 'The managed ruleset is not already on.',
+});
+await expectCase('R9-04c', 'The managed rules are already enabled, but do not turn on OWASP.', 'en', okVerdict, 'I am on the Free plan', {
+  absent: /already enabled/,
+  present: /Pro or above|Free Managed Ruleset/,
+});
+await expectCase('R9-05a', 'Pick Logging action.', 'en', okVerdict, '', {
+  absent: /Logging action/,
+  present: /Do not invent an action name/,
+});
+await expectCase('R9-05b', 'Quarantine as the action.', 'en', okVerdict, '', {
+  absent: /Quarantine/,
+  present: /Do not invent an action name/,
+});
+await expectCase('R9-05c', 'Use the Simulate action to watch.', 'en', okVerdict, '', {
+  absent: /Simulate action/,
+  present: /Do not invent an action name/,
+});
+await expectCase('R9-05d', 'Set the rule action to Observe only.', 'en', okVerdict, '', {
+  absent: /Observe/,
+  present: /Do not invent an action name/,
+});
+await expectCase('R9-05e', 'Do not invent an action name.', 'en', okVerdict, '', {
+  exact: 'Do not invent an action name.',
+});
+await expectCase('R9-05f', 'Use the Log action to watch.', 'en', okVerdict, 'I am on the Enterprise plan', {
+  exact: 'Use the Log action to watch.',
+});
+await expectCase('ONB45-10a', 'Managed Challenge is a CAPTCHA.', 'en', okVerdict, 'Which WAF action should I use?', {
+  absent: /CAPTCHA/,
+  present: /Block, Managed Challenge/,
+});
+await expectCase('ONB45-10b', 'Non-Interactive Challenge shows a puzzle.', 'en', okVerdict, 'Which WAF action should I use?', {
+  absent: /puzzle/,
+  present: /Block, Managed Challenge/,
+});
+await expectCase('ONB45-10c', 'Go to Security → WAF → Managed rules.', 'en', okVerdict, 'How do I write a WAF rule?', {
+  absent: /Security → WAF/,
+  present: /Block, Managed Challenge|Security → Security rules|Security → Settings/,
+});
+await expectCase('ONB45-10d', 'On Enterprise, the Cloudflare Managed Ruleset is already on.', 'en', okVerdict, '', {
+  absent: /already on/,
+  present: /Pro or above/,
+});
+await expectCase('ONB45-10e', 'A custom rule tests without blocking.', 'en', okVerdict, 'How do I write a WAF rule?', {
+  absent: /without blocking/,
+  present: /Block, Managed Challenge/,
+});
+await expectCase('ONB45-10f', 'Set the action to Log to test without blocking.', 'en', okVerdict, 'I am on the Enterprise plan', {
+  exact: 'Set the action to Log to test without blocking.',
+});
+for (const verdict of [okVerdict, nullVerdict, unsureVerdict, wrongVerdict]) {
+  const saveAll = await reviewPlanClaims('After you click Save, all rules are enabled.', 'en', verdict, {
+    prompt: 'How do I save?',
+  });
+  assert.doesNotMatch(saveAll, /all rules are enabled/, String(verdict));
+  assert.match(saveAll, /subset of rules|does not enable every rule/);
+  const host = await reviewPlanClaims('Point DNS at bob.cloudflare.com.', 'en', verdict, {
+    prompt: 'Which nameserver do I paste?',
+  });
+  assert.doesNotMatch(host, /bob\.cloudflare\.com/);
+  assert.match(host, /Never write a nameserver hostname/);
+}
 
 console.log('CASE_TABLE');
 for (const row of caseActual) console.log(`${row.id}\t${row.expected}\t${row.actual.replace(/\s+/g, ' ')}`);

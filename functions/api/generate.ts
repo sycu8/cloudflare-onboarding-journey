@@ -1,7 +1,11 @@
 import { buildGenerateMessages, curatedOnboardingContext, type GenerateLang } from './generateGrounding.ts';
 import {
   CUSTOM_RULE_ACTIONS,
+  LOG_WATCH,
   OVERRIDE_ACTIONS,
+  asksLogpush,
+  detachActionRows,
+  isWafActionsAnswer,
   businessManagedRulesetLine,
   claimCheckMessages,
   claimsUnknownWafAction,
@@ -61,17 +65,34 @@ export function logEnterpriseInstruction(lang: Lang): string {
 }
 
 function logInsteadInstruction(lang: Lang): string {
-  return lang === 'en'
-    ? 'On Free, Pro, and Business, use Managed Challenge instead of Log.'
-    : 'Trên Free, Pro và Business, hãy dùng Managed Challenge thay cho Log.';
+  return LOG_WATCH[lang];
 }
 
-/** The question is about the WAF Log action or a custom-rule action, not a logging product. */
+function isRetiredInsteadLine(sentence: string): boolean {
+  return /use managed challenge instead of log|managed challenge thay cho log/.test(foldGenerated(sentence));
+}
+
+function isWatchLine(sentence: string): boolean {
+  const folded = foldGenerated(sentence);
+  return [LOG_WATCH.en, LOG_WATCH.vi].some((block) =>
+    block.split(/(?<=[.!?])\s+/).some((part) => part && foldGenerated(part) === folded),
+  );
+}
+
+/** The question is about the WAF Log action or watching a rule, not Logpush. */
 export function promptAsksLogAction(prompt: string): boolean {
+  if (asksLogpush(prompt)) return false;
   const folded = foldGenerated(prompt);
   if (isWafLogAction(prompt) || hasCapitalLogGrant(prompt)) return true;
+  if (/\b(?:watch|watching|trial|trialing|before i block|before blocking|record waf|waf matches|xem rule|theo doi|truoc khi chan)\b/.test(folded)) {
+    return true;
+  }
   if (/\b(?:custom rule|firewall rule|action nao|which action|what action|hanh dong nao)\b/.test(folded)) return true;
   return false;
+}
+
+function showLogWatch(plan: StatedPlan, prompt: string): boolean {
+  return (plan === 'free' || plan === 'pro' || plan === 'business') && promptAsksLogAction(prompt);
 }
 
 function enterpriseFeatureInstruction(lang: Lang): string {
@@ -437,9 +458,16 @@ export function rewritePlanGatedActions(text: string, lang: Lang, prompt: string
   let sawLogging = false;
   let sawLogpush = false;
   let sawBusinessCmr = false;
+  let sawWatch = false;
+  const watch = showLogWatch(plan, prompt);
   const rewritten = rewriteSentences(source, (sentence) => {
     if (isRefusalOpener(sentence) || inventedEnterpriseProbe(sentence)) return '';
-    if (inventsWafAction(sentence)) return knownActionsInstruction(lang);
+    if (isRetiredInsteadLine(sentence) || (isWatchLine(sentence) && !watch)) {
+      if (watch) sawWatch = true;
+      return '';
+    }
+    if (asksLogpush(prompt) && (isWatchLine(sentence) || isRetiredInsteadLine(sentence) || isWafActionsAnswer(sentence))) return '';
+    if (inventsWafAction(sentence) && !asksLogpush(prompt)) return knownActionsInstruction(lang);
     if (deniesBusinessManagedRuleset(sentence)) {
       sawBusinessCmr = true;
       return '';
@@ -469,7 +497,7 @@ export function rewritePlanGatedActions(text: string, lang: Lang, prompt: string
       sawSdd = true;
       return '';
     }
-    if (pairsLowerPlanWithLog(sentence, prompt) || (plan !== 'enterprise' && namesLogAsWafAction(sentence))) {
+    if (!asksLogpush(prompt) && (pairsLowerPlanWithLog(sentence, prompt) || (plan !== 'enterprise' && namesLogAsWafAction(sentence)))) {
       sawLog = true;
       return '';
     }
@@ -477,10 +505,11 @@ export function rewritePlanGatedActions(text: string, lang: Lang, prompt: string
   });
   let next = cleanupGaps(rewritten);
   if (sawUpsell || sawSdd) next = appendMissing(next, featureLine);
-  else if (sawLog && plan !== 'enterprise') {
+  else if (sawLog && plan !== 'enterprise' && !asksLogpush(prompt)) {
     next = appendMissing(next, logLine);
-    if (promptAsksLogAction(prompt)) next = appendMissing(next, logInsteadInstruction(lang));
+    if (watch) sawWatch = true;
   }
+  if (sawWatch || watch && sawLog) next = appendMissing(next, logInsteadInstruction(lang));
   if (sawSave) next = appendMissing(next, saveLine);
   else if (sawSaveLimit && !hasSubsetPoint(next)) next = appendMissing(next, subsetSentence(lang));
   if (sawBot) next = appendMissing(next, botManagementInstruction(lang));
@@ -713,14 +742,30 @@ export function curatedStepsFallback(prompt: string, lang: Lang): string {
   return `${intro}\n${lines.join('\n')}`;
 }
 
+function hasDashboardSteps(folded: string): boolean {
+  return /security\s*(?:→|->)|overview|nameserver|managed challenge|\bblock\b|orange cloud|full \(strict\)|dash\.cloudflare|\bsave\b|logpush|super bot|bot fight|custom rule|free managed|interactive challenge/.test(
+    folded,
+  );
+}
+
+/** An offer to help, with no dashboard step left in the answer. */
+function isOfferOrMeta(text: string): boolean {
+  const folded = foldGenerated(text);
+  if (hasDashboardSteps(folded)) return false;
+  if (/\blog is only available on enterprise\b|\blog is enterprise only\b|\blog chi co tren enterprise\b/.test(folded)) return false;
+  return /\b(?:i can help|i'd be happy|id be happy|happy to|let me|sure[,! ]|of course|here is an overview|here's an overview|i will explain|toi co the giup|minh se|de minh|chac chan)\b/.test(
+    folded,
+  );
+}
+
 export function guardGenerateText(text: string, lang: Lang, prompt = ''): string {
   let guarded = rewritePlanGatedActions(rewriteInventedNameservers(text, lang, prompt), lang, prompt);
-  if (isBareRefusal(guarded)) {
+  if (isBareRefusal(guarded) || isOfferOrMeta(guarded)) {
     const fallback = curatedStepsFallback(prompt, lang);
     if (fallback) guarded = fallback;
   }
   guarded = correctBackwardsNameservers(guarded, lang, prompt);
-  return dedupePlanRows(ensureRequiredSteps(guarded, lang, prompt));
+  return detachActionRows(dedupePlanRows(ensureRequiredSteps(guarded, lang, prompt)));
 }
 
 function rewriteChoice(choice: unknown, lang: Lang, prompt: string): unknown {

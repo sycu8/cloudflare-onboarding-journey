@@ -79,8 +79,8 @@ export const basicConfigurationSections: PracticalGuideSection[] = [
       },
       {
         text: {
-          vi: 'Action khi override managed rule: Block, Log, Non-Interactive Challenge, Managed Challenge và Interactive Challenge. Skip không phải action override.',
-          en: 'Managed-rule override actions: Block, Log, Non-Interactive Challenge, Managed Challenge, and Interactive Challenge. Skip is not an override action.',
+          vi: 'Action khi override managed rule: Block, Log, Non-Interactive Challenge, Managed Challenge và Interactive Challenge. Skip không phải action override. Log chỉ có trên Enterprise.',
+          en: 'Managed-rule override actions: Block, Log, Non-Interactive Challenge, Managed Challenge, and Interactive Challenge. Skip is not an override action. Log is Enterprise only.',
         },
       },
       {

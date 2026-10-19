@@ -12,9 +12,21 @@ export const CUSTOM_RULE_ACTIONS = {
 
 /** Managed-rule override actions. Skip is a custom-rule action, not an override. */
 export const OVERRIDE_ACTIONS = {
-  en: 'Managed-rule override actions: Block, Log, Non-Interactive Challenge, Managed Challenge, and Interactive Challenge. Skip is not an override action.',
-  vi: 'Action khi override managed rule: Block, Log, Non-Interactive Challenge, Managed Challenge và Interactive Challenge. Skip không phải action override.',
+  en: 'Managed-rule override actions: Block, Log, Non-Interactive Challenge, Managed Challenge, and Interactive Challenge. Skip is not an override action. Log is Enterprise only.',
+  vi: 'Action khi override managed rule: Block, Log, Non-Interactive Challenge, Managed Challenge và Interactive Challenge. Skip không phải action override. Log chỉ có trên Enterprise.',
 } as const;
+
+/** Shown only for Free, Pro, or Business when the question is about Log or watching a rule. */
+export const LOG_WATCH = {
+  en: 'Free, Pro, and Business have no Log action. Start with Managed Challenge, review Security Events, then switch to Block. Managed Challenge challenges real visitors; it does not only record.',
+  vi: 'Free, Pro và Business không có action Log. Bắt đầu bằng Managed Challenge, xem Security Events, rồi mới đổi sang Block. Managed Challenge thách thức người truy cập thật, không chỉ ghi lại.',
+} as const;
+
+const KEPT_VERBATIM = [
+  'Business does not include the Log action; it is only on Enterprise.',
+  'Gói Business không có action Log; Log chỉ có trên Enterprise.',
+  'On Pro, use Super Bot Fight Mode.',
+] as const;
 
 export const PLAN_FEATURE_ROWS = [
   {
@@ -64,6 +76,43 @@ export type ClaimVerdict = 'ok' | 'wrong' | 'unsure';
 export type ClaimSentence = { id: string; text: string };
 
 export type ClaimCheckCounts = { kept: number; dropped: number; rewritten: number };
+
+function sentenceParts(text: string): string[] {
+  return foldFeature(text)
+    .split(/(?<=[.!?])\s+/)
+    .map((part) => part.replace(/\s+/g, ' ').trim())
+    .filter(Boolean);
+}
+
+/** The custom-rule sentence or the override sentence, including each sentence inside them. */
+export function isSharedActionSentence(sentence: string): boolean {
+  const folded = foldFeature(sentence).replace(/\s+/g, ' ').trim();
+  const blobs = [CUSTOM_RULE_ACTIONS.en, CUSTOM_RULE_ACTIONS.vi, OVERRIDE_ACTIONS.en, OVERRIDE_ACTIONS.vi, LOG_WATCH.en, LOG_WATCH.vi];
+  return blobs.some((blob) => sentenceParts(blob).includes(folded) || foldFeature(blob).replace(/\s+/g, ' ').trim() === folded);
+}
+
+/** A sentence of the WAF action row, including the shared lists and the record-only denials. */
+export function isWafActionsAnswer(sentence: string): boolean {
+  const folded = foldFeature(sentence).replace(/\s+/g, ' ').trim();
+  if (!folded) return false;
+  const row = PLAN_FEATURE_ROWS.find((item) => item.id === 'waf-actions');
+  if (!row) return false;
+  return [row.en, row.vi].some((blob) => {
+    const whole = foldFeature(blob).replace(/\s+/g, ' ').trim();
+    return whole === folded || sentenceParts(blob).includes(folded);
+  });
+}
+
+export function isKeptVerbatim(sentence: string): boolean {
+  const folded = foldFeature(sentence).replace(/\s+/g, ' ').trim();
+  return KEPT_VERBATIM.some((line) => foldFeature(line).replace(/\s+/g, ' ').trim() === folded);
+}
+
+/** A Logpush question must not be answered with the WAF action row. */
+export function asksLogpush(text: string): boolean {
+  const folded = foldFeature(text);
+  return /\blogpush\b|request logs|http logs|logs to r2|\br2\b/.test(folded) && /\blog/.test(folded);
+}
 
 export function formatPlanFeatureTable(lang: GenerateLang): string {
   const title = lang === 'en' ? 'Plan-feature table (authoritative):' : 'Bảng plan-feature (chuẩn):';
@@ -249,35 +298,41 @@ export function isProceduralStep(sentence: string): boolean {
   return NAMESERVER.test(folded) && /overview|registrar|paste|\bdan\b|copy|chep/.test(folded);
 }
 
-const RECORD_ONLY =
-  /record-only|records only|only records|just records|only logs|only logging|merely records|log-only|log only|chi ghi|chi de ghi|de ghi|ghi nhan|ghi lai|la de ghi|does not challenge|without challenging|khong challenge|pass(?:es|ing)? traffic|lets? traffic|allows? traffic|cho (?:traffic|luu luong) (?:di )?qua|chi (?:de )?log|only log|records (?:the |a )?(?:match|matches|request|requests|hit|hits)\b/;
+const MC_DENIAL =
+  /not a record-only|not record-only|does not only record|doesn't only record|doesnt only record|khong phai action chi ghi|khong chi ghi|challenges the visitor|challenges real visitors|thach thuc nguoi/;
 
-/** "Managed Challenge only records" is a plan claim. The action challenges; it does not only record. */
+/** Managed Challenge lets traffic through, notes a request, or only records it. Any verb, any order. */
 export function isManagedChallengeRecordOnly(sentence: string, context = ''): boolean {
+  if (isSharedActionSentence(sentence)) return false;
   const folded = foldFeature(sentence);
-  if (/not a record-only|not record-only|khong phai action chi ghi|khong chi ghi|challenges the visitor|thach thuc nguoi/.test(folded)) {
-    return false;
-  }
+  if (MC_DENIAL.test(folded)) return false;
   const named = /managed challenge/.test(folded);
   const fromContext = !named && /managed challenge/.test(foldFeature(context));
   if (!named && !fromContext) return false;
-  if (!named) {
-    return /\b(?:it|this|that)\b[\s\S]{0,48}\b(?:only logs|only records|just records|records only|passes traffic|lets traffic|allows traffic)|chi (?:ghi|log)\b|khong chan|only logs|only records/.test(
+  const letsThrough = /traffic|luu luong|request|visitor|nguoi/.test(folded) && /through|qua\b|pass|let|allow|cho\b/.test(folded);
+  const noting = /ghi nhan|\bnot(?:e|es|ing)\b/.test(folded);
+  const onlyRecording =
+    /record-only|only records|only record|just records|merely records|only logs|only logging|chi ghi|chi log|records only|\brecord(?:s|ing)?\b|chi\b[\s\S]{0,20}\b(?:ghi|log)\b/.test(
       folded,
     );
-  }
-  return RECORD_ONLY.test(folded);
+  if (!named) return letsThrough || noting || onlyRecording || /only logs|only records|chi ghi|khong chan/.test(folded);
+  return letsThrough || noting || onlyRecording;
 }
 
-/** Skip is a real custom-rule action. It is not a record-only action. */
+/** Skip described as count, record, log, watch, theo dõi, or ghi. Any word order. A denial stays. */
 function isSkipRecordOnly(sentence: string, context = ''): boolean {
+  if (isSharedActionSentence(sentence)) return false;
   const folded = foldFeature(sentence);
-  if (/not a record-only|not record-only|khong phai action chi ghi|is not a record-only/.test(folded)) return false;
+  if (/not a record-only|not record-only|khong phai action chi ghi|is not a record|does not record|doesn't record|does not log|does not count|does not watch|khong ghi|khong theo doi/.test(folded)) {
+    return false;
+  }
+  if (/\b(?:not|no|never|doesn't|doesnt|does not|isn't|isnt|khong)\b[\s\S]{0,48}\b(?:record|log|count|watch|ghi|theo doi)\b/.test(folded)) {
+    return false;
+  }
   const named = /\bskip\b/.test(folded);
   const fromContext = !named && /\bskip\b/.test(foldFeature(context));
   if (!named && !fromContext) return false;
-  if (!named) return /\bonly logs|only records|just records|record-only|chi ghi|chi log\b/.test(folded);
-  return RECORD_ONLY.test(folded);
+  return /\b(?:count|counts|counting|record|records|recording|log|logs|logging|watch|watches|watching|theo doi|ghi)\b/.test(folded);
 }
 
 /** Skip is not a managed-rule override action. */
@@ -373,12 +428,49 @@ function planClauses(text: string): string[] {
     .filter(Boolean);
 }
 
-function firstPersonPlan(clause: string): LearnerPlan {
+const PLAN_WORD = /\b(enterprise|business|pro|free)\b/;
+/** Stop the gap before a second choice, a list comma, or a question word. */
+const PLAN_GAP_STOP = /\b(?:or|hay|vs|where|what|which|how|whose|does|do|did|can|could|is|are|co|khong|nao)\b|[,;]/;
+/** A plan after these words is not the learner's plan. */
+const PLAN_NOT_OWNED = /\b(?:not|n't|isnt|isn't|arent|aren't|khong phai|or|hay|vs|switch to|upgrade to|consider(?:ing)?|can nhac|hoi ve|chuyen sang)\b/;
+
+const FIRST_PERSON_CUE =
+  /\b(?:i am on|i'm on|im on|i'm using|im using|we are on|we're on|we are running|we're running|my plan is|our plan is|we run|dang dung goi|dang dung|toi dang|minh dang|em dang|chung toi|chung ta|we are|we're)\b/g;
+
+/**
+ * "I use" / "tôi dùng" / "mình dùng" name a plan only when the plan, "the X plan", or "gói X" is the object.
+ * "I use Log" is a verb object, not a plan.
+ */
+function directUsePlan(clause: string): LearnerPlan {
   const match =
-    /\b(?:i am on|im on|i'm on|i use|i'm using|im using|we are on|we're on|my plan is|our plan is|toi dung|toi dang|minh dung|em dung|chung toi(?: dang)?|chung ta(?: dang)?|dang dung goi|dung goi|goi cua toi(?: la)?|plan cua toi(?: la)?)\b[\s\S]{0,32}\b(enterprise|business|pro|free)\b/.exec(
+    /\b(?:i use|i'm using|im using|i am using|toi dung|minh dung|em dung)\s+(?:the\s+(enterprise|business|pro|free)\s+plan|goi\s+(enterprise|business|pro|free)|(enterprise|business|pro|free)\s+plan)\b/.exec(
       clause,
     );
-  return asLearnerPlan(match?.[1]);
+  return asLearnerPlan(match?.[1] || match?.[2] || match?.[3]);
+}
+
+function firstPlanInGap(gap: string): LearnerPlan {
+  const plan = PLAN_WORD.exec(gap);
+  if (!plan || plan.index === undefined) return 'unknown';
+  const before = gap.slice(0, plan.index);
+  if (PLAN_NOT_OWNED.test(before)) return 'unknown';
+  return asLearnerPlan(plan[1]);
+}
+
+/** The first plan after a first-person cue. The gap stops at or/hay/vs, a comma, or a question word. */
+function firstPersonPlan(clause: string): LearnerPlan {
+  const direct = directUsePlan(clause);
+  if (direct !== 'unknown') return direct;
+  FIRST_PERSON_CUE.lastIndex = 0;
+  for (const cue of clause.matchAll(FIRST_PERSON_CUE)) {
+    const start = (cue.index ?? 0) + cue[0].length;
+    const rest = clause.slice(start);
+    const stop = PLAN_GAP_STOP.exec(rest);
+    const gap = (stop ? rest.slice(0, stop.index) : rest).slice(0, 32);
+    const plan = firstPlanInGap(gap);
+    if (plan !== 'unknown') return plan;
+  }
+  return 'unknown';
 }
 
 /**
@@ -411,18 +503,7 @@ export function resolveLearnerPlan(text: string): LearnerPlan {
     if (fromQuestion !== 'unknown') return fromQuestion;
   }
 
-  const firstPerson =
-    /\b(?:i am on|im on|i'm on|i use|i'm using|my plan is|toi dung|toi dang|minh dung|em dung|dang dung goi|dung goi|goi cua toi(?: la)?|plan cua toi(?: la)?)\s+(?:the\s+|goi\s+|la\s+)?(enterprise|business|pro|free)\b/.exec(
-      folded,
-    );
-  const fromSelf = asLearnerPlan(firstPerson?.[1]);
-  if (fromSelf !== 'unknown') return fromSelf;
-
   for (const clause of clauses) {
-    const plural =
-      /\b(?:we|we're|we are|our team|chung toi|chung ta)\b[\s\S]*\b(enterprise|business|pro|free)\b\s*[.!]?\s*$/.exec(clause);
-    const fromPlural = asLearnerPlan(plural?.[1]);
-    if (fromPlural !== 'unknown') return fromPlural;
     const planHere =
       /\b(?:the\s+)?plan\s+here\s+is\s+(enterprise|business|pro|free)\b|\b(?:plan|goi)\s+here\b[\s\S]{0,24}\b(enterprise|business|pro|free)\b|\bgoi\s+(?:o\s+)?day(?:\s+la)?\s+(enterprise|business|pro|free)\b/.exec(
         clause,
@@ -430,16 +511,16 @@ export function resolveLearnerPlan(text: string): LearnerPlan {
     const fromHere = asLearnerPlan(planHere?.[1] || planHere?.[2] || planHere?.[3]);
     if (fromHere !== 'unknown') return fromHere;
     const owned =
-      /\btai khoan\s+(enterprise|business|pro|free)\b|\b(?:our|my)\s+(enterprise|business|pro|free)\s+(?:zone|site|account)\b|\b(?:my|our)\s+(?:zone|site|account)\s+is\s+on\s+(?:the\s+)?(enterprise|business|pro|free)\b|\b(?:zone|site|account|tai khoan)\s+(?:cua toi|cua minh)\b[\s\S]{0,24}\b(enterprise|business|pro|free)\b/.exec(
+      /\btai khoan\s+(enterprise|business|pro|free)\b|\b(?:our|my)\s+(enterprise|business|pro|free)\s+(?:zone|site|account)\b|\b(?:my|our)\s+(?:zone|site|account)\s+is\s+(?:on\s+(?:the\s+)?|an\s+)?(enterprise|business|pro|free)\b|\b(?:is|am)\s+an\s+(enterprise|business|pro|free)\s+(?:customer|account)\b|\b(?:tai khoan|goi|plan|site|account)\s+(?:cua toi\s+|cua minh\s+)?la\s+(enterprise|business|pro|free)\b|\b(?:zone|site|account|tai khoan)\s+(?:cua toi|cua minh)\b[\s\S]{0,16}\b(enterprise|business|pro|free)\b/.exec(
         clause,
       );
-    const fromOwned = asLearnerPlan(owned?.[1] || owned?.[2] || owned?.[3] || owned?.[4]);
+    const fromOwned = asLearnerPlan(owned?.[1] || owned?.[2] || owned?.[3] || owned?.[4] || owned?.[5] || owned?.[6]);
     if (fromOwned !== 'unknown') return fromOwned;
     const declared =
-      /\b(?:on|with)\s+(?:the\s+|goi\s+)?(enterprise|business|pro|free)\s+(?:plan|zone|account|goi)\b|\bgoi\s+(enterprise|business|pro|free)\b/.exec(
+      /\b(?:on|with)\s+(?:the\s+|goi\s+)?(enterprise|business|pro|free)\s+(?:plan|zone|account|goi)\b|\bgoi\s+(enterprise|business|pro|free)\b|^(?:the\s+)?(enterprise|business|pro|free)\s+plan\b|\b(enterprise|business|pro|free)\s+here\b/.exec(
         clause,
       );
-    const fromDeclared = asLearnerPlan(declared?.[1] || declared?.[2]);
+    const fromDeclared = asLearnerPlan(declared?.[1] || declared?.[2] || declared?.[3] || declared?.[4]);
     if (fromDeclared !== 'unknown') return fromDeclared;
   }
   return 'unknown';
@@ -490,6 +571,7 @@ export function mentionsPlanOrFeature(sentence: string, context = ''): boolean {
     return true;
   }
   if (namesUnknownAction(sentence)) return true;
+  if (outputGuardRow(sentence, context)) return true;
   if (hasInventedNameserverHost(sentence, context)) return true;
   if (isProceduralStep(sentence)) return false;
   const folded = foldFeature(sentence);
@@ -521,6 +603,7 @@ export function mentionsPlanOrFeature(sentence: string, context = ''): boolean {
 
 /** The sentence already states a table fact. */
 export function tableConfirms(sentence: string): boolean {
+  if (isSharedActionSentence(sentence) || isKeptVerbatim(sentence)) return true;
   const folded = foldFeature(sentence);
   const hidden = hideLogpush(folded);
   if (/\bnot an action\b|\bkhong phai action\b/.test(folded) && /simulate/.test(folded)) return true;
@@ -642,9 +725,14 @@ function sbfmOnFree(folded: string): boolean {
 
 function actionsPaidOnly(folded: string): boolean {
   if (/\bfree\b/.test(folded) && /\b(?:has|keeps|includes|included)\b/.test(folded) && !/\bpaid\b/.test(folded)) return false;
-  const paid = /\b(?:paid plans?|paid only|only (?:on|with|for) paid|with paid plans|needs a paid|goi tra phi)\b/.test(folded);
-  if (!paid) return false;
-  return /\b(?:actions?|hanh dong|custom rules?|block|managed challenge|\bwaf\b)\b/.test(folded);
+  const action = /\b(?:actions?|hanh dong|custom rules?|block|managed challenge|interactive challenge|non-interactive challenge|js challenge|\bwaf\b)\b/;
+  if (!action.test(folded)) return false;
+  if (/\b(?:needs|requires|only on|only for|only with|chi co|chi tren)\b[\s\S]{0,32}\b(?:paid|pro|business)\b/.test(folded)) return true;
+  if (/\b(?:paid plans?|paid only|only (?:on|with|for) paid|with paid plans|needs a paid|goi tra phi)\b/.test(folded)) return true;
+  if (/\bfree\b/.test(folded) && /\b(?:not|no|cannot|can't|cant|khong|without|unavailable|isn't|isnt|aren't|arent)\b/.test(folded)) {
+    return true;
+  }
+  return false;
 }
 
 const KNOWN_ACTION_TARGET =
@@ -654,35 +742,55 @@ const KNOWN_ACTION_TARGET =
  * An action name that is not in the table. Checked before logging-product tokens are hidden,
  * so "Logging" and "logging-only" stay visible. "Do not invent an action name" is not a claim.
  */
+function actionNameTokens(folded: string): string[] {
+  const found: string[] = [];
+  const patterns = [
+    /\b(?:pick|choose|select|chon|set|use|using|dat|dung)\s+(?:the\s+)?([a-z0-9-]+(?:\s+[a-z0-9-]+){0,3})\s+(?:action|hanh dong)\b/g,
+    /\b([a-z0-9-]+(?:\s+[a-z0-9-]+){0,3})\s+as\s+(?:the\s+)?(?:action|hanh dong)\b/g,
+    /\bthe\s+([a-z0-9-]+(?:\s+[a-z0-9-]+){0,3})\s+(?:action|hanh dong)\b/g,
+    /\brule\s+(?:action|hanh dong)\s+to\s+([a-z0-9-]+(?:\s+[a-z0-9-]+){0,2})\b/g,
+    /\b(?:action|hanh dong)\s+(?:to|la|thanh|sang|named|called)\s+([a-z0-9-]+(?:\s+[a-z0-9-]+){0,3})\b/g,
+  ];
+  for (const pattern of patterns) {
+    for (const match of folded.matchAll(pattern)) {
+      if (match[1]) found.push(match[1].replace(/-/g, ' ').replace(/\s+/g, ' ').trim());
+    }
+  }
+  return found;
+}
+
 function namesUnknownAction(sentence: string): boolean {
   const folded = foldFeature(sentence);
+  if (isSharedActionSentence(sentence)) return false;
   if (/\bnot an action\b|\bkhong phai action\b|\bdo not invent\b|\bdung bia\b|\bdungneg bia\b/.test(folded)) return false;
   if (/not a record-only|not record-only|khong phai action chi ghi/.test(folded)) return false;
   if (/\b(?:logging-only|log-only|logging only)\b/.test(folded) && /\b(?:action|hanh dong)\b/.test(folded)) return true;
-  const match =
-    /\b(?:set|dat|chon|select|pick|choose|use|using|dung)\s+(?:the\s+)?(?:action|hanh dong)\s+(?:to|la|thanh|sang)\s+([a-z0-9-]+(?:\s+[a-z0-9-]+){0,3})/.exec(
-      folded,
-    ) ||
-    /\b(?:use|using|chon|select|pick|set|dung)\s+([a-z0-9-]+)\s+as\s+(?:the\s+)?(?:action|hanh dong)\b/.exec(folded) ||
-    /\b(?:action|hanh dong)\s+(?:named|called)\s+([a-z0-9-]+(?:\s+[a-z0-9-]+){0,2})/.exec(folded);
-  if (!match?.[1]) return false;
-  const target = match[1].replace(/-/g, ' ').replace(/\s+/g, ' ').trim();
-  if (/^(?:name|names|the|custom|override|only|enterprise|visitor|record|records|invent)$/.test(target)) return false;
-  return !KNOWN_ACTION_TARGET.test(target);
+  const stop = /^(?:name|names|the|custom|override|only|enterprise|visitor|record|records|invent|real|waf|same|following)$/;
+  const purpose = /^(?:watch|watching|trial|trialing|review|testing)$/;
+  return actionNameTokens(folded).some(
+    (target) => !stop.test(target) && !purpose.test(target) && !KNOWN_ACTION_TARGET.test(target),
+  );
 }
 
 /** Free keeps the Cloudflare Free Managed Ruleset. The full Managed Ruleset is Pro and above. */
 function freePaidRulesetOn(sentence: string, context: string): boolean {
   const folded = foldFeature(sentence);
-  if (!/managed ruleset/.test(folded) || /free managed ruleset/.test(folded)) return false;
-  if (/needs pro|pro or above|pro tro len|not on the free|khong co tren|does not include|not included|isn't included|isnt included/.test(folded)) {
-    return false;
-  }
-  if (ownPlan(`${context}\n${sentence}`) !== 'free') return false;
+  if (/free managed ruleset|free managed rules\b/.test(folded)) return false;
+  if (!/managed ruleset|\bmanaged rules\b/.test(folded)) return false;
+  const statesOn = /\b(?:already on|is on|turned on|is enabled|already enabled|bat san|da bat|dang bat)\b/;
+  const onMatch = statesOn.exec(folded);
+  const beforeOn = onMatch ? folded.slice(Math.max(0, onMatch.index - 24), onMatch.index) : '';
+  const saysOn = Boolean(onMatch) && !/\b(?:not|n't|isnt|isn't|aren't|arent|khong|chua)\b/.test(beforeOn);
+  const learnerFree = ownPlan(`${context}\n${sentence}`) === 'free' || /\bfree\b/.test(folded);
+  const learnerPaid =
+    ownPlan(sentence) === 'pro' || ownPlan(sentence) === 'business' || ownPlan(sentence) === 'enterprise';
+  if (!learnerFree || (learnerPaid && !/\bfree\b/.test(folded))) return false;
+  if (/\b(?:pro|business|enterprise)\b/.test(folded) && !saysOn && !/\bfree\b/.test(folded)) return false;
+  // "already on" wins even when another clause in the sentence is negated.
+  if (saysOn) return true;
   if (NEGATION.test(folded)) return false;
-  const statesOn = /\b(?:is on|already on|turned on|is enabled|already enabled|bat san|da bat|dang bat)\b/;
-  if (/\b(?:pro|business|enterprise)\b/.test(folded) && !statesOn.test(folded)) return false;
-  return statesOn.test(folded) || /\b(?:turn on|enable|hay bat)\b/.test(folded);
+  if (/needs pro|pro or above|pro tro len|not on the free|khong co tren|does not include|not included/.test(folded)) return false;
+  return /\b(?:turn on|enable|hay bat)\b/.test(folded);
 }
 
 /**
@@ -716,10 +824,42 @@ function logGrantUnconfirmed(sentence: string, context: string): boolean {
   return LOWER_PLAN.test(folded) || ownPlan(context) !== 'enterprise';
 }
 
+/** CAPTCHA, a disallowed WAF menu, Enterprise "already on", or "without blocking" except Log. */
+function outputGuardRow(sentence: string, context: string): 'waf-actions' | 'rulesets' | null {
+  const folded = foldFeature(sentence);
+  if (/captcha|puzzle/.test(folded) && /managed challenge|non-interactive challenge|js challenge|interactive challenge/.test(folded)) {
+    return 'waf-actions';
+  }
+  if (
+    /without blocking|khong chan/.test(folded) &&
+    /custom rule|\brule\b|\btest/.test(folded) &&
+    !/\b(?:log action|to log|action log)\b/.test(folded) &&
+    !/\baction\b[\s\S]{0,24}\blog\b/.test(folded)
+  ) {
+    return 'waf-actions';
+  }
+  if (
+    /\benterprise\b/.test(folded) &&
+    /managed ruleset|\bmanaged rules\b/.test(folded) &&
+    !/free managed|not already|isn't already|isnt already|chua bat|khong bat san/.test(folded) &&
+    /already on|is enabled|already enabled|bat san|da bat/.test(folded)
+  ) {
+    return 'rulesets';
+  }
+  if (/→|->/.test(sentence) && /\bwaf\b|custom rule|firewall|security/.test(foldFeature(`${context}\n${sentence}`))) {
+    const paths = foldFeature(sentence).match(/[a-z0-9 ]{0,32}(?:→|->)\s*[a-z0-9 ]{1,32}/g) ?? [];
+    if (paths.some((path) => !/security\s*(?:→|->)\s*(?:security rules|settings)\b/.test(path))) return 'waf-actions';
+  }
+  return null;
+}
+
 /** The sentence conflicts with the table. This wins over an ok verdict. */
 export function tableContradicts(sentence: string, context = ''): boolean {
+  const prompt = context.split('\n')[0] ?? '';
+  if (asksLogpush(prompt) && isWafActionsAnswer(sentence)) return true;
   if (tableConfirms(sentence)) return false;
   const folded = foldFeature(sentence);
+  if (outputGuardRow(sentence, context)) return true;
   if (hasInventedNameserverHost(sentence, context)) return true;
   if (deniesBusinessManagedRuleset(sentence)) return true;
   if (isManagedChallengeRecordOnly(sentence, context)) return true;
@@ -797,20 +937,24 @@ export function rewriteFromTable(sentence: string, lang: GenerateLang, context =
   const hidden = stripViLogUses(hideLoggingProducts(folded));
   const planNamesLog = PLAN.test(folded) && /\blog\b/.test(hidden) && !isPlanContextOnly(folded);
   const ids: Array<(typeof PLAN_FEATURE_ROWS)[number]['id']> = [];
+  const logpushQuestion = asksLogpush(context);
   if (
-    isWafLogAction(sentence) ||
-    hasCapitalLogGrant(sentence) ||
-    planNamesLog ||
-    isManagedChallengeRecordOnly(sentence, context) ||
-    isSkipRecordOnly(sentence, context) ||
-    listsSkipAsOverride(folded) ||
-    deniesJsChallenge(folded) ||
-    namesInventedAction(folded) ||
-    namesUnknownAction(sentence) ||
-    actionsPaidOnly(folded)
+    !logpushQuestion &&
+    (isWafLogAction(sentence) ||
+      hasCapitalLogGrant(sentence) ||
+      planNamesLog ||
+      isManagedChallengeRecordOnly(sentence, context) ||
+      isSkipRecordOnly(sentence, context) ||
+      listsSkipAsOverride(folded) ||
+      deniesJsChallenge(folded) ||
+      namesInventedAction(folded) ||
+      namesUnknownAction(sentence) ||
+      actionsPaidOnly(folded))
   ) {
     ids.push('waf-actions');
   }
+  const guarded = outputGuardRow(sentence, context);
+  if (guarded) ids.push(guarded);
   const forbidden = planForbidsGatedFeature(sentence, context);
   if (forbidden === 'sdd') ids.push('sdd');
   if (forbidden === 'bots') ids.push('bots');
@@ -943,8 +1087,9 @@ export function dropEmptyHeadings(text: string): string {
   for (let i = 0; i < lines.length; i += 1) {
     const line = lines[i];
     if (!line.trim()) continue;
+    if (/^\s*(?:\d+[.)]|[-*])\s*$/.test(line)) continue;
     if (isHeadingLine(line)) {
-      const next = lines.slice(i + 1).find((item) => item.trim());
+      const next = lines.slice(i + 1).find((item) => item.trim() && !/^\s*(?:\d+[.)]|[-*])\s*$/.test(item));
       if (!next || isHeadingLine(next)) continue;
     }
     if (kept[kept.length - 1] === line) continue;
@@ -1084,8 +1229,25 @@ function resolveSentence(
     return settle(sentence, lang, context);
   }
   if (verdict === 'ok' || tableConfirms(sentence)) return { text: sentence, action: 'kept' };
-  // A failed or unsure check fails closed. tableConfirms already kept its sentence above.
+  // Null or unsure keeps a how-to that does not grant Log, SDD, Bot Management, or a paid ruleset.
+  if (!failsClosedOnUnsure(sentence, context)) return { text: sentence, action: 'kept' };
   return settle(sentence, lang, context);
+}
+
+function failsClosedOnUnsure(sentence: string, context: string): boolean {
+  const folded = foldFeature(sentence);
+  if (tableConfirms(sentence)) return false;
+  if (hasCapitalLogGrant(sentence) || isWafLogAction(sentence) || logGrantUnconfirmed(sentence, context)) return true;
+  if (PLAN.test(folded) && (AVAILABILITY.test(folded) || /\b(?:works on|lacks|lack|missing|not on|khong ho tro|khong bao gom)\b/.test(folded))) {
+    return true;
+  }
+  if (SDD.test(folded) && /\b(?:enable|turn|included|include|available|already|have|has|get|comes)\b/.test(folded)) return true;
+  if (BOT.test(folded) && !/super bot fight mode/.test(folded)) return true;
+  if (freePaidRulesetOn(sentence, context) || actionsPaidOnly(folded)) return true;
+  if (featureAvailabilityClaim(folded)) return true;
+  if (claimsAllRulesRun(folded) || isSaveClaim(folded) || hasInventedNameserverHost(sentence, context)) return true;
+  if (isManagedChallengeRecordOnly(sentence, context) || isSkipRecordOnly(sentence, context) || namesUnknownAction(sentence)) return true;
+  return false;
 }
 
 /**
@@ -1154,7 +1316,9 @@ export function tableRowsForPrompt(prompt: string, lang: GenerateLang): string[]
   if (BOT.test(folded) || /super bot|bot fight/.test(folded)) ids.push('bots');
   if (RULESET.test(folded)) ids.push('rulesets');
   if (NAMESERVER.test(folded) || /mat bao/.test(folded)) ids.push('nameservers');
-  if (LOG_ACTION.test(hideLogpush(folded)) || /managed challenge|\bwaf\b|custom rule/.test(folded)) ids.push('waf-actions');
+  if (!asksLogpush(prompt) && (LOG_ACTION.test(hideLogpush(folded)) || /managed challenge|\bwaf\b|custom rule/.test(folded))) {
+    ids.push('waf-actions');
+  }
   return ids.map((id) => PLAN_FEATURE_ROWS.find((row) => row.id === id)?.[lang] ?? '').filter(Boolean);
 }
 
@@ -1215,8 +1379,14 @@ export async function reviewPlanClaims(
 
 /** A dropped or heading-only answer becomes a table row. Save questions always get the Save row. */
 /** One copy of each plan-table row. A later sentence that repeats a row id is dropped. */
+function isLogOnlyFact(folded: string): boolean {
+  return /log is only available on enterprise|log is enterprise only|log chi co tren enterprise/.test(folded);
+}
+
+/** One copy of each sentence. The two "Log is only on Enterprise" wordings count as one fact. */
 export function dedupePlanRows(text: string): string {
   const seenSentences = new Set<string>();
+  let seenLogOnly = false;
   return text
     .split('\n')
     .map((line) =>
@@ -1224,6 +1394,10 @@ export function dedupePlanRows(text: string): string {
         .filter((sentence) => {
           const folded = foldFeature(sentence);
           if (!folded || seenSentences.has(folded)) return false;
+          if (isLogOnlyFact(folded)) {
+            if (seenLogOnly) return false;
+            seenLogOnly = true;
+          }
           seenSentences.add(folded);
           return true;
         })
@@ -1233,10 +1407,27 @@ export function dedupePlanRows(text: string): string {
     .join('\n');
 }
 
+/** A rewritten action list is its own line, never left inside a bullet or a number. */
+export function detachActionRows(text: string): string {
+  const start = /WAF custom-rule actions:|Action của custom rule WAF:/;
+  return text
+    .split('\n')
+    .flatMap((line) => {
+      const match = start.exec(line);
+      if (!match || match.index === undefined) return [line];
+      const before = line.slice(0, match.index).trim();
+      const row = line.slice(match.index).trim();
+      const marker = before.replace(/\s+/g, '');
+      if (!before || /^[-*]$/.test(marker) || /^\d+[.)]$/.test(marker)) return [row];
+      return [before, row];
+    })
+    .join('\n');
+}
+
 function finishClaimReview(text: string, prompt: string, lang: GenerateLang): string {
-  let next = dedupePlanRows(text.trim());
+  let next = dedupePlanRows(detachActionRows(dropEmptyHeadings(text.trim())));
   if (!next || isHeadingOnly(next)) next = tableDerivedFallback(prompt, lang);
   next = ensureSaveAnswer(next, prompt, lang);
   if (!next.trim()) next = tableDerivedFallback(prompt, lang);
-  return dedupePlanRows(next);
+  return dedupePlanRows(detachActionRows(dropEmptyHeadings(next)));
 }
