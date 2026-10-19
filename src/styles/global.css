@@ -327,6 +327,9 @@ html.dark .badge-accent {
 }
 .onboarding-md pre {
   @apply my-4 overflow-x-auto rounded-xl border border-[var(--cf-border)] bg-[var(--cf-bg-elevated)] p-4 text-xs;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  max-width: 100%;
 }
 .onboarding-md figure {
   @apply my-6;

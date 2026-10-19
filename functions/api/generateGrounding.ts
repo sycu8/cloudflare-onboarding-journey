@@ -1,8 +1,9 @@
 import { basicConfigurationSections } from '../../src/data/cf101PracticalGuides.ts';
+import { CUSTOM_RULE_ACTIONS, LOG_WATCH, OVERRIDE_ACTIONS, formatPlanFeatureTable } from './planFeatures.ts';
 
 export type GenerateLang = 'vi' | 'en';
 
-type TopicId = 'dns' | 'proxy' | 'ssl' | 'waf';
+type TopicId = 'dns' | 'proxy' | 'ssl' | 'waf' | 'logs' | 'bots';
 
 type Topic = {
   id: TopicId;
@@ -22,13 +23,13 @@ const LESSON_STEPS: Record<TopicId, { vi: string[]; en: string[] }> = {
       'Đăng nhập dash.cloudflare.com → Onboard a domain / Add a site.',
       'Review từng record trước khi continue. A/AAAA/CNAME trỏ origin thật; MX cho email; TXT cho SPF/DKIM/DMARC.',
       'Cloudflare tự gán hai nameserver riêng cho từng zone và không đổi được. Mở đúng zone → trang Overview và copy nguyên hai tên đang hiện. Không đoán hostname.',
-      'Hạ TTL trên DNS cũ (nếu còn quyền). Tại registrar, đổi nameserver một lần bằng đúng hai tên vừa copy từ Overview.',
+      'Hạ TTL trên DNS cũ (nếu còn quyền). Tại registrar, dán đúng hai nameserver vừa copy từ trang Overview. Chỉ đổi nameserver một lần. https://developers.cloudflare.com/dns/zone-setups/full-setup/setup/',
     ],
     en: [
       'Sign in at dash.cloudflare.com → Onboard a domain / Add a site.',
       'Review every record before continue. A/AAAA/CNAME point at the real origin; MX for email; TXT for SPF/DKIM/DMARC.',
       'Cloudflare assigns two nameservers to each zone and the assignment cannot be changed. Open that zone → Overview page and copy the two names shown there. Do not guess a hostname.',
-      'Lower TTL on old DNS (if you still can). At the registrar, change nameservers once, using the two names copied from Overview.',
+      'Lower TTL on old DNS (if you still can). At the registrar, paste the two nameservers copied from the zone Overview page, and change nameservers once. https://developers.cloudflare.com/dns/zone-setups/full-setup/setup/',
     ],
   },
   proxy: {
@@ -59,24 +60,42 @@ const LESSON_STEPS: Record<TopicId, { vi: string[]; en: string[] }> = {
   },
   waf: {
     vi: [
-      'Nói rõ plan trước khi chỉ bước. Simulate không phải action. Log chỉ có trên Enterprise. Sensitive Data Detection chỉ có trên Enterprise. Đừng bảo người học nâng cấp lên Pro hoặc Business để có Log hoặc Sensitive Data Detection.',
+      'Nói rõ plan trước khi chỉ bước. Simulate không phải action. Log chỉ có trên Enterprise. Sensitive Data Detection chỉ có trên Enterprise. Đừng bảo người học nâng cấp lên Pro hoặc Business để có Log hoặc Sensitive Data Detection. Đừng gọi challenge là CAPTCHA hay puzzle. Menu WAF chỉ Security → Security rules hoặc Security → Settings. Managed Ruleset không bật sẵn trên Enterprise. Custom rule không “thử không chặn” trừ khi action là Log.',
+      'Sensitive Data Detection chỉ có trên Enterprise. Free, Pro và Business không có công tắc Sensitive data detection. Đừng nâng cấp lên Pro hoặc Business để có SDD. Trên Enterprise: Security → Settings, lọc Web application exploits, bật Sensitive data detection. https://developers.cloudflare.com/waf/managed-rules/reference/sensitive-data-detection/',
       'Cloudflare Managed Ruleset cần Pro trở lên. Free đã có WAF: Cloudflare Free Managed Ruleset (bật sẵn) và custom rules. Không bật Cloudflare Managed Ruleset hay OWASP Core Ruleset trên Free.',
       'Pro và Business: Cloudflare Managed Ruleset không bật sẵn. Vào Security → Settings, lọc Web application exploits, rồi bật Cloudflare managed ruleset. OWASP Core là tùy chọn và cũng cần Pro trở lên. Xem deployment settings rồi Save. Save không bật mọi rule. Sau khi bật, chỉ một phần rule chạy. Không override mọi rule sang Block.',
-      'Enterprise: cùng đường Security → Settings. Muốn xem rule mới trước khi chặn thì dùng action Log, rồi xem Security Events. Free, Pro và Business không có Log: bắt đầu bằng Managed Challenge, xem Security Events, rồi mới đổi sang Block.',
+      `Enterprise: cùng đường Security → Settings. Muốn xem rule mới trước khi chặn thì dùng action Log, rồi xem Security Events. ${LOG_WATCH.vi}`,
       'Sau khi đã bật ruleset: Security → Security rules, lọc Managed rules, mở rule có action Execute nếu cần đổi scope hoặc override.',
-      'Action thật khi override: Block, Managed Challenge, Non-Interactive Challenge, Interactive Challenge. Log chỉ Enterprise. Không gọi Simulate.',
+      `${CUSTOM_RULE_ACTIONS.vi} ${OVERRIDE_ACTIONS.vi}`,
       'WAF chỉ thấy HTTP khi hostname đang proxied (đám mây cam). Không bật WAF trong cài đặt WordPress.',
       'Docs: https://developers.cloudflare.com/waf/managed-rules/ https://developers.cloudflare.com/waf/custom-rules/ https://developers.cloudflare.com/ruleset-engine/rules-language/actions/ https://developers.cloudflare.com/waf/managed-rules/deploy-zone-dashboard/ https://developers.cloudflare.com/security/rules/',
     ],
     en: [
-      'Name the plan before you give a step. Simulate is not an action. Log is Enterprise-only. Sensitive Data Detection is Enterprise-only. Do not tell the learner to upgrade to Pro or Business for Log or Sensitive Data Detection.',
+      'Name the plan before you give a step. Simulate is not an action. Log is Enterprise-only. Sensitive Data Detection is Enterprise-only. Do not tell the learner to upgrade to Pro or Business for Log or Sensitive Data Detection. Do not call a challenge a CAPTCHA or a puzzle. WAF menus are only Security → Security rules or Security → Settings. The Managed Ruleset is not already on for Enterprise. A custom rule does not test without blocking unless the action is Log.',
+      'Sensitive Data Detection is Enterprise-only. Free, Pro, and Business have no Sensitive data detection toggle. Do not upgrade to Pro or Business for SDD. On Enterprise: Security → Settings, filter Web application exploits, turn on Sensitive data detection. https://developers.cloudflare.com/waf/managed-rules/reference/sensitive-data-detection/',
       'The Cloudflare Managed Ruleset needs Pro or above. Free already has WAF: the Cloudflare Free Managed Ruleset (already on) and custom rules. Do not turn on the Cloudflare Managed Ruleset or the OWASP Core Ruleset on Free.',
       'Pro and Business: the Cloudflare Managed Ruleset is not already on. Go to Security → Settings, filter by Web application exploits, then turn on Cloudflare managed ruleset. OWASP Core is optional and also needs Pro or above. Review the deployment settings, then Save. Save does not enable every rule. After you turn it on, only a subset of rules runs. Do not override every rule to Block.',
-      'Enterprise: same Security → Settings path. To watch a new rule before blocking, use the Log action, then review Security Events. Free, Pro, and Business have no Log: start with Managed Challenge, review Security Events, then switch to Block.',
+      `Enterprise: same Security → Settings path. To watch a new rule before blocking, use the Log action, then review Security Events. ${LOG_WATCH.en}`,
       'After a ruleset is on: Security → Security rules, filter Managed rules, and open the rule whose action is Execute when you need to change scope or an override.',
-      'Real override actions: Block, Managed Challenge, Non-Interactive Challenge, Interactive Challenge. Log is Enterprise-only. Do not call anything Simulate.',
+      `${CUSTOM_RULE_ACTIONS.en} ${OVERRIDE_ACTIONS.en}`,
       'WAF only sees HTTP when the hostname is proxied (orange cloud). Do not enable WAF inside WordPress settings.',
       'Docs: https://developers.cloudflare.com/waf/managed-rules/ https://developers.cloudflare.com/waf/custom-rules/ https://developers.cloudflare.com/ruleset-engine/rules-language/actions/ https://developers.cloudflare.com/waf/managed-rules/deploy-zone-dashboard/ https://developers.cloudflare.com/security/rules/',
+    ],
+  },
+  logs: {
+    vi: [
+      'Logpush có trên Free, Pro và Business theo giá dùng bao nhiêu tính bấy nhiêu. Chỉ action Log của custom rule WAF là Enterprise-only. Không có công tắc tên Logging. https://developers.cloudflare.com/logs/logpush/pricing/',
+    ],
+    en: [
+      'Logpush is available on Free, Pro, and Business with usage-based pricing. Only the WAF custom-rule Log action is Enterprise-only. There is no Logging toggle. https://developers.cloudflare.com/logs/logpush/pricing/',
+    ],
+  },
+  bots: {
+    vi: [
+      'Bot Management là add-on Enterprise. Pro và Business dùng Super Bot Fight Mode, không phải Bot Management. Free dùng Bot Fight Mode. https://developers.cloudflare.com/bots/get-started/super-bot-fight-mode/',
+    ],
+    en: [
+      'Bot Management is an Enterprise add-on. Pro and Business use Super Bot Fight Mode, not Bot Management. Free uses Bot Fight Mode. https://developers.cloudflare.com/bots/get-started/super-bot-fight-mode/',
     ],
   },
 };
@@ -86,7 +105,7 @@ const TOPICS: Topic[] = [
     id: 'dns',
     // The public DNS accordion summary says "DNS map", which the model repeats as a filler step.
     guideId: '',
-    pattern: /nameserver|\bdns\b|ban ghi|ten mien|\bdomain\b|registrar|\bzone\b/,
+    pattern: /nameserver|\bdns\b|ban ghi|ten mien|\bdomain\b|registrar|\bzone\b|mat bao/,
   },
   {
     id: 'proxy',
@@ -104,7 +123,17 @@ const TOPICS: Topic[] = [
     // the prompt so the model does not see the notes twice.
     guideId: '',
     pattern:
-      /\bwaf\b|firewall|tuong lua|managed rule|rule set|wordpress|security setting|bao mat|owasp|ruleset|core rule|\blog\b(?!\s+in\b)|simulate|goi free|free plan|on free/,
+      /\bwaf\b|firewall|tuong lua|managed rule|rule set|wordpress|security setting|bao mat|owasp|ruleset|core rule|\blog\b(?!\s+in\b)|simulate|goi free|free plan|on free|sensitive data|\bsdd\b|du lieu nhay cam|phat hien the|the tin dung|card detection|credit card/,
+  },
+  {
+    id: 'logs',
+    guideId: '',
+    pattern: /logpush|\blogging\b/,
+  },
+  {
+    id: 'bots',
+    guideId: '',
+    pattern: /bot management|super bot|bot fight/,
   },
 ];
 
@@ -130,10 +159,13 @@ export function generateSystemPrompt(lang: GenerateLang): string {
       '',
       'Grounding rules — follow all of them:',
       '- Only describe Cloudflare steps that really exist: a nameserver change and DNS records, the orange-cloud proxy toggle, the SSL/TLS mode, and WAF managed rules and security settings in the Cloudflare dashboard (dash.cloudflare.com). WAF is available on Free: the Cloudflare Free Managed Ruleset and custom rules. The Cloudflare Managed Ruleset needs Pro or above. The OWASP Core Ruleset needs Pro or above. Log is Enterprise-only. Sensitive Data Detection is Enterprise-only. Simulate is not an action.',
-      '- Never invent credentials, passwords, or plugin or API-key steps. There is no DNS password. WAF is not turned on by adding an API key in WordPress settings. Do not invent nameserver hostnames. Never write a concrete nameserver hostname. Tell the learner to copy the two nameservers shown on that zone’s Overview page. A guessed pair takes the domain and its email offline.',
-      '- Do not tell the learner to upgrade to Pro or Business for Log or Sensitive Data Detection. Both are Enterprise-only. When the plan is not Enterprise, use Managed Challenge instead of Log. The Cloudflare Managed Ruleset is not already on for Pro or Business. Save does not enable every rule.',
+      '- Never invent credentials, passwords, or plugin or API-key steps. There is no DNS password. WAF is not turned on by adding an API key in WordPress settings. Do not invent nameserver hostnames. Never write a concrete nameserver hostname. Tell the learner to copy the two nameservers shown on that zone’s Overview page, then paste those two names at the registrar. A guessed pair takes the domain and its email offline.',
+      '- Do not tell the learner to upgrade to Pro or Business for Log or Sensitive Data Detection. Both are Enterprise-only. For Free, Pro, and Business, when the question is about the Log action or watching a rule before blocking, say: Free, Pro, and Business have no Log action. Start with Managed Challenge, review Security Events, then switch to Block. Managed Challenge challenges real visitors; it does not only record. Do not use that paragraph for Enterprise or for a Logpush question. Do not call Managed Challenge or Non-Interactive Challenge a CAPTCHA or a puzzle. WAF menu paths are only Security → Security rules and Security → Settings. The Cloudflare Managed Ruleset is not already on, including on Enterprise. Do not say a custom rule tests without blocking unless the action is Log. Save does not enable every rule. The deployment runs a subset of rules.',
+      '- Logpush is available on Free, Pro, and Business with usage-based pricing. Only the WAF custom-rule Log action is Enterprise-only. Do not say that Pro lacks Logpush. There is no Logging toggle. Bot Management is an Enterprise add-on; on Pro and Business use Super Bot Fight Mode. https://developers.cloudflare.com/logs/logpush/pricing/',
       '- If you are not sure a control exists, say you are not sure and point the learner to the Cloudflare dashboard or https://developers.cloudflare.com instead of guessing.',
       '- When curated onboarding notes are included, use only those steps. Do not add filler steps the notes do not contain: no DNS cache, no DNS buffer, and no “DNS map” action. Say the next step once. Do not repeat it.',
+      '',
+      formatPlanFeatureTable('en'),
     ].join('\n');
   }
 
@@ -142,10 +174,13 @@ export function generateSystemPrompt(lang: GenerateLang): string {
     '',
     'Quy tắc bám sự thật — làm đủ các ý sau:',
     '- Chỉ mô tả bước Cloudflare có thật: đổi nameserver và bản ghi DNS, công tắc proxy đám mây cam (orange cloud), chế độ SSL/TLS, và WAF managed rules cùng security settings trong dashboard Cloudflare (dash.cloudflare.com). Free đã có WAF: Cloudflare Free Managed Ruleset và custom rules. Cloudflare Managed Ruleset cần Pro trở lên. OWASP Core Ruleset cần Pro trở lên. Log chỉ có trên Enterprise. Sensitive Data Detection chỉ có trên Enterprise. Simulate không phải action.',
-    '- Không bịa thông tin đăng nhập, mật khẩu, bước cài plugin, hoặc bước API key. Không có mật khẩu DNS. Không bật WAF bằng cách thêm API key trong phần cài đặt WordPress. Không bịa hostname nameserver. Không viết hostname nameserver cụ thể. Bảo người học copy đúng hai nameserver đang hiện trên trang Overview của zone đó. Đoán sai cặp nameserver làm tên miền và email ngừng phân giải.',
-    '- Đừng bảo người học nâng cấp lên Pro hoặc Business để có Log hoặc Sensitive Data Detection. Cả hai chỉ có trên Enterprise. Khi plan không phải Enterprise, dùng Managed Challenge thay cho Log. Cloudflare Managed Ruleset không bật sẵn trên Pro hoặc Business. Save không bật mọi rule.',
+      '- Không bịa thông tin đăng nhập, mật khẩu, bước cài plugin, hoặc bước API key. Không có mật khẩu DNS. Không bật WAF bằng cách thêm API key trong phần cài đặt WordPress. Không bịa hostname nameserver. Không viết hostname nameserver cụ thể. Bảo người học copy đúng hai nameserver đang hiện trên trang Overview của zone đó, rồi dán hai tên đó tại registrar. Đoán sai cặp nameserver làm tên miền và email ngừng phân giải.',
+      '- Đừng bảo người học nâng cấp lên Pro hoặc Business để có Log hoặc Sensitive Data Detection. Cả hai chỉ có trên Enterprise. Với Free, Pro và Business, khi câu hỏi là về action Log hoặc xem rule trước khi chặn, hãy nói: Free, Pro và Business không có action Log. Bắt đầu bằng Managed Challenge, xem Security Events, rồi mới đổi sang Block. Managed Challenge thách thức người truy cập thật, không chỉ ghi lại. Đừng dùng đoạn đó cho Enterprise hoặc câu hỏi Logpush. Đừng gọi Managed Challenge hay Non-Interactive Challenge là CAPTCHA hoặc puzzle. Đường menu WAF chỉ có Security → Security rules và Security → Settings. Cloudflare Managed Ruleset không bật sẵn, kể cả trên Enterprise. Đừng nói custom rule thử mà không chặn trừ khi action là Log. Save không bật mọi rule. Bản deployment chỉ chạy một phần rule.',
+      '- Logpush có trên Free, Pro và Business theo giá dùng bao nhiêu tính bấy nhiêu. Chỉ action Log của custom rule WAF là Enterprise-only. Đừng nói Pro không có Logpush. Không có công tắc tên Logging. Bot Management là add-on Enterprise; trên Pro và Business dùng Super Bot Fight Mode. https://developers.cloudflare.com/logs/logpush/pricing/',
     '- Nếu không chắc một nút hay một bước có tồn tại, hãy nói là không chắc và hướng người học tới dashboard Cloudflare hoặc https://developers.cloudflare.com, đừng đoán.',
     '- Khi có ghi chú onboarding đi kèm, chỉ dùng các bước đó. Không thêm bước đệm mà ghi chú không có: không bộ đệm DNS, không DNS cache, và không hành động “DNS map”. Nói bước tiếp theo một lần. Đừng lặp lại.',
+    '',
+    formatPlanFeatureTable('vi'),
   ].join('\n');
 }
 
