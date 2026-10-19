@@ -26,6 +26,7 @@ const {
   gatherVerdicts,
   parseClaimVerdicts,
   reviewPlanClaims,
+  tableConfirms,
 } = await import('../functions/api/planFeatures.ts');
 
 const EN_RULES = [
@@ -367,6 +368,18 @@ assert.equal(statedPlan('Enterprise customer here'), 'enterprise', 'R7-02a');
 assert.equal(statedPlan('I use Enterprise'), 'enterprise', 'R7-02b');
 assert.equal(statedPlan('I use Log'), 'unknown', 'R7-02c');
 assert.equal(statedPlan('Tài khoản của mình là Enterprise, có Log không?'), 'enterprise', 'R7-02d');
+assert.equal(statedPlan('on the fence about Enterprise'), 'unknown', 'fence');
+assert.equal(statedPlan('I am on the fence about Enterprise'), 'unknown', 'fence-cue');
+assert.equal(statedPlan('waitlist for Enterprise'), 'unknown', 'waitlist');
+assert.equal(statedPlan('I am on the waitlist for Enterprise'), 'unknown', 'waitlist-cue');
+assert.notEqual(statedPlan('Compared with the Enterprise plan, our site is on Pro'), 'enterprise', 'compared');
+assert.equal(statedPlan('We are currently on Enterprise'), 'enterprise', 'currently');
+assert.equal(tableConfirms('not just for Enterprise; Pro has it too'), false, 'grants-lower');
+const logActionFirst = await reviewPlanClaims('Log action first.', 'en', async (sentences) => sentences.map((sentence) => ({ id: sentence.id, verdict: 'ok' })), {
+  prompt: 'I am on the Enterprise plan',
+});
+assert.equal(logActionFirst, 'Log action first.');
+assert.doesNotMatch(logActionFirst, /Do not invent an action name/);
 
 const businessLog = await generate(
   { prompt: 'I am on the Business plan. Should I change the WAF action to Log?', lang: 'en' },
@@ -2047,8 +2060,7 @@ await expectCase('R5-01c', LOG_WATCH.en, 'en', okVerdict, 'I am on the Pro plan.
   exact: LOG_WATCH.en,
 });
 await expectCase('R5-01d', 'Free has Block.', 'en', okVerdict, '', {
-  absent: /Free has Block/,
-  present: /Block, Managed Challenge/,
+  exact: 'Free has Block.',
 });
 await expectCase('R11-02a', 'Block only works on Pro.', 'en', nullVerdict, '', {
   absent: /only works on Pro/,

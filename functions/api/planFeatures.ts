@@ -115,7 +115,7 @@ function isPlanTableSentence(sentence: string): boolean {
  */
 function placesDeniedFeatureOnEnterprise(sentence: string): boolean {
   const folded = foldFeature(sentence);
-  if (!/\blog\b|super bot fight mode|\bbot management\b/.test(folded)) return false;
+  if (!/\blog\b|\bbot management\b/.test(folded)) return false;
   if (!/\b(?:free|pro|business)\b/.test(folded) || !/\benterprise\b/.test(folded)) return false;
   return /\b(?:not|no|never|without|khong|isn't|isnt|doesn't|doesnt|aren't|arent|unavailable|lacks|lack|missing|excluded|reserved|limited)\b|\bonly\b[\s\S]{0,32}\benterprise\b|\benterprise\b[\s\S]{0,32}\bonly\b/.test(
     folded,
@@ -490,7 +490,8 @@ function strongCuePlan(clause: string): LearnerPlan {
     const rest = clause.slice(start);
     const stop = PLAN_GAP_STOP.exec(rest);
     const gap = (stop ? rest.slice(0, stop.index) : rest).slice(0, 32);
-    const plan = firstPlanInGap(gap);
+    const near = new RegExp(`^\\s*(?:(?:the|a|an|goi|currently|already|still|also|now|hien|van)\\s+|(?:this|our|my|the)\\s+(?:account|zone|site)\\s+on\\s+)*(${PLAN_NAME})\\b`).exec(gap);
+    const plan = near ? firstPlanInGap(gap) : 'unknown';
     if (plan !== 'unknown') return plan;
   }
   return 'unknown';
@@ -503,7 +504,7 @@ function bareCuePlan(clause: string): LearnerPlan {
     `^(?:on|using|dung|o goi|la)\\s+(?:the\\s+|goi\\s+|an\\s+)?(${PLAN_NAME})\\b|^an\\s+(${PLAN_NAME})\\s+(?:customer|account)\\b`,
   );
   for (const cue of clause.matchAll(BARE_CUE)) {
-    const rest = clause.slice((cue.index ?? 0) + cue[0].length).trim();
+    const rest = clause.slice((cue.index ?? 0) + cue[0].length).trim().replace(/^(?:(?:currently|already|still|also|now|hien|van)\s+)+/, '');
     const direct = directPlan.exec(rest);
     if (direct) return asLearnerPlan(direct[1]);
     const via = viaPlan.exec(rest);
@@ -536,7 +537,7 @@ function isPurePlanQuestion(clause: string): boolean {
 
 export function resolveLearnerPlan(text: string): LearnerPlan {
   const allClauses = planClauses(text);
-  const clauses = allClauses.filter((clause) => !isPurePlanQuestion(clause));
+  const clauses = foldPlanText(text).split(/[;]|(?<=[.!?\n])/).map((c) => c.trim()).filter(Boolean).filter((clause) => !isPurePlanQuestion(clause));
   const folded = clauses.join(' ');
   const profile =
     /\b(?:selected plan|onboarding plan|profile plan|learner plan|plan da chon|goi da chon)\s*[:=]?\s*(enterprise|business|pro|free)\b|\bplan\s*[:=]\s*(enterprise|business|pro|free)\b/.exec(
@@ -655,7 +656,8 @@ export function mentionsPlanOrFeature(sentence: string, context = ''): boolean {
 
 /** A ruleset sentence that already matches the table: Pro or above, not on Free, or Free's own ruleset. */
 function confirmsRulesetPlan(folded: string): boolean {
-  if (!/managed ruleset|\bmanaged rules\b|\bowasp\b|\bwaf\b/.test(folded)) return false;
+  if (!/managed ruleset|\bmanaged rules\b|\bowasp\b/.test(folded)) return false;
+  if (/cloudflare managed ruleset/.test(folded) && /\bfree\b/.test(folded) && /already on|already enabled|on by default|are active/.test(folded)) return false;
   const saysOn = /\b(?:already on|already enabled|are active|are running|on by default)\b/.test(folded) && !/not already|isn't already|isnt already/.test(folded);
   if (saysOn && !/free managed ruleset/.test(folded)) return false;
   if (/do not turn on|don't turn on|not on the free|khong bat|not already on|isn't already|isnt already/.test(folded)) {
@@ -666,7 +668,9 @@ function confirmsRulesetPlan(folded: string): boolean {
 }
 
 /** The sentence already states a table fact. */
+const GRANTS_LOWER = /\btoo\b|\bas well\b|\balso\b[\s\S]{0,16}\b(?:has|have|gets?|includes?)\b|\bnot (?:just|only|limited|reserved)\b|\bisn'?t (?:just|only|limited|reserved)\b|\bkhong chi\b|\bcung co\b|\bno limits\b/;
 export function tableConfirms(sentence: string): boolean {
+  if (GRANTS_LOWER.test(foldFeature(sentence))) return false;
   if (isSharedActionSentence(sentence) || isPlanTableSentence(sentence) || placesDeniedFeatureOnEnterprise(sentence)) return true;
   if (confirmsRulesetPlan(foldFeature(sentence))) return true;
   const folded = foldFeature(sentence);
@@ -798,12 +802,12 @@ function namesPlanAndControl(folded: string): boolean {
 }
 
 function actionsPaidOnly(folded: string): boolean {
-  if (namesPlanAndControl(folded)) return true;
+  if (namesPlanAndControl(folded) && /\b(?:only|chi|need|needs|require|requires|required|upgrade|nang cap|paid|paying|tra phi|not|khong|cannot|can't|cant|unavailable)\b/.test(folded)) return true;
   const control = ACTION_OR_RULESET.test(folded) || /\bcustom rules?\b/.test(folded);
   if (!control) return false;
   if (/\b(?:need|needs|require|requires|required)\b/.test(folded) && PLAN_OR_PAID.test(folded)) return true;
   if (/\bonly works? on\b/.test(folded) && PLAN_OR_PAID.test(folded)) return true;
-  if (/\bpaying\b/.test(folded)) return true;
+  if (/\b(?:paying|tra phi)\b/.test(folded)) return true;
   if (/\b(?:active|enabled) on free\b/.test(folded)) return true;
   return false;
 }
@@ -832,7 +836,9 @@ function actionNameTokens(folded: string): string[] {
   const found: string[] = [];
   const patterns = [
     /\b(?:action|hanh dong)\b(?:\s+[a-z0-9-]+){0,4}?\s+(?:to|la|thanh|sang|named|called)\s+([a-z0-9-]+(?:\s+[a-z0-9-]+){0,3})/g,
-    /\b(?:action|hanh dong)\s+(?!to\b|la\b|thanh\b|sang\b|named\b|called\b|of\b|for\b|only\b|at\b|as\b|in\b|on\b|with\b|from\b|the\b|a\b|an\b|this\b|that\b|gom\b|include(?:s|d)?\b|including\b|are\b|is\b|list\b|following\b)([a-z0-9-]+(?:\s+[a-z0-9-]+){0,2})/g,
+    /\b([a-z0-9-]+(?:\s+[a-z0-9-]+){0,2})\s+as\s+(?:the\s+)?(?:action|hanh dong)\b/g,
+    /\b(?:pick|choose|select|set|use|chon|dat|dung)\s+the\s+([a-z0-9-]+(?:\s+[a-z0-9-]+){0,2})\s+(?:action|hanh dong)\b/g,
+    /\b(?:chon|dat|dung|choose|pick|select|set|use)\s+(?:the\s+)?(?:action|hanh dong)\s+(?!cua\b|to\b|la\b|thanh\b|sang\b|named\b|called\b|of\b|for\b|only\b|at\b|as\b|in\b|on\b|with\b|from\b|the\b|a\b|an\b|this\b|that\b|gom\b|include(?:s|d)?\b|including\b|are\b|is\b|list\b|following\b)([a-z0-9-]+(?:\s+[a-z0-9-]+){0,2})/g,
   ];
   for (const pattern of patterns) {
     for (const match of folded.matchAll(pattern)) {
@@ -1322,6 +1328,7 @@ function resolveSentence(
 function failsClosedOnUnsure(sentence: string, context: string): boolean {
   const folded = foldFeature(sentence);
   if (tableConfirms(sentence)) return false;
+  if (namesPlanAndControl(folded)) return true;
   const enterpriseLog = ownPlan(context) === 'enterprise' && !LOWER_PLAN.test(folded);
   if ((hasCapitalLogGrant(sentence) || isWafLogAction(sentence)) && !enterpriseLog) return true;
   if (logGrantUnconfirmed(sentence, context)) return true;
