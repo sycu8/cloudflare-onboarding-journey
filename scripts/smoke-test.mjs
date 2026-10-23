@@ -328,6 +328,7 @@ for (const { path, type } of AGENT_JSON_ROUTES) {
 const HEADER_CHECKS = [
   { path: '/use-cases/', expect: (cc) => cc.includes('stale-while-revalidate'), label: 'HTML SWR' },
   { path: '/sitemap-index.xml', expect: (cc) => cc.includes('max-age=3600'), label: 'sitemap TTL' },
+  { path: '/sitemap.xml', expect: (cc) => cc.includes('max-age=3600'), label: 'sitemap.xml TTL' },
   { path: '/robots.txt', expect: (cc) => cc.includes('max-age=86400'), label: 'robots TTL' },
 ];
 
@@ -470,6 +471,11 @@ try {
     if (/"worksFor"\s*:/.test(home.text) || /"jobTitle"\s*:/.test(home.text)) {
       errors.push('seo / → schema includes a Cloudflare role (worksFor or jobTitle)');
     }
+    if (!/hreflang="vi"/i.test(home.text) || !/hreflang="en"/i.test(home.text)) {
+      errors.push('seo / → missing vi/en hreflang');
+    }
+    if (!/"@type":"FAQPage"/.test(home.text)) errors.push('seo / → missing FAQPage');
+    if (!home.text.includes('https://orangecloud.vn/')) errors.push('seo / → missing hub link');
     if (errors.length === before) console.log('✓ (seo) homepage schema, disclaimer, no twitter:site');
   }
 } catch (e) {
@@ -534,7 +540,49 @@ try {
   if (!robotsRes.ok) errors.push(`/robots.txt → HTTP ${robotsRes.status}`);
   else if (!robotsText.includes(signal)) errors.push(`/robots.txt → Content-Signal changed (${robotsText.trim()})`);
   else if (/ai-input=yes/.test(robotsText)) errors.push('/robots.txt → ai-input=yes must stay no');
+  else if (!/Sitemap:\s+\S+\/sitemap\.xml/i.test(robotsText)) errors.push('/robots.txt → missing Sitemap sitemap.xml');
   else console.log('✓ (seo) robots Content-Signal unchanged');
+
+try {
+  const sitemapRes = await siteFetch(`${BASE}/sitemap.xml`, { redirect: 'follow' });
+  const sitemapXml = await sitemapRes.text();
+  if (!sitemapRes.ok) errors.push(`/sitemap.xml → HTTP ${sitemapRes.status}`);
+  else if (!sitemapXml.includes('<urlset')) errors.push('/sitemap.xml → missing urlset');
+  else if (!sitemapXml.includes('hreflang="vi"') || !sitemapXml.includes('hreflang="en"')) {
+    errors.push('/sitemap.xml → missing vi/en hreflang');
+  } else console.log('✓ (seo) /sitemap.xml');
+} catch (e) {
+  errors.push(`/sitemap.xml → ${e.message}`);
+}
+
+try {
+  const tracks = await fetchPath('/tracks/');
+  if (!tracks.ok) errors.push(`seo /tracks/ → HTTP ${tracks.status}`);
+  else if (!/"@type":"Course"/.test(tracks.text)) errors.push('seo /tracks/ → missing Course');
+  else console.log('✓ (seo) /tracks/ Course');
+} catch (e) {
+  errors.push(`seo /tracks/ → ${e.message}`);
+}
+
+try {
+  const week = await fetchPath('/first-week/');
+  if (!week.ok) errors.push(`seo /first-week/ → HTTP ${week.status}`);
+  else if (!/"@type":"HowTo"/.test(week.text)) errors.push('seo /first-week/ → missing HowTo');
+  else console.log('✓ (seo) /first-week/ HowTo');
+} catch (e) {
+  errors.push(`seo /first-week/ → ${e.message}`);
+}
+
+if (IS_LOCAL_PREVIEW) {
+  try {
+    const preview = await siteFetch(`${BASE}/`, { redirect: 'follow' });
+    const tag = preview.headers.get('x-robots-tag') || '';
+    if (!/noindex/i.test(tag)) errors.push('non-canonical host → missing X-Robots-Tag: noindex');
+    else console.log('✓ (seo) non-canonical host X-Robots-Tag');
+  } catch (e) {
+    errors.push(`non-canonical X-Robots-Tag → ${e.message}`);
+  }
+}
 } catch (e) {
   errors.push(`/robots.txt → ${e.message}`);
 }

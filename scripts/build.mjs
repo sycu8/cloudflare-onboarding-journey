@@ -12,6 +12,7 @@ const steps = [
   ['node', ['scripts/check-ref-diagram-assets.mjs']],
   ['node', ['scripts/build-agent-discovery.mjs']],
   ['npx', ['astro', 'build']],
+  ['node', ['scripts/write-sitemap-xml.mjs']],
   ...(sitemapOnly
     ? []
     : [

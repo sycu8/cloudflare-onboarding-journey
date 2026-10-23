@@ -3,6 +3,17 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/chrome/Breadcrumbs.astro';
 import LangText from '../../components/ui/LangText.astro';
 import { tracks } from '../../data/tracks';
+import { courseJsonLd, siteSeo } from '../../lib/seo';
+
+const courseLd = courseJsonLd(
+  Astro.site ?? siteSeo.origin,
+  '/tracks',
+  { vi: 'Lộ trình học Cloudflare', en: 'Cloudflare learning tracks' },
+  {
+    vi: 'Năm lộ trình miễn phí: Application Services, Developer Platform, Cloudflare One, AI Security & Adoption và Operational Excellence.',
+    en: 'Five free tracks: Application Services, Developer Platform, Cloudflare One, AI Security & Adoption, and Operational Excellence.',
+  },
+);
 ---
 
 <BaseLayout
@@ -14,6 +25,10 @@ import { tracks } from '../../data/tracks';
   canonicalPath="/tracks"
   showProgressBar
 >
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(courseLd)} />
+  </Fragment>
+
   <Breadcrumbs items={[{ href: '/tracks', label: { vi: 'Lộ trình học', en: 'Tracks' , km: 'Tracks' } }]} />
 
   <header class="mb-8">

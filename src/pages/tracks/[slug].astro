@@ -46,6 +46,7 @@ import { getDemosForTrack } from '../../data/demoScripts';
 import { getDiagramsForTrack } from '../../data/referenceDiagrams';
 import DeveloperLabsSection from '../../components/content/DeveloperLabsSection.astro';
 import { getDeveloperLabsForTrackSlug } from '../../data/developerLabs';
+import { courseJsonLd, siteSeo } from '../../lib/seo';
 
 export function getStaticPaths() {
   return tracks.map((t) => ({ params: { slug: t.slug } }));
@@ -80,6 +81,7 @@ const trackDemoVignettes =
 const trackDiagrams = getDiagramsForTrack(track.slug, 3);
 const developerLabs = getDeveloperLabsForTrackSlug(track.slug);
 const onboardingOverview = track.slug === 'cloudflare-one' ? getOnboardingPageByFile('overview.html') : undefined;
+const courseLd = courseJsonLd(Astro.site ?? siteSeo.origin, `/tracks/${track.slug}`, track.title, track.promise);
 ---
 
 <BaseLayout
@@ -88,6 +90,10 @@ const onboardingOverview = track.slug === 'cloudflare-one' ? getOnboardingPageBy
   canonicalPath={`/tracks/${track.slug}`}
   showProgressBar
 >
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(courseLd)} />
+  </Fragment>
+
   <Breadcrumbs
     items={[
       { href: `/tracks/${track.slug}`, label: track.title },

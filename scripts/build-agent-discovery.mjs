@@ -272,7 +272,7 @@ Allow: /
 Disallow: /workshop/admin/
 Content-Signal: ai-train=no, search=yes, ai-input=no
 
-Sitemap: ${origin}/sitemap-index.xml
+Sitemap: ${origin}/sitemap.xml
 `,
 );
 

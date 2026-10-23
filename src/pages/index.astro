@@ -11,6 +11,11 @@ import DeploymentExamplesHighlight from '../components/content/DeploymentExample
 import BlogPostCard from '../components/content/BlogPostCard.astro';
 import { useCases, getUseCasesByTrack } from '../data/useCases';
 import { blogPosts } from '../data/blog';
+import { siteFaq } from '../data/siteFaq';
+import SiteFaq from '../components/content/SiteFaq.astro';
+import { canonicalUrl, faqPageJsonLd, siteSeo } from '../lib/seo';
+
+const faqLd = faqPageJsonLd(canonicalUrl('/', Astro.site ?? siteSeo.origin).href, siteFaq);
 
 const asCount = getUseCasesByTrack('application-services').length;
 const dpCount = getUseCasesByTrack('developer-platform').length;
@@ -29,6 +34,10 @@ const featuredBlogPosts = blogPosts.slice(0, 3);
   }}
   canonicalPath="/"
 >
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+  </Fragment>
+
   <HeroSection
     eyebrow={{ vi: 'Cloudflare Starter Hub', en: 'Cloudflare Starter Hub', km: 'Cloudflare Starter Hub' }}
     badge={{ vi: 'Người mới', en: 'Beginners', km: 'អ្នកចាប់ផ្តើម' }}
@@ -338,4 +347,6 @@ const featuredBlogPosts = blogPosts.slice(0, 3);
       {featuredBlogPosts.map((post) => <BlogPostCard post={post} />)}
     </div>
   </section>
+
+  <SiteFaq />
 </BaseLayout>
