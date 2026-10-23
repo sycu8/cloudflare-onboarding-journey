@@ -109,6 +109,9 @@
 /sitemap-index.xml
   Cache-Control: public, max-age=3600, stale-while-revalidate=86400
 
+/sitemap.xml
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
 /sitemap-0.xml
   Cache-Control: public, max-age=3600, stale-while-revalidate=86400
 

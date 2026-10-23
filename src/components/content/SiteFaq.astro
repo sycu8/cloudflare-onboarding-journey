@@ -1,0 +1,31 @@
+---
+import LangText from '../ui/LangText.astro';
+import { siteFaq } from '../../data/siteFaq';
+---
+
+<section class="mt-10" aria-labelledby="site-faq-heading">
+  <LangText
+    as="h2"
+    id="site-faq-heading"
+    class="text-xl font-semibold md:text-2xl"
+    text={{ vi: 'Câu hỏi thường gặp', en: 'Common questions', km: 'សំណួរញឹកញាប់' }}
+  />
+  <div class="mt-4 space-y-3">
+    {
+      siteFaq.map((item) => (
+        <details class="card group">
+          <summary class="cursor-pointer font-medium">
+            <LangText text={item.question} />
+          </summary>
+          <LangText as="p" class="text-muted mt-3 text-sm leading-relaxed" text={item.answer} />
+        </details>
+      ))
+    }
+  </div>
+  <p class="text-muted mt-4 text-sm">
+    <span class="lang-vi">Danh sách dự án: </span>
+    <span class="lang-en">Project list: </span>
+    <span class="lang-km">បញ្ជីគម្រោង៖ </span>
+    <a class="link" href="https://orangecloud.vn/">https://orangecloud.vn/</a>
+  </p>
+</section>

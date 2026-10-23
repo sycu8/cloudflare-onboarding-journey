@@ -1,6 +1,7 @@
 name = "blog-email-inbox"
 main = "src/index.ts"
 compatibility_date = "2026-06-02"
+workers_dev = false
 
 # Secrets (wrangler secret put):
 #   BLOG_APPROVE_SECRET

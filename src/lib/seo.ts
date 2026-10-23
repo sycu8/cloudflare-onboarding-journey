@@ -16,6 +16,13 @@ export const siteSeo = {
  */
 export const personId = 'https://orangecloud.vn/#person';
 
+/** Apex showcase. This site is one project on that hub. */
+export const hubSite = {
+  id: 'https://orangecloud.vn/#website',
+  url: 'https://orangecloud.vn/',
+  name: 'Orange Cloud',
+} as const;
+
 export function websiteId(origin: string | URL): string {
   return new URL('/#website', origin).href;
 }
@@ -47,6 +54,61 @@ export function websiteJsonLd(origin: string | URL) {
       'Vietnamese learning hub for Cloudflare: learning paths, product explainers, checklists and FAQs. Personal project maintained by Cường Lê Sỹ. Not a publication of Cloudflare, Inc.',
     author: { '@id': personId },
     publisher: { '@id': personId },
+    isPartOf: { '@id': hubSite.id, '@type': 'WebSite', name: hubSite.name, url: hubSite.url },
+  };
+}
+
+export function courseJsonLd(
+  origin: string | URL,
+  path: string,
+  name: { vi: string; en: string },
+  description: { vi: string; en: string },
+) {
+  const url = canonicalUrl(path, origin).href;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Course',
+    '@id': `${url}#course`,
+    name: name.vi,
+    alternateName: name.en,
+    description: description.vi,
+    inLanguage: ['vi', 'en'],
+    url,
+    provider: { '@id': personId },
+    isAccessibleForFree: true,
+    isPartOf: { '@id': websiteId(origin) },
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'VND',
+      availability: 'https://schema.org/InStock',
+    },
+    hasCourseInstance: {
+      '@type': 'CourseInstance',
+      courseMode: 'online',
+      inLanguage: ['vi', 'en'],
+    },
+  };
+}
+
+export function faqPageJsonLd(
+  pageUrl: string,
+  items: { question: { vi: string; en: string }; answer: { vi: string; en: string } }[],
+) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    '@id': `${pageUrl}#faq`,
+    url: pageUrl,
+    inLanguage: ['vi', 'en'],
+    mainEntity: items.map((item) => ({
+      '@type': 'Question',
+      name: item.question.vi,
+      acceptedAnswer: [
+        { '@type': 'Answer', text: item.answer.vi, inLanguage: 'vi' },
+        { '@type': 'Answer', text: item.answer.en, inLanguage: 'en' },
+      ],
+    })),
   };
 }
 

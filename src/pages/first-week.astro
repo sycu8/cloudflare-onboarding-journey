@@ -10,6 +10,27 @@ import {
   platformSnapshot2026,
   platformSnapshotNote,
 } from '../data/beginnerJourney';
+import { canonicalUrl, siteSeo } from '../lib/seo';
+
+const pageUrl = canonicalUrl('/first-week', Astro.site ?? siteSeo.origin).href;
+const howToLd = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  '@id': `${pageUrl}#howto`,
+  name: 'Tuần đầu học Cloudflare',
+  alternateName: 'Your first week learning Cloudflare',
+  description: firstWeekIntro.vi,
+  inLanguage: ['vi', 'en'],
+  totalTime: 'P7D',
+  url: pageUrl,
+  step: firstWeekDays.map((d) => ({
+    '@type': 'HowToStep',
+    position: d.day,
+    name: d.title.vi,
+    text: `${d.goal.vi} ${d.tasks.map((task) => task.vi).join(' ')}`,
+    url: `${pageUrl}#day-${d.day}`,
+  })),
+};
 ---
 
 <BaseLayout
@@ -21,6 +42,10 @@ import {
   canonicalPath="/first-week"
   showProgressBar
 >
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(howToLd)} />
+  </Fragment>
+
   <Breadcrumbs
     items={[
       { href: '/start-here', label: { vi: 'Bắt đầu', en: 'Start Here' , km: 'Start Here' } },
@@ -35,7 +60,7 @@ import {
 
   <section class="space-y-6">
     {firstWeekDays.map((d) => (
-      <article class="card">
+      <article class="card" id={`day-${d.day}`}>
         <div class="flex flex-wrap items-center gap-2">
           <span class="badge badge-accent">
             <span class="lang-vi">Ngày {d.day}</span>

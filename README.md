@@ -4,6 +4,8 @@
 [![Astro](https://img.shields.io/badge/Astro-6-BC52EE?style=flat-square&logo=astro)](https://astro.build/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 
+**Live site:** [https://onboarding.orangecloud.vn](https://onboarding.orangecloud.vn)
+
 **Cloudflare Starter Hub** — a trilingual (Vietnamese, English, Khmer) learning site that helps beginners go from *“I don’t know where to start”* to a clear path across **Application Services**, **Developer Platform**, and **Cloudflare One**.
 
 Live sites:

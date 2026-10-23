@@ -74,6 +74,32 @@ import { useCaseTrackOrder, getUseCasesByTrack } from '../../data/useCases';
     </div>
   </div>
 
+  <div class="container mt-8 border-t border-[var(--cf-border)] pt-6 text-sm">
+    <div class="font-semibold">
+      <LangText text={{ vi: 'Cùng hệ Orange Cloud', en: 'Also on Orange Cloud', km: 'ផងដែរនៅ Orange Cloud' }} />
+    </div>
+    <ul class="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-x-5 sm:gap-y-2">
+      <li>
+        <a class="link" href="https://orangecloud.vn/" target="_blank" rel="noopener noreferrer">
+          <LangText text={{ vi: 'Orange Cloud — trang các dự án', en: 'Orange Cloud — project hub', km: 'Orange Cloud — hub' }} />
+        </a>
+      </li>
+      <li>
+        <a class="link" href="https://blog.orangecloud.vn/" target="_blank" rel="noopener noreferrer">
+          <LangText text={{ vi: 'Blog kỹ thuật', en: 'Engineering blog', km: 'ប្លុកបច្ចេកទេស' }} />
+        </a>
+      </li>
+      <li>
+        <a class="link" href="https://ready.orangecloud.vn/" target="_blank" rel="noopener noreferrer">CF Ready</a>
+      </li>
+      <li>
+        <a class="link" href="https://lookup.orangecloud.vn/" target="_blank" rel="noopener noreferrer">
+          <LangText text={{ vi: 'Kiểm tra phủ edge', en: 'Edge coverage check', km: 'ពិនិត្យ edge' }} />
+        </a>
+      </li>
+    </ul>
+  </div>
+
   <div class="text-muted container mt-10 space-y-3 border-t border-[var(--cf-border)] pt-6 text-xs">
     <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
       <div>© {new Date().getFullYear()} Cloudflare Starter Hub</div>

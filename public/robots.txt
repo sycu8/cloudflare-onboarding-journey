@@ -3,4 +3,4 @@ Allow: /
 Disallow: /workshop/admin/
 Content-Signal: ai-train=no, search=yes, ai-input=no
 
-Sitemap: https://onboarding.orangecloud.vn/sitemap-index.xml
+Sitemap: https://onboarding.orangecloud.vn/sitemap.xml
