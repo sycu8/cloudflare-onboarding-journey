@@ -1,6 +1,6 @@
-# Blog bi-daily schedule (email approve)
+# Blog every-3-days schedule (email approve)
 
-Cadence: **one bilingual post every 2 days** (`Asia/Ho_Chi_Minh`).
+Cadence: **one bilingual post every 3 days** (`Asia/Ho_Chi_Minh`).
 
 Notifications go **only** to `sycu.lee@gmail.com` (no GitHub issues).
 
@@ -68,10 +68,11 @@ Without the Worker, the **Approve link** still works.
 ```bash
 npm run blog:today
 npm run blog:upcoming
-npm run blog:scaffold -- --date=2026-08-17
-BLOG_APPROVE_SECRET=… npm run blog:email-body -- --date=2026-08-17
+npm run blog:scaffold -- --date=2026-10-26
+BLOG_APPROVE_SECRET=… npm run blog:email-body -- --date=2026-10-26
 ```
 
 ## Extending the queue
 
-Add rows to `src/data/blogSchedule.data.json` (keep ≥14 days ahead, dates every **2** days).
+Add rows to `src/data/blogSchedule.data.json` (keep ≥14 days ahead, dates every **3** days).
+Historical rows before 2026-10-26 may still be spaced every 2 days (legacy cadence).

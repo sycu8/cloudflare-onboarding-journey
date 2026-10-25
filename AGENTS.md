@@ -29,7 +29,7 @@ After user merges on GitHub: `git pull origin main` → `npm run build` → `npm
 - No secrets in repo; `wrangler.toml` is local-only
 - Minimize scope; match existing Astro/React patterns in `src/`
 - Blog visuals: prefer `diagramSlugs` → `public/ref-diagrams/` (official Cloudflare diagrams). Dashboard screenshots go in `public/images/blog/` via post `images` / `sections[].image` — see that folder’s README.
-- Blog cadence: **1 post / 2 days** via email to `sycu.lee@gmail.com` (approve by reply `APPROVE` or link). See [docs/BLOG_SCHEDULE.md](docs/BLOG_SCHEDULE.md).
+- Blog cadence: **1 post / 3 days** via email to `sycu.lee@gmail.com` (approve by reply `APPROVE` or link). See [docs/BLOG_SCHEDULE.md](docs/BLOG_SCHEDULE.md).
 - **Cloudflare API:** use the [`cf`](https://github.com/cloudflare/cf) CLI (`scripts/lib/cf.mjs`, `npx cf …`) — not raw `fetch` to `api.cloudflare.com`. See [docs/CF-CLI.md](docs/CF-CLI.md). Wrangler stays for Pages `dev`/`deploy` and local D1/R2.
 
 ## Cursor Cloud specific instructions
