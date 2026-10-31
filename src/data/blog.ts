@@ -30,6 +30,7 @@ import { postQueuesHangDoiMessageTrenWorkers } from './blogPosts/queues-hang-doi
 import { postDurableObjectsPhoiHopTrangThaiEdge } from './blogPosts/durable-objects-trang-thai';
 import { postTurnstileThayCaptchaBaoVeForm } from './blogPosts/turnstile-thay-captcha';
 import { postTunnelCloudflaredKhongMoPort } from './blogPosts/tunnel-cloudflared-port';
+import { postEmailRoutingVaEmailWorkers } from './blogPosts/email-routing-va-email-workers';
 
 export type BlogTopic = 'ai' | 'security' | 'cdn' | 'workers' | 'developer-platform';
 export type BlogLevel = 'entry' | 'intermediate';
@@ -187,6 +188,7 @@ export function countBlogWords(post: BlogPost, lang: 'vi' | 'en'): number {
     post.description[lang],
     ...post.sections.flatMap((s) => [s.heading[lang], ...s.paragraphs.map((p) => p[lang])]),
     ...post.faq.flatMap((f) => [f.question[lang], f.answer[lang]]),
-  ];
+  postEmailRoutingVaEmailWorkers,
+];
   return parts.join(' ').trim().split(/\s+/).filter(Boolean).length;
 }
