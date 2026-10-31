@@ -122,7 +122,7 @@ export const blogSourceNote: LocalizedString = {
   en: 'Content is rewritten for clarity; always read the original posts on blog.cloudflare.com and official docs for technical detail or the latest updates.',
 };
 
-/** All scheduled blog posts (6 seed + 25 bi-daily posts). */
+/** All published blog posts (6 seed + cadence posts from the editorial queue). */
 export const blogPosts: BlogPost[] = [
   postCdnCache,
   postWafBeginner,

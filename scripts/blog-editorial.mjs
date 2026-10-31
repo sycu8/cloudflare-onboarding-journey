@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Bi-daily blog editorial helpers (email-centric):
+ * Every-3-days blog editorial helpers (email-centric):
  *   node scripts/blog-editorial.mjs                 → today's assignment
  *   node scripts/blog-editorial.mjs --json
  *   node scripts/blog-editorial.mjs --email-body    → HTML+text payload JSON for sending
@@ -165,7 +165,7 @@ async function fileExists(p) {
 
 function buildPrompt(item) {
   const sources = item.sourceHints.map((h) => `- ${h}`).join('\n');
-  return `# Blog bi-daily ${item.date}: \`${item.slug}\`
+  return `# Blog every-3-days ${item.date}: \`${item.slug}\`
 
 ## Working title
 - VI: ${item.workingTitle.vi}
@@ -205,7 +205,7 @@ function buildEmailPayload(item, token) {
   const subject = `[Blog] Duyệt bài ${item.date}: ${item.slug}`;
   const titleVi = item.workingTitle.vi;
   const titleEn = item.workingTitle.en;
-  const text = `Blog bi-daily — cần duyệt
+  const text = `Blog every-3-days — cần duyệt
 
 Ngày: ${item.date}
 Slug: ${item.slug}
@@ -230,7 +230,7 @@ Editor: ${BLOG_EDITOR_EMAIL}
 
   const html = `<!DOCTYPE html><html><body style="font-family:system-ui,sans-serif;line-height:1.5;color:#1e293b;max-width:560px;margin:0 auto;padding:24px">
 <p>Xin chào,</p>
-<p>Đến lịch viết bài <strong>2 ngày/lần</strong>:</p>
+<p>Đến lịch viết bài <strong>3 ngày/lần</strong>:</p>
 <h2 style="color:#f6821f;margin:16px 0">${escapeHtml(titleVi)}</h2>
 <p><em>${escapeHtml(titleEn)}</em></p>
 <p><strong>Ngày:</strong> ${item.date}<br/>
@@ -280,10 +280,10 @@ async function main() {
       .filter((q) => statusOf(q) !== 'published' && q.date >= today)
       .slice(0, args.upcoming);
     if (args.json) {
-      console.log(JSON.stringify({ ok: true, today, cadence: 'every-2-days', items: list }, null, 2));
+      console.log(JSON.stringify({ ok: true, today, cadence: 'every-3-days', items: list }, null, 2));
       return;
     }
-    console.log(`Upcoming blog slots (every 2 days) from ${today}:`);
+    console.log(`Upcoming blog slots (every 3 days) from ${today}:`);
     for (const row of list) {
       console.log(`  ${row.date}  ${row.slug}  [${statusOf(row)}]`);
       console.log(`    ${row.workingTitle.en}`);
@@ -296,8 +296,8 @@ async function main() {
       ok: false,
       today,
       date,
-      cadence: 'every-2-days',
-      error: `No schedule item for ${date} (bi-daily queue — not every calendar day).`,
+      cadence: 'every-3-days',
+      error: `No schedule item for ${date} (every-3-days queue — not every calendar day).`,
       editorEmail: BLOG_EDITOR_EMAIL,
     };
     console.log(JSON.stringify(msg, null, 2));
@@ -373,7 +373,7 @@ async function main() {
           today,
           date,
           status,
-          cadence: 'every-2-days',
+          cadence: 'every-3-days',
           editorEmail: BLOG_EDITOR_EMAIL,
           item,
           token: args.signToken ? token : undefined,
@@ -385,7 +385,7 @@ async function main() {
     return;
   }
 
-  console.log(`Blog bi-daily — ${date} [${status}]`);
+  console.log(`Blog every-3-days — ${date} [${status}]`);
   console.log(`Slug:  ${item.slug}`);
   console.log(`Title: ${item.workingTitle.en}`);
   console.log(`Editor email: ${BLOG_EDITOR_EMAIL}`);

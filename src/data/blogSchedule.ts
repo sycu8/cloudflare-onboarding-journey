@@ -3,7 +3,7 @@ import { blogPosts, type BlogLevel, type BlogTopic } from './blog';
 import queueData from './blogSchedule.data.json';
 
 /**
- * Blog editorial calendar — 1 post every 2 days (Asia/Ho_Chi_Minh).
+ * Blog editorial calendar — 1 post every 3 days (Asia/Ho_Chi_Minh).
  * Reminder + approve flow is email-only (sycu.lee@gmail.com).
  */
 export type BlogScheduleStatus = 'published' | 'due' | 'upcoming';
@@ -35,8 +35,8 @@ export const BLOG_APPROVE_INBOX = 'blog-approve@orangecloud.vn';
 export const blogScheduleQueue: BlogScheduleItem[] = queueData as BlogScheduleItem[];
 
 export const blogCadenceNote: LocalizedString = {
-  vi: 'Lịch biên tập: 1 bài / 2 ngày (giờ Việt Nam). Hệ thống gửi email đề xuất tới biên tập viên; reply APPROVE (hoặc bấm Approve) để mở PR đăng bài.',
-  en: 'Editorial cadence: 1 post every 2 days (Vietnam time). The system emails the editor a topic; reply APPROVE (or click Approve) to open the publish PR.',
+  vi: 'Lịch biên tập: 1 bài / 3 ngày (giờ Việt Nam). Hệ thống gửi email đề xuất tới biên tập viên; reply APPROVE (hoặc bấm Approve) để mở PR đăng bài.',
+  en: 'Editorial cadence: 1 post every 3 days (Vietnam time). The system emails the editor a topic; reply APPROVE (or click Approve) to open the publish PR.',
 };
 
 function publishedSlugSet(): Set<string> {
@@ -71,7 +71,7 @@ export function getScheduleItemBySlug(slug: string): BlogScheduleItem | undefine
   return blogScheduleQueue.find((item) => item.slug === slug);
 }
 
-/** Today's queue row if this calendar day is a scheduled bi-daily slot. */
+/** Today's queue row if this calendar day is a scheduled every-3-days slot. */
 export function getTodayScheduleItem(today = todayInVietnam()): BlogScheduleItem | undefined {
   return getScheduleItemByDate(today);
 }
@@ -89,7 +89,7 @@ export function listDue(today = todayInVietnam()): BlogScheduleItem[] {
 export function buildEditorialPrompt(item: BlogScheduleItem): string {
   const sources = item.sourceHints.map((h) => `- ${h}`).join('\n');
   const products = (item.relatedProductSlugs ?? []).map((p) => `- /products/${p}/`).join('\n') || '- (none)';
-  return `# Blog bi-daily ${item.date}: \`${item.slug}\`
+  return `# Blog every-3-days ${item.date}: \`${item.slug}\`
 
 ## Working title
 - VI: ${item.workingTitle.vi}

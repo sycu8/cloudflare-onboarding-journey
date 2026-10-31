@@ -573,5 +573,718 @@
       "tunnel",
       "access"
     ]
+  },
+  {
+    "date": "2026-10-26",
+    "slug": "hyperdrive-ket-noi-postgres-nhanh-hon",
+    "topic": "developer-platform",
+    "level": "intermediate",
+    "workingTitle": {
+      "vi": "Hyperdrive: làm kết nối Postgres từ Workers nhanh và ổn hơn",
+      "en": "Hyperdrive: making Postgres from Workers faster and steadier"
+    },
+    "angle": {
+      "vi": "Vì sao mở TCP tới DB chậm từ edge; connection pooling; khi nào dùng Hyperdrive thay vì gọi DB trực tiếp.",
+      "en": "Why opening TCP to a DB from the edge is slow; connection pooling; when Hyperdrive beats a direct DB call."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/tag/hyperdrive/",
+      "https://developers.cloudflare.com/hyperdrive/"
+    ],
+    "relatedTrack": "developer-platform",
+    "relatedProductSlugs": [
+      "hyperdrive",
+      "workers",
+      "d1"
+    ]
+  },
+  {
+    "date": "2026-10-29",
+    "slug": "browser-rendering-chup-va-tuong-tac-trang",
+    "topic": "developer-platform",
+    "level": "intermediate",
+    "workingTitle": {
+      "vi": "Browser Rendering: chụp trang và tự động hóa trình duyệt trên Cloudflare",
+      "en": "Browser Rendering: screenshots and browser automation on Cloudflare"
+    },
+    "angle": {
+      "vi": "Khi cần PDF/screenshot/crawl JS-heavy; Puppeteer/Playwright trên edge; chi phí và giới hạn người mới hay gặp.",
+      "en": "When you need PDFs/screenshots/JS-heavy crawls; Puppeteer/Playwright at the edge; costs and beginner pitfalls."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/tag/browser-rendering/",
+      "https://developers.cloudflare.com/browser-rendering/"
+    ],
+    "relatedTrack": "developer-platform",
+    "relatedProductSlugs": [
+      "browser-rendering",
+      "workers",
+      "r2"
+    ]
+  },
+  {
+    "date": "2026-11-01",
+    "slug": "email-routing-va-email-workers",
+    "topic": "developer-platform",
+    "level": "entry",
+    "workingTitle": {
+      "vi": "Email Routing và Email Workers: nhận mail rồi xử lý bằng code",
+      "en": "Email Routing and Email Workers: receive mail, then handle it in code"
+    },
+    "angle": {
+      "vi": "Forward domain mail không cần hộp thư riêng; Worker đọc phần từ/đến; khác Email Sending.",
+      "en": "Forward domain mail without a mailbox; Workers read from/to; different from Email Sending."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/tag/email-routing/",
+      "https://developers.cloudflare.com/email-routing/"
+    ],
+    "relatedTrack": "developer-platform",
+    "relatedProductSlugs": [
+      "email-routing",
+      "workers"
+    ]
+  },
+  {
+    "date": "2026-11-04",
+    "slug": "argo-smart-routing-giam-do-tre",
+    "topic": "cdn",
+    "level": "entry",
+    "workingTitle": {
+      "vi": "Argo Smart Routing: đường đi thông minh hơn giữa user và origin",
+      "en": "Argo Smart Routing: smarter paths between users and your origin"
+    },
+    "angle": {
+      "vi": "Internet công cộng vs đường Cloudflare ưu tiên; khi nào đáng bật; đo latency trước/sau.",
+      "en": "Public Internet vs Cloudflare-preferred paths; when it is worth enabling; measure latency before/after."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/tag/argo/",
+      "https://developers.cloudflare.com/argo-smart-routing/"
+    ],
+    "relatedTrack": "application-services",
+    "relatedProductSlugs": [
+      "cdn",
+      "argo",
+      "analytics"
+    ]
+  },
+  {
+    "date": "2026-11-07",
+    "slug": "waiting-room-bao-ve-khi-traffic-bung",
+    "topic": "security",
+    "level": "entry",
+    "workingTitle": {
+      "vi": "Waiting Room: xếp hàng ảo khi website bị “đông đột ngột”",
+      "en": "Waiting Room: a virtual queue when your site suddenly gets crowded"
+    },
+    "angle": {
+      "vi": "Flash sale / đăng ký sự kiện; bảo vệ origin khỏi stampede; khác rate limiting và DDoS.",
+      "en": "Flash sales / event signup; protect origin from stampedes; vs rate limiting and DDoS."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/tag/waiting-room/",
+      "https://developers.cloudflare.com/waiting-room/"
+    ],
+    "relatedTrack": "application-services",
+    "relatedProductSlugs": [
+      "waiting-room",
+      "cdn",
+      "load-balancing"
+    ]
+  },
+  {
+    "date": "2026-11-10",
+    "slug": "zaraz-third-party-script-gon-hon",
+    "topic": "cdn",
+    "level": "entry",
+    "workingTitle": {
+      "vi": "Zaraz: chạy script bên thứ ba gọn hơn, ít làm chậm trang",
+      "en": "Zaraz: run third-party scripts leaner so they slow the page less"
+    },
+    "angle": {
+      "vi": "Tag manager ở edge; giảm JS nặng trên trình duyệt; privacy và consent cơ bản.",
+      "en": "Edge tag manager; less heavy JS in the browser; basic privacy and consent."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/tag/zaraz/",
+      "https://developers.cloudflare.com/zaraz/"
+    ],
+    "relatedTrack": "application-services",
+    "relatedProductSlugs": [
+      "zaraz",
+      "cdn"
+    ]
+  },
+  {
+    "date": "2026-11-13",
+    "slug": "stream-video-cdn-cho-nguoi-moi",
+    "topic": "cdn",
+    "level": "entry",
+    "workingTitle": {
+      "vi": "Cloudflare Stream: phát video không tự dựng encoder và CDN",
+      "en": "Cloudflare Stream: ship video without building your own encoder and CDN"
+    },
+    "angle": {
+      "vi": "Upload → encode → player; khi dùng Stream thay vì chỉ R2 + HTML5; bảo vệ link xem.",
+      "en": "Upload → encode → player; when Stream beats plain R2 + HTML5; protecting watch links."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/tag/stream/",
+      "https://developers.cloudflare.com/stream/"
+    ],
+    "relatedTrack": "application-services",
+    "relatedProductSlugs": [
+      "stream",
+      "r2",
+      "cdn"
+    ]
+  },
+  {
+    "date": "2026-11-16",
+    "slug": "transform-rules-sua-header-url",
+    "topic": "cdn",
+    "level": "entry",
+    "workingTitle": {
+      "vi": "Transform Rules: sửa URL và header mà không đụng code origin",
+      "en": "Transform Rules: change URLs and headers without touching origin code"
+    },
+    "angle": {
+      "vi": "Rewrite path, set header, redirect nhẹ; khác Page Rules cũ; ví dụ HTTPS và www.",
+      "en": "Path rewrites, set headers, light redirects; vs legacy Page Rules; HTTPS and www examples."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/tag/rules/",
+      "https://developers.cloudflare.com/rules/transform/"
+    ],
+    "relatedTrack": "application-services",
+    "relatedProductSlugs": [
+      "cdn",
+      "dns"
+    ]
+  },
+  {
+    "date": "2026-11-19",
+    "slug": "api-shield-bao-ve-api-schema",
+    "topic": "security",
+    "level": "intermediate",
+    "workingTitle": {
+      "vi": "API Shield: bảo vệ API bằng schema và mTLS (giải thích dễ)",
+      "en": "API Shield: protect APIs with schema checks and mTLS, explained simply"
+    },
+    "angle": {
+      "vi": "Phát hiện endpoint lạ; validate request; client certificate cho máy-máy; khác WAF form web.",
+      "en": "Spot unexpected endpoints; validate requests; client certs for machine-to-machine; vs classic web WAF."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/tag/api-shield/",
+      "https://developers.cloudflare.com/api-shield/"
+    ],
+    "relatedTrack": "application-services",
+    "relatedProductSlugs": [
+      "api-shield",
+      "waf",
+      "ssl"
+    ]
+  },
+  {
+    "date": "2026-11-22",
+    "slug": "snippets-javascript-tren-edge",
+    "topic": "workers",
+    "level": "entry",
+    "workingTitle": {
+      "vi": "Cloudflare Snippets: vài dòng JavaScript trên edge không cần Worker đầy đủ",
+      "en": "Cloudflare Snippets: a few lines of JavaScript at the edge without a full Worker"
+    },
+    "angle": {
+      "vi": "Khi nào Snippets đủ; khác Workers/Pages Functions; giới hạn và use case A/B, header.",
+      "en": "When Snippets are enough; vs Workers/Pages Functions; limits and A/B or header use cases."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/snippets-announcing-general-availability/",
+      "https://developers.cloudflare.com/rules/snippets/"
+    ],
+    "relatedTrack": "developer-platform",
+    "relatedProductSlugs": [
+      "workers",
+      "cdn"
+    ]
+  },
+  {
+    "date": "2026-11-25",
+    "slug": "cache-reserve-luu-dai-hon-tren-r2",
+    "topic": "cdn",
+    "level": "intermediate",
+    "workingTitle": {
+      "vi": "Cache Reserve: giữ cache lâu hơn nhờ R2 phía sau CDN",
+      "en": "Cache Reserve: keep cache longer with R2 behind the CDN"
+    },
+    "angle": {
+      "vi": "Cache miss tốn origin; Reserve như tầng lạnh; khi traffic media/static lớn.",
+      "en": "Cache misses cost origin; Reserve as a cold tier; when media/static traffic is large."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/cache-reserve-open-beta/",
+      "https://developers.cloudflare.com/cache/advanced-configuration/cache-reserve/"
+    ],
+    "relatedTrack": "application-services",
+    "relatedProductSlugs": [
+      "cdn",
+      "r2",
+      "cache"
+    ]
+  },
+  {
+    "date": "2026-11-28",
+    "slug": "gateway-dns-filtering-zero-trust",
+    "topic": "security",
+    "level": "entry",
+    "workingTitle": {
+      "vi": "Gateway DNS filtering: chặn domain độc hại trước khi trình duyệt tải",
+      "en": "Gateway DNS filtering: block bad domains before the browser loads them"
+    },
+    "angle": {
+      "vi": "DNS là lớp đầu; category filter; khác Access và WAF website công khai.",
+      "en": "DNS as the first layer; category filters; vs Access and a public-site WAF."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/tag/cloudflare-gateway/",
+      "https://developers.cloudflare.com/cloudflare-one/policies/gateway/"
+    ],
+    "relatedTrack": "cloudflare-one",
+    "relatedProductSlugs": [
+      "gateway",
+      "zero-trust",
+      "dns"
+    ]
+  },
+  {
+    "date": "2026-12-01",
+    "slug": "warp-client-ket-noi-thiet-bi",
+    "topic": "security",
+    "level": "entry",
+    "workingTitle": {
+      "vi": "WARP client: đưa thiết bị vào Zero Trust mà không VPN cổ điển",
+      "en": "The WARP client: put devices on Zero Trust without a classic VPN"
+    },
+    "angle": {
+      "vi": "Cài client, enroll device; split tunnel cơ bản; đi cùng Gateway/Access.",
+      "en": "Install client, enroll device; basic split tunnel; pairs with Gateway/Access."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/tag/warp/",
+      "https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/warp/"
+    ],
+    "relatedTrack": "cloudflare-one",
+    "relatedProductSlugs": [
+      "warp",
+      "gateway",
+      "access"
+    ]
+  },
+  {
+    "date": "2026-12-04",
+    "slug": "ai-crawl-control-bot-ai",
+    "topic": "ai",
+    "level": "entry",
+    "workingTitle": {
+      "vi": "AI Crawl Control: quyết định bot AI nào được đọc site của bạn",
+      "en": "AI Crawl Control: decide which AI bots may read your site"
+    },
+    "angle": {
+      "vi": "Bot AI khác crawler SEO; chính sách allow/block; liên hệ robots.txt và WAF.",
+      "en": "AI bots vs SEO crawlers; allow/block policy; relates to robots.txt and WAF."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/tag/ai/",
+      "https://developers.cloudflare.com/bots/"
+    ],
+    "relatedTrack": "ai-security-adoption",
+    "relatedProductSlugs": [
+      "bot-management",
+      "waf",
+      "ai"
+    ]
+  },
+  {
+    "date": "2026-12-07",
+    "slug": "workers-static-assets-frontend",
+    "topic": "workers",
+    "level": "entry",
+    "workingTitle": {
+      "vi": "Workers + Static Assets: host frontend cạnh API trên cùng một Worker",
+      "en": "Workers + Static Assets: host a frontend next to your API on one Worker"
+    },
+    "angle": {
+      "vi": "Pages vs Workers assets; khi gộp SPA + API; routing tĩnh và động.",
+      "en": "Pages vs Workers assets; when to combine SPA + API; static vs dynamic routing."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/workers-assets/",
+      "https://developers.cloudflare.com/workers/static-assets/"
+    ],
+    "relatedTrack": "developer-platform",
+    "relatedProductSlugs": [
+      "workers",
+      "pages"
+    ]
+  },
+  {
+    "date": "2026-12-10",
+    "slug": "logpush-va-analytics-quan-sat",
+    "topic": "developer-platform",
+    "level": "intermediate",
+    "workingTitle": {
+      "vi": "Logpush và Analytics: đưa log Cloudflare ra nơi bạn đang quan sát",
+      "en": "Logpush and Analytics: send Cloudflare logs where you already observe"
+    },
+    "angle": {
+      "vi": "Dashboard đủ tới đâu; Logpush sang R2/SIEM; tránh “chỉ nhìn khi sự cố”.",
+      "en": "How far the dashboard goes; Logpush to R2/SIEM; avoid only looking during incidents."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/tag/analytics/",
+      "https://developers.cloudflare.com/logs/about/"
+    ],
+    "relatedTrack": "operational-excellence",
+    "relatedProductSlugs": [
+      "analytics",
+      "r2",
+      "workers"
+    ]
+  },
+  {
+    "date": "2026-12-13",
+    "slug": "containers-tren-cloudflare-workers",
+    "topic": "workers",
+    "level": "intermediate",
+    "workingTitle": {
+      "vi": "Containers trên Cloudflare: khi Worker “nhẹ” chưa đủ",
+      "en": "Containers on Cloudflare: when a lightweight Worker is not enough"
+    },
+    "angle": {
+      "vi": "Quy trình cần binary/dependency nặng; khác Sandbox và Workers chuẩn; chọn đúng lớp.",
+      "en": "Workloads that need heavy binaries/deps; vs Sandbox and plain Workers; pick the right layer."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/tag/containers/",
+      "https://developers.cloudflare.com/containers/"
+    ],
+    "relatedTrack": "developer-platform",
+    "relatedProductSlugs": [
+      "workers",
+      "sandbox",
+      "containers"
+    ]
+  },
+  {
+    "date": "2026-12-16",
+    "slug": "pipelines-dua-du-lieu-vao-r2",
+    "topic": "developer-platform",
+    "level": "intermediate",
+    "workingTitle": {
+      "vi": "Pipelines: đẩy sự kiện và log vào R2 theo lô cho analytics",
+      "en": "Pipelines: batch events and logs into R2 for analytics"
+    },
+    "angle": {
+      "vi": "Ingest liên tục → object trên R2; khác Queues thuần; use case clickstream/telemetry.",
+      "en": "Continuous ingest → objects on R2; vs plain Queues; clickstream/telemetry use cases."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/tag/pipelines/",
+      "https://developers.cloudflare.com/pipelines/"
+    ],
+    "relatedTrack": "developer-platform",
+    "relatedProductSlugs": [
+      "pipelines",
+      "r2",
+      "queues"
+    ]
+  },
+  {
+    "date": "2026-12-19",
+    "slug": "realtime-kit-goi-webrtc-don-gian",
+    "topic": "developer-platform",
+    "level": "intermediate",
+    "workingTitle": {
+      "vi": "Realtime / Calls: xây gọi thoại-video trên edge (góc nhìn người mới)",
+      "en": "Realtime / Calls: build voice-video calls on the edge for beginners"
+    },
+    "angle": {
+      "vi": "WebRTC khó tự host; Cloudflare lo TURN/SFU; khác WebSocket chat thuần.",
+      "en": "WebRTC is hard to self-host; Cloudflare handles TURN/SFU; vs plain WebSocket chat."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/tag/realtime/",
+      "https://developers.cloudflare.com/realtime/"
+    ],
+    "relatedTrack": "developer-platform",
+    "relatedProductSlugs": [
+      "realtime",
+      "workers",
+      "durable-objects"
+    ]
+  },
+  {
+    "date": "2026-12-22",
+    "slug": "dlp-zero-trust-ngan-ro-ri-du-lieu",
+    "topic": "security",
+    "level": "intermediate",
+    "workingTitle": {
+      "vi": "DLP trong Cloudflare One: giảm rủi ro lộ dữ liệu nhạy cảm",
+      "en": "DLP in Cloudflare One: reduce the risk of leaking sensitive data"
+    },
+    "angle": {
+      "vi": "Phát hiện PII/secret trên traffic; profile và hành động; đi cùng Gateway/CASB.",
+      "en": "Detect PII/secrets in traffic; profiles and actions; pairs with Gateway/CASB."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/tag/dlp/",
+      "https://developers.cloudflare.com/cloudflare-one/policies/data-loss-prevention/"
+    ],
+    "relatedTrack": "cloudflare-one",
+    "relatedProductSlugs": [
+      "dlp",
+      "gateway",
+      "casb"
+    ]
+  },
+  {
+    "date": "2026-12-25",
+    "slug": "casb-saas-security-cho-it",
+    "topic": "security",
+    "level": "intermediate",
+    "workingTitle": {
+      "vi": "CASB: kiểm tra cấu hình SaaS (Google/Microsoft…) dễ hiểu cho IT",
+      "en": "CASB: checking SaaS posture (Google/Microsoft…) in plain language for IT"
+    },
+    "angle": {
+      "vi": "SaaS misconfig hay gặp; findings → remediation; khác Access proxy ứng dụng.",
+      "en": "Common SaaS misconfigs; findings → remediation; vs Access app proxying."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/tag/casb/",
+      "https://developers.cloudflare.com/cloudflare-one/applications/casb/"
+    ],
+    "relatedTrack": "cloudflare-one",
+    "relatedProductSlugs": [
+      "casb",
+      "zero-trust",
+      "access"
+    ]
+  },
+  {
+    "date": "2026-12-28",
+    "slug": "origin-rules-chon-origin-thong-minh",
+    "topic": "cdn",
+    "level": "entry",
+    "workingTitle": {
+      "vi": "Origin Rules: chọn origin/host header đúng mà không sửa DNS lung tung",
+      "en": "Origin Rules: pick the right origin/host header without messy DNS hacks"
+    },
+    "angle": {
+      "vi": "Override host, port, DNS; staging vs prod; kết hợp Transform và Load Balancing.",
+      "en": "Override host, port, DNS; staging vs prod; combine with Transform and Load Balancing."
+    },
+    "sourceHints": [
+      "https://developers.cloudflare.com/rules/origin-rules/",
+      "https://blog.cloudflare.com/tag/rules/"
+    ],
+    "relatedTrack": "application-services",
+    "relatedProductSlugs": [
+      "cdn",
+      "dns",
+      "load-balancing"
+    ]
+  },
+  {
+    "date": "2026-12-31",
+    "slug": "workers-vpc-ket-noi-mang-rieng",
+    "topic": "workers",
+    "level": "intermediate",
+    "workingTitle": {
+      "vi": "Workers và mạng riêng: gọi service nội bộ an toàn hơn từ edge",
+      "en": "Workers and private networking: reach internal services more safely from the edge"
+    },
+    "angle": {
+      "vi": "Khi API chỉ sống trong VPC/private; Tunnel/VPC patterns; không lộ port public.",
+      "en": "When APIs live only in a VPC/private net; Tunnel/VPC patterns; no public ports."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/tag/workers/",
+      "https://developers.cloudflare.com/workers/"
+    ],
+    "relatedTrack": "developer-platform",
+    "relatedProductSlugs": [
+      "workers",
+      "tunnel",
+      "hyperdrive"
+    ]
+  },
+  {
+    "date": "2027-01-03",
+    "slug": "ai-gateway-cache-va-retry",
+    "topic": "ai",
+    "level": "intermediate",
+    "workingTitle": {
+      "vi": "AI Gateway: cache và retry để app AI đỡ đắt và đỡ lỗi",
+      "en": "AI Gateway: caching and retries so AI apps cost less and fail less"
+    },
+    "angle": {
+      "vi": "Cache response giống nhau; backoff khi provider lỗi; khác Workers AI thuần.",
+      "en": "Cache identical responses; backoff when providers fail; vs plain Workers AI."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/tag/ai-gateway/",
+      "https://developers.cloudflare.com/ai-gateway/"
+    ],
+    "relatedTrack": "ai-security-adoption",
+    "relatedProductSlugs": [
+      "ai-gateway",
+      "workers-ai"
+    ]
+  },
+  {
+    "date": "2027-01-06",
+    "slug": "pages-functions-middleware-auth",
+    "topic": "workers",
+    "level": "entry",
+    "workingTitle": {
+      "vi": "Pages Functions và middleware: thêm auth/API cạnh site tĩnh",
+      "en": "Pages Functions and middleware: add auth/APIs beside a static site"
+    },
+    "angle": {
+      "vi": "File-based routes; middleware chặn /admin; khác Worker riêng biệt.",
+      "en": "File-based routes; middleware guarding /admin; vs a separate Worker."
+    },
+    "sourceHints": [
+      "https://developers.cloudflare.com/pages/functions/",
+      "https://blog.cloudflare.com/tag/pages/"
+    ],
+    "relatedTrack": "developer-platform",
+    "relatedProductSlugs": [
+      "pages",
+      "workers",
+      "access"
+    ]
+  },
+  {
+    "date": "2027-01-09",
+    "slug": "bot-fight-mode-va-super-bot",
+    "topic": "security",
+    "level": "entry",
+    "workingTitle": {
+      "vi": "Bot Fight Mode: lớp chống bot miễn phí nên bật thế nào cho đúng",
+      "en": "Bot Fight Mode: how to turn on free bot protection the right way"
+    },
+    "angle": {
+      "vi": "Bot Fight vs Super Bot Fight vs Bot Management; false positive form login; quan sát trước khi harden.",
+      "en": "Bot Fight vs Super Bot Fight vs Bot Management; login-form false positives; observe before hardening."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/tag/bots/",
+      "https://developers.cloudflare.com/bots/"
+    ],
+    "relatedTrack": "application-services",
+    "relatedProductSlugs": [
+      "bot-management",
+      "waf",
+      "turnstile"
+    ]
+  },
+  {
+    "date": "2027-01-12",
+    "slug": "spectrum-tcp-udp-proxy",
+    "topic": "cdn",
+    "level": "intermediate",
+    "workingTitle": {
+      "vi": "Spectrum: proxy TCP/UDP (game, SSH, database) qua Cloudflare",
+      "en": "Spectrum: proxy TCP/UDP (games, SSH, databases) through Cloudflare"
+    },
+    "angle": {
+      "vi": "Không chỉ HTTP; bảo vệ và ẩn IP origin cho protocol khác; khác Tunnel.",
+      "en": "Not only HTTP; protect and hide origin IPs for other protocols; vs Tunnel."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/tag/spectrum/",
+      "https://developers.cloudflare.com/spectrum/"
+    ],
+    "relatedTrack": "application-services",
+    "relatedProductSlugs": [
+      "spectrum",
+      "cdn",
+      "ddos"
+    ]
+  },
+  {
+    "date": "2027-01-15",
+    "slug": "smart-placement-workers-gan-backend",
+    "topic": "workers",
+    "level": "intermediate",
+    "workingTitle": {
+      "vi": "Smart Placement: đặt Worker gần backend thay vì chỉ gần user",
+      "en": "Smart Placement: place a Worker near your backend, not only near users"
+    },
+    "angle": {
+      "vi": "Latency user vs latency DB; khi bật Smart Placement; đo trước/sau.",
+      "en": "User latency vs DB latency; when to enable Smart Placement; measure before/after."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/workers-smart-placement/",
+      "https://developers.cloudflare.com/workers/configuration/smart-placement/"
+    ],
+    "relatedTrack": "developer-platform",
+    "relatedProductSlugs": [
+      "workers",
+      "hyperdrive",
+      "d1"
+    ]
+  },
+  {
+    "date": "2027-01-18",
+    "slug": "certificate-transparency-va-ssl-advanced",
+    "topic": "security",
+    "level": "entry",
+    "workingTitle": {
+      "vi": "SSL nâng cao: Universal SSL, Advanced Certificate, CT monitoring",
+      "en": "Advanced SSL: Universal SSL, Advanced Certificates, and CT monitoring"
+    },
+    "angle": {
+      "vi": "Chứng chỉ miễn phí đủ tới đâu; custom hostname; theo dõi cấp phát lạ.",
+      "en": "How far free certs go; custom hostnames; watch unexpected issuance."
+    },
+    "sourceHints": [
+      "https://blog.cloudflare.com/tag/ssl/",
+      "https://developers.cloudflare.com/ssl/"
+    ],
+    "relatedTrack": "application-services",
+    "relatedProductSlugs": [
+      "ssl",
+      "dns"
+    ]
+  },
+  {
+    "date": "2027-01-21",
+    "slug": "vectorize-metadata-filtering-rag",
+    "topic": "ai",
+    "level": "intermediate",
+    "workingTitle": {
+      "vi": "Vectorize metadata filters: RAG chỉ tìm đúng thư mục/tenant",
+      "en": "Vectorize metadata filters: RAG that only searches the right folder/tenant"
+    },
+    "angle": {
+      "vi": "Embedding thôi chưa đủ; filter theo metadata; tránh lẫn tài liệu giữa các khách.",
+      "en": "Embeddings alone are not enough; filter by metadata; avoid cross-tenant doc bleed."
+    },
+    "sourceHints": [
+      "https://developers.cloudflare.com/vectorize/",
+      "https://blog.cloudflare.com/tag/vectorize/"
+    ],
+    "relatedTrack": "ai-security-adoption",
+    "relatedProductSlugs": [
+      "vectorize",
+      "workers-ai",
+      "ai-gateway"
+    ]
   }
 ]

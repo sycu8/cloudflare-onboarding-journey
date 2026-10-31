@@ -1,10 +1,10 @@
-# Bi-daily blog editorial email (cron daily; only sends on schedule dates)
+# Every-3-days blog editorial email (cron daily; only sends on schedule dates)
 #
 # Reuses Deploy credentials from the `production` GitHub Environment:
 #   CLOUDFLARE_API_TOKEN + CLOUDFLARE_ACCOUNT_ID
 # Sends ONE email to sycu.lee@gmail.com (Approve link + Reply APPROVE).
 
-name: Blog bi-daily email
+name: Blog every-3-days email
 
 on:
   schedule:
@@ -31,7 +31,7 @@ env:
 
 jobs:
   email-editor:
-    name: Email bi-daily blog assignment
+    name: Email every-3-days blog assignment
     runs-on: ubuntu-latest
     timeout-minutes: 15
     # Same env as Deploy → production so CLOUDFLARE_* secrets resolve
@@ -65,7 +65,7 @@ jobs:
           SKIP=$(node -e "const j=require('/tmp/blog-email.json'); process.stdout.write(j.skip?'true':(j.ok===false?'noslot':'false'))")
           echo "skip=$SKIP" >> "$GITHUB_OUTPUT"
           if [ "$SKIP" = "noslot" ]; then
-            echo "No bi-daily slot today — OK"
+            echo "No every-3-days slot today — OK"
           fi
 
       - name: Record approve token in D1
