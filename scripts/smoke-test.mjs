@@ -415,7 +415,7 @@ for (const path of toCheck) {
   }
 }
 
-const PERSON_ID = 'https://orangecloud.vn/#person';
+const ORG_ID_SUFFIX = '/#organization';
 
 function canonicalHref(html) {
   const m = html.match(/<link rel="canonical" href="([^"]+)"/i);
@@ -467,7 +467,9 @@ try {
     if (!home.text.includes('Not a Cloudflare, Inc. publication.')) {
       errors.push('seo / → missing non-affiliation disclaimer');
     }
-    if (!home.text.includes(PERSON_ID)) errors.push(`seo / → WebSite JSON-LD missing ${PERSON_ID}`);
+    if (!home.text.includes(ORG_ID_SUFFIX) || !home.text.includes('"@type":"Organization"')) {
+      errors.push('seo / → WebSite JSON-LD missing Organization publisher');
+    }
     if (/"worksFor"\s*:/.test(home.text) || /"jobTitle"\s*:/.test(home.text)) {
       errors.push('seo / → schema includes a Cloudflare role (worksFor or jobTitle)');
     }
@@ -486,7 +488,9 @@ try {
   const post = await fetchPath('/blog/dns-proxy-dam-may-cam-cho-nguoi-moi/');
   if (!post.ok) errors.push(`seo blog post → HTTP ${post.status}`);
   else if (!/"@type":"BlogPosting"/.test(post.text)) errors.push('seo blog post → missing BlogPosting');
-  else if (!post.text.includes(PERSON_ID)) errors.push('seo blog post → BlogPosting does not reference the Person @id');
+  else if (!post.text.includes(ORG_ID_SUFFIX) || !post.text.includes('"@type":"Organization"')) {
+    errors.push('seo blog post → BlogPosting does not reference the Organization publisher');
+  }
   else if (/"worksFor"\s*:/.test(post.text) || /"jobTitle"\s*:/.test(post.text)) {
     errors.push('seo blog post → schema includes a Cloudflare role');
   } else if (/<meta name="twitter:site"/i.test(post.text)) {

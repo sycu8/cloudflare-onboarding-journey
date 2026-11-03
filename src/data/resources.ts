@@ -7,6 +7,8 @@ export type ResourceCard = {
   type: 'checklist' | 'diagram' | 'slides' | 'lab' | 'external';
   href: string;
   status: 'available' | 'coming-soon';
+  /** Hidden from HTML, search, and the resource list while sales content is off. */
+  commercial?: boolean;
 };
 
 export const resources: ResourceCard[] = [
@@ -14,8 +16,8 @@ export const resources: ResourceCard[] = [
     slug: 'system-status',
     title: { vi: 'System status & incidents', en: 'System status & incidents' },
     description: {
-      vi: 'Live từ new.cloudflarestatus.com — sự cố active, maintenance, lịch sử gần đây.',
-      en: 'Live from new.cloudflarestatus.com — active incidents, maintenance, recent history.',
+      vi: 'Live từ www.cloudflarestatus.com — sự cố đang mở và lịch sử gần đây.',
+      en: 'Live from www.cloudflarestatus.com — open incidents and recent history.',
     },
     type: 'external',
     href: '/status',
@@ -91,41 +93,31 @@ export const resources: ResourceCard[] = [
     slug: 'plan-comparison',
     title: { vi: 'So sánh gói Cloudflare (SME)', en: 'Cloudflare plan comparison (SME)' },
     description: {
-      vi: 'Business vs Enterprise: bảng 124 tính năng và gợi ý chọn gói cho doanh nghiệp vừa và nhỏ.',
-      en: 'Business vs Enterprise: 124-feature matrix and SME buying guidance.',
+      vi: 'Hub trỏ tới trang gói công khai. Không giữ bảng quyền lợi riêng.',
+      en: 'The hub points at the public plans page and does not keep its own entitlement matrix.',
     },
     type: 'external',
     href: '/plans',
     status: 'available',
   },
   {
-    slug: 'enterprise-success-packages',
-    title: { vi: 'Standard & Premium Success (Enterprise)', en: 'Standard & Premium Success (Enterprise)' },
-    description: {
-      vi: 'Bảng chính thống Asia & Latin America: Standard đi kèm Enterprise, Premium 3 tier theo ACV, SLA support P1–P4.',
-      en: 'Official Asia & Latin America matrix: Standard with Enterprise, Premium 3 ACV tiers, P1–P4 support SLAs.',
-    },
-    type: 'external',
-    href: '/cheatsheets/enterprise-support-success-packages',
-    status: 'available',
-  },
-  {
     slug: 'cloudflare-one-paygo-vs-enterprise',
     title: { vi: 'Cloudflare One: Paygo vs Enterprise', en: 'Cloudflare One: Paygo vs Enterprise' },
     description: {
-      vi: 'So sánh Pay-as-you-go ($7/user) và Contract Plan cho ZTNA, SWG, DLP, CASB và SASE network.',
-      en: 'Compare Pay-as-you-go ($7/user) and Contract plans for ZTNA, SWG, DLP, CASB, and SASE networking.',
+      vi: 'So sánh Pay-as-you-go và Contract trên trang giá Zero Trust chính thức.',
+      en: 'Pay-as-you-go and Contract compared on the official Zero Trust pricing page.',
     },
     type: 'external',
-    href: '/cheatsheets/cloudflare-one-enterprise-vs-paygo',
+    href: 'https://www.cloudflare.com/plans/zero-trust-services/',
     status: 'available',
+    commercial: true,
   },
   {
-    slug: 'enterprise-success',
-    title: { vi: 'Enterprise, Premium Success & TAM', en: 'Enterprise, Premium Success & TAM' },
+    slug: 'enterprise-plan',
+    title: { vi: 'Gói Contract (Enterprise)', en: 'Contract (Enterprise) plan' },
     description: {
-      vi: 'Ưu điểm Enterprise, Premium Success, TAM, Professional Services — và 3 lợi ích mua qua đối tác Indochina.',
-      en: 'Enterprise advantages, Premium Success, TAM, Professional Services — plus 3 Indochina partner buying benefits.',
+      vi: 'Giải thích ngắn và liên kết tới trang gói công khai.',
+      en: 'A short note plus a link to the public plans page.',
     },
     type: 'external',
     href: '/enterprise',

@@ -4,11 +4,11 @@ import Breadcrumbs from '../../components/chrome/Breadcrumbs.astro';
 import LangText from '../../components/ui/LangText.astro';
 import CTASection from '../../components/content/CTASection.astro';
 import CloudflareOnePlanComparisonTable from '../../components/interactive/CloudflareOnePlanComparisonTable';
+import { showCommercialContent } from '../../lib/siteFlags';
 import {
   CLOUDFLARE_ONE_DASHBOARD_URL,
   CLOUDFLARE_ONE_PLANS_SOURCE_NOTE,
   CLOUDFLARE_ONE_PRICING_URL,
-  CONTACT_SALES_URL,
   cloudflareOneDecisionGuide,
   cloudflareOneKeyDifferentiators,
   cloudflareOnePlanCategories,
@@ -16,6 +16,10 @@ import {
   cloudflareOnePlansPageIntro,
   cloudflareOnePaygoSupportWarning,
 } from '../../data/cloudflareOnePlans';
+
+if (!showCommercialContent) {
+  return Astro.redirect('https://www.cloudflare.com/plans/zero-trust-services/', 301);
+}
 ---
 
 <BaseLayout
@@ -55,14 +59,6 @@ import {
       <a class="link" href={CLOUDFLARE_ONE_DASHBOARD_URL} target="_blank" rel="noopener noreferrer">
         <span class="lang-vi">Zero Trust dashboard ↗</span>
         <span class="lang-en">Zero Trust dashboard ↗</span>
-      </a>
-      <a class="link" href={CONTACT_SALES_URL} target="_blank" rel="noopener noreferrer">
-        <span class="lang-vi">Liên hệ Sales (Contract) ↗</span>
-        <span class="lang-en">Contact Sales (Contract) ↗</span>
-      </a>
-      <a class="link" href="/cheatsheets/enterprise-support-success-packages">
-        <span class="lang-vi">Standard & Premium Success (Enterprise) →</span>
-        <span class="lang-en">Standard & Premium Success (Enterprise) →</span>
       </a>
       <a class="link" href="/plans">
         <span class="lang-vi">So sánh gói zone (Free–Enterprise) →</span>

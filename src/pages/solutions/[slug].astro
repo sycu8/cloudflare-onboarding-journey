@@ -3,9 +3,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/chrome/Breadcrumbs.astro';
 import SolutionProposalView from '../../components/content/SolutionProposalView.astro';
 import LangText from '../../components/ui/LangText.astro';
+import { showCommercialContent } from '../../lib/siteFlags';
 import { allSolutionProposals, getSolutionBySlug, solutionsDisclaimer } from '../../data/solutionProposals';
 
 export function getStaticPaths() {
+  if (!showCommercialContent) return [];
   return allSolutionProposals.map((s) => ({ params: { slug: s.slug } }));
 }
 

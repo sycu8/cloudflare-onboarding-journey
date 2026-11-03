@@ -11,7 +11,7 @@ import {
   blogTopicLabels,
   type BlogTopic,
 } from '../../data/blog';
-import { personId, siteSeo, websiteId } from '../../lib/seo';
+import { organizationId, organizationJsonLd, siteSeo, websiteId } from '../../lib/seo';
 
 const topics = Object.keys(blogTopicLabels) as BlogTopic[];
 const siteOrigin = Astro.site ?? siteSeo.origin;
@@ -25,8 +25,8 @@ const itemListJsonLd = {
   url: new URL('/blog/', siteOrigin).href,
   inLanguage: 'vi',
   isPartOf: { '@id': websiteId(siteOrigin) },
-  author: { '@id': personId },
-  publisher: { '@id': personId },
+  author: { ...organizationJsonLd, '@id': organizationId(siteOrigin) },
+  publisher: { ...organizationJsonLd, '@id': organizationId(siteOrigin) },
   disambiguatingDescription:
     'Independent Vietnamese learning blog. Not a publication of Cloudflare, Inc.',
   blogPost: blogPosts.map((post) => ({
@@ -38,8 +38,8 @@ const itemListJsonLd = {
     inLanguage: 'vi',
     url: new URL(`/blog/${post.slug}/`, siteOrigin).href,
     description: post.description.vi,
-    author: { '@id': personId },
-    publisher: { '@id': personId },
+    author: { ...organizationJsonLd, '@id': organizationId(siteOrigin) },
+    publisher: { ...organizationJsonLd, '@id': organizationId(siteOrigin) },
   })),
 };
 ---

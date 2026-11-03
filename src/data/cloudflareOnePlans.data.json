@@ -40,8 +40,8 @@
           "paygo": "no",
           "enterprise": "Standard: P1 ≤2h",
           "note": {
-            "vi": "Enterprise Contract bao gồm Standard Success với SLA phản hồi case theo severity (Asia/LATAM: P1 ≤2h). Premium nâng lên P1 ≤1h. Xem /cheatsheets/enterprise-support-success-packages.",
-            "en": "Enterprise Contract includes Standard Success with severity-based case response SLAs (Asia/LATAM: P1 ≤2h). Premium upgrades to P1 ≤1h. See /cheatsheets/enterprise-support-success-packages."
+            "vi": "Đối chiếu hỗ trợ của từng gói trên trang giá Zero Trust chính thức.",
+            "en": "Compare each plan’s support on the official Zero Trust pricing page."
           }
         },
         {

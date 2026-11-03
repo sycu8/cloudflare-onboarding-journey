@@ -24,6 +24,7 @@ export function setStoredLanguage(lang: Language) {
   if (typeof window === 'undefined') return;
   try {
     window.localStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
+    window.dispatchEvent(new CustomEvent('cfhub:language', { detail: lang }));
   } catch {
     // ignore
   }

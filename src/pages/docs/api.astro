@@ -59,6 +59,7 @@ const origin = Astro.site?.href.replace(/\/$/, '') ?? 'https://onboarding.orange
     <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'REST endpoints', en: 'REST endpoints', km: 'REST endpoints' }} />
     <ul class="text-muted mt-3 space-y-2 font-mono text-sm">
       <li>GET /api/site-config</li>
+      <li>GET /api/cloudflare-status</li>
       <li>GET /api/workshop-events</li>
       <li>POST /api/workshop-signup</li>
       <li>POST /api/feedback</li>

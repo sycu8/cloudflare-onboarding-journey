@@ -1,0 +1,31 @@
+---
+/**
+ * Shown only while the page language is Khmer (CSS lang-km).
+ * Wording is pending a native-speaker review — TODO(verify).
+ */
+---
+
+<div class="lang-km mb-6 rounded-xl border border-[var(--cf-border)] bg-[var(--cf-bg-elevated)] p-4 text-sm leading-relaxed" role="note">
+  <p class="font-medium">
+    <span class="badge mr-2 align-middle">Translated by AI</span>
+    ខ្លឹមសារភាសាខ្មែរនេះត្រូវបានបកប្រែដោយ AI ហើយអាចមានកំហុស។ យើងណែនាំឱ្យសិក្សាជាភាសាអង់គ្លេស។
+  </p>
+  <p class="text-muted mt-2">
+    This Khmer content is translated by AI and may contain errors. We recommend studying in English.
+  </p>
+  <button type="button" class="btn btn-primary mt-3" data-read-english>
+    Read in English
+  </button>
+</div>
+
+<script>
+  import { applyPageLang } from '../../lib/applyPageLang';
+  import { setStoredLanguage } from '../../i18n/storage';
+
+  document.querySelectorAll('[data-read-english]').forEach((button) => {
+    button.addEventListener('click', () => {
+      setStoredLanguage('en');
+      applyPageLang('en');
+    });
+  });
+</script>

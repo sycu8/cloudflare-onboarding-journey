@@ -9,6 +9,8 @@ process.env.PUBLIC_SITE_URL = (process.env.PUBLIC_SITE_URL || SITE).replace(/\/$
 const sitemapOnly = process.argv.includes('--sitemap-only');
 
 const steps = [
+  ['node', ['scripts/check-trust-content.mjs']],
+  ['node', ['--experimental-strip-types', 'scripts/test-cloudflare-status.mjs']],
   ['node', ['scripts/check-ref-diagram-assets.mjs']],
   ['node', ['scripts/build-agent-discovery.mjs']],
   ['npx', ['astro', 'build']],
@@ -18,6 +20,7 @@ const steps = [
     : [
         ['node', ['scripts/copy-dist-assets.mjs']],
         ['node', ['scripts/check-ref-diagram-assets.mjs', '--dist']],
+        ['node', ['scripts/check-trust-content.mjs', '--dist']],
       ]),
 ];
 

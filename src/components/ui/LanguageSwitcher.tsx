@@ -19,6 +19,12 @@ export default function LanguageSwitcher() {
     const stored = getStoredLanguage();
     setLang(stored);
     applyPageLang(stored);
+    const onLanguage = (event: Event) => {
+      const next = (event as CustomEvent<Language>).detail;
+      if (next === 'vi' || next === 'en' || next === 'km') setLang(next);
+    };
+    window.addEventListener('cfhub:language', onLanguage);
+    return () => window.removeEventListener('cfhub:language', onLanguage);
   }, []);
 
   useEffect(() => {
@@ -65,7 +71,7 @@ export default function LanguageSwitcher() {
         <ul
           role="menu"
           aria-label="Language"
-          className="absolute right-0 z-50 mt-1 min-w-[10.5rem] overflow-hidden rounded-lg border border-[var(--cf-border)] bg-[var(--cf-bg-elevated)] py-1 shadow-lg"
+          className="absolute right-0 z-50 mt-1 min-w-[16rem] overflow-hidden rounded-lg border border-[var(--cf-border)] bg-[var(--cf-bg-elevated)] py-1 shadow-lg"
         >
           {LANGUAGE_OPTIONS.map((option) => (
             <li key={option.value} role="none">
@@ -83,6 +89,9 @@ export default function LanguageSwitcher() {
               </button>
             </li>
           ))}
+          <li className="border-t border-[var(--cf-border)] px-3 py-2 text-xs leading-relaxed text-[var(--cf-text-muted)]">
+            ខ្លឹមសារភាសាខ្មែរនេះត្រូវបានបកប្រែដោយ AI ហើយអាចមានកំហុស។ យើងណែនាំឱ្យសិក្សាជាភាសាអង់គ្លេស។ / Khmer pages are AI-translated and may contain errors. English is recommended.
+          </li>
         </ul>
       ) : null}
     </div>

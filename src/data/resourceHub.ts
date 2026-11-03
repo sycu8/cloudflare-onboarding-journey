@@ -187,8 +187,8 @@ export const resourceHubItems: ResourceHubItem[] = [
     id: 'status',
     title: { vi: 'System status', en: 'System status' },
     description: {
-      vi: 'Trạng thái dịch vụ và incident — live từ new.cloudflarestatus.com.',
-      en: 'Service status and incidents — live from new.cloudflarestatus.com.',
+      vi: 'Trạng thái dịch vụ và incident — live từ www.cloudflarestatus.com.',
+      en: 'Service status and incidents — live from www.cloudflarestatus.com.',
     },
     href: '/status',
     category: 'operations',

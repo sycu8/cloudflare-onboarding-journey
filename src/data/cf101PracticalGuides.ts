@@ -12,7 +12,7 @@ export type PracticalGuideSection = {
   docsPath?: string;
 };
 
-/** Condensed from Basic Configuration Guide lab material. */
+/** Short setup notes. Each section links to a public Cloudflare docs path. */
 export const basicConfigurationSections: PracticalGuideSection[] = [
   {
     id: 'dns',

@@ -44,14 +44,13 @@ export const communityEvents: CommunityEvent[] = [
       en: 'Vietnamese with some English',
     },
     registrationUrl: 'https://luma.com/8y2xy93w',
-    host: 'Cuong Le',
+    host: 'Cloudflare community meetup',
     speakers: [
       { name: 'Lưu Tuấn Anh', role: { vi: 'Sr. Solutions Engineer — Cloudflare', en: 'Sr. Solutions Engineer — Cloudflare' } },
       { name: 'Trần Tuấn Anh', role: { vi: 'Head of Cloud Solutions — FPT Telecom International', en: 'Head of Cloud Solutions — FPT Telecom International' } },
       { name: 'Tình Nguyễn', role: { vi: 'AI & Data Expert — LionTech', en: 'AI & Data Expert — LionTech' } },
       { name: 'Hòa Lưu', role: { vi: 'Cloud Engineer — LionTech', en: 'Cloud Engineer — LionTech' } },
       { name: 'Sử Minh Thành', role: { vi: 'Founder VibeCode.edu.vn — Cloudflare Community Builder', en: 'Founder VibeCode.edu.vn — Cloudflare Community Builder' } },
-      { name: 'Lê Sỹ Cường', role: { vi: 'Territory Account Executive — Cloudflare', en: 'Territory Account Executive — Cloudflare' } },
       { name: 'Nguyễn Hữu Nguyên Ý', role: { vi: 'Cloudflare Community Builder', en: 'Cloudflare Community Builder' } },
     ],
     highlights: {
@@ -83,8 +82,8 @@ export const communityEvents: CommunityEvent[] = [
       ],
     },
     contact: {
-      vi: 'Liên hệ Mr. Cường (0369 161 494) hoặc Mr. Ý (0773 288 148)',
-      en: 'Contact Mr. Cường (0369 161 494) or Mr. Ý (0773 288 148)',
+      vi: 'Đăng ký qua form hội thảo trên hub hoặc trang đăng ký của sự kiện.',
+      en: 'Register through the hub workshop form or the event registration page.',
     },
     free: true,
     source: 'luma',

@@ -209,7 +209,7 @@ export const cloudflareOneKeyDifferentiators: {
   {
     feature: { vi: 'SLA phản hồi support case', en: 'Support case response SLA' },
     paygo: { vi: 'Không có', en: 'None' },
-    enterprise: { vi: 'Standard P1 ≤2h (Premium ≤1h)', en: 'Standard P1 ≤2h (Premium ≤1h)' },
+    enterprise: { vi: 'Xem trang gói chính thức', en: 'See the official plans page' },
     whyItMatters: {
       vi: 'Enterprise Contract gồm Standard Success — ticket có SLA phản hồi; Pay-as-you-go không cam kết thời gian.',
       en: 'Enterprise Contract includes Standard Success — tickets have response SLAs; Pay-as-you-go has no time commitment.',
@@ -222,15 +222,6 @@ export const cloudflareOneKeyDifferentiators: {
     whyItMatters: {
       vi: 'Standard Success cam kết xử lý theo P1–P4; Pay-as-you-go phụ thuộc hàng đợi chung — có thể chờ rất lâu.',
       en: 'Standard Success commits to P1–P4 handling; Pay-as-you-go follows a shared queue — may wait a long time.',
-    },
-  },
-  {
-    feature: { vi: 'Premium Success & Support', en: 'Premium Success & Support' },
-    paygo: { vi: 'Không có', en: 'Not available' },
-    enterprise: { vi: 'Add-on (~20% ACV)', en: 'Add-on (~20% ACV)' },
-    whyItMatters: {
-      vi: 'Premium thêm premium queue, Named CSM, SLA P1 ≤1h và expert sessions — xem cheatsheet Success Packages.',
-      en: 'Premium adds priority queue, named CSM, P1 ≤1h SLA, and expert sessions — see Success Packages cheatsheet.',
     },
   },
   {

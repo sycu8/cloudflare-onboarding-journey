@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Navbar from '../components/chrome/Navbar.astro';
 import Footer from '../components/chrome/Footer.astro';
+import KhmerTranslationNotice from '../components/chrome/KhmerTranslationNotice.astro';
 import ProgressBar from '../components/ui/ProgressBar';
 import BackToTop from '../components/ui/BackToTop';
 import { assetUrl } from '../lib/assets';
@@ -166,6 +167,7 @@ const imageUrl = new URL(ogImage ?? siteSeo.defaultImage, siteOrigin).href;
       <Navbar />
       {showProgressBar ? <ProgressBar client:load /> : null}
       <main class="container py-10">
+        <KhmerTranslationNotice />
         <slot />
       </main>
       <BackToTop client:load />

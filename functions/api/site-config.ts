@@ -1,4 +1,5 @@
 import { jsonResponse } from '../../src/lib/server/json';
+import { showCommercialContent } from '../../src/lib/siteFlags';
 
 export const onRequestGet: PagesFunction<{
   SITE_CONFIG?: KVNamespace;
@@ -17,6 +18,7 @@ export const onRequestGet: PagesFunction<{
   return jsonResponse(
     {
       ok: true,
+      showCommercialContent,
       workshopEnabled,
       resourceDownloadsEnabled,
       turnstileSiteKey: env.PUBLIC_TURNSTILE_SITE_KEY || null,

@@ -3,6 +3,8 @@ import type { LocalizedString } from '../i18n/types';
 export type Cf101Term = {
   term: string;
   definition: LocalizedString;
+  /** Public Cloudflare docs or learning-center URL. */
+  source: string;
 };
 
 export type Cf101TermSection = {
@@ -11,111 +13,289 @@ export type Cf101TermSection = {
   terms: Cf101Term[];
 };
 
-/** Sourced from internal Cloudflare terminology reference (Orange Cloud training). */
+const DNS_TYPES = 'https://developers.cloudflare.com/dns/manage-dns-records/reference/dns-record-types/';
+const DNS_SERVERS = 'https://www.cloudflare.com/learning/dns/dns-server-types/';
+const CACHE_RESPONSES = 'https://developers.cloudflare.com/cache/concepts/cache-responses/';
+
+/** Glossary rebuilt from public Cloudflare pages. Terms without a public page were removed. */
 export const cf101TerminologySections: Cf101TermSection[] = [
   {
     id: 'basics',
-    title: { vi: 'Thuật ngữ cơ bản', en: 'Core terminology' },
+    title: { vi: 'Mạng & edge', en: 'Network & edge' },
     terms: [
-      { term: 'Session', definition: { vi: 'Phiên kết nối giữa client và server.', en: 'A connection session between client and server.' } },
-      { term: 'Congestion', definition: { vi: 'Nghẽn mạng khi lưu lượng vượt khả năng xử lý.', en: 'Network congestion when traffic exceeds capacity.' } },
-      { term: 'Failover', definition: { vi: 'Chuyển sang hệ thống dự phòng khi primary gặp sự cố.', en: 'Switching to a backup system when the primary fails.' } },
-      { term: 'Redundancy', definition: { vi: 'Dự phòng — nhiều thành phần thay thế để tăng độ tin cậy.', en: 'Redundancy — spare components to improve reliability.' } },
-      { term: 'High Availability (H/A)', definition: { vi: 'Hệ thống có tính sẵn sàng cao (H/A), giảm downtime.', en: 'High availability (H/A) — designed to minimize downtime.' } },
-      { term: 'Scalability', definition: { vi: 'Khả năng mở rộng khi tải tăng.', en: 'Ability to scale as load grows.' } },
-      { term: 'Horizontal Scaling', definition: { vi: 'Mở rộng bằng cách thêm node/máy chủ.', en: 'Scaling out by adding nodes or servers.' } },
-      { term: 'Vertical Scaling', definition: { vi: 'Tăng tài nguyên (CPU/RAM) trên một máy.', en: 'Scaling up by adding CPU/RAM to one machine.' } },
-      { term: 'SLA', definition: { vi: 'Cam kết dịch vụ (uptime, thời gian phản hồi).', en: 'Service level agreement (uptime, response time).' } },
-      { term: 'Multi-region', definition: { vi: 'Hệ thống triển khai trên nhiều khu vực địa lý.', en: 'System deployed across multiple geographic regions.' } },
-      { term: 'Socket', definition: { vi: 'Kết nối logic giữa hai endpoint (IP + port).', en: 'Logical connection between two endpoints (IP + port).' } },
-      { term: 'Edge', definition: { vi: 'Rìa mạng — điểm Cloudflare xử lý traffic trước origin.', en: 'Network edge — where Cloudflare processes traffic before the origin.' } },
-      { term: 'POP (Point of Presence)', definition: { vi: 'Điểm truy cập / data center Cloudflare gần người dùng.', en: 'Point of Presence — Cloudflare data center near users.' } },
+      {
+        term: 'Edge',
+        source: 'https://www.cloudflare.com/learning/cdn/glossary/edge-server/',
+        definition: {
+          vi: 'Máy chủ ở rìa mạng, gần người dùng hơn origin.',
+          en: 'A server at the edge of the network, closer to users than the origin.',
+        },
+      },
+      {
+        term: 'POP (Point of Presence)',
+        source: 'https://www.cloudflare.com/learning/cdn/glossary/point-of-presence-pop/',
+        definition: {
+          vi: 'Địa điểm Cloudflare đặt máy chủ để phục vụ người dùng gần đó.',
+          en: 'A location where Cloudflare places servers to serve nearby users.',
+        },
+      },
+      {
+        term: 'Anycast',
+        source: 'https://www.cloudflare.com/learning/cdn/glossary/anycast-network/',
+        definition: {
+          vi: 'Cùng một địa chỉ IP được công bố từ nhiều nơi, để traffic tới điểm gần nhất.',
+          en: 'The same IP address announced from many places, so traffic reaches a nearby site.',
+        },
+      },
     ],
   },
   {
     id: 'dns-routing',
-    title: { vi: 'DNS & điều hướng traffic', en: 'DNS & traffic routing' },
+    title: { vi: 'DNS', en: 'DNS' },
     terms: [
-      { term: 'Authoritative DNS', definition: { vi: 'Nơi quản lý chính thức bản ghi của domain.', en: 'The official source of truth for a domain’s DNS records.' } },
-      { term: 'Recursive DNS', definition: { vi: 'Resolver truy vấn giúp end user (8.8.8.8, 1.1.1.1).', en: 'Resolver that looks up answers on behalf of end users.' } },
-      { term: 'Resolver', definition: { vi: 'Máy chủ phân giải DNS.', en: 'DNS resolver server.' } },
-      { term: 'NS Record', definition: { vi: 'Khai báo nameserver cho zone.', en: 'Declares nameservers for a zone.' } },
-      { term: 'MX Record', definition: { vi: 'Chỉ định mail server.', en: 'Points to mail servers.' } },
-      { term: 'TXT Record', definition: { vi: 'Text record — xác thực domain, SPF, DKIM, v.v.', en: 'Text record for verification, SPF, DKIM, etc.' } },
-      { term: 'SRV Record', definition: { vi: 'Khai báo service (host, port, protocol).', en: 'Service location record (host, port, protocol).' } },
-      { term: 'DNSSEC', definition: { vi: 'Xác thực DNS chống giả mạo bản ghi.', en: 'Cryptographic DNS authentication against spoofing.' } },
-      { term: 'Geo Routing', definition: { vi: 'Điều hướng theo vị trí địa lý người dùng.', en: 'Routing based on user geography.' } },
-      { term: 'Traffic Steering', definition: { vi: 'Điều hướng thông minh: dynamic, geo, random, weighted.', en: 'Smart steering: dynamic, geo, random, weighted.' } },
-      { term: 'Split Horizon DNS', definition: { vi: 'DNS trả kết quả khác nhau theo vùng/mạng nội bộ.', en: 'Different DNS answers for internal vs external clients.' } },
-      { term: 'A / AAAA', definition: { vi: 'Bản ghi trỏ IPv4 / IPv6.', en: 'DNS records pointing to IPv4 / IPv6 addresses.' } },
-      { term: 'CNAME', definition: { vi: 'Alias trỏ tên miền tới tên khác.', en: 'Canonical name alias to another hostname.' } },
-      { term: 'TTL', definition: { vi: 'Time To Live — thời gian cache bản ghi DNS ở resolver.', en: 'Time To Live — how long resolvers cache a DNS record.' } },
-      { term: 'Orange Cloud', definition: { vi: 'Proxy bật — traffic đi qua Cloudflare.', en: 'Proxied record — traffic flows through Cloudflare.' } },
-      { term: 'Gray Cloud', definition: { vi: 'DNS only — traffic không qua proxy Cloudflare.', en: 'DNS-only — traffic bypasses Cloudflare proxy.' } },
-      { term: 'Anycast', definition: { vi: 'Một IP được quảng bá từ nhiều edge — routing tới POP gần nhất.', en: 'One IP announced from many edges — routes to nearest POP.' } },
+      {
+        term: 'Authoritative DNS',
+        source: DNS_SERVERS,
+        definition: {
+          vi: 'Nameserver giữ câu trả lời chính thức cho một zone.',
+          en: 'The nameserver that holds the official answers for a zone.',
+        },
+      },
+      {
+        term: 'Recursive DNS',
+        source: DNS_SERVERS,
+        definition: {
+          vi: 'Resolver đi hỏi giúp người dùng cho đến khi có câu trả lời.',
+          en: 'A resolver that looks up an answer on behalf of the user.',
+        },
+      },
+      {
+        term: 'NS Record',
+        source: DNS_TYPES,
+        definition: { vi: 'Chỉ nameserver của zone.', en: 'Points at the nameservers for a zone.' },
+      },
+      {
+        term: 'MX Record',
+        source: DNS_TYPES,
+        definition: { vi: 'Chỉ mail server của domain.', en: 'Points at a domain’s mail servers.' },
+      },
+      {
+        term: 'TXT Record',
+        source: DNS_TYPES,
+        definition: { vi: 'Bản ghi chữ, dùng cho xác minh và SPF.', en: 'A text record, used for verification and SPF.' },
+      },
+      {
+        term: 'A / AAAA',
+        source: DNS_TYPES,
+        definition: { vi: 'Trỏ tên tới địa chỉ IPv4 hoặc IPv6.', en: 'Points a name at an IPv4 or IPv6 address.' },
+      },
+      {
+        term: 'CNAME',
+        source: DNS_TYPES,
+        definition: { vi: 'Alias từ tên này sang tên khác.', en: 'An alias from one hostname to another.' },
+      },
+      {
+        term: 'TTL',
+        source: 'https://developers.cloudflare.com/dns/manage-dns-records/reference/ttl/',
+        definition: {
+          vi: 'Thời gian resolver được phép nhớ một bản ghi.',
+          en: 'How long a resolver may cache a record.',
+        },
+      },
+      {
+        term: 'DNSSEC',
+        source: 'https://developers.cloudflare.com/dns/dnssec/',
+        definition: {
+          vi: 'Chữ ký số cho bản ghi DNS để phát hiện giả mạo.',
+          en: 'Digital signatures on DNS records so spoofed answers can be detected.',
+        },
+      },
+      {
+        term: 'Proxied DNS (orange cloud)',
+        source: 'https://developers.cloudflare.com/dns/proxy-status/',
+        definition: {
+          vi: 'Record được proxy: traffic HTTP đi qua Cloudflare.',
+          en: 'A proxied record: HTTP traffic goes through Cloudflare.',
+        },
+      },
+      {
+        term: 'DNS only (grey cloud)',
+        source: 'https://developers.cloudflare.com/dns/proxy-status/',
+        definition: {
+          vi: 'Chỉ phân giải DNS; traffic không qua proxy Cloudflare.',
+          en: 'DNS resolution only; traffic does not pass through the Cloudflare proxy.',
+        },
+      },
     ],
   },
   {
     id: 'performance',
-    title: { vi: 'Performance & CDN', en: 'Performance & CDN' },
+    title: { vi: 'Cache & HTTP', en: 'Cache & HTTP' },
     terms: [
-      { term: 'Purge Cache', definition: { vi: 'Xóa cache thủ công trên edge.', en: 'Manually invalidate cached content on the edge.' } },
-      { term: 'Compression', definition: { vi: 'Nén response (Brotli, Gzip) để giảm bandwidth.', en: 'Compressing responses (Brotli, Gzip) to save bandwidth.' } },
-      { term: 'Brotli', definition: { vi: 'Chuẩn nén hiện đại, thường nhỏ hơn Gzip.', en: 'Modern compression format, often smaller than Gzip.' } },
-      { term: 'Gzip', definition: { vi: 'Chuẩn nén phổ biến trên web.', en: 'Common web compression format.' } },
-      { term: 'Minification', definition: { vi: 'Rút gọn JS/CSS/HTML (bỏ whitespace).', en: 'Stripping whitespace from JS/CSS/HTML.' } },
-      { term: 'Prefetch / Preload', definition: { vi: 'Tải trước hoặc ưu tiên tài nguyên quan trọng.', en: 'Prefetch or prioritize critical assets early.' } },
-      { term: 'TTFB', definition: { vi: 'Time To First Byte — thời gian nhận byte đầu từ server.', en: 'Time To First Byte from the server.' } },
-      { term: 'HTTP/2', definition: { vi: 'Multiplexing — nhiều request song song trên một kết nối.', en: 'Multiplexed requests over one connection.' } },
-      { term: 'HTTP/3', definition: { vi: 'HTTP over QUIC — giảm latency, ổn định hơn trên mạng lossy.', en: 'HTTP over QUIC — lower latency on lossy networks.' } },
-      { term: 'QUIC', definition: { vi: 'Giao thức transport trên UDP (nền tảng HTTP/3).', en: 'UDP-based transport protocol (HTTP/3 foundation).' } },
-      { term: 'Smart Tiered Cache', definition: { vi: 'Cache nhiều tầng giữa các POP.', en: 'Multi-tier caching between POPs.' } },
-      { term: 'Cache DYNAMIC', definition: { vi: 'Cloudflare proxy nhưng không cache — mỗi request về origin.', en: 'Proxied but not cached — every request hits origin.' } },
-      { term: 'Cache HIT', definition: { vi: 'Có cache hợp lệ — trả từ edge.', en: 'Valid cache — served from edge.' } },
-      { term: 'Cache MISS', definition: { vi: 'Không có cache — fetch đầy đủ từ origin.', en: 'No cache — full fetch from origin.' } },
-      { term: 'Cache REVALIDATED', definition: { vi: 'Có cache nhưng kiểm tra origin trước khi trả.', en: 'Cached but revalidated with origin before serving.' } },
+      {
+        term: 'Purge Cache',
+        source: 'https://developers.cloudflare.com/cache/how-to/purge-cache/',
+        definition: { vi: 'Xóa bản sao đã cache trên edge.', en: 'Removes cached copies from the edge.' },
+      },
+      {
+        term: 'Brotli and Gzip',
+        source: 'https://developers.cloudflare.com/speed/optimization/content/compression/',
+        definition: {
+          vi: 'Hai cách nén response để giảm dung lượng tải.',
+          en: 'Two ways to compress responses so downloads are smaller.',
+        },
+      },
+      {
+        term: 'Minification',
+        source: 'https://developers.cloudflare.com/speed/optimization/content/content-minification/',
+        definition: {
+          vi: 'Bỏ ký tự thừa trong HTML, CSS hoặc JavaScript.',
+          en: 'Strips extra characters from HTML, CSS, or JavaScript.',
+        },
+      },
+      {
+        term: 'TTFB',
+        source: 'https://www.cloudflare.com/learning/cdn/glossary/time-to-first-byte-ttfb/',
+        definition: {
+          vi: 'Thời gian tới byte đầu tiên của response.',
+          en: 'Time until the first byte of the response arrives.',
+        },
+      },
+      {
+        term: 'HTTP/3',
+        source: 'https://www.cloudflare.com/learning/performance/what-is-http3/',
+        definition: { vi: 'HTTP chạy trên QUIC.', en: 'HTTP carried over QUIC.' },
+      },
+      {
+        term: 'Tiered Cache',
+        source: 'https://developers.cloudflare.com/cache/how-to/tiered-cache/',
+        definition: {
+          vi: 'Các lớp cache giữa các data center trước khi về origin.',
+          en: 'Cache layers between data centers before a request reaches the origin.',
+        },
+      },
+      {
+        term: 'Cache HIT / MISS',
+        source: CACHE_RESPONSES,
+        definition: {
+          vi: 'HIT: trả từ cache. MISS: không có bản cache, phải hỏi origin.',
+          en: 'HIT: served from cache. MISS: nothing cached, so the origin is contacted.',
+        },
+      },
     ],
   },
   {
     id: 'security',
-    title: { vi: 'Security — WAF & protection', en: 'Security — WAF & protection' },
+    title: { vi: 'WAF', en: 'WAF' },
     terms: [
-      { term: 'Behavioral Analysis', definition: { vi: 'Phân tích hành vi request để phát hiện bất thường.', en: 'Analyzing request behavior for anomalies.' } },
-      { term: 'Exploit / Vulnerability', definition: { vi: 'Khai thác lỗ hổng / điểm yếu bảo mật.', en: 'Exploit / security vulnerability.' } },
-      { term: 'SQL Injection (SQLi)', definition: { vi: 'Chèn SQL độc hại để truy cập dữ liệu trái phép.', en: 'Injecting malicious SQL to access unauthorized data.' } },
-      { term: 'XSS', definition: { vi: 'Cross-Site Scripting — chèn JavaScript độc vào trang.', en: 'Cross-Site Scripting — injecting malicious scripts.' } },
-      { term: 'CSRF', definition: { vi: 'Lợi dụng session hợp lệ để thực hiện hành động trái phép.', en: 'Forging requests using a victim’s valid session.' } },
-      { term: 'RCE', definition: { vi: 'Remote Code Execution — chạy mã từ xa trên server.', en: 'Remote Code Execution on the server.' } },
-      { term: 'CVE', definition: { vi: 'Mã định danh lỗ hổng đã công bố.', en: 'Published vulnerability identifier.' } },
-      { term: 'Mitigation', definition: { vi: 'Biện pháp giảm thiểu tấn công.', en: 'Measures to reduce attack impact.' } },
-      { term: 'False Positive', definition: { vi: 'Chặn nhầm traffic hợp lệ.', en: 'Blocking legitimate traffic by mistake.' } },
-      { term: 'Managed Ruleset', definition: { vi: 'Bộ rule WAF do Cloudflare duy trì, cập nhật thường xuyên.', en: 'Cloudflare-maintained WAF rules updated regularly.' } },
-      { term: 'Managed Challenge', definition: { vi: 'Cloudflare chọn cơ chế xác minh phù hợp (JS, interactive, v.v.).', en: 'Cloudflare picks the right verification method automatically.' } },
+      {
+        term: 'SQL injection',
+        source: 'https://www.cloudflare.com/learning/security/threats/sql-injection/',
+        definition: {
+          vi: 'Chèn câu lệnh SQL vào input để đọc hoặc sửa dữ liệu.',
+          en: 'Inserting SQL into input to read or change data.',
+        },
+      },
+      {
+        term: 'XSS',
+        source: 'https://www.cloudflare.com/learning/security/threats/cross-site-scripting/',
+        definition: {
+          vi: 'Chèn script vào trang để chạy trong trình duyệt người khác.',
+          en: 'Injecting a script into a page so it runs in someone else’s browser.',
+        },
+      },
+      {
+        term: 'CSRF',
+        source: 'https://www.cloudflare.com/learning/security/threats/cross-site-request-forgery/',
+        definition: {
+          vi: 'Lừa trình duyệt gửi request bằng phiên đăng nhập sẵn có.',
+          en: 'Tricking a browser into sending a request with an existing login.',
+        },
+      },
+      {
+        term: 'Managed Ruleset',
+        source: 'https://developers.cloudflare.com/waf/managed-rules/',
+        definition: {
+          vi: 'Bộ rule WAF do Cloudflare viết và cập nhật.',
+          en: 'A WAF ruleset written and updated by Cloudflare.',
+        },
+      },
+      {
+        term: 'Managed Challenge',
+        source: 'https://developers.cloudflare.com/cloudflare-challenges/challenge-types/',
+        definition: {
+          vi: 'Cloudflare chọn kiểu thử thách phù hợp với request.',
+          en: 'Cloudflare chooses a challenge type that fits the request.',
+        },
+      },
     ],
   },
   {
     id: 'bots',
-    title: { vi: 'Bot Management', en: 'Bot Management' },
+    title: { vi: 'Bot', en: 'Bots' },
     terms: [
-      { term: 'Headless Browser', definition: { vi: 'Trình duyệt không UI — dùng automation/scraping.', en: 'Browser without UI — used for automation/scraping.' } },
-      { term: 'Scraping', definition: { vi: 'Thu thập dữ liệu web tự động.', en: 'Automated web data collection.' } },
-      { term: 'Credential Stuffing', definition: { vi: 'Dùng credential rò rỉ để đăng nhập hàng loạt.', en: 'Using leaked credentials for bulk login attempts.' } },
-      { term: 'Bot Score', definition: { vi: 'Điểm 1–99: 1 = chắc chắn bot, 30–99 = likely human.', en: 'Score 1–99: 1 = automated, 30–99 = likely human.' } },
-      { term: 'Verified Bots', definition: { vi: 'Bot đã xác minh (Googlebot, Bingbot, v.v.).', en: 'Verified crawlers (Googlebot, Bingbot, etc.).' } },
-      { term: 'JavaScript Detections', definition: { vi: 'Chạy JS trên mọi request để thu tín hiệu bot liên tục.', en: 'Runs JS on requests to collect ongoing bot signals.' } },
-      { term: 'Search engine crawler', definition: { vi: 'Bot lập chỉ mục cho công cụ tìm kiếm.', en: 'Bot that indexes pages for search engines.' } },
-      { term: 'AI Crawler', definition: { vi: 'Thu thập nội dung để huấn luyện mô hình AI.', en: 'Collects content to train AI models.' } },
+      {
+        term: 'Bot Score',
+        source: 'https://developers.cloudflare.com/bots/concepts/bot-score/',
+        definition: {
+          vi: 'Điểm từ 1 đến 99. 1 gần như chắc là tự động; 99 gần như chắc là người.',
+          en: 'A score from 1 to 99. 1 is almost certainly automated; 99 is almost certainly a human.',
+        },
+      },
+      {
+        term: 'Verified bots',
+        source: 'https://developers.cloudflare.com/bots/concepts/bot/verified-bots/',
+        definition: {
+          vi: 'Bot Cloudflare đã kiểm tra, ví dụ crawler của công cụ tìm kiếm.',
+          en: 'Bots Cloudflare has verified, such as search-engine crawlers.',
+        },
+      },
+      {
+        term: 'JavaScript Detections',
+        source: 'https://developers.cloudflare.com/bots/additional-configurations/javascript-detections/',
+        definition: {
+          vi: 'Chạy JavaScript để thu thêm tín hiệu về client.',
+          en: 'Runs JavaScript to collect extra signals about the client.',
+        },
+      },
+      {
+        term: 'Credential stuffing',
+        source: 'https://www.cloudflare.com/learning/bots/what-is-credential-stuffing/',
+        definition: {
+          vi: 'Thử hàng loạt mật khẩu đã lộ lên form đăng nhập.',
+          en: 'Trying many leaked passwords against a login form.',
+        },
+      },
     ],
   },
   {
     id: 'zero-trust',
-    title: { vi: 'Zero Trust / ZTNA', en: 'Zero Trust / ZTNA' },
+    title: { vi: 'Cloudflare One', en: 'Cloudflare One' },
     terms: [
-      { term: 'Federation', definition: { vi: 'Liên kết hệ thống xác thực giữa tổ chức.', en: 'Linking identity systems across organizations.' } },
-      { term: 'SCIM', definition: { vi: 'Tự động đồng bộ tạo/cập nhật/xóa user giữa IdP và app.', en: 'Automated user provisioning between IdP and apps.' } },
-      { term: 'SSO', definition: { vi: 'Single Sign-On — đăng nhập một lần, nhiều app.', en: 'Single Sign-On across applications.' } },
-      { term: 'MFA', definition: { vi: 'Xác thực đa yếu tố ngoài mật khẩu.', en: 'Multi-factor authentication beyond passwords.' } },
-      { term: 'CASB', definition: { vi: 'Giám sát và kiểm soát truy cập SaaS.', en: 'Cloud Access Security Broker for SaaS.' } },
+      {
+        term: 'SSO',
+        source: 'https://developers.cloudflare.com/cloudflare-one/integrations/identity-providers/',
+        definition: {
+          vi: 'Đăng nhập một lần qua nhà cung cấp danh tính.',
+          en: 'Single sign-on through an identity provider.',
+        },
+      },
+      {
+        term: 'SCIM',
+        source: 'https://developers.cloudflare.com/cloudflare-one/identity/users/scim/',
+        definition: {
+          vi: 'Đồng bộ người dùng từ IdP sang Cloudflare.',
+          en: 'Provisioning users from an IdP into Cloudflare.',
+        },
+      },
+      {
+        term: 'CASB',
+        source: 'https://developers.cloudflare.com/cloudflare-one/applications/casb/',
+        definition: {
+          vi: 'Kiểm tra và kiểm soát ứng dụng SaaS.',
+          en: 'Inspects and controls SaaS applications.',
+        },
+      },
     ],
   },
 ];

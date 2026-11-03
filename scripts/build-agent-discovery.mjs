@@ -74,6 +74,7 @@ write(join(wellKnown, 'openapi.json'), {
                   type: 'object',
                   properties: {
                     ok: { type: 'boolean' },
+                    showCommercialContent: { type: 'boolean' },
                     workshopEnabled: { type: 'boolean' },
                     resourceDownloadsEnabled: { type: 'boolean' },
                     announcementBanner: { nullable: true },
@@ -82,6 +83,16 @@ write(join(wellKnown, 'openapi.json'), {
               },
             },
           },
+        },
+      },
+    },
+    '/cloudflare-status': {
+      get: {
+        operationId: 'getCloudflareStatus',
+        summary: 'Current Cloudflare status from www.cloudflarestatus.com',
+        responses: {
+          '200': { description: 'Live summary, open incidents, and recent history' },
+          '502': { description: 'Official status could not be loaded' },
         },
       },
     },

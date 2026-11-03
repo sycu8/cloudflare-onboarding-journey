@@ -2,11 +2,16 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumbs from '../components/chrome/Breadcrumbs.astro';
 import LangText from '../components/ui/LangText.astro';
+import { showCommercialContent } from '../lib/siteFlags';
 import {
   allSolutionProposals,
   solutionsHubIntro,
   solutionsDisclaimer,
 } from '../data/solutionProposals';
+
+if (!showCommercialContent) {
+  return Astro.redirect('/plans/', 301);
+}
 ---
 
 <BaseLayout

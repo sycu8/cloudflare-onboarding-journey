@@ -10,11 +10,16 @@ export const siteSeo = {
   localeAlternate: 'en_US',
 } as const;
 
-/**
- * Person node on the apex. Referenced by @id only.
- * Do not add worksFor, jobTitle, or any Cloudflare role — employment stays in visible text on orangecloud.vn.
- */
-export const personId = 'https://orangecloud.vn/#person';
+/** Neutral publisher. No personal name. */
+export function organizationId(origin: string | URL): string {
+  return new URL('/#organization', origin).href;
+}
+
+export const organizationJsonLd = {
+  '@type': 'Organization',
+  name: 'Orange Cloud',
+  url: 'https://orangecloud.vn/',
+} as const;
 
 /** Apex showcase. This site is one project on that hub. */
 export const hubSite = {
@@ -51,9 +56,9 @@ export function websiteJsonLd(origin: string | URL) {
     url: new URL('/', origin).href,
     inLanguage: 'vi',
     description:
-      'Vietnamese learning hub for Cloudflare: learning paths, product explainers, checklists and FAQs. Personal project maintained by Cường Lê Sỹ. Not a publication of Cloudflare, Inc.',
-    author: { '@id': personId },
-    publisher: { '@id': personId },
+      'Vietnamese learning hub for Cloudflare: learning paths, product explainers, checklists and FAQs. Maintained by Orange Cloud. Not a publication of Cloudflare, Inc.',
+    author: { ...organizationJsonLd, '@id': organizationId(origin) },
+    publisher: { ...organizationJsonLd, '@id': organizationId(origin) },
     isPartOf: { '@id': hubSite.id, '@type': 'WebSite', name: hubSite.name, url: hubSite.url },
   };
 }
@@ -74,7 +79,7 @@ export function courseJsonLd(
     description: description.vi,
     inLanguage: ['vi', 'en'],
     url,
-    provider: { '@id': personId },
+    provider: { ...organizationJsonLd, '@id': organizationId(origin) },
     isAccessibleForFree: true,
     isPartOf: { '@id': websiteId(origin) },
     offers: {

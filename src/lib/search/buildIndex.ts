@@ -5,6 +5,7 @@ import { glossary } from '../../data/glossary';
 import { mobileNavMore, primaryNavItems } from '../../data/navigation';
 import { productPages } from '../../data/productPages';
 import { resources } from '../../data/resources';
+import { showCommercialContent } from '../siteFlags';
 import { tracks } from '../../data/tracks';
 import { useCases } from '../../data/useCases';
 import { roleRoadmaps } from '../../data/roleRoadmaps';
@@ -318,6 +319,7 @@ export function buildSearchDocuments(): SearchDocument[] {
 
   for (const resource of resources) {
     if (resource.status !== 'available') continue;
+    if (resource.commercial && !showCommercialContent) continue;
     out.push(
       doc(
         `resource-${resource.slug}`,

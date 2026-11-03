@@ -216,8 +216,8 @@ export const applicationServicesProposal: SolutionProposal = {
       en: 'Guided onboarding and Customer Success — shorten time-to-value',
     },
     {
-      vi: 'Premium Success: EBR, best practices, tối ưu security posture',
-      en: 'Premium Success: executive business reviews, best practices, security posture optimization',
+      vi: 'Ôn tập bảo mật định kỳ và thực hành tốt',
+      en: 'Periodic security reviews and published best practices',
     },
     {
       vi: 'SOC-as-a-Service: monitoring, alerting thông minh, tabletop drills',
@@ -408,7 +408,7 @@ export const cloudflareOneSaseProposal: SolutionProposal = {
   hubLinks: [
     { href: '/demo-guides#cloudflare-one', label: { vi: 'Dashboard overview Zero Trust', en: 'Zero Trust dashboard overview' } },
     { href: '/cheatsheets/cloudflare-one-enterprise-vs-paygo', label: { vi: 'Pay-as-you-go vs Enterprise', en: 'Pay-as-you-go vs Enterprise' } },
-    { href: '/cheatsheets/enterprise-support-success-packages', label: { vi: 'Standard & Premium Success', en: 'Standard & Premium Success' } },
+    { href: 'https://www.cloudflare.com/plans/', label: { vi: 'Trang gói chính thức', en: 'Official plans page' } },
     { href: '/use-cases/replace-vpn', label: { vi: 'Tình huống thay VPN', en: 'Replace VPN use case' } },
     { href: '/tracks/cloudflare-one', label: { vi: 'Lộ trình Cloudflare One', en: 'Cloudflare One track' } },
   ],

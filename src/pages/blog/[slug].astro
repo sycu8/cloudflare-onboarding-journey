@@ -18,7 +18,7 @@ import {
 import { getDiagramBySlug } from '../../data/referenceDiagrams';
 import { getProductBySlug } from '../../data/productPages';
 import { tracks } from '../../data/tracks';
-import { personId, siteSeo, websiteId } from '../../lib/seo';
+import { organizationId, organizationJsonLd, siteSeo, websiteId } from '../../lib/seo';
 
 export function getStaticPaths() {
   return blogPosts.map((post) => ({ params: { slug: post.slug } }));
@@ -71,8 +71,8 @@ const articleJsonLd = {
   url: canonicalUrl,
   keywords: `${post.keywords.en}, ${post.keywords.vi}`,
   ...(jsonLdImage ? { image: [jsonLdImage] } : {}),
-  author: { '@id': personId },
-  publisher: { '@id': personId },
+  author: { ...organizationJsonLd, '@id': organizationId(siteOrigin) },
+  publisher: { ...organizationJsonLd, '@id': organizationId(siteOrigin) },
   isPartOf: { '@id': websiteId(siteOrigin) },
   disambiguatingDescription:
     'Independent Vietnamese learning article. Not a publication of Cloudflare, Inc.',

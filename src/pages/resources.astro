@@ -1,4 +1,5 @@
 ---
+import { showCommercialContent } from '../lib/siteFlags';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumbs from '../components/chrome/Breadcrumbs.astro';
 import LangText from '../components/ui/LangText.astro';
@@ -19,6 +20,8 @@ import {
 } from '../data/referenceDiagrams';
 import ResourceHubCard from '../components/content/ResourceHubCard.astro';
 import { resources } from '../data/resources';
+
+const visibleResources = resources.filter((item) => showCommercialContent || !item.commercial);
 import {
   resourceHubIntro,
   resourceHubItems,
@@ -180,8 +183,8 @@ const featuredBlog = blogPosts.slice(0, 4);
         as="p"
         class="text-muted mt-1 text-sm"
         text={{
-          vi: 'Nguồn chính thức new.cloudflarestatus.com — sự cố active, maintenance, lịch sử; tải live qua API.',
-          en: 'Official source new.cloudflarestatus.com — active incidents, maintenance, history; live API in the hub.',
+          vi: 'Nguồn chính thức www.cloudflarestatus.com — sự cố đang mở và lịch sử, tải qua API của hub.',
+          en: 'Official source www.cloudflarestatus.com — open incidents and history, loaded through the hub API.',
         }}
       />
     </div>
@@ -207,6 +210,7 @@ const featuredBlog = blogPosts.slice(0, 4);
     </a>
   </section>
 
+  {showCommercialContent ? (
   <section id="solution-proposals" class="card mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
     <div>
       <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Proposal bộ giải pháp', en: 'Solution proposals', km: 'Solution proposals' }} />
@@ -214,8 +218,8 @@ const featuredBlog = blogPosts.slice(0, 4);
         as="p"
         class="text-muted mt-1 text-sm"
         text={{
-          vi: 'Application Security, SASE (Cloudflare One), Email Security — song ngữ Anh–Việt, rút gọn từ proposal mẫu.',
-          en: 'Application Security, SASE (Cloudflare One), Email Security — bilingual EN/VI from sample proposals.',
+          vi: 'Application Security, SASE (Cloudflare One), Email Security.',
+          en: 'Application Security, SASE (Cloudflare One), and Email Security.',
         }}
       />
     </div>
@@ -223,6 +227,7 @@ const featuredBlog = blogPosts.slice(0, 4);
       <LangText text={{ vi: 'Xem 3 bộ giải pháp', en: 'View 3 solutions', km: 'View 3 solutions' }} />
     </a>
   </section>
+  ) : null}
 
   <section id="demo-guides" class="card mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
     <div>
@@ -243,18 +248,18 @@ const featuredBlog = blogPosts.slice(0, 4);
 
   <section id="plan-comparison" class="card mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
     <div>
-      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'So sánh gói cho SME', en: 'Plan comparison for SMEs', km: 'Plan comparison for SMEs' }} />
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Gói Cloudflare', en: 'Cloudflare plans', km: 'Cloudflare plans' }} />
       <LangText
         as="p"
         class="text-muted mt-1 text-sm"
         text={{
-          vi: 'Free / Pro / Business / Enterprise — 124 tính năng, hướng chọn Business hoặc Enterprise khi mua cho doanh nghiệp.',
-          en: 'Free / Pro / Business / Enterprise — 124 features, guidance for Business vs Enterprise purchases.',
+          vi: 'Free, Pro, Business và Contract được công bố tại cloudflare.com/plans. Hub không giữ bảng quyền lợi riêng.',
+          en: 'Free, Pro, Business, and Contract are published at cloudflare.com/plans. This hub does not keep its own entitlement matrix.',
         }}
       />
     </div>
     <a class="btn btn-primary shrink-0" href="/plans">
-      <LangText text={{ vi: 'Xem bảng so sánh', en: 'View comparison', km: 'View comparison' }} />
+      <LangText text={{ vi: 'Cách đọc trang gói', en: 'How to read the plans page', km: 'How to read the plans page' }} />
     </a>
   </section>
 
@@ -263,14 +268,14 @@ const featuredBlog = blogPosts.slice(0, 4);
       <LangText
         as="h2"
         class="text-lg font-semibold"
-        text={{ vi: 'Enterprise, Premium Success & TAM', en: 'Enterprise, Premium Success & TAM', km: 'Enterprise, Premium Success & TAM' }}
+        text={{ vi: 'Gói Contract (Enterprise)', en: 'Contract (Enterprise) plan', km: 'Contract (Enterprise) plan' }}
       />
       <LangText
         as="p"
         class="text-muted mt-1 text-sm"
         text={{
-          vi: 'Vì sao nâng cấp Enterprise, Premium Success / TAM / Professional Services — và 3 ưu điểm mua qua đối tác Indochina (VAT, triển khai, local team).',
-          en: 'Why upgrade to Enterprise, Premium Success / TAM / Professional Services — plus 3 Indochina partner benefits (VAT, delivery, local team).',
+          vi: 'Giải thích ngắn gói Contract và liên kết tới trang gói công khai.',
+          en: 'A short note on the Contract plan, with a link to the public plans page.',
         }}
       />
     </div>
@@ -371,7 +376,7 @@ const featuredBlog = blogPosts.slice(0, 4);
   <section class="mb-10">
     <LangText as="h2" class="text-xl font-semibold" text={{ vi: 'Công cụ tương tác trong hub', en: 'Interactive tools in this hub', km: 'Interactive tools in this hub' }} />
     <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {resources.map((r) => (
+      {visibleResources.map((r) => (
         <ResourceCard title={r.title} description={r.description} type={r.type} href={r.href} status={r.status} />
       ))}
     </div>

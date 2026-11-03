@@ -1,22 +1,28 @@
 import type { LocalizedString } from '../i18n/types';
 
-/** Official Cloudflare system status & incidents (Statuspage). */
-export const CLOUDFLARE_STATUS_URL = 'https://new.cloudflarestatus.com/';
-export const CLOUDFLARE_STATUS_LEGACY_URL = 'https://www.cloudflarestatus.com/';
+/** Official Cloudflare status site. Machine-readable Statuspage API under /api/v2/. */
+export const CLOUDFLARE_STATUS_URL = 'https://www.cloudflarestatus.com/';
+export const CLOUDFLARE_STATUS_HISTORY_URL = 'https://www.cloudflarestatus.com/history';
 export const CLOUDFLARE_STATUS_RSS_URL = 'https://www.cloudflarestatus.com/history.rss';
-export const CLOUDFLARE_STATUS_API_SUMMARY = 'https://new.cloudflarestatus.com/api/v2/summary.json';
-export const CLOUDFLARE_STATUS_API_INCIDENTS = 'https://new.cloudflarestatus.com/api/v2/incidents.json';
+export const CLOUDFLARE_STATUS_API_SUMMARY = 'https://www.cloudflarestatus.com/api/v2/summary.json';
+export const CLOUDFLARE_STATUS_API_INCIDENTS = 'https://www.cloudflarestatus.com/api/v2/incidents.json';
+export const HUB_STATUS_API = '/api/cloudflare-status';
 
 export const STATUS_LAST_REVIEWED = '2026-06-02';
 
 export const statusIntro: LocalizedString = {
-  vi: 'Tổng hợp trạng thái hệ thống và sự cố Cloudflare — nguồn chính thức new.cloudflarestatus.com. Trang hub tải dữ liệu live qua API công khai; luôn mở trang status gốc khi vận hành production hoặc báo cáo sự cố.',
-  en: 'Cloudflare system status and incidents — official source new.cloudflarestatus.com. This hub page loads live data from the public API; always open the official status page for production operations or incident reporting.',
+  vi: 'Trạng thái và sự cố chỉ lấy từ www.cloudflarestatus.com. Sự cố đang mở lấy từ trang tổng quan; sự cố đã qua lấy từ lịch sử. Hub không viết lại nội dung sự cố.',
+  en: 'Status and incidents come only from www.cloudflarestatus.com. Open incidents come from the overview; past incidents come from history. This hub does not rewrite incident text.',
 };
 
 export const statusSourceNote: LocalizedString = {
-  vi: `Nguồn: ${CLOUDFLARE_STATUS_URL} · Hub review: ${STATUS_LAST_REVIEWED}. Dữ liệu live có thể khác snapshot tĩnh khi có incident mới.`,
-  en: `Source: ${CLOUDFLARE_STATUS_URL} · Hub review: ${STATUS_LAST_REVIEWED}. Live data may differ from static snapshots when new incidents occur.`,
+  vi: `Nguồn: ${CLOUDFLARE_STATUS_URL} và ${CLOUDFLARE_STATUS_HISTORY_URL}. Nếu không tải được, trang này không hiện sự cố cũ.`,
+  en: `Source: ${CLOUDFLARE_STATUS_URL} and ${CLOUDFLARE_STATUS_HISTORY_URL}. If loading fails, this page does not show old incidents.`,
+};
+
+export const statusLoadError: LocalizedString = {
+  vi: 'Không tải được trạng thái trực tiếp — hãy xem www.cloudflarestatus.com',
+  en: "Couldn't load live status — check www.cloudflarestatus.com",
 };
 
 export type StatusTrackFilter =
@@ -95,83 +101,13 @@ export type StatusSnapshotIncident = {
   active: boolean;
 };
 
-/** Fallback when live API is unreachable (snapshot from official status page). */
-export const statusSnapshot = {
-  pageStatus: {
-    indicator: 'minor' as const,
-    description: 'Minor Service Outage',
-  },
-  activeIncidents: [
-    {
-      id: 'china-challenge',
-      name: 'Customers with traffic using China Network may see an increased in Challenge failures',
-      status: 'monitoring',
-      impact: 'minor',
-      updatedAt: '2026-06-02T07:16:03Z',
-      components: ['Challenge Platform', 'Turnstile'],
-      active: true,
-    },
-    {
-      id: 'letsencrypt-tls',
-      name: 'Issue with TLS certificates using Lets Encrypt CA',
-      status: 'identified',
-      impact: 'minor',
-      updatedAt: '2026-06-02T12:00:00Z',
-      components: ['SSL Certificate Provisioning'],
-      active: true,
-    },
-    {
-      id: 'custom-hostname-api',
-      name: 'Custom Hostname API issue',
-      status: 'monitoring',
-      impact: 'minor',
-      updatedAt: '2026-05-31T18:00:00Z',
-      components: ['SSL for SaaS Provisioning'],
-      active: true,
-    },
-  ] satisfies StatusSnapshotIncident[],
-  recentResolved: [
-    {
-      id: 'access-delays',
-      name: 'Cloudflare Access Configuration Delays',
-      status: 'resolved',
-      impact: 'minor',
-      updatedAt: '2026-06-02T14:28:00Z',
-      components: ['Cloudflare Access'],
-      active: false,
-    },
-    {
-      id: 'us-east-network',
-      name: 'Network performance issues in US Eastern region',
-      status: 'resolved',
-      impact: 'none',
-      updatedAt: '2026-06-02T12:00:00Z',
-      components: ['Network'],
-      active: false,
-    },
-    {
-      id: 'miami-5xx',
-      name: 'Cloudflare is investigating an increased level of HTTP 5xx errors in the Miami and Bogota areas',
-      status: 'resolved',
-      impact: 'minor',
-      updatedAt: '2026-06-02T04:32:00Z',
-      components: ['Network'],
-      active: false,
-    },
-    {
-      id: 'dashboard-api',
-      name: 'Cloudflare Dashboard and Cloudflare API service issues',
-      status: 'resolved',
-      impact: 'minor',
-      updatedAt: '2026-06-02T01:18:00Z',
-      components: ['Dashboard', 'API'],
-      active: false,
-    },
-  ] satisfies StatusSnapshotIncident[],
-};
+const INCIDENT_ID = /^[a-z0-9]+$/i;
 
 export function incidentOfficialUrl(id: string): string {
-  return `${CLOUDFLARE_STATUS_URL.replace(/\/$/, '')}/incidents/${id}`;
+  if (!INCIDENT_ID.test(id)) {
+    throw new Error('invalid_incident_id');
+  }
+  return `https://www.cloudflarestatus.com/incidents/${id}`;
 }
 
 export function matchesStatusTrack(

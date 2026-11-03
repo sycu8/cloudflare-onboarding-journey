@@ -38,9 +38,9 @@ export const siteFaq: SiteFaqItem[] = [
       km: 'អ្នកណាថែទាំ hub នេះ?',
     },
     answer: {
-      vi: 'Cường Lê Sỹ giữ hub như một dự án cá nhân trong Orange Cloud. Bài học bám tài liệu công khai để người mới tự học.',
-      en: 'Cường Lê Sỹ maintains the hub as a personal project inside Orange Cloud. Lessons follow public documentation so beginners can study on their own.',
-      km: 'Cường Lê Sỹ ថែទាំ hub ជាគម្រោងផ្ទាល់ខ្លួនក្នុង Orange Cloud។ មេរៀនពឹងឯកសារសាធារណៈ ដើម្បីឱ្យអ្នកចាប់ផ្តើមរៀនដោយខ្លួនឯង។',
+      vi: 'Orange Cloud giữ hub này. Bài học bám tài liệu công khai để người mới tự học.',
+      en: 'Orange Cloud maintains this hub. Lessons follow public documentation so beginners can study on their own.',
+      km: 'Orange Cloud ថែទាំ hub នេះ។ មេរៀនពឹងឯកសារសាធារណៈ ដើម្បីឱ្យអ្នកចាប់ផ្តើមរៀនដោយខ្លួនឯង។',
     },
   },
   {

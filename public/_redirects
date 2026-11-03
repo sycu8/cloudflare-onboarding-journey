@@ -1,3 +1,7 @@
+/cheatsheets/enterprise-support-success-packages https://www.cloudflare.com/plans/ 301
+/cheatsheets/enterprise-support-success-packages/ https://www.cloudflare.com/plans/ 301
+/solutions/* /plans/ 301
+
 /workshop/admin /admin/ 302
 /workshop/admin/ /admin/ 302
 

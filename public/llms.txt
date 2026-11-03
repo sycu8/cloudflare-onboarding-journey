@@ -1,6 +1,6 @@
 # OrangeCloud Onboarding: học Cloudflare từ con số 0
 
-> Vietnamese learning hub for Cloudflare: learning paths, product explainers, checklists and FAQs for beginners. Personal project maintained by Cường Lê Sỹ (https://orangecloud.vn/about/). Not a publication of Cloudflare, Inc.; official documentation is at https://developers.cloudflare.com/.
+> Vietnamese learning hub for Cloudflare: learning paths, product explainers, checklists and FAQs for beginners. Maintained by Orange Cloud (https://orangecloud.vn/). Not a publication of Cloudflare, Inc.; official documentation is at https://developers.cloudflare.com/.
 
 ## Start here
 - [Bắt đầu](https://onboarding.orangecloud.vn/start-here/)
