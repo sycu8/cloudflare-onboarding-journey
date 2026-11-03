@@ -11,6 +11,7 @@
   </defs>
   <rect width="1200" height="630" fill="url(#bg)"/>
   <path fill="url(#cloud)" d="M380 320c12-40 48-68 92-68 14 0 27 3 39 8 18-55 70-95 131-95 66 0 121 46 136 108 52 8 91 52 91 106 0 58-47 105-105 105H340c-48 0-87-39-87-87 0-42 30-78 70-84z"/>
-  <text x="600" y="280" text-anchor="middle" fill="#fff" font-family="system-ui,sans-serif" font-size="52" font-weight="700">Cloudflare Starter Hub</text>
-  <text x="600" y="360" text-anchor="middle" fill="#94a3b8" font-family="system-ui,sans-serif" font-size="28">H�c Cloudflare t� con s� 0</text>
+  <text x="600" y="270" text-anchor="middle" fill="#fff" font-family="system-ui,sans-serif" font-size="48" font-weight="700">Bắt đầu học Cloudflare</text>
+  <text x="600" y="340" text-anchor="middle" fill="#F6821F" font-family="system-ui,sans-serif" font-size="36" font-weight="700">từ con số 0</text>
+  <text x="600" y="410" text-anchor="middle" fill="#94a3b8" font-family="system-ui,sans-serif" font-size="24">onboarding.orangecloud.vn</text>
 </svg>

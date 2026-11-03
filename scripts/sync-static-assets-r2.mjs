@@ -15,6 +15,7 @@ const PREFIX = 'static';
 const FILES = [
   { file: 'favicon.svg', contentType: 'image/svg+xml' },
   { file: 'favicon.ico', contentType: 'image/x-icon' },
+  { file: 'og-image.png', contentType: 'image/png' },
   { file: 'og-image.svg', contentType: 'image/svg+xml' },
   { file: 'logo-cloudflare.svg', contentType: 'image/svg+xml' },
 ];

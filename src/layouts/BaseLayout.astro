@@ -41,6 +41,16 @@ const titleEn = formatTitle(title.en, siteName);
 const titleKm = formatTitle(title.km ?? title.en, siteName);
 const descKm = description.km ?? description.en;
 const imageUrl = new URL(ogImage ?? siteSeo.defaultImage, siteOrigin).href;
+const usingDefaultOg = !ogImage;
+const imageType = imageUrl.endsWith('.png')
+  ? 'image/png'
+  : imageUrl.endsWith('.jpg') || imageUrl.endsWith('.jpeg')
+    ? 'image/jpeg'
+    : imageUrl.endsWith('.webp')
+      ? 'image/webp'
+      : imageUrl.endsWith('.svg')
+        ? 'image/svg+xml'
+        : undefined;
 ---
 
 <html
@@ -127,11 +137,20 @@ const imageUrl = new URL(ogImage ?? siteSeo.defaultImage, siteOrigin).href;
     <meta property="og:description" content={description.vi} />
     <meta property="og:url" content={canonical.href} />
     <meta property="og:image" content={imageUrl} />
+    {imageType ? <meta property="og:image:type" content={imageType} /> : null}
+    {usingDefaultOg ? (
+      <>
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+      </>
+    ) : null}
+    <meta property="og:image:alt" content={titleVi} />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={titleVi} />
     <meta name="twitter:description" content={description.vi} />
     <meta name="twitter:image" content={imageUrl} />
+    <meta name="twitter:image:alt" content={titleVi} />
 
     <script type="application/ld+json" set:html={JSON.stringify(websiteLd)} />
 

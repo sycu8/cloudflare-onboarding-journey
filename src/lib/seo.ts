@@ -5,7 +5,7 @@ export const siteSeo = {
   name: 'Cloudflare Starter Hub',
   origin: 'https://onboarding.orangecloud.vn',
   themeColor: '#F6821F',
-  defaultImage: assetUrl('og-image.svg'),
+  defaultImage: assetUrl('og-image.png'),
   locale: 'vi_VN',
   localeAlternate: 'en_US',
 } as const;
