@@ -9,7 +9,7 @@ import { join } from 'node:path';
 const root = process.cwd();
 const publicDir = join(root, 'public');
 const outDir = join(root, 'dist', 'assets');
-const files = ['favicon.svg', 'favicon.ico', 'og-image.png', 'og-image.svg', 'logo-cloudflare.svg'];
+const files = ['favicon.svg', 'favicon.ico', 'og-share.png', 'og-image.png', 'og-image.svg', 'logo-cloudflare.svg'];
 
 if (!existsSync(join(root, 'dist'))) {
   console.error('dist/ missing — run npm run build first');

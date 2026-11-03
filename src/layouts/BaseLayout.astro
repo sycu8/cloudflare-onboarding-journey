@@ -17,6 +17,11 @@ type Props = {
   showProgressBar?: boolean;
   /** Override default OG image for this page */
   ogImage?: string;
+  /** Link-preview title and description. Falls back to the page title and description. */
+  share?: {
+    title: { vi: string; en: string };
+    description: { vi: string; en: string };
+  };
   noindex?: boolean;
   /** Open Graph type — use `article` for blog posts */
   ogType?: 'website' | 'article';
@@ -28,6 +33,7 @@ const {
   canonicalPath,
   showProgressBar = false,
   ogImage,
+  share,
   noindex = false,
   ogType = 'website',
 } = Astro.props;
@@ -40,6 +46,8 @@ const titleVi = formatTitle(title.vi, siteName);
 const titleEn = formatTitle(title.en, siteName);
 const titleKm = formatTitle(title.km ?? title.en, siteName);
 const descKm = description.km ?? description.en;
+const ogTitle = share?.title.vi ?? titleVi;
+const ogDescription = share?.description.vi ?? description.vi;
 const imageUrl = new URL(ogImage ?? siteSeo.defaultImage, siteOrigin).href;
 const usingDefaultOg = !ogImage;
 const imageType = imageUrl.endsWith('.png')
@@ -133,8 +141,8 @@ const imageType = imageUrl.endsWith('.png')
     <meta property="og:type" content={ogType} />
     <meta property="og:locale" content={siteSeo.locale} />
     <meta property="og:locale:alternate" content={siteSeo.localeAlternate} />
-    <meta property="og:title" content={titleVi} />
-    <meta property="og:description" content={description.vi} />
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:description" content={ogDescription} />
     <meta property="og:url" content={canonical.href} />
     <meta property="og:image" content={imageUrl} />
     {imageType ? <meta property="og:image:type" content={imageType} /> : null}
@@ -144,13 +152,13 @@ const imageType = imageUrl.endsWith('.png')
         <meta property="og:image:height" content="630" />
       </>
     ) : null}
-    <meta property="og:image:alt" content={titleVi} />
+    <meta property="og:image:alt" content={ogTitle} />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={titleVi} />
-    <meta name="twitter:description" content={description.vi} />
+    <meta name="twitter:title" content={ogTitle} />
+    <meta name="twitter:description" content={ogDescription} />
     <meta name="twitter:image" content={imageUrl} />
-    <meta name="twitter:image:alt" content={titleVi} />
+    <meta name="twitter:image:alt" content={ogTitle} />
 
     <script type="application/ld+json" set:html={JSON.stringify(websiteLd)} />
 

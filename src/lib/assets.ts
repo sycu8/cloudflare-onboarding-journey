@@ -2,7 +2,7 @@
  * Static image URLs — served from R2 via `/assets/*` in production (Pages Function).
  * In dev, falls back to files in `public/` for `astro dev` without wrangler.
  */
-const ASSET_FILES = ['favicon.svg', 'favicon.ico', 'og-image.png', 'og-image.svg', 'logo-cloudflare.svg'] as const;
+const ASSET_FILES = ['favicon.svg', 'favicon.ico', 'og-share.png', 'og-image.png', 'og-image.svg', 'logo-cloudflare.svg'] as const;
 
 export type StaticAssetFile = (typeof ASSET_FILES)[number];
 

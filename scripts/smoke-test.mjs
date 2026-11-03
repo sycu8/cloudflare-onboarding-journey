@@ -165,7 +165,7 @@ const API_ROUTES = ['/api/workshop-events', '/api/site-config', '/api/search'];
 
 const ASSET_ROUTES = [
   '/assets/favicon.svg',
-  '/assets/og-image.png',
+  '/assets/og-share.png',
   '/assets/og-image.svg',
   '/ref-diagrams/ai/ai-rag/0.webp',
   '/ref-diagrams/serverless/fullstack-application/0.webp',
@@ -479,8 +479,11 @@ try {
     }
     if (!/"@type":"FAQPage"/.test(home.text)) errors.push('seo / → missing FAQPage');
     if (!home.text.includes('https://orangecloud.vn/')) errors.push('seo / → missing hub link');
-    if (!/property="og:image" content="[^"]*\/og-image\.png"/i.test(home.text)) {
+    if (!/property="og:image" content="[^"]*\/og-share\.png"/i.test(home.text)) {
       errors.push('seo / → og:image is not the PNG share card');
+    }
+    if (!/property="og:title" content="Học Cloudflare từ con số 0"/.test(home.text)) {
+      errors.push('seo / → og:title is not the share post title');
     }
     if (!/property="og:image:width" content="1200"/i.test(home.text)) {
       errors.push('seo / → missing og:image width 1200');
