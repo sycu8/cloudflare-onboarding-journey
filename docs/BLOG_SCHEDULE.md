@@ -69,8 +69,47 @@ Without the Worker, the **Approve link** still works.
 npm run blog:today
 npm run blog:upcoming
 npm run blog:scaffold -- --date=2026-10-26
-BLOG_APPROVE_SECRET=… npm run blog:email-body -- --date=2026-10-26
+npm run blog:email-body -- --date=2026-10-26
+npm run blog:email-body -- --slug=hyperdrive-ket-noi-postgres-nhanh-hon
 ```
+
+`blog:email-body` only prints the payload. It does not send mail and it does not write D1.
+
+## Backfill a missed approval email
+
+The daily cron sends only the slot whose date is **today** in `Asia/Ho_Chi_Minh`. It does not replay dates that already passed.
+
+These two slots were added on 2026-10-31 in the 3-day queue (`d15429d`), after their dates, so the cron never emailed them:
+
+| Date | Slug |
+|------|------|
+| 2026-10-26 | `hyperdrive-ket-noi-postgres-nhanh-hon` |
+| 2026-10-29 | `browser-rendering-chup-va-tuong-tac-trang` |
+
+Send both approval emails in one dispatch (production environment; this writes D1 and sends mail):
+
+```bash
+gh workflow run "Blog every-3-days email" \
+  --repo sycu8/cloudflare-onboarding-journey \
+  --ref main \
+  -f slug=hyperdrive-ket-noi-postgres-nhanh-hon,browser-rendering-chup-va-tuong-tac-trang
+```
+
+Or one date at a time:
+
+```bash
+gh workflow run "Blog every-3-days email" \
+  --repo sycu8/cloudflare-onboarding-journey \
+  --ref main \
+  -f date=2026-10-26
+
+gh workflow run "Blog every-3-days email" \
+  --repo sycu8/cloudflare-onboarding-journey \
+  --ref main \
+  -f date=2026-10-29
+```
+
+`--slug` and `--date` must name the same rows when both are set. A comma-separated list is only for `--email-body` / this workflow. Do not run the dispatch until you mean to email `sycu.lee@gmail.com`.
 
 ## Extending the queue
 

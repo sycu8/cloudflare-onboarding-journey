@@ -13,7 +13,16 @@ on:
   workflow_dispatch:
     inputs:
       date:
-        description: Override date YYYY-MM-DD (Asia/Ho_Chi_Minh). Empty = today.
+        description: >
+          Schedule date YYYY-MM-DD, or comma-separated dates, for a missed slot.
+          Empty = today in Asia/Ho_Chi_Minh. Ignored when slug is set, unless you
+          pass the same number of dates and slugs.
+        required: false
+        default: ''
+      slug:
+        description: >
+          Post slug, or comma-separated slugs, for a missed approval email.
+          Example: hyperdrive-ket-noi-postgres-nhanh-hon,browser-rendering-chup-va-tuong-tac-trang
         required: false
         default: ''
 
@@ -51,18 +60,22 @@ jobs:
         id: mail
         env:
           OVERRIDE_DATE: ${{ inputs.date }}
+          OVERRIDE_SLUG: ${{ inputs.slug }}
           BLOG_EDITOR_EMAIL: sycu.lee@gmail.com
           BLOG_APPROVE_INBOX: blog-approve@orangecloud.vn
           PUBLIC_SITE_URL: https://onboarding.orangecloud.vn
         run: |
           set -euo pipefail
           ARGS=(--email-body)
+          if [ -n "${OVERRIDE_SLUG:-}" ]; then
+            ARGS+=(--slug="$OVERRIDE_SLUG")
+          fi
           if [ -n "${OVERRIDE_DATE:-}" ]; then
             ARGS+=(--date="$OVERRIDE_DATE")
           fi
           node scripts/blog-editorial.mjs "${ARGS[@]}" > /tmp/blog-email.json
-          cat /tmp/blog-email.json
-          SKIP=$(node -e "const j=require('/tmp/blog-email.json'); process.stdout.write(j.skip?'true':(j.ok===false?'noslot':'false'))")
+          node -e "const j=require('/tmp/blog-email.json'); if (j.ok===false) { console.log(j.error||'no slot'); process.exit(0);} const msgs=Array.isArray(j.messages)?j.messages:[]; for (const m of msgs) console.log(m.skip?'skip':'send', m.item&&m.item.date, m.item&&m.item.slug, m.reason||'');"
+          SKIP=$(node -e "const j=require('/tmp/blog-email.json'); const msgs=Array.isArray(j.messages)?j.messages:(j.email?[j]:[]); const send=msgs.some(m=>m && !m.skip); process.stdout.write(j.ok===false?'noslot':(send?'false':'true'))")
           echo "skip=$SKIP" >> "$GITHUB_OUTPUT"
           if [ "$SKIP" = "noslot" ]; then
             echo "No every-3-days slot today — OK"
@@ -80,6 +93,7 @@ jobs:
           node <<'NODE'
           const fs = require('fs');
           const j = JSON.parse(fs.readFileSync('/tmp/blog-email.json', 'utf8'));
+          const messages = (Array.isArray(j.messages) ? j.messages : j.email ? [j] : []).filter((m) => m && !m.skip);
           const accountId = process.env.CLOUDFLARE_ACCOUNT_ID || process.env.CF_ACCOUNT_ID_FALLBACK;
           const token = process.env.CLOUDFLARE_API_TOKEN;
           const dbId = process.env.D1_DATABASE_ID;
@@ -87,10 +101,11 @@ jobs:
             console.error('Missing CLOUDFLARE_API_TOKEN (and account id). Use GitHub Environment "production" secrets.');
             process.exit(1);
           }
-          const date = j.email.item.date;
-          const slug = j.email.item.slug;
-          const approveToken = j.token;
           (async () => {
+            for (const message of messages) {
+            const date = message.email.item.date;
+            const slug = message.email.item.slug;
+            const approveToken = message.token;
             const res = await fetch(
               `https://api.cloudflare.com/client/v4/accounts/${accountId}/d1/database/${dbId}/query`,
               {
@@ -117,6 +132,7 @@ jobs:
               process.exit(1);
             }
             console.log('Stored approve token in D1 for', date, slug);
+            }
           })();
           NODE
 
@@ -132,7 +148,7 @@ jobs:
           node <<'NODE'
           const fs = require('fs');
           const j = JSON.parse(fs.readFileSync('/tmp/blog-email.json', 'utf8'));
-          const email = j.email;
+          const messages = (Array.isArray(j.messages) ? j.messages : j.email ? [j] : []).filter((m) => m && !m.skip);
           const accountId = process.env.CLOUDFLARE_ACCOUNT_ID || process.env.CF_ACCOUNT_ID_FALLBACK;
           const token = process.env.CLOUDFLARE_API_TOKEN;
           const from = process.env.WORKSHOP_EMAIL_FROM || 'Cloudflare Starter Hub <onboarding@orangecloud.vn>';
@@ -146,6 +162,8 @@ jobs:
             return raw.trim();
           }
           (async () => {
+            for (const message of messages) {
+            const email = message.email;
             const res = await fetch(
               `https://api.cloudflare.com/client/v4/accounts/${accountId}/email/sending/send`,
               {
@@ -170,5 +188,6 @@ jobs:
               process.exit(1);
             }
             console.log('Sent editorial email to', email.to, 'slug', email.item.slug);
+            }
           })();
           NODE
