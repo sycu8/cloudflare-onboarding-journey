@@ -1,10 +1,24 @@
 import type { LocalizedString } from '../i18n/types';
+import type { LessonKind } from './lessonKind';
+
+export type { LessonKind };
 
 export type TrackLesson = {
   title: LocalizedString;
   body: LocalizedString;
   tip?: LocalizedString;
   hubLink?: string;
+  /**
+   * knowledge | lab-hub | lab-official.
+   * Omit to use the temporary module tags in `inferLessonKind`.
+   */
+  kind?: LessonKind;
+  /** Estimated time for this lesson. Hub labs fall back to the follow-along time. */
+  duration?: LocalizedString;
+  /** Lesson ids the reader should finish first. */
+  prerequisites?: string[];
+  /** Lesson ids this item depends on. Labs should point at knowledge lessons. */
+  dependsOn?: string[];
 };
 
 export type TrackModuleRole = 'required' | 'recommended' | 'optional' | 'deep-dive' | 'reference';

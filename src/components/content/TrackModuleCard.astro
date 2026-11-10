@@ -1,6 +1,8 @@
 ---
 import LangText from '../ui/LangText.astro';
+import LessonKindBadge from './LessonKindBadge.astro';
 import type { TrackModule, TrackModuleRole } from '../../data/tracks';
+import type { FlowItem } from '../../data/trackFlow';
 
 const roleLabel: Record<TrackModuleRole, { vi: string; en: string; km: string }> = {
   required: { vi: 'Bắt buộc', en: 'Required', km: 'ចាំបាច់' },
@@ -12,10 +14,12 @@ const roleLabel: Record<TrackModuleRole, { vi: string; en: string; km: string }>
 
 type Props = {
   module: TrackModule;
-  trackSlug: string;
+  flow: FlowItem[];
 };
 
-const { module, trackSlug } = Astro.props;
+const { module, flow } = Astro.props;
+const items = flow.filter((item) => item.moduleId === module.id);
+const byKey = new Map(flow.map((item) => [item.key, item]));
 ---
 
 <article class="card" id={module.id}>
@@ -31,45 +35,51 @@ const { module, trackSlug } = Astro.props;
     <span class="badge">
       <span class="lang-vi">{module.lessons.length} bài</span>
       <span class="lang-en">{module.lessons.length} lessons</span>
-      <span class="lang-km">{module.lessons.length} មេរៀន</span>
+      <span class="lang-km">{module.lessons.length} lessons</span>
     </span>
   </div>
 
   <LangText as="h3" class="mt-3 text-lg font-semibold" text={module.title} />
   <LangText as="p" class="text-muted mt-2 text-sm" text={module.description} />
 
-  <ol class="mt-4 space-y-4">
-    {module.lessons.map((lesson, li) => {
-      const lessonId = `${module.id}-l${li + 1}`;
+  <ol class="mt-4 divide-y divide-[var(--cf-border)]">
+    {items.map((item) => {
+      const prereqs = item.prerequisiteIds
+        .map((id) => byKey.get(id))
+        .filter((entry): entry is FlowItem => !!entry);
       return (
-      <li class="rounded-xl border border-[var(--cf-border)] bg-[var(--cf-bg-elevated)]/50 p-4">
-        <div class="flex gap-3">
-          <span class="badge badge-accent mt-0.5 shrink-0">{li + 1}</span>
-          <div class="min-w-0 flex-1">
-            <a href={`/tracks/${trackSlug}/${lessonId}`} class="group">
-              <LangText as="h4" class="font-medium group-hover:text-[var(--cf-accent)]" text={lesson.title} />
-            </a>
-            <LangText as="p" class="text-muted mt-2 text-sm leading-relaxed" text={lesson.body} />
-            {lesson.tip ? (
-              <p class="mt-2 rounded-lg border border-[var(--cf-border)] bg-[var(--cf-surface)] px-3 py-2 text-xs">
-                <span class="font-medium text-[var(--cf-accent)]">
-                  <span class="lang-vi">Mẹo: </span>
-                  <span class="lang-en">Tip: </span>
-                  <span class="lang-km">គន្លឹះ៖ </span>
-                </span>
-                <span class="lang-vi">{lesson.tip.vi}</span>
-                <span class="lang-en">{lesson.tip.en}</span>
-                <span class="lang-km">{lesson.tip.km ?? lesson.tip.en}</span>
-              </p>
+        <li class="py-3 first:pt-0 last:pb-0">
+          <div class="flex flex-wrap items-center gap-2">
+            <LessonKindBadge kind={item.kind} />
+            {item.duration ? (
+              <span class="badge">
+                <LangText text={item.duration} />
+              </span>
             ) : null}
-            <a class="link mt-3 inline-block text-sm" href={`/tracks/${trackSlug}/${lessonId}`}>
-              <span class="lang-vi">Hướng dẫn chi tiết →</span>
-              <span class="lang-en">Detailed guide →</span>
-              <span class="lang-km">មគ្គុទេសក៍លម្អិត →</span>
-            </a>
           </div>
-        </div>
-      </li>
-    );})}
+          <a href={item.href} class="group mt-2 inline-block">
+            <LangText as="h4" class="font-medium group-hover:text-[var(--cf-accent)]" text={item.title} />
+          </a>
+          {item.summary ? (
+            <LangText as="p" class="text-muted mt-1 text-sm leading-relaxed" text={item.summary} />
+          ) : null}
+          {prereqs.length > 0 ? (
+            <p class="text-muted mt-2 text-xs leading-relaxed">
+              <span class="lang-vi">Nên đọc trước: </span>
+              <span class="lang-en">Read first: </span>
+              <span class="lang-km">Read first: </span>
+              {prereqs.map((prereq, index) => (
+                <>
+                  {index > 0 ? <span>, </span> : null}
+                  <a class="link" href={prereq.href}>
+                    <LangText text={prereq.title} />
+                  </a>
+                </>
+              ))}
+            </p>
+          ) : null}
+        </li>
+      );
+    })}
   </ol>
 </article>

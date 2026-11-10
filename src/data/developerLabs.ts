@@ -39,6 +39,11 @@ export type DeveloperLabTrack = {
   labCount: number;
   /** Hub modules this lab complements (e.g. dp-1, dp-3) */
   hubModuleIds: string[];
+  /**
+   * Hub lesson ids this official lab follows.
+   * When empty, the track flow places the lab after the last lesson of hubModuleIds[0].
+   */
+  dependsOn?: string[];
   whenInHub: LocalizedString;
   labs: DeveloperLabStep[];
 };

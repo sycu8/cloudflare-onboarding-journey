@@ -69,6 +69,59 @@ body {
   @apply mx-auto w-full max-w-6xl px-4;
 }
 
+.track-layout {
+  display: grid;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .track-layout {
+    grid-template-columns: 17.5rem minmax(0, 1fr);
+  }
+}
+
+.track-toc-toggle {
+  position: sticky;
+  top: 4.5rem;
+  z-index: 30;
+}
+
+.track-toc-panel {
+  display: none;
+  margin-top: 0.75rem;
+  max-height: 60vh;
+  overflow: auto;
+  border: 1px solid var(--cf-border);
+  background: var(--cf-surface);
+  border-radius: 1rem;
+  padding: 0.85rem 0.75rem;
+}
+
+.track-toc-panel.is-open {
+  display: block;
+}
+
+@media (min-width: 1024px) {
+  /* Beat .btn { display: inline-flex } so the mobile drawer control stays off desktop. */
+  button.track-toc-toggle {
+    display: none;
+  }
+
+  .track-toc-panel {
+    display: block;
+    position: sticky;
+    top: 5rem;
+    max-height: calc(100vh - 6rem);
+    margin-top: 0;
+  }
+}
+
+.track-toc-current {
+  background: rgba(246, 130, 26, 0.12);
+  border-radius: 0.65rem;
+}
+
 /* Page shell background */
 .bg-hero {
   min-height: 100dvh;

@@ -1,0 +1,21 @@
+---
+import type { LessonKind } from '../../data/lessonKind';
+
+type Props = {
+  kind: LessonKind;
+};
+
+const { kind } = Astro.props;
+
+const label: Record<LessonKind, { vi: string; en: string }> = {
+  knowledge: { vi: 'Kiến thức', en: 'Knowledge' },
+  'lab-hub': { vi: 'Lab (hub)', en: 'Lab (hub)' },
+  'lab-official': { vi: 'Lab (Cloudflare)', en: 'Lab (Cloudflare)' },
+};
+---
+
+<span class:list={['badge', kind === 'knowledge' ? '' : 'badge-accent']} data-lesson-kind={kind}>
+  <span class="lang-vi">{label[kind].vi}</span>
+  <span class="lang-en">{label[kind].en}</span>
+  <span class="lang-km">{label[kind].en}</span>
+</span>

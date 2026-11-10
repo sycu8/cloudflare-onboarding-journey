@@ -47,6 +47,9 @@ import { getDiagramsForTrack } from '../../data/referenceDiagrams';
 import DeveloperLabsSection from '../../components/content/DeveloperLabsSection.astro';
 import { getDeveloperLabsForTrackSlug } from '../../data/developerLabs';
 import { courseJsonLd, siteSeo } from '../../lib/seo';
+import TrackToc from '../../components/interactive/TrackToc';
+import { getTrackFlow } from '../../data/trackFlow';
+import { estimatedTrackMinutes } from '../../data/trackCatalog';
 
 export function getStaticPaths() {
   return tracks.map((t) => ({ params: { slug: t.slug } }));
@@ -78,8 +81,22 @@ const trackDemoVignettes =
     ? getDemosForTrack(track.slug)
     : [];
 
-const trackDiagrams = getDiagramsForTrack(track.slug, 3);
-const developerLabs = getDeveloperLabsForTrackSlug(track.slug);
+const trackDiagrams = getDiagramsForTrack(track.slug, 1);
+const developerLabs = track.slug === 'developer-platform' ? getDeveloperLabsForTrackSlug(track.slug) : [];
+const flow = getTrackFlow(track.slug);
+const tocItems = flow.map((item) => ({
+  key: item.key,
+  kind: item.kind,
+  href: item.href,
+  title: item.title,
+  moduleId: item.moduleId,
+  moduleTitle: item.moduleTitle,
+  duration: item.duration ?? null,
+}));
+const trackMinutes = estimatedTrackMinutes(track);
+const knowledgeCount = flow.filter((item) => item.kind === 'knowledge').length;
+const hubLabCount = flow.filter((item) => item.kind === 'lab-hub').length;
+const officialLabCount = flow.filter((item) => item.kind === 'lab-official').length;
 const onboardingOverview = track.slug === 'cloudflare-one' ? getOnboardingPageByFile('overview.html') : undefined;
 const courseLd = courseJsonLd(Astro.site ?? siteSeo.origin, `/tracks/${track.slug}`, track.title, track.promise);
 ---
@@ -102,10 +119,42 @@ const courseLd = courseJsonLd(Astro.site ?? siteSeo.origin, `/tracks/${track.slu
 
   <TrackContextBanner track={track} />
 
+  <div class="track-layout">
+  <TrackToc client:load trackSlug={track.slug} items={tocItems} currentKey="" />
+  <div class="min-w-0">
+
   <header class="mb-8">
     <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={track.title} />
     <LangText as="p" class="text-muted mt-2 max-w-3xl text-base" text={track.headline} />
+    <p class="text-muted mt-3 text-xs leading-relaxed">
+      <span class="lang-vi">
+        {knowledgeCount} bài kiến thức
+        {hubLabCount > 0 ? ` · ${hubLabCount} lab (hub)` : ''}
+        {officialLabCount > 0 ? ` · ${officialLabCount} lab (Cloudflare)` : ''}
+        {trackMinutes ? ` · ~${trackMinutes} phút (ước lượng các phần)` : ''}
+      </span>
+      <span class="lang-en">
+        {knowledgeCount} knowledge
+        {hubLabCount > 0 ? ` · ${hubLabCount} hub labs` : ''}
+        {officialLabCount > 0 ? ` · ${officialLabCount} Cloudflare labs` : ''}
+        {trackMinutes ? ` · ~${trackMinutes} min (sum of part estimates)` : ''}
+      </span>
+      <span class="lang-km">
+        {knowledgeCount} knowledge
+        {hubLabCount > 0 ? ` · ${hubLabCount} hub labs` : ''}
+        {officialLabCount > 0 ? ` · ${officialLabCount} Cloudflare labs` : ''}
+        {trackMinutes ? ` · ~${trackMinutes} min (sum of part estimates)` : ''}
+      </span>
+    </p>
     <LangText as="p" class="text-muted mt-3 max-w-3xl text-sm leading-relaxed" text={track.description} />
+    <LangText
+      as="p"
+      class="text-muted mt-2 max-w-3xl text-sm leading-relaxed"
+      text={{
+        vi: 'Đọc phần kiến thức trước, rồi làm lab. Thời lượng là ước lượng.',
+        en: 'Read the knowledge sections first, then do the labs. Times are estimates.',
+      }}
+    />
   </header>
 
   <section class="card mb-6">
@@ -208,10 +257,10 @@ const courseLd = courseJsonLd(Astro.site ?? siteSeo.origin, `/tracks/${track.slu
   ) : null}
 
   <section class="mb-8">
-    <LangText as="h2" class="mb-4 text-xl font-semibold" text={{ vi: 'Nội dung từng phần', en: 'Module-by-module content', km: 'ខ្លឹមសារតាមផ្នែក' }} />
+    <LangText as="h2" class="mb-4 text-xl font-semibold" text={{ vi: 'Kiến thức và lab', en: 'Knowledge and labs', km: 'Knowledge and labs' }} />
     <div class="space-y-6">
-      {track.modules.map((mod, i) => (
-        <TrackModuleCard module={mod} trackSlug={track.slug} />
+      {track.modules.map((mod) => (
+        <TrackModuleCard module={mod} flow={flow} />
       ))}
     </div>
   </section>
@@ -264,6 +313,7 @@ const courseLd = courseJsonLd(Astro.site ?? siteSeo.origin, `/tracks/${track.slu
 
   {developerLabs.length > 0 ? <DeveloperLabsSection variant="track" /> : null}
 
+  <TrackOptionalReading>
   <section id="track-resources" class="mb-8 scroll-mt-24">
     <LangText
       as="h2"
@@ -289,7 +339,7 @@ const courseLd = courseJsonLd(Astro.site ?? siteSeo.origin, `/tracks/${track.slu
     </div>
   </section>
 
-  <TrackOptionalReading>
+
   {trackDemoVignettes.length > 0 ? (
     <section id="demo-guides" class="mb-8 scroll-mt-24">
       <LangText
@@ -478,4 +528,13 @@ const courseLd = courseJsonLd(Astro.site ?? siteSeo.origin, `/tracks/${track.slu
   />
 
   <TrackSwitcher current={track} />
+  </div>
+  </div>
+  <script is:inline>
+    (function () {
+      var root = document.querySelector('.track-optional-reading');
+      if (!root || !location.hash) return;
+      if (root.querySelector(location.hash)) root.setAttribute('open', '');
+    })();
+  </script>
 </BaseLayout>

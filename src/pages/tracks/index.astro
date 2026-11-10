@@ -2,8 +2,19 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/chrome/Breadcrumbs.astro';
 import LangText from '../../components/ui/LangText.astro';
-import { tracks } from '../../data/tracks';
+import { tracks, type Track } from '../../data/tracks';
 import { courseJsonLd, siteSeo } from '../../lib/seo';
+import {
+  TRACK_DISPLAY_ORDER,
+  estimatedTrackMinutes,
+  foundationStep,
+  trackIndexMeta,
+} from '../../data/trackCatalog';
+import { getTrackFlow } from '../../data/trackFlow';
+
+const ordered = TRACK_DISPLAY_ORDER.map((slug) => tracks.find((track) => track.slug === slug)).filter(
+  (track): track is Track => !!track,
+);
 
 const courseLd = courseJsonLd(
   Astro.site ?? siteSeo.origin,
@@ -19,8 +30,8 @@ const courseLd = courseJsonLd(
 <BaseLayout
   title={{ vi: 'Lộ trình học Cloudflare', en: 'Cloudflare learning tracks', km: 'Cloudflare learning tracks' }}
   description={{
-    vi: 'Năm lộ trình: Application Services, Developer Platform, Cloudflare One, AI Security & Adoption và Operational Excellence.',
-    en: 'Five tracks: Application Services, Developer Platform, Cloudflare One, AI Security & Adoption, and Operational Excellence.',
+    vi: 'Năm lộ trình: Application Services, Developer Platform, Cloudflare One, AI Security & Adoption và Operational Excellence. Bước 0 là nền tảng.',
+    en: 'Five tracks: Application Services, Developer Platform, Cloudflare One, AI Security & Adoption, and Operational Excellence. Step 0 is the foundation.',
   }}
   canonicalPath="/tracks"
   showProgressBar
@@ -37,38 +48,100 @@ const courseLd = courseJsonLd(
       as="p"
       class="text-muted mt-2 max-w-3xl text-sm leading-relaxed"
       text={{
-        vi: 'Chọn một lộ trình và học tuần tự trong phạm vi đó — không cần mở chéo lộ trình khác. Khi xong hoặc đổi vai trò, bạn có thể chuyển sang lộ trình khác.',
-        en: 'Pick one path and learn sequentially within it — no need to cross into other paths. When you are done or your role changes, switch to another path.',
+        vi: 'Bước 0 là nền tảng. Sau đó học tuần tự trong một lộ trình: kiến thức trước, lab sau. Mỗi lộ trình đứng riêng; dòng điều kiện chỉ là gợi ý, không bắt buộc học song song.',
+        en: 'Step 0 is the foundation. Then learn in order inside one track: knowledge first, labs after. Each track stands alone; the prerequisite line is a suggestion, not parallel study.',
       }}
     />
   </header>
 
-  <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-5">
-    {tracks.map((track) => (
-      <article class="card flex flex-col">
-        <LangText as="h2" class="text-lg font-semibold" text={track.title} />
-        <LangText as="p" class="text-muted mt-2 flex-1 text-sm leading-relaxed" text={track.headline} />
-        <p class="text-muted mt-3 text-xs">
-          <span class="lang-vi">{track.modules.length} phần · {track.modules.reduce((n, m) => n + m.lessons.length, 0)} bài</span>
-          <span class="lang-en">{track.modules.length} parts · {track.modules.reduce((n, m) => n + m.lessons.length, 0)} lessons</span>
-          <span class="lang-km">{track.modules.length} parts · {track.modules.reduce((n, m) => n + m.lessons.length, 0)} lessons</span>
-        </p>
-        <ul class="mt-3 flex flex-wrap gap-1.5">
-          {track.keyConcepts.slice(0, 4).map((k) => (
-            <li class="badge text-xs">{k}</li>
-          ))}
-        </ul>
-        <a class="btn btn-primary mt-4 w-full justify-center" href={`/tracks/${track.slug}`}>
-          <LangText text={{ vi: 'Vào lộ trình này', en: 'Enter this path', km: 'Enter this path' }} />
-        </a>
-        <p class="text-muted mt-2 text-center text-xs">
-          <span class="lang-vi">Lộ trình độc lập — không bắt buộc học song song</span>
-          <span class="lang-en">Self-contained path — no parallel study required</span>
-          <span class="lang-km">Self-contained path — no parallel study required</span>
-        </p>
-      </article>
-    ))}
-  </div>
+  <section class="card mb-6" id="step-0">
+    <div class="flex flex-wrap items-center gap-2">
+      <span class="badge badge-accent">
+        <span class="lang-vi">Bước 0</span>
+        <span class="lang-en">Step 0</span>
+        <span class="lang-km">Step 0</span>
+      </span>
+    </div>
+    <LangText as="h2" class="mt-3 text-lg font-semibold" text={foundationStep.title} />
+    <LangText as="p" class="text-muted mt-2 text-sm leading-relaxed" text={foundationStep.summary} />
+    <ul class="mt-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+      {foundationStep.links.map((link) => (
+        <li>
+          <a class="btn btn-secondary" href={link.href}>
+            <LangText text={link.label} />
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <ol class="space-y-4">
+    {ordered.map((track, index) => {
+      const meta = trackIndexMeta[track.slug];
+      const flow = getTrackFlow(track.slug);
+      const knowledge = flow.filter((item) => item.kind === 'knowledge').length;
+      const hubLabs = flow.filter((item) => item.kind === 'lab-hub').length;
+      const officialLabs = flow.filter((item) => item.kind === 'lab-official').length;
+      const minutes = estimatedTrackMinutes(track);
+      return (
+        <li class="card">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="badge">
+              <span class="lang-vi">Bước {index + 1}</span>
+              <span class="lang-en">Step {index + 1}</span>
+              <span class="lang-km">Step {index + 1}</span>
+            </span>
+            <span class="badge">
+              <LangText text={meta.level} />
+            </span>
+            {meta.suggestedStart ? (
+              <span class="badge badge-accent">
+                <span class="lang-vi">Nên bắt đầu đây</span>
+                <span class="lang-en">Start here</span>
+                <span class="lang-km">Start here</span>
+              </span>
+            ) : null}
+          </div>
+          <LangText as="h2" class="mt-3 text-lg font-semibold" text={track.title} />
+          <LangText as="p" class="text-muted mt-2 text-sm leading-relaxed" text={track.headline} />
+          <p class="text-muted mt-3 text-xs leading-relaxed">
+            <span class="lang-vi">
+              {track.modules.length} phần · {knowledge} bài kiến thức
+              {hubLabs > 0 ? ` · ${hubLabs} lab (hub)` : ''}
+              {officialLabs > 0 ? ` · ${officialLabs} lab (Cloudflare)` : ''}
+              {minutes ? ` · ~${minutes} phút (ước lượng các phần)` : ''}
+            </span>
+            <span class="lang-en">
+              {track.modules.length} parts · {knowledge} knowledge
+              {hubLabs > 0 ? ` · ${hubLabs} hub labs` : ''}
+              {officialLabs > 0 ? ` · ${officialLabs} Cloudflare labs` : ''}
+              {minutes ? ` · ~${minutes} min (sum of part estimates)` : ''}
+            </span>
+            <span class="lang-km">
+              {track.modules.length} parts · {knowledge} knowledge
+              {hubLabs > 0 ? ` · ${hubLabs} hub labs` : ''}
+              {officialLabs > 0 ? ` · ${officialLabs} Cloudflare labs` : ''}
+              {minutes ? ` · ~${minutes} min (sum of part estimates)` : ''}
+            </span>
+          </p>
+          <p class="text-muted mt-1 text-xs">
+            <span class="lang-vi">Điều kiện gợi ý: </span>
+            <span class="lang-en">Suggested prerequisite: </span>
+            <span class="lang-km">Suggested prerequisite: </span>
+            <LangText text={meta.prereq} />
+          </p>
+          <ul class="mt-3 flex flex-wrap gap-1.5">
+            {track.keyConcepts.slice(0, 4).map((concept) => (
+              <li class="badge text-xs">{concept}</li>
+            ))}
+          </ul>
+          <a class="btn btn-primary mt-4" href={`/tracks/${track.slug}`}>
+            <LangText text={{ vi: 'Vào lộ trình này', en: 'Enter this path', km: 'Enter this path' }} />
+          </a>
+        </li>
+      );
+    })}
+  </ol>
 
   <p class="text-muted mt-8 text-center text-sm">
     <LangText

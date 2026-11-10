@@ -4,14 +4,18 @@ import Breadcrumbs from '../../../components/chrome/Breadcrumbs.astro';
 import LangText from '../../../components/ui/LangText.astro';
 import ReferenceDiagramFigure from '../../../components/content/ReferenceDiagramFigure.astro';
 import CloudflareResourceCard from '../../../components/content/CloudflareResourceCard.astro';
+import LessonKindBadge from '../../../components/content/LessonKindBadge.astro';
+import KnowledgeLesson from '../../../components/content/KnowledgeLesson.astro';
+import FlowNav from '../../../components/content/FlowNav.astro';
 import {
   getAllFlatTrackLessons,
   getFlatTrackLesson,
-  getAdjacentLessons,
   getLessonEnrichment,
   getLessonDiagrams,
   getLessonHeroImage,
 } from '../../../data/trackLessons';
+import { getFlowNeighbors, getTrackFlow, labsAfterLesson } from '../../../data/trackFlow';
+import { inferLessonKind } from '../../../data/lessonKind';
 import { getOnboardingPageForLesson, onboardingHtml } from '../../../data/zeroTrustOnboarding';
 import OnboardingArticle from '../../../components/content/OnboardingArticle.astro';
 import FollowAlongArticle from '../../../components/content/FollowAlongArticle.astro';
@@ -21,7 +25,8 @@ import { getProductBySlug } from '../../../data/productPages';
 import { tracks } from '../../../data/tracks';
 import TrackContextBanner from '../../../components/content/TrackContextBanner.astro';
 import TrackSwitcher from '../../../components/content/TrackSwitcher.astro';
-import { getLabsForHubModule, DEVELOPER_LABS_HUB_PATH, DEVELOPER_LABS_URL } from '../../../data/developerLabs';
+import TrackToc from '../../../components/interactive/TrackToc';
+import TrackLessonDone from '../../../components/interactive/TrackLessonDone';
 
 export function getStaticPaths() {
   return getAllFlatTrackLessons().map((l) => ({
@@ -37,14 +42,29 @@ const track = tracks.find((t) => t.slug === slug)!;
 const enrichment = getLessonEnrichment(lesson);
 const diagrams = getLessonDiagrams(lesson);
 const heroImage = getLessonHeroImage(lesson);
-const { prev, next } = getAdjacentLessons(track.slug, lesson.id);
+const neighbors = getFlowNeighbors(track.slug, lesson.id);
+const kind = neighbors.current?.kind ?? inferLessonKind(lesson.moduleId, lesson.kind);
+const duration = neighbors.current?.duration;
+const prereqs = (neighbors.current?.prerequisiteIds ?? [])
+  .map((id) => neighbors.flow.find((item) => item.key === id))
+  .filter((item): item is NonNullable<typeof item> => !!item);
+const labLinks = kind === 'knowledge' ? labsAfterLesson(track.slug, lesson.id) : [];
 const relatedProducts = (enrichment.productSlugs ?? [])
   .map((s) => getProductBySlug(s))
   .filter((p): p is NonNullable<ReturnType<typeof getProductBySlug>> => !!p);
 const deploymentExamples = getDeploymentExamplesForLesson(lesson.id);
 const onboardingPage = track.slug === 'cloudflare-one' ? getOnboardingPageForLesson(lesson.id) : undefined;
 const followAlong = !onboardingPage ? getFollowAlongLesson(lesson.id) : undefined;
-const relatedLabs = track.slug === 'developer-platform' ? getLabsForHubModule(lesson.moduleId) : [];
+const flow = getTrackFlow(track.slug);
+const tocItems = flow.map((item) => ({
+  key: item.key,
+  kind: item.kind,
+  href: item.href,
+  title: item.title,
+  moduleId: item.moduleId,
+  moduleTitle: item.moduleTitle,
+  duration: item.duration ?? null,
+}));
 ---
 
 <BaseLayout
@@ -65,6 +85,10 @@ const relatedLabs = track.slug === 'developer-platform' ? getLabsForHubModule(le
 
   <TrackContextBanner track={track} />
 
+  <div class="track-layout">
+    <TrackToc client:load trackSlug={track.slug} items={tocItems} currentKey={lesson.id} />
+    <div class="min-w-0">
+
   <header class="mb-6">
     <p class="text-muted mb-2 text-xs font-medium uppercase tracking-wide">
       <LangText text={lesson.moduleTitle} />
@@ -72,67 +96,100 @@ const relatedLabs = track.slug === 'developer-platform' ? getLabsForHubModule(le
         ·
         <span class="lang-vi"> Bài {lesson.lessonIndex + 1}/{lesson.totalLessonsInModule}</span>
         <span class="lang-en"> Lesson {lesson.lessonIndex + 1}/{lesson.totalLessonsInModule}</span>
-        <span class="lang-km"> មេរៀន {lesson.lessonIndex + 1}/{lesson.totalLessonsInModule}</span>
+        <span class="lang-km"> Lesson {lesson.lessonIndex + 1}/{lesson.totalLessonsInModule}</span>
       </span>
     </p>
+    <div class="mb-3 flex flex-wrap items-center gap-2">
+      <LessonKindBadge kind={kind} />
+      {duration ? (
+        <span class="badge">
+          <span class="lang-vi">Ước lượng </span>
+          <span class="lang-en">About </span>
+          <span class="lang-km">About </span>
+          <LangText text={duration} />
+        </span>
+      ) : null}
+      <TrackLessonDone client:load itemKey={lesson.id} />
+    </div>
     <LangText as="h1" class="text-2xl font-semibold md:text-3xl" text={lesson.title} />
-    {onboardingPage || followAlong ? null : (
-      <LangText as="p" class="text-muted mt-3 max-w-3xl text-sm leading-relaxed" text={lesson.body} />
-    )}
+    {prereqs.length > 0 ? (
+      <p class="text-muted mt-3 text-sm leading-relaxed">
+        <span class="lang-vi">Nên đọc trước: </span>
+        <span class="lang-en">Read first: </span>
+        <span class="lang-km">Read first: </span>
+        {prereqs.map((item, index) => (
+          <>
+            {index > 0 ? <span>, </span> : null}
+            <a class="link" href={item.href}>
+              <LangText text={item.title} />
+            </a>
+          </>
+        ))}
+      </p>
+    ) : null}
   </header>
 
-  {onboardingPage ? (
+  {kind === 'knowledge' ? (
+    <KnowledgeLesson
+      lesson={lesson}
+      enrichment={enrichment}
+      diagrams={diagrams}
+      followAlong={followAlong}
+      onboardingHtml={onboardingPage ? onboardingHtml(onboardingPage) : undefined}
+      onboardingSourceUrl={onboardingPage?.sourceUrl}
+      heroImage={heroImage}
+      labLinks={labLinks}
+    />
+  ) : onboardingPage ? (
     <OnboardingArticle html={onboardingHtml(onboardingPage)} sourceUrl={onboardingPage.sourceUrl} />
   ) : followAlong ? (
     <FollowAlongArticle lesson={followAlong} />
   ) : (
     <>
-  {heroImage ? (
-    <figure class="card mb-8 overflow-hidden p-0">
-      <img
-        src={heroImage}
-        alt={lesson.title.en}
-        loading="eager"
-        decoding="async"
-        class="w-full max-h-[20rem] object-contain bg-[var(--cf-bg-elevated)] p-4"
-      />
-      <figcaption class="text-muted border-t border-[var(--cf-border)] px-4 py-2 text-xs">
-        <span class="lang-vi">Minh họa từ sơ đồ kiến trúc tham chiếu Cloudflare (developers.cloudflare.com)</span>
-        <span class="lang-en">Illustration from Cloudflare Reference Architecture (developers.cloudflare.com)</span>
-        <span class="lang-km">Illustration from Cloudflare Reference Architecture (developers.cloudflare.com)</span>
-      </figcaption>
-    </figure>
-  ) : null}
+      {heroImage ? (
+        <figure class="card mb-8 overflow-hidden p-0">
+          <img
+            src={heroImage}
+            alt={lesson.title.en}
+            loading="eager"
+            decoding="async"
+            class="max-h-[20rem] w-full bg-[var(--cf-bg-elevated)] object-contain p-4"
+          />
+          <figcaption class="text-muted border-t border-[var(--cf-border)] px-4 py-2 text-xs">
+            <span class="lang-vi">Minh họa từ sơ đồ kiến trúc tham chiếu Cloudflare (developers.cloudflare.com)</span>
+            <span class="lang-en">Illustration from Cloudflare Reference Architecture (developers.cloudflare.com)</span>
+            <span class="lang-km">Illustration from Cloudflare Reference Architecture (developers.cloudflare.com)</span>
+          </figcaption>
+        </figure>
+      ) : null}
 
-  <section class="card mb-6">
-    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Các bước thực hiện', en: 'Step-by-step', km: 'Step-by-step' }} />
-    <ol class="text-muted mt-4 list-decimal space-y-3 pl-5 text-sm leading-relaxed">
-      {enrichment.steps.vi.map((step, i) => (
-        <li>
-          <span class="lang-vi">{step}</span>
-          <span class="lang-en">{enrichment.steps.en[i]}</span>
-          <span class="lang-km">{enrichment.steps.en[i]}</span>
-        </li>
-      ))}
-    </ol>
-  </section>
+      <section class="card mb-6">
+        <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Các bước thực hiện', en: 'Step-by-step', km: 'Step-by-step' }} />
+        <ol class="text-muted mt-4 list-decimal space-y-3 pl-5 text-sm leading-relaxed">
+          {enrichment.steps.vi.map((step, i) => (
+            <li>
+              <span class="lang-vi">{step}</span>
+              <span class="lang-en">{enrichment.steps.en[i]}</span>
+              <span class="lang-km">{enrichment.steps.en[i]}</span>
+            </li>
+          ))}
+        </ol>
+      </section>
 
-  <section class="card mb-6">
-    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Giải thích chi tiết', en: 'Detailed explanation', km: 'Detailed explanation' }} />
-    <LangText as="p" class="text-muted mt-3 text-sm leading-relaxed" text={enrichment.deepDive} />
-    {lesson.tip ? (
-      <p class="mt-4 rounded-lg border border-[var(--cf-border)] bg-[var(--cf-surface)] px-4 py-3 text-sm">
-        <span class="font-medium text-[var(--cf-accent)]">
-          <span class="lang-vi">Mẹo: </span>
-          <span class="lang-en">Tip: </span>
-          <span class="lang-km">Tip:</span>
-        </span>
-        <span class="lang-vi">{lesson.tip.vi}</span>
-        <span class="lang-en">{lesson.tip.en}</span>
-        <span class="lang-km">{lesson.tip.en}</span>
-      </p>
-    ) : null}
-  </section>
+      <section class="card mb-6">
+        <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Giải thích chi tiết', en: 'Detailed explanation', km: 'Detailed explanation' }} />
+        <LangText as="p" class="text-muted mt-3 text-sm leading-relaxed" text={enrichment.deepDive} />
+        {lesson.tip ? (
+          <p class="mt-4 rounded-lg border border-[var(--cf-border)] bg-[var(--cf-surface)] px-4 py-3 text-sm">
+            <span class="font-medium text-[var(--cf-accent)]">
+              <span class="lang-vi">Mẹo: </span>
+              <span class="lang-en">Tip: </span>
+              <span class="lang-km">Tip: </span>
+            </span>
+            <LangText text={lesson.tip} />
+          </p>
+        ) : null}
+      </section>
     </>
   )}
 
@@ -147,7 +204,7 @@ const relatedLabs = track.slug === 'developer-platform' ? getLabsForHubModule(le
       <p class="text-muted mt-3 text-xs">
         <span class="lang-vi">Nguồn: </span>
         <span class="lang-en">Source: </span>
-        <span class="lang-km">Source:</span>
+        <span class="lang-km">Source: </span>
         <a
           class="link"
           href={enrichment.bestPracticeNote.sourceUrl}
@@ -181,54 +238,6 @@ const relatedLabs = track.slug === 'developer-platform' ? getLabsForHubModule(le
         <a class="link" href={`/tracks/${track.slug}/#track-resources`}>
           <LangText text={{ vi: 'Xem thêm ví dụ trong lộ trình →', en: 'More examples in this path →', km: 'More examples in this path →' }} />
         </a>
-      </p>
-    </section>
-  ) : null}
-
-  {relatedLabs.length > 0 ? (
-    <section class="lab-lesson-card mb-6">
-      <p class="text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-[var(--cf-accent)]">
-        labs.cloudflare.dev
-      </p>
-      <LangText
-        as="h2"
-        class="mt-1 text-lg font-semibold"
-        text={{ vi: 'Lab thực hành khớp bài này', en: 'Hands-on labs for this lesson', km: 'Hands-on labs for this lesson' }}
-      />
-      <p class="text-muted mt-2 text-sm leading-relaxed">
-        <span class="lang-vi">
-          Nguồn bổ sung chính thức — làm lab sau khi đọc bài, không thay bước trong hub.
-        </span>
-        <span class="lang-en">
-          Official supplement — run the lab after this lesson; it does not replace the hub steps.
-        </span>
-        <span class="lang-km">Official supplement — run the lab after this lesson; it does not replace the hub steps.</span>
-      </p>
-      <ul class="mt-4 space-y-3">
-        {relatedLabs.map((lab) => (
-          <li class="flex flex-col gap-2 rounded-xl border border-[var(--cf-border)] bg-[var(--cf-bg-elevated)]/70 p-3 sm:flex-row sm:items-center sm:justify-between">
-            <div class="min-w-0">
-              <p class="text-sm font-semibold">
-                <span class="font-mono text-[var(--cf-accent)]">{lab.number}</span>
-                {' '}
-                <LangText text={lab.title} />
-              </p>
-              <LangText as="p" class="text-muted mt-1 text-xs leading-relaxed" text={lab.whenInHub} />
-            </div>
-            <a class="btn btn-primary shrink-0 self-start" href={lab.href}>
-              <span class="lang-vi">Mở {lab.labCount} bài lab</span>
-              <span class="lang-en">Open {lab.labCount} lab articles</span>
-              <span class="lang-km">Open {lab.labCount} lab articles</span>
-            </a>
-          </li>
-        ))}
-      </ul>
-      <p class="mt-3 text-xs">
-        <a class="link" href={DEVELOPER_LABS_HUB_PATH}>
-          <LangText text={{ vi: 'Xem đủ 4 track lab trên hub →', en: 'See all 4 lab tracks on this hub →', km: 'See all 4 lab tracks on this hub →' }} />
-        </a>
-        {' · '}
-        <a class="link" href={DEVELOPER_LABS_URL} target="_blank" rel="noopener noreferrer">labs.cloudflare.dev ↗</a>
       </p>
     </section>
   ) : null}
@@ -274,7 +283,7 @@ const relatedLabs = track.slug === 'developer-platform' ? getLabsForHubModule(le
     </section>
   ) : null}
 
-  {diagrams.length > 0 ? (
+  {kind !== 'knowledge' && diagrams.length > 0 ? (
     <section class="mb-6">
       <LangText
         as="h2"
@@ -304,40 +313,14 @@ const relatedLabs = track.slug === 'developer-platform' ? getLabsForHubModule(le
     </section>
   ) : null}
 
-  <nav class="flex flex-wrap gap-3 border-t border-[var(--cf-border)] pt-6 mb-6" aria-label="Lesson navigation">
-    {prev ? (
-      <a class="btn btn-secondary" href={`/tracks/${track.slug}/${prev.id}`}>
-        <span class="lang-vi">← {prev.title.vi}</span>
-        <span class="lang-en">← {prev.title.en}</span>
-        <span class="lang-km">← {prev.title.en}</span>
-      </a>
-    ) : (
-      <a class="btn btn-secondary" href={`/tracks/${track.slug}`}>
-        <LangText text={{ vi: '← Về lộ trình', en: '← Back to track', km: '← Back to track' }} />
-      </a>
-    )}
-    {next ? (
-      <a class="btn btn-primary ml-auto" href={`/tracks/${track.slug}/${next.id}`}>
-        <span class="lang-vi">{next.title.vi} →</span>
-        <span class="lang-en">{next.title.en} →</span>
-        <span class="lang-km">{next.title.en} →</span>
-      </a>
-    ) : (
-      <a class="btn btn-primary ml-auto" href={track.cta.href}>
-        <LangText text={track.cta.label} />
-      </a>
-    )}
-  </nav>
+  <FlowNav
+    prev={neighbors.prev}
+    next={neighbors.next}
+    trackHref={`/tracks/${track.slug}`}
+    doneCta={track.cta}
+  />
 
   <TrackSwitcher current={track} />
+    </div>
+  </div>
 </BaseLayout>
-
-<style>
-  .lab-lesson-card {
-    border-radius: 1rem;
-    border: 1px solid color-mix(in srgb, var(--cf-accent) 40%, var(--cf-border));
-    background:
-      linear-gradient(180deg, color-mix(in srgb, var(--cf-accent) 10%, var(--cf-surface)), var(--cf-surface));
-    padding: 1.25rem 1.35rem;
-  }
-</style>

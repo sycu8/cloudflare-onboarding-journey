@@ -1,0 +1,152 @@
+---
+import LangText from '../ui/LangText.astro';
+import LessonKindBadge from './LessonKindBadge.astro';
+import FollowAlongArticle from './FollowAlongArticle.astro';
+import OnboardingArticle from './OnboardingArticle.astro';
+import ReferenceDiagramFigure from './ReferenceDiagramFigure.astro';
+import type { FlatTrackLesson, TrackLessonEnrichment } from '../../data/trackLessons';
+import type { FollowAlongLesson } from '../../data/followAlongLessons';
+import type { ReferenceDiagram } from '../../data/referenceDiagrams';
+import type { FlowItem } from '../../data/trackFlow';
+import type { LocalizedString } from '../../i18n/types';
+
+type Props = {
+  lesson: FlatTrackLesson;
+  enrichment: TrackLessonEnrichment;
+  diagrams: ReferenceDiagram[];
+  followAlong?: FollowAlongLesson;
+  onboardingHtml?: LocalizedString;
+  onboardingSourceUrl?: string;
+  heroImage?: string;
+  labLinks: FlowItem[];
+};
+
+const { lesson, enrichment, diagrams, followAlong, onboardingHtml, onboardingSourceUrl, heroImage, labLinks } = Astro.props;
+
+function sameText(a: string, b: string) {
+  return a.replace(/\s+/g, ' ').trim() === b.replace(/\s+/g, ' ').trim();
+}
+
+const showHow =
+  !sameText(enrichment.deepDive.vi, lesson.body.vi) || !sameText(enrichment.deepDive.en, lesson.body.en);
+---
+
+<section class="card mb-6" id="main-ideas">
+  <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Ý chính', en: 'Main ideas' }} />
+  <LangText as="p" class="text-muted mt-3 text-sm leading-relaxed" text={lesson.body} />
+  {lesson.tip ? (
+    <p class="mt-4 rounded-lg border border-[var(--cf-border)] bg-[var(--cf-surface)] px-4 py-3 text-sm">
+      <span class="font-medium text-[var(--cf-accent)]">
+        <span class="lang-vi">Mẹo: </span>
+        <span class="lang-en">Tip: </span>
+        <span class="lang-km">Tip: </span>
+      </span>
+      <LangText text={lesson.tip} />
+    </p>
+  ) : null}
+  {heroImage ? (
+    <figure class="mt-4 overflow-hidden rounded-xl border border-[var(--cf-border)]">
+      <img
+        src={heroImage}
+        alt={lesson.title.en}
+        loading="lazy"
+        decoding="async"
+        class="max-h-[20rem] w-full bg-[var(--cf-bg-elevated)] object-contain p-4"
+      />
+    </figure>
+  ) : null}
+  {onboardingHtml && onboardingSourceUrl ? (
+    <div class="mt-4">
+      <OnboardingArticle html={onboardingHtml} sourceUrl={onboardingSourceUrl} />
+    </div>
+  ) : null}
+</section>
+
+{showHow ? (
+  <section class="card mb-6" id="how-it-works">
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Cách hoạt động', en: 'How it works' }} />
+    <LangText as="p" class="text-muted mt-3 text-sm leading-relaxed" text={enrichment.deepDive} />
+  </section>
+) : null}
+
+{diagrams.length > 0 ? (
+  <section class="mb-6" id="architecture">
+    <LangText as="h2" class="mb-4 text-lg font-semibold" text={{ vi: 'Kiến trúc', en: 'Architecture' }} />
+    <div class="grid gap-6 lg:grid-cols-2">
+      {diagrams.map((diagram) => (
+        <ReferenceDiagramFigure diagram={diagram} />
+      ))}
+    </div>
+  </section>
+) : null}
+
+<section class="card mb-6" id="glossary">
+  <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Thuật ngữ', en: 'Glossary' }} />
+  <LangText
+    as="p"
+    class="text-muted mt-3 text-sm leading-relaxed"
+    text={{
+      vi: 'Bài này chưa có mục thuật ngữ riêng. Tra từ trong bảng chung của hub.',
+      en: 'This lesson does not have its own glossary yet. Look terms up in the hub glossary.',
+    }}
+  />
+  <a class="link mt-3 inline-block text-sm" href="/glossary">
+    <LangText text={{ vi: 'Mở bảng thuật ngữ →', en: 'Open the glossary →' }} />
+  </a>
+</section>
+
+{labLinks.length > 0 ? (
+  <section class="card mb-6" id="do-the-lab">
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Làm lab', en: 'Do the lab' }} />
+    <LangText
+      as="p"
+      class="text-muted mt-2 text-sm leading-relaxed"
+      text={{
+        vi: 'Lab nằm ở bài riêng. Đọc ý chính trước, rồi mở lab.',
+        en: 'Labs live on their own pages. Read the main ideas, then open a lab.',
+      }}
+    />
+    <ul class="mt-4 space-y-3">
+      {labLinks.map((lab) => (
+        <li class="flex flex-col gap-2 rounded-xl border border-[var(--cf-border)] p-3 sm:flex-row sm:items-center sm:justify-between">
+          <div class="min-w-0">
+            <LessonKindBadge kind={lab.kind} />
+            <a class="mt-2 block font-medium hover:text-[var(--cf-accent)]" href={lab.href}>
+              <LangText text={lab.title} />
+            </a>
+            {lab.duration ? (
+              <p class="text-muted mt-1 text-xs">
+                <LangText text={lab.duration} />
+              </p>
+            ) : null}
+          </div>
+          <a class="btn btn-primary shrink-0 self-start" href={lab.href}>
+            <LangText text={{ vi: 'Mở lab', en: 'Open lab' }} />
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+) : null}
+
+{followAlong ? (
+  <details class="track-optional-reading card mb-6 group">
+    <summary class="cursor-pointer list-none font-semibold marker:content-none [&::-webkit-details-marker]:hidden">
+      <span class="flex items-center justify-between gap-2">
+        <span>
+          <span class="lang-vi">Các bước bấm dashboard đang có trên bài này</span>
+          <span class="lang-en">Dashboard steps already on this page</span>
+          <span class="lang-km">Dashboard steps already on this page</span>
+        </span>
+        <span class="text-muted text-sm font-normal group-open:hidden">
+          <span class="lang-vi">Mở</span>
+          <span class="lang-en">Expand</span>
+          <span class="lang-km">Expand</span>
+        </span>
+      </span>
+    </summary>
+    <div class="mt-6 border-t border-[var(--cf-border)] pt-6">
+      <FollowAlongArticle lesson={followAlong} />
+    </div>
+  </details>
+) : null}
