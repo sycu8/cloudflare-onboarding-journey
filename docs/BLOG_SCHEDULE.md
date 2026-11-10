@@ -109,7 +109,7 @@ gh workflow run "Blog every-3-days email" \
   -f date=2026-10-29
 ```
 
-`--slug` and `--date` must name the same rows when both are set. A comma-separated list is only for `--email-body` / this workflow. Do not run the dispatch until you mean to email `sycu.lee@gmail.com`.
+Leave `date` empty to use today in `Asia/Ho_Chi_Minh`. A comma-separated `date` or `slug` list is for this workflow and for `--email-body`. If you set both, pass the same number of values in the same order. Each date must be that slug's schedule date, or the job fails. Do not run the dispatch until you mean to email `sycu.lee@gmail.com`.
 
 ## Extending the queue
 

@@ -39,11 +39,10 @@ export const postEmailRoutingVaEmailWorkers: BlogPost = {
           en: 'Sending mail out is a different product, Email Sending. Use it when an app must send an order receipt, a login code, or an alert. The pricing docs say sending to any recipient needs the Workers Paid plan: 3,000 messages a month per account, then 0.35 USD per 1,000. Sends to a verified destination address are free and do not count toward that quota, even if you only turned on Email Routing. Inbound mail through Routing is unlimited on both the Free and Paid plans.',
         },
         {
-          vi: 'Muốn dùng Email Routing, tên miền phải dùng DNS của Cloudflare. Lúc gắn tên miền, Cloudflare thêm bản ghi MX để thư đi vào, bản ghi TXT cho SPF, và bản ghi TXT cho DKIM. Trên DNS Cloudflare, thay đổi thường xong trong 5 đến 15 phút, nhưng tài liệu vẫn nói có thể mất tới 24 giờ. Đừng tắt proxy DNS của website chỉ vì bạn đang sửa email. Website và thư dùng các bản ghi khác nhau.',
-          en: 'Email Routing needs Cloudflare DNS for the domain. When you onboard the domain, Cloudflare adds MX records so mail comes in, a TXT record for SPF, and a TXT record for DKIM. On Cloudflare DNS the change usually finishes in 5 to 15 minutes, but the docs still say it can take up to 24 hours. Do not turn off the website proxy just because you are editing email. The website and the mailbox use different records.',
+          vi: 'Muốn dùng Email Routing, tên miền phải dùng DNS của Cloudflare. Lúc gắn tên miền, Cloudflare thêm bản ghi MX để thư đi vào, bản ghi TXT cho SPF, và bản ghi TXT cho DKIM. Trang Route emails ghi chú: thay đổi DNS có thể mất tới 24 giờ mới lan ra toàn cầu, và thường xong trong 5–15 phút nếu tên miền đang dùng DNS Cloudflare. Đừng tắt proxy DNS của website chỉ vì bạn đang sửa email. Website và thư dùng các bản ghi khác nhau.',
+          en: 'Email Routing needs Cloudflare DNS for the domain. When you onboard the domain, Cloudflare adds MX records so mail comes in, a TXT record for SPF, and a TXT record for DKIM. The Route emails page notes that DNS changes can take up to 24 hours to propagate globally, and usually finish within 5–15 minutes when the domain uses Cloudflare DNS. Do not turn off the website proxy just because you are editing email. The website and the mailbox use different records.',
         },
       ],
-      diagramSlug: 'fullstack-application',
     },
     {
       heading: {
@@ -60,8 +59,8 @@ export const postEmailRoutingVaEmailWorkers: BlogPost = {
           en: 'Each rule pairs an address pattern with one action. The three dashboard actions are send to an email, send to a Worker, or drop the message. One rule points at one address or one Worker. If `support@` should reach several people, use a Worker and call forward once for each verified address. If two rules share the same address pattern, only the rule listed first runs. The current dashboard path is Compute, then Email Service, then Email Routing.',
         },
         {
-          vi: 'Luật catch-all nhận mọi địa chỉ chưa có luật riêng, nếu bạn bật nó. Subaddressing, dạng `support+donhang@`, có thể rơi về luật của địa chỉ gốc. Thử bằng cách gửi từ một hộp thư khác, không gửi từ chính hộp thư đích, vì một số nhà cung cấp bỏ thư trông như tự gửi cho mình. Không thấy thư thì xem mục spam, rồi xem nhật ký hoạt động. Các trạng thái ở đó gồm đã chuyển tiếp, Worker đã xử lý, đã bỏ, bị từ chối, giao thất bại, và lỗi.',
-          en: 'A catch-all rule receives every address that has no rule of its own, if you enable it. Subaddressing, the `support+order@` form, can fall back to the base address rule. Test by sending from a different mailbox, not from the destination inbox itself, because some providers drop mail that looks like it was sent to itself. If the message is missing, check spam, then the activity log. Statuses there include forwarded, handled by a Worker, dropped, rejected, delivery failed, and error.',
+          vi: 'Luật catch-all nhận mọi địa chỉ chưa có luật riêng, nếu bạn bật nó. Nếu bật subaddressing, thư tới `support+donhang@` đi theo luật của `support@`. Thử bằng cách gửi từ một hộp thư khác, không gửi từ chính hộp thư đích, vì một số nhà cung cấp bỏ thư trông như tự gửi cho mình. Không thấy thư thì xem mục spam, rồi xem nhật ký hoạt động. Các trạng thái ở đó gồm đã chuyển tiếp, Worker đã xử lý, đã bỏ, bị từ chối, giao thất bại, và lỗi.',
+          en: 'A catch-all rule receives every address that has no rule of its own, if you enable it. If subaddressing is on, mail to `support+order@` follows the rule for `support@`. Test by sending from a different mailbox, not from the destination inbox itself, because some providers drop mail that looks like it was sent to itself. If the message is missing, check spam, then the activity log. Statuses there include forwarded, handled by a Worker, dropped, rejected, delivery failed, and error.',
         },
       ],
     },
@@ -183,5 +182,5 @@ export const postEmailRoutingVaEmailWorkers: BlogPost = {
     { href: '/cloudflare-101/', label: { vi: 'Cloudflare 101', en: 'Cloudflare 101' } },
     { href: '/blog/', label: { vi: 'Blog hub', en: 'Blog hub' } },
   ],
-  diagramSlugs: ['fullstack-application', 'serverless-global-apis'],
+  diagramSlugs: ['serverless-global-apis'],
 };

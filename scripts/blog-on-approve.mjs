@@ -10,7 +10,7 @@
  * and reject the update as stale info, which aborted every later slug.
  */
 import { execFileSync, spawnSync } from 'node:child_process';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { countBlogWordsIsCorrupted } from './blog-register-scaffold.mjs';
@@ -243,23 +243,46 @@ function gitOk(args) {
   }
 }
 
-function gitOut(args) {
-  return execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
-}
+const defaultPostsDir = path.join(root, 'src/data/blogPosts');
 
-function publishedOnDisk(slug) {
-  const { readdirSync, readFileSync: read } = requireFs();
-  const dir = path.join(root, 'src/data/blogPosts');
-  for (const fileName of readdirSync(dir)) {
+/**
+ * @param {string} slug
+ * @param {string} [postsDir]
+ */
+export function publishedOnDisk(slug, postsDir = defaultPostsDir) {
+  for (const fileName of readdirSync(postsDir)) {
     if (!fileName.endsWith('.ts')) continue;
-    const text = read(path.join(dir, fileName), 'utf8');
+    const text = readFileSync(path.join(postsDir, fileName), 'utf8');
     if (text.includes(`slug: '${slug}'`)) return true;
   }
   return false;
 }
 
-function requireFs() {
-  return { readdirSync, readFileSync };
+/**
+ * @param {{ date: string, slug: string }} job
+ * @param {string} [postsDir]
+ */
+export function isPublished(job, postsDir = defaultPostsDir) {
+  assertJobShape(job);
+  return publishedOnDisk(job.slug, postsDir);
+}
+
+/**
+ * Fail the slug when D1 or Email Sending does not accept the call.
+ * Logs HTTP status and numeric error codes only.
+ * @param {string} kind
+ * @param {{ ok: boolean, status: number }} res
+ * @param {{ success?: boolean, errors?: { code?: number | string }[] }} [data]
+ */
+export function assertHttpOk(kind, res, data) {
+  if (res.ok && data?.success !== false) return;
+  const codes = Array.isArray(data?.errors)
+    ? data.errors
+        .map((item) => item?.code)
+        .filter((code) => code != null)
+        .join(',')
+    : '';
+  throw new Error(`${kind} failed: HTTP ${res.status}${codes ? ` error codes ${codes}` : ''}`);
 }
 
 function realContext() {
@@ -363,7 +386,7 @@ async function markPr(date, slug, prUrl) {
   const token = process.env.CLOUDFLARE_API_TOKEN;
   const dbId = process.env.D1_DATABASE_ID;
   if (!accountId || !token || !dbId || !prUrl) return;
-  await fetch(`https://api.cloudflare.com/client/v4/accounts/${accountId}/d1/database/${dbId}/query`, {
+  const res = await fetch(`https://api.cloudflare.com/client/v4/accounts/${accountId}/d1/database/${dbId}/query`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -374,6 +397,8 @@ async function markPr(date, slug, prUrl) {
       params: [prUrl, date, slug],
     }),
   });
+  const data = await res.json().catch(() => ({}));
+  assertHttpOk(`D1 update ${date} ${slug}`, res, data);
 }
 
 async function emailPr(date, slug, prLine) {
@@ -381,7 +406,7 @@ async function emailPr(date, slug, prLine) {
   const token = process.env.CLOUDFLARE_API_TOKEN;
   if (!accountId || !token) return;
   const fromRaw = process.env.WORKSHOP_EMAIL_FROM || 'Cloudflare Starter Hub <onboarding@orangecloud.vn>';
-  await fetch(`https://api.cloudflare.com/client/v4/accounts/${accountId}/email/sending/send`, {
+  const res = await fetch(`https://api.cloudflare.com/client/v4/accounts/${accountId}/email/sending/send`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -395,6 +420,8 @@ async function emailPr(date, slug, prLine) {
       html: `<p>APPROVE đã nhận.</p><p><strong>${escapeHtml(prLine)}</strong></p><p>Viết đủ nội dung bilingual rồi <strong>merge PR</strong> (+ deploy) để đăng.</p>`,
     }),
   });
+  const data = await res.json().catch(() => ({}));
+  assertHttpOk(`email send ${date} ${slug}`, res, data);
 }
 
 function fromPayload(raw) {
@@ -410,28 +437,104 @@ function escapeHtml(value) {
     .replace(/>/g, '&gt;');
 }
 
+/**
+ * Local end-to-end pass. Git and fetch are in-memory. isPublished reads the
+ * real posts directory (BLOG_DRY_POSTS_DIR or src/data/blogPosts).
+ * @param {{ date: string, slug: string }[]} jobs
+ * @param {{ postsDir?: string, httpStatus?: number }} [options]
+ */
+export async function runDryApprove(jobs, options = {}) {
+  const postsDir = options.postsDir || defaultPostsDir;
+  const httpStatus = options.httpStatus ?? 200;
+  /** @type {string[]} */
+  const gitCalls = [];
+  const ctx = {
+    prBodyPath: '/tmp/blog-dry-pr-body.md',
+    isPublished(job) {
+      return publishedOnDisk(job.slug, postsDir);
+    },
+    git(args) {
+      assertNoForce(args);
+      gitCalls.push(args.join(' '));
+      if (args[0] === 'fetch' && String(args.at(-1)).startsWith('refs/heads/')) {
+        throw new Error('remote branch missing');
+      }
+    },
+    readBlogTs() {
+      return 'export function countBlogWords() {\n}\n';
+    },
+    scaffold() {},
+    register() {},
+    prompt() {
+      return 'dry prompt';
+    },
+    hasStagedChanges() {
+      return true;
+    },
+    isAncestor() {
+      return false;
+    },
+    writePrBody() {},
+    gh() {},
+    prLine() {
+      return 'PR #1 https://example.com/pull/1';
+    },
+    async notify(job) {
+      const res = { ok: httpStatus >= 200 && httpStatus < 300, status: httpStatus };
+      const data = res.ok ? { success: true } : { success: false, errors: [{ code: httpStatus }] };
+      assertHttpOk(`D1 update ${job.date} ${job.slug}`, res, data);
+      assertHttpOk(`email send ${job.date} ${job.slug}`, res, data);
+    },
+    async reset() {},
+  };
+  const result = await runApproveJobs(jobs, {
+    handle: (job) => openScaffoldForJob(job, ctx),
+    reset: () => ctx.reset(),
+  });
+  return { ...result, gitCalls };
+}
+
 async function main() {
-  execFileSync('git', ['config', 'user.name', 'blog-editorial-bot'], { cwd: root, stdio: 'inherit' });
-  execFileSync('git', ['config', 'user.email', 'onboarding@orangecloud.vn'], { cwd: root, stdio: 'inherit' });
+  const dry = process.argv.includes('--dry-run');
+  if (!dry) {
+    execFileSync('git', ['config', 'user.name', 'blog-editorial-bot'], { cwd: root, stdio: 'inherit' });
+    execFileSync('git', ['config', 'user.email', 'onboarding@orangecloud.vn'], { cwd: root, stdio: 'inherit' });
+  }
 
   const event = process.env.EVENT_NAME || '';
   let polledRows = [];
   const hasDispatch = event === 'repository_dispatch' && process.env.DISPATCH_DATE && process.env.DISPATCH_SLUG;
   const hasInputs = process.env.INPUT_DATE && process.env.INPUT_SLUG;
-  if (event === 'schedule' || (!hasDispatch && !hasInputs)) {
-    polledRows = await pollApprovedRows();
+  /** @type {{ date: string, slug: string }[]} */
+  let jobs;
+  if (dry) {
+    jobs = JSON.parse(process.env.BLOG_DRY_JOBS || '[]');
+  } else {
+    if (event === 'schedule' || (!hasDispatch && !hasInputs)) {
+      polledRows = await pollApprovedRows();
+    }
+    jobs = collectJobs({
+      event,
+      dispatchDate: process.env.DISPATCH_DATE || '',
+      dispatchSlug: process.env.DISPATCH_SLUG || '',
+      inputDate: process.env.INPUT_DATE || '',
+      inputSlug: process.env.INPUT_SLUG || '',
+      polledRows,
+    });
   }
-  const jobs = collectJobs({
-    event,
-    dispatchDate: process.env.DISPATCH_DATE || '',
-    dispatchSlug: process.env.DISPATCH_SLUG || '',
-    inputDate: process.env.INPUT_DATE || '',
-    inputSlug: process.env.INPUT_SLUG || '',
-    polledRows,
-  });
   console.log(JSON.stringify({ jobs }, null, 2));
   if (jobs.length === 0) {
     console.log('No approved blog jobs — done');
+    return;
+  }
+
+  if (dry) {
+    const result = await runDryApprove(jobs, {
+      postsDir: process.env.BLOG_DRY_POSTS_DIR || defaultPostsDir,
+      httpStatus: process.env.BLOG_DRY_HTTP_STATUS ? Number(process.env.BLOG_DRY_HTTP_STATUS) : 200,
+    });
+    console.log(JSON.stringify({ ok: result.ok, failures: result.failures, gitCalls: result.gitCalls }));
+    if (result.failures.length) process.exitCode = result.exitCode;
     return;
   }
 

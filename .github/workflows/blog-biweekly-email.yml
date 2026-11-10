@@ -14,9 +14,10 @@ on:
     inputs:
       date:
         description: >
-          Schedule date YYYY-MM-DD, or comma-separated dates, for a missed slot.
-          Empty = today in Asia/Ho_Chi_Minh. Ignored when slug is set, unless you
-          pass the same number of dates and slugs.
+          One YYYY-MM-DD, or comma-separated dates, for a missed slot.
+          Empty uses today in Asia/Ho_Chi_Minh.
+          If slug is also set, pass the same number of dates in the same order.
+          Each date must be that slug's schedule date, or the job fails.
         required: false
         default: ''
       slug:

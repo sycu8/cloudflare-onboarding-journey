@@ -3,7 +3,9 @@
  * approve job must isolate slug failures without a force push.
  */
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
@@ -14,12 +16,15 @@ import {
   locateBlogPostsArray,
 } from './blog-register-scaffold.mjs';
 import {
+  assertHttpOk,
   assertJobShape,
   assertNoForce,
   collectJobs,
   decidePush,
   formatFailureReport,
+  isPublished,
   openScaffoldForJob,
+  publishedOnDisk,
   remoteBranchFetchRefspec,
   runApproveJobs,
 } from './blog-on-approve.mjs';
@@ -316,6 +321,64 @@ await openScaffoldForJob(
   },
 );
 
+const postsDir = mkdtempSync(path.join(tmpdir(), 'blog-published-'));
+try {
+  writeFileSync(path.join(postsDir, 'kept.ts'), "export const postKept = {\n  slug: 'kept-slug',\n};\n");
+  assert.equal(publishedOnDisk('kept-slug', postsDir), true);
+  assert.equal(publishedOnDisk('other-slug', postsDir), false);
+  assert.equal(isPublished({ date: '2026-11-01', slug: 'kept-slug' }, postsDir), true);
+  assert.equal(isPublished({ date: '2026-11-04', slug: 'other-slug' }, postsDir), false);
+
+  const jobs = JSON.stringify([
+    { date: '2026-11-01', slug: 'kept-slug' },
+    { date: '2026-11-04', slug: 'other-slug' },
+  ]);
+  const okDry = runDry({ BLOG_DRY_POSTS_DIR: postsDir, BLOG_DRY_JOBS: jobs });
+  assert.equal(okDry.status, 0, okDry.stderr);
+  assert.deepEqual(
+    okDry.json.ok.map((item) => item.status),
+    ['skipped-published', 'opened'],
+  );
+  assert.equal(okDry.json.failures.length, 0);
+  assert.ok(okDry.json.gitCalls.some((line) => line === 'push -u origin HEAD:refs/heads/blog/other-slug'));
+  assert.equal(okDry.json.gitCalls.some((line) => line.includes('force')), false);
+
+  const failedDry = runDry({
+    BLOG_DRY_POSTS_DIR: postsDir,
+    BLOG_DRY_JOBS: jobs,
+    BLOG_DRY_HTTP_STATUS: '502',
+  });
+  assert.equal(failedDry.status, 1);
+  assert.equal(failedDry.json.ok.length, 1);
+  assert.equal(failedDry.json.ok[0].slug, 'kept-slug');
+  assert.equal(failedDry.json.failures.length, 1);
+  assert.equal(failedDry.json.failures[0].slug, 'other-slug');
+  assert.match(failedDry.json.failures[0].error, /HTTP 502/);
+} finally {
+  rmSync(postsDir, { recursive: true, force: true });
+}
+
+const realDry = runDry({
+  BLOG_DRY_JOBS: JSON.stringify([
+    { date: '2026-11-01', slug: 'email-routing-va-email-workers' },
+    { date: '2026-11-04', slug: 'argo-smart-routing-giam-do-tre' },
+  ]),
+});
+assert.equal(realDry.status, 0, realDry.stderr);
+assert.deepEqual(
+  realDry.json.ok.map((item) => [item.slug, item.status]),
+  [
+    ['email-routing-va-email-workers', 'skipped-published'],
+    ['argo-smart-routing-giam-do-tre', 'skipped-published'],
+  ],
+);
+assert.deepEqual(realDry.json.gitCalls, []);
+
+assert.throws(
+  () => assertHttpOk('D1 update', { ok: false, status: 403 }, { success: false, errors: [{ code: 10000 }] }),
+  /HTTP 403 error codes 10000/,
+);
+
 for (const post of [postEmailRoutingVaEmailWorkers, postArgoSmartRoutingGiamDoTre]) {
   const vi = countWords(post, 'vi');
   const en = countWords(post, 'en');
@@ -324,6 +387,20 @@ for (const post of [postEmailRoutingVaEmailWorkers, postArgoSmartRoutingGiamDoTr
   assert.ok(post.faq.length >= 3, `${post.slug} needs FAQ`);
   assert.ok(post.sources.length >= 2, `${post.slug} needs sources`);
   assert.equal(post.sections.some((section) => section.paragraphs.some((p) => p.vi.includes('TODO'))), false);
+}
+
+function runDry(env) {
+  const result = spawnSync(process.execPath, ['scripts/blog-on-approve.mjs', '--dry-run'], {
+    cwd: root,
+    env: { ...process.env, ...env },
+    encoding: 'utf8',
+  });
+  const line = result.stdout.trim().split('\n').filter(Boolean).at(-1);
+  return {
+    status: result.status,
+    stderr: result.stderr,
+    json: JSON.parse(line || '{}'),
+  };
 }
 
 console.log('blog cadence tests passed');
