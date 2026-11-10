@@ -4,15 +4,16 @@
  *   node scripts/blog-editorial.mjs                 → today's assignment
  *   node scripts/blog-editorial.mjs --json
  *   node scripts/blog-editorial.mjs --email-body    → HTML+text payload JSON for sending
- *   node scripts/blog-editorial.mjs --scaffold [--date=YYYY-MM-DD]
+ *   node scripts/blog-editorial.mjs --scaffold [--date=YYYY-MM-DD | --slug=slug]
  *   node scripts/blog-editorial.mjs --upcoming=14
- *   node scripts/blog-editorial.mjs --prompt [--date=YYYY-MM-DD]
+ *   node scripts/blog-editorial.mjs --prompt [--date=YYYY-MM-DD | --slug=slug]
+ *   node scripts/blog-editorial.mjs --email-body [--date=YYYY-MM-DD[,YYYY-MM-DD] | --slug=a,b]
  */
 import { createHmac, randomBytes } from 'node:crypto';
 import { readdirSync, readFileSync } from 'node:fs';
 import { access as accessAsync, mkdir as mkdirAsync, writeFile as writeFileAsync } from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const queue = JSON.parse(readFileSync(path.join(root, 'src/data/blogSchedule.data.json'), 'utf8'));
@@ -59,6 +60,7 @@ function parseArgs(argv) {
     scaffold: false,
     prompt: false,
     date: null,
+    slug: null,
     upcoming: null,
     signToken: false,
   };
@@ -69,9 +71,78 @@ function parseArgs(argv) {
     else if (a === '--prompt') out.prompt = true;
     else if (a === '--sign-token') out.signToken = true;
     else if (a.startsWith('--date=')) out.date = a.slice('--date='.length);
+    else if (a.startsWith('--slug=')) out.slug = a.slice('--slug='.length);
     else if (a.startsWith('--upcoming=')) out.upcoming = Number(a.slice('--upcoming='.length));
   }
   return out;
+}
+
+/** @param {string | null | undefined} value */
+export function splitCsv(value) {
+  if (!value) return [];
+  return String(value)
+    .split(',')
+    .map((part) => part.trim())
+    .filter(Boolean);
+}
+
+export class ScheduleMissError extends Error {
+  /**
+   * @param {string} message
+   * @param {{ emailBodySoft?: boolean }} [options]
+   */
+  constructor(message, options = {}) {
+    super(message);
+    this.name = 'ScheduleMissError';
+    this.emailBodySoft = Boolean(options.emailBodySoft);
+  }
+}
+
+/**
+ * Resolve explicit backfill targets. Returns null when neither date nor slug
+ * was passed so the caller can use "today".
+ *
+ * A single unknown date is a soft miss (the daily email job treats that as
+ * "no slot"). An unknown slug, or any miss inside a comma-separated list,
+ * is a hard error so a backfill typo does not look successful.
+ *
+ * @param {{ date: string, slug: string }[]} queue
+ * @param {{ date?: string | null, slug?: string | null }} [selectors]
+ */
+export function resolveEditorialTargets(queue, selectors = {}) {
+  const slugs = splitCsv(selectors.slug);
+  const dates = splitCsv(selectors.date);
+  if (!slugs.length && !dates.length) return null;
+  if (slugs.length && dates.length && slugs.length !== dates.length) {
+    throw new ScheduleMissError('Pass the same number of dates and slugs, or only one of them.');
+  }
+  if (slugs.length && dates.length) {
+    return slugs.map((slug, index) => {
+      const item = queue.find((row) => row.slug === slug);
+      if (!item) throw new ScheduleMissError(`No schedule item for slug ${slug}`);
+      if (item.date !== dates[index]) {
+        throw new ScheduleMissError(`Slug ${slug} is scheduled on ${item.date}, not ${dates[index]}`);
+      }
+      return item;
+    });
+  }
+  if (slugs.length) {
+    return slugs.map((slug) => {
+      const item = queue.find((row) => row.slug === slug);
+      if (!item) throw new ScheduleMissError(`No schedule item for slug ${slug}`);
+      return item;
+    });
+  }
+  return dates.map((date) => {
+    const item = queue.find((row) => row.date === date);
+    if (!item) {
+      throw new ScheduleMissError(
+        `No schedule item for ${date} (every-3-days queue — not every calendar day).`,
+        { emailBodySoft: dates.length === 1 },
+      );
+    }
+    return item;
+  });
 }
 
 function exportNameFromSlug(slug) {
@@ -269,11 +340,19 @@ function escapeHtml(s) {
     .replace(/"/g, '&quot;');
 }
 
+function emailMessageFor(item, secret) {
+  const status = statusOf(item);
+  const summary = { date: item.date, slug: item.slug, workingTitle: item.workingTitle };
+  if (status === 'published') {
+    return { ok: true, skip: true, reason: 'already_published', status, item: summary };
+  }
+  const token = signApproveToken(item, secret || 'd1-opaque');
+  return { ok: true, skip: false, status, token, item: summary, email: buildEmailPayload(item, token) };
+}
+
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   const today = todayInVietnam();
-  const date = args.date || today;
-  const item = queue.find((q) => q.date === date);
 
   if (args.upcoming != null) {
     const list = queue
@@ -291,20 +370,57 @@ async function main() {
     return;
   }
 
-  if (!item) {
-    const msg = {
-      ok: false,
-      today,
-      date,
-      cadence: 'every-3-days',
-      error: `No schedule item for ${date} (every-3-days queue — not every calendar day).`,
-      editorEmail: BLOG_EDITOR_EMAIL,
-    };
-    console.log(JSON.stringify(msg, null, 2));
-    process.exitCode = args.emailBody ? 0 : 2;
+  let targets;
+  try {
+    targets = resolveEditorialTargets(queue, { date: args.date, slug: args.slug });
+  } catch (error) {
+    if (error instanceof ScheduleMissError && error.emailBodySoft && args.emailBody) {
+      console.log(
+        JSON.stringify(
+          {
+            ok: false,
+            today,
+            date: args.date,
+            cadence: 'every-3-days',
+            error: error.message,
+            editorEmail: BLOG_EDITOR_EMAIL,
+          },
+          null,
+          2,
+        ),
+      );
+      return;
+    }
+    console.error(error instanceof Error ? error.message : error);
+    process.exitCode = 1;
     return;
   }
 
+  if (!targets) {
+    const todayItem = queue.find((row) => row.date === today);
+    if (!todayItem) {
+      const msg = {
+        ok: false,
+        today,
+        date: today,
+        cadence: 'every-3-days',
+        error: `No schedule item for ${today} (every-3-days queue — not every calendar day).`,
+        editorEmail: BLOG_EDITOR_EMAIL,
+      };
+      console.log(JSON.stringify(msg, null, 2));
+      process.exitCode = args.emailBody ? 0 : 2;
+      return;
+    }
+    targets = [todayItem];
+  }
+
+  if ((args.prompt || args.scaffold || args.json || !args.emailBody) && targets.length !== 1) {
+    console.error('Pass one --date or one --slug for this command. Comma-separated lists are for --email-body backfill.');
+    process.exitCode = 1;
+    return;
+  }
+
+  const item = targets[0];
   const status = statusOf(item);
 
   if (args.prompt) {
@@ -336,34 +452,26 @@ async function main() {
   }
 
   const secret = process.env.BLOG_APPROVE_SECRET || '';
-  let token = null;
-  if (args.emailBody || args.signToken) {
-    // Opaque token stored in D1 by the email workflow (HMAC optional if secret set)
-    token = signApproveToken(item, secret || 'd1-opaque');
-  }
 
   if (args.emailBody) {
-    if (status === 'published') {
-      console.log(
-        JSON.stringify(
-          {
-            ok: true,
-            skip: true,
-            reason: 'already_published',
-            today,
-            status,
-            item: { date: item.date, slug: item.slug, workingTitle: item.workingTitle },
-          },
-          null,
-          2,
-        ),
-      );
-      return;
-    }
-    const payload = buildEmailPayload(item, token);
-    console.log(JSON.stringify({ ok: true, skip: false, today, status, token, email: payload }, null, 2));
+    const messages = targets.map((row) => emailMessageFor(row, secret));
+    const first = messages[0];
+    console.log(
+      JSON.stringify(
+        {
+          ok: true,
+          today,
+          messages,
+          ...(messages.length === 1 ? first : {}),
+        },
+        null,
+        2,
+      ),
+    );
     return;
   }
+
+  const token = args.signToken ? signApproveToken(item, secret || 'd1-opaque') : null;
 
   if (args.json) {
     console.log(
@@ -371,7 +479,7 @@ async function main() {
         {
           ok: true,
           today,
-          date,
+          date: item.date,
           status,
           cadence: 'every-3-days',
           editorEmail: BLOG_EDITOR_EMAIL,
@@ -385,13 +493,17 @@ async function main() {
     return;
   }
 
-  console.log(`Blog every-3-days — ${date} [${status}]`);
+  console.log(`Blog every-3-days — ${item.date} [${status}]`);
   console.log(`Slug:  ${item.slug}`);
   console.log(`Title: ${item.workingTitle.en}`);
   console.log(`Editor email: ${BLOG_EDITOR_EMAIL}`);
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exitCode = 1;
-});
+const isMain =
+  process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href;
+if (isMain) {
+  main().catch((err) => {
+    console.error(err);
+    process.exitCode = 1;
+  });
+}

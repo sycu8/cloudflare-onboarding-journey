@@ -30,6 +30,8 @@ import { postQueuesHangDoiMessageTrenWorkers } from './blogPosts/queues-hang-doi
 import { postDurableObjectsPhoiHopTrangThaiEdge } from './blogPosts/durable-objects-trang-thai';
 import { postTurnstileThayCaptchaBaoVeForm } from './blogPosts/turnstile-thay-captcha';
 import { postTunnelCloudflaredKhongMoPort } from './blogPosts/tunnel-cloudflared-port';
+import { postEmailRoutingVaEmailWorkers } from './blogPosts/email-routing-va-email-workers';
+import { postArgoSmartRoutingGiamDoTre } from './blogPosts/argo-smart-routing-giam-do-tre';
 
 export type BlogTopic = 'ai' | 'security' | 'cdn' | 'workers' | 'developer-platform';
 export type BlogLevel = 'entry' | 'intermediate';
@@ -155,6 +157,8 @@ export const blogPosts: BlogPost[] = [
   postDurableObjectsPhoiHopTrangThaiEdge,
   postTurnstileThayCaptchaBaoVeForm,
   postTunnelCloudflaredKhongMoPort,
+  postEmailRoutingVaEmailWorkers,
+  postArgoSmartRoutingGiamDoTre,
 ].sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
 
 export function getBlogPost(slug: string): BlogPost | undefined {
