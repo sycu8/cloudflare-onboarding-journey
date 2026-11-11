@@ -49,6 +49,7 @@
     "test:tutorial-html": "node --experimental-strip-types scripts/test-sanitize-tutorial-html.mjs",
     "test:blog-cadence": "node --experimental-strip-types scripts/test-blog-cadence.mjs",
     "verify:i18n": "node scripts/verify-i18n.mjs",
+    "test:track-flow": "node scripts/test-track-flow.mjs",
     "astro": "astro"
   },
   "dependencies": {

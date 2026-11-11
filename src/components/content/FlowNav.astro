@@ -1,0 +1,61 @@
+---
+import LangText from '../ui/LangText.astro';
+import type { FlowItem } from '../../data/trackFlow';
+import type { LocalizedString } from '../../i18n/types';
+import type { LessonKind } from '../../data/lessonKind';
+
+type Props = {
+  prev?: FlowItem;
+  next?: FlowItem;
+  trackHref: string;
+  doneCta?: { href: string; label: LocalizedString };
+};
+
+const { prev, next, trackHref, doneCta } = Astro.props;
+
+const kindLabel: Record<LessonKind, { vi: string; en: string }> = {
+  knowledge: { vi: 'Kiến thức', en: 'Knowledge' },
+  reference: { vi: 'Tham chiếu', en: 'Reference' },
+  'lab-hub': { vi: 'Lab (hub)', en: 'Lab (hub)' },
+  'lab-official': { vi: 'Lab (Cloudflare)', en: 'Lab (Cloudflare)' },
+};
+---
+
+<nav class="mb-6 flex flex-col gap-3 border-t border-[var(--cf-border)] pt-6 sm:flex-row sm:flex-wrap" aria-label="Lesson navigation">
+  {prev ? (
+    <a class="btn btn-secondary max-w-full text-left" href={prev.href}>
+      <span class="block text-[0.65rem] font-semibold uppercase tracking-wide opacity-70">
+        <span class="lang-vi">{kindLabel[prev.kind].vi}</span>
+        <span class="lang-en">{kindLabel[prev.kind].en}</span>
+        <span class="lang-km">{kindLabel[prev.kind].en}</span>
+      </span>
+      <span class="mt-0.5 block">
+        <span class="lang-vi">← {prev.title.vi}</span>
+        <span class="lang-en">← {prev.title.en}</span>
+        <span class="lang-km">← {prev.title.km ?? prev.title.en}</span>
+      </span>
+    </a>
+  ) : (
+    <a class="btn btn-secondary" href={trackHref}>
+      <LangText text={{ vi: '← Về lộ trình', en: '← Back to track' }} />
+    </a>
+  )}
+  {next ? (
+    <a class="btn btn-primary ml-auto max-w-full text-left" href={next.href} data-flow-next={next.kind}>
+      <span class="block text-[0.65rem] font-semibold uppercase tracking-wide opacity-80">
+        <span class="lang-vi">{kindLabel[next.kind].vi}</span>
+        <span class="lang-en">{kindLabel[next.kind].en}</span>
+        <span class="lang-km">{kindLabel[next.kind].en}</span>
+      </span>
+      <span class="mt-0.5 block">
+        <span class="lang-vi">{next.title.vi} →</span>
+        <span class="lang-en">{next.title.en} →</span>
+        <span class="lang-km">{next.title.km ?? next.title.en} →</span>
+      </span>
+    </a>
+  ) : doneCta ? (
+    <a class="btn btn-primary ml-auto" href={doneCta.href}>
+      <LangText text={doneCta.label} />
+    </a>
+  ) : null}
+</nav>

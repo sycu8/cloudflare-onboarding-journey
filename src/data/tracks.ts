@@ -1,10 +1,24 @@
 import type { LocalizedString } from '../i18n/types';
+import type { LessonKind } from './lessonKind';
+
+export type { LessonKind };
 
 export type TrackLesson = {
   title: LocalizedString;
   body: LocalizedString;
   tip?: LocalizedString;
   hubLink?: string;
+  /**
+   * knowledge | lab-hub | lab-official.
+   * Omit to use the temporary module tags in `inferLessonKind`.
+   */
+  kind?: LessonKind;
+  /** Estimated time for this lesson. Hub labs fall back to the follow-along time. */
+  duration?: LocalizedString;
+  /** Lesson ids the reader should finish first. */
+  prerequisites?: string[];
+  /** Lesson ids this item depends on. Labs should point at knowledge lessons. */
+  dependsOn?: string[];
 };
 
 export type TrackModuleRole = 'required' | 'recommended' | 'optional' | 'deep-dive' | 'reference';
@@ -438,6 +452,7 @@ export const tracks: Track[] = [
           },
           {
             title: { vi: 'Sổ tay cấu hình (dashboard runbook)', en: 'Configuration runbook (dashboard)', km: 'runbook កំណត់រចនាសម្ព័ន្ធ (dashboard)' },
+            duration: { vi: '~10 phút', en: '~10 min', km: '~10 នាទី' },
             body: {
               vi: 'Add site → DNS → Proxied → Full (strict) → Origin CA → WAF Log → /login 10/phút → Cache Rules → Analytics.',
               en: 'Add site → DNS → Proxied → Full (strict) → Origin CA → WAF Log → /login 10/min → Cache Rules → Analytics.',
@@ -957,6 +972,7 @@ export const tracks: Track[] = [
           },
           {
             title: { vi: 'Sổ tay lệnh (C3 / wrangler / Pages)', en: 'Command runbook (C3 / wrangler / Pages)', km: 'Command runbook (C3 / wrangler / Pages)' },
+            duration: { vi: '~10 phút', en: '~10 min', km: '~10 នាទី' },
             body: {
               vi: 'create cloudflare → login/dev/deploy → secret put → kv/d1/r2 → tail → Pages Git dist.',
               en: 'create cloudflare → login/dev/deploy → secret put → kv/d1/r2 → tail → Pages Git dist.',
@@ -1503,7 +1519,7 @@ export const tracks: Track[] = [
           vi: 'Hướng dẫn chiến lược rollout (10 golden rules) và bảng cấu hình đầy đủ từng field trên dashboard.',
           en: 'Rollout strategy (10 golden rules) and the full dashboard field-by-field configuration runbook.',
         },
-        duration: { vi: 'Tham chiếu', en: 'Reference' },
+        duration: { vi: '~20 phút', en: '~20 min' },
         lessons: [
           {
             title: { vi: 'Hướng dẫn thực hành tốt (best-practice guide)', en: 'Best-practice guide' },
@@ -1629,15 +1645,15 @@ export const tracks: Track[] = [
     outcomes: { vi: ['Inventory Shadow AI và policy theo risk', 'Áp SWG/RBI/CASB/DLP cho AI SaaS', 'Bảo vệ AI app với Gateway, WAF và bot controls', 'Thiết kế RAG/agent có authorization rõ ràng'], en: ['Inventory Shadow AI and policy by risk', 'Apply SWG/RBI/CASB/DLP to AI SaaS', 'Protect AI apps with Gateway, WAF, and bot controls', 'Design RAG/agents with clear authorization'] },
     keyConcepts: ['Shadow AI', 'CASB', 'SWG', 'RBI', 'DLP', 'AI Gateway', 'Firewall for AI', 'RAG', 'Agents'],
     modules: [
-      { id: 'asa-1', title: { vi: 'Phần 1: Quản trị AI doanh nghiệp', en: 'Part 1: Enterprise AI governance' }, description: { vi: 'Visibility, policy và SaaS controls.', en: 'Visibility, policy, and SaaS controls.' }, lessons: [
+      { id: 'asa-1', title: { vi: 'Phần 1: Quản trị AI doanh nghiệp', en: 'Part 1: Enterprise AI governance' }, description: { vi: 'Visibility, policy và SaaS controls.', en: 'Visibility, policy, and SaaS controls.' }, duration: { vi: '~30 phút', en: '~30 min' }, lessons: [
         { title: { vi: 'CASB: Shadow AI và posture', en: 'CASB: Shadow AI and posture' }, body: { vi: 'Inventory AI SaaS, review token/user findings và remediation theo data sensitivity.', en: 'Inventory AI SaaS, review token/user findings, and remediate by data sensitivity.' }, hubLink: '/cheatsheets/ai-protection-portfolio#casb' },
         { title: { vi: 'SWG và RBI cho web AI', en: 'SWG and RBI for web AI' }, body: { vi: 'Discover, allow/block/steer AI destinations; isolate browsing/upload risk cao.', en: 'Discover, allow/block/steer AI destinations; isolate high-risk browsing/uploads.' }, hubLink: '/cheatsheets/ai-protection-portfolio#swg-rbi' },
       ]},
-      { id: 'asa-2', title: { vi: 'Phần 2: AI application controls', en: 'Part 2: AI application controls' }, description: { vi: 'Gateway, WAF và security baseline.', en: 'Gateway, WAF, and the security baseline.' }, lessons: [
+      { id: 'asa-2', title: { vi: 'Phần 2: AI application controls', en: 'Part 2: AI application controls' }, description: { vi: 'Gateway, WAF và security baseline.', en: 'Gateway, WAF, and the security baseline.' }, duration: { vi: '~30 phút', en: '~30 min' }, lessons: [
         { title: { vi: 'AI Gateway: routing và audit', en: 'AI Gateway: routing and audit' }, body: { vi: 'Route provider, observe usage và apply guardrails mà không đưa credential ra client.', en: 'Route providers, observe usage, and apply guardrails without exposing credentials to clients.' }, hubLink: '/cheatsheets/ai-protection-portfolio#ai-gateway' },
         { title: { vi: 'WAF, bots và prompt protection', en: 'WAF, bots, and prompt protection' }, body: { vi: 'Treat model output as untrusted; validate tools, rate limit endpoint và apply Firewall for AI policies.', en: 'Treat model output as untrusted; validate tools, rate-limit endpoints, and apply Firewall for AI policies.' }, hubLink: '/cheatsheets/ai-protection-portfolio#app-security' },
       ]},
-      { id: 'asa-3', title: { vi: 'Phần 3: Build AI có trách nhiệm', en: 'Part 3: Build AI responsibly' }, description: { vi: 'RAG và agent với data/tool boundaries.', en: 'RAG and agents with data/tool boundaries.' }, lessons: [
+      { id: 'asa-3', title: { vi: 'Phần 3: Build AI có trách nhiệm', en: 'Part 3: Build AI responsibly' }, description: { vi: 'RAG và agent với data/tool boundaries.', en: 'RAG and agents with data/tool boundaries.' }, duration: { vi: '~30 phút', en: '~30 min' }, lessons: [
         { title: { vi: 'RAG với Vectorize và access scope', en: 'RAG with Vectorize and access scope' }, body: { vi: 'Authorize trước retrieval; metadata ACL và source citation không phải optional.', en: 'Authorize before retrieval; ACL metadata and source citation are not optional.' } },
         { title: { vi: 'Agents, tools và least privilege', en: 'Agents, tools, and least privilege' }, body: { vi: 'Tool nhỏ, typed, auditable; model không được tự cấp quyền hay secret.', en: 'Tools should be small, typed, and auditable; a model must not grant itself access or secrets.' } },
       ]},

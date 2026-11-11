@@ -10,6 +10,11 @@ import {
 } from '../../../../../data/developerLabs';
 import { getLabArticles, loc } from '../../../../../data/developerLabArticles';
 import { labChrome } from '../../../../../data/developerLabs.copy';
+import LessonKindBadge from '../../../../../components/content/LessonKindBadge.astro';
+import FlowNav from '../../../../../components/content/FlowNav.astro';
+import TrackToc from '../../../../../components/interactive/TrackToc';
+import TrackLessonDone from '../../../../../components/interactive/TrackLessonDone';
+import { estimateBadge, getFlowNeighbors, getTrackFlow } from '../../../../../data/trackFlow';
 
 export function getStaticPaths() {
   return developerLabTracks.map((track) => ({ params: { labId: track.id } }));
@@ -20,6 +25,21 @@ const track = developerLabTracks.find((item) => item.id === labId);
 if (!track) throw new Error(`Lab track not found: ${labId}`);
 const articles = getLabArticles(labId);
 const first = articles[0];
+const flowKey = `official:${labId}`;
+const neighbors = getFlowNeighbors('developer-platform', flowKey);
+const prereqs = (neighbors.current?.prerequisiteIds ?? [])
+  .map((id) => neighbors.flow.find((item) => item.key === id))
+  .filter((item): item is NonNullable<typeof item> => !!item);
+const tocItems = getTrackFlow('developer-platform').map((item) => ({
+  key: item.key,
+  kind: item.kind,
+  href: item.href,
+  title: item.title,
+  moduleId: item.moduleId,
+  moduleTitle: item.moduleTitle,
+  duration: item.duration ?? null,
+  minutes: item.minutes,
+}));
 ---
 
 <BaseLayout
@@ -39,7 +59,20 @@ const first = articles[0];
     ]}
   />
 
+  <div class="track-layout">
+    <TrackToc client:load trackSlug="developer-platform" items={tocItems} currentKey={flowKey} />
+    <div class="min-w-0">
+
   <header class="lab-track-head mb-8">
+    <div class="mb-3 flex flex-wrap items-center gap-2">
+      <LessonKindBadge kind="lab-official" />
+      {neighbors.current?.duration ? (
+        <span class="badge">
+          <LangText text={estimateBadge(neighbors.current.duration)} />
+        </span>
+      ) : null}
+      <TrackLessonDone client:load itemKey={flowKey} />
+    </div>
     <p class="font-mono text-sm font-bold text-[var(--cf-accent)]">{track.number}</p>
     <LangText as="h1" class="mt-1 text-2xl font-semibold text-white md:text-3xl" text={track.title} />
     <p class="mt-1 text-sm font-medium text-[var(--cf-accent)]">
@@ -47,6 +80,21 @@ const first = articles[0];
     </p>
     <LangText as="p" class="mt-3 max-w-3xl text-sm leading-relaxed text-white/80" text={track.description} />
     <LangText as="p" class="mt-3 max-w-3xl text-xs leading-relaxed text-white/60" text={track.whenInHub} />
+    {prereqs.length > 0 ? (
+      <p class="mt-3 text-xs leading-relaxed text-white/80">
+        <span class="lang-vi">Nên đọc trước: </span>
+        <span class="lang-en">Read first: </span>
+        <span class="lang-km">Read first: </span>
+        {prereqs.map((item, index) => (
+          <>
+            {index > 0 ? <span>, </span> : null}
+            <a class="link" href={item.href}>
+              <LangText text={item.title} />
+            </a>
+          </>
+        ))}
+      </p>
+    ) : null}
     <div class="mt-5 flex flex-wrap gap-2">
       {first ? (
         <a class="btn btn-primary" href={developerLabHubPath(labId, first.id)}>
@@ -88,6 +136,14 @@ const first = articles[0];
       );
     })}
   </ol>
+
+  <FlowNav
+    prev={neighbors.prev}
+    next={neighbors.next}
+    trackHref="/tracks/developer-platform/"
+  />
+    </div>
+  </div>
 </BaseLayout>
 
 <style>

@@ -39,6 +39,11 @@ export type DeveloperLabTrack = {
   labCount: number;
   /** Hub modules this lab complements (e.g. dp-1, dp-3) */
   hubModuleIds: string[];
+  /**
+   * Hub lesson ids this official lab follows.
+   * When empty, the track flow places the lab after the last lesson of hubModuleIds[0].
+   */
+  dependsOn?: string[];
   whenInHub: LocalizedString;
   labs: DeveloperLabStep[];
 };
@@ -171,6 +176,7 @@ const developerLabTracksRaw: DeveloperLabTrack[] = [
     tags: ['Custom Tools', 'Zod', 'External APIs', 'KV'],
     labCount: 7,
     hubModuleIds: ['dp-3', 'dp-5'],
+    dependsOn: ['dp-3-l1', 'dp-5-l5'],
     whenInHub: {
       vi: 'Sau Phần 5 (tools/agent) và khi đã quen KV ở Phần 3. Luyện schema + authorization phía server.',
       en: 'After Part 5 (tools/agents) and once KV from Part 3 is familiar. Practice schemas and server-side authorization.',
@@ -302,6 +308,7 @@ const developerLabTracksRaw: DeveloperLabTrack[] = [
     tags: ['Secure Execution', 'AI Code Generation', 'Containers', 'Workers AI'],
     labCount: 7,
     hubModuleIds: ['dp-4', 'dp-5'],
+    dependsOn: ['dp-5-l1'],
     whenInHub: {
       vi: 'Sau Phần 5 (AI) và Phần 4 (vận hành/secret). Lab bảo mật khớp golden rules: secret không lên client.',
       en: 'After Part 5 (AI) and Part 4 (operate/secrets). The security labs match the golden rules: secrets stay off the client.',
