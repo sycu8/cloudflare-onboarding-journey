@@ -1,5 +1,14 @@
 import type { LocalizedString } from '../i18n/types';
 import type { LessonKind } from './lessonKind';
+import {
+  asApiLesson,
+  asArchitectureLesson,
+  asCacheLesson,
+  asDnsLesson,
+  asSslLesson,
+  asTrafficLesson,
+  asWafLesson,
+} from './asKnowledgeLessons';
 
 export type { LessonKind };
 
@@ -8,11 +17,22 @@ export type TrackLesson = {
   body: LocalizedString;
   tip?: LocalizedString;
   hubLink?: string;
+  /** Stable URL id. When omitted, the id is `{moduleId}-l{n}` among lessons that also omit it. */
+  id?: string;
   /**
-   * knowledge | lab-hub | lab-official.
+   * knowledge | reference | lab-hub | lab-official.
    * Omit to use the temporary module tags in `inferLessonKind`.
    */
   kind?: LessonKind;
+  /** Structured sections for a knowledge lesson. */
+  guide?: {
+    how: LocalizedString;
+    architecture: LocalizedString;
+    whenToUse: LocalizedString;
+    whenNot: LocalizedString;
+    planNotes: LocalizedString;
+    terms: { term: string | LocalizedString; detail: LocalizedString }[];
+  };
   /** Estimated time for this lesson. Hub labs fall back to the follow-along time. */
   duration?: LocalizedString;
   /** Lesson ids the reader should finish first. */
@@ -38,6 +58,8 @@ export type TrackStartHere = {
   checklistTitle: LocalizedString;
   checklist: { vi: string[]; en: string[]; km?: string[] };
   planNote: LocalizedString;
+  /** Shown under the plan table. Not a price quote. */
+  planFootnote?: LocalizedString;
   planRows: {
     capability: LocalizedString;
     free: LocalizedString;
@@ -84,18 +106,18 @@ export const tracks: Track[] = [
     slug: 'application-services',
     title: { vi: 'Application Services', en: 'Application Services', km: 'Application Services' },
     headline: {
-      vi: 'Follow-along: DNS → proxy → SSL → WAF → cache — rồi mới rẽ API Shield hoặc Load Balancing',
-      en: 'Follow-along: DNS → proxy → SSL → WAF → cache — then branch to API Shield or Load Balancing',
-      km: 'Follow-along: DNS → proxy → SSL → WAF → cache — បន្ទាប់មកទើបបែកផ្លូវទៅ API Shield ឬ Load Balancing',
+      vi: 'DNS, proxy, SSL, WAF rồi cache — hiểu trước, làm lab sau',
+      en: 'DNS, proxy, SSL, WAF, then cache — learn the idea, then do the lab',
+      km: 'DNS, proxy, SSL, WAF then cache — learn the idea, then do the lab',
     },
     promise: {
-      vi: 'Làm đúng từng bước trên dashboard: zone chạy, HTTPS Full (strict), WAF log rồi block, cache không phá session.',
-      en: 'Click through the dashboard: a live zone, Full (strict) HTTPS, WAF log-then-block, cache that does not break sessions.',
-      km: 'ចុចតាម dashboard៖ zone កំពុងដំណើរការ, HTTPS Full (strict), WAF log-then-block, cache ដែលមិនបំបែក session។',
+      vi: 'Lộ trình cho website hoặc API đang chạy: kiến trúc, khi nào dùng từng lớp, rồi lab bấm theo trên dashboard.',
+      en: 'A path for a live website or API: the architecture, when to use each layer, then a dashboard lab.',
+      km: 'A path for a live website or API: the architecture, when to use each layer, then a dashboard lab.',
     },
     description: {
-      vi: 'Lộ trình follow-along cho team đã có website, web app hoặc API public. Làm theo thứ tự — mỗi phần xây trên phần trước. Dừng sau bất kỳ phần bắt buộc nào vẫn có giá trị. Use case (bảo vệ site / API / DDoS) là cửa chọn; track này là đường làm.',
-      en: 'A follow-along path for teams with a live website, web app, or public API. Work in order — each part builds on the last. Stopping after any required part still leaves something useful. Use cases (protect site / API / DDoS) are the doorway; this track is the how-to.',
+      vi: 'Lộ trình cho team đã có website, web app hoặc API public. Đọc bài kiến thức trước, rồi làm lab của phần đó. Dừng sau phần bắt buộc vẫn có giá trị. API Shield và Load Balancing là nhánh sau, không phải bước đầu.',
+      en: 'A path for teams with a live website, web app, or public API. Read the knowledge lesson, then do that part’s lab. Stopping after a required part still leaves something useful. API Shield and Load Balancing are later branches, not the first step.',
       km: 'ផ្លូវ follow-along សម្រាប់ team ដែលមាន website, web app ឬ API សាធារណៈ កំពុងដំណើរការ។ ធ្វើតាមលំដាប់ — ផ្នែកនីមួយៗសង់លើផ្នែកមុន។ បញ្ឈប់បន្ទាប់ពីផ្នែកចាំបាច់ណាមួយ នៅតែទុកអ្វីដែលមានប្រយោជន៍។ ករណីប្រើប្រាស់ (ការពារ site / API / DDoS) គឺជាច្រកចូល; track នេះគឺរបៀបធ្វើ។',
     },
     whoIsThisFor: {
@@ -166,8 +188,8 @@ export const tracks: Track[] = [
     ],
     startHere: {
       intro: {
-        vi: 'Đây là hướng dẫn follow-along. Làm đúng từng bước: click, nhập, checkpoint. Nhãn menu có thể đổi — chọn mục tương đương gần nhất. Use case trên hub giúp chọn đường; đừng rẽ API Shield hay Load Balancing trước khi proxy + SSL + WAF log ổn.',
-        en: 'This is a follow-along guide. Do exactly what each step says: click, type, checkpoint. Menu labels shift — follow the nearest equivalent. Hub use cases help you choose a path; do not branch into API Shield or Load Balancing before proxy + SSL + WAF log are healthy.',
+        vi: 'Đọc bài kiến thức của từng phần trước, rồi làm lab. Nhãn menu có thể đổi — chọn mục tương đương. Đừng rẽ API Shield hay Load Balancing trước khi proxy, SSL và WAF đã ổn.',
+        en: 'Read each part’s knowledge lesson, then do the lab. Menu labels change — pick the closest match. Do not branch into API Shield or Load Balancing before the proxy, SSL, and WAF are in place.',
         km: 'នេះជាមគ្គុទេសក៍ follow-along។ ធ្វើតាមពិតប្រាកដនូវអ្វីដែលជំហាននីមួយៗនិយាយ៖ click, type, checkpoint។ ស្លាក menu អាចផ្លាស់ប្តូរ — តាមគោលដៅសមមូលជិតបំផុត។ ករណីប្រើប្រាស់នៅ hub ជួយអ្នកជ្រើសរើសផ្លូវ; កុំបែកផ្លូវទៅ API Shield ឬ Load Balancing មុនពេល proxy + SSL + WAF log មានស្ថិរភាព។',
       },
       checklistTitle: { vi: 'Trước khi Add a site', en: 'Before you Add a site', km: 'មុនពេលអ្នក Add a site' },
@@ -177,34 +199,47 @@ export const tracks: Track[] = [
           'Screenshot hoặc zone file DNS hiện tại (MX, TXT, SPF/DKIM, verification)',
           'Quyền SSH/firewall origin nếu sẽ lockdown IP',
           'Ghi: hostname production (www vs apex), path nhạy cảm đầu tiên (/login hoặc /api), plan hiện tại',
-          'Quyết định: full setup (đổi NS) hay partial/CNAME (Business+)',
+          'Quyết định: full setup (đổi nameserver) hay CNAME setup (chỉ Business hoặc Enterprise — không phải Custom Hostnames)',
         ],
         en: [
           'A live domain (or staging) and permission to change nameservers at the registrar',
           'Screenshot or zone file of current DNS (MX, TXT, SPF/DKIM, verification)',
           'SSH/firewall access to origin if you will lock down IPs',
           'Write down: production hostname (www vs apex), first sensitive path (/login or /api), current plan',
-          'Decide: full setup (change NS) or partial/CNAME (Business+)',
+          'Decide: full setup (change nameservers) or CNAME setup (Business or Enterprise only — not Custom Hostnames)',
         ],
       km: [
         'A live domain (or staging) and permission to change nameservers at the registrar',
         'Screenshot or zone file of current DNS (MX, TXT, SPF/DKIM, verification)',
         'SSH/firewall access to origin if you will lock down IPs',
         'Write down: production hostname (www vs apex), first sensitive path (/login or /api), current plan',
-        'Decide: full setup (change NS) or partial/CNAME (Business+)',
+        'Decide: full setup (change nameservers) or CNAME setup (Business or Enterprise only — not Custom Hostnames)',
       ],
       },
       planNote: {
-        vi: 'Bắt đầu Free để học Phần 1–4. Nâng cấp khi Bot Management, API Shield, Load Balancing hoặc Waiting Room bị greyed out — không đoán feature.',
-        en: 'Start on Free to learn Parts 1–4. Upgrade when Bot Management, API Shield, Load Balancing, or Waiting Room is greyed out — do not guess entitlements.',
-        km: 'ចាប់ផ្តើមនៅ Free ដើម្បីរៀនផ្នែក 1–4។ Upgrade ពេល Bot Management, API Shield, Load Balancing ឬ Waiting Room ត្រូវបាន greyed out — កុំទាយ entitlements។',
+        vi: 'Số trong bảng lấy từ docs ngày 2026-11-11. Mỗi dòng là một sản phẩm. Giá add-on xem trên dashboard, không chép ở đây.',
+        en: 'The numbers in the table are from the docs on 2026-11-11. Each row is one product. Add-on prices are on the dashboard, not copied here.',
+        km: 'The numbers in the table are from the docs on 2026-11-11. Each row is one product. Add-on prices are on the dashboard, not copied here.',
+      },
+      planFootnote: {
+        vi: 'Không phải báo giá; đối chiếu Cloudflare Plans / product docs và dashboard. Kiểm tra lần cuối: 2026-11-11.',
+        en: 'Not a price quote; check Cloudflare Plans / product docs and the dashboard. Last checked: 2026-11-11.',
       },
       planRows: [
-        { capability: { vi: 'Add site, DNS, proxy, Universal SSL', en: 'Add site, DNS, proxy, Universal SSL', km: 'Add site, DNS, proxy, Universal SSL' }, free: { vi: 'Có', en: 'Yes', km: 'Yes' }, paid: { vi: 'Có', en: 'Yes', km: 'Yes' } },
-        { capability: { vi: 'WAF managed / rate limit', en: 'WAF managed / rate limit', km: 'WAF managed / rate limit' }, free: { vi: 'Cơ bản, ít rule', en: 'Basic, few rules', km: 'មូលដ្ឋាន, rule តិច' }, paid: { vi: 'Đầy đủ hơn ở Pro/Biz/Ent', en: 'Fuller on Pro/Biz/Ent', km: 'ពេញលេញជាងនៅ Pro/Biz/Ent' } },
-        { capability: { vi: 'Bot Fight / Super Bot / Bot Management', en: 'Bot Fight / Super Bot / Bot Management', km: 'Bot Fight / Super Bot / Bot Management' }, free: { vi: 'Bot Fight', en: 'Bot Fight', km: 'Bot Fight' }, paid: { vi: 'Super Bot (Pro+); Bot Management (Ent)', en: 'Super Bot (Pro+); Bot Management (Ent)', km: 'Super Bot (Pro+); Bot Management (Ent)' } },
-        { capability: { vi: 'Cache Rules, Speed, Images', en: 'Cache Rules, Speed, Images', km: 'Cache Rules, Speed, Images' }, free: { vi: 'Cache Rules giới hạn', en: 'Limited Cache Rules', km: 'Cache Rules មានកំណត់' }, paid: { vi: 'Nhiều rule; Images/Argo add-on', en: 'More rules; Images/Argo add-on', km: 'rule ច្រើនជាង; Images/Argo add-on' } },
-        { capability: { vi: 'API Shield, mTLS, Load Balancing, Waiting Room', en: 'API Shield, mTLS, Load Balancing, Waiting Room', km: 'API Shield, mTLS, Load Balancing, Waiting Room' }, free: { vi: 'Không / rất hạn chế', en: 'No / very limited', km: 'ទេ / មានកំណត់ខ្លាំង' }, paid: { vi: 'Add-on hoặc Enterprise', en: 'Add-on or Enterprise', km: 'Add-on ឬ Enterprise' } },
+        { capability: { vi: 'Full setup (đổi nameserver), proxy, Universal SSL cho hostname Proxied', en: 'Full setup (nameserver change), proxy, Universal SSL for Proxied hostnames' }, free: { vi: 'Có', en: 'Yes' }, paid: { vi: 'Có', en: 'Yes' } },
+        { capability: { vi: 'CNAME setup (partial)', en: 'CNAME setup (partial)' }, free: { vi: 'Không. Free và Pro chỉ full setup', en: 'No. Free and Pro are full setup only' }, paid: { vi: 'Business và Enterprise', en: 'Business and Enterprise' } },
+        { capability: { vi: 'WAF managed rules', en: 'WAF managed rules' }, free: { vi: 'Chỉ Free Managed Ruleset', en: 'Free Managed Ruleset only' }, paid: { vi: 'Pro trở lên: Cloudflare Managed Ruleset', en: 'Pro and above: Cloudflare Managed Ruleset' } },
+        { capability: { vi: 'Custom rules (số luật)', en: 'Custom rules (count)' }, free: { vi: '5', en: '5' }, paid: { vi: 'Pro 20, Business 100, Enterprise 1.000', en: 'Pro 20, Business 100, Enterprise 1,000' } },
+        { capability: { vi: 'Rate limiting rules (số luật)', en: 'Rate limiting rules (count)' }, free: { vi: '1 luật, kỳ đếm 10 giây. Action xem dashboard — bảng docs không ghi Block là action duy nhất', en: '1 rule, 10-second counting period. Check the action in the dashboard — the docs table does not list Block as the only action' }, paid: { vi: 'Pro 2, Business 5. Enterprise: bảng docs ghi 100 nếu hợp đồng có application security; footnote nói số phụ thuộc hợp đồng', en: 'Pro 2, Business 5. Enterprise: the docs table shows 100 when the contract includes application security; a footnote says the count depends on the contract' } },
+        { capability: { vi: 'Bot', en: 'Bots' }, free: { vi: 'Bot Fight Mode', en: 'Bot Fight Mode' }, paid: { vi: 'Super Bot Fight Mode trên Pro/Business/Enterprise. Bot Management là add-on Enterprise', en: 'Super Bot Fight Mode on Pro/Business/Enterprise. Bot Management is an Enterprise add-on' } },
+        { capability: { vi: 'Cache Rules (số rule)', en: 'Cache Rules (count)' }, free: { vi: '10', en: '10' }, paid: { vi: 'Pro 25, Business 50, Enterprise 300', en: 'Pro 25, Business 50, Enterprise 300' } },
+        { capability: { vi: 'Argo Smart Routing', en: 'Argo Smart Routing' }, free: { vi: 'Add-on, không nằm trong gói zone. Giá trên dashboard', en: 'Add-on, not part of the zone plan. Price on the dashboard' }, paid: { vi: 'Cùng vậy (nay gắn với Smart Shield)', en: 'Same (now offered with Smart Shield)' } },
+        { capability: { vi: 'Cloudflare Images', en: 'Cloudflare Images' }, free: { vi: 'Sản phẩm riêng. Xem docs và dashboard, bài này không kết luận gói', en: 'A separate product. See the docs and dashboard; this table does not assign a plan' }, paid: { vi: 'Xem docs Images và dashboard', en: 'See the Images docs and the dashboard' } },
+        { capability: { vi: 'API Shield', en: 'API Shield' }, free: { vi: 'Bộ sản phẩm API Security là Enterprise. Bộ đầy đủ là add-on', en: 'API Security products are Enterprise. The full suite is an add-on' }, paid: { vi: 'Enterprise add-on. Xem trang plans trước khi làm', en: 'Enterprise add-on. Read the plans page before you build' } },
+        { capability: { vi: 'mTLS (CA do Cloudflare quản lý)', en: 'mTLS (Cloudflare-managed CA)' }, free: { vi: 'Docs nói ai cũng dựng được. Đối chiếu trang API Shield', en: 'Docs say anyone can set it up. Check the API Shield page' }, paid: { vi: 'Cùng câu đó. Không suy ra từ gói zone', en: 'Same sentence. Do not infer it from the zone plan' } },
+        { capability: { vi: 'Load Balancing', en: 'Load Balancing' }, free: { vi: 'Add-on, không nằm trong gói zone', en: 'Add-on, not part of the zone plan' }, paid: { vi: 'Add-on. Giá trên dashboard', en: 'Add-on. Price on the dashboard' } },
+        { capability: { vi: 'Waiting Room', en: 'Waiting Room' }, free: { vi: 'Không', en: 'No' }, paid: { vi: 'Không trên Pro. Business và Enterprise: 1 phòng cơ bản. Nâng cao là add-on Enterprise', en: 'Not on Pro. Business and Enterprise: 1 basic room. Advanced is an Enterprise add-on' } },
+        { capability: { vi: 'DDoS (HTTP và mạng) khi đã proxy', en: 'DDoS (HTTP and network) once proxied' }, free: { vi: 'Luôn bật, mọi gói', en: 'Always on, every plan' }, paid: { vi: 'Luôn bật. DDoS cho DNS authoritative chỉ có ở full setup', en: 'Always on. Authoritative DNS DDoS is full setup only' } },
       ],
     },
     modules: [
@@ -218,16 +253,7 @@ export const tracks: Track[] = [
         },
         duration: { vi: '~15 phút', en: '~15 min', km: '~15 នាទី' },
         role: 'required',
-        lessons: [
-          {
-            title: { vi: 'Kiến trúc Application Services và thứ tự onboarding', en: 'Application Services architecture and onboarding order', km: 'ស្ថាបត្យកម្ម Application Services និងលំដាប់ onboarding' },
-            body: {
-              vi: 'Proxy phải bật trước WAF và cache. Use case là cửa chọn — đừng rẽ API Shield hay Load Balancing trước nền.',
-              en: 'Proxy must be on before WAF and cache. Use cases are the doorway — do not branch to API Shield or Load Balancing before the spine.',
-              km: 'Proxy ត្រូវតែបើកមុន WAF និង cache។ ករណីប្រើប្រាស់គឺជាច្រកចូល — កុំបែកផ្លូវទៅ API Shield ឬ Load Balancing មុនគ្រឹះ។',
-            },
-          },
-        ],
+        lessons: [asArchitectureLesson],
       },
       {
         id: 'as-1',
@@ -240,7 +266,10 @@ export const tracks: Track[] = [
         duration: { vi: '~45 phút', en: '~45 min', km: '~45 នាទី' },
         role: 'required',
         lessons: [
+          asDnsLesson,
           {
+            dependsOn: ['as-k-dns'],
+            kind: 'lab-hub',
             title: { vi: 'Thêm domain và review DNS records', en: 'Add domain and review DNS records', km: 'បន្ថែម domain និងពិនិត្យ DNS record' },
             body: {
               vi: 'Import hoặc tạo zone cho domain. Liệt kê A/AAAA, CNAME, MX và ghi chú record nào trỏ tới origin thật. Đừng proxy MX hoặc record nội bộ không cần qua Cloudflare.',
@@ -255,6 +284,8 @@ export const tracks: Track[] = [
             hubLink: '/cloudflare-101',
           },
           {
+            dependsOn: ['as-k-dns'],
+            kind: 'lab-hub',
             title: { vi: 'Bật proxy (orange cloud) đúng record', en: 'Enable proxy on the right records', km: 'បើក proxy លើ record ត្រឹមត្រូវ' },
             body: {
               vi: 'Proxy các record phục vụ HTTP/HTTPS public (website, API gateway). Giữ DNS only cho record chỉ dùng nội bộ hoặc dịch vụ đặc biệt.',
@@ -276,7 +307,10 @@ export const tracks: Track[] = [
         duration: { vi: '~45 phút', en: '~45 min', km: '~45 នាទី' },
         role: 'required',
         lessons: [
+          asSslLesson,
           {
+            dependsOn: ['as-k-ssl'],
+            kind: 'lab-hub',
             title: { vi: 'Chọn SSL/TLS mode phù hợp', en: 'Choose the right SSL/TLS mode', km: 'ជ្រើសរើស SSL/TLS mode ត្រឹមត្រូវ' },
             body: {
               vi: 'Full (strict) khi origin có cert hợp lệ. Tránh Flexible nếu origin chỉ nhận HTTPS. Kiểm tra redirect HTTP→HTTPS.',
@@ -290,6 +324,8 @@ export const tracks: Track[] = [
             },
           },
           {
+            dependsOn: ['as-k-ssl'],
+            kind: 'lab-hub',
             title: { vi: 'Origin certificate và bypass', en: 'Origin certificates and bypass', km: 'Origin certificate និង bypass' },
             body: {
               vi: 'Chặn truy cập trực tiếp IP origin nếu có thể (firewall chỉ cho phép Cloudflare). Điều này ngăn attacker bỏ qua WAF.',
@@ -310,16 +346,21 @@ export const tracks: Track[] = [
         duration: { vi: '~60 phút + 24–48h log', en: '~60 min + 24–48h log', km: '~60 នាទី + 24–48h log' },
         role: 'required',
         lessons: [
+          asWafLesson,
           {
+            dependsOn: ['as-k-waf'],
+            kind: 'lab-hub',
             title: { vi: 'Bật WAF managed rules', en: 'Enable WAF managed rules', km: 'បើក WAF managed rules' },
             body: {
-              vi: 'Bắt đầu ở chế độ log/simulate nếu lo ngại false positive, sau đó chuyển block. Ưu tiên bảo vệ login, admin, API public.',
-              en: 'Start in log/simulate if worried about false positives, then move to block. Prioritize login, admin, and public API paths.',
-              km: 'ចាប់ផ្តើមនៅ log/Simulate បើព្រួយអំពី false positive បន្ទាប់មកផ្លាស់ប្តូរទៅ Block។ ផ្តល់អាទិភាពទៅ login, admin និង path API សាធារណៈ។',
+              vi: 'Nếu lo false positive: trên Enterprise, bắt đầu ở Log rồi mới Block. Gói khác không có action Log — dùng Managed Challenge trên path hẹp (login, admin, API public) và xem Security Events trước khi Block.',
+              en: 'If you worry about false positives: on Enterprise, start on Log and then Block. Other plans have no Log action — use Managed Challenge on a narrow path (login, admin, public API) and check Security Events before Block.',
+              km: 'If you worry about false positives: on Enterprise, start on Log and then Block. Other plans have no Log action — use Managed Challenge on a narrow path and check Security Events before Block.',
             },
             hubLink: '/use-cases/secure-api',
           },
           {
+            dependsOn: ['as-k-waf'],
+            kind: 'lab-hub',
             title: { vi: 'Rate limiting cho login và form', en: 'Rate limiting for login and forms', km: 'Rate limiting សម្រាប់ login និង form' },
             body: {
               vi: 'Giới hạn request theo IP hoặc cookie cho /login, /signup, OTP, search. Giảm credential stuffing và abuse.',
@@ -328,6 +369,8 @@ export const tracks: Track[] = [
             },
           },
           {
+            dependsOn: ['as-k-waf'],
+            kind: 'lab-hub',
             title: { vi: 'Bot protection cơ bản', en: 'Basic bot protection', km: 'ការពារ bot មូលដ្ឋាន' },
             body: {
               vi: 'Phân biệt bot xấu (scrape, spam) và traffic hợp lệ. Kết hợp challenge hoặc block theo score.',
@@ -349,7 +392,10 @@ export const tracks: Track[] = [
         duration: { vi: '~90 phút', en: '~90 min', km: '~90 នាទី' },
         role: 'recommended',
         lessons: [
+          asCacheLesson,
           {
+            dependsOn: ['as-k-cache'],
+            kind: 'lab-hub',
             title: { vi: 'CDN & cache hit/miss', en: 'CDN & cache hit/miss', km: 'CDN និង cache hit/miss' },
             body: {
               vi: 'Hiểu HIT tại PoP vs MISS về origin. Cache static assets; không cache HTML có session.',
@@ -359,6 +405,8 @@ export const tracks: Track[] = [
             hubLink: '/content-delivery#cdn-basics',
           },
           {
+            dependsOn: ['as-k-cache'],
+            kind: 'lab-hub',
             title: { vi: 'Cache Rules & purge', en: 'Cache Rules & purge', km: 'Cache Rules និង purge' },
             body: {
               vi: 'Bypass /admin, /checkout; TTL cho /assets/*; purge sau mỗi release frontend.',
@@ -368,6 +416,8 @@ export const tracks: Track[] = [
             hubLink: '/content-delivery#cache-rules',
           },
           {
+            dependsOn: ['as-k-cache'],
+            kind: 'lab-hub',
             title: { vi: 'Speed & Images', en: 'Speed & Images', km: 'Speed & Images' },
             body: {
               vi: 'Brotli, Early Hints, HTTP/3; resize ảnh WebP/AVIF tại edge. Marketing: thêm Zaraz & Cloudflare Fonts.',
@@ -377,6 +427,8 @@ export const tracks: Track[] = [
             hubLink: '/content-delivery#zaraz-tags',
           },
           {
+            dependsOn: ['as-k-cache'],
+            kind: 'lab-hub',
             title: { vi: 'Đo hit ratio & Core Web Vitals', en: 'Measure hit ratio & Core Web Vitals', km: 'វាស់ hit ratio និង Core Web Vitals' },
             body: {
               vi: 'Caching Analytics + Web Analytics — báo cáo trước/sau cho stakeholder.',
@@ -398,7 +450,10 @@ export const tracks: Track[] = [
         duration: { vi: '~40 phút', en: '~40 min', km: '~40 នាទី' },
         role: 'optional',
         lessons: [
+          asApiLesson,
           {
+            dependsOn: ['as-k-api'],
+            kind: 'lab-hub',
             title: { vi: 'Bảo vệ API sau khi proxy + WAF ổn', en: 'Protect APIs after proxy + WAF are stable', km: 'ការពារ API បន្ទាប់ពី proxy + WAF មានស្ថិរភាព' },
             body: {
               vi: 'Free/Pro: WAF + rate limit /api + origin lockdown. Enterprise: API Shield schema, JWT, mTLS. Discover/log trước khi enforce.',
@@ -420,7 +475,10 @@ export const tracks: Track[] = [
         duration: { vi: '~45 phút', en: '~45 min', km: '~45 នាទី' },
         role: 'optional',
         lessons: [
+          asTrafficLesson,
           {
+            dependsOn: ['as-k-traffic'],
+            kind: 'lab-hub',
             title: { vi: 'Pool/monitor, DDoS khi proxied, Waiting Room cho event', en: 'Pools/monitors, DDoS when proxied, Waiting Room for events', km: 'Pool/monitor, DDoS ពេល proxied, Waiting Room សម្រាប់ព្រឹត្តិការណ៍' },
             body: {
               vi: 'LB: health /health 60s, failover lab. Waiting Room chỉ đúng path sale/ticket. Một origin ổn — chưa cần mua LB.',
@@ -445,18 +503,18 @@ export const tracks: Track[] = [
           {
             title: { vi: '10 golden rules Application Services', en: '10 Application Services golden rules', km: '10 golden rules Application Services' },
             body: {
-              vi: 'Proxy trước WAF; review DNS trước đổi NS; Full (strict); lockdown origin; log rồi block; không cache session; đo rồi mới khoe.',
-              en: 'Proxy before WAF; review DNS before changing NS; Full (strict); lock down origin; log then block; no session cache; measure before celebrating.',
-              km: 'Proxy មុន WAF; ពិនិត្យ DNS មុនពេលផ្លាស់ប្តូរ NS; Full (strict); lock down origin; log បន្ទាប់មក Block; កុំ cache session; វាស់មុនពេលអបអរសាទរ។',
+              vi: 'Proxy trước WAF; review DNS trước đổi NS; Full (strict); lockdown origin; trên Enterprise thì Log rồi Block, gói khác dùng Managed Challenge trên path hẹp rồi xem Security Events trước khi Block; không cache session; đo rồi mới khoe.',
+              en: 'Proxy before WAF; review DNS before changing NS; Full (strict); lock down origin; on Enterprise use Log then Block, and on other plans use Managed Challenge on a narrow path and check Security Events before Block; no session cache; measure before celebrating.',
+              km: 'Proxy before WAF; review DNS before changing NS; Full (strict); lock down origin; on Enterprise use Log then Block, and on other plans use Managed Challenge on a narrow path and check Security Events before Block; no session cache; measure before celebrating.',
             },
           },
           {
             title: { vi: 'Sổ tay cấu hình (dashboard runbook)', en: 'Configuration runbook (dashboard)', km: 'runbook កំណត់រចនាសម្ព័ន្ធ (dashboard)' },
             duration: { vi: '~10 phút', en: '~10 min', km: '~10 នាទី' },
             body: {
-              vi: 'Add site → DNS → Proxied → Full (strict) → Origin CA → WAF Log → /login 10/phút → Cache Rules → Analytics.',
-              en: 'Add site → DNS → Proxied → Full (strict) → Origin CA → WAF Log → /login 10/min → Cache Rules → Analytics.',
-              km: 'Add site → DNS → Proxied → Full (strict) → Origin CA → WAF Log → /login 10/min → Cache Rules → Analytics។',
+              vi: 'Add site → DNS → Proxied → Full (strict) → Origin CA → WAF (Enterprise: Log rồi Block; gói khác: Managed Challenge trên path hẹp, xem Security Events, rồi Block) → Cache Rules → Analytics.',
+              en: 'Add site → DNS → Proxied → Full (strict) → Origin CA → WAF (Enterprise: Log then Block; other plans: Managed Challenge on a narrow path, check Security Events, then Block) → Cache Rules → Analytics.',
+              km: 'Add site → DNS → Proxied → Full (strict) → Origin CA → WAF (Enterprise: Log then Block; other plans: Managed Challenge on a narrow path, check Security Events, then Block) → Cache Rules → Analytics.',
             },
           },
         ],
@@ -523,7 +581,7 @@ export const tracks: Track[] = [
         },
         {
           title: 'WAF Block ngày đầu không Simulate',
-          detail: 'False positive trên checkout/API. Log 24–48h, tune, rồi Block.',
+          detail: 'False positive trên checkout/API. Action Log chỉ có trên Enterprise. Gói khác: Managed Challenge trên path hẹp, xem Security Events, rồi mới Block.',
         },
         {
           title: 'Cache Everything trên HTML có session',
@@ -549,7 +607,7 @@ export const tracks: Track[] = [
         },
         {
           title: 'WAF Block on day one with no Simulate',
-          detail: 'False positives on checkout/API. Log 24–48h, tune, then Block.',
+          detail: 'False positives on checkout/API. The Log action is Enterprise only. On other plans, use Managed Challenge on a narrow path, check Security Events, then Block.',
         },
         {
           title: 'Cache Everything on session HTML',
@@ -575,7 +633,7 @@ export const tracks: Track[] = [
         },
         {
           title: 'WAF Block on day one with no Simulate',
-          detail: 'False positives on checkout/API. Log 24–48h, tune, then Block.',
+          detail: 'False positives on checkout/API. The Log action is Enterprise only. On other plans, use Managed Challenge on a narrow path, check Security Events, then Block.',
         },
         {
           title: 'Cache Everything on session HTML',

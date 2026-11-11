@@ -83,6 +83,11 @@ body {
   max-width: 100%;
 }
 
+.wrap-anywhere {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 @media (min-width: 1024px) {
   .track-layout {
     grid-template-columns: 17.5rem minmax(0, 1fr);
@@ -128,6 +133,46 @@ body {
 .track-toc-current {
   background: rgba(246, 130, 26, 0.12);
   border-radius: 0.65rem;
+}
+
+.term-hint {
+  display: inline-block;
+  max-width: 100%;
+}
+.term-hint summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  list-style: none;
+}
+.term-hint summary::-webkit-details-marker {
+  display: none;
+}
+.term-hint-i {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.05rem;
+  height: 1.05rem;
+  border-radius: 999px;
+  border: 1px solid var(--cf-accent);
+  color: #9a3412;
+  background: #fff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1;
+}
+.term-hint-bubble {
+  margin: 0.35rem 0 0;
+  max-width: 36rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--cf-border);
+  background: var(--cf-surface);
+  padding: 0.55rem 0.75rem;
+  font-size: 0.8rem;
+  line-height: 1.45;
 }
 
 /* Page shell background */

@@ -1,0 +1,24 @@
+---
+import LangText from '../ui/LangText.astro';
+import type { LocalizedString } from '../../i18n/types';
+
+type Props = {
+  term: string | LocalizedString;
+  detail: LocalizedString;
+};
+
+const { term, detail } = Astro.props;
+const termText = typeof term === 'string' ? { vi: term, en: term } : term;
+---
+
+<details class="term-hint">
+  <summary>
+    <span class="term-hint-word">
+      <LangText text={termText} />
+    </span>
+    <span class="term-hint-i" aria-hidden="true">i</span>
+  </summary>
+  <p class="term-hint-bubble">
+    <LangText text={detail} />
+  </p>
+</details>

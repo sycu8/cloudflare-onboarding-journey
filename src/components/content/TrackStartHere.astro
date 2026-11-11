@@ -46,4 +46,9 @@ const { startHere } = Astro.props;
       </tbody>
     </table>
   </div>
+  {startHere.planFootnote ? (
+    <p class="text-muted mt-3 text-xs leading-relaxed">
+      <LangText text={startHere.planFootnote} />
+    </p>
+  ) : null}
 </section>
