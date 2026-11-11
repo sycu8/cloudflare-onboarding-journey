@@ -63,8 +63,8 @@ export const trackLessonBestPractices: Record<string, BestPracticeNote> = {
   },
   'as-3-l1': {
     text: {
-      vi: 'Triển khai Cloudflare Managed Ruleset ở mức Account khi có nhiều zone — ruleset đã được Cloudflare tinh chỉnh để giảm false positive. App mới có thể bắt đầu ở chế độ Log trước khi chuyển Default.',
-      en: 'Deploy the Cloudflare Managed Ruleset at the Account level when you have multiple zones — rulesets are pre-tuned to minimize false positives. New apps can start in Log mode before switching to Default.',
+      vi: 'Triển khai Cloudflare Managed Ruleset ở mức Account khi có nhiều zone — ruleset đã được Cloudflare tinh chỉnh để giảm false positive. Action Log chỉ có trên Enterprise. Gói khác: dùng Managed Challenge trên path hẹp và xem Security Events trước khi Block.',
+      en: 'Deploy the Cloudflare Managed Ruleset at the Account level when you have multiple zones — rulesets are pre-tuned to minimize false positives. The Log action is Enterprise only. On other plans, use Managed Challenge on a narrow path and check Security Events before Block.',
     },
     sourceTitle: {
       vi: 'Streamlined WAF deployment across zones and applications',

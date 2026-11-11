@@ -83,6 +83,11 @@ body {
   max-width: 100%;
 }
 
+.wrap-anywhere {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 @media (min-width: 1024px) {
   .track-layout {
     grid-template-columns: 17.5rem minmax(0, 1fr);

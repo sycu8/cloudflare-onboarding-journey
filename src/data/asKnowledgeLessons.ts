@@ -7,7 +7,7 @@ type Guide = {
   whenToUse: LocalizedString;
   whenNot: LocalizedString;
   planNotes: LocalizedString;
-  terms: { term: string; detail: LocalizedString }[];
+  terms: { term: string | LocalizedString; detail: LocalizedString }[];
 };
 
 type KnowledgeLesson = {
@@ -54,7 +54,7 @@ export const asArchitectureLesson: KnowledgeLesson = lesson(
     'Application Services architecture and the build order',
   ),
   t(
-    'Khách vào site theo đường: DNS, rồi proxy (đám mây cam), SSL, WAF, cache, rồi mới tới origin. Làm đúng thứ tự đó. Chưa xong nền thì chưa rẽ API Shield hay Load Balancing.',
+    'Khách vào site theo đường: DNS, rồi proxy (đám mây cam), SSL, WAF, cache, rồi mới tới origin. Làm đúng thứ tự đó. Khi nền chưa xong, đừng chuyển sang API Shield hay Load Balancing.',
     'A visitor reaches your site through DNS, then the proxy (orange cloud), SSL, WAF, cache, and only then the origin. Follow that order. Do not branch to API Shield or Load Balancing before the base is in place.',
   ),
   {
@@ -116,12 +116,12 @@ export const asDnsLesson: KnowledgeLesson = lesson(
       'Use full setup when you can change nameservers. That is the common path, and the only one on Free and Pro. Use CNAME setup when you cannot move authoritative DNS and you only need to proxy a few subdomains.',
     ),
     whenNot: t(
-      'Đừng bật proxy cho MX, hay cho hostname chỉ dùng nội bộ. Đừng tắt DNSSEC ở registrar sau khi đã thêm domain nếu bạn chưa đọc hướng dẫn — tắt DNSSEC trước khi chuyển, nếu không domain có thể không phân giải. CNAME setup không phải Cloudflare for SaaS (Custom Hostnames): sản phẩm đó cấp hostname cho khách của bạn, không phải cách đưa zone của bạn lên Cloudflare.',
-      'Do not proxy MX, or a hostname that should stay internal. Do not leave DNSSEC on at the registrar in a way that blocks the move — turn DNSSEC off before you switch, or the domain can fail to resolve. CNAME setup is not Cloudflare for SaaS (Custom Hostnames): that product issues hostnames for your customers, it is not how you onboard your own zone.',
+      'Đừng bật proxy cho MX, hay cho hostname chỉ dùng nội bộ. Tắt DNSSEC ở registrar trước khi đổi nameserver. Nếu không, domain có thể không phân giải. CNAME setup không phải Cloudflare for SaaS (Custom Hostnames): sản phẩm đó cấp hostname cho khách của bạn, không phải cách đưa zone của bạn lên Cloudflare.',
+      'Do not proxy MX, or a hostname that should stay internal. Turn DNSSEC off at the registrar before you change nameservers. If you do not, the domain may fail to resolve. CNAME setup is not Cloudflare for SaaS (Custom Hostnames): that product issues hostnames for your customers, it is not how you onboard your own zone.',
     ),
     planNotes: t(
-      `CNAME setup (partial) chỉ có trên Business và Enterprise. Free và Pro chỉ dùng full setup. Partial không dùng được với domain đăng ký tại Cloudflare Registrar. Nguồn: ${source('https://developers.cloudflare.com/dns/zone-setups/partial-setup/')} và ${source('https://developers.cloudflare.com/dns/nameservers/update-nameservers/')} (${CHECKED}).`,
-      `CNAME setup (partial) is Business and Enterprise only. Free and Pro use full setup only. Partial setup is not supported on Cloudflare Registrar domains. Sources: ${source('https://developers.cloudflare.com/dns/zone-setups/partial-setup/')} and ${source('https://developers.cloudflare.com/dns/nameservers/update-nameservers/')} (${CHECKED}).`,
+      `CNAME setup (partial) chỉ có trên Business và Enterprise. Free và Pro chỉ dùng full setup. Partial không dùng được với domain đăng ký tại Cloudflare Registrar. Nguồn: ${source('https://developers.cloudflare.com/dns/zone-setups/partial-setup/')} ${source('https://developers.cloudflare.com/dns/nameservers/update-nameservers/')} (${CHECKED}).`,
+      `CNAME setup (partial) is Business and Enterprise only. Free and Pro use full setup only. Partial setup is not supported on Cloudflare Registrar domains. Sources: ${source('https://developers.cloudflare.com/dns/zone-setups/partial-setup/')} ${source('https://developers.cloudflare.com/dns/nameservers/update-nameservers/')} (${CHECKED}).`,
     ),
     terms: [
       {
@@ -132,7 +132,7 @@ export const asDnsLesson: KnowledgeLesson = lesson(
         ),
       },
       {
-        term: 'Đám mây cam / xám',
+        term: t('Đám mây cam / xám', 'Orange / grey cloud'),
         detail: t(
           'Cam = Proxied. Xám = DNS only. Chỉ A, AAAA và CNAME mới bật cam được.',
           'Orange = Proxied. Grey = DNS only. Only A, AAAA, and CNAME records can be orange.',
@@ -156,7 +156,7 @@ export const asSslLesson: KnowledgeLesson = lesson(
       'Flexible: the visitor uses HTTPS, and Cloudflare calls the origin over HTTP. If the origin redirects every HTTP request to HTTPS, the browser loops. Full: Cloudflare calls the origin over HTTPS but does not check that the certificate is valid or unexpired. Full (strict): the origin certificate must be unexpired, issued by a public CA or Cloudflare Origin CA, and the name on the certificate must match the hostname.',
     ),
     architecture: t(
-      'Chứng chỉ cạnh (Universal SSL) nằm trên Cloudflare, cho hostname đang Proxied. Ở full setup, Universal SSL phủ apex và subdomain một cấp (www), không phủ tên sâu hơn như app.dev.example.com — tên sâu cần chứng chỉ khác. Ở CNAME setup, mỗi subdomain proxied có chứng chỉ Universal SSL riêng. Chứng chỉ origin là chứng chỉ trên máy chủ của bạn, khác với chứng chỉ cạnh.',
+      'Chứng chỉ ở edge của Cloudflare (Universal SSL) nằm trên Cloudflare, cho hostname đang Proxied. Ở full setup, Universal SSL phủ apex và subdomain một cấp (www), không phủ tên sâu hơn như app.dev.example.com — tên sâu cần chứng chỉ khác. Ở CNAME setup, mỗi subdomain proxied có chứng chỉ Universal SSL riêng. Chứng chỉ origin là chứng chỉ trên máy chủ của bạn, khác với chứng chỉ ở edge.',
       'The edge certificate (Universal SSL) sits on Cloudflare, for hostnames that are Proxied. On a full setup, Universal SSL covers the apex and one subdomain level (www), not a deeper name such as app.dev.example.com — deeper names need another certificate. On a CNAME setup, each proxied subdomain gets its own Universal SSL certificate. The origin certificate is the one on your server. It is not the edge certificate.',
     ),
     whenToUse: t(
@@ -168,8 +168,8 @@ export const asSslLesson: KnowledgeLesson = lesson(
       'Do not use Flexible when the origin accepts only HTTPS or redirects HTTP to HTTPS. Do not use Off. Full (not strict) is only a temporary step: Cloudflare does not validate the origin certificate.',
     ),
     planNotes: t(
-      `Các mode SSL là cấu hình zone, không phải bảng giá riêng trong bài này. Universal SSL là chứng chỉ cạnh mặc định cho record Proxied; giới hạn tên miền nằm ở trang limitations. Nguồn: ${source('https://developers.cloudflare.com/ssl/origin-configuration/ssl-modes/flexible/')} và ${source('https://developers.cloudflare.com/ssl/edge-certificates/universal-ssl/limitations/')} (${CHECKED}).`,
-      `SSL modes are a zone setting, not a separate price in this lesson. Universal SSL is the default edge certificate for Proxied records; hostname coverage is on the limitations page. Sources: ${source('https://developers.cloudflare.com/ssl/origin-configuration/ssl-modes/flexible/')} and ${source('https://developers.cloudflare.com/ssl/edge-certificates/universal-ssl/limitations/')} (${CHECKED}).`,
+      `Các mode SSL là cấu hình zone, không phải bảng giá riêng trong bài này. Universal SSL là chứng chỉ ở edge, gắn mặc định cho record Proxied; giới hạn tên miền nằm ở trang limitations. Nguồn: ${source('https://developers.cloudflare.com/ssl/origin-configuration/ssl-modes/flexible/')} ${source('https://developers.cloudflare.com/ssl/edge-certificates/universal-ssl/limitations/')} (${CHECKED}).`,
+      `SSL modes are a zone setting, not a separate price in this lesson. Universal SSL is the default edge certificate for Proxied records; hostname coverage is on the limitations page. Sources: ${source('https://developers.cloudflare.com/ssl/origin-configuration/ssl-modes/flexible/')} ${source('https://developers.cloudflare.com/ssl/edge-certificates/universal-ssl/limitations/')} (${CHECKED}).`,
     ),
     terms: [
       {
@@ -200,24 +200,24 @@ export const asWafLesson: KnowledgeLesson = lesson(
   ),
   {
     how: t(
-      'Request qua proxy mới vào các lớp này. Custom rule chạy trước. Rate limit chạy sau custom rule. Managed Rules là bộ luật Cloudflare giữ. Bạn có thể để một luật ở Log để xem nó có chặn nhầm không, rồi mới đổi sang Block. Bot Fight Mode (Free) không nằm trong Ruleset Engine nên custom rule không Skip được nó. Super Bot Fight Mode thì Skip được.',
-      'These layers only see requests that pass through the proxy. Custom rules run first. Rate limiting runs after custom rules. Managed Rules are the sets Cloudflare maintains. You can leave a rule on Log to see if it would block real users, then switch it to Block. Bot Fight Mode (Free) is not in the Ruleset Engine, so a custom rule cannot Skip it. Super Bot Fight Mode can be skipped.',
+      'Chỉ request đi qua proxy mới qua các lớp này. Custom rule chạy trước. Rate limit chạy sau custom rule. Managed Rules là bộ luật Cloudflare giữ. Trên Enterprise, bạn có thể để luật ở Log để xem nó có chặn nhầm không, rồi mới đổi sang Block. Gói khác không có action Log: dùng Managed Challenge trên một path hẹp và xem Security Events trước khi chuyển sang Block. Bot Fight Mode (Free) không nằm trong Ruleset Engine nên custom rule không Skip được nó. Super Bot Fight Mode thì Skip được.',
+      'Only requests that go through the proxy pass these layers. Custom rules run first. Rate limiting runs after custom rules. Managed Rules are the sets Cloudflare maintains. On Enterprise, you can leave a rule on Log to see if it would block real users, then switch it to Block. Other plans have no Log action: use Managed Challenge on a narrow path and check Security Events before you switch to Block. Bot Fight Mode (Free) is not in the Ruleset Engine, so a custom rule cannot Skip it. Super Bot Fight Mode can be skipped.',
     ),
     architecture: t(
-      'Nên nghĩ theo path: /login và /api cần rate limit chặt hơn trang tĩnh. Bot Fight Mode áp cả domain, không chọn từng path. Super Bot Fight Mode cũng áp cả domain, nhưng bạn chọn hành động theo nhóm bot (chắc chắn tự động, có thể tự động, bot đã xác minh). Bot Management (add-on Enterprise) cho điểm bot để viết custom rule theo path.',
+      'Nên chia theo đường dẫn (path): /login và /api cần rate limit chặt hơn trang tĩnh. Bot Fight Mode áp cả domain, không chọn từng path. Super Bot Fight Mode cũng áp cả domain, nhưng bạn chọn hành động theo nhóm bot (chắc chắn tự động, có thể tự động, bot đã xác minh). Bot Management (add-on Enterprise) cho điểm bot để viết custom rule theo path.',
       'Think by path: /login and /api need a tighter rate limit than a static page. Bot Fight Mode applies to the whole domain, not one path. Super Bot Fight Mode is also domain-wide, but you pick an action per bot group (definitely automated, likely automated, verified bots). Bot Management (an Enterprise add-on) gives a bot score so you can write a custom rule per path.',
     ),
     whenToUse: t(
-      'Bật Free Managed Ruleset trên gói Free (nó được gắn sẵn). Viết custom rule khi bạn biết path cần chặn hoặc challenge. Thêm một rate limit cho form hoặc login. Bật Bot Fight Mode trên Free nếu bạn chấp nhận không tạo ngoại lệ.',
-      'Turn on the Free Managed Ruleset on the Free plan (it is deployed for you). Write a custom rule when you know a path to block or challenge. Add one rate limiting rule for a form or login. Turn on Bot Fight Mode on Free if you can accept that you cannot make exceptions.',
+      'Trên Free, Free Managed Ruleset đã bật sẵn. Giữ nó bật. Viết custom rule khi bạn biết path cần chặn hoặc challenge. Thêm một rate limit cho form hoặc login. Bật Bot Fight Mode trên Free nếu bạn chấp nhận không tạo ngoại lệ.',
+      'On Free, the Free Managed Ruleset is already on. Leave it on. Write a custom rule when you know a path to block or challenge. Add one rate limiting rule for a form or login. Turn on Bot Fight Mode on Free if you can accept that you cannot make exceptions.',
     ),
     whenNot: t(
-      'Đừng đổi sang Block ngay nếu bạn chưa xem Security Events. Đừng kỳ vọng Bot Fight Mode bỏ qua một IP giám sát — nó không Skip được. Đừng mua Bot Management chỉ để bật công tắc bot trên Free: đó là add-on Enterprise.',
-      'Do not switch to Block before you have looked at Security Events. Do not expect Bot Fight Mode to ignore a monitoring IP — it cannot be skipped. Do not buy Bot Management just to turn on the Free bot switch: it is an Enterprise add-on.',
+      'Đừng đổi sang Block ngay nếu bạn chưa xem Security Events. Đừng kỳ vọng Bot Fight Mode chừa IP của dịch vụ giám sát — nó không Skip được. Đừng mua Bot Management chỉ để bật công tắc bot trên Free: đó là add-on Enterprise.',
+      'Do not switch to Block before you have looked at Security Events. Do not expect Bot Fight Mode to spare a monitoring service IP — it cannot be skipped. Do not buy Bot Management just to turn on the Free bot switch: it is an Enterprise add-on.',
     ),
     planNotes: t(
-      `Số liệu kiểm tra ${CHECKED}. Custom rule: Free 5, Pro 20, Business 100, Enterprise 1.000. Regex từ Business; action Log chỉ Enterprise. Rate limit: Free 1 luật (đếm 10 giây, action Block), Pro 2, Business 5. Enterprise: bảng docs ghi 100 khi hợp đồng có application security, và footnote nói số luật phụ thuộc hợp đồng. Managed Rules: Free chỉ Free Managed Ruleset (gắn sẵn trên Free); Pro trở lên có Cloudflare Managed Ruleset. Bot Fight Mode trên Free, custom rule không Skip được. Super Bot Fight Mode trên Pro, Business và Enterprise (khi chưa có add-on Bot Management); custom rule với action Skip thì bỏ qua được. Nguồn: ${source('https://developers.cloudflare.com/waf/custom-rules/')} , ${source('https://developers.cloudflare.com/waf/rate-limiting-rules/')} , ${source('https://developers.cloudflare.com/waf/get-started/')} , ${source('https://developers.cloudflare.com/waf/feature-interoperability/')} .`,
-      `Numbers checked ${CHECKED}. Custom rules: Free 5, Pro 20, Business 100, Enterprise 1,000. Regex starts on Business; the Log action is Enterprise only. Rate limiting rules: Free 1 (10-second period, Block), Pro 2, Business 5. Enterprise: the docs table shows 100 when the contract includes application security, and a footnote says the count depends on the contract. Managed Rules: Free gets only the Free Managed Ruleset, and it is deployed by default on Free; Pro and above get the Cloudflare Managed Ruleset. Bot Fight Mode is on Free, and a custom rule cannot Skip it. Super Bot Fight Mode is on Pro, Business, and Enterprise when you do not have the Bot Management add-on; a custom rule with the Skip action can bypass it. Sources: ${source('https://developers.cloudflare.com/waf/custom-rules/')} , ${source('https://developers.cloudflare.com/waf/rate-limiting-rules/')} , ${source('https://developers.cloudflare.com/waf/get-started/')} , ${source('https://developers.cloudflare.com/waf/feature-interoperability/')} .`,
+      `Số liệu kiểm tra ${CHECKED}. Custom rule: Free 5, Pro 20, Business 100, Enterprise 1.000. Regex từ Business; action Log chỉ Enterprise. Rate limit: Free 1 luật, kỳ đếm 10 giây. Pro 2, Business 5. Action trên Free không ghi là Block-only trong bảng availability — xem dashboard. Enterprise: bảng docs ghi 100 khi hợp đồng có application security, và footnote nói số luật phụ thuộc hợp đồng. Managed Rules: Free chỉ Free Managed Ruleset (gắn sẵn trên Free); Pro trở lên có Cloudflare Managed Ruleset. Bot Fight Mode trên Free, custom rule không Skip được. Super Bot Fight Mode trên Pro, Business và Enterprise (khi chưa có add-on Bot Management); custom rule với action Skip thì bỏ qua được. Nguồn: ${source('https://developers.cloudflare.com/waf/custom-rules/')} ${source('https://developers.cloudflare.com/waf/rate-limiting-rules/')} ${source('https://developers.cloudflare.com/waf/get-started/')} ${source('https://developers.cloudflare.com/waf/feature-interoperability/')}`,
+      `Numbers checked ${CHECKED}. Custom rules: Free 5, Pro 20, Business 100, Enterprise 1,000. Regex starts on Business; the Log action is Enterprise only. Rate limiting rules: Free 1 rule, 10-second counting period. Pro 2, Business 5. The availability table does not list Block as the only Free action — check the dashboard. Enterprise: the docs table shows 100 when the contract includes application security, and a footnote says the count depends on the contract. Managed Rules: Free gets only the Free Managed Ruleset, and it is deployed by default on Free; Pro and above get the Cloudflare Managed Ruleset. Bot Fight Mode is on Free, and a custom rule cannot Skip it. Super Bot Fight Mode is on Pro, Business, and Enterprise when you do not have the Bot Management add-on; a custom rule with the Skip action can bypass it. Sources: ${source('https://developers.cloudflare.com/waf/custom-rules/')} ${source('https://developers.cloudflare.com/waf/rate-limiting-rules/')} ${source('https://developers.cloudflare.com/waf/get-started/')} ${source('https://developers.cloudflare.com/waf/feature-interoperability/')}`,
     ),
     terms: [
       {
@@ -243,7 +243,7 @@ export const asCacheLesson: KnowledgeLesson = lesson(
   'as-k-cache',
   t('Cache: cái gì được lưu, cái gì phải bỏ qua', 'Cache: what to store, and what to skip'),
   t(
-    'Cache giữ bản sao ở mạng Cloudflare để origin đỡ phải trả lại. File tĩnh (CSS, JS, ảnh) thường cache được. HTML có đăng nhập hoặc giỏ hàng thì không.',
+    'Cache giữ bản sao ở mạng Cloudflare để origin không phải trả lời lại. File tĩnh (CSS, JS, ảnh) thường cache được. HTML có đăng nhập hoặc giỏ hàng thì không.',
     'Cache keeps a copy on Cloudflare’s network so the origin does not have to answer again. Static files (CSS, JS, images) are usually safe to cache. HTML with a login or a cart is not.',
   ),
   {
@@ -252,20 +252,20 @@ export const asCacheLesson: KnowledgeLesson = lesson(
       'A Cache Rule decides which requests are cached, for how long, and what is in the cache key. The record must be Proxied or the rule does nothing. HIT means Cloudflare answered from cache. MISS means it had to ask the origin. Purge deletes a stored copy after you change a file.',
     ),
     architecture: t(
-      'Tách path: /assets có thể cache lâu. /admin, /checkout, /login thì Bypass. Khóa cache mặc định không gồm cookie riêng của bạn. Khóa theo header, cookie, hoặc query string cụ thể là của Enterprise. Bỏ qua query string, hoặc sắp thứ tự query, thì có trên mọi gói.',
+      'Chia theo path: /assets có thể cache lâu. /admin, /checkout, /login thì Bypass. Khóa cache mặc định không gồm cookie riêng của bạn. Khóa theo header, cookie, hoặc query string cụ thể là của Enterprise. Bỏ qua query string, hoặc sắp thứ tự query, thì có trên mọi gói.',
       'Split by path: /assets can cache for a long time. Bypass /admin, /checkout, and /login. The default cache key does not include your private cookies. A key that includes headers, cookies, or specific query strings is Enterprise. Ignoring the query string, or sorting it, is available on every plan.',
     ),
     whenToUse: t(
-      'Dùng Cache Rule khi bạn muốn nói rõ: path này cache, path kia không. Đo hit ratio sau khi bật, đừng chỉ nhìn cảm giác.',
+      'Dùng Cache Rule khi bạn muốn nói rõ: path này cache, path kia không. Đo hit ratio sau khi bật, đừng chỉ dựa vào cảm giác.',
       'Use Cache Rules when you want to say, in writing, which path is cached and which is not. Check the hit ratio after you turn them on. Do not trust a feeling.',
     ),
     whenNot: t(
-      'Đừng Cache Everything trên HTML có session. Đừng giả Argo Smart Routing hay Cloudflare Images đã có trong gói zone: cả hai là sản phẩm riêng. Giá nằm trên dashboard, bài này không báo giá.',
+      'Đừng Cache Everything trên HTML có session. Đừng mặc định Argo Smart Routing hay Cloudflare Images có sẵn trong gói zone: cả hai là sản phẩm riêng. Giá nằm trên dashboard, bài này không báo giá.',
       'Do not use Cache Everything on HTML that has a session. Do not assume Argo Smart Routing or Cloudflare Images are included in the zone plan: both are separate products. The price is on the dashboard. This lesson is not a quote.',
     ),
     planNotes: t(
-      `Cache Rules có trên mọi gói. Số rule (${CHECKED}): Free 10, Pro 25, Business 50, Enterprise 300. Khóa cache theo header, cookie hoặc query cụ thể là Enterprise. Argo Smart Routing là add-on (nay nằm trong Smart Shield); xem giá trên dashboard. Cloudflare Images là sản phẩm riêng — bài này không khẳng định nó nằm trong gói nào. Nguồn: ${source('https://developers.cloudflare.com/cache/how-to/cache-rules/')} và ${source('https://developers.cloudflare.com/cache/how-to/cache-keys/')} .`,
-      `Cache Rules exist on every plan. Rule counts (${CHECKED}): Free 10, Pro 25, Business 50, Enterprise 300. A cache key that uses headers, cookies, or specific query strings is Enterprise. Argo Smart Routing is an add-on (now part of Smart Shield); see the price on the dashboard. Cloudflare Images is a separate product — this lesson does not assign it to a plan. Sources: ${source('https://developers.cloudflare.com/cache/how-to/cache-rules/')} and ${source('https://developers.cloudflare.com/cache/how-to/cache-keys/')} .`,
+      `Cache Rules có trên mọi gói. Số rule (${CHECKED}): Free 10, Pro 25, Business 50, Enterprise 300. Khóa cache theo header, cookie hoặc query cụ thể là Enterprise. Argo Smart Routing là add-on (nay nằm trong Smart Shield); xem giá trên dashboard. Cloudflare Images là sản phẩm riêng — bài này không khẳng định nó nằm trong gói nào. Nguồn: ${source('https://developers.cloudflare.com/cache/how-to/cache-rules/')} ${source('https://developers.cloudflare.com/cache/how-to/cache-keys/')}.`,
+      `Cache Rules exist on every plan. Rule counts (${CHECKED}): Free 10, Pro 25, Business 50, Enterprise 300. A cache key that uses headers, cookies, or specific query strings is Enterprise. Argo Smart Routing is an add-on (now part of Smart Shield); see the price on the dashboard. Cloudflare Images is a separate product — this lesson does not assign it to a plan. Sources: ${source('https://developers.cloudflare.com/cache/how-to/cache-rules/')} ${source('https://developers.cloudflare.com/cache/how-to/cache-keys/')}.`,
     ),
     terms: [
       {
@@ -288,7 +288,7 @@ export const asApiLesson: KnowledgeLesson = lesson(
   'as-k-api',
   t('API Shield và mTLS: khi nào mới cần', 'API Shield and mTLS: when you actually need them'),
   t(
-    'Khi proxy và WAF đã chạy, API public vẫn cần rate limit và custom rule. API Shield là bộ công cụ riêng cho API (schema, khám phá endpoint). mTLS là khách xuất trình chứng chỉ. Đừng trộn hai thứ này với CNAME setup.',
+    'Khi proxy và WAF đã chạy, API public vẫn cần rate limit và custom rule. API Shield là bộ công cụ riêng cho API (schema, khám phá endpoint). mTLS là khách xuất trình chứng chỉ. Đừng nhầm hai thứ này với CNAME setup.',
     'Once the proxy and WAF are working, a public API still needs rate limiting and custom rules. API Shield is a separate toolkit for APIs (schema, endpoint discovery). mTLS means the client presents a certificate. Do not mix either of these up with CNAME setup.',
   ),
   {
@@ -309,8 +309,8 @@ export const asApiLesson: KnowledgeLesson = lesson(
       'Do not turn on API Shield before the zone and proxy are stable. Do not use this page as a quote for the add-on. If the dashboard does not show a feature, trust the dashboard and the plans page, not memory.',
     ),
     planNotes: t(
-      `API Shield: Enterprise, bộ đầy đủ là add-on. mTLS với CA Cloudflare: docs nói ai cũng dựng được — xem trang sản phẩm trước khi làm lab. Kiểm tra ${CHECKED}. Nguồn: ${source('https://developers.cloudflare.com/api-shield/')} và ${source('https://developers.cloudflare.com/api-shield/plans/')} .`,
-      `API Shield: Enterprise, and the full suite is an add-on. mTLS with a Cloudflare CA: the docs say anyone can set it up — read the product page before the lab. Checked ${CHECKED}. Sources: ${source('https://developers.cloudflare.com/api-shield/')} and ${source('https://developers.cloudflare.com/api-shield/plans/')} .`,
+      `API Shield: Enterprise, bộ đầy đủ là add-on. mTLS với CA Cloudflare: docs nói ai cũng dựng được — xem trang sản phẩm trước khi làm lab. Kiểm tra ${CHECKED}. Nguồn: ${source('https://developers.cloudflare.com/api-shield/')} ${source('https://developers.cloudflare.com/api-shield/plans/')}.`,
+      `API Shield: Enterprise, and the full suite is an add-on. mTLS with a Cloudflare CA: the docs say anyone can set it up — read the product page before the lab. Checked ${CHECKED}. Sources: ${source('https://developers.cloudflare.com/api-shield/')} ${source('https://developers.cloudflare.com/api-shield/plans/')}.`,
     ),
     terms: [
       {
@@ -341,7 +341,7 @@ export const asTrafficLesson: KnowledgeLesson = lesson(
   ),
   {
     how: t(
-      'DDoS L7 (HTTP) và L3/L4 (mạng) chạy tự động, bạn không phải bật. Bảo vệ DDoS cho hạ tầng DNS authoritative chỉ có khi domain dùng full setup, vì CNAME setup không dùng nameserver Cloudflare. Load Balancing theo dõi origin khỏe hay không rồi chuyển traffic. Waiting Room giữ khách trên trang chờ thay vì để origin ngã.',
+      'DDoS L7 (HTTP) và L3/L4 (mạng) chạy tự động, bạn không phải bật. Bảo vệ DDoS cho hạ tầng DNS authoritative chỉ có khi domain dùng full setup, vì CNAME setup không dùng nameserver Cloudflare. Load Balancing theo dõi origin khỏe hay không rồi chuyển traffic. Waiting Room giữ khách trên trang chờ thay vì để origin bị sập.',
       'HTTP (L7) and network (L3/L4) DDoS protection run on their own. You do not turn them on. DDoS protection for authoritative DNS only exists on a full setup, because a CNAME setup does not use Cloudflare’s nameservers. Load Balancing watches whether an origin is healthy and moves traffic. Waiting Room holds visitors on a queue page instead of letting the origin fall over.',
     ),
     architecture: t(
@@ -357,8 +357,8 @@ export const asTrafficLesson: KnowledgeLesson = lesson(
       'Do not buy Load Balancing for a single origin. Do not put Waiting Room on the whole site if only one path is busy. Do not expect a CNAME setup to have the same authoritative-DNS DDoS layer as a full setup.',
     ),
     planNotes: t(
-      `Kiểm tra ${CHECKED}. DDoS HTTP và mạng: mọi gói, luôn bật. Waiting Room: không có trên Free và Pro; Business và Enterprise có 1 phòng cơ bản; tính năng nâng cao là add-on Enterprise. Load Balancing: add-on, không nằm trong gói zone — giá trên dashboard, bài này không chép giá. Nguồn: ${source('https://developers.cloudflare.com/waf/feature-interoperability/')} , ${source('https://developers.cloudflare.com/waiting-room/plans/')} , ${source('https://developers.cloudflare.com/load-balancing/')} , ${source('https://developers.cloudflare.com/dns/zone-setups/partial-setup/')} .`,
-      `Checked ${CHECKED}. HTTP and network DDoS: every plan, always on. Waiting Room: not on Free or Pro; Business and Enterprise include one basic room; advanced features are an Enterprise add-on. Load Balancing: an add-on, not part of the zone plan — the price is on the dashboard, and this lesson does not copy it. Sources: ${source('https://developers.cloudflare.com/waf/feature-interoperability/')} , ${source('https://developers.cloudflare.com/waiting-room/plans/')} , ${source('https://developers.cloudflare.com/load-balancing/')} , ${source('https://developers.cloudflare.com/dns/zone-setups/partial-setup/')} .`,
+      `Kiểm tra ${CHECKED}. DDoS HTTP và mạng: mọi gói, luôn bật. Waiting Room: không có trên Free và Pro; Business và Enterprise có 1 phòng cơ bản; tính năng nâng cao là add-on Enterprise. Load Balancing: add-on, không nằm trong gói zone — giá trên dashboard, bài này không chép giá. Nguồn: ${source('https://developers.cloudflare.com/waf/feature-interoperability/')} ${source('https://developers.cloudflare.com/waiting-room/plans/')} ${source('https://developers.cloudflare.com/load-balancing/')} ${source('https://developers.cloudflare.com/dns/zone-setups/partial-setup/')}`,
+      `Checked ${CHECKED}. HTTP and network DDoS: every plan, always on. Waiting Room: not on Free or Pro; Business and Enterprise include one basic room; advanced features are an Enterprise add-on. Load Balancing: an add-on, not part of the zone plan — the price is on the dashboard, and this lesson does not copy it. Sources: ${source('https://developers.cloudflare.com/waf/feature-interoperability/')} ${source('https://developers.cloudflare.com/waiting-room/plans/')} ${source('https://developers.cloudflare.com/load-balancing/')} ${source('https://developers.cloudflare.com/dns/zone-setups/partial-setup/')}`,
     ),
     terms: [
       {

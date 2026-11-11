@@ -70,7 +70,7 @@ export const applicationServicesFollowAlong: FollowAlongLesson[] = [
       t('Bật WAF/cache khi record còn DNS only — không có hiệu lực trên HTTP.', 'Turning on WAF/cache while the record is DNS only has no effect on HTTP.', 'ការបើក WAF/cache ពេល record នៅតែ DNS only មិនមានឥទ្ធិពលលើ HTTP។'),
     ],
     tips: [
-      t('Nhiều team: ngày 1 zone + proxy + Full (strict); ngày 2 WAF simulate; tuần 2 cache rules và report.', 'Many teams: day 1 zone + proxy + Full (strict); day 2 WAF simulate; week 2 cache rules and a report.', 'ក្រុមជាច្រើន៖ day 1 zone + proxy + Full (strict); day 2 WAF Simulate; week 2 cache rules និង report។'),
+      t('Nhiều team: ngày 1 zone + proxy + Full (strict); ngày 2 xem Security Events (action Log chỉ có trên Enterprise; gói khác dùng Managed Challenge trên path hẹp); tuần 2 cache rules và report.', 'Many teams: day 1 zone + proxy + Full (strict); day 2 review Security Events (the Log action is Enterprise only; other plans use Managed Challenge on a narrow path); week 2 cache rules and a report.', 'Many teams: day 1 zone + proxy + Full (strict); day 2 review Security Events (the Log action is Enterprise only; other plans use Managed Challenge on a narrow path); week 2 cache rules and a report.'),
       t('Nhãn menu dashboard có thể đổi — chọn mục tương đương gần nhất.', 'Dashboard labels shift — follow the nearest equivalent.', 'Dashboard labels ផ្លាស់ — តាម equivalent ដែលជិតបំផុត។'),
     ],
     officialDocs: [
@@ -279,9 +279,9 @@ export const applicationServicesFollowAlong: FollowAlongLesson[] = [
     lessonId: 'as-3-l1',
     role: 'required',
     goal: t(
-      'Bật WAF managed rules ở chế độ log/simulate, xem Security Events, rồi mới Block.',
-      'Turn on WAF managed rules in log/simulate, watch Security Events, then Block.',
-      'បើក WAF managed rules ក្នុង log/Simulate, មើល Security Events, រួច Block។',
+      'Bật WAF managed rules. Action Log chỉ có trên Enterprise. Gói khác: Managed Challenge trên path hẹp, xem Security Events, rồi mới Block.',
+      'Turn on WAF managed rules. The Log action is Enterprise only. On other plans, use Managed Challenge on a narrow path, check Security Events, then Block.',
+      'Turn on WAF managed rules. The Log action is Enterprise only. On other plans, use Managed Challenge on a narrow path, check Security Events, then Block.',
     ),
     who: t('Security / DevOps', 'Security / DevOps', 'Security / DevOps'),
     time: t('~20 phút cấu hình + 24–48h quan sát', '~20 min setup + 24–48h watch', '~20 នាទី setup + 24–48h មើល'),
@@ -298,7 +298,7 @@ export const applicationServicesFollowAlong: FollowAlongLesson[] = [
         click: t('Managed rules → Enable', 'Managed rules → Enable', 'Managed rules → Enable'),
       },
       {
-        action: t('Đặt action mặc định là Log / Simulate trong 24–48h — không Block ngay trên production lạ.', 'Set the default action to Log / Simulate for 24–48h — do not Block immediately on an unfamiliar production site.', 'កំណត់ default action ទៅ Log / Simulate សម្រាប់ 24–48h — កុំ Block ភ្លាមលើ production site ដែលមិនស្គាល់។'),
+        action: t('Đừng Block ngay trên production lạ. Action Log chỉ có trên Enterprise. Gói khác: Managed Challenge trên path hẹp, xem Security Events, rồi mới Block.', 'Do not Block immediately on an unfamiliar production site. The Log action is Enterprise only. On other plans, use Managed Challenge on a narrow path, check Security Events, then Block.', 'Do not Block immediately on an unfamiliar production site. The Log action is Enterprise only. On other plans, use Managed Challenge on a narrow path, check Security Events, then Block.'),
         checkpoint: t('Security Events bắt đầu có sự kiện. Lọc path /login, /admin, /api.', 'Security Events starts showing events. Filter paths /login, /admin, /api.', 'Security Events ចាប់ផ្តើមបង្ហាញ events។ Filter paths /login, /admin, /api។'),
       },
       {
@@ -316,7 +316,7 @@ export const applicationServicesFollowAlong: FollowAlongLesson[] = [
       t('WAF không chạy nếu hostname còn grey-cloud.', 'WAF does not run if the hostname is still grey-cloud.', 'WAF មិនរត់បើ hostname នៅតែ grey-cloud។'),
     ],
     tips: [
-      t('Golden rule: log rồi block — giống Gateway/DLP trên track Cloudflare One.', 'Golden rule: log then block — same idea as Gateway/DLP on the Cloudflare One track.', 'Golden rule៖ log រួច block — គំនិតដូច Gateway/DLP លើ track Cloudflare One។'),
+      t('Golden rule: trên Enterprise thì Log rồi Block. Gói khác dùng Managed Challenge trên path hẹp và xem Security Events trước khi Block.', 'Golden rule: on Enterprise, Log then Block. On other plans, use Managed Challenge on a narrow path and check Security Events before Block.', 'Golden rule: on Enterprise, Log then Block. On other plans, use Managed Challenge on a narrow path and check Security Events before Block.'),
       t('Learning path Application security có thứ tự account → default traffic → WAF.', 'The Application security learning path orders account → default traffic → WAF.', 'Application security learning path តម្រៀប account → default traffic → WAF។'),
     ],
     officialDocs: [
@@ -335,9 +335,9 @@ export const applicationServicesFollowAlong: FollowAlongLesson[] = [
     who: t('Security', 'Security', 'Security'),
     time: t('~15 phút', '~15 min', '~15 នាទី'),
     finishWith: t(
-      'Rule 10 request/phút/IP trên /login (hoặc tương đương) ở Log rồi Challenge/Block.',
-      'A 10 request/min/IP rule on /login (or equivalent) in Log, then Challenge/Block.',
-      'Rule 10 request/min/IP លើ /login (ឬ equivalent) ក្នុង Log, រួច Challenge/Block។',
+      'Rule 10 request/phút/IP trên /login. Action Log chỉ có trên Enterprise. Gói khác: Managed Challenge, xem Security Events, rồi mới Block.',
+      'A 10 request/min/IP rule on /login. The Log action is Enterprise only. On other plans, use Managed Challenge, check Security Events, then Block.',
+      'A 10 request/min/IP rule on /login. The Log action is Enterprise only. On other plans, use Managed Challenge, check Security Events, then Block.',
     ),
     beforeYouBegin: t('WAF đã bật (as-3-l1). Biết path login/signup/OTP thật (không đoán).', 'WAF is on (as-3-l1). You know the real login/signup/OTP paths (do not guess).', 'WAF បើក (as-3-l1)។ អ្នកដឹង paths login/signup/OTP ពិត (កុំទាយ)។'),
     planNote: t('Rate limiting rules tùy plan — Free có giới hạn số rule. Advanced RL ở plan cao hơn.', 'Rate limiting rules depend on plan — Free has a rule cap. Advanced RL is on higher plans.', 'Rate limiting rules អាស្រ័យលើ plan — Free មាន rule cap។ Advanced RL មានលើ plans ខ្ពស់ជាង។'),
@@ -346,9 +346,9 @@ export const applicationServicesFollowAlong: FollowAlongLesson[] = [
         action: t('Security → WAF → Rate limiting rules → Create rule.', 'Security → WAF → Rate limiting rules → Create rule.', 'Security → WAF → Rate limiting rules → Create rule។'),
         click: t('Create rule', 'Create rule', 'Create rule'),
         enter: t(
-          'If: URI Path contains /login  |  With: 10 requests / 1 minute / IP  |  Then: Log (48h) rồi Managed Challenge hoặc Block',
-          'If: URI Path contains /login  |  With: 10 requests / 1 minute / IP  |  Then: Log (48h) then Managed Challenge or Block',
-          'If: URI Path contains /login  |  With: 10 requests / 1 minute / IP  |  Then: Log (48h) then Managed Challenge or Block',
+          'If: URI Path contains /login  |  With: 10 requests / 1 minute / IP  |  Then: Enterprise mới dùng Log. Gói khác: Managed Challenge, xem Security Events, rồi Block',
+          'If: URI Path contains /login  |  With: 10 requests / 1 minute / IP  |  Then: Log only on Enterprise. Other plans: Managed Challenge, check Security Events, then Block',
+          'If: URI Path contains /login  |  With: 10 requests / 1 minute / IP  |  Then: Log only on Enterprise. Other plans: Managed Challenge, check Security Events, then Block',
         ),
       },
       {
@@ -601,7 +601,7 @@ export const applicationServicesFollowAlong: FollowAlongLesson[] = [
         checkpoint: t('Cache Rule Bypass cho /api/* nếu response theo user.', 'Cache Rule Bypass for /api/* if responses are per-user.', 'Cache Rule Bypass សម្រាប់ /api/* ប្រសិនបើ response តាម user។'),
       },
       {
-        action: t('Security → WAF: custom rule + rate limit cho /api (ví dụ 100 req/phút/IP ở Log).', 'Security → WAF: custom rule + rate limit for /api (e.g. 100 req/min/IP in Log).', 'Security → WAF: custom rule + rate limit សម្រាប់ /api (e.g. 100 req/min/IP ក្នុង Log)។'),
+        action: t('Security → WAF: custom rule + rate limit cho /api (ví dụ 100 req/phút/IP). Action Log chỉ có trên Enterprise. Gói khác: Managed Challenge, xem Security Events, rồi Block.', 'Security → WAF: custom rule + rate limit for /api (for example 100 req/min/IP). The Log action is Enterprise only. On other plans, use Managed Challenge, check Security Events, then Block.', 'Security → WAF: custom rule + rate limit for /api. The Log action is Enterprise only. On other plans, use Managed Challenge, check Security Events, then Block.'),
         enter: t('URI Path starts with /api/', 'URI Path starts with /api/', 'URI Path starts with /api/'),
       },
       {
@@ -697,7 +697,7 @@ export const applicationServicesFollowAlong: FollowAlongLesson[] = [
         action: t('4. Lockdown origin (IP allowlist hoặc AOP) — WAF vô nghĩa nếu bypass IP.', '4. Lock down origin (IP allowlist or AOP) — WAF is meaningless if IPs bypass it.', '4. Lock down origin (IP allowlist ឬ AOP) — WAF គ្មានន័យប្រសិនបើ IP bypass វា។'),
       },
       {
-        action: t('5. Log/simulate rồi Block — WAF, rate limit, bot.', '5. Log/simulate then Block — WAF, rate limit, bot.', '5. Log/simulate បន្ទាប់មក Block — WAF, rate limit, bot។'),
+        action: t('5. WAF, rate limit, bot: action Log chỉ có trên Enterprise. Gói khác dùng Managed Challenge trên path hẹp, xem Security Events, rồi Block.', '5. WAF, rate limit, bot: the Log action is Enterprise only. On other plans, use Managed Challenge on a narrow path, check Security Events, then Block.', '5. WAF, rate limit, bot: the Log action is Enterprise only. On other plans, use Managed Challenge on a narrow path, check Security Events, then Block.'),
       },
       {
         action: t('6. Không cache HTML session; bypass /admin /checkout.', '6. Do not cache session HTML; bypass /admin /checkout.', '6. កុំ cache session HTML; bypass /admin /checkout។'),
@@ -765,12 +765,12 @@ export const applicationServicesFollowAlong: FollowAlongLesson[] = [
       },
       {
         action: t('WAF', 'WAF', 'WAF'),
-        click: t('Security → WAF → Managed rules → Log 24–48h → Block', 'Security → WAF → Managed rules → Log 24–48h → Block', 'Security → WAF → Managed rules → Log 24–48h → Block'),
+        click: t('Security → WAF → Managed rules. Enterprise: Log rồi Block. Gói khác: Managed Challenge trên path hẹp, xem Security Events, rồi Block.', 'Security → WAF → Managed rules. Enterprise: Log then Block. Other plans: Managed Challenge on a narrow path, check Security Events, then Block.', 'Security → WAF → Managed rules. Enterprise: Log then Block. Other plans: Managed Challenge on a narrow path, check Security Events, then Block.'),
       },
       {
         action: t('Rate limit', 'Rate limit', 'Rate limit'),
         click: t('Security → WAF → Rate limiting rules', 'Security → WAF → Rate limiting rules', 'Security → WAF → Rate limiting rules'),
-        enter: t('/login 10 req / 1 min / IP → Log rồi Challenge', '/login 10 req / 1 min / IP → Log then Challenge', '/login 10 req / 1 min / IP → Log បន្ទាប់មក Challenge'),
+        enter: t('/login 10 req / 1 min / IP. Action Log chỉ Enterprise. Gói khác: Managed Challenge, xem Security Events, rồi Block.', '/login 10 req / 1 min / IP. The Log action is Enterprise only. Other plans: Managed Challenge, check Security Events, then Block.', '/login 10 req / 1 min / IP. The Log action is Enterprise only. Other plans: Managed Challenge, check Security Events, then Block.'),
       },
       {
         action: t('Cache Rules', 'Cache Rules', 'Cache Rules'),

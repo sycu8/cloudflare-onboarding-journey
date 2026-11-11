@@ -31,7 +31,7 @@ export type TrackLesson = {
     whenToUse: LocalizedString;
     whenNot: LocalizedString;
     planNotes: LocalizedString;
-    terms: { term: string; detail: LocalizedString }[];
+    terms: { term: string | LocalizedString; detail: LocalizedString }[];
   };
   /** Estimated time for this lesson. Hub labs fall back to the follow-along time. */
   duration?: LocalizedString;
@@ -230,7 +230,7 @@ export const tracks: Track[] = [
         { capability: { vi: 'CNAME setup (partial)', en: 'CNAME setup (partial)' }, free: { vi: 'Không. Free và Pro chỉ full setup', en: 'No. Free and Pro are full setup only' }, paid: { vi: 'Business và Enterprise', en: 'Business and Enterprise' } },
         { capability: { vi: 'WAF managed rules', en: 'WAF managed rules' }, free: { vi: 'Chỉ Free Managed Ruleset', en: 'Free Managed Ruleset only' }, paid: { vi: 'Pro trở lên: Cloudflare Managed Ruleset', en: 'Pro and above: Cloudflare Managed Ruleset' } },
         { capability: { vi: 'Custom rules (số luật)', en: 'Custom rules (count)' }, free: { vi: '5', en: '5' }, paid: { vi: 'Pro 20, Business 100, Enterprise 1.000', en: 'Pro 20, Business 100, Enterprise 1,000' } },
-        { capability: { vi: 'Rate limiting rules (số luật)', en: 'Rate limiting rules (count)' }, free: { vi: '1 (kỳ 10 giây, action Block)', en: '1 (10-second period, Block)' }, paid: { vi: 'Pro 2, Business 5. Enterprise: bảng docs ghi 100 nếu hợp đồng có application security; footnote nói số phụ thuộc hợp đồng', en: 'Pro 2, Business 5. Enterprise: the docs table shows 100 when the contract includes application security; a footnote says the count depends on the contract' } },
+        { capability: { vi: 'Rate limiting rules (số luật)', en: 'Rate limiting rules (count)' }, free: { vi: '1 luật, kỳ đếm 10 giây. Action xem dashboard — bảng docs không ghi Block là action duy nhất', en: '1 rule, 10-second counting period. Check the action in the dashboard — the docs table does not list Block as the only action' }, paid: { vi: 'Pro 2, Business 5. Enterprise: bảng docs ghi 100 nếu hợp đồng có application security; footnote nói số phụ thuộc hợp đồng', en: 'Pro 2, Business 5. Enterprise: the docs table shows 100 when the contract includes application security; a footnote says the count depends on the contract' } },
         { capability: { vi: 'Bot', en: 'Bots' }, free: { vi: 'Bot Fight Mode', en: 'Bot Fight Mode' }, paid: { vi: 'Super Bot Fight Mode trên Pro/Business/Enterprise. Bot Management là add-on Enterprise', en: 'Super Bot Fight Mode on Pro/Business/Enterprise. Bot Management is an Enterprise add-on' } },
         { capability: { vi: 'Cache Rules (số rule)', en: 'Cache Rules (count)' }, free: { vi: '10', en: '10' }, paid: { vi: 'Pro 25, Business 50, Enterprise 300', en: 'Pro 25, Business 50, Enterprise 300' } },
         { capability: { vi: 'Argo Smart Routing', en: 'Argo Smart Routing' }, free: { vi: 'Add-on, không nằm trong gói zone. Giá trên dashboard', en: 'Add-on, not part of the zone plan. Price on the dashboard' }, paid: { vi: 'Cùng vậy (nay gắn với Smart Shield)', en: 'Same (now offered with Smart Shield)' } },
@@ -352,9 +352,9 @@ export const tracks: Track[] = [
             kind: 'lab-hub',
             title: { vi: 'Bật WAF managed rules', en: 'Enable WAF managed rules', km: 'បើក WAF managed rules' },
             body: {
-              vi: 'Bắt đầu ở chế độ log/simulate nếu lo ngại false positive, sau đó chuyển block. Ưu tiên bảo vệ login, admin, API public.',
-              en: 'Start in log/simulate if worried about false positives, then move to block. Prioritize login, admin, and public API paths.',
-              km: 'ចាប់ផ្តើមនៅ log/Simulate បើព្រួយអំពី false positive បន្ទាប់មកផ្លាស់ប្តូរទៅ Block។ ផ្តល់អាទិភាពទៅ login, admin និង path API សាធារណៈ។',
+              vi: 'Nếu lo false positive: trên Enterprise, bắt đầu ở Log rồi mới Block. Gói khác không có action Log — dùng Managed Challenge trên path hẹp (login, admin, API public) và xem Security Events trước khi Block.',
+              en: 'If you worry about false positives: on Enterprise, start on Log and then Block. Other plans have no Log action — use Managed Challenge on a narrow path (login, admin, public API) and check Security Events before Block.',
+              km: 'If you worry about false positives: on Enterprise, start on Log and then Block. Other plans have no Log action — use Managed Challenge on a narrow path and check Security Events before Block.',
             },
             hubLink: '/use-cases/secure-api',
           },
@@ -503,18 +503,18 @@ export const tracks: Track[] = [
           {
             title: { vi: '10 golden rules Application Services', en: '10 Application Services golden rules', km: '10 golden rules Application Services' },
             body: {
-              vi: 'Proxy trước WAF; review DNS trước đổi NS; Full (strict); lockdown origin; log rồi block; không cache session; đo rồi mới khoe.',
-              en: 'Proxy before WAF; review DNS before changing NS; Full (strict); lock down origin; log then block; no session cache; measure before celebrating.',
-              km: 'Proxy មុន WAF; ពិនិត្យ DNS មុនពេលផ្លាស់ប្តូរ NS; Full (strict); lock down origin; log បន្ទាប់មក Block; កុំ cache session; វាស់មុនពេលអបអរសាទរ។',
+              vi: 'Proxy trước WAF; review DNS trước đổi NS; Full (strict); lockdown origin; trên Enterprise thì Log rồi Block, gói khác dùng Managed Challenge trên path hẹp rồi xem Security Events trước khi Block; không cache session; đo rồi mới khoe.',
+              en: 'Proxy before WAF; review DNS before changing NS; Full (strict); lock down origin; on Enterprise use Log then Block, and on other plans use Managed Challenge on a narrow path and check Security Events before Block; no session cache; measure before celebrating.',
+              km: 'Proxy before WAF; review DNS before changing NS; Full (strict); lock down origin; on Enterprise use Log then Block, and on other plans use Managed Challenge on a narrow path and check Security Events before Block; no session cache; measure before celebrating.',
             },
           },
           {
             title: { vi: 'Sổ tay cấu hình (dashboard runbook)', en: 'Configuration runbook (dashboard)', km: 'runbook កំណត់រចនាសម្ព័ន្ធ (dashboard)' },
             duration: { vi: '~10 phút', en: '~10 min', km: '~10 នាទី' },
             body: {
-              vi: 'Add site → DNS → Proxied → Full (strict) → Origin CA → WAF Log → /login 10/phút → Cache Rules → Analytics.',
-              en: 'Add site → DNS → Proxied → Full (strict) → Origin CA → WAF Log → /login 10/min → Cache Rules → Analytics.',
-              km: 'Add site → DNS → Proxied → Full (strict) → Origin CA → WAF Log → /login 10/min → Cache Rules → Analytics។',
+              vi: 'Add site → DNS → Proxied → Full (strict) → Origin CA → WAF (Enterprise: Log rồi Block; gói khác: Managed Challenge trên path hẹp, xem Security Events, rồi Block) → Cache Rules → Analytics.',
+              en: 'Add site → DNS → Proxied → Full (strict) → Origin CA → WAF (Enterprise: Log then Block; other plans: Managed Challenge on a narrow path, check Security Events, then Block) → Cache Rules → Analytics.',
+              km: 'Add site → DNS → Proxied → Full (strict) → Origin CA → WAF (Enterprise: Log then Block; other plans: Managed Challenge on a narrow path, check Security Events, then Block) → Cache Rules → Analytics.',
             },
           },
         ],
@@ -581,7 +581,7 @@ export const tracks: Track[] = [
         },
         {
           title: 'WAF Block ngày đầu không Simulate',
-          detail: 'False positive trên checkout/API. Log 24–48h, tune, rồi Block.',
+          detail: 'False positive trên checkout/API. Action Log chỉ có trên Enterprise. Gói khác: Managed Challenge trên path hẹp, xem Security Events, rồi mới Block.',
         },
         {
           title: 'Cache Everything trên HTML có session',
@@ -607,7 +607,7 @@ export const tracks: Track[] = [
         },
         {
           title: 'WAF Block on day one with no Simulate',
-          detail: 'False positives on checkout/API. Log 24–48h, tune, then Block.',
+          detail: 'False positives on checkout/API. The Log action is Enterprise only. On other plans, use Managed Challenge on a narrow path, check Security Events, then Block.',
         },
         {
           title: 'Cache Everything on session HTML',
@@ -633,7 +633,7 @@ export const tracks: Track[] = [
         },
         {
           title: 'WAF Block on day one with no Simulate',
-          detail: 'False positives on checkout/API. Log 24–48h, tune, then Block.',
+          detail: 'False positives on checkout/API. The Log action is Enterprise only. On other plans, use Managed Challenge on a narrow path, check Security Events, then Block.',
         },
         {
           title: 'Cache Everything on session HTML',

@@ -216,13 +216,13 @@ export const trackLessonEnrichment: Record<string, TrackLessonEnrichment> = {
     steps: {
       vi: [
         'Security → WAF → Managed rules: bật OWASP/Core ruleset.',
-        'Chạy Simulate/Log 24–48h trước khi Block.',
+        'Action Log chỉ có trên Enterprise. Gói khác: Managed Challenge trên path hẹp, xem Security Events, rồi mới Block.',
         'Tạo custom rule cho path /admin, /api nếu cần.',
         'Review Security Events để tinh chỉnh false positive.',
       ],
       en: [
         'Security → WAF → Managed rules: enable OWASP/Core rulesets.',
-        'Run Simulate/Log for 24–48h before Block.',
+        'The Log action is Enterprise only. On other plans, use Managed Challenge on a narrow path, check Security Events, then Block.',
         'Add custom rules for /admin, /api if needed.',
         'Review Security Events to tune false positives.',
       ],

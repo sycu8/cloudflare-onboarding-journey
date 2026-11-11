@@ -86,7 +86,7 @@ const showHow =
 
 {diagrams.length > 0 ? (
   <section class="mb-6" id="architecture">
-    <LangText as="h2" class="mb-4 text-lg font-semibold" text={{ vi: 'Kiến trúc', en: 'Architecture' }} />
+    <LangText as="h2" class="mb-4 text-lg font-semibold" text={{ vi: 'Sơ đồ', en: 'Diagrams' }} />
     <div class="grid gap-6 lg:grid-cols-2">
       {diagrams.map((diagram) => (
         <ReferenceDiagramFigure diagram={diagram} />
@@ -105,7 +105,7 @@ const showHow =
     </section>
     <section class="card mb-6" id="plan-notes">
       <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Gói và giới hạn', en: 'Plans and limits' }} />
-      <LangText as="p" class="text-muted mt-3 text-sm leading-relaxed" text={guide.planNotes} />
+      <LangText as="p" class="text-muted wrap-anywhere mt-3 text-sm leading-relaxed" text={guide.planNotes} />
       <p class="text-muted mt-3 text-xs leading-relaxed">
         <span class="lang-vi">Không phải báo giá. Đối chiếu docs và dashboard. Kiểm tra lần cuối: 2026-11-11.</span>
         <span class="lang-en">Not a price quote. Check the docs and the dashboard. Last checked: 2026-11-11.</span>

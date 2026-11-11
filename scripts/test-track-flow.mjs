@@ -159,6 +159,40 @@ try {
     assert.ok(item.summary.vi && item.summary.en, `${id} summary`);
   }
 
+  const { applicationServicesFollowAlong } = await vite.ssrLoadModule('/src/data/followAlong/applicationServices.ts');
+  const { developerPlatformFollowAlong } = await vite.ssrLoadModule('/src/data/followAlong/developerPlatform.ts');
+  const { trackLessonEnrichment } = await vite.ssrLoadModule('/src/data/trackLessons.ts');
+  const { trackLessonBestPractices } = await vite.ssrLoadModule('/src/data/trackLessonBestPractices.ts');
+
+  const lessonStrings = [];
+  const walk = (value, path) => {
+    if (typeof value === 'string') lessonStrings.push({ path, value });
+    else if (Array.isArray(value)) value.forEach((item, index) => walk(item, `${path}[${index}]`));
+    else if (value && typeof value === 'object') {
+      for (const [key, child] of Object.entries(value)) {
+        if (key === 'url' || key === 'href' || key === 'sourceUrl') continue;
+        walk(child, `${path}.${key}`);
+      }
+    }
+  };
+  for (const lesson of lessons) walk(lesson, lesson.id);
+  walk(applicationServicesFollowAlong, 'as-follow');
+  walk(developerPlatformFollowAlong, 'dp-follow');
+  walk(trackLessonEnrichment, 'enrichment');
+  walk(trackLessonBestPractices, 'best-practice');
+
+  const logAction = /log\s*\/\s*simulate|simulate\s*\/\s*log|\bwaf simulate\b|\blog mode\b|\b(in|ở) log\b(?!\/monitor)|\bthen:\s*log\b|→\s*log\b|log rồi block|log then block|\blog 24|\bwaf log\b|chế độ log|action mặc định là log|default action to log/i;
+  for (const item of lessonStrings) {
+    if (!logAction.test(item.value)) continue;
+    assert.match(item.value, /enterprise/i, `${item.path} recommends Log without an Enterprise caveat`);
+  }
+
+  const viDiacritic = /[àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]/i;
+  for (const item of lessonStrings) {
+    if (!item.path.endsWith('.en')) continue;
+    assert.equal(viDiacritic.test(item.value), false, `${item.path} EN has Vietnamese diacritics: ${item.value.slice(0, 80)}`);
+  }
+
   const hrefs = new Set(lessons.map((lesson) => `/tracks/${lesson.trackSlug}/${lesson.id}/`));
   for (const item of dp.concat(asFlow)) {
     if (item.kind === 'lab-official') {
