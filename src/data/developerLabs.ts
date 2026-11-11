@@ -88,6 +88,7 @@ const developerLabTracksRaw: DeveloperLabTrack[] = [
     tags: ['HTTP APIs', 'KV', 'D1', 'Workers AI'],
     labCount: 7,
     hubModuleIds: ['dp-1', 'dp-3', 'dp-5'],
+    dependsOn: ['dp-k-worker', 'dp-1-l2'],
     whenInHub: {
       vi: 'Sau Phần 1 (Worker + Wrangler) và Phần 3 (KV/D1). Lab AI + Gateway khớp Phần 5.',
       en: 'After Part 1 (Worker + Wrangler) and Part 3 (KV/D1). The AI + Gateway labs match Part 5.',
@@ -265,6 +266,7 @@ const developerLabTracksRaw: DeveloperLabTrack[] = [
     tags: ['Agents SDK', 'State', 'Scheduling', 'WebSockets'],
     labCount: 2,
     hubModuleIds: ['dp-5', 'dp-6'],
+    dependsOn: ['dp-k-ai', 'dp-5-l5'],
     whenInHub: {
       vi: 'Sau bài Agents ở Phần 5. Phần 6 (Durable Objects) giải thích state theo object phía sau SDK.',
       en: 'After the Agents lesson in Part 5. Part 6 (Durable Objects) explains the per-object state behind the SDK.',
@@ -308,7 +310,7 @@ const developerLabTracksRaw: DeveloperLabTrack[] = [
     tags: ['Secure Execution', 'AI Code Generation', 'Containers', 'Workers AI'],
     labCount: 7,
     hubModuleIds: ['dp-4', 'dp-5'],
-    dependsOn: ['dp-5-l1'],
+    dependsOn: ['dp-5-l5'],
     whenInHub: {
       vi: 'Sau Phần 5 (AI) và Phần 4 (vận hành/secret). Lab bảo mật khớp golden rules: secret không lên client.',
       en: 'After Part 5 (AI) and Part 4 (operate/secrets). The security labs match the golden rules: secrets stay off the client.',

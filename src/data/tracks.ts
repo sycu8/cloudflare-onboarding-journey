@@ -9,6 +9,15 @@ import {
   asTrafficLesson,
   asWafLesson,
 } from './asKnowledgeLessons';
+import {
+  dpAiLesson,
+  dpArchitectureLesson,
+  dpOperateLesson,
+  dpPagesLesson,
+  dpStatefulLesson,
+  dpStorageLesson,
+  dpWorkerLesson,
+} from './dpKnowledgeLessons';
 
 export type { LessonKind };
 
@@ -651,18 +660,18 @@ export const tracks: Track[] = [
     slug: 'developer-platform',
     title: { vi: 'Developer Platform', en: 'Developer Platform', km: 'Developer Platform' },
     headline: {
-      vi: 'Follow-along Worker-first: C3 + Wrangler, rồi storage, Pages (compat), operate và AI',
-      en: 'Follow-along Worker-first: C3 + Wrangler, then storage, Pages (compat), operate, and AI',
-      km: 'Follow-along Worker-first: C3 + Wrangler បន្ទាប់មក storage, Pages (compat), operate និង AI',
+      vi: 'Hiểu Worker, storage và AI trước, rồi làm lab',
+      en: 'Learn Workers, storage, and AI first, then do the lab',
+      km: 'Learn Workers, storage, and AI first, then do the lab',
     },
     promise: {
-      vi: 'Deploy Hello World lên *.workers.dev, bind KV/D1/R2 đúng chỗ, secret không lên client — AI chỉ sau nền.',
-      en: 'Deploy Hello World to *.workers.dev, bind KV/D1/R2 correctly, keep secrets off the client — AI only after the spine.',
-      km: 'Deploy Hello World ទៅ *.workers.dev, bind KV/D1/R2 ឱ្យត្រឹមត្រូវ, កុំដាក់ secret នៅលើ client — AI តែបន្ទាប់ពីគ្រឹះ។',
+      vi: 'Lộ trình cho người muốn ship API hoặc tool mà không quản máy chủ. Đọc bài kiến thức, rồi làm lab hub, rồi lab chính thức nếu có.',
+      en: 'A path for people who want to ship an API or a tool without running a server. Read the knowledge lesson, do the hub lab, then the official lab when one exists.',
+      km: 'A path for people who want to ship an API or a tool without running a server. Read the knowledge lesson, do the hub lab, then the official lab when one exists.',
     },
     description: {
-      vi: 'Lộ trình follow-along 2026: app mới bắt đầu bằng Workers (C3 + wrangler). Pages vẫn có cho Git site hiện có (như chính hub này). Dừng sau Worker đầu tiên vẫn có giá trị. Use case là cửa chọn; track là đường làm.',
-      en: 'A 2026 follow-along path: new apps start with Workers (C3 + wrangler). Pages remains for existing Git sites (like this hub). Stopping after the first Worker still leaves something useful. Use cases are the doorway; this track is the how-to.',
+      vi: 'App mới bắt đầu bằng Worker (C3 + Wrangler). Pages dành cho site Git có sẵn, như chính hub này. Dừng sau Worker đầu tiên vẫn có giá trị. AI làm sau khi secret và storage đã ổn.',
+      en: 'A new app starts with a Worker (C3 + Wrangler). Pages is for an existing Git site, like this hub. Stopping after the first Worker still leaves something useful. AI comes after secrets and storage are in place.',
       km: 'ផ្លូវ follow-along 2026៖ app ថ្មីចាប់ផ្តើមដោយ Workers (C3 + wrangler)។ Pages នៅសល់សម្រាប់ Git site ដែលមានស្រាប់ (ដូច hub នេះ)។ បញ្ឈប់បន្ទាប់ពី Worker ដំបូង នៅតែទុកអ្វីដែលមានប្រយោជន៍។ ករណីប្រើប្រាស់គឺជាច្រកចូល; track នេះគឺរបៀបធ្វើ។',
     },
     whoIsThisFor: {
@@ -742,28 +751,28 @@ export const tracks: Track[] = [
     ],
     startHere: {
       intro: {
-        vi: 'App mới: Worker trước. Hub này dùng Pages + Functions vì nó là site nội dung — đó không phải template cho API mới. Làm đúng lệnh, checkpoint URL, rồi mới AI.',
-        en: 'New apps: Worker first. This hub uses Pages + Functions because it is a content site — that is not the template for a new API. Run the commands, checkpoint the URL, then AI.',
+        vi: 'Đọc bài kiến thức của từng phần trước, rồi làm lab. App mới dùng Worker. Pages chỉ cho site Git có sẵn. Đừng gọi AI trước khi secret nằm trên Worker.',
+        en: 'Read each part’s knowledge lesson, then do the lab. A new app uses a Worker. Pages is only for an existing Git site. Do not call AI before the secret lives on the Worker.',
         km: 'app ថ្មី៖ Worker មុន។ Hub នេះប្រើ Pages + Functions ព្រោះវាជា site មាតិកា — នោះមិនមែនជា template សម្រាប់ API ថ្មី។ រត់ command, checkpoint URL បន្ទាប់មក AI។',
       },
       checklistTitle: { vi: 'Trước khi chạy C3', en: 'Before you run C3', km: 'មុនពេលអ្នករត់ C3' },
       checklist: {
         vi: [
-          'Node.js 18.17+ và npm',
+          'Node.js bản Current, Active hoặc Maintenance (trang cài Wrangler) và npm',
           'Tài khoản Cloudflare (Workers & Pages)',
           'Quyết định: app mới (Worker) hay Git site có sẵn (Pages)',
           'Không commit file .env có secret; chuẩn bị tên project (my-first-worker)',
           'Nếu sẽ gắn domain: zone đã có trên account (track Application Services)',
         ],
         en: [
-          'Node.js 18.17+ and npm',
+          'A Current, Active, or Maintenance Node.js release (Wrangler install page) and npm',
           'A Cloudflare account (Workers & Pages)',
           'Decide: new app (Worker) or existing Git site (Pages)',
           'Do not commit .env secrets; pick a project name (my-first-worker)',
           'If you will attach a domain: a zone already on the account (Application Services track)',
         ],
       km: [
-        'Node.js 18.17+ និង npm',
+        'A Current, Active, or Maintenance Node.js release (Wrangler install page) and npm',
         'គណនី Cloudflare (Workers & Pages)',
         'សម្រេច៖ app ថ្មី (Worker) ឬ Git site មានស្រាប់ (Pages)',
         'កុំ commit secret ក្នុង .env; ជ្រើសឈ្មោះ project (my-first-worker)',
@@ -771,16 +780,27 @@ export const tracks: Track[] = [
       ],
       },
       planNote: {
-        vi: 'Workers Free đủ Hello World, KV/D1/R2 nhỏ, Workers AI lab. Durable Objects, Queues, Workflows, Hyperdrive thường cần Paid — xác nhận trên dashboard trước Phần 6.',
-        en: 'Workers Free is enough for Hello World, small KV/D1/R2, and a Workers AI lab. Durable Objects, Queues, Workflows, and Hyperdrive usually need Paid — confirm in the dashboard before Part 6.',
-        km: 'Workers Free គ្រប់គ្រាន់សម្រាប់ Hello World, KV/D1/R2 តូច និង lab Workers AI។ Durable Objects, Queues, Workflows និង Hyperdrive ជាធម្មតាត្រូវការ Paid — បញ្ជាក់នៅ dashboard មុនផ្នែក 6។',
+        vi: 'Số trong bảng lấy từ docs ngày 2026-11-11. Mỗi dòng là một sản phẩm. Vượt hạn Free thì lời gọi lỗi. Giá gói Paid xem trang pricing, không chép ở đây.',
+        en: 'The numbers in the table are from the docs on 2026-11-11. Each row is one product. Past a Free cap, the call fails. Paid prices are on the pricing page, not copied here.',
+        km: 'The numbers in the table are from the docs on 2026-11-11. Each row is one product. Past a Free cap, the call fails. Paid prices are on the pricing page, not copied here.',
+      },
+      planFootnote: {
+        vi: 'Không phải báo giá; đối chiếu Cloudflare Plans / product docs và dashboard. Kiểm tra lần cuối: 2026-11-11.',
+        en: 'Not a price quote; check Cloudflare Plans / product docs and the dashboard. Last checked: 2026-11-11.',
       },
       planRows: [
-        { capability: { vi: 'Workers, wrangler, workers.dev', en: 'Workers, wrangler, workers.dev', km: 'Workers, wrangler, workers.dev' }, free: { vi: 'Có (quota ngày)', en: 'Yes (daily quota)', km: 'Yes (quota ប្រចាំថ្ងៃ)' }, paid: { vi: 'Quota cao hơn', en: 'Higher quota', km: 'quota ខ្ពស់ជាង' } },
-        { capability: { vi: 'KV, D1, R2', en: 'KV, D1, R2', km: 'KV, D1, R2' }, free: { vi: 'Free tier', en: 'Free tier', km: 'Free tier' }, paid: { vi: 'Limit cao hơn', en: 'Higher limits', km: 'limit ខ្ពស់ជាង' } },
-        { capability: { vi: 'Pages + Functions', en: 'Pages + Functions', km: 'Pages + Functions' }, free: { vi: 'Có', en: 'Yes', km: 'Yes' }, paid: { vi: 'Build minutes nhiều hơn', en: 'More build minutes', km: 'build minute ច្រើនជាង' } },
-        { capability: { vi: 'Workers AI, AI Gateway', en: 'Workers AI, AI Gateway', km: 'Workers AI, AI Gateway' }, free: { vi: 'Lab / neurons ngày', en: 'Lab / daily neurons', km: 'Lab / neuron ប្រចាំថ្ងៃ' }, paid: { vi: 'Usage + guardrails/DLP', en: 'Usage + guardrails/DLP', km: 'Usage + guardrails/DLP' } },
-        { capability: { vi: 'Durable Objects, Queues, Workflows, Hyperdrive', en: 'Durable Objects, Queues, Workflows, Hyperdrive', km: 'Durable Objects, Queues, Workflows, Hyperdrive' }, free: { vi: 'Hạn chế / không', en: 'Limited / no', km: 'មានកំណត់ / ទេ' }, paid: { vi: 'Workers Paid / add-on', en: 'Workers Paid / add-on', km: 'Workers Paid / add-on' } },
+        { capability: { vi: 'Workers (request và CPU)', en: 'Workers (requests and CPU)' }, free: { vi: '100.000 request/ngày, 10 ms CPU', en: '100,000 requests/day, 10 ms CPU' }, paid: { vi: 'Bảng limits: không trần request, CPU tới 5 phút. Mức phí trên trang pricing', en: 'Limits table: no request cap, CPU up to 5 min. The fee is on the pricing page' } },
+        { capability: { vi: 'KV', en: 'KV' }, free: { vi: '100.000 đọc/ngày, 1.000 ghi/ngày, 1 GB', en: '100,000 reads/day, 1,000 writes/day, 1 GB' }, paid: { vi: 'Hạn mức tháng cao hơn, xem pricing', en: 'Higher monthly allowance, see pricing' } },
+        { capability: { vi: 'D1', en: 'D1' }, free: { vi: '5 triệu dòng đọc/ngày, 100.000 dòng ghi/ngày, 5 GB, 10 database', en: '5 million rows read/day, 100,000 rows written/day, 5 GB, 10 databases' }, paid: { vi: 'Hạn mức tháng cao hơn, xem pricing', en: 'Higher monthly allowance, see pricing' } },
+        { capability: { vi: 'R2', en: 'R2' }, free: { vi: '10 GB-tháng, 1 triệu Class A và 10 triệu Class B mỗi tháng', en: '10 GB-months, 1 million Class A and 10 million Class B per month' }, paid: { vi: 'Tính theo dung lượng và thao tác, xem pricing', en: 'Billed on storage and operations, see pricing' } },
+        { capability: { vi: 'Pages Functions', en: 'Pages Functions' }, free: { vi: 'Tính vào 100.000 request Workers/ngày. File tĩnh không tính', en: 'Counts toward 100,000 Worker requests/day. Static files do not count' }, paid: { vi: 'Cùng cách tính Workers Paid', en: 'Same meter as Workers Paid' } },
+        { capability: { vi: 'Workers AI', en: 'Workers AI' }, free: { vi: '10.000 neuron/ngày. Vài model lớn không có trên Free', en: '10,000 neurons/day. A few large models are not on Free' }, paid: { vi: 'Cùng 10.000 neuron/ngày, phần vượt tính phí. Xem pricing', en: 'Same 10,000 neurons/day, usage above that is billed. See pricing' } },
+        { capability: { vi: 'AI Gateway', en: 'AI Gateway' }, free: { vi: 'Bài này không gán gói. Xem docs và dashboard', en: 'This table does not assign a plan. See the docs and dashboard' }, paid: { vi: 'Xem docs và dashboard', en: 'See the docs and dashboard' } },
+        { capability: { vi: 'Durable Objects', en: 'Durable Objects' }, free: { vi: 'Có, chỉ SQLite. 5 triệu dòng đọc/ngày, 100.000 dòng ghi/ngày, 5 GB', en: 'Yes, SQLite only. 5 million rows read/day, 100,000 rows written/day, 5 GB' }, paid: { vi: 'Thêm backend và hạn mức. Xem pricing', en: 'More backends and a higher allowance. See pricing' } },
+        { capability: { vi: 'Queues', en: 'Queues' }, free: { vi: 'Pricing: 10.000 thao tác/ngày, giữ tin 24 giờ. Tutorial khác nói cần Paid để bật — xem dashboard', en: 'Pricing: 10,000 operations/day, 24-hour retention. Another tutorial says Paid is required to enable it. Check the dashboard' }, paid: { vi: '1 triệu thao tác/tháng rồi tính thêm. Giữ tin tới 14 ngày', en: '1 million operations/month, then more. Retention up to 14 days' } },
+        { capability: { vi: 'Workflows', en: 'Workflows' }, free: { vi: 'Có. 3.000 step/ngày, CPU 10 ms, request dùng chung Workers', en: 'Yes. 3,000 steps/day, 10 ms CPU, requests shared with Workers' }, paid: { vi: 'Hạn mức tháng cao hơn, xem pricing', en: 'Higher monthly allowance, see pricing' } },
+        { capability: { vi: 'Hyperdrive', en: 'Hyperdrive' }, free: { vi: '100.000 query/ngày', en: '100,000 queries/day' }, paid: { vi: 'Không trần query trên bảng pricing', en: 'No query cap on the pricing table' } },
+        { capability: { vi: 'Vectorize', en: 'Vectorize' }, free: { vi: 'Không gán gói: một câu nói chỉ Paid, một bảng có dòng Free', en: 'No plan assigned: one sentence says Paid only, a table still has a Free row' }, paid: { vi: 'Xem docs Vectorize và dashboard', en: 'See the Vectorize docs and the dashboard' } },
       ],
     },
     modules: [
@@ -794,16 +814,7 @@ export const tracks: Track[] = [
         },
         duration: { vi: '~15 phút', en: '~15 min', km: '~15 នាទី' },
         role: 'required',
-        lessons: [
-          {
-            title: { vi: 'Kiến trúc Developer Platform 2026', en: 'Developer Platform architecture 2026', km: 'ស្ថាបត្យកម្ម Developer Platform 2026' },
-            body: {
-              vi: 'User → Worker hoặc Pages → bindings → AI Gateway. Hub này là ví dụ Pages; project mới dùng C3.',
-              en: 'User → Worker or Pages → bindings → AI Gateway. This hub is a Pages example; new projects use C3.',
-              km: 'User → Worker ឬ Pages → binding → AI Gateway។ Hub នេះជាឧទាហរណ៍ Pages; project ថ្មីប្រើ C3។',
-            },
-          },
-        ],
+        lessons: [dpArchitectureLesson],
       },
       {
         id: 'dp-1',
@@ -816,7 +827,11 @@ export const tracks: Track[] = [
         duration: { vi: '~55 phút', en: '~55 min', km: '~55 នាទី' },
         role: 'required',
         lessons: [
+          dpWorkerLesson,
           {
+            dependsOn: ['dp-k-worker'],
+            kind: 'lab-hub',
+            duration: { vi: '~25 phút', en: '~25 min' },
             title: { vi: 'C3, wrangler login và deploy Hello World', en: 'C3, wrangler login, and deploy Hello World', km: 'C3, wrangler login និង deploy Hello World' },
             body: {
               vi: 'Hello World, Worker only, TypeScript. Checkpoint: localhost:8787 và *.workers.dev.',
@@ -826,6 +841,9 @@ export const tracks: Track[] = [
             hubLink: '/use-cases/build-serverless-app',
           },
           {
+            dependsOn: ['dp-k-worker'],
+            kind: 'lab-hub',
+            duration: { vi: '~30 phút', en: '~30 min' },
             title: { vi: 'wrangler.jsonc, vars và wrangler secret', en: 'wrangler.jsonc, vars, and wrangler secret', km: 'wrangler.jsonc, vars និង wrangler secret' },
             body: {
               vi: 'File config là source of truth. Secret không nằm trong vars hay PUBLIC_*.',
@@ -846,7 +864,11 @@ export const tracks: Track[] = [
         duration: { vi: '~55 phút', en: '~55 min', km: '~55 នាទី' },
         role: 'recommended',
         lessons: [
+          dpPagesLesson,
           {
+            dependsOn: ['dp-k-pages'],
+            kind: 'lab-hub',
+            duration: { vi: '~30 phút', en: '~30 min' },
             title: { vi: 'Pages từ Git: build command và output dist', en: 'Pages from Git: build command and dist output', km: 'Pages ពី Git: build command និង output dist' },
             body: {
               vi: 'Connect Git, npm run build, output dist. Preview mỗi PR. Đọc guide migrate sang Workers khi sẵn sàng.',
@@ -856,6 +878,9 @@ export const tracks: Track[] = [
             hubLink: '/use-cases/deploy-static-site',
           },
           {
+            dependsOn: ['dp-k-pages'],
+            kind: 'lab-hub',
+            duration: { vi: '~25 phút', en: '~25 min' },
             title: { vi: 'Pages Functions /api/* và khi nào tách Worker', en: 'Pages Functions /api/* and when to split a Worker', km: 'Pages Functions /api/* និងពេលណាត្រូវបំបែក Worker' },
             body: {
               vi: 'Cùng Workers runtime. Tách Worker khi service không gắn UI tĩnh.',
@@ -876,7 +901,11 @@ export const tracks: Track[] = [
         duration: { vi: '~75 phút', en: '~75 min', km: '~75 នាទី' },
         role: 'required',
         lessons: [
+          dpStorageLesson,
           {
+            dependsOn: ['dp-k-storage'],
+            kind: 'lab-hub',
+            duration: { vi: '~25 phút', en: '~25 min' },
             title: { vi: 'KV cho config và cache nhẹ', en: 'KV for config and light cache', km: 'KV សម្រាប់ config និង cache ស្រាល' },
             body: {
               vi: 'Lưu feature flags, session token ngắn, rate limit counter. Không dùng KV cho giao dịch tài chính cần consistency cao.',
@@ -886,6 +915,9 @@ export const tracks: Track[] = [
             hubLink: '/glossary',
           },
           {
+            dependsOn: ['dp-k-storage'],
+            kind: 'lab-hub',
+            duration: { vi: '~30 phút', en: '~30 min' },
             title: { vi: 'D1 cho dữ liệu có schema', en: 'D1 for structured data', km: 'D1 សម្រាប់ទិន្នន័យមានរចនាសម្ព័ន្ធ' },
             body: {
               vi: 'Workshop signup, quiz results, user preferences — bảng SQL nhỏ. Chạy migration với `wrangler d1 migrations`.',
@@ -894,6 +926,9 @@ export const tracks: Track[] = [
             },
           },
           {
+            dependsOn: ['dp-k-storage'],
+            kind: 'lab-hub',
+            duration: { vi: '~20 phút', en: '~20 min' },
             title: { vi: 'R2 cho file và tài liệu', en: 'R2 for files and assets', km: 'R2 សម្រាប់ឯកសារ និង asset' },
             body: {
               vi: 'PDF, slides, upload user — object storage. Có thể phục vụ public hoặc signed URL sau này.',
@@ -914,7 +949,11 @@ export const tracks: Track[] = [
         duration: { vi: '~45 phút', en: '~45 min', km: '~45 នាទី' },
         role: 'recommended',
         lessons: [
+          dpOperateLesson,
           {
+            dependsOn: ['dp-k-operate'],
+            kind: 'lab-hub',
+            duration: { vi: '~20 phút', en: '~20 min' },
             title: { vi: 'Web Analytics và log Workers', en: 'Web Analytics and Worker logs', km: 'Web Analytics និង log Worker' },
             body: {
               vi: 'Bật Cloudflare Web Analytics cho traffic. Dùng `wrangler tail` hoặc observability khi debug API.',
@@ -923,6 +962,9 @@ export const tracks: Track[] = [
             },
           },
           {
+            dependsOn: ['dp-k-operate'],
+            kind: 'lab-hub',
+            duration: { vi: '~25 phút', en: '~25 min' },
             title: { vi: 'Turnstile cho form public', en: 'Turnstile for public forms', km: 'Turnstile សម្រាប់ form សាធារណៈ' },
             body: {
               vi: 'Chống bot trên đăng ký workshop, contact form. Verify token server-side trước khi ghi D1.',
@@ -944,7 +986,11 @@ export const tracks: Track[] = [
         duration: { vi: '~110 phút', en: '~110 min', km: '~110 នាទី' },
         role: 'recommended',
         lessons: [
+          dpAiLesson,
           {
+            dependsOn: ['dp-k-ai'],
+            kind: 'lab-hub',
+            duration: { vi: '~25 phút', en: '~25 min' },
             title: { vi: 'Inference đầu tiên với Workers AI', en: 'First inference with Workers AI', km: 'inference ដំបូងជាមួយ Workers AI' },
             body: {
               vi: 'Thêm AI binding vào Worker, gọi model từ server-side và trả response tối thiểu. Bắt đầu bằng một task rõ ràng trước khi thêm chat UI hoặc nhiều provider.',
@@ -954,6 +1000,9 @@ export const tracks: Track[] = [
             hubLink: '/use-cases/build-ai-applications',
           },
           {
+            dependsOn: ['dp-k-ai'],
+            kind: 'lab-hub',
+            duration: { vi: '~25 phút', en: '~25 min' },
             title: { vi: 'Adopt AI có kiểm soát với AI Gateway', en: 'Adopt AI deliberately with AI Gateway', km: 'ប្រើ AI ដោយចេតនាជាមួយ AI Gateway' },
             body: {
               vi: 'Đặt AI Gateway giữa app và model provider để quan sát request, cache khi phù hợp và thay provider mà không làm lộ credential ở client.',
@@ -962,6 +1011,9 @@ export const tracks: Track[] = [
             },
           },
           {
+            dependsOn: ['dp-k-ai'],
+            kind: 'lab-hub',
+            duration: { vi: '~20 phút', en: '~20 min' },
             title: { vi: 'Baseline bảo mật cho ứng dụng AI', en: 'AI application security baseline', km: 'baseline សុវត្ថិភាពកម្មវិធី AI' },
             body: {
               vi: 'Giữ key ở Worker secrets, xác thực người dùng trước endpoint AI, rate limit input, validate tool input và áp dụng guardrails cho data/response nhạy cảm.',
@@ -971,6 +1023,9 @@ export const tracks: Track[] = [
             hubLink: '/cheatsheets/ai-protection-portfolio#ai-gateway',
           },
           {
+            dependsOn: ['dp-k-ai'],
+            kind: 'lab-hub',
+            duration: { vi: '~40 phút', en: '~40 min' },
             title: { vi: 'RAG với Vectorize và storage', en: 'RAG with Vectorize and storage', km: 'RAG ជាមួយ Vectorize និង storage' },
             body: {
               vi: 'Tách luồng ingest và query: lưu tài liệu trong R2, tạo embeddings vào Vectorize, retrieve context có nguồn trước khi gọi model. Đừng coi vector search là quyền truy cập dữ liệu.',
@@ -979,6 +1034,9 @@ export const tracks: Track[] = [
             },
           },
           {
+            dependsOn: ['dp-k-ai'],
+            kind: 'lab-hub',
+            duration: { vi: '~35 phút', en: '~35 min' },
             title: { vi: 'Agents: tools, skills và quyền hạn tối thiểu', en: 'Agents: tools, skills, and least privilege', km: 'Agent៖ tool, skill និង least privilege' },
             body: {
               vi: 'Dùng Agents SDK cho state/session khi cần. Mỗi tool cần schema input rõ ràng, authorization ở server và scope nhỏ; skill là hướng dẫn/versioned knowledge, không phải quyền truy cập bí mật.',
@@ -992,14 +1050,18 @@ export const tracks: Track[] = [
         id: 'dp-6',
         title: { vi: 'Phần 6: Durable Objects, Queues, Workflows, Hyperdrive', en: 'Part 6: Durable Objects, Queues, Workflows, Hyperdrive', km: 'ផ្នែក 6: Durable Objects, Queues, Workflows, Hyperdrive' },
         description: {
-          vi: 'Optional — chọn đúng một sản phẩm sau khi Worker + storage ổn. Thường cần Workers Paid.',
-          en: 'Optional — pick exactly one product after Worker + storage are stable. Often needs Workers Paid.',
+          vi: 'Optional — chọn đúng một sản phẩm sau khi Worker và storage đã ổn. Cả bốn đều có mức Free có hạn. Xem dashboard trước khi bật.',
+          en: 'Optional — pick exactly one product after the Worker and storage are stable. All four have a limited Free allowance. Check the dashboard before you turn one on.',
           km: 'ស្រេចចិត្ត — ជ្រើសរើសផលិតផលតែមួយបន្ទាប់ពី Worker + storage មានស្ថិរភាព។ ជាញឹកញាប់ត្រូវការ Workers Paid។',
         },
         duration: { vi: '~30 phút', en: '~30 min', km: '~30 នាទី' },
         role: 'optional',
         lessons: [
+          dpStatefulLesson,
           {
+            dependsOn: ['dp-k-stateful'],
+            kind: 'lab-hub',
+            duration: { vi: '~30 phút', en: '~30 min' },
             title: { vi: 'Khi nào thêm DO, Queue, Workflow hoặc Hyperdrive', en: 'When to add DO, Queue, Workflow, or Hyperdrive', km: 'ពេលណាត្រូវបន្ថែម DO, Queue, Workflow, ឬ Hyperdrive' },
             body: {
               vi: 'DO: state theo object. Queues: việc nền. Workflows: pipeline dài. Hyperdrive: Postgres/MySQL bên ngoài — không thay D1.',
@@ -1021,6 +1083,9 @@ export const tracks: Track[] = [
         role: 'reference',
         lessons: [
           {
+            kind: 'reference',
+            prerequisites: ['dp-6-l1'],
+            duration: { vi: '~15 phút', en: '~15 min' },
             title: { vi: '10 golden rules Developer Platform', en: '10 Developer Platform golden rules', km: '10 golden rules Developer Platform' },
             body: {
               vi: 'Worker-first; secret qua wrangler secret; chọn storage đúng; verify Turnstile; vector ≠ ACL.',
@@ -1029,6 +1094,8 @@ export const tracks: Track[] = [
             },
           },
           {
+            kind: 'reference',
+            prerequisites: ['dp-7-l1'],
             title: { vi: 'Sổ tay lệnh (C3 / wrangler / Pages)', en: 'Command runbook (C3 / wrangler / Pages)', km: 'Command runbook (C3 / wrangler / Pages)' },
             duration: { vi: '~10 phút', en: '~10 min', km: '~10 នាទី' },
             body: {
@@ -1104,7 +1171,7 @@ export const tracks: Track[] = [
         },
         {
           title: 'App mới bắt đầu bằng Pages Functions',
-          detail: 'On-ramp 2026 là C3 + Worker. Pages Functions hợp site Git hiện có (như hub này), không phải template API mới.',
+          detail: 'Lối vào là C3 + Worker. Pages Functions hợp site Git hiện có (như hub này), không phải khuôn API mới.',
         },
       ],
       en: [
@@ -1130,7 +1197,7 @@ export const tracks: Track[] = [
         },
         {
           title: 'Starting a new app with Pages Functions',
-          detail: 'The 2026 on-ramp is C3 + Worker. Pages Functions fit existing Git sites (like this hub), not a new API template.',
+          detail: 'The on-ramp is C3 + Worker. Pages Functions fit existing Git sites (like this hub), not a new API template.',
         },
       ],
       km: [
@@ -1156,7 +1223,7 @@ export const tracks: Track[] = [
         },
         {
           title: 'Starting a new app with Pages Functions',
-          detail: 'The 2026 on-ramp is C3 + Worker. Pages Functions fit existing Git sites (like this hub), not a new API template.',
+          detail: 'The on-ramp is C3 + Worker. Pages Functions fit existing Git sites (like this hub), not a new API template.',
         },
       ],
     },
