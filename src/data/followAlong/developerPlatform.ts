@@ -39,11 +39,11 @@ export const developerPlatformFollowAlong: FollowAlongLesson[] = [
       'Decision: new apps start with a Worker + C3; Pages is for existing Git sites; AI/RAG only after secrets and storage are clear.',
       'ការសម្រេច: app ថ្មីចាប់ផ្តើមតាម Worker + C3; Pages សម្រាប់ Git site ដែលមានស្រាប់; AI/RAG តែប៉ុណ្ណោះបន្ទាប់ពី secret និង storage ច្បាស់។',
     ),
-    beforeYouBegin: t('Node.js 18+ và tài khoản Cloudflare. Không bắt buộc có domain.', 'Node.js 18+ and a Cloudflare account. A domain is optional.', 'Node.js 18+ និងគណនី Cloudflare។ Domain គឺ optional។'),
+    beforeYouBegin: t('Node.js bản Current, Active hoặc Maintenance, và tài khoản Cloudflare. Không bắt buộc có domain.', 'A Current, Active, or Maintenance Node.js release, and a Cloudflare account. A domain is optional.', 'A Current, Active, or Maintenance Node.js release, and a Cloudflare account. A domain is optional.'),
     intro: t(
-      'Developer Platform 2026: compute mặc định là Workers. C3 (`npm create cloudflare`) + Wrangler là on-ramp.\n\nUser → Worker hoặc Pages → KV / D1 / R2 / Durable Objects → (tuỳ chọn) AI Gateway → model.\n\nHub này (onboarding.orangecloud.vn) là ví dụ Pages + Functions + D1. Project mới: Worker-first. Dừng sau Worker đầu tiên vẫn có giá trị.',
-      'Developer Platform 2026: default compute is Workers. C3 (`npm create cloudflare`) + Wrangler is the on-ramp.\n\nUser → Worker or Pages → KV / D1 / R2 / Durable Objects → (optional) AI Gateway → model.\n\nThis hub (onboarding.orangecloud.vn) is a Pages + Functions + D1 example. New projects: Worker-first. Stopping after the first Worker still leaves something useful.',
-      'Developer Platform 2026: compute លំនាំដើមគឺ Workers។ C3 (`npm create cloudflare`) + Wrangler គឺ on-ramp។\n\nUser → Worker ឬ Pages → KV / D1 / R2 / Durable Objects → (optional) AI Gateway → model។\n\nHub នេះ (onboarding.orangecloud.vn) គឺឧទាហរណ៍ Pages + Functions + D1។ Project ថ្មី: Worker-first។ ការឈប់បន្ទាប់ពី Worker ទីមួយនៅតែទុកអ្វីដែលមានប្រយោជន៍។',
+      'Compute mặc định là Workers. C3 (`npm create cloudflare`) + Wrangler là lối vào.\n\nUser → Worker hoặc Pages → KV / D1 / R2 → (tuỳ chọn) AI Gateway → model.\n\nHub này là ví dụ Pages + Functions + D1. Project mới: Worker trước. Dừng sau Worker đầu tiên vẫn có giá trị.',
+      'Default compute is Workers. C3 (`npm create cloudflare`) + Wrangler is the on-ramp.\n\nUser → Worker or Pages → KV / D1 / R2 → (optional) AI Gateway → model.\n\nThis hub is a Pages + Functions + D1 example. New projects: Worker first. Stopping after the first Worker still leaves something useful.',
+      'Default compute is Workers. C3 (`npm create cloudflare`) + Wrangler is the on-ramp.\n\nUser → Worker or Pages → KV / D1 / R2 → (optional) AI Gateway → model.\n\nThis hub is a Pages + Functions + D1 example. New projects: Worker first. Stopping after the first Worker still leaves something useful.',
     ),
     steps: [
       {
@@ -87,8 +87,8 @@ export const developerPlatformFollowAlong: FollowAlongLesson[] = [
       'URL https://<name>.<subdomain>.workers.dev returns “Hello World”; `wrangler dev` runs locally.',
       'URL https://<name>.<subdomain>.workers.dev ត្រឡប់ “Hello World”; `wrangler dev` ដំណើរការ locally។',
     ),
-    beforeYouBegin: t('Node.js ≥ 18.17; npm; trình duyệt cho OAuth Wrangler.', 'Node.js ≥ 18.17; npm; a browser for Wrangler OAuth.', 'Node.js ≥ 18.17; npm; browser សម្រាប់ Wrangler OAuth។'),
-    planNote: t('Workers Free có request limit hàng ngày. Paid Workers tăng limit và thêm features (DO, Queues, …).', 'Workers Free has a daily request cap. Paid Workers raises limits and unlocks features (DO, Queues, …).', 'Workers Free មានដែនកំណត់ request ប្រចាំថ្ងៃ។ Paid Workers លើកដែនកំណត់ និងដោះ feature (DO, Queues, …)។'),
+    beforeYouBegin: t('Node.js bản Current, Active hoặc Maintenance; npm; trình duyệt cho OAuth Wrangler.', 'A Current, Active, or Maintenance Node.js release; npm; a browser for Wrangler OAuth.', 'A Current, Active, or Maintenance Node.js release; npm; a browser for Wrangler OAuth.'),
+    planNote: t('Workers Free: 100.000 request/ngày và 10 ms CPU. Durable Objects, Queues, Workflows và Hyperdrive cũng có mức Free có hạn — xem docs, không coi là khóa Paid.', 'Workers Free: 100,000 requests per day and 10 ms of CPU. Durable Objects, Queues, Workflows, and Hyperdrive also have a limited Free allowance. See the docs. They are not a Paid lock.', 'Workers Free: 100,000 requests per day and 10 ms of CPU. Durable Objects, Queues, Workflows, and Hyperdrive also have a limited Free allowance. See the docs. They are not a Paid lock.'),
     steps: [
       {
         action: t('Tạo hoặc mở tài khoản Workers: dash.cloudflare.com/sign-up/workers-and-pages.', 'Create or open a Workers account: dash.cloudflare.com/sign-up/workers-and-pages.', 'បង្កើតឬបើកគណនី Workers: dash.cloudflare.com/sign-up/workers-and-pages។'),
@@ -661,7 +661,7 @@ export const developerPlatformFollowAlong: FollowAlongLesson[] = [
       'ផលិតផល optional មួយបាន map ទៅ use case; បីទៀតគឺ “not yet”។',
     ),
     beforeYouBegin: t('Phần 1 và 3 xong. Đừng học cả bốn cùng lúc.', 'Parts 1 and 3 done. Do not learn all four at once.', 'Parts 1 និង 3 រួចហើយ។ កុំរៀនទាំង four ក្នុងពេលតែមួយ។'),
-    planNote: t('Durable Objects, Queues, Workflows, Hyperdrive thường cần Workers Paid / giới hạn Free khác nhau — kiểm tra dashboard.', 'Durable Objects, Queues, Workflows, and Hyperdrive usually need Workers Paid / different Free limits — check the dashboard.', 'Durable Objects, Queues, Workflows និង Hyperdrive ជាធម្មតាត្រូវការ Workers Paid / ដែនកំណត់ Free ខុសគ្នា — ពិនិត្យ dashboard។'),
+    planNote: t('Cả bốn có mức Free có hạn (SQLite cho Durable Objects, 10.000 thao tác Queues/ngày, 3.000 step Workflows/ngày, 100.000 query Hyperdrive/ngày). Một tutorial Queues vẫn nói cần Paid để bật. Kiểm tra dashboard.', 'All four have a limited Free allowance (SQLite for Durable Objects, 10,000 Queue operations per day, 3,000 Workflow steps per day, 100,000 Hyperdrive queries per day). One Queues tutorial still says Paid is required to enable it. Check the dashboard.', 'All four have a limited Free allowance (SQLite for Durable Objects, 10,000 Queue operations per day, 3,000 Workflow steps per day, 100,000 Hyperdrive queries per day). One Queues tutorial still says Paid is required to enable it. Check the dashboard.'),
     steps: [
       {
         action: t('Durable Objects: state nhất quán theo object (chat room, booking). SQLite-backed class khi cần query local.', 'Durable Objects: strongly consistent per-object state (chat room, booking). SQLite-backed class when you need local queries.', 'Durable Objects៖ state consistent ខ្លាំងតាម object (chat room, booking)។ Class SQLite-backed ពេលអ្នកត្រូវការ query ក្នុងមូលដ្ឋាន។'),

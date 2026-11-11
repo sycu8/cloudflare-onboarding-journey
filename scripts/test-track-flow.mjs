@@ -38,7 +38,7 @@ try {
 
   for (const lesson of lessons) {
     const autoId = new RegExp(`^${lesson.moduleId}-l\\d+$`);
-    const knowledgeId = /^as-k-[a-z]+$/;
+    const knowledgeId = /^(as|dp)-k-[a-z]+$/;
     assert.ok(autoId.test(lesson.id) || knowledgeId.test(lesson.id), lesson.id);
     const fromModule =
       lesson.moduleId === 'as-7' || lesson.moduleId === 'dp-7'
@@ -142,8 +142,40 @@ try {
   assert.ok(mcp.prerequisiteIds.includes('dp-5-l5'));
   assert.equal(mcp.prerequisiteIds.includes('dp-3-l3'), false);
   const sandbox = dp.find((item) => item.key === 'official:sandbox-sdk');
-  assert.deepEqual(sandbox.prerequisiteIds, ['dp-5-l1']);
+  assert.equal(sandbox.prerequisiteIds.at(-1), 'dp-5-l5');
   assert.equal(sandbox.prerequisiteIds.includes('dp-4-l2'), false);
+  assert.equal(sandbox.prerequisiteIds.includes('dp-5-l1'), false);
+  const sandboxAt = dp.findIndex((item) => item.key === 'official:sandbox-sdk');
+  const aiLabAt = dp.findIndex((item) => item.key === 'dp-5-l5');
+  assert.ok(sandboxAt > aiLabAt, 'sandbox official lab follows the AI hub labs');
+  assert.equal(dp[dp.findIndex((item) => item.key === 'official:workers') - 1].key, 'dp-1-l2');
+  assert.equal(dp.find((item) => item.key === 'dp-k-worker')?.kind, 'knowledge');
+  assert.deepEqual(dp.find((item) => item.key === 'dp-1-l1')?.prerequisiteIds, ['dp-k-worker']);
+  const dpLessons = lessons.filter((lesson) => lesson.trackSlug === 'developer-platform');
+  for (const lesson of dpLessons) {
+    assert.ok(lesson.duration?.vi && lesson.duration?.en, `${lesson.id} duration`);
+    assert.ok(parseDurationMinutes(lesson.duration.vi) > 0, `${lesson.id} duration minutes`);
+    if (lesson.id !== 'dp-0-l1') {
+      const ids = lesson.prerequisites?.length ? lesson.prerequisites : lesson.dependsOn;
+      assert.ok(ids?.length, `${lesson.id} has prerequisites or dependsOn`);
+    }
+  }
+  for (const id of ['dp-k-worker', 'dp-k-pages', 'dp-k-storage', 'dp-k-operate', 'dp-k-ai', 'dp-k-stateful']) {
+    const lesson = dpLessons.find((entry) => entry.id === id);
+    assert.ok(lesson?.guide?.how?.vi && lesson.guide.how.en, `${id} guide`);
+    assert.ok(lesson.title.vi && lesson.title.en && lesson.body.vi && lesson.body.en);
+    assert.equal(/2026/.test(lesson.title.vi + lesson.title.en), false);
+  }
+  assert.equal(/2026/.test(dpLessons.find((entry) => entry.id === 'dp-0-l1').title.en), false);
+
+  const paidAsFree = /usually need (workers )?paid|thường cần (workers )?paid|unlocks features \(do|18\.17|hạn chế \/ không|limited \/ no/i;
+  const dpText = [];
+  const walkDp = (value) => {
+    if (typeof value === 'string') dpText.push(value);
+    else if (Array.isArray(value)) value.forEach(walkDp);
+    else if (value && typeof value === 'object') Object.values(value).forEach(walkDp);
+  };
+  walkDp(dpLessons);
   assert.ok(getTrackFlow('ai-security-adoption').every((item) => item.minutes > 0));
 
   const asLabs = asFlow.filter((item) => item.kind === 'lab-hub');
@@ -161,6 +193,13 @@ try {
 
   const { applicationServicesFollowAlong } = await vite.ssrLoadModule('/src/data/followAlong/applicationServices.ts');
   const { developerPlatformFollowAlong } = await vite.ssrLoadModule('/src/data/followAlong/developerPlatform.ts');
+  walkDp(developerPlatformFollowAlong);
+  for (const text of dpText) {
+    assert.equal(paidAsFree.test(text), false, text.slice(0, 140));
+    if (/vectorize/i.test(text) && /\bfree\b/i.test(text)) {
+      assert.match(text, /dashboard|docs|paid|does not assign|không gán/i, text.slice(0, 140));
+    }
+  }
   const { trackLessonEnrichment } = await vite.ssrLoadModule('/src/data/trackLessons.ts');
   const { trackLessonBestPractices } = await vite.ssrLoadModule('/src/data/trackLessonBestPractices.ts');
 
