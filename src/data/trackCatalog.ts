@@ -77,16 +77,3 @@ export const foundationStep = {
   ],
 };
 
-/** Sum of module duration numbers already in the track data. Not a new limit. */
-export function estimatedTrackMinutes(track: Track): number | undefined {
-  let sum = 0;
-  let found = false;
-  for (const mod of track.modules) {
-    const source = mod.duration?.vi || mod.duration?.en || '';
-    const match = source.match(/(\d+)/);
-    if (!match) continue;
-    sum += Number(match[1]);
-    found = true;
-  }
-  return found ? sum : undefined;
-}

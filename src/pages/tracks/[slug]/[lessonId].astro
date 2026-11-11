@@ -14,7 +14,8 @@ import {
   getLessonDiagrams,
   getLessonHeroImage,
 } from '../../../data/trackLessons';
-import { getFlowNeighbors, getTrackFlow, labsAfterLesson } from '../../../data/trackFlow';
+import { estimateBadge, getFlowNeighbors, getTrackFlow, labsAfterLesson } from '../../../data/trackFlow';
+import { trackIndexMeta } from '../../../data/trackCatalog';
 import { inferLessonKind } from '../../../data/lessonKind';
 import { getOnboardingPageForLesson, onboardingHtml } from '../../../data/zeroTrustOnboarding';
 import OnboardingArticle from '../../../components/content/OnboardingArticle.astro';
@@ -64,6 +65,7 @@ const tocItems = flow.map((item) => ({
   moduleId: item.moduleId,
   moduleTitle: item.moduleTitle,
   duration: item.duration ?? null,
+  minutes: item.minutes,
 }));
 ---
 
@@ -103,10 +105,7 @@ const tocItems = flow.map((item) => ({
       <LessonKindBadge kind={kind} />
       {duration ? (
         <span class="badge">
-          <span class="lang-vi">Ước lượng </span>
-          <span class="lang-en">About </span>
-          <span class="lang-km">About </span>
-          <LangText text={duration} />
+          <LangText text={estimateBadge(duration)} />
         </span>
       ) : null}
       <TrackLessonDone client:load itemKey={lesson.id} />
@@ -125,6 +124,13 @@ const tocItems = flow.map((item) => ({
             </a>
           </>
         ))}
+      </p>
+    ) : neighbors.current?.isTrackStart ? (
+      <p class="text-muted mt-3 text-sm leading-relaxed">
+        <span class="lang-vi">Không cần bài trước. </span>
+        <span class="lang-en">No prerequisites. </span>
+        <span class="lang-km">No prerequisites. </span>
+        <LangText text={trackIndexMeta[track.slug].prereq} />
       </p>
     ) : null}
   </header>

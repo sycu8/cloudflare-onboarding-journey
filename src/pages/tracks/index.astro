@@ -6,11 +6,10 @@ import { tracks, type Track } from '../../data/tracks';
 import { courseJsonLd, siteSeo } from '../../lib/seo';
 import {
   TRACK_DISPLAY_ORDER,
-  estimatedTrackMinutes,
   foundationStep,
   trackIndexMeta,
 } from '../../data/trackCatalog';
-import { getTrackFlow } from '../../data/trackFlow';
+import { getTrackFlow, sumFlowMinutes } from '../../data/trackFlow';
 
 const ordered = TRACK_DISPLAY_ORDER.map((slug) => tracks.find((track) => track.slug === slug)).filter(
   (track): track is Track => !!track,
@@ -48,8 +47,8 @@ const courseLd = courseJsonLd(
       as="p"
       class="text-muted mt-2 max-w-3xl text-sm leading-relaxed"
       text={{
-        vi: 'Bước 0 là nền tảng. Sau đó học tuần tự trong một lộ trình: kiến thức trước, lab sau. Mỗi lộ trình đứng riêng; dòng điều kiện chỉ là gợi ý, không bắt buộc học song song.',
-        en: 'Step 0 is the foundation. Then learn in order inside one track: knowledge first, labs after. Each track stands alone; the prerequisite line is a suggestion, not parallel study.',
+        vi: 'Bước 0 là nền tảng. Sau đó học tuần tự trong một lộ trình: kiến thức trước, lab sau. Mỗi lộ trình học độc lập. Phần điều kiện chỉ là gợi ý.',
+        en: 'Step 0 is the foundation. Then learn in order inside one track: knowledge first, labs after. Each track stands on its own. The prerequisite line is only a suggestion.',
       }}
     />
   </header>
@@ -80,9 +79,10 @@ const courseLd = courseJsonLd(
       const meta = trackIndexMeta[track.slug];
       const flow = getTrackFlow(track.slug);
       const knowledge = flow.filter((item) => item.kind === 'knowledge').length;
+      const reference = flow.filter((item) => item.kind === 'reference').length;
       const hubLabs = flow.filter((item) => item.kind === 'lab-hub').length;
       const officialLabs = flow.filter((item) => item.kind === 'lab-official').length;
-      const minutes = estimatedTrackMinutes(track);
+      const minutes = sumFlowMinutes(flow);
       return (
         <li class="card">
           <div class="flex flex-wrap items-center gap-2">
@@ -96,9 +96,9 @@ const courseLd = courseJsonLd(
             </span>
             {meta.suggestedStart ? (
               <span class="badge badge-accent">
-                <span class="lang-vi">Nên bắt đầu đây</span>
-                <span class="lang-en">Start here</span>
-                <span class="lang-km">Start here</span>
+                <span class="lang-vi">Nên bắt đầu từ đây</span>
+                <span class="lang-en">Begin here</span>
+                <span class="lang-km">Begin here</span>
               </span>
             ) : null}
           </div>
@@ -107,21 +107,24 @@ const courseLd = courseJsonLd(
           <p class="text-muted mt-3 text-xs leading-relaxed">
             <span class="lang-vi">
               {track.modules.length} phần · {knowledge} bài kiến thức
+              {reference > 0 ? ` · ${reference} bài tham chiếu` : ''}
               {hubLabs > 0 ? ` · ${hubLabs} lab (hub)` : ''}
               {officialLabs > 0 ? ` · ${officialLabs} lab (Cloudflare)` : ''}
-              {minutes ? ` · ~${minutes} phút (ước lượng các phần)` : ''}
+              {minutes ? ` · ~${minutes} phút (tổng ước lượng các phần)` : ''}
             </span>
             <span class="lang-en">
               {track.modules.length} parts · {knowledge} knowledge
+              {reference > 0 ? ` · ${reference} reference` : ''}
               {hubLabs > 0 ? ` · ${hubLabs} hub labs` : ''}
               {officialLabs > 0 ? ` · ${officialLabs} Cloudflare labs` : ''}
-              {minutes ? ` · ~${minutes} min (sum of part estimates)` : ''}
+              {minutes ? ` · ~${minutes} min (estimated total)` : ''}
             </span>
             <span class="lang-km">
               {track.modules.length} parts · {knowledge} knowledge
+              {reference > 0 ? ` · ${reference} reference` : ''}
               {hubLabs > 0 ? ` · ${hubLabs} hub labs` : ''}
               {officialLabs > 0 ? ` · ${officialLabs} Cloudflare labs` : ''}
-              {minutes ? ` · ~${minutes} min (sum of part estimates)` : ''}
+              {minutes ? ` · ~${minutes} min (estimated total)` : ''}
             </span>
           </p>
           <p class="text-muted mt-1 text-xs">

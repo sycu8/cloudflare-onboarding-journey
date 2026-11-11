@@ -17,21 +17,17 @@ export type TrackTocItem = {
   moduleId: string;
   moduleTitle: Text;
   duration?: Text | null;
+  minutes?: number;
 };
 
 type Filter = 'all' | 'knowledge' | 'lab';
 
 const kindLabel: Record<LessonKind, { vi: string; en: string }> = {
   knowledge: { vi: 'Kiến thức', en: 'Knowledge' },
+  reference: { vi: 'Tham chiếu', en: 'Reference' },
   'lab-hub': { vi: 'Lab (hub)', en: 'Lab (hub)' },
   'lab-official': { vi: 'Lab (Cloudflare)', en: 'Lab (Cloudflare)' },
 };
-
-function minutesOf(duration?: Text | null): number | undefined {
-  if (!duration) return undefined;
-  const match = `${duration.en} ${duration.vi}`.match(/(\d+)\s*(min|phút)/i);
-  return match ? Number(match[1]) : undefined;
-}
 
 export default function TrackToc({
   trackSlug,
@@ -61,7 +57,7 @@ export default function TrackToc({
     () =>
       items.filter((item) => {
         if (filter === 'knowledge') return item.kind === 'knowledge';
-        if (filter === 'lab') return item.kind !== 'knowledge';
+        if (filter === 'lab') return item.kind === 'lab-hub' || item.kind === 'lab-official';
         return true;
       }),
     [items, filter],
@@ -69,8 +65,8 @@ export default function TrackToc({
 
   const doneCount = items.filter((item) => progress[item.key]).length;
   const remaining = items.filter((item) => !progress[item.key]);
-  const remainingMinutes = remaining.reduce((sum, item) => sum + (minutesOf(item.duration) ?? 0), 0);
-  const timedRemaining = remaining.filter((item) => minutesOf(item.duration) != null).length;
+  const remainingMinutes = remaining.reduce((sum, item) => sum + (item.minutes ?? 0), 0);
+  const timedRemaining = remaining.filter((item) => (item.minutes ?? 0) > 0).length;
   const pct = items.length ? Math.round((doneCount / items.length) * 100) : 0;
 
   const groups: { moduleId: string; moduleTitle: Text; items: TrackTocItem[] }[] = [];
@@ -127,9 +123,9 @@ export default function TrackToc({
             {timedRemaining > 0 ? (
               <>
                 {' '}
-                <span className="lang-vi">Còn khoảng {remainingMinutes} phút ở {timedRemaining} bài có ghi giờ.</span>
-                <span className="lang-en">About {remainingMinutes} min left across {timedRemaining} timed lessons.</span>
-                <span className="lang-km">About {remainingMinutes} min left across {timedRemaining} timed lessons.</span>
+                <span className="lang-vi">Còn khoảng {remainingMinutes} phút ({timedRemaining} bài có ghi thời lượng).</span>
+                <span className="lang-en">About {remainingMinutes} min left ({timedRemaining} lessons with a time).</span>
+                <span className="lang-km">About {remainingMinutes} min left ({timedRemaining} lessons with a time).</span>
               </>
             ) : null}
           </p>

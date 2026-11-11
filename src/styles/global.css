@@ -73,6 +73,14 @@ body {
   display: grid;
   gap: 1.5rem;
   align-items: start;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.track-layout > * {
+  min-width: 0;
+  max-width: 100%;
 }
 
 @media (min-width: 1024px) {
@@ -320,6 +328,18 @@ html.dark .badge-accent {
 
 .onboarding-md {
   color: var(--cf-text);
+  max-width: 100%;
+  min-width: 0;
+}
+.onboarding-article {
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+}
+.lab-track-head .badge {
+  background: #ffffff;
+  color: #7c2d12;
+  border-color: #ffffff;
 }
 .onboarding-md > h1:first-child {
   display: none;
@@ -366,6 +386,15 @@ html.dark .badge-accent {
 .onboarding-md th,
 .onboarding-md td {
   @apply border border-[var(--cf-border)] px-3 py-2 align-top;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.onboarding-md code,
+.onboarding-md pre {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: pre-wrap;
+  max-width: 100%;
 }
 .onboarding-md th {
   background: var(--cf-bg-elevated);

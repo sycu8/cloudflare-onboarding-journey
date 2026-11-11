@@ -77,6 +77,12 @@ const byKey = new Map(flow.map((item) => [item.key, item]));
                 </>
               ))}
             </p>
+          ) : item.isTrackStart ? (
+            <p class="text-muted mt-2 text-xs leading-relaxed">
+              <span class="lang-vi">Không cần bài trước.</span>
+              <span class="lang-en">No prerequisites.</span>
+              <span class="lang-km">No prerequisites.</span>
+            </p>
           ) : null}
         </li>
       );

@@ -48,8 +48,7 @@ import DeveloperLabsSection from '../../components/content/DeveloperLabsSection.
 import { getDeveloperLabsForTrackSlug } from '../../data/developerLabs';
 import { courseJsonLd, siteSeo } from '../../lib/seo';
 import TrackToc from '../../components/interactive/TrackToc';
-import { getTrackFlow } from '../../data/trackFlow';
-import { estimatedTrackMinutes } from '../../data/trackCatalog';
+import { getTrackFlow, sumFlowMinutes } from '../../data/trackFlow';
 
 export function getStaticPaths() {
   return tracks.map((t) => ({ params: { slug: t.slug } }));
@@ -92,9 +91,11 @@ const tocItems = flow.map((item) => ({
   moduleId: item.moduleId,
   moduleTitle: item.moduleTitle,
   duration: item.duration ?? null,
+  minutes: item.minutes,
 }));
-const trackMinutes = estimatedTrackMinutes(track);
+const trackMinutes = sumFlowMinutes(flow);
 const knowledgeCount = flow.filter((item) => item.kind === 'knowledge').length;
+const referenceCount = flow.filter((item) => item.kind === 'reference').length;
 const hubLabCount = flow.filter((item) => item.kind === 'lab-hub').length;
 const officialLabCount = flow.filter((item) => item.kind === 'lab-official').length;
 const onboardingOverview = track.slug === 'cloudflare-one' ? getOnboardingPageByFile('overview.html') : undefined;
@@ -129,21 +130,24 @@ const courseLd = courseJsonLd(Astro.site ?? siteSeo.origin, `/tracks/${track.slu
     <p class="text-muted mt-3 text-xs leading-relaxed">
       <span class="lang-vi">
         {knowledgeCount} bài kiến thức
+        {referenceCount > 0 ? ` · ${referenceCount} bài tham chiếu` : ''}
         {hubLabCount > 0 ? ` · ${hubLabCount} lab (hub)` : ''}
         {officialLabCount > 0 ? ` · ${officialLabCount} lab (Cloudflare)` : ''}
-        {trackMinutes ? ` · ~${trackMinutes} phút (ước lượng các phần)` : ''}
+        {trackMinutes ? ` · ~${trackMinutes} phút (tổng ước lượng các phần)` : ''}
       </span>
       <span class="lang-en">
         {knowledgeCount} knowledge
+        {referenceCount > 0 ? ` · ${referenceCount} reference` : ''}
         {hubLabCount > 0 ? ` · ${hubLabCount} hub labs` : ''}
         {officialLabCount > 0 ? ` · ${officialLabCount} Cloudflare labs` : ''}
-        {trackMinutes ? ` · ~${trackMinutes} min (sum of part estimates)` : ''}
+        {trackMinutes ? ` · ~${trackMinutes} min (estimated total)` : ''}
       </span>
       <span class="lang-km">
         {knowledgeCount} knowledge
+        {referenceCount > 0 ? ` · ${referenceCount} reference` : ''}
         {hubLabCount > 0 ? ` · ${hubLabCount} hub labs` : ''}
         {officialLabCount > 0 ? ` · ${officialLabCount} Cloudflare labs` : ''}
-        {trackMinutes ? ` · ~${trackMinutes} min (sum of part estimates)` : ''}
+        {trackMinutes ? ` · ~${trackMinutes} min (estimated total)` : ''}
       </span>
     </p>
     <LangText as="p" class="text-muted mt-3 max-w-3xl text-sm leading-relaxed" text={track.description} />

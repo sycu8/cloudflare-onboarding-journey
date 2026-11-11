@@ -12,15 +12,16 @@ const vite = await createServer({
 });
 
 try {
-  const { inferLessonKind } = await vite.ssrLoadModule('/src/data/lessonKind.ts');
-  const { getTrackFlow } = await vite.ssrLoadModule('/src/data/trackFlow.ts');
+  const { inferLessonKind, parseDurationMinutes } = await vite.ssrLoadModule('/src/data/lessonKind.ts');
+  const { getTrackFlow, sumFlowMinutes } = await vite.ssrLoadModule('/src/data/trackFlow.ts');
   const { getAllFlatTrackLessons } = await vite.ssrLoadModule('/src/data/trackLessons.ts');
   const { TRACK_DISPLAY_ORDER } = await vite.ssrLoadModule('/src/data/trackCatalog.ts');
   const { tracks } = await vite.ssrLoadModule('/src/data/tracks.ts');
 
   assert.equal(inferLessonKind('as-0'), 'knowledge');
   assert.equal(inferLessonKind('as-3'), 'lab-hub');
-  assert.equal(inferLessonKind('as-7'), 'lab-hub');
+  assert.equal(inferLessonKind('as-7'), 'reference');
+  assert.equal(inferLessonKind('dp-7'), 'reference');
   assert.equal(inferLessonKind('dp-0'), 'knowledge');
   assert.equal(inferLessonKind('dp-1'), 'lab-hub');
   assert.equal(inferLessonKind('c1-1'), 'knowledge');
@@ -38,14 +39,16 @@ try {
   for (const lesson of lessons) {
     assert.match(lesson.id, new RegExp(`^${lesson.moduleId}-l\\d+$`));
     const expected =
-      lesson.moduleId === 'as-0' ||
-      lesson.moduleId === 'dp-0' ||
-      lesson.moduleId === 'c1-1' ||
-      lesson.moduleId === 'c1-9' ||
-      lesson.moduleId.startsWith('asa-') ||
-      lesson.moduleId.startsWith('oe-')
-        ? 'knowledge'
-        : 'lab-hub';
+      lesson.moduleId === 'as-7' || lesson.moduleId === 'dp-7'
+        ? 'reference'
+        : lesson.moduleId === 'as-0' ||
+            lesson.moduleId === 'dp-0' ||
+            lesson.moduleId === 'c1-1' ||
+            lesson.moduleId === 'c1-9' ||
+            lesson.moduleId.startsWith('asa-') ||
+            lesson.moduleId.startsWith('oe-')
+          ? 'knowledge'
+          : 'lab-hub';
     assert.equal(inferLessonKind(lesson.moduleId, lesson.kind), expected, lesson.id);
   }
 
@@ -75,6 +78,28 @@ try {
   assert.equal(asFlow[1].kind, 'lab-hub');
   assert.deepEqual(asFlow[1].prerequisiteIds, ['as-0-l1']);
   assert.equal(asFlow.find((item) => item.key === 'as-3-l1')?.kind, 'lab-hub');
+  assert.deepEqual(asFlow.find((item) => item.key === 'as-3-l1')?.prerequisiteIds, ['as-0-l1']);
+  assert.equal(asFlow.find((item) => item.key === 'as-7-l1')?.kind, 'reference');
+  assert.equal(asFlow.find((item) => item.key === 'as-7-l2')?.kind, 'reference');
+  assert.deepEqual(asFlow[0].prerequisiteIds, []);
+
+  for (const slug of TRACK_DISPLAY_ORDER) {
+    const flow = getTrackFlow(slug);
+    const total = sumFlowMinutes(flow);
+    assert.equal(sumFlowMinutes(flow), total, `${slug} total is stable`);
+    assert.ok(total > 0, `${slug} has a total`);
+    flow.forEach((item, index) => {
+      assert.ok(item.duration, `${item.key} has a duration`);
+      const minutes = parseDurationMinutes(item.duration.vi);
+      assert.ok(minutes > 0, `${item.key} duration has a time`);
+      assert.equal(item.minutes, minutes, `${item.key} minutes match the badge`);
+      const isLab = item.kind === 'lab-hub' || item.kind === 'lab-official';
+      if (isLab && index > 0) {
+        assert.ok(item.prerequisiteIds.length > 0, `${item.key} lab has a prerequisite`);
+      }
+    });
+    assert.deepEqual(flow[0].prerequisiteIds, [], `${slug} first lesson has no lesson prerequisite`);
+  }
 
   for (const slug of ['ai-security-adoption', 'operational-excellence']) {
     const flow = getTrackFlow(slug);
@@ -99,6 +124,13 @@ try {
   assert.equal(dp.filter((item) => item.kind === 'lab-official').length, 4);
   assert.equal(dp[0].key, 'dp-0-l1');
   assert.equal(dp[0].kind, 'knowledge');
+  const mcp = dp.find((item) => item.key === 'official:mcp');
+  assert.ok(mcp.prerequisiteIds.includes('dp-5-l5'));
+  assert.equal(mcp.prerequisiteIds.includes('dp-3-l3'), false);
+  const sandbox = dp.find((item) => item.key === 'official:sandbox-sdk');
+  assert.deepEqual(sandbox.prerequisiteIds, ['dp-5-l1']);
+  assert.equal(sandbox.prerequisiteIds.includes('dp-4-l2'), false);
+  assert.ok(getTrackFlow('ai-security-adoption').every((item) => item.minutes > 0));
 
   const hrefs = new Set(lessons.map((lesson) => `/tracks/${lesson.trackSlug}/${lesson.id}/`));
   for (const item of dp.concat(asFlow)) {
