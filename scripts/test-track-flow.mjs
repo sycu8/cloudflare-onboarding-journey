@@ -37,8 +37,10 @@ try {
   assert.equal(new Set(ids).size, ids.length, 'lesson ids must stay unique');
 
   for (const lesson of lessons) {
-    assert.match(lesson.id, new RegExp(`^${lesson.moduleId}-l\\d+$`));
-    const expected =
+    const autoId = new RegExp(`^${lesson.moduleId}-l\\d+$`);
+    const knowledgeId = /^as-k-[a-z]+$/;
+    assert.ok(autoId.test(lesson.id) || knowledgeId.test(lesson.id), lesson.id);
+    const fromModule =
       lesson.moduleId === 'as-7' || lesson.moduleId === 'dp-7'
         ? 'reference'
         : lesson.moduleId === 'as-0' ||
@@ -49,7 +51,7 @@ try {
             lesson.moduleId.startsWith('oe-')
           ? 'knowledge'
           : 'lab-hub';
-    assert.equal(inferLessonKind(lesson.moduleId, lesson.kind), expected, lesson.id);
+    assert.equal(inferLessonKind(lesson.moduleId, lesson.kind), lesson.kind ?? fromModule, lesson.id);
   }
 
   assert.deepEqual(
@@ -74,11 +76,23 @@ try {
   );
   assert.equal(asFlow[0].key, 'as-0-l1');
   assert.equal(asFlow[0].kind, 'knowledge');
-  assert.equal(asFlow[1].key, 'as-1-l1');
-  assert.equal(asFlow[1].kind, 'lab-hub');
-  assert.deepEqual(asFlow[1].prerequisiteIds, ['as-0-l1']);
+  assert.equal(asFlow[1].key, 'as-k-dns');
+  assert.equal(asFlow[1].kind, 'knowledge');
+  assert.equal(asFlow[2].key, 'as-1-l1');
+  assert.equal(asFlow[2].kind, 'lab-hub');
+  assert.deepEqual(asFlow[2].prerequisiteIds, ['as-k-dns']);
   assert.equal(asFlow.find((item) => item.key === 'as-3-l1')?.kind, 'lab-hub');
-  assert.deepEqual(asFlow.find((item) => item.key === 'as-3-l1')?.prerequisiteIds, ['as-0-l1']);
+  assert.deepEqual(asFlow.find((item) => item.key === 'as-3-l1')?.prerequisiteIds, ['as-k-waf']);
+  const wafAt = asFlow.findIndex((item) => item.key === 'as-k-waf');
+  assert.equal(asFlow[wafAt + 1].key, 'as-3-l1');
+  const knowledgeLessons = lessons.filter((lesson) => String(lesson.id).startsWith('as-k-'));
+  assert.equal(knowledgeLessons.length, 6);
+  for (const lesson of knowledgeLessons) {
+    assert.ok(lesson.guide?.how?.vi && lesson.guide?.how?.en, `${lesson.id} guide`);
+    assert.ok(lesson.guide.whenToUse.vi && lesson.guide.whenNot.en);
+    assert.ok(lesson.guide.planNotes.vi && lesson.guide.planNotes.en);
+    assert.ok(lesson.title.vi && lesson.title.en && lesson.body.vi && lesson.body.en);
+  }
   assert.equal(asFlow.find((item) => item.key === 'as-7-l1')?.kind, 'reference');
   assert.equal(asFlow.find((item) => item.key === 'as-7-l2')?.kind, 'reference');
   assert.deepEqual(asFlow[0].prerequisiteIds, []);
@@ -131,6 +145,19 @@ try {
   assert.deepEqual(sandbox.prerequisiteIds, ['dp-5-l1']);
   assert.equal(sandbox.prerequisiteIds.includes('dp-4-l2'), false);
   assert.ok(getTrackFlow('ai-security-adoption').every((item) => item.minutes > 0));
+
+  const asLabs = asFlow.filter((item) => item.kind === 'lab-hub');
+  const asKeys = new Set(asFlow.map((item) => item.key));
+  for (const lab of asLabs) {
+    assert.ok(lab.prerequisiteIds.length > 0, `${lab.key} dependsOn`);
+    for (const id of lab.prerequisiteIds) assert.ok(asKeys.has(id), `${lab.key} -> ${id}`);
+  }
+  for (const id of ['as-k-dns', 'as-k-ssl', 'as-k-waf', 'as-k-cache', 'as-k-api', 'as-k-traffic']) {
+    const item = asFlow.find((entry) => entry.key === id);
+    assert.ok(item, id);
+    assert.ok(item.title.vi && item.title.en, `${id} title`);
+    assert.ok(item.summary.vi && item.summary.en, `${id} summary`);
+  }
 
   const hrefs = new Set(lessons.map((lesson) => `/tracks/${lesson.trackSlug}/${lesson.id}/`));
   for (const item of dp.concat(asFlow)) {

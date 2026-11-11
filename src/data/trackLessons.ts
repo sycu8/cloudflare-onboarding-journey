@@ -48,9 +48,10 @@ function flattenModule(
   mod: TrackModule,
   moduleIndex: number,
 ): FlatTrackLesson[] {
+  let auto = 0;
   return mod.lessons.map((lesson, lessonIndex) => ({
     ...lesson,
-    id: `${mod.id}-l${lessonIndex + 1}`,
+    id: lesson.id ?? `${mod.id}-l${(auto += 1)}`,
     trackSlug: track.slug,
     trackTitle: track.title,
     moduleId: mod.id,

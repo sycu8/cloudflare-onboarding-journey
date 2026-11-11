@@ -161,6 +161,8 @@ const courseLd = courseJsonLd(Astro.site ?? siteSeo.origin, `/tracks/${track.slu
     />
   </header>
 
+  {track.startHere ? <TrackStartHere startHere={track.startHere} /> : null}
+
   <section class="card mb-6">
     <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Ai nên học lộ trình này?', en: 'Who is this for?', km: 'Who is this for?' }} />
     <LangText as="p" class="text-muted mt-2 text-sm leading-relaxed" text={track.whoIsThisFor} />
@@ -170,8 +172,6 @@ const courseLd = courseJsonLd(Astro.site ?? siteSeo.origin, `/tracks/${track.slu
     <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Mô hình tư duy', en: 'Mental model', km: 'Mental model' }} />
     <LangText as="p" class="text-muted mt-2 font-mono text-sm leading-relaxed" text={track.mentalModel} />
   </section>
-
-  {track.startHere ? <TrackStartHere startHere={track.startHere} /> : null}
 
   {track.slug === 'cloudflare-one' ? (
     <section class="mb-8">

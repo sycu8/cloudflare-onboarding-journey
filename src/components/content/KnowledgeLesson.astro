@@ -8,6 +8,7 @@ import type { FlatTrackLesson, TrackLessonEnrichment } from '../../data/trackLes
 import type { FollowAlongLesson } from '../../data/followAlongLessons';
 import type { ReferenceDiagram } from '../../data/referenceDiagrams';
 import type { FlowItem } from '../../data/trackFlow';
+import TermHint from './TermHint.astro';
 import type { LocalizedString } from '../../i18n/types';
 
 type Props = {
@@ -27,8 +28,10 @@ function sameText(a: string, b: string) {
   return a.replace(/\s+/g, ' ').trim() === b.replace(/\s+/g, ' ').trim();
 }
 
+const guide = lesson.guide;
 const showHow =
-  !sameText(enrichment.deepDive.vi, lesson.body.vi) || !sameText(enrichment.deepDive.en, lesson.body.en);
+  !guide &&
+  (!sameText(enrichment.deepDive.vi, lesson.body.vi) || !sameText(enrichment.deepDive.en, lesson.body.en));
 ---
 
 <section class="card mb-6" id="main-ideas">
@@ -62,10 +65,22 @@ const showHow =
   ) : null}
 </section>
 
-{showHow ? (
+{guide ? (
+  <section class="card mb-6" id="how-it-works">
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Cách hoạt động', en: 'How it works' }} />
+    <LangText as="p" class="text-muted mt-3 text-sm leading-relaxed" text={guide.how} />
+  </section>
+) : showHow ? (
   <section class="card mb-6" id="how-it-works">
     <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Cách hoạt động', en: 'How it works' }} />
     <LangText as="p" class="text-muted mt-3 text-sm leading-relaxed" text={enrichment.deepDive} />
+  </section>
+) : null}
+
+{guide ? (
+  <section class="card mb-6" id="architecture-notes">
+    <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Kiến trúc', en: 'Architecture' }} />
+    <LangText as="p" class="text-muted mt-3 text-sm leading-relaxed" text={guide.architecture} />
   </section>
 ) : null}
 
@@ -80,16 +95,46 @@ const showHow =
   </section>
 ) : null}
 
+{guide ? (
+  <>
+    <section class="card mb-6" id="when-to-use">
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Khi nào dùng', en: 'When to use it' }} />
+      <LangText as="p" class="text-muted mt-3 text-sm leading-relaxed" text={guide.whenToUse} />
+      <LangText as="h3" class="mt-4 text-base font-semibold" text={{ vi: 'Khi nào không dùng', en: 'When not to use it' }} />
+      <LangText as="p" class="text-muted mt-2 text-sm leading-relaxed" text={guide.whenNot} />
+    </section>
+    <section class="card mb-6" id="plan-notes">
+      <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Gói và giới hạn', en: 'Plans and limits' }} />
+      <LangText as="p" class="text-muted mt-3 text-sm leading-relaxed" text={guide.planNotes} />
+      <p class="text-muted mt-3 text-xs leading-relaxed">
+        <span class="lang-vi">Không phải báo giá. Đối chiếu docs và dashboard. Kiểm tra lần cuối: 2026-11-11.</span>
+        <span class="lang-en">Not a price quote. Check the docs and the dashboard. Last checked: 2026-11-11.</span>
+        <span class="lang-km">Not a price quote. Check the docs and the dashboard. Last checked: 2026-11-11.</span>
+      </p>
+    </section>
+  </>
+) : null}
+
 <section class="card mb-6" id="glossary">
   <LangText as="h2" class="text-lg font-semibold" text={{ vi: 'Thuật ngữ', en: 'Glossary' }} />
-  <LangText
-    as="p"
-    class="text-muted mt-3 text-sm leading-relaxed"
-    text={{
-      vi: 'Bài này chưa có mục thuật ngữ riêng. Tra từ trong bảng chung của hub.',
-      en: 'This lesson does not have its own glossary yet. Look terms up in the hub glossary.',
-    }}
-  />
+  {guide && guide.terms.length > 0 ? (
+    <ul class="mt-3 flex flex-col gap-2">
+      {guide.terms.map((item) => (
+        <li>
+          <TermHint term={item.term} detail={item.detail} />
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <LangText
+      as="p"
+      class="text-muted mt-3 text-sm leading-relaxed"
+      text={{
+        vi: 'Bài này chưa có mục thuật ngữ riêng. Tra từ trong bảng chung của hub.',
+        en: 'This lesson does not have its own glossary yet. Look terms up in the hub glossary.',
+      }}
+    />
+  )}
   <a class="link mt-3 inline-block text-sm" href="/glossary">
     <LangText text={{ vi: 'Mở bảng thuật ngữ →', en: 'Open the glossary →' }} />
   </a>
