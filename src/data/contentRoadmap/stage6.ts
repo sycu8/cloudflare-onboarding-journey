@@ -100,7 +100,7 @@ export const stage6: ContentRoadmapStage = {
       'dp-r2',
       'R2',
       'R2',
-      'R2 object storage S3-compatible, không egress fee qua Workers. Lưu upload user, asset, backup — kết hợp Workers presigned URL.',
+      'R2 object storage S3-compatible, không tính egress trên mọi đường truy cập. Chi phí là storage, thao tác Class A/B, và retrieval nếu dùng Infrequent Access.',
       'Use case media và SaaS file upload — architecture R2 trên hub.',
       {
         level: 'beginner',
@@ -186,7 +186,7 @@ export const stage6: ContentRoadmapStage = {
         level: 'intermediate',
         estimatedMinutes: 15,
         filterTags: ['developer', 'security'],
-        sourceUrls: [SRC.arch, 'https://developers.cloudflare.com/reference-architecture/diagrams/serverless/full-stack-application/'],
+        sourceUrls: [SRC.arch, 'https://developers.cloudflare.com/reference-architecture/'],
         relatedExistingRoutes: [
           '/reference-architecture/fullstack-workers',
           '/use-cases/build-serverless-app',

@@ -34,7 +34,7 @@ const salesSteps: RoleRoadmapStep[] = [
     sourceUrls: [
       `${CF_DOCS}/fundamentals/`,
       `${CF_DOCS}/fundamentals/concepts/how-cloudflare-works/`,
-      'https://www.cloudflare.com/learning-paths/',
+      'https://developers.cloudflare.com/learning-paths/',
     ],
   },
   {
@@ -820,7 +820,7 @@ const studentSteps: RoleRoadmapStep[] = [
     sourceUrls: [
       `${CF_DOCS}/learning-paths/`,
       `${CF_DOCS}/workers/get-started/guide/`,
-      'https://www.cloudflare.com/learning-paths/',
+      'https://developers.cloudflare.com/learning-paths/',
     ],
   },
 ];

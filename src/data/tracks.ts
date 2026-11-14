@@ -192,7 +192,7 @@ export const tracks: Track[] = [
           en: 'TTL, DNSSEC, cutover — read before changing production nameservers.',
           km: 'TTL, DNSSEC, cutover — អានមុនពេលផ្លាស់ប្តូរ nameserver production។',
         },
-        href: 'https://developers.cloudflare.com/learning-paths/dns-best-practices/',
+        href: 'https://developers.cloudflare.com/learning-paths/',
       },
     ],
     startHere: {
@@ -465,9 +465,9 @@ export const tracks: Track[] = [
             kind: 'lab-hub',
             title: { vi: 'Bảo vệ API sau khi proxy + WAF ổn', en: 'Protect APIs after proxy + WAF are stable', km: 'ការពារ API បន្ទាប់ពី proxy + WAF មានស្ថិរភាព' },
             body: {
-              vi: 'Free/Pro: WAF + rate limit /api + origin lockdown. Enterprise: API Shield schema, JWT, mTLS. Discover/log trước khi enforce.',
-              en: 'Free/Pro: WAF + /api rate limit + origin lockdown. Enterprise: API Shield schema, JWT, mTLS. Discover/log before enforce.',
-              km: 'Free/Pro: WAF + rate limit /api + origin lockdown។ Enterprise: API Shield schema, JWT, mTLS។ Discover/log មុនពេល enforce។',
+              vi: 'Free/Pro: WAF + rate limit /api + origin lockdown. mTLS với CA do Cloudflare quản lý dùng được trên mọi gói. Schema validation có hạn mức theo gói (Free: 100 endpoint, 5 schema, chỉ Block). Bộ API Shield đầy đủ (JWT và các tính năng còn lại) là add-on Enterprise.',
+              en: 'Free/Pro: WAF + /api rate limit + origin lockdown. mTLS with a Cloudflare-managed CA works on every plan. Schema validation has a per-plan allowance (Free: 100 endpoints, 5 schemas, Block only). The full API Shield suite (JWT and the rest) is an Enterprise add-on.',
+              km: 'Free/Pro: WAF + rate limit /api + origin lockdown។ mTLS ជាមួយ CA របស់ Cloudflare ប្រើបានលើគ្រប់ plan។ Schema validation មានដែនតាម plan (Free: 100 endpoint, 5 schema, Block តែប៉ុណ្ណោះ)។ API Shield ពេញ (JWT និងផ្សេងទៀត) គឺ add-on Enterprise។',
             },
             hubLink: '/use-cases/secure-api',
           },
@@ -1595,8 +1595,8 @@ export const tracks: Track[] = [
           {
             title: { vi: 'AI Gateway: auth, DLP, cost cho model call', en: 'AI Gateway: auth, DLP, and cost for model calls' },
             body: {
-              vi: 'AI Gateway ngồi trước model provider — không cần WARP hay TLS decrypt. Authenticated Gateway + token; BYOK để key không nằm trong app. Guardrails = an toàn nội dung; DLP = PII/secret (Enterprise). Response scanning buffer full body (chậm streaming). Không cache/rate-limit gateway dùng cho AI Search/RAG.',
-              en: 'AI Gateway sits in front of model providers — no WARP or TLS decrypt required. Authenticated Gateway + token; BYOK so keys never live in the app. Guardrails = content safety; DLP = PII/secrets (Enterprise). Response scanning buffers the full body (hurts streaming). Do not cache or rate-limit a gateway used for AI Search/RAG.',
+              vi: 'AI Gateway ngồi trước model provider — không cần WARP hay TLS decrypt. Authenticated Gateway + token; BYOK để key không nằm trong app. Guardrails = an toàn nội dung; DLP = PII/secret (miễn phí trên mọi gói; không có Zero Trust thì có 2 profile sẵn). Response scanning buffer full body (chậm streaming). Không cache/rate-limit gateway dùng cho AI Search/RAG.',
+              en: 'AI Gateway sits in front of model providers — no WARP or TLS decrypt required. Authenticated Gateway + token; BYOK so keys never live in the app. Guardrails = content safety; DLP = PII/secrets (free on all plans; without a Zero Trust subscription you get 2 predefined profiles). Response scanning buffers the full body (hurts streaming). Do not cache or rate-limit a gateway used for AI Search/RAG.',
             },
           },
           {

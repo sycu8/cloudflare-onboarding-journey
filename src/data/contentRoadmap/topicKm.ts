@@ -498,7 +498,7 @@ export const topicKmById: Record<string, Partial<TopicKmOverlay>> = {
   },
   'dp-r2': {
     summaryKm:
-      'R2 គឺ S3-compatible object storage គ្មាន egress fee via Workers។ store user upload, asset, backup — រួម Workers presigned URL។',
+      'R2 គឺ S3-compatible object storage គ្មាន egress លើគ្រប់ផ្លូវ។ ថ្លៃគឺ storage, Class A/B និង retrieval បើប្រើ Infrequent Access។',
     whyItMattersKm:
       'Media និង SaaS file upload use case — R2 architecture នៅ hub។',
   },

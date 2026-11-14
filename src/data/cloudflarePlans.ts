@@ -82,8 +82,8 @@ export const planTierCards: {
     name: { vi: 'Enterprise', en: 'Enterprise' },
     tagline: { vi: 'Quy mô lớn, compliance, kiểm soát sâu', en: 'Scale, compliance, deep control' },
     typicalBuyer: {
-      vi: 'Tổ chức cần custom cache keys, purge theo tag/host, Enterprise DDoS, Access/SWG/Zero Trust quy mô, hỗ trợ 24/7 named, hợp đồng & roadmap riêng.',
-      en: 'Organizations needing custom cache keys, tag/host purge, Enterprise DDoS, scaled Access/SWG/Zero Trust, 24/7 named support, and custom contracts.',
+      vi: 'Tổ chức cần custom cache keys, Enterprise DDoS, Access/SWG/Zero Trust quy mô, hỗ trợ 24/7 named, hợp đồng và roadmap riêng. Purge theo URL, hostname, tag và prefix có trên mọi gói.',
+      en: 'Organizations needing custom cache keys, Enterprise DDoS, scaled Access/SWG/Zero Trust, 24/7 named support, and custom contracts. Purge by URL, hostname, tag, and prefix is on every plan.',
     },
     pricingHint: {
       vi: 'Giá tùy chỉnh — làm việc với Cloudflare Sales / đối tác',
@@ -100,8 +100,8 @@ export const smeDecisionGuide: {
     title: { vi: 'Chọn Business khi…', en: 'Choose Business when…' },
     bullets: [
       {
-        vi: 'Bạn cần WAF custom rules, SLA uptime cam kết, và cache rule linh hoạt (ví dụ bypass theo cookie) nhưng chưa cần purge theo tag hoặc IP ưu tiên.',
-        en: 'You need custom WAF rules, committed uptime SLA, and flexible cache rules (e.g. bypass on cookie) but not tag-based purge or prioritized IPs.',
+        vi: 'Bạn cần WAF custom rules, SLA uptime cam kết, và cache rule linh hoạt (ví dụ bypass theo cookie) nhưng chưa cần custom cache keys hoặc IP ưu tiên.',
+        en: 'You need custom WAF rules, committed uptime SLA, and flexible cache rules (for example bypass on cookie) but not custom cache keys or prioritized IPs.',
       },
       {
         vi: 'Team vận hành nhỏ (1–5 người) quản lý vài zone production, ngân sách cố định hơn Enterprise.',
@@ -117,8 +117,8 @@ export const smeDecisionGuide: {
     title: { vi: 'Chọn Enterprise khi…', en: 'Choose Enterprise when…' },
     bullets: [
       {
-        vi: 'Cần Enterprise DDoS, custom cache keys, purge theo tag/host, hoặc routing IP ưu tiên cho traffic quan trọng.',
-        en: 'You need Enterprise DDoS, custom cache keys, tag/host purge, or prioritized IP routing for critical traffic.',
+        vi: 'Cần Enterprise DDoS, custom cache keys, hoặc routing IP ưu tiên cho traffic quan trọng. Purge theo tag và hostname không phải lý do chọn Enterprise.',
+        en: 'You need Enterprise DDoS, custom cache keys, or prioritized IP routing for critical traffic. Purge by tag and hostname is not a reason to choose Enterprise.',
       },
       {
         vi: 'Triển khai Zero Trust rộng: Access Premium, Gateway/SWG, Browser Isolation, nhiều identity provider — vượt gói “50 users” của Business.',

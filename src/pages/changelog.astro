@@ -9,7 +9,6 @@ import {
   changelogSourceNote,
   CLOUDFLARE_CHANGELOG_URL,
   CLOUDFLARE_CHANGELOG_RSS_URL,
-  CLOUDFLARE_CHANGELOG_LLMS_URL,
   CLOUDFLARE_RSS_FEEDS_URL,
   CHANGELOG_LAST_REVIEWED,
   getFeaturedChangelogEntries,
@@ -74,12 +73,6 @@ const featured = getFeaturedChangelogEntries(4);
         <span class="lang-vi"> — đăng ký trong reader hoặc automation nội bộ.</span>
         <span class="lang-en"> — subscribe in your reader or internal automation.</span>
         <span class="lang-km">— subscribe in your reader or internal automation.</span>
-      </li>
-      <li>
-        <a class="link" href={CLOUDFLARE_CHANGELOG_LLMS_URL} target="_blank" rel="noopener noreferrer">llms.txt</a>
-        <span class="lang-vi"> — chỉ mục đầy đủ cho agent/docs discovery.</span>
-        <span class="lang-en"> — full index for agent and docs discovery.</span>
-        <span class="lang-km">— full index for agent and docs discovery.</span>
       </li>
     </ul>
     <p class="text-muted mt-3 text-xs">

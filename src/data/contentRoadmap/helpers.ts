@@ -17,7 +17,7 @@ export const SRC = {
   labs: 'https://labs.cloudflare.dev/',
   pages: 'https://developers.cloudflare.com/pages/',
   one: 'https://developers.cloudflare.com/cloudflare-one/',
-  zeroTrust: 'https://developers.cloudflare.com/cloudflare-one/zero-trust/',
+  zeroTrust: 'https://developers.cloudflare.com/cloudflare-one/',
   arch: 'https://developers.cloudflare.com/reference-architecture/',
   mdnHttp: 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview',
   mdnIp: 'https://developer.mozilla.org/en-US/docs/Glossary/IP_address',

@@ -208,7 +208,7 @@ export const trackLessonEnrichment: Record<string, TrackLessonEnrichment> = {
     },
     docsLinks: [
       { label: { vi: 'Origin CA certificates', en: 'Origin CA certificates' }, url: 'https://developers.cloudflare.com/ssl/origin-configuration/origin-ca/' },
-      { label: { vi: 'IP ranges', en: 'IP ranges' }, url: 'https://developers.cloudflare.com/fundamentals/reference/cloudflare-ip-addresses/' },
+      { label: { vi: 'IP ranges', en: 'IP ranges' }, url: 'https://developers.cloudflare.com/fundamentals/concepts/cloudflare-ip-addresses/' },
     ],
     productSlugs: ['ssl', 'waf'],
   },
@@ -310,7 +310,7 @@ export const trackLessonEnrichment: Record<string, TrackLessonEnrichment> = {
     },
     docsLinks: [
       { label: { vi: 'Cache Rules', en: 'Cache Rules' }, url: 'https://developers.cloudflare.com/cache/how-to/cache-rules/' },
-      { label: { vi: 'CDN concepts', en: 'CDN concepts' }, url: 'https://developers.cloudflare.com/cache/concepts/cdn/' },
+      { label: { vi: 'CDN concepts', en: 'CDN concepts' }, url: 'https://developers.cloudflare.com/cache/get-started/' },
     ],
     diagramSlugs: ['distributed-web-performance-architecture'],
     productSlugs: ['cache', 'cdn'],
@@ -1215,14 +1215,14 @@ export const trackLessonEnrichment: Record<string, TrackLessonEnrichment> = {
   'c1-6-l1': {
     steps: {
       vi: [
-        'Xác nhận Enterprise và TLS decryption đang on — không thì DLP profile không xuất hiện.',
-        'Zero Trust → DLP → Profiles: bật Financial / PII / Credentials / Source Code (hoặc custom regex).',
+        'Bật TLS decryption. Free và Pay-as-you-go có 2 profile sẵn: Financial Information, và Social Security, Insurance, Tax and Identifier Numbers. Bộ DLP đầy đủ là add-on của Zero Trust Enterprise.',
+        'Zero Trust → DLP → Profiles: trên Free và Pay-as-you-go bật hai profile sẵn (Financial Information, và Social Security / Insurance / Tax / Identifier Numbers). Profile custom và phần còn lại cần add-on Zero Trust Enterprise.',
         'Confidence Medium; minimum match count 1 cho high-risk.',
         'HTTP policy Allow + DLP profile, mọi destination, 1–2 tuần — chỉ log.',
       ],
       en: [
-        'Confirm Enterprise and that TLS decryption is on — otherwise DLP profiles will not appear.',
-        'Zero Trust → DLP → Profiles: enable Financial / PII / Credentials / Source Code (or custom regex).',
+        'Turn TLS decryption on. Free and Pay-as-you-go include two predefined profiles: Financial Information, and Social Security, Insurance, Tax, and Identifier Numbers. The full DLP set is an add-on to Zero Trust Enterprise.',
+        'Zero Trust → DLP → Profiles: on Free and Pay-as-you-go, enable the two predefined profiles (Financial Information, and Social Security / Insurance / Tax / Identifier Numbers). Custom profiles and the rest need the Zero Trust Enterprise add-on.',
         'Confidence Medium; minimum match count 1 for high-risk.',
         'HTTP policy Allow + DLP profile, all destinations, 1–2 weeks — log only.',
       ],
@@ -1284,7 +1284,7 @@ export const trackLessonEnrichment: Record<string, TrackLessonEnrichment> = {
     },
     docsLinks: [
       { label: { vi: 'Module 7 — AI controls', en: 'Module 7 — AI controls' }, url: `${ZT_ONBOARD}/module-7-ai-controls.html` },
-      { label: { vi: 'Holistic AI security learning path', en: 'Holistic AI security learning path' }, url: 'https://developers.cloudflare.com/learning-paths/holistic-ai-security/' },
+      { label: { vi: 'Holistic AI security learning path', en: 'Holistic AI security learning path' }, url: 'https://developers.cloudflare.com/waf/detections/firewall-for-ai/' },
     ],
     productSlugs: ['casb', 'dlp', 'swg'],
   },
@@ -1319,13 +1319,13 @@ export const trackLessonEnrichment: Record<string, TrackLessonEnrichment> = {
       vi: [
         'Tạo AI Gateway; trỏ app/agent vào gateway endpoint; xác nhận request trong AI → AI Gateway.',
         'Bật Authenticated Gateway (token); BYOK / Store Keys cho provider key.',
-        'Guardrails cho unsafe content; DLP profile (Enterprise) trên request — response scan làm chậm streaming.',
+        'Guardrails cho unsafe content; DLP (miễn phí; Free có 2 profile sẵn) trên request — response scan làm chậm streaming.',
         'Cost/rate limit; `cf-aig-collect-log-payload: false` nếu không được persist prompt. Gateway riêng cho RAG.',
       ],
       en: [
         'Create an AI Gateway; point the app/agent at the gateway endpoint; confirm requests under AI → AI Gateway.',
         'Enable Authenticated Gateway (token); BYOK / Store Keys for the provider key.',
-        'Guardrails for unsafe content; DLP profiles (Enterprise) on the request — response scanning slows streaming.',
+        'Guardrails for unsafe content; DLP (free; 2 predefined profiles without Zero Trust) on the request — response scanning slows streaming.',
         'Cost/rate limits; `cf-aig-collect-log-payload: false` if you must not persist prompts. Dedicated gateway for RAG.',
       ],
     },

@@ -496,7 +496,7 @@ export const topicEnById: Record<string, Partial<TopicEnOverlay>> = {
   },
   'dp-r2': {
     summaryEn:
-      'R2 is S3-compatible object storage with no egress fees via Workers. Store user uploads, assets, backups — combine with Workers presigned URLs.',
+      'R2 is S3-compatible object storage with no egress on any access path. Cost is storage, Class A/B operations, and retrieval if you use Infrequent Access.',
     whyItMattersEn:
       'Media and SaaS file upload use cases — R2 architecture on the hub.',
   },

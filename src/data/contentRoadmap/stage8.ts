@@ -192,7 +192,7 @@ export const stage8: ContentRoadmapStage = {
         filterTags: ['developer', 'security', 'performance'],
         sourceUrls: [
           SRC.arch,
-          'https://developers.cloudflare.com/reference-architecture/architectures/cloudflare-for-startups/',
+          'https://developers.cloudflare.com/reference-architecture/',
         ],
         relatedExistingRoutes: [
           '/use-cases/build-saas-platform',
