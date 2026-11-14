@@ -1319,13 +1319,13 @@ export const trackLessonEnrichment: Record<string, TrackLessonEnrichment> = {
       vi: [
         'Tạo AI Gateway; trỏ app/agent vào gateway endpoint; xác nhận request trong AI → AI Gateway.',
         'Bật Authenticated Gateway (token); BYOK / Store Keys cho provider key.',
-        'Guardrails cho unsafe content; DLP profile (Enterprise) trên request — response scan làm chậm streaming.',
+        'Guardrails cho unsafe content; DLP (miễn phí; Free có 2 profile sẵn) trên request — response scan làm chậm streaming.',
         'Cost/rate limit; `cf-aig-collect-log-payload: false` nếu không được persist prompt. Gateway riêng cho RAG.',
       ],
       en: [
         'Create an AI Gateway; point the app/agent at the gateway endpoint; confirm requests under AI → AI Gateway.',
         'Enable Authenticated Gateway (token); BYOK / Store Keys for the provider key.',
-        'Guardrails for unsafe content; DLP profiles (Enterprise) on the request — response scanning slows streaming.',
+        'Guardrails for unsafe content; DLP (free; 2 predefined profiles without Zero Trust) on the request — response scanning slows streaming.',
         'Cost/rate limits; `cf-aig-collect-log-payload: false` if you must not persist prompts. Dedicated gateway for RAG.',
       ],
     },

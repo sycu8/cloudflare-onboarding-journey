@@ -1527,8 +1527,8 @@ export const tracks: Track[] = [
           {
             title: { vi: 'AI Gateway: auth, DLP, cost cho model call', en: 'AI Gateway: auth, DLP, and cost for model calls' },
             body: {
-              vi: 'AI Gateway ngồi trước model provider — không cần WARP hay TLS decrypt. Authenticated Gateway + token; BYOK để key không nằm trong app. Guardrails = an toàn nội dung; DLP = PII/secret (Enterprise). Response scanning buffer full body (chậm streaming). Không cache/rate-limit gateway dùng cho AI Search/RAG.',
-              en: 'AI Gateway sits in front of model providers — no WARP or TLS decrypt required. Authenticated Gateway + token; BYOK so keys never live in the app. Guardrails = content safety; DLP = PII/secrets (Enterprise). Response scanning buffers the full body (hurts streaming). Do not cache or rate-limit a gateway used for AI Search/RAG.',
+              vi: 'AI Gateway ngồi trước model provider — không cần WARP hay TLS decrypt. Authenticated Gateway + token; BYOK để key không nằm trong app. Guardrails = an toàn nội dung; DLP = PII/secret (miễn phí trên mọi gói; không có Zero Trust thì có 2 profile sẵn). Response scanning buffer full body (chậm streaming). Không cache/rate-limit gateway dùng cho AI Search/RAG.',
+              en: 'AI Gateway sits in front of model providers — no WARP or TLS decrypt required. Authenticated Gateway + token; BYOK so keys never live in the app. Guardrails = content safety; DLP = PII/secrets (free on all plans; without a Zero Trust subscription you get 2 predefined profiles). Response scanning buffers the full body (hurts streaming). Do not cache or rate-limit a gateway used for AI Search/RAG.',
             },
           },
           {
