@@ -3,7 +3,6 @@ import type { LocalizedString } from '../i18n/types';
 /** Official product changelog — primary source for “what shipped recently”. */
 export const CLOUDFLARE_CHANGELOG_URL = 'https://developers.cloudflare.com/changelog/';
 export const CLOUDFLARE_CHANGELOG_RSS_URL = 'https://developers.cloudflare.com/changelog/rss/index.xml';
-export const CLOUDFLARE_CHANGELOG_LLMS_URL = 'https://developers.cloudflare.com/changelog/llms.txt';
 export const CLOUDFLARE_RSS_FEEDS_URL =
   'https://developers.cloudflare.com/fundamentals/new-features/available-rss-feeds/';
 
@@ -76,7 +75,7 @@ export const changelogEntries: ChangelogEntry[] = [
       vi: 'Think agents: Agent Skills (R2/bundled), Telegram messengers, scheduled task DSL, ThinkWorkflow với structured output; chat recovery mạnh hơn (isRecovering, stall timeout); MCP resumable streams.',
       en: 'Think agents: Agent Skills (R2/bundled), Telegram messengers, scheduled task DSL, ThinkWorkflow with structured output; stronger durable chat recovery (isRecovering, stall timeout); MCP resumable streams.',
     },
-    href: 'https://developers.cloudflare.com/changelog/post/2026-06-02-agents-sdk-v0140/',
+    href: 'https://developers.cloudflare.com/changelog/product/agents/',
     products: ['agents', 'workers'],
     productLabels: ['Agents', 'Workers'],
     relatedTrack: 'developer-platform',

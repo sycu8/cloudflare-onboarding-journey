@@ -1952,7 +1952,7 @@
             "type": "callout",
             "kind": "note",
             "title": "Persistent Storage with KV",
-            "html": "Cloudflare KV provides global, low-latency key-value storage for your MCP tools, enabling persistent data across sessions.\n<ul><li>Global Distribution: Data replicated across our global network</li><li>Eventually Consistent: Fast reads with eventual consistency</li><li>Generous Limits: 1GB storage and 100,000 operations daily on free tier</li><li>Simple API: Easy key-value operations (get, put, delete, list)</li></ul>"
+            "html": "Cloudflare KV provides global, low-latency key-value storage for your MCP tools, enabling persistent data across sessions.\n<ul><li>Global Distribution: Data replicated across our global network</li><li>Eventually Consistent: Fast reads with eventual consistency</li><li>Free tier: 1 GB storage, 100,000 reads per day, and 1,000 writes, deletes, and lists per day each</li><li>Simple API: Easy key-value operations (get, put, delete, list)</li></ul>"
           },
           {
             "type": "heading",

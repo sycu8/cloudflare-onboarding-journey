@@ -60,7 +60,7 @@
       "en": "Static/frontend sites vs edge APIs/logic; many projects use both."
     },
     "sourceHints": [
-      "https://blog.cloudflare.com/tag/pages/",
+      "https://blog.cloudflare.com/tag/cloudflare-pages/",
       "https://blog.cloudflare.com/tag/workers/"
     ],
     "relatedTrack": "developer-platform",
@@ -267,7 +267,7 @@
       "en": "Config flags, light sessions; not a relational SQL replacement."
     },
     "sourceHints": [
-      "https://blog.cloudflare.com/tag/kv/",
+      "https://blog.cloudflare.com/tag/key-value/",
       "https://blog.cloudflare.com/tag/workers/"
     ],
     "relatedTrack": "developer-platform",
@@ -313,7 +313,7 @@
       "en": "Split traffic, health checks, failover — small-ops language."
     },
     "sourceHints": [
-      "https://blog.cloudflare.com/tag/load-balancing/",
+      "https://blog.cloudflare.com/tag/loadbalancing/",
       "https://blog.cloudflare.com/tag/cdn/"
     ],
     "relatedTrack": "application-services",
@@ -427,7 +427,7 @@
       "en": "Cache + resize; mobile; caching alone does not fix oversized assets."
     },
     "sourceHints": [
-      "https://blog.cloudflare.com/tag/images/",
+      "https://blog.cloudflare.com/tag/cloudflare-images/",
       "https://blog.cloudflare.com/tag/cdn/"
     ],
     "relatedTrack": "application-services",
@@ -730,7 +730,7 @@
       "en": "Upload → encode → player; when Stream beats plain R2 + HTML5; protecting watch links."
     },
     "sourceHints": [
-      "https://blog.cloudflare.com/tag/stream/",
+      "https://blog.cloudflare.com/tag/cloudflare-stream/",
       "https://developers.cloudflare.com/stream/"
     ],
     "relatedTrack": "application-services",
@@ -754,7 +754,7 @@
       "en": "Path rewrites, set headers, light redirects; vs legacy Page Rules; HTTPS and www examples."
     },
     "sourceHints": [
-      "https://blog.cloudflare.com/tag/rules/",
+      "https://blog.cloudflare.com/tag/waf/",
       "https://developers.cloudflare.com/rules/transform/"
     ],
     "relatedTrack": "application-services",
@@ -801,7 +801,7 @@
       "en": "When Snippets are enough; vs Workers/Pages Functions; limits and A/B or header use cases."
     },
     "sourceHints": [
-      "https://blog.cloudflare.com/snippets-announcing-general-availability/",
+      "https://blog.cloudflare.com/tag/snippets/",
       "https://developers.cloudflare.com/rules/snippets/"
     ],
     "relatedTrack": "developer-platform",
@@ -848,7 +848,7 @@
       "en": "DNS as the first layer; category filters; vs Access and a public-site WAF."
     },
     "sourceHints": [
-      "https://blog.cloudflare.com/tag/cloudflare-gateway/",
+      "https://blog.cloudflare.com/tag/gateway/",
       "https://developers.cloudflare.com/cloudflare-one/policies/gateway/"
     ],
     "relatedTrack": "cloudflare-one",
@@ -920,7 +920,7 @@
       "en": "Pages vs Workers assets; when to combine SPA + API; static vs dynamic routing."
     },
     "sourceHints": [
-      "https://blog.cloudflare.com/workers-assets/",
+      "https://developers.cloudflare.com/workers/static-assets/",
       "https://developers.cloudflare.com/workers/static-assets/"
     ],
     "relatedTrack": "developer-platform",
@@ -1015,7 +1015,7 @@
       "en": "WebRTC is hard to self-host; Cloudflare handles TURN/SFU; vs plain WebSocket chat."
     },
     "sourceHints": [
-      "https://blog.cloudflare.com/tag/realtime/",
+      "https://blog.cloudflare.com/tag/cloudflare-realtime/",
       "https://developers.cloudflare.com/realtime/"
     ],
     "relatedTrack": "developer-platform",
@@ -1088,7 +1088,7 @@
     },
     "sourceHints": [
       "https://developers.cloudflare.com/rules/origin-rules/",
-      "https://blog.cloudflare.com/tag/rules/"
+      "https://blog.cloudflare.com/tag/waf/"
     ],
     "relatedTrack": "application-services",
     "relatedProductSlugs": [
@@ -1159,7 +1159,7 @@
     },
     "sourceHints": [
       "https://developers.cloudflare.com/pages/functions/",
-      "https://blog.cloudflare.com/tag/pages/"
+      "https://blog.cloudflare.com/tag/cloudflare-pages/"
     ],
     "relatedTrack": "developer-platform",
     "relatedProductSlugs": [
@@ -1230,7 +1230,7 @@
       "en": "User latency vs DB latency; when to enable Smart Placement; measure before/after."
     },
     "sourceHints": [
-      "https://blog.cloudflare.com/workers-smart-placement/",
+      "https://blog.cloudflare.com/tag/smart-placement/",
       "https://developers.cloudflare.com/workers/configuration/smart-placement/"
     ],
     "relatedTrack": "developer-platform",

@@ -55,7 +55,7 @@ export const aiProtectionPillars: AiProtectionPillar[] = [
     controls: [{ vi: 'Detect/block/moderate unsafe prompt, prompt injection và sensitive response theo policy', en: 'Detect, block, or moderate unsafe prompts, prompt injection, and sensitive responses by policy' }, { vi: 'Bot Analytics, AI Labyrinth và controls cho verified/unverified AI bots', en: 'Bot Analytics, AI Labyrinth, and controls for verified or unverified AI bots' }, { vi: 'Rate limit public AI endpoint và verify user input server-side', en: 'Rate-limit public AI endpoints and verify user input server-side' }],
     risks: [{ vi: 'PII leak, harmful prompt và prompt injection', en: 'PII leaks, harmful prompts, and prompt injection' }, { vi: 'Unauthorized AI crawling, bot abuse và export cost', en: 'Unauthorized AI crawling, bot abuse, and export cost' }],
     productSlugs: ['waf', 'bots', 'rate-limiting', 'turnstile'],
-    docsHref: 'https://developers.cloudflare.com/waf/ai/',
+    docsHref: 'https://developers.cloudflare.com/waf/detections/firewall-for-ai/',
   },
   {
     id: 'radar-sase',

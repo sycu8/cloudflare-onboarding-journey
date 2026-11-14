@@ -37,8 +37,8 @@ export const postRateLimitingBaoVeFormLogin: BlogPost = {
           en: 'Picture a workshop signup form or login page: an attacker (or bot) sends thousands of requests in minutes — spamming the database, slowing the origin, or trying passwords from a list. The origin must handle each request; without limits, one IP can consume resources like hundreds of real users.',
         },
         {
-          vi: 'Rate limiting đặt quy tắc: ví dụ “mỗi IP chỉ được 10 request POST tới `/api/login` trong 60 giây”. Vượt ngưỡng → block, challenge (Turnstile), hoặc log. Cloudflare áp dụng ở edge — trước khi request chạm origin — giống lễ tân không cho cùng một người gõ cửa liên tục.',
-          en: 'Rate limiting sets a rule: for example “each IP may only POST to `/api/login` 10 times per 60 seconds.” Above the threshold → block, challenge (Turnstile), or log. Cloudflare applies this at the edge — before the request hits the origin — like a receptionist stopping the same person from knocking endlessly.',
+          vi: 'Hạn mức phụ thuộc gói. Free: 1 rule, chỉ field Path và Verified Bot, chu kỳ đếm 10 giây. Ví dụ hợp Free: Path = /login, một số request mỗi 10 giây, action Managed Challenge. Matching Method (POST) từ Business. Action Log chỉ có trên Enterprise; gói khác bắt đầu bằng Managed Challenge rồi xem Security Events trước khi Block. Cloudflare áp dụng ở edge, trước khi request chạm origin.',
+          en: 'Limits depend on the plan. Free: 1 rule, only the Path and Verified Bot fields, and a 10-second counting period. A Free-safe example: Path = /login, a small number of requests per 10 seconds, action Managed Challenge. Matching on Method (POST) starts at Business. The Log action is Enterprise only; other plans start with Managed Challenge and check Security Events before Block. Cloudflare applies this at the edge, before the request hits the origin.',
         },
         {
           vi: 'Trên blog.cloudflare.com, bài security và WAF thường nhắc rate limiting cùng bot management: không phải silver bullet, nhưng là lớp rẻ và hiệu quả cho abuse phổ biến. Hub có trang sản phẩm Rate limiting và lộ trình Application Services.',
@@ -94,8 +94,8 @@ export const postRateLimitingBaoVeFormLogin: BlogPost = {
       },
       paragraphs: [
         {
-          vi: 'Rule 1: POST tới `/login` hoặc `/api/auth/*` — ví dụ 10 request / phút / IP, action block hoặc challenge. Rule 2: POST tới form public (signup, contact) — ví dụ 20 request / phút / IP. Ghi log trước khi block cứng nếu bạn chưa chắc ngưỡng.',
-          en: 'Rule 1: POST to `/login` or `/api/auth/*` — e.g. 10 requests per minute per IP, action block or challenge. Rule 2: POST to public forms (signup, contact) — e.g. 20 requests per minute per IP. Log before hard block if you are unsure of thresholds.',
+          vi: 'Free chỉ có 1 rule và chu kỳ 10 giây, nên đừng viết “10 request mỗi phút” cho gói Free. Trên Free: Path = /login, chu kỳ 10 giây, Managed Challenge. Pro có 2 rule và chu kỳ tới 1 phút. Field Method (POST) từ Business. Action Log chỉ có trên Enterprise.',
+          en: 'Free has 1 rule and a 10-second period, so do not write “10 requests per minute” for Free. On Free: Path = /login, a 10-second period, Managed Challenge. Pro has 2 rules and periods up to 1 minute. The Method field (POST) starts at Business. The Log action is Enterprise only.',
         },
         {
           vi: 'Đọc trang Rate limiting và WAF trên hub; bài WAF cho người mới giải thích lớp bảo vệ chung. Khi cần sâu hơn, mở blog.cloudflare.com/tag/security/ và docs rate limiting rules.',
@@ -131,8 +131,8 @@ export const postRateLimitingBaoVeFormLogin: BlogPost = {
         en: 'Is rate limiting on the Free plan?',
       },
       answer: {
-        vi: 'Tính năng và ngưỡng phụ thuộc gói Cloudflare — xem pricing và docs hiện tại. Người mới vẫn nên đọc rule templates và Security Events dù ở gói thấp.',
-        en: 'Features and thresholds depend on your Cloudflare plan — check current pricing and docs. Beginners should still read rule templates and Security Events even on lower tiers.',
+        vi: 'Có. Free có 1 rate limiting rule, chu kỳ đếm 10 giây, và chỉ field Path cùng Verified Bot. Pro có 2 rule và chu kỳ tới 1 phút. Action Log chỉ có trên Enterprise.',
+        en: 'Yes. Free has 1 rate limiting rule with a 10-second counting period, and only the Path and Verified Bot fields. Pro has 2 rules and periods up to 1 minute. The Log action is Enterprise only.',
       },
     },
   ],

@@ -16,8 +16,8 @@ export const postR2LuuFileKhongPhiEgressChoNguoiMoi: BlogPost = {
     en: 'Explain Cloudflare R2 for beginners: images, backups, static assets; vs classic hosting disks; and wiring Workers via bindings without scary download egress fees.',
   },
   excerpt: {
-    vi: 'R2 là kho object trên Cloudflare — giống S3 nhưng không tính phí egress khi phục vụ qua mạng Cloudflare. Hợp ảnh user, backup, và file tĩnh cho Workers/Pages.',
-    en: 'R2 is Cloudflare object storage — S3-like but without egress fees when served through Cloudflare’s network. Great for user images, backups, and static files for Workers/Pages.',
+    vi: 'R2 là kho object trên Cloudflare, API kiểu S3. Mọi đường truy cập đều không tính egress: Workers, S3 API, r2.dev và custom domain. Chi phí là storage, thao tác Class A/B, và phí lấy dữ liệu nếu dùng Infrequent Access.',
+    en: 'R2 is Cloudflare object storage with an S3-style API. Egress is free on every access path: Workers, the S3 API, r2.dev, and custom domains. You pay for storage, Class A/B operations, and data retrieval if you use Infrequent Access.',
   },
   keywords: {
     vi: 'Cloudflare R2 là gì, object storage, không phí egress, lưu file ảnh, Workers binding R2, học Developer Platform',
@@ -35,8 +35,8 @@ export const postR2LuuFileKhongPhiEgressChoNguoiMoi: BlogPost = {
           en: 'Traditional hosting ties disk space to one server: limited capacity, harder backup and scale when traffic grows. Object storage (like R2) stores files as keyed objects — image.png, backup/2026-08.zip — in a bucket, accessed via HTTP(S) APIs, scaling separately from your app server.',
         },
         {
-          vi: 'R2 tương thích API kiểu S3: nhiều công cụ và SDK quen thuộc. Khác biệt nổi bật trên blog.cloudflare.com về storage: không tính phí egress (tải dữ liệu ra) khi phục vụ qua mạng Cloudflare — tránh “hóa đơn bất ngờ” khi ảnh viral.',
-          en: 'R2 speaks S3-compatible APIs: familiar tools and SDKs. A standout difference in Cloudflare Blog storage posts: no egress fees when serving through Cloudflare’s network — avoiding “surprise bills” when an image goes viral.',
+          vi: 'R2 tương thích API kiểu S3. Trang pricing nói không tính phí egress cho mọi storage class, kể cả khi tải trực tiếp qua Workers API, S3 API và domain r2.dev. Nếu bạn gắn dịch vụ tính phí khác vào bucket, dịch vụ đó có thể tính phí riêng.',
+          en: 'R2 speaks an S3-compatible API. The pricing page says there are no egress charges for any storage class, including downloads through the Workers API, the S3 API, and r2.dev domains. If you connect another metered service to the bucket, that service may charge you.',
         },
         {
           vi: 'Use case điển hình: ảnh upload user, video ngắn, export backup database, static asset cho site, log archive. Không phù hợp thay database quan hệ — dùng D1 hoặc DB chuyên dụng cho dữ liệu có cấu trúc và query phức tạp.',
@@ -52,12 +52,12 @@ export const postR2LuuFileKhongPhiEgressChoNguoiMoi: BlogPost = {
       },
       paragraphs: [
         {
-          vi: 'Egress là lưu lượng dữ liệu “ra khỏi” nhà cung cấp cloud khi user tải file. Một số nhà cung cấp object storage giá storage rẻ nhưng egress đắt — site càng nổi tiếng, bill càng leo. R2 được thiết kế với mô hình: trả cho storage và operation, không phạt egress qua Cloudflare.',
-          en: 'Egress is data leaving a cloud provider when users download files. Some object stores price storage cheaply but egress expensively — the more popular the site, the higher the bill. R2 is designed around paying for storage and operations, not punishing egress through Cloudflare.',
+          vi: 'Egress là dữ liệu ra Internet khi user tải file. R2 không tính egress trên mọi storage class và mọi đường truy cập. Bạn trả storage và thao tác Class A/B. Infrequent Access còn có phí data retrieval.',
+          en: 'Egress is data leaving to the Internet when users download a file. R2 charges no egress for any storage class or access path. You pay for storage and Class A/B operations. Infrequent Access also has a data retrieval fee.',
         },
         {
-          vi: 'Lưu ý thực tế: egress-free áp dụng khi bạn phục vụ qua Workers, CDN, hoặc các đường tích hợp Cloudflare — không phải “mọi cách tải từ Internet đều miễn phí mãi mãi”. Đọc pricing và docs trước khi thiết kế kiến trúc tải file trực tiếp từ R2 public bucket ra ngoài mạng CF.',
-          en: 'Reality check: zero egress applies when you serve via Workers, CDN, or Cloudflare-integrated paths — not “every possible Internet download is free forever.” Read pricing and docs before designing direct public-bucket downloads outside the CF network.',
+          vi: 'Đừng đọc “không egress” thành “miễn phí mọi thứ”. Phần vượt free tier tính storage và Class A/B. Infrequent Access không nằm trong free tier và có phí lấy dữ liệu. Bài này không báo giá — đối chiếu trang pricing.',
+          en: 'Do not read “no egress” as “everything is free.” Usage above the free tier is billed as storage and Class A/B operations. Infrequent Access is outside the free tier and adds a data retrieval fee. This post is not a quote — check the pricing page.',
         },
         {
           vi: 'So với giữ ảnh trên cùng VPS chạy WordPress: R2 tách storage khỏi compute — VPS restart không làm mất file; scale CDN/Worker không cần copy ảnh sang máy mới. Phù hợp lộ trình Developer Platform trên hub.',
@@ -138,8 +138,8 @@ export const postR2LuuFileKhongPhiEgressChoNguoiMoi: BlogPost = {
         en: 'What is the main R2 vs S3 difference for beginners?',
       },
       answer: {
-        vi: 'API tương thích S3 nhưng R2 nằm trong ecosystem Cloudflare (bindings, zero egress qua CF). Nếu bạn đã dùng Workers/Pages, R2 thường ít ma sát hơn mang thêm một nhà cung cấp riêng.',
-        en: 'S3-compatible API but R2 lives in Cloudflare’s ecosystem (bindings, zero egress via CF). If you already use Workers/Pages, R2 usually adds less friction than another separate vendor.',
+        vi: 'API tương thích S3 và không tính egress trên mọi đường (Workers, S3, r2.dev, custom domain). Chi phí nằm ở storage, thao tác, và retrieval nếu dùng Infrequent Access.',
+        en: 'S3-compatible API and no egress on every path (Workers, S3, r2.dev, custom domains). Cost is storage, operations, and retrieval if you use Infrequent Access.',
       },
     },
   ],

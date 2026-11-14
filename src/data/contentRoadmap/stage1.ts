@@ -103,7 +103,7 @@ export const stage1: ContentRoadmapStage = {
       'Giảm panic khi khách báo “một số nơi vào được, một số không” sau khi đổi nameserver.',
       {
         filterTags: ['dns'],
-        sourceUrls: ['https://developers.cloudflare.com/dns/zone-setups/troubleshooting/propagation/'],
+        sourceUrls: ['https://developers.cloudflare.com/dns/troubleshooting/'],
         relatedExistingRoutes: ['/tracks/application-services', '/checklists/beginner-cloudflare-checklist'],
         relatedCloudflareProducts: ['DNS'],
         prerequisites: ['dns-ttl'],

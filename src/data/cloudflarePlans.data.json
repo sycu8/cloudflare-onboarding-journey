@@ -18,8 +18,8 @@
           "business": "yes",
           "enterprise": "yes",
           "note": {
-            "vi": "- 320 cities in 120+ countries, including mainland China\n- 13,000 networks directly connect to Cloudflare, including every major ISP, cloud provider, and enterprise\n- 280 Tbps global network edge capacity, consisting of transit connections, peering and private network interconnects\n- ~50 ms from about 95% of the world’s Internet-connected population\nLink: https://www.cloudflare.com/en-gb/network/ ",
-            "en": "- 320 cities in 120+ countries, including mainland China\n- 13,000 networks directly connect to Cloudflare, including every major ISP, cloud provider, and enterprise\n- 280 Tbps global network edge capacity, consisting of transit connections, peering and private network interconnects\n- ~50 ms from about 95% of the world’s Internet-connected population\nLink: https://www.cloudflare.com/en-gb/network/ "
+            "vi": "- 348 cities across 8 regions, in 100+ countries\n- 13,000 networks directly connect to Cloudflare, including every major ISP, cloud provider, and enterprise\n- ~50 ms from about 95% of the world’s Internet-connected population\nLink: https://www.cloudflare.com/en-gb/network/ ",
+            "en": "- 348 cities across 8 regions, in 100+ countries\n- 13,000 networks directly connect to Cloudflare, including every major ISP, cloud provider, and enterprise\n- ~50 ms from about 95% of the world’s Internet-connected population\nLink: https://www.cloudflare.com/en-gb/network/ "
           }
         },
         {
@@ -577,8 +577,8 @@
           "business": "no",
           "enterprise": "Custom Pricing",
           "note": {
-            "vi": "Mutual TLS (mTLS) authentication uses client certificates to ensure traffic between client and server is bidirectionally secure and trusted. mTLS also allows requests that do not authenticate via an identity provider — such as Internet-of-things (IoT) devices — to demonstrate they can reach a given resource: https://developers.cloudflare.com/learning-paths/application-security/default-traffic-secu",
-            "en": "Mutual TLS (mTLS) authentication uses client certificates to ensure traffic between client and server is bidirectionally secure and trusted. mTLS also allows requests that do not authenticate via an identity provider — such as Internet-of-things (IoT) devices — to demonstrate they can reach a given resource: https://developers.cloudflare.com/learning-paths/application-security/default-traffic-secu"
+            "vi": "Mutual TLS (mTLS) authentication uses client certificates to ensure traffic between client and server is bidirectionally secure and trusted. mTLS also allows requests that do not authenticate via an identity provider — such as Internet-of-things (IoT) devices — to demonstrate they can reach a given resource: https://developers.cloudflare.com/learning-paths/application-security/default-traffic-security/",
+            "en": "Mutual TLS (mTLS) authentication uses client certificates to ensure traffic between client and server is bidirectionally secure and trusted. mTLS also allows requests that do not authenticate via an identity provider — such as Internet-of-things (IoT) devices — to demonstrate they can reach a given resource: https://developers.cloudflare.com/learning-paths/application-security/default-traffic-security/"
           }
         },
         {
@@ -1271,8 +1271,8 @@
           "business": "yes",
           "enterprise": "yes",
           "note": {
-            "vi": "Powered by CF infrastrustrure:\n- 320 cities in 120+ countries, including mainland China\n- 13,000 networks directly connect to Cloudflare, including every major ISP, cloud provider, and enterprise\n- 280 Tbps global network edge capacity, consisting of transit connections, peering and private network interconnects\n- ~50 ms from about 95% of the world’s Internet-connected population\nLink: https://www",
-            "en": "Powered by CF infrastrustrure:\n- 320 cities in 120+ countries, including mainland China\n- 13,000 networks directly connect to Cloudflare, including every major ISP, cloud provider, and enterprise\n- 280 Tbps global network edge capacity, consisting of transit connections, peering and private network interconnects\n- ~50 ms from about 95% of the world’s Internet-connected population\nLink: https://www"
+            "vi": "Powered by CF infrastrustrure:\n- 348 cities across 8 regions, in 100+ countries\n- 13,000 networks directly connect to Cloudflare, including every major ISP, cloud provider, and enterprise\n- ~50 ms from about 95% of the world’s Internet-connected population\nLink: https://www",
+            "en": "Powered by CF infrastrustrure:\n- 348 cities across 8 regions, in 100+ countries\n- 13,000 networks directly connect to Cloudflare, including every major ISP, cloud provider, and enterprise\n- ~50 ms from about 95% of the world’s Internet-connected population\nLink: https://www"
           }
         },
         {
@@ -2093,8 +2093,8 @@
       "business": "no",
       "enterprise": "Custom Pricing",
       "note": {
-        "vi": "Mutual TLS (mTLS) authentication uses client certificates to ensure traffic between client and server is bidirectionally secure and trusted. mTLS also allows requests that do not authenticate via an identity provider — such as Internet-of-things (IoT) devices — to demonstrate they can reach a given resource: https://developers.cloudflare.com/learning-paths/application-security/default-traffic-secu",
-        "en": "Mutual TLS (mTLS) authentication uses client certificates to ensure traffic between client and server is bidirectionally secure and trusted. mTLS also allows requests that do not authenticate via an identity provider — such as Internet-of-things (IoT) devices — to demonstrate they can reach a given resource: https://developers.cloudflare.com/learning-paths/application-security/default-traffic-secu"
+        "vi": "Mutual TLS (mTLS) authentication uses client certificates to ensure traffic between client and server is bidirectionally secure and trusted. mTLS also allows requests that do not authenticate via an identity provider — such as Internet-of-things (IoT) devices — to demonstrate they can reach a given resource: https://developers.cloudflare.com/learning-paths/application-security/default-traffic-security/",
+        "en": "Mutual TLS (mTLS) authentication uses client certificates to ensure traffic between client and server is bidirectionally secure and trusted. mTLS also allows requests that do not authenticate via an identity provider — such as Internet-of-things (IoT) devices — to demonstrate they can reach a given resource: https://developers.cloudflare.com/learning-paths/application-security/default-traffic-security/"
       },
       "categoryId": "security"
     },

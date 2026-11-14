@@ -443,7 +443,7 @@
     "slug": "concepts",
     "title": "Concepts",
     "path": "/learning-paths/holistic-ai-security/concepts/",
-    "url": "https://developers.cloudflare.com/learning-paths/holistic-ai-security/concepts/",
+    "url": "https://developers.cloudflare.com/waf/detections/firewall-for-ai/",
     "contentType": "Learning path",
     "track": "cross-cutting"
   },
