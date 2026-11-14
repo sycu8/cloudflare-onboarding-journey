@@ -16,8 +16,8 @@ export const postPagesVsWorkersKhiNaoDungGi: BlogPost = {
     en: 'Compare Cloudflare Pages and Workers for beginners: static/frontend sites vs edge APIs and logic, and why many real projects use both.',
   },
   excerpt: {
-    vi: 'Dự án mới nên bắt đầu trên Workers, kể cả site tĩnh (static assets). Pages vẫn chạy site Git có sẵn. Workers là nền tảng chính để build ứng dụng.',
-    en: 'Start new projects on Workers, including static sites (static assets). Pages still runs an existing Git site. Workers is the primary platform for building applications.',
+    vi: 'Pages thuận tiện deploy site tĩnh và frontend; Workers chạy code xử lý request tùy ý. Nhiều app hiện đại: Pages làm “mặt tiền”, Workers làm API và logic phía sau.',
+    en: 'Pages is great for static sites and frontends; Workers runs custom request-handling code. Many modern apps: Pages as the storefront, Workers as APIs and backend logic.',
   },
   keywords: {
     vi: 'Cloudflare Pages, Cloudflare Workers, Pages vs Workers, deploy static site, serverless edge, học Developer Platform',
@@ -35,8 +35,8 @@ export const postPagesVsWorkersKhiNaoDungGi: BlogPost = {
           en: 'Cloudflare Pages and Workers both live on the Developer Platform: you deploy to a global edge network without running physical servers. The mental model differs: Pages optimizes for static files and frontend builds (HTML, CSS, JS, frameworks like Astro/React/Vue); Workers optimizes for code that runs on each HTTP request — redirects, APIs, auth, data glue.',
         },
         {
-          vi: 'Docs Pages nói Workers hỗ trợ hầu hết use case của Pages và có tập tính năng rộng hơn. Workers là nền tảng chính để build ứng dụng. Dự án mới, kể cả site tĩnh, hãy bắt đầu bằng Workers với static assets. Pages vẫn hợp khi site Git đã nằm trên Pages.',
-          en: 'The Pages docs say Workers supports most Pages use cases and offers a broader feature set. Workers is the primary platform for building applications. Start new projects, including static sites, on Workers with static assets. Pages still fits when a Git site already lives on Pages.',
+          vi: 'Câu hỏi đầu tiên: “Người dùng chủ yếu tải trang đã build sẵn, hay mỗi request cần logic riêng?” Nếu là portfolio, blog, landing marketing — Pages thường đủ và rất nhanh để bắt đầu. Nếu là API JSON, webhook, hoặc middleware phức tạp — Workers (hoặc Pages Functions) phù hợp hơn.',
+          en: 'First question: “Do users mostly load prebuilt pages, or does each request need custom logic?” For a portfolio, blog, or marketing landing — Pages is often enough and very fast to start. For JSON APIs, webhooks, or complex middleware — Workers (or Pages Functions) fits better.',
         },
         {
           vi: 'Blog.cloudflare.com thường mô tả Pages và Workers như hai cánh của cùng một nhà: nhiều tutorial full-stack kết hợp Pages deploy frontend + Worker xử lý form/API. Bạn không bắt buộc chọn một và loại bỏ hẳn cái kia.',
@@ -52,8 +52,8 @@ export const postPagesVsWorkersKhiNaoDungGi: BlogPost = {
       },
       paragraphs: [
         {
-          vi: 'Pages vẫn phục vụ site Git có sẵn: build trên CI, file từ edge, HTTPS và preview theo pull request. Hub này là site Astro trên Pages. Dự án mới thì docs khuyên Workers với static assets, không lấy Pages làm mặc định.',
-          en: 'Pages still serves an existing Git site: CI builds, files from the edge, HTTPS, and a preview per pull request. This hub is an Astro site on Pages. For a new project, the docs say to use Workers with static assets, not Pages as the default.',
+          vi: 'Pages shine với site tĩnh hoặc JAMstack: build trên CI (Git push), Cloudflare phục vụ file từ edge, HTTPS và preview branch có sẵn. Hub này chính là ví dụ Astro build ra static + Functions — pattern quen thuộc với Pages.',
+          en: 'Pages shines for static or JAMstack sites: build in CI (git push), Cloudflare serves files from the edge with HTTPS and preview branches built in. This hub itself is an Astro static build plus Functions — a familiar Pages pattern.',
         },
         {
           vi: 'Bạn có ít hoặc không có server “luôn bật”. Mỗi deploy là một phiên bản file. Thay đổi nội dung = build lại và publish — không SSH vào máy. Phù hợp team nhỏ, tài liệu, marketing, và prototype UI nhanh.',
@@ -145,7 +145,7 @@ export const postPagesVsWorkersKhiNaoDungGi: BlogPost = {
   sources: [
     {
       title: 'The Cloudflare Blog — Pages topics',
-      href: 'https://blog.cloudflare.com/tag/cloudflare-pages/',
+      href: 'https://blog.cloudflare.com/tag/pages/',
     },
     {
       title: 'The Cloudflare Blog — Workers topics',

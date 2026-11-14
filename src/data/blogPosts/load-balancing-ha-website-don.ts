@@ -141,7 +141,7 @@ export const postLoadBalancingHaWebsiteDon: BlogPost = {
   sources: [
     {
       title: 'The Cloudflare Blog — Load Balancing topics',
-      href: 'https://blog.cloudflare.com/tag/loadbalancing/',
+      href: 'https://blog.cloudflare.com/tag/load-balancing/',
     },
     {
       title: 'The Cloudflare Blog — CDN topics',
