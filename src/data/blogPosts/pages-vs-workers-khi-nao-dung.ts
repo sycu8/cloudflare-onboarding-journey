@@ -145,7 +145,7 @@ export const postPagesVsWorkersKhiNaoDungGi: BlogPost = {
   sources: [
     {
       title: 'The Cloudflare Blog — Pages topics',
-      href: 'https://blog.cloudflare.com/tag/pages/',
+      href: 'https://blog.cloudflare.com/tag/cloudflare-pages/',
     },
     {
       title: 'The Cloudflare Blog — Workers topics',

@@ -140,8 +140,8 @@ export const postKvKeyValueEdgeKhi: BlogPost = {
   ],
   sources: [
     {
-      title: 'The Cloudflare Blog — KV topics',
-      href: 'https://blog.cloudflare.com/tag/kv/',
+      title: 'Cloudflare Workers KV (Cloudflare Docs)',
+      href: 'https://developers.cloudflare.com/kv/',
     },
     {
       title: 'The Cloudflare Blog — Workers topics',

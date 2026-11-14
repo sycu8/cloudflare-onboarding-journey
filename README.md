@@ -218,6 +218,8 @@ Wrangler remains for **Pages deploy**, **`wrangler pages dev`**, and **local** D
 
 ### 1. Pages project
 
+Cloudflare's Pages docs say Workers is the primary platform for building applications, and to start new projects with Workers ([static assets migration](https://developers.cloudflare.com/workers/static-assets/migration-guides/migrate-from-pages/)). This repository is an existing Pages app (Pages Functions and `wrangler pages deploy`). The steps below publish this repo to Pages. Pages remains supported.
+
 1. Create a [Cloudflare Pages](https://developers.cloudflare.com/pages/) project connected to this repo, **or** deploy with Wrangler:
 
    ```bash

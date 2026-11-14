@@ -139,7 +139,7 @@ export const postImageOptimizationCdnTocDo: BlogPost = {
   sources: [
     {
       title: 'The Cloudflare Blog — Images topics',
-      href: 'https://blog.cloudflare.com/tag/images/',
+      href: 'https://blog.cloudflare.com/tag/cloudflare-images/',
     },
     {
       title: 'The Cloudflare Blog — CDN topics',
