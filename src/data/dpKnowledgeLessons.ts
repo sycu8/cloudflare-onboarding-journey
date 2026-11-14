@@ -20,7 +20,7 @@ type KnowledgeLesson = {
   prerequisites?: string[];
 };
 
-const CHECKED = '2026-11-11';
+const CHECKED = '2026-11-15';
 
 function t(vi: string, en: string): LocalizedString {
   return { vi, en };
@@ -97,24 +97,24 @@ export const dpWorkerLesson: KnowledgeLesson = lesson(
   ),
   {
     how: t(
-      'Lệnh `npm create cloudflare` hỏi vài câu rồi tạo `wrangler.jsonc` và `src/`. `wrangler dev` mở máy local. `wrangler deploy` đưa code lên mạng Cloudflare. `wrangler secret put` giữ mật khẩu trên account, không trong file.',
-      '`npm create cloudflare` asks a few questions, then creates `wrangler.jsonc` and `src/`. `wrangler dev` opens a local server. `wrangler deploy` puts the code on Cloudflare’s network. `wrangler secret put` keeps a password on the account, not in a file.',
+      'Lệnh `npm create cloudflare` hỏi vài câu rồi tạo `wrangler.jsonc` và `src/`. `wrangler dev` chạy server local. `wrangler deploy` đưa code lên mạng Cloudflare. `wrangler secret put` lưu secret trên account Cloudflare, không nằm trong file.',
+      '`npm create cloudflare` asks a few questions, then creates `wrangler.jsonc` and `src/`. `wrangler dev` runs a local server. `wrangler deploy` puts the code on Cloudflare’s network. `wrangler secret put` stores the secret on the Cloudflare account, not in a file.',
     ),
     architecture: t(
-      'Trình duyệt hoặc app gọi URL workers.dev. Cloudflare chạy Worker gần người dùng. Worker chỉ thấy biến và secret mà bạn gắn trong config. `PUBLIC_*` có thể lọt ra client. Secret thì không.',
-      'A browser or app calls the workers.dev URL. Cloudflare runs the Worker near the user. The Worker only sees the variables and secrets you attach in config. A `PUBLIC_*` value can leak to the client. A secret does not.',
+      'Trình duyệt hoặc app gọi URL workers.dev. Cloudflare chạy Worker gần người dùng. Worker đọc biến và secret từ config. Docs nói đừng để thông tin nhạy cảm trong `vars` dạng chữ thường. Hãy dùng secret.',
+      'A browser or app calls the workers.dev URL. Cloudflare runs the Worker near the user. The Worker reads variables and secrets from config. The docs say not to put sensitive information in plaintext `vars`. Use a secret.',
     ),
     whenToUse: t(
       'Dùng Worker cho API, webhook, form handler, hoặc bất kỳ logic nào không gắn với một site Git có sẵn.',
       'Use a Worker for an API, a webhook, a form handler, or any logic that is not tied to an existing Git site.',
     ),
     whenNot: t(
-      'Đừng dùng Worker chỉ để host file tĩnh của một framework đã có trên Git. Việc đó là Pages. Đừng nhét API key vào biến `PUBLIC_*`.',
-      'Do not use a Worker only to host the static files of a framework that already lives in Git. That job is Pages. Do not put an API key in a `PUBLIC_*` variable.',
+      'Đừng dùng Worker chỉ để host file tĩnh của một framework đã có trên Git. Việc đó là Pages. Đừng nhét API key vào biến thường trong file config.',
+      'Do not use a Worker only to host the static files of a framework that already lives in Git. That job is Pages. Do not put an API key in a plaintext variable in the config file.',
     ),
     planNotes: t(
-      `Trang cài Wrangler (${CHECKED}) nói CLI chạy trên bản Node Current, Active hoặc Maintenance. Một learning path cũ vẫn ghi một số phiên bản thấp hơn. Đừng chép số phiên bản cũ vào checklist. Free: 100.000 request/ngày, 10 ms CPU, 50 subrequest mỗi request. Nguồn: ${source('https://developers.cloudflare.com/workers/wrangler/install-and-update/')} ${source('https://developers.cloudflare.com/workers/platform/limits/')}`,
-      `The Wrangler install page (${CHECKED}) says the CLI runs on Current, Active, or Maintenance Node.js releases. An older learning path still names a lower release. Do not copy an old version number into the checklist. Free: 100,000 requests per day, 10 ms of CPU, 50 subrequests per request. Sources: ${source('https://developers.cloudflare.com/workers/wrangler/install-and-update/')} ${source('https://developers.cloudflare.com/workers/platform/limits/')}`,
+      `Trang cài Wrangler (${CHECKED}) nói CLI chạy trên bản Node Current, Active hoặc Maintenance. Một learning path cũ vẫn ghi một số phiên bản thấp hơn. Đừng chép số phiên bản cũ vào checklist. Free: 100.000 request/ngày, 10 ms CPU. Subrequest: 50 ra ngoài mỗi lần chạy, và 1.000 tới dịch vụ Cloudflare. Nguồn: ${source('https://developers.cloudflare.com/workers/wrangler/install-and-update/')} ${source('https://developers.cloudflare.com/workers/platform/limits/')}`,
+      `The Wrangler install page (${CHECKED}) says the CLI runs on Current, Active, or Maintenance Node.js releases. An older learning path still names a lower release. Do not copy an old version number into the checklist. Free: 100,000 requests per day, 10 ms of CPU. Subrequests: 50 external per invocation, and 1,000 to Cloudflare services. Sources: ${source('https://developers.cloudflare.com/workers/wrangler/install-and-update/')} ${source('https://developers.cloudflare.com/workers/platform/limits/')}`,
     ),
     terms: [
       {
@@ -134,8 +134,8 @@ export const dpPagesLesson: KnowledgeLesson = lesson(
   'dp-k-pages',
   t('Pages và Functions', 'Pages and Functions'),
   t(
-    'Pages lấy site từ Git, build, rồi giữ file trong output directory. Function là Worker gắn với site đó. Đây không phải khuôn cho API mới.',
-    'Pages takes a site from Git, builds it, and keeps the files in the output directory. A Function is a Worker attached to that site. This is not the mold for a new API.',
+    'Pages lấy site từ Git, build, rồi giữ file trong output directory. Function là Worker gắn với site đó. Đây không phải mẫu cho API mới.',
+    'Pages takes a site from Git, builds it, and keeps the files in the output directory. A Function is a Worker attached to that site. This is not the template for a new API.',
   ),
   {
     how: t(
@@ -197,8 +197,8 @@ export const dpStorageLesson: KnowledgeLesson = lesson(
       'Do not use KV for a balance or an order. Do not use R2 for one small config line. Do not use D1 as a file store.',
     ),
     planNotes: t(
-      `Số trên Free, kiểm tra ${CHECKED}. KV: 100.000 lần đọc/ngày, 1.000 lần ghi/ngày, 1 GB. D1: 5 triệu dòng đọc/ngày, 100.000 dòng ghi/ngày, 5 GB, 10 database. R2: 10 GB-tháng, 1 triệu thao tác Class A và 10 triệu Class B mỗi tháng. Vượt hạn thì lỗi, không phải giá trong bài này. Nguồn: ${source('https://developers.cloudflare.com/kv/platform/pricing/')} ${source('https://developers.cloudflare.com/d1/platform/pricing/')} ${source('https://developers.cloudflare.com/workers/platform/pricing/')}`,
-      `Free-plan numbers, checked ${CHECKED}. KV: 100,000 reads per day, 1,000 writes per day, 1 GB. D1: 5 million rows read per day, 100,000 rows written per day, 5 GB, 10 databases. R2: 10 GB-months, 1 million Class A operations and 10 million Class B operations per month. Past the cap, calls fail. This lesson is not a price. Sources: ${source('https://developers.cloudflare.com/kv/platform/pricing/')} ${source('https://developers.cloudflare.com/d1/platform/pricing/')} ${source('https://developers.cloudflare.com/workers/platform/pricing/')}`,
+      `Số trên Free, kiểm tra ${CHECKED}. KV: 100.000 lần đọc/ngày, 1.000 lần ghi/ngày, 1 GB. D1: 5 triệu dòng đọc/ngày, 100.000 dòng ghi/ngày, 5 GB, 10 database. R2: 10 GB-tháng, 1 triệu thao tác Class A và 10 triệu Class B mỗi tháng. KV và D1: vượt hạn Free thì lời gọi lỗi. R2: phần vượt free tier bị tính phí. Bài này không báo giá. Nguồn: ${source('https://developers.cloudflare.com/kv/platform/pricing/')} ${source('https://developers.cloudflare.com/d1/platform/pricing/')} ${source('https://developers.cloudflare.com/r2/pricing/')}`,
+      `Free-plan numbers, checked ${CHECKED}. KV: 100,000 reads per day, 1,000 writes per day, 1 GB. D1: 5 million rows read per day, 100,000 rows written per day, 5 GB, 10 databases. R2: 10 GB-months, 1 million Class A operations and 10 million Class B operations per month. KV and D1: past the Free cap, calls fail. R2: usage above the free tier is billed. This lesson is not a quote. Sources: ${source('https://developers.cloudflare.com/kv/platform/pricing/')} ${source('https://developers.cloudflare.com/d1/platform/pricing/')} ${source('https://developers.cloudflare.com/r2/pricing/')}`,
     ),
     terms: [
       {
@@ -211,7 +211,7 @@ export const dpStorageLesson: KnowledgeLesson = lesson(
       },
     ],
   },
-  { prerequisites: ['dp-k-pages'] },
+  { prerequisites: ['dp-k-worker'] },
 );
 
 export const dpOperateLesson: KnowledgeLesson = lesson(
@@ -239,8 +239,8 @@ export const dpOperateLesson: KnowledgeLesson = lesson(
       'Do not treat the widget as enough. Do not turn logs off in production and then ask why the API is silent.',
     ),
     planNotes: t(
-      `Workers Logs có trên Free và Paid. Free (${CHECKED}): 200.000 sự kiện log/ngày, giữ 3 ngày. Bài này không gán gói cho widget Turnstile — xem docs Turnstile và dashboard. Nguồn: ${source('https://developers.cloudflare.com/workers/observability/logs/workers-logs/')}`,
-      `Workers Logs exist on Free and Paid. Free (${CHECKED}): 200,000 log events per day, kept for 3 days. This lesson does not assign a plan to the Turnstile widget. Check the Turnstile docs and the dashboard. Source: ${source('https://developers.cloudflare.com/workers/observability/logs/workers-logs/')}`,
+      `Workers Logs có trên Free và Paid. Đến 1 tháng 12 năm 2026, Free là 200.000 sự kiện/ngày, giữ 3 ngày. Sau ngày đó docs chuyển sang giá Observability. Turnstile dùng được trên mọi gói, không tính phí widget. Tài khoản Free được 20 widget. Nguồn: ${source('https://developers.cloudflare.com/workers/observability/logs/workers-logs/')} ${source('https://developers.cloudflare.com/turnstile/plans/')}`,
+      `Workers Logs exist on Free and Paid. Until 1 December 2026, Free is 200,000 events per day, kept for 3 days. After that, the docs switch to Observability pricing. Turnstile is available on all plans at no cost for the widget. A Free account can have 20 widgets. Sources: ${source('https://developers.cloudflare.com/workers/observability/logs/workers-logs/')} ${source('https://developers.cloudflare.com/turnstile/plans/')}`,
     ),
     terms: [
       {
@@ -265,24 +265,24 @@ export const dpAiLesson: KnowledgeLesson = lesson(
   ),
   {
     how: t(
-      'Binding AI để Worker gọi model phía server. AI Gateway đứng giữa app và model: thấy request, cache khi hợp, đổi provider mà không đưa key xuống trình duyệt. RAG lấy đoạn tài liệu có nguồn rồi mới hỏi model. Agent là Worker có tool. Mỗi tool cần schema và quyền hẹp.',
+      'Binding AI cho phép Worker gọi model phía server. AI Gateway đứng giữa app và model: thấy request, cache khi hợp, đổi provider mà không đưa key xuống trình duyệt. RAG lấy đoạn tài liệu có nguồn rồi mới hỏi model. Agent là Worker có tool. Mỗi tool cần schema và quyền hẹp.',
       'An AI binding lets the Worker call a model on the server. AI Gateway sits between the app and the model: it can see the request, cache when that is safe, and change provider without sending the key to the browser. RAG fetches a sourced passage, then asks the model. An agent is a Worker with tools. Each tool needs a schema and a narrow permission.',
     ),
     architecture: t(
-      'Secret và danh tính người dùng đứng trước endpoint AI. Vector search không phải quyền đọc dữ liệu. Kết quả tìm được vẫn phải qua kiểm tra “user này được xem tài liệu này không”.',
-      'The secret and the user’s identity sit in front of the AI endpoint. Vector search is not permission to read data. A search hit still has to pass “is this user allowed to see this document?”.',
+      'Kiểm tra secret và danh tính người dùng trước khi tới endpoint AI. Vector search không phải quyền đọc dữ liệu. Kết quả tìm được vẫn phải qua kiểm tra “user này được xem tài liệu này không”.',
+      'Check the secret and the user’s identity before the request reaches the AI endpoint. Vector search is not permission to read data. A search hit still has to pass “is this user allowed to see this document?”.',
     ),
     whenToUse: t(
-      'Làm lab AI sau khi Worker và storage đã chạy. Official lab Workers (phần tóm tắt và Gateway), Agents, MCP và Sandbox nằm sau các lab hub của phần này.',
-      'Do the AI lab after the Worker and storage already run. The official Workers labs (summary and Gateway), plus Agents, MCP, and Sandbox, come after this part’s hub labs.',
+      'Làm lab AI sau khi Worker và storage đã chạy. Sau các lab hub phần này là official lab MCP, Agents và Sandbox. Bước tóm tắt và Gateway trong official lab Workers (đã làm sau Phần 1) cũng khớp phần này.',
+      'Do the AI lab after the Worker and storage already run. After this part’s hub labs come the official MCP, Agents, and Sandbox labs. The summary and Gateway steps of the official Workers lab (done after Part 1) also match this part.',
     ),
     whenNot: t(
       'Đừng bắt đầu bằng agent tự gọi nhiều tool. Đừng coi bài này là quy định Shadow AI. Việc đó sang track AI Security.',
       'Do not start with an agent that calls many tools. Do not treat this page as the Shadow AI policy. That belongs on the AI Security track.',
     ),
     planNotes: t(
-      `Workers AI (${CHECKED}): 10.000 neuron mỗi ngày, cả Free và Paid. Muốn hơn mức đó thì cần Workers Paid. Vài model lớn chỉ có trên Paid. Bảng giá còn ghi $0.011 / 1.000 neuron — đối chiếu trang pricing, không lấy số này làm báo giá. Vectorize: một câu nói chỉ có trên Paid, một bảng lại có dòng Free. Bài này không gán gói. AI Gateway: không gán gói. Nguồn: ${source('https://developers.cloudflare.com/workers-ai/platform/pricing/')} ${source('https://developers.cloudflare.com/workers/platform/pricing/')}`,
-      `Workers AI (${CHECKED}): 10,000 neurons per day, on both Free and Paid. More than that needs Workers Paid. A few large models are Paid only. The pricing page also lists $0.011 per 1,000 neurons. Check that page. This is not a quote. Vectorize: one sentence says Paid only, and a table still has a Free row. This lesson does not assign a plan. AI Gateway: no plan assigned. Sources: ${source('https://developers.cloudflare.com/workers-ai/platform/pricing/')} ${source('https://developers.cloudflare.com/workers/platform/pricing/')}`,
+      `Workers AI (${CHECKED}): 10.000 neuron mỗi ngày, cả Free và Paid. Muốn hơn mức đó thì cần Workers Paid. Vài model lớn chỉ có trên Paid. Trang pricing ghi $0.011 / 1.000 neuron — đối chiếu trang đó, không lấy số này làm báo giá. AI Gateway: tính năng lõi (analytics, cache, rate limit) miễn phí trên mọi gói. Vectorize: một trang nói chỉ Paid, trang khác nói Free và Paid đều dùng được. Bài này không gán gói cho Vectorize. Nguồn: ${source('https://developers.cloudflare.com/workers-ai/platform/pricing/')} ${source('https://developers.cloudflare.com/ai-gateway/reference/pricing/')} ${source('https://developers.cloudflare.com/vectorize/get-started/intro/')}`,
+      `Workers AI (${CHECKED}): 10,000 neurons per day, on both Free and Paid. More than that needs Workers Paid. A few large models are Paid only. The pricing page lists $0.011 per 1,000 neurons. Check that page. This is not a quote. AI Gateway: core features (analytics, cache, rate limiting) are free on all plans. Vectorize: one page says Paid only, another says both Free and Paid can use it. This lesson does not assign Vectorize a plan. Sources: ${source('https://developers.cloudflare.com/workers-ai/platform/pricing/')} ${source('https://developers.cloudflare.com/ai-gateway/reference/pricing/')} ${source('https://developers.cloudflare.com/vectorize/get-started/intro/')}`,
     ),
     terms: [
       {
@@ -307,8 +307,8 @@ export const dpStatefulLesson: KnowledgeLesson = lesson(
   ),
   {
     how: t(
-      'Durable Object giữ trạng thái của một thứ, ví dụ một phòng chat. Trên Free chỉ có backend SQLite. Queue nhận việc nền và làm sau. Workflow là chuỗi bước dài, có chỗ ngủ chờ. Hyperdrive nối Worker tới Postgres hoặc MySQL bên ngoài. Nó không thay D1.',
-      'A Durable Object keeps the state of one thing, such as one chat room. On Free, only the SQLite backend is available. A queue takes background work and does it later. A Workflow is a long chain of steps, with places to sleep. Hyperdrive connects a Worker to external Postgres or MySQL. It does not replace D1.',
+      'Durable Object giữ trạng thái của một thứ, ví dụ một phòng chat. Trên Free chỉ có backend SQLite. Queue nhận việc nền và làm sau. Workflow là chuỗi bước dài, có thể tạm dừng (sleep) giữa các bước. Hyperdrive nối Worker tới Postgres hoặc MySQL bên ngoài. Nó không thay D1.',
+      'A Durable Object keeps the state of one thing, such as one chat room. On Free, only the SQLite backend is available. A queue takes background work and does it later. A Workflow is a long chain of steps that can pause (sleep) between steps. Hyperdrive connects a Worker to external Postgres or MySQL. It does not replace D1.',
     ),
     architecture: t(
       'Worker thường vô trạng thái. Những sản phẩm này thêm trạng thái, hàng đợi, hoặc đường tới database có sẵn. Gắn một binding, đừng gắn cả bốn cho lab đầu.',
@@ -323,8 +323,8 @@ export const dpStatefulLesson: KnowledgeLesson = lesson(
       'Do not add a Durable Object just to store one flag. That job is KV. Do not use Hyperdrive instead of a small SQL database. That job is D1.',
     ),
     planNotes: t(
-      `Tách từng sản phẩm, kiểm tra ${CHECKED}. Durable Objects: có trên Free, chỉ SQLite; 5 triệu dòng đọc/ngày, 100.000 dòng ghi/ngày, 5 GB. Queues: trang pricing ghi 10.000 thao tác/ngày và giữ tin 24 giờ trên Free. Một tutorial vẫn nói phải có Workers Paid mới bật Queues trong dashboard — xem dashboard. Workflows: có trên Free, 3.000 step/ngày, CPU 10 ms, request dùng chung hạn mức Workers. Hyperdrive: 100.000 query/ngày trên Free. Nguồn: ${source('https://developers.cloudflare.com/durable-objects/platform/pricing/')} ${source('https://developers.cloudflare.com/queues/platform/pricing/')} ${source('https://developers.cloudflare.com/workflows/reference/pricing/')} ${source('https://developers.cloudflare.com/hyperdrive/platform/pricing/')}`,
-      `Split by product, checked ${CHECKED}. Durable Objects: on Free, SQLite only; 5 million rows read per day, 100,000 rows written per day, 5 GB. Queues: the pricing page lists 10,000 operations per day and 24-hour retention on Free. One tutorial still says you need Workers Paid to enable Queues in the dashboard. Check the dashboard. Workflows: on Free, 3,000 steps per day, 10 ms of CPU, requests shared with the Workers quota. Hyperdrive: 100,000 queries per day on Free. Sources: ${source('https://developers.cloudflare.com/durable-objects/platform/pricing/')} ${source('https://developers.cloudflare.com/queues/platform/pricing/')} ${source('https://developers.cloudflare.com/workflows/reference/pricing/')} ${source('https://developers.cloudflare.com/hyperdrive/platform/pricing/')}`,
+      `Tách từng sản phẩm, kiểm tra ${CHECKED}. Durable Objects: có trên Free, chỉ SQLite. Bảng giá: 5 triệu dòng đọc/ngày, 100.000 dòng ghi/ngày, 5 GB tổng. Trang limits: một object SQLite trên Free ngừng ghi ở 1 GB. Vượt hạn Free thì thao tác đó lỗi. Queues: trang pricing ghi 10.000 thao tác/ngày và giữ tin 24 giờ trên Free. Một tutorial vẫn nói phải có Workers Paid mới bật Queues trong dashboard — xem dashboard. Workflows: có trên Free, 3.000 step/ngày, CPU 10 ms, request dùng chung hạn mức Workers. Hyperdrive: 100.000 query/ngày trên Free; vượt hạn thì query lỗi. Nguồn: ${source('https://developers.cloudflare.com/durable-objects/platform/pricing/')} ${source('https://developers.cloudflare.com/durable-objects/platform/limits/')} ${source('https://developers.cloudflare.com/queues/platform/pricing/')} ${source('https://developers.cloudflare.com/workflows/reference/pricing/')} ${source('https://developers.cloudflare.com/hyperdrive/platform/pricing/')}`,
+      `Split by product, checked ${CHECKED}. Durable Objects: on Free, SQLite only. The pricing table lists 5 million rows read per day, 100,000 rows written per day, and 5 GB total. The limits page says one SQLite object on Free stops writes at 1 GB. Past a Free cap, that operation fails. Queues: the pricing page lists 10,000 operations per day and 24-hour retention on Free. One tutorial still says you need Workers Paid to enable Queues in the dashboard. Check the dashboard. Workflows: on Free, 3,000 steps per day, 10 ms of CPU, requests shared with the Workers quota. Hyperdrive: 100,000 queries per day on Free; past that cap, the query fails. Sources: ${source('https://developers.cloudflare.com/durable-objects/platform/pricing/')} ${source('https://developers.cloudflare.com/durable-objects/platform/limits/')} ${source('https://developers.cloudflare.com/queues/platform/pricing/')} ${source('https://developers.cloudflare.com/workflows/reference/pricing/')} ${source('https://developers.cloudflare.com/hyperdrive/platform/pricing/')}`,
     ),
     terms: [
       {

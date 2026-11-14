@@ -662,17 +662,17 @@ export const tracks: Track[] = [
     headline: {
       vi: 'Hiểu Worker, storage và AI trước, rồi làm lab',
       en: 'Learn Workers, storage, and AI first, then do the lab',
-      km: 'Learn Workers, storage, and AI first, then do the lab',
+      km: 'ស្វែងយល់ Worker, storage និង AI មុន រួចធ្វើ lab',
     },
     promise: {
       vi: 'Lộ trình cho người muốn ship API hoặc tool mà không quản máy chủ. Đọc bài kiến thức, rồi làm lab hub, rồi lab chính thức nếu có.',
       en: 'A path for people who want to ship an API or a tool without running a server. Read the knowledge lesson, do the hub lab, then the official lab when one exists.',
-      km: 'A path for people who want to ship an API or a tool without running a server. Read the knowledge lesson, do the hub lab, then the official lab when one exists.',
+      km: 'ផ្លូវសម្រាប់អ្នកចង់ ship API ឬ tool ដោយមិនដំណើរការ server។ អានមេរៀនចំណេះដឹង រួចធ្វើ lab hub រួច lab ផ្លូវការ បើមាន។',
     },
     description: {
       vi: 'App mới bắt đầu bằng Worker (C3 + Wrangler). Pages dành cho site Git có sẵn, như chính hub này. Dừng sau Worker đầu tiên vẫn có giá trị. AI làm sau khi secret và storage đã ổn.',
       en: 'A new app starts with a Worker (C3 + Wrangler). Pages is for an existing Git site, like this hub. Stopping after the first Worker still leaves something useful. AI comes after secrets and storage are in place.',
-      km: 'ផ្លូវ follow-along 2026៖ app ថ្មីចាប់ផ្តើមដោយ Workers (C3 + wrangler)។ Pages នៅសល់សម្រាប់ Git site ដែលមានស្រាប់ (ដូច hub នេះ)។ បញ្ឈប់បន្ទាប់ពី Worker ដំបូង នៅតែទុកអ្វីដែលមានប្រយោជន៍។ ករណីប្រើប្រាស់គឺជាច្រកចូល; track នេះគឺរបៀបធ្វើ។',
+      km: 'App ថ្មីចាប់ផ្តើមដោយ Worker (C3 + Wrangler)។ Pages សម្រាប់ Git site ដែលមានស្រាប់ ដូច hub នេះ។ បញ្ឈប់បន្ទាប់ពី Worker ដំបូង នៅតែមានប្រយោជន៍។ AI មកបន្ទាប់ពី secret និង storage រួចរាល់។',
     },
     whoIsThisFor: {
       vi: 'Developer, full-stack engineer, hoặc team build internal tool / MVP / side project muốn ship nhanh không quản lý server.',
@@ -680,9 +680,9 @@ export const tracks: Track[] = [
       km: 'Developer, full-stack engineer ឬ team ដែលបង្កើត internal tool, MVP ឬ side project ដែលចង់ ship លឿនដោយមិនគ្រប់គ្រង server។',
     },
     mentalModel: {
-      vi: 'User → Worker (mặc định) hoặc Pages (Git site) → bindings KV / D1 / R2 → (tuỳ chọn) AI Gateway → model. Secret ở Worker, không phải PUBLIC_*.',
-      en: 'User → Worker (default) or Pages (Git site) → KV / D1 / R2 bindings → (optional) AI Gateway → model. Secrets live on the Worker, not in PUBLIC_*.',
-      km: 'User → Worker (លំនំាដើម) ឬ Pages (Git site) → binding KV / D1 / R2 → (ស្រេចចិត្ត) AI Gateway → model។ Secret រស់នៅលើ Worker មិនមែនក្នុង PUBLIC_*។',
+      vi: 'User → Worker (mặc định) hoặc Pages (Git site) → bindings KV / D1 / R2 → (tuỳ chọn) AI Gateway → model. Secret ở Worker, không ghi thành biến chữ thường trong file config.',
+      en: 'User → Worker (default) or Pages (Git site) → KV / D1 / R2 bindings → (optional) AI Gateway → model. Secrets live on the Worker, not as plaintext variables in the config file.',
+      km: 'User → Worker (លំនាំដើម) ឬ Pages (Git site) → binding KV / D1 / R2 → (ស្រេចចិត្ត) AI Gateway → model។ Secret នៅលើ Worker មិនសរសេរជាអថេរអក្សរធម្មតាក្នុងឯកសារ config។',
     },
     outcomes: {
       vi: [
@@ -753,7 +753,7 @@ export const tracks: Track[] = [
       intro: {
         vi: 'Đọc bài kiến thức của từng phần trước, rồi làm lab. App mới dùng Worker. Pages chỉ cho site Git có sẵn. Đừng gọi AI trước khi secret nằm trên Worker.',
         en: 'Read each part’s knowledge lesson, then do the lab. A new app uses a Worker. Pages is only for an existing Git site. Do not call AI before the secret lives on the Worker.',
-        km: 'app ថ្មី៖ Worker មុន។ Hub នេះប្រើ Pages + Functions ព្រោះវាជា site មាតិកា — នោះមិនមែនជា template សម្រាប់ API ថ្មី។ រត់ command, checkpoint URL បន្ទាប់មក AI។',
+        km: 'អានមេរៀនចំណេះដឹងនៃផ្នែកនីមួយៗមុន រួចធ្វើ lab។ App ថ្មីប្រើ Worker។ Pages សម្រាប់តែ Git site ដែលមានស្រាប់។ កុំហៅ AI មុនពេល secret នៅលើ Worker។',
       },
       checklistTitle: { vi: 'Trước khi chạy C3', en: 'Before you run C3', km: 'មុនពេលអ្នករត់ C3' },
       checklist: {
@@ -772,7 +772,7 @@ export const tracks: Track[] = [
           'If you will attach a domain: a zone already on the account (Application Services track)',
         ],
       km: [
-        'A Current, Active, or Maintenance Node.js release (Wrangler install page) and npm',
+        'Node.js កំណែ Current, Active ឬ Maintenance (ទំព័រដំឡើង Wrangler) និង npm',
         'គណនី Cloudflare (Workers & Pages)',
         'សម្រេច៖ app ថ្មី (Worker) ឬ Git site មានស្រាប់ (Pages)',
         'កុំ commit secret ក្នុង .env; ជ្រើសឈ្មោះ project (my-first-worker)',
@@ -780,13 +780,14 @@ export const tracks: Track[] = [
       ],
       },
       planNote: {
-        vi: 'Số trong bảng lấy từ docs ngày 2026-11-11. Mỗi dòng là một sản phẩm. Vượt hạn Free thì lời gọi lỗi. Giá gói Paid xem trang pricing, không chép ở đây.',
-        en: 'The numbers in the table are from the docs on 2026-11-11. Each row is one product. Past a Free cap, the call fails. Paid prices are on the pricing page, not copied here.',
-        km: 'The numbers in the table are from the docs on 2026-11-11. Each row is one product. Past a Free cap, the call fails. Paid prices are on the pricing page, not copied here.',
+        vi: 'Số trong bảng lấy từ docs ngày 2026-11-15. Mỗi dòng là một sản phẩm. Với phần lớn sản phẩm, vượt hạn Free thì lời gọi lỗi. R2 thì tính phí phần vượt. Giá gói Paid xem trang pricing, không chép ở đây.',
+        en: 'The numbers in the table are from the docs on 2026-11-15. Each row is one product. For most products, past a Free cap the call fails. R2 bills the usage above its free tier. Paid prices are on the pricing page, not copied here.',
+        km: 'លេខក្នុងតារាងយកពី docs ថ្ងៃ 2026-11-15។ មួយជួរគឺផលិតផលមួយ។ សម្រាប់ផលិតផលភាគច្រើន លើសដែន Free នោះការហៅបរាជ័យ។ R2 គិតថ្លៃផ្នែកលើស free tier។ តម្លៃ Paid មើលទំព័រ pricing មិនចម្លងនៅទីនេះ។',
       },
       planFootnote: {
-        vi: 'Không phải báo giá; đối chiếu Cloudflare Plans / product docs và dashboard. Kiểm tra lần cuối: 2026-11-11.',
-        en: 'Not a price quote; check Cloudflare Plans / product docs and the dashboard. Last checked: 2026-11-11.',
+        vi: 'Không phải báo giá; đối chiếu Cloudflare Plans / product docs và dashboard. Kiểm tra lần cuối: 2026-11-15.',
+        en: 'Not a price quote; check Cloudflare Plans / product docs and the dashboard. Last checked: 2026-11-15.',
+        km: 'មិនមែនការដេញថ្លៃ។ ផ្ទៀង Cloudflare Plans / product docs និង dashboard។ ពិនិត្យចុងក្រោយ: 2026-11-15។',
       },
       planRows: [
         { capability: { vi: 'Workers (request và CPU)', en: 'Workers (requests and CPU)' }, free: { vi: '100.000 request/ngày, 10 ms CPU', en: '100,000 requests/day, 10 ms CPU' }, paid: { vi: 'Bảng limits: không trần request, CPU tới 5 phút. Mức phí trên trang pricing', en: 'Limits table: no request cap, CPU up to 5 min. The fee is on the pricing page' } },
@@ -795,8 +796,8 @@ export const tracks: Track[] = [
         { capability: { vi: 'R2', en: 'R2' }, free: { vi: '10 GB-tháng, 1 triệu Class A và 10 triệu Class B mỗi tháng', en: '10 GB-months, 1 million Class A and 10 million Class B per month' }, paid: { vi: 'Tính theo dung lượng và thao tác, xem pricing', en: 'Billed on storage and operations, see pricing' } },
         { capability: { vi: 'Pages Functions', en: 'Pages Functions' }, free: { vi: 'Tính vào 100.000 request Workers/ngày. File tĩnh không tính', en: 'Counts toward 100,000 Worker requests/day. Static files do not count' }, paid: { vi: 'Cùng cách tính Workers Paid', en: 'Same meter as Workers Paid' } },
         { capability: { vi: 'Workers AI', en: 'Workers AI' }, free: { vi: '10.000 neuron/ngày. Vài model lớn không có trên Free', en: '10,000 neurons/day. A few large models are not on Free' }, paid: { vi: 'Cùng 10.000 neuron/ngày, phần vượt tính phí. Xem pricing', en: 'Same 10,000 neurons/day, usage above that is billed. See pricing' } },
-        { capability: { vi: 'AI Gateway', en: 'AI Gateway' }, free: { vi: 'Bài này không gán gói. Xem docs và dashboard', en: 'This table does not assign a plan. See the docs and dashboard' }, paid: { vi: 'Xem docs và dashboard', en: 'See the docs and dashboard' } },
-        { capability: { vi: 'Durable Objects', en: 'Durable Objects' }, free: { vi: 'Có, chỉ SQLite. 5 triệu dòng đọc/ngày, 100.000 dòng ghi/ngày, 5 GB', en: 'Yes, SQLite only. 5 million rows read/day, 100,000 rows written/day, 5 GB' }, paid: { vi: 'Thêm backend và hạn mức. Xem pricing', en: 'More backends and a higher allowance. See pricing' } },
+        { capability: { vi: 'AI Gateway', en: 'AI Gateway' }, free: { vi: 'Tính năng lõi (analytics, cache, rate limit) miễn phí trên mọi gói', en: 'Core features (analytics, cache, rate limiting) are free on all plans' }, paid: { vi: 'Cùng tính năng lõi. Log theo Workers Logs hoặc Legacy Logs. Quét DLP miễn phí trên mọi gói', en: 'Same core features. Logs follow Workers Logs or Legacy Logs. DLP scanning is free on all plans' } },
+        { capability: { vi: 'Durable Objects', en: 'Durable Objects' }, free: { vi: 'Có, chỉ SQLite. 5 triệu dòng đọc/ngày, 100.000 dòng ghi/ngày, 5 GB tổng. Một object ngừng ghi ở 1 GB', en: 'Yes, SQLite only. 5 million rows read/day, 100,000 rows written/day, 5 GB total. One object stops writes at 1 GB' }, paid: { vi: 'SQLite. Backend key-value chỉ với account đã có sẵn. Xem pricing', en: 'SQLite. The key-value backend is only for accounts that already have one. See pricing' } },
         { capability: { vi: 'Queues', en: 'Queues' }, free: { vi: 'Pricing: 10.000 thao tác/ngày, giữ tin 24 giờ. Tutorial khác nói cần Paid để bật — xem dashboard', en: 'Pricing: 10,000 operations/day, 24-hour retention. Another tutorial says Paid is required to enable it. Check the dashboard' }, paid: { vi: '1 triệu thao tác/tháng rồi tính thêm. Giữ tin tới 14 ngày', en: '1 million operations/month, then more. Retention up to 14 days' } },
         { capability: { vi: 'Workflows', en: 'Workflows' }, free: { vi: 'Có. 3.000 step/ngày, CPU 10 ms, request dùng chung Workers', en: 'Yes. 3,000 steps/day, 10 ms CPU, requests shared with Workers' }, paid: { vi: 'Hạn mức tháng cao hơn, xem pricing', en: 'Higher monthly allowance, see pricing' } },
         { capability: { vi: 'Hyperdrive', en: 'Hyperdrive' }, free: { vi: '100.000 query/ngày', en: '100,000 queries/day' }, paid: { vi: 'Không trần query trên bảng pricing', en: 'No query cap on the pricing table' } },
@@ -846,9 +847,9 @@ export const tracks: Track[] = [
             duration: { vi: '~30 phút', en: '~30 min' },
             title: { vi: 'wrangler.jsonc, vars và wrangler secret', en: 'wrangler.jsonc, vars, and wrangler secret', km: 'wrangler.jsonc, vars និង wrangler secret' },
             body: {
-              vi: 'File config là source of truth. Secret không nằm trong vars hay PUBLIC_*.',
-              en: 'The config file is the source of truth. Secrets do not live in vars or PUBLIC_*.',
-              km: 'ឯកសារ config គឺជាប្រភពពិត។ Secret មិនរស់នៅក្នុង vars ឬ PUBLIC_*។',
+              vi: 'File config là nguồn sự thật. Đừng để secret trong vars dạng chữ thường. Dùng wrangler secret.',
+              en: 'The config file is the source of truth. Do not put a secret in plaintext vars. Use wrangler secret.',
+              km: 'ឯកសារ config គឺប្រភពពិត។ កុំដាក់ secret ក្នុង vars អក្សរធម្មតា។ ប្រើ wrangler secret។',
             },
           },
         ],
@@ -1111,7 +1112,7 @@ export const tracks: Track[] = [
       vi: [
         'Đọc kiến trúc: app mới = Worker; Git site = Pages',
         'C3 Hello World, wrangler login/dev/deploy — *.workers.dev',
-        'wrangler.jsonc + wrangler secret (không PUBLIC_* cho key)',
+        'wrangler.jsonc + wrangler secret (không để key trong biến chữ thường)',
         'Chọn KV / D1 / R2; apply migration D1 local và remote',
         'Nếu có framework Git: Pages + preview; Functions chỉ khi gắn site',
         'wrangler tail; Turnstile siteverify trước ghi D1',
@@ -1122,7 +1123,7 @@ export const tracks: Track[] = [
       en: [
         'Read the architecture: new app = Worker; Git site = Pages',
         'C3 Hello World, wrangler login/dev/deploy — *.workers.dev',
-        'wrangler.jsonc + wrangler secret (no PUBLIC_* for keys)',
+        'wrangler.jsonc + wrangler secret (no plaintext variable for a key)',
         'Choose KV / D1 / R2; apply D1 migrations local and remote',
         'If you have a Git framework: Pages + preview; Functions only when tied to the site',
         'wrangler tail; Turnstile siteverify before D1 writes',
@@ -1133,7 +1134,7 @@ export const tracks: Track[] = [
       km: [
         'Read the architecture: new app = Worker; Git site = Pages',
         'C3 Hello World, wrangler login/dev/deploy — *.workers.dev',
-        'wrangler.jsonc + wrangler secret (no PUBLIC_* for keys)',
+        'wrangler.jsonc + wrangler secret (no plaintext variable for a key)',
         'Choose KV / D1 / R2; apply D1 migrations local and remote',
         'If you have a Git framework: Pages + preview; Functions only when tied to the site',
         'wrangler tail; Turnstile siteverify before D1 writes',
@@ -1159,7 +1160,7 @@ export const tracks: Track[] = [
         },
         {
           title: 'Secret/API key lộ ở client',
-          detail: 'Chỉ `PUBLIC_*` được embed build. Token Turnstile secret, DB credentials phải ở Pages Functions/Worker env.',
+          detail: 'Đừng để secret trong biến chữ thường hoặc trong file build. Token Turnstile và credential database phải là secret trên Function hoặc Worker.',
         },
         {
           title: 'Không verify Turnstile server-side',
@@ -1185,7 +1186,7 @@ export const tracks: Track[] = [
         },
         {
           title: 'Secrets/API keys exposed in the client',
-          detail: 'Only `PUBLIC_*` belongs in the build. Turnstile secrets and DB credentials belong in Pages Functions/Worker env.',
+          detail: 'Do not put a secret in a plaintext variable or in the build. Turnstile tokens and database credentials must be secrets on the Function or Worker.',
         },
         {
           title: 'No server-side Turnstile verification',
@@ -1211,7 +1212,7 @@ export const tracks: Track[] = [
         },
         {
           title: 'Secrets/API keys exposed in the client',
-          detail: 'Only `PUBLIC_*` belongs in the build. Turnstile secrets and DB credentials belong in Pages Functions/Worker env.',
+          detail: 'Do not put a secret in a plaintext variable or in the build. Turnstile tokens and database credentials must be secrets on the Function or Worker.',
         },
         {
           title: 'No server-side Turnstile verification',

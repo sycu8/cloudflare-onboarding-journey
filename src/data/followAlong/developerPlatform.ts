@@ -60,7 +60,7 @@ export const developerPlatformFollowAlong: FollowAlongLesson[] = [
       },
     ],
     watchOuts: [
-      t('Nhét secret vào PUBLIC_* hoặc frontend — lộ key.', 'Putting secrets in PUBLIC_* or the frontend leaks keys.', 'ការដាក់ secret ក្នុង PUBLIC_* ឬ frontend លេច key។'),
+      t('Nhét secret vào biến chữ thường hoặc frontend — lộ key.', 'Putting a secret in a plaintext variable or in frontend code leaks the key.', 'ដាក់ secret ក្នុងអថេរអក្សរធម្មតា ឬ frontend លេច key។'),
       t('Chọn KV cho bảng quan hệ — consistency không đủ.', 'Choosing KV for relational tables — consistency is not enough.', 'ការជ្រើស KV សម្រាប់តារាង relational — consistency មិនគ្រប់គ្រាន់។'),
     ],
     tips: [
@@ -126,9 +126,9 @@ export const developerPlatformFollowAlong: FollowAlongLesson[] = [
     lessonId: 'dp-1-l2',
     role: 'required',
     goal: t(
-      'Hiểu wrangler.jsonc (name, main, compatibility_date), routes, env, và secret — không nhét key vào code hay PUBLIC_*.',
-      'Understand wrangler.jsonc (name, main, compatibility_date), routes, env, and secrets — no keys in code or PUBLIC_*.',
-      'យល់ wrangler.jsonc (name, main, compatibility_date), routes, env និង secrets — កុំដាក់ key ក្នុង code ឬ PUBLIC_*។',
+      'Hiểu wrangler.jsonc (name, main, compatibility_date), routes, env, và secret — không nhét key vào code hay biến chữ thường.',
+      'Understand wrangler.jsonc (name, main, compatibility_date), routes, env, and secrets — no keys in code or in a plaintext variable.',
+      'យល់ wrangler.jsonc (name, main, compatibility_date), routes, env និង secrets — កុំដាក់ key ក្នុង code ឬអថេរអក្សរធម្មតា។',
     ),
     who: t('Developer', 'Developer', 'Developer'),
     time: t('~30 phút', '~30 min', '~30 នាទី'),
@@ -152,7 +152,7 @@ export const developerPlatformFollowAlong: FollowAlongLesson[] = [
         action: t('Đặt secret (API token giả trong lab).', 'Set a secret (fake API token in the lab).', 'កំណត់ secret (API token ក្លែងក្នុង lab)។'),
         enter: t('npx wrangler secret put API_TOKEN', 'npx wrangler secret put API_TOKEN', 'npx wrangler secret put API_TOKEN'),
         see: t('Prompt nhập giá trị — không commit vào git. Trong code: env.API_TOKEN.', 'Prompt for the value — do not commit it. In code: env.API_TOKEN.', 'Prompt សម្រាប់ value — កុំ commit។ ក្នុង code: env.API_TOKEN។'),
-        checkpoint: t('Worker đọc env.API_TOKEN; repo không chứa token. PUBLIC_* chỉ cho giá trị an toàn trên frontend.', 'Worker reads env.API_TOKEN; the repo has no token. PUBLIC_* is only for frontend-safe values.', 'Worker អាន env.API_TOKEN; repo មិនមាន token។ PUBLIC_* សម្រាប់តែ value សុវត្ថិភាពលើ frontend។'),
+        checkpoint: t('Worker đọc env.API_TOKEN; repo không chứa token. Biến chữ thường trong file config không phải chỗ để secret.', 'Worker reads env.API_TOKEN; the repo has no token. A plaintext variable in the config file is not a place for a secret.', 'Worker អាន env.API_TOKEN; repo មិនមាន token។ អថេរអក្សរធម្មតាក្នុងឯកសារ config មិនមែនកន្លែងសម្រាប់ secret។'),
       },
       {
         action: t('Nếu có zone: Workers → Settings → Domains & Routes, hoặc routes trong wrangler. Không thì giữ workers.dev.', 'If you have a zone: Workers → Settings → Domains & Routes, or routes in wrangler. Otherwise keep workers.dev.', 'បើមាន zone: Workers → Settings → Domains & Routes ឬ routes ក្នុង wrangler។ បើមិនមាន រក្សា workers.dev។'),
@@ -439,7 +439,7 @@ export const developerPlatformFollowAlong: FollowAlongLesson[] = [
       'Widget មើលឃើញ; Function/Worker ហៅ siteverify; requests គ្មាន token ត្រូវបានបដិសេធ។',
     ),
     beforeYouBegin: t('Có form POST và chỗ ghi D1 (dp-3-l2) hoặc mock.', 'You have a POST form and a D1 write (dp-3-l2) or a mock.', 'អ្នកមាន form POST និង D1 write (dp-3-l2) ឬ mock។'),
-    planNote: t('Turnstile có free tier. Secret key không bao giờ lên client.', 'Turnstile has a free tier. The secret key never goes to the client.', 'Turnstile មាន free tier។ Secret key មិនដែលទៅ client។'),
+    planNote: t('Turnstile dùng được trên mọi gói, không tính phí widget. Secret key không bao giờ lên client.', 'Turnstile is available on all plans at no cost for the widget. The secret key never goes to the client.', 'Turnstile ប្រើបានលើគ្រប់ plan ដោយមិនគិតថ្លៃ widget។ Secret key មិនដែលទៅ client។'),
     steps: [
       {
         action: t('Dashboard → Turnstile → Add widget. Lấy site key (public) và secret key.', 'Dashboard → Turnstile → Add widget. Copy the site key (public) and secret key.', 'Dashboard → Turnstile → Add widget។ Copy site key (public) និង secret key។'),
@@ -516,7 +516,7 @@ export const developerPlatformFollowAlong: FollowAlongLesson[] = [
       'Gateway slug; Worker ហៅតាម gateway; dashboard បង្ហាញ requests។',
     ),
     beforeYouBegin: t('Đã gọi được model (dp-5-l1) hoặc provider ngoài (OpenAI) với secret trên Worker.', 'You can already call a model (dp-5-l1) or an external provider (OpenAI) with the secret on the Worker.', 'អ្នកអាចហៅ model បានរួច (dp-5-l1) ឬ provider ខាងក្រៅ (OpenAI) ដោយ secret លើ Worker។'),
-    planNote: t('AI Gateway có free tier. Authenticated gateway + DLP response là plan cao hơn.', 'AI Gateway has a free tier. Authenticated gateway + response DLP are higher plans.', 'AI Gateway មាន free tier។ Authenticated gateway + response DLP គឺ plan ខ្ពស់ជាង។'),
+    planNote: t('AI Gateway có trên mọi gói. Analytics, cache và rate limit là tính năng lõi miễn phí. Log có hạn riêng. Quét DLP miễn phí trên mọi gói.', 'AI Gateway is on every plan. Analytics, cache, and rate limiting are free core features. Logs have their own limits. DLP scanning is free on every plan.', 'AI Gateway មានលើគ្រប់ plan។ Analytics, cache និង rate limiting គឺមុខងារស្នូលឥតគិតថ្លៃ។ Log មានដែនកំណត់ផ្ទាល់ខ្លួន។ ការស្កេន DLP ឥតគិតថ្លៃលើគ្រប់ plan។'),
     steps: [
       {
         action: t('AI → AI Gateway → Create gateway. Copy slug/endpoint.', 'AI → AI Gateway → Create gateway. Copy the slug/endpoint.', 'AI → AI Gateway → Create gateway។ Copy slug/endpoint។'),
@@ -705,7 +705,7 @@ export const developerPlatformFollowAlong: FollowAlongLesson[] = [
     steps: [
       { action: t('1. App mới: C3 + Worker trước. Pages là compat cho Git site.', '1. New apps: C3 + Worker first. Pages is compat for Git sites.', '1. Apps ថ្មី៖ C3 + Worker មុន។ Pages គឺ compat សម្រាប់ Git sites។') },
       { action: t('2. wrangler.jsonc là source of truth; compatibility_date rõ.', '2. wrangler.jsonc is source of truth; set compatibility_date.', '2. wrangler.jsonc គឺ source of truth; កំណត់ compatibility_date។') },
-      { action: t('3. Secret qua wrangler secret — không PUBLIC_*, không commit.', '3. Secrets via wrangler secret — no PUBLIC_*, no commits.', '3. Secrets តាម wrangler secret — គ្មាន PUBLIC_*, គ្មាន commits។') },
+      { action: t('3. Secret qua wrangler secret — không biến chữ thường, không commit.', '3. Secrets via wrangler secret — no plaintext variable, no commit.', '3. Secrets តាម wrangler secret — គ្មានអថេរអក្សរធម្មតា គ្មាន commit។') },
       { action: t('4. KV vs D1 vs R2 theo loại dữ liệu, không theo thói quen.', '4. KV vs D1 vs R2 by data type, not habit.', '4. KV vs D1 vs R2 តាមប្រភេទទិន្នន័យ មិនមែនទម្លាប់។') },
       { action: t('5. Migration D1 apply local và remote.', '5. Apply D1 migrations locally and remotely.', '5. Apply D1 migrations locally និង remotely។') },
       { action: t('6. Preview/production env tách; xem build log trước merge.', '6. Split preview/production env; read the build log before merge.', '6. បំបែក preview/production env; អាន build log មុន merge។') },

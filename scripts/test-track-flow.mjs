@@ -151,6 +151,7 @@ try {
   assert.equal(dp[dp.findIndex((item) => item.key === 'official:workers') - 1].key, 'dp-1-l2');
   assert.equal(dp.find((item) => item.key === 'dp-k-worker')?.kind, 'knowledge');
   assert.deepEqual(dp.find((item) => item.key === 'dp-1-l1')?.prerequisiteIds, ['dp-k-worker']);
+  assert.deepEqual(dp.find((item) => item.key === 'dp-k-storage')?.prerequisiteIds, ['dp-k-worker']);
   const dpLessons = lessons.filter((lesson) => lesson.trackSlug === 'developer-platform');
   for (const lesson of dpLessons) {
     assert.ok(lesson.duration?.vi && lesson.duration?.en, `${lesson.id} duration`);
