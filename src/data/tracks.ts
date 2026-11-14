@@ -18,6 +18,19 @@ import {
   dpStorageLesson,
   dpWorkerLesson,
 } from './dpKnowledgeLessons';
+import {
+  c1AccessLesson,
+  c1AccountLesson,
+  c1AiLesson,
+  c1ArchitectureLesson,
+  c1BestPracticeLesson,
+  c1DeviceLesson,
+  c1DlpLesson,
+  c1GatewayLesson,
+  c1IdentityLesson,
+  c1RunbookLesson,
+  c1WanLesson,
+} from './c1KnowledgeLessons';
 
 export type { LessonKind };
 
@@ -1314,6 +1327,74 @@ export const tracks: Track[] = [
         href: 'https://zerotrust.cfsase.workers.dev/best-practice-guide.html',
       },
     ],
+    startHere: {
+      intro: {
+        vi: 'Đọc bài kiến thức của từng phần trước, rồi làm lab. Chọn team name và nhóm pilot trước khi bấm dashboard. Dừng sau một phần vẫn còn dùng được.',
+        en: 'Read each part’s knowledge lesson, then do the lab. Pick the team name and the pilot group before you click through the dashboard. Stopping after one part still leaves something you can use.',
+        km: 'អានមេរៀនចំណេះដឹងនៃផ្នែកនីមួយៗមុន រួចធ្វើ lab។ ជ្រើស team name និងក្រុម pilot មុនពេលចុច dashboard។ បញ្ឈប់បន្ទាប់ពីផ្នែកមួយ នៅតែមានអ្វីប្រើបាន។',
+      },
+      checklistTitle: { vi: 'Trước khi tạo tổ chức', en: 'Before you create the organization', km: 'មុនពេលបង្កើតអង្គភាព' },
+      checklist: {
+        vi: [
+          'Email công việc nhận được thư, và bật 2FA cho admin',
+          'Quyền admin trên IdP (Entra ID, Okta hoặc Google) khi tới phần đăng nhập',
+          'Team name ngắn. Nó thành https://<team>.cloudflareaccess.com',
+          'Nhóm pilot 5–25 người và một app nội bộ đầu tiên',
+          'Sẵn sàng nhập payment details. Gói Free vẫn cần bước này và không bị tính phí',
+        ],
+        en: [
+          'A work email that can receive mail, and 2FA on for the admin',
+          'Admin on the IdP (Entra ID, Okta, or Google) when you reach login',
+          'A short team name. It becomes https://<team>.cloudflareaccess.com',
+          'A pilot of 5–25 people and one first private app',
+          'Ready to enter payment details. The Free plan still needs this step and you are not charged',
+        ],
+        km: [
+          'អ៊ីមែលការងារដែលទទួលសំបុត្របាន និងបើក 2FA សម្រាប់ admin',
+          'សិទ្ធិ admin លើ IdP (Entra ID, Okta ឬ Google) ពេលដល់ផ្នែកចូល',
+          'Team name ខ្លី។ វាក្លាយជា https://<team>.cloudflareaccess.com',
+          'ក្រុម pilot 5–25 នាក់ និង app ខាងក្នុងដំបូងមួយ',
+          'រួចរាល់បញ្ចូល payment details។ គម្រោង Free នៅតែត្រូវការជំហាននេះ ហើយមិនគិតថ្លៃ',
+        ],
+      },
+      planNote: {
+        vi: 'Số và câu trong bảng lấy từ docs ngày 2026-11-14. Ô không có câu trích thì để trống ý “xem dashboard”, không bịa hạn mức. Đây không phải báo giá.',
+        en: 'The sentences in the table come from the docs on 2026-11-14. A cell without a quote says to check the dashboard. Nothing here is a price quote.',
+        km: 'ប្រយោគក្នុងតារាងយកពី docs ថ្ងៃ 2026-11-14។ ប្រអប់គ្មានសម្រង់ នោះសុំមើល dashboard។ នេះមិនមែនការដេញថ្លៃ។',
+      },
+      planFootnote: {
+        vi: 'Không phải báo giá. Đối chiếu product docs và dashboard. Kiểm tra lần cuối: 2026-11-14.',
+        en: 'Not a price quote. Check the product docs and the dashboard. Last checked: 2026-11-14.',
+        km: 'មិនមែនការដេញថ្លៃ។ ផ្ទៀង product docs និង dashboard។ ពិនិត្យចុងក្រោយ: 2026-11-14។',
+      },
+      planRows: [
+        {
+          capability: { vi: 'Tổ chức Zero Trust', en: 'Zero Trust organization' },
+          free: { vi: 'Chọn gói và nhập payment details. Free không bị tính phí', en: 'Select a plan and enter payment details. Free is not charged' },
+          paid: { vi: 'Pay-as-you-go hoặc Contract. Xem trang plans', en: 'Pay-as-you-go or Contract. See the plans page' },
+        },
+        {
+          capability: { vi: 'DLP', en: 'DLP' },
+          free: { vi: 'Hai profile sẵn: Financial Information, và Social Security, Insurance, Tax, and Identifier Numbers', en: 'Two predefined profiles: Financial Information, and Social Security, Insurance, Tax, and Identifier Numbers' },
+          paid: { vi: 'Bộ đầy đủ là add-on của Zero Trust Enterprise', en: 'The full set is an add-on to Zero Trust Enterprise' },
+        },
+        {
+          capability: { vi: 'Browser Isolation', en: 'Browser Isolation' },
+          free: { vi: 'Trang sản phẩm không nói có trên Free', en: 'The product page does not say it is included on Free' },
+          paid: { vi: 'Add-on của Pay-as-you-go và Enterprise', en: 'Add-on to Pay-as-you-go and Enterprise' },
+        },
+        {
+          capability: { vi: 'Cloudflare WAN', en: 'Cloudflare WAN' },
+          free: { vi: 'Không. Sản phẩm Enterprise-only', en: 'No. The product is Enterprise-only' },
+          paid: { vi: 'Enterprise-only. Liên hệ Cloudflare', en: 'Enterprise-only. Contact Cloudflare' },
+        },
+        {
+          capability: { vi: 'Số chỗ ngồi', en: 'Seats' },
+          free: { vi: 'Không chép số. Một seat bị dùng khi user đăng nhập hoặc enroll client', en: 'No number copied here. A seat is used when a user signs in or enrolls the client' },
+          paid: { vi: 'Xem trang plans và dashboard', en: 'See the plans page and the dashboard' },
+        },
+      ],
+    },
     modules: [
       {
         id: 'c1-1',
@@ -1323,32 +1404,27 @@ export const tracks: Track[] = [
           en: 'The SASE picture, pre-start checklist, creating the Cloudflare One organization, and least-privilege admins.',
         },
         duration: { vi: '~50 phút', en: '~50 min' },
+        role: 'required',
         lessons: [
+          c1ArchitectureLesson,
+          c1AccountLesson,
           {
-            title: { vi: 'Kiến trúc và quy trình onboarding', en: 'Architecture & workflow' },
-            body: {
-              vi: 'Bản đồ trực quan của toàn bộ dự án: bạn đang xây gì (kiến trúc tham chiếu) và thứ tự xây (quy trình onboarding). Mỗi khối gắn module (M1, M2, …) để nhảy thẳng sang hướng dẫn.',
-              en: 'A visual map of the whole project: what you are building (the reference architecture) and the order you build it in (the onboarding workflow). Every box is tagged with the module (M1, M2, …) that covers it, so you can jump straight to the how-to.',
-            },
-            tip: {
-              vi: 'Nhiều team làm Mô-đun 1–3 tuần đầu (identity + thiết bị), Access và Gateway tuần hai, DLP/AI/WAN sau.',
-              en: 'Many teams do Modules 1–3 in week one (identity + devices), Access and Gateway in week two, then DLP/AI/WAN later.',
-            },
-            hubLink: '/use-cases/cloudflare-one',
-          },
-          {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-account'],
             title: { vi: 'Tạo account, team name và Cloudflare One', en: 'Create the account, team name, and Cloudflare One' },
             body: {
-              vi: 'Đăng ký dash.cloudflare.com, xác thực email, bật 2FA cho admin. Mở Zero Trust, chọn team name (trở thành `https://<team>.cloudflareaccess.com`) và plan. Team name rất khó đổi — chọn tên ngắn, bền. Cloudflare tự là IdP mặc định; Restrict to account members rồi test login tại team domain.',
-              en: 'Sign up at dash.cloudflare.com, verify email, and enable admin 2FA. Open Zero Trust, pick a team name (it becomes `https://<team>.cloudflareaccess.com`) and a plan. The team name is hard to change — choose a short, durable name. Cloudflare is the default IdP; Restrict to account members, then test login at the team domain.',
+              vi: 'Đăng ký dash.cloudflare.com, xác thực email, bật 2FA cho admin. Mở Zero Trust, chọn team name (trở thành `https://<team>.cloudflareaccess.com`) và plan. Đổi team name được, nhưng phải cập nhật IdP và client. Cloudflare tự là IdP mặc định; Restrict to account members rồi test login tại team domain.',
+              en: 'Sign up at dash.cloudflare.com, verify email, and enable admin 2FA. Open Zero Trust, pick a team name (it becomes `https://<team>.cloudflareaccess.com`) and a plan. You can change the team name later, but you must update the IdP and the client. Cloudflare is the default IdP; Restrict to account members, then test login at the team domain.',
             },
             tip: {
-              vi: 'Cần phương thức thanh toán kể cả Free — Free không bị tính phí. Domain không bắt buộc để bắt đầu Zero Trust.',
-              en: 'A payment method is required even on Free — you are not charged on Free. A domain is not required to start Zero Trust.',
+              vi: 'Chọn gói và nhập payment details. Gói Zero Trust Free vẫn cần bước này, và bạn không bị tính phí. Domain không bắt buộc để bắt đầu.',
+              en: 'Select a plan and enter payment details. The Zero Trust Free plan still needs that step, and you are not charged. A domain is not required to start.',
             },
             hubLink: '/glossary',
           },
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-account'],
             title: { vi: 'Admin, vai trò và break-glass', en: 'Admins, roles, and break-glass' },
             body: {
               vi: 'Admin nhận account role; nhân viên dùng dịch vụ chỉ cần enrollment + Access policy — không cần role trên account. Mời ít nhất hai Super Admin, dùng role hẹp cho daily work, và giữ Cloudflare login / OTP làm đường break-glass nếu Access khóa dashboard. Token API account-owned + expiry; xem audit log sau mỗi thay đổi admin.',
@@ -1369,8 +1445,12 @@ export const tracks: Track[] = [
           en: 'Connect corporate login — the foundation for every later Access, enrollment, and Gateway policy.',
         },
         duration: { vi: '~45 phút', en: '~45 min' },
+        role: 'required',
         lessons: [
+          c1IdentityLesson,
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-identity'],
             title: { vi: 'Kết nối Entra ID, Okta hoặc Google', en: 'Connect Entra ID, Okta, or Google' },
             body: {
               vi: 'Callback URL: `https://<team-name>.cloudflareaccess.com/cdn-cgi/access/callback`. Đăng ký app trên IdP (không chọn gallery SaaS), dán callback, copy client ID / tenant / secret, cấp quyền đọc user và group, Grant admin consent, rồi Add IdP trong Cloudflare One → Settings → Authentication. Google còn cần JavaScript origin = team domain.',
@@ -1383,6 +1463,8 @@ export const tracks: Track[] = [
             hubLink: '/demo-guides#cloudflare-one',
           },
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-identity'],
             title: { vi: 'Test group claims, MFA và SCIM', en: 'Test group claims, MFA, and SCIM' },
             body: {
               vi: 'Dùng Test trên IdP: phải thấy email và groups. Bật MFA bắt buộc tại IdP trước khi enforce Access. Bật SCIM khi sẵn sàng để group/user đồng bộ khi offboard. Policy nên tham chiếu group IdP, không phải từng user. Cloudflare login mặc định vẫn giữ làm break-glass.',
@@ -1404,8 +1486,12 @@ export const tracks: Track[] = [
           en: 'Enrollment, device profiles (mode, split tunnel, BYOD), and posture — the on-ramp plus device-health signals.',
         },
         duration: { vi: '~60 phút', en: '~60 min' },
+        role: 'required',
         lessons: [
+          c1DeviceLesson,
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-device'],
             title: { vi: 'Enrollment và cài Cloudflare One Client', en: 'Enrollment and installing the Cloudflare One Client' },
             body: {
               vi: 'Trước khi cài: Settings → WARP Client → Device enrollment permissions — Allow email ending in `@yourcompany.com` với IdP vừa nối. Nếu bỏ bước này, client báo “not allowed to enroll.” Cài WARP/Cloudflare One Client, chọn login to Cloudflare Zero Trust (không phải consumer 1.1.1.1), nhập team name, đăng nhập IdP. Dashboard phải hiện thiết bị Connected.',
@@ -1418,6 +1504,8 @@ export const tracks: Track[] = [
             hubLink: '/use-cases/secure-remote-users',
           },
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-device'],
             title: { vi: 'Device profiles, split tunnel và BYOD', en: 'Device profiles, split tunnel, and BYOD' },
             body: {
               vi: 'Laptop công ty: Default profile → Gateway with WARP, Switch Locked on, Auto connect 1 phút. Split tunnel Exclude (full protection). BYOD: profile riêng, Include mode chỉ company apps/networks — Exclude trên máy cá nhân đưa browsing cá nhân qua công ty. Profile cụ thể đặt trên profile rộng. Prefer CIDR hơn domain trong split tunnel.',
@@ -1429,6 +1517,8 @@ export const tracks: Track[] = [
             },
           },
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-device'],
             title: { vi: 'Device posture checks', en: 'Device posture checks' },
             body: {
               vi: 'Tạo check tái sử dụng (disk encryption, firewall, OS version, client certificate, EDR). Gắn vào Access và/hoặc Gateway. Posture được đánh giá lại liên tục — thiết bị hết compliant mất quyền. Tanium không dùng được trong Gateway policy (chỉ Access). Service-token enrollment không match selector identity — dùng OS hoặc managed network.',
@@ -1449,8 +1539,12 @@ export const tracks: Track[] = [
           en: 'Publish apps by identity, not by whole network — outbound Tunnel, group policies, Mesh/Appliance when you need site-to-site.',
         },
         duration: { vi: '~60 phút', en: '~60 min' },
+        role: 'recommended',
         lessons: [
+          c1AccessLesson,
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-access'],
             title: { vi: 'Tunnel outbound và public hostname', en: 'Outbound Tunnel and public hostname' },
             body: {
               vi: 'Networks → Tunnels → Create cloudflared. Chạy connector trên host reach được app (outbound TCP 7844). Token là secret. Map public hostname (ví dụ `wiki.yourcompany.com`) → `localhost:port`. Checkpoint: connector Healthy. Cần zone trên Cloudflare cho hostname tự host.',
@@ -1463,6 +1557,8 @@ export const tracks: Track[] = [
             hubLink: '/use-cases/replace-vpn',
           },
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-access'],
             title: { vi: 'Access application và policy theo group', en: 'Access application and group policies' },
             body: {
               vi: 'Access controls → Applications → Self-hosted. Cùng hostname với Tunnel. Session 24h (ngắn hơn cho app nhạy cảm). Policy Allow: email ending in / IdP group + posture nếu cần. Instant auth khi một IdP; Authenticate with Cloudflare One Client cho user đã enroll. Dùng Access Group / rule group, không Allow Everyone.',
@@ -1475,6 +1571,8 @@ export const tracks: Track[] = [
             hubLink: '/use-cases/replace-vpn',
           },
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-access'],
             title: { vi: 'Chọn connector: Tunnel, Mesh hay Appliance', en: 'Pick a connector: Tunnel, Mesh, or Appliance' },
             body: {
               vi: 'Tunnel: app/server và CIDR riêng, một chiều tới Cloudflare. Mesh (ex-WARP Connector): any-to-any giữa host/device/site. Appliance: cả chi nhánh. Có thể kết hợp. Host tunnel phải ra được Cloudflare:7844.',
@@ -1495,8 +1593,12 @@ export const tracks: Track[] = [
           en: 'DNS first, then Network, then HTTP/TLS. Add egress, Browser Isolation, and SaaS/AI discovery once that is stable.',
         },
         duration: { vi: '~90 phút', en: '~90 min' },
+        role: 'recommended',
         lessons: [
+          c1GatewayLesson,
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-gateway'],
             title: { vi: 'Gateway theo lớp: DNS → Network → HTTP', en: 'Gateway in layers: DNS → Network → HTTP' },
             body: {
               vi: 'DNS policies: Block Security Categories (malware, phishing, C2, cryptomining…). Test `malware.testcategory.com` — phải ra block page. Rồi Network, rồi HTTP với TLS decryption (cần root CA). Do Not Inspect cho cert-pinning và Microsoft 365. Start log/monitor rồi mới Block hàng loạt.',
@@ -1509,6 +1611,8 @@ export const tracks: Track[] = [
             hubLink: '/use-cases/secure-remote-users',
           },
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-gateway'],
             title: { vi: 'Egress policies và phiên bản IP', en: 'Egress policies and IP version' },
             body: {
               vi: 'Dedicated egress IPs khi SaaS allowlist theo IP công ty. Policy egress theo identity/group. Tắt IPv6 trên profile nếu destination dual-stack làm lệch IP allowlist. Kiểm tra IP thoát trên pilot device sau khi bật.',
@@ -1516,6 +1620,8 @@ export const tracks: Track[] = [
             },
           },
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-gateway'],
             title: { vi: 'Remote Browser Isolation (RBI)', en: 'Remote Browser Isolation (RBI)' },
             body: {
               vi: 'Cô lập browsing rủi ro trên browser remote — clipboard, upload, print có thể tắt. Clientless cho contractor/BYOD không cài client (không có device posture). Dùng cho upload AI rủi ro cao hoặc site untrusted. Test user journey trước khi isolate cả category.',
@@ -1524,6 +1630,8 @@ export const tracks: Track[] = [
             hubLink: '/cheatsheets/ai-protection-portfolio#swg-rbi',
           },
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-gateway'],
             title: { vi: 'Shadow IT và khám phá AI SaaS', en: 'Shadow IT and AI SaaS discovery' },
             body: {
               vi: 'CASB / Shadow IT: inventory SaaS và AI tools đang dùng, owner và độ nhạy dữ liệu. Đừng block mù khi chưa có sanctioned alternative — người dùng sẽ sang điện thoại và bạn mất visibility. Discover → allow có guardrail / isolate / block có chủ đích.',
@@ -1537,16 +1645,20 @@ export const tracks: Track[] = [
         id: 'c1-6',
         title: { vi: 'Phần 6: DLP — bảo vệ dữ liệu', en: 'Part 6: DLP — data protection' },
         description: {
-          vi: 'Phát hiện PII, secret, source code trên HTTP đã giải mã — monitor trước, block sau. Thường cần Enterprise.',
-          en: 'Detect PII, secrets, and source code on decrypted HTTP — monitor first, block second. Typically Enterprise.',
+          vi: 'Phát hiện dữ liệu nhạy cảm trên HTTP đã giải mã. Free và Pay-as-you-go có hai profile sẵn. Bộ đầy đủ là add-on Enterprise.',
+          en: 'Detect sensitive data on decrypted HTTP. Free and Pay-as-you-go include two predefined profiles. The full set is an Enterprise add-on.',
         },
         duration: { vi: '~45 phút', en: '~45 min' },
+        role: 'optional',
         lessons: [
+          c1DlpLesson,
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-dlp'],
             title: { vi: 'DLP profile và chạy log-only', en: 'DLP profiles and log-only' },
             body: {
-              vi: 'Cần TLS decryption (Mô-đun 5). DLP Profiles: Credentials and Secrets, Financial, PII, Source Code — hoặc custom regex/dictionary. Confidence Medium; tăng nếu noisy. HTTP policy Allow + DLP profile trên mọi destination = log-only 1–2 tuần. Tune false positive trước Block.',
-              en: 'Needs TLS decryption (Part 5). DLP Profiles: Credentials and Secrets, Financial, PII, Source Code — or custom regex/dictionaries. Confidence Medium; raise it if noisy. HTTP policy Allow + DLP profile on all destinations = log-only for 1–2 weeks. Tune false positives before Block.',
+              vi: 'Cần TLS decryption (Mô-đun 5). Free và Pay-as-you-go dùng hai profile sẵn: Financial Information, và Social Security, Insurance, Tax, and Identifier Numbers. Bộ đầy đủ (custom và các profile sẵn còn lại) là add-on Enterprise. HTTP policy Allow + profile, 1–2 tuần, rồi mới Block.',
+              en: 'Needs TLS decryption (Part 5). Free and Pay-as-you-go use two predefined profiles: Financial Information, and Social Security, Insurance, Tax, and Identifier Numbers. The full set (custom profiles and the other predefined profiles) is an Enterprise add-on. HTTP policy Allow + a profile for 1–2 weeks, then Block.',
             },
             tip: {
               vi: 'Vàng cho DLP: monitor first, block second. Block ngay gây false positive và ticket.',
@@ -1554,6 +1666,8 @@ export const tracks: Track[] = [
             },
           },
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-dlp'],
             title: { vi: 'Enforce trên destination rủi ro cao', en: 'Enforce on high-risk destinations' },
             body: {
               vi: 'Sau baseline: Block (hoặc Isolate) khi DLP match tới unsanctioned file sharing / AI / personal email. Giữ Allow+log cho destination đã phê duyệt. Gắn profile tái sử dụng; sửa một profile là mọi policy đổi. Review DLP logs theo cadence.',
@@ -1571,8 +1685,12 @@ export const tracks: Track[] = [
           en: 'Govern workforce AI (do not ban), MCP portals, AI Gateway for apps/agents, and AI crawlers on your public content.',
         },
         duration: { vi: '~70 phút', en: '~70 min' },
+        role: 'optional',
         lessons: [
+          c1AiLesson,
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-ai'],
             title: { vi: 'Govern AI: thấy, cho phép an toàn, chặn data leak', en: 'Govern AI: see it, allow safely, stop data leaks' },
             body: {
               vi: 'Cấm ChatGPT khiến người dùng sang điện thoại — mất visibility. Dùng Gateway/CASB để thấy tool, allow sanctioned với DLP trên prompt, RBI cho upload rủi ro, block hoặc isolate tool không phê duyệt. Suite: Shadow AI (5d) → control apps → DLP prompts → MCP agents → AI Gateway cho app bạn build.',
@@ -1585,6 +1703,8 @@ export const tracks: Track[] = [
             hubLink: '/cheatsheets/ai-protection-portfolio#radar-sase',
           },
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-ai'],
             title: { vi: 'MCP portals: Access cho AI agents', en: 'MCP portals: Access for AI agents' },
             body: {
               vi: 'Đưa MCP server nội bộ sau Access; portal một URL với tool đã curate, identity per-user và log. Managed OAuth chỉ khi server validate JWT Access (`Cf-Access-Jwt-Assertion`). Policy trên portal chỉ ẩn tool — enforce thật = Access làm OAuth provider. Agent tự trị dùng service token; tool call vào Access/Gateway logs.',
@@ -1593,13 +1713,17 @@ export const tracks: Track[] = [
             hubLink: '/cheatsheets/ai-protection-portfolio#ai-gateway',
           },
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-ai'],
             title: { vi: 'AI Gateway: auth, DLP, cost cho model call', en: 'AI Gateway: auth, DLP, and cost for model calls' },
             body: {
-              vi: 'AI Gateway ngồi trước model provider — không cần WARP hay TLS decrypt. Authenticated Gateway + token; BYOK để key không nằm trong app. Guardrails = an toàn nội dung; DLP = PII/secret (Enterprise). Response scanning buffer full body (chậm streaming). Không cache/rate-limit gateway dùng cho AI Search/RAG.',
-              en: 'AI Gateway sits in front of model providers — no WARP or TLS decrypt required. Authenticated Gateway + token; BYOK so keys never live in the app. Guardrails = content safety; DLP = PII/secrets (Enterprise). Response scanning buffers the full body (hurts streaming). Do not cache or rate-limit a gateway used for AI Search/RAG.',
+              vi: 'AI Gateway ngồi trước model provider — không cần WARP hay TLS decrypt. Authenticated Gateway + token; BYOK để key không nằm trong app. Guardrails = an toàn nội dung; DLP = PII/secret (miễn phí trên mọi gói; không có Zero Trust thì có 2 profile sẵn). Response scanning buffer full body (chậm streaming). Không cache/rate-limit gateway dùng cho AI Search/RAG.',
+              en: 'AI Gateway sits in front of model providers — no WARP or TLS decrypt required. Authenticated Gateway + token; BYOK so keys never live in the app. Guardrails = content safety; DLP = PII/secrets (free on all plans; without a Zero Trust subscription you get 2 predefined profiles). Response scanning buffers the full body (hurts streaming). Do not cache or rate-limit a gateway used for AI Search/RAG.',
             },
           },
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-ai'],
             title: { vi: 'Agentic Internet: AI crawler trên site của bạn', en: 'Agentic Internet: AI crawlers on your site' },
             body: {
               vi: 'AI Audit xem crawler nào hit content. Policy theo purpose (Training / Agent / Search): allow, block, hoặc block trên trang có ads. Default mới (domain mới từ 15 Sep 2026): Training/Agent blocked trên trang ads; Search allowed. Enforce robots.txt; Pay Per Crawl trả 402 nếu crawler chưa đồng ý trả. Lớp inbound — tách với SWG cho nhân viên.',
@@ -1616,8 +1740,12 @@ export const tracks: Track[] = [
           en: 'Connect offices, DCs, and cloud to Cloudflare so whole sites — not only WARP laptops — are filtered and routed. Enterprise; this touches production networking.',
         },
         duration: { vi: '~90 phút', en: '~90 min' },
+        role: 'optional',
         lessons: [
+          c1WanLesson,
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-wan'],
             title: { vi: 'On-ramp, MSS clamping và tunnel dư thừa', en: 'On-ramp, MSS clamping, and redundant tunnels' },
             body: {
               vi: 'Chọn GRE / IPsec / Connector / CNI. Làm MSS clamping trước — quên thì HTTP chạy còn HTTPS treo. Tạo hai tunnel, match PSK/lifetime trên firewall, health check Healthy. Một site trước; có console + rollback. IP overlap giữa site (`192.168.1.0/24` hai nơi) phá routing.',
@@ -1630,6 +1758,8 @@ export const tracks: Track[] = [
             hubLink: '/use-cases/secure-remote-users',
           },
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-wan'],
             title: { vi: 'Routing, Magic Firewall và gửi traffic qua Gateway', en: 'Routing, Magic Firewall, and sending traffic through Gateway' },
             body: {
               vi: 'Static hoặc BGP vào Magic routing table. Magic Firewall baseline. Gửi site traffic qua Gateway để DNS/HTTP/DLP giống user WARP. Test connectivity, HTTPS (MSS), failover tunnel, rồi mới retire MPLS/VPN site-to-site. Logpush Access+Gateway từ đầu.',
@@ -1646,22 +1776,8 @@ export const tracks: Track[] = [
           en: 'Rollout strategy (10 golden rules) and the full dashboard field-by-field configuration runbook.',
         },
         duration: { vi: '~20 phút', en: '~20 min' },
-        lessons: [
-          {
-            title: { vi: 'Hướng dẫn thực hành tốt (best-practice guide)', en: 'Best-practice guide' },
-            body: {
-              vi: 'Thứ tự rollout, chiến lược pilot → validate → expand, và các golden rule cho identity, thiết bị, Access, Gateway, DLP, AI và Cloudflare WAN.',
-              en: 'Rollout order, the pilot → validate → expand strategy, and golden rules for identity, devices, Access, Gateway, DLP, AI, and Cloudflare WAN.',
-            },
-          },
-          {
-            title: { vi: 'Sổ tay cấu hình (configuration runbook)', en: 'Configuration runbook' },
-            body: {
-              vi: 'Bảng tham chiếu đầy đủ: đường dẫn dashboard, field và giá trị mẫu cho từng module khi bạn đã hiểu luồng.',
-              en: 'Full quick reference: dashboard paths, fields, and sample values for every module once you know the flow.',
-            },
-          },
-        ],
+        role: 'reference',
+        lessons: [c1BestPracticeLesson, c1RunbookLesson],
       },
     ],
     recommendedSequence: {

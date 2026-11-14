@@ -8,7 +8,7 @@ export type LessonKind = 'knowledge' | 'lab-hub' | 'lab-official' | 'reference';
  * An explicit `kind` on a lesson wins.
  */
 const KNOWLEDGE_MODULES = new Set(['as-0', 'dp-0', 'c1-1', 'c1-9']);
-const REFERENCE_MODULES = new Set(['as-7', 'dp-7']);
+const REFERENCE_MODULES = new Set(['as-7', 'dp-7', 'c1-9']);
 
 export function inferLessonKind(moduleId: string, explicit?: LessonKind): LessonKind {
   if (explicit) return explicit;
