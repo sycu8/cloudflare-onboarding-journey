@@ -810,8 +810,8 @@ export const trackLessonEnrichment: Record<string, TrackLessonEnrichment> = {
       en: ['Pick exactly one: DO, Queues, Workflows, or Hyperdrive.', 'Lab one product; leave the other three for later.'],
     },
     deepDive: {
-      vi: 'Hyperdrive không thay D1. Optional thường cần Workers Paid.',
-      en: 'Hyperdrive does not replace D1. Optional products usually need Workers Paid.',
+      vi: 'Hyperdrive không thay D1. Cả bốn sản phẩm optional có mức Free có hạn. Xem dashboard trước khi bật.',
+      en: 'Hyperdrive does not replace D1. All four optional products have a limited Free allowance. Check the dashboard before you turn one on.',
     },
     docsLinks: [],
     productSlugs: ['durable-objects'],
