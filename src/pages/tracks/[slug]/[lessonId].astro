@@ -135,16 +135,16 @@ const tocItems = flow.map((item) => ({
     ) : null}
   </header>
 
-  {kind === 'knowledge' ? (
+  {kind === 'knowledge' || (kind === 'reference' && lesson.guide) ? (
     <KnowledgeLesson
       lesson={lesson}
       enrichment={enrichment}
       diagrams={diagrams}
       followAlong={followAlong}
-      onboardingHtml={onboardingPage ? onboardingHtml(onboardingPage) : undefined}
-      onboardingSourceUrl={onboardingPage?.sourceUrl}
+      onboardingHtml={onboardingPage && !lesson.guide ? onboardingHtml(onboardingPage) : undefined}
+      onboardingSourceUrl={onboardingPage && !lesson.guide ? onboardingPage.sourceUrl : undefined}
       heroImage={heroImage}
-      labLinks={labLinks}
+      labLinks={kind === 'knowledge' ? labLinks : []}
     />
   ) : onboardingPage ? (
     <OnboardingArticle html={onboardingHtml(onboardingPage)} sourceUrl={onboardingPage.sourceUrl} />

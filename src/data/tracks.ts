@@ -9,6 +9,28 @@ import {
   asTrafficLesson,
   asWafLesson,
 } from './asKnowledgeLessons';
+import {
+  dpAiLesson,
+  dpArchitectureLesson,
+  dpOperateLesson,
+  dpPagesLesson,
+  dpStatefulLesson,
+  dpStorageLesson,
+  dpWorkerLesson,
+} from './dpKnowledgeLessons';
+import {
+  c1AccessLesson,
+  c1AccountLesson,
+  c1AiLesson,
+  c1ArchitectureLesson,
+  c1BestPracticeLesson,
+  c1DeviceLesson,
+  c1DlpLesson,
+  c1GatewayLesson,
+  c1IdentityLesson,
+  c1RunbookLesson,
+  c1WanLesson,
+} from './c1KnowledgeLessons';
 
 export type { LessonKind };
 
@@ -651,19 +673,19 @@ export const tracks: Track[] = [
     slug: 'developer-platform',
     title: { vi: 'Developer Platform', en: 'Developer Platform', km: 'Developer Platform' },
     headline: {
-      vi: 'Follow-along Worker-first: C3 + Wrangler, rồi storage, Pages (compat), operate và AI',
-      en: 'Follow-along Worker-first: C3 + Wrangler, then storage, Pages (compat), operate, and AI',
-      km: 'Follow-along Worker-first: C3 + Wrangler បន្ទាប់មក storage, Pages (compat), operate និង AI',
+      vi: 'Hiểu Worker, storage và AI trước, rồi làm lab',
+      en: 'Learn Workers, storage, and AI first, then do the lab',
+      km: 'ស្វែងយល់ Worker, storage និង AI មុន រួចធ្វើ lab',
     },
     promise: {
-      vi: 'Deploy Hello World lên *.workers.dev, bind KV/D1/R2 đúng chỗ, secret không lên client — AI chỉ sau nền.',
-      en: 'Deploy Hello World to *.workers.dev, bind KV/D1/R2 correctly, keep secrets off the client — AI only after the spine.',
-      km: 'Deploy Hello World ទៅ *.workers.dev, bind KV/D1/R2 ឱ្យត្រឹមត្រូវ, កុំដាក់ secret នៅលើ client — AI តែបន្ទាប់ពីគ្រឹះ។',
+      vi: 'Lộ trình cho người muốn ship API hoặc tool mà không quản máy chủ. Đọc bài kiến thức, rồi làm lab hub, rồi lab chính thức nếu có.',
+      en: 'A path for people who want to ship an API or a tool without running a server. Read the knowledge lesson, do the hub lab, then the official lab when one exists.',
+      km: 'ផ្លូវសម្រាប់អ្នកចង់ ship API ឬ tool ដោយមិនដំណើរការ server។ អានមេរៀនចំណេះដឹង រួចធ្វើ lab hub រួច lab ផ្លូវការ បើមាន។',
     },
     description: {
-      vi: 'Lộ trình follow-along 2026: app mới bắt đầu bằng Workers (C3 + wrangler). Pages vẫn có cho Git site hiện có (như chính hub này). Dừng sau Worker đầu tiên vẫn có giá trị. Use case là cửa chọn; track là đường làm.',
-      en: 'A 2026 follow-along path: new apps start with Workers (C3 + wrangler). Pages remains for existing Git sites (like this hub). Stopping after the first Worker still leaves something useful. Use cases are the doorway; this track is the how-to.',
-      km: 'ផ្លូវ follow-along 2026៖ app ថ្មីចាប់ផ្តើមដោយ Workers (C3 + wrangler)។ Pages នៅសល់សម្រាប់ Git site ដែលមានស្រាប់ (ដូច hub នេះ)។ បញ្ឈប់បន្ទាប់ពី Worker ដំបូង នៅតែទុកអ្វីដែលមានប្រយោជន៍។ ករណីប្រើប្រាស់គឺជាច្រកចូល; track នេះគឺរបៀបធ្វើ។',
+      vi: 'App mới bắt đầu bằng Worker (C3 + Wrangler). Pages dành cho site Git có sẵn, như chính hub này. Dừng sau Worker đầu tiên vẫn có giá trị. AI làm sau khi secret và storage đã ổn.',
+      en: 'A new app starts with a Worker (C3 + Wrangler). Pages is for an existing Git site, like this hub. Stopping after the first Worker still leaves something useful. AI comes after secrets and storage are in place.',
+      km: 'App ថ្មីចាប់ផ្តើមដោយ Worker (C3 + Wrangler)។ Pages សម្រាប់ Git site ដែលមានស្រាប់ ដូច hub នេះ។ បញ្ឈប់បន្ទាប់ពី Worker ដំបូង នៅតែមានប្រយោជន៍។ AI មកបន្ទាប់ពី secret និង storage រួចរាល់។',
     },
     whoIsThisFor: {
       vi: 'Developer, full-stack engineer, hoặc team build internal tool / MVP / side project muốn ship nhanh không quản lý server.',
@@ -671,9 +693,9 @@ export const tracks: Track[] = [
       km: 'Developer, full-stack engineer ឬ team ដែលបង្កើត internal tool, MVP ឬ side project ដែលចង់ ship លឿនដោយមិនគ្រប់គ្រង server។',
     },
     mentalModel: {
-      vi: 'User → Worker (mặc định) hoặc Pages (Git site) → bindings KV / D1 / R2 → (tuỳ chọn) AI Gateway → model. Secret ở Worker, không phải PUBLIC_*.',
-      en: 'User → Worker (default) or Pages (Git site) → KV / D1 / R2 bindings → (optional) AI Gateway → model. Secrets live on the Worker, not in PUBLIC_*.',
-      km: 'User → Worker (លំនំាដើម) ឬ Pages (Git site) → binding KV / D1 / R2 → (ស្រេចចិត្ត) AI Gateway → model។ Secret រស់នៅលើ Worker មិនមែនក្នុង PUBLIC_*។',
+      vi: 'User → Worker (mặc định) hoặc Pages (Git site) → bindings KV / D1 / R2 → (tuỳ chọn) AI Gateway → model. Secret ở Worker, không ghi thành biến chữ thường trong file config.',
+      en: 'User → Worker (default) or Pages (Git site) → KV / D1 / R2 bindings → (optional) AI Gateway → model. Secrets live on the Worker, not as plaintext variables in the config file.',
+      km: 'User → Worker (លំនាំដើម) ឬ Pages (Git site) → binding KV / D1 / R2 → (ស្រេចចិត្ត) AI Gateway → model។ Secret នៅលើ Worker មិនសរសេរជាអថេរអក្សរធម្មតាក្នុងឯកសារ config។',
     },
     outcomes: {
       vi: [
@@ -742,28 +764,28 @@ export const tracks: Track[] = [
     ],
     startHere: {
       intro: {
-        vi: 'App mới: Worker trước. Hub này dùng Pages + Functions vì nó là site nội dung — đó không phải template cho API mới. Làm đúng lệnh, checkpoint URL, rồi mới AI.',
-        en: 'New apps: Worker first. This hub uses Pages + Functions because it is a content site — that is not the template for a new API. Run the commands, checkpoint the URL, then AI.',
-        km: 'app ថ្មី៖ Worker មុន។ Hub នេះប្រើ Pages + Functions ព្រោះវាជា site មាតិកា — នោះមិនមែនជា template សម្រាប់ API ថ្មី។ រត់ command, checkpoint URL បន្ទាប់មក AI។',
+        vi: 'Đọc bài kiến thức của từng phần trước, rồi làm lab. App mới dùng Worker. Pages chỉ cho site Git có sẵn. Đừng gọi AI trước khi secret nằm trên Worker.',
+        en: 'Read each part’s knowledge lesson, then do the lab. A new app uses a Worker. Pages is only for an existing Git site. Do not call AI before the secret lives on the Worker.',
+        km: 'អានមេរៀនចំណេះដឹងនៃផ្នែកនីមួយៗមុន រួចធ្វើ lab។ App ថ្មីប្រើ Worker។ Pages សម្រាប់តែ Git site ដែលមានស្រាប់។ កុំហៅ AI មុនពេល secret នៅលើ Worker។',
       },
       checklistTitle: { vi: 'Trước khi chạy C3', en: 'Before you run C3', km: 'មុនពេលអ្នករត់ C3' },
       checklist: {
         vi: [
-          'Node.js 18.17+ và npm',
+          'Node.js bản Current, Active hoặc Maintenance (trang cài Wrangler) và npm',
           'Tài khoản Cloudflare (Workers & Pages)',
           'Quyết định: app mới (Worker) hay Git site có sẵn (Pages)',
           'Không commit file .env có secret; chuẩn bị tên project (my-first-worker)',
           'Nếu sẽ gắn domain: zone đã có trên account (track Application Services)',
         ],
         en: [
-          'Node.js 18.17+ and npm',
+          'A Current, Active, or Maintenance Node.js release (Wrangler install page) and npm',
           'A Cloudflare account (Workers & Pages)',
           'Decide: new app (Worker) or existing Git site (Pages)',
           'Do not commit .env secrets; pick a project name (my-first-worker)',
           'If you will attach a domain: a zone already on the account (Application Services track)',
         ],
       km: [
-        'Node.js 18.17+ និង npm',
+        'Node.js កំណែ Current, Active ឬ Maintenance (ទំព័រដំឡើង Wrangler) និង npm',
         'គណនី Cloudflare (Workers & Pages)',
         'សម្រេច៖ app ថ្មី (Worker) ឬ Git site មានស្រាប់ (Pages)',
         'កុំ commit secret ក្នុង .env; ជ្រើសឈ្មោះ project (my-first-worker)',
@@ -771,16 +793,28 @@ export const tracks: Track[] = [
       ],
       },
       planNote: {
-        vi: 'Workers Free đủ Hello World, KV/D1/R2 nhỏ, Workers AI lab. Durable Objects, Queues, Workflows, Hyperdrive thường cần Paid — xác nhận trên dashboard trước Phần 6.',
-        en: 'Workers Free is enough for Hello World, small KV/D1/R2, and a Workers AI lab. Durable Objects, Queues, Workflows, and Hyperdrive usually need Paid — confirm in the dashboard before Part 6.',
-        km: 'Workers Free គ្រប់គ្រាន់សម្រាប់ Hello World, KV/D1/R2 តូច និង lab Workers AI។ Durable Objects, Queues, Workflows និង Hyperdrive ជាធម្មតាត្រូវការ Paid — បញ្ជាក់នៅ dashboard មុនផ្នែក 6។',
+        vi: 'Số trong bảng lấy từ docs ngày 2026-11-15. Mỗi dòng là một sản phẩm. Với phần lớn sản phẩm, vượt hạn Free thì lời gọi lỗi. R2 cần bật gói R2 qua checkout trong dashboard, và phần vượt free tier bị tính phí. Giá gói Paid xem trang pricing, không chép ở đây.',
+        en: 'The numbers in the table are from the docs on 2026-11-15. Each row is one product. For most products, past a Free cap the call fails. R2 is turned on through an R2 subscription checkout in the dashboard and bills usage above its free tier. Paid prices are on the pricing page, not copied here.',
+        km: 'លេខក្នុងតារាងយកពី docs ថ្ងៃ 2026-11-15។ មួយជួរគឺផលិតផលមួយ។ សម្រាប់ផលិតផលភាគច្រើន លើសដែន Free នោះការហៅបរាជ័យ។ R2 ត្រូវបើកតាម checkout ជាវ R2 ក្នុង dashboard ហើយគិតថ្លៃផ្នែកលើស free tier។ តម្លៃ Paid មើលទំព័រ pricing មិនចម្លងនៅទីនេះ។',
+      },
+      planFootnote: {
+        vi: 'Không phải báo giá; đối chiếu Cloudflare Plans / product docs và dashboard. Kiểm tra lần cuối: 2026-11-15.',
+        en: 'Not a price quote; check Cloudflare Plans / product docs and the dashboard. Last checked: 2026-11-15.',
+        km: 'មិនមែនការដេញថ្លៃ។ ផ្ទៀង Cloudflare Plans / product docs និង dashboard។ ពិនិត្យចុងក្រោយ: 2026-11-15។',
       },
       planRows: [
-        { capability: { vi: 'Workers, wrangler, workers.dev', en: 'Workers, wrangler, workers.dev', km: 'Workers, wrangler, workers.dev' }, free: { vi: 'Có (quota ngày)', en: 'Yes (daily quota)', km: 'Yes (quota ប្រចាំថ្ងៃ)' }, paid: { vi: 'Quota cao hơn', en: 'Higher quota', km: 'quota ខ្ពស់ជាង' } },
-        { capability: { vi: 'KV, D1, R2', en: 'KV, D1, R2', km: 'KV, D1, R2' }, free: { vi: 'Free tier', en: 'Free tier', km: 'Free tier' }, paid: { vi: 'Limit cao hơn', en: 'Higher limits', km: 'limit ខ្ពស់ជាង' } },
-        { capability: { vi: 'Pages + Functions', en: 'Pages + Functions', km: 'Pages + Functions' }, free: { vi: 'Có', en: 'Yes', km: 'Yes' }, paid: { vi: 'Build minutes nhiều hơn', en: 'More build minutes', km: 'build minute ច្រើនជាង' } },
-        { capability: { vi: 'Workers AI, AI Gateway', en: 'Workers AI, AI Gateway', km: 'Workers AI, AI Gateway' }, free: { vi: 'Lab / neurons ngày', en: 'Lab / daily neurons', km: 'Lab / neuron ប្រចាំថ្ងៃ' }, paid: { vi: 'Usage + guardrails/DLP', en: 'Usage + guardrails/DLP', km: 'Usage + guardrails/DLP' } },
-        { capability: { vi: 'Durable Objects, Queues, Workflows, Hyperdrive', en: 'Durable Objects, Queues, Workflows, Hyperdrive', km: 'Durable Objects, Queues, Workflows, Hyperdrive' }, free: { vi: 'Hạn chế / không', en: 'Limited / no', km: 'មានកំណត់ / ទេ' }, paid: { vi: 'Workers Paid / add-on', en: 'Workers Paid / add-on', km: 'Workers Paid / add-on' } },
+        { capability: { vi: 'Workers (request và CPU)', en: 'Workers (requests and CPU)' }, free: { vi: '100.000 request/ngày, 10 ms CPU', en: '100,000 requests/day, 10 ms CPU' }, paid: { vi: 'Bảng limits: không trần request, CPU tới 5 phút. Mức phí trên trang pricing', en: 'Limits table: no request cap, CPU up to 5 min. The fee is on the pricing page' } },
+        { capability: { vi: 'KV', en: 'KV' }, free: { vi: '100.000 đọc/ngày, 1.000 ghi/ngày, 1 GB', en: '100,000 reads/day, 1,000 writes/day, 1 GB' }, paid: { vi: 'Hạn mức tháng cao hơn, xem pricing', en: 'Higher monthly allowance, see pricing' } },
+        { capability: { vi: 'D1', en: 'D1' }, free: { vi: '5 triệu dòng đọc/ngày, 100.000 dòng ghi/ngày, 5 GB, 10 database', en: '5 million rows read/day, 100,000 rows written/day, 5 GB, 10 databases' }, paid: { vi: 'Hạn mức tháng cao hơn, xem pricing', en: 'Higher monthly allowance, see pricing' } },
+        { capability: { vi: 'R2', en: 'R2' }, free: { vi: '10 GB-tháng, 1 triệu Class A và 10 triệu Class B mỗi tháng. Bật qua checkout gói R2 trong dashboard', en: '10 GB-months, 1 million Class A and 10 million Class B per month. Turned on through the R2 subscription checkout in the dashboard' }, paid: { vi: 'Phần vượt free tier tính theo dung lượng và thao tác. Xem pricing', en: 'Usage above the free tier is billed on storage and operations. See pricing' } },
+        { capability: { vi: 'Pages Functions', en: 'Pages Functions' }, free: { vi: 'Tính vào 100.000 request Workers/ngày. File tĩnh không tính', en: 'Counts toward 100,000 Worker requests/day. Static files do not count' }, paid: { vi: 'Cùng cách tính Workers Paid', en: 'Same meter as Workers Paid' } },
+        { capability: { vi: 'Workers AI', en: 'Workers AI' }, free: { vi: '10.000 neuron/ngày. Vài model lớn không có trên Free', en: '10,000 neurons/day. A few large models are not on Free' }, paid: { vi: 'Cùng 10.000 neuron/ngày, phần vượt tính phí. Xem pricing', en: 'Same 10,000 neurons/day, usage above that is billed. See pricing' } },
+        { capability: { vi: 'AI Gateway', en: 'AI Gateway' }, free: { vi: 'Tính năng lõi (analytics, cache, rate limit) miễn phí trên mọi gói', en: 'Core features (analytics, cache, rate limiting) are free on all plans' }, paid: { vi: 'Cùng tính năng lõi. Log theo Workers Logs hoặc Legacy Logs. Quét DLP miễn phí trên mọi gói', en: 'Same core features. Logs follow Workers Logs or Legacy Logs. DLP scanning is free on all plans' } },
+        { capability: { vi: 'Durable Objects', en: 'Durable Objects' }, free: { vi: 'Có, chỉ SQLite. 5 triệu dòng đọc/ngày, 100.000 dòng ghi/ngày, 5 GB tổng. Một object ngừng ghi ở 1 GB', en: 'Yes, SQLite only. 5 million rows read/day, 100,000 rows written/day, 5 GB total. One object stops writes at 1 GB' }, paid: { vi: 'SQLite. Backend key-value chỉ với account đã có sẵn. Xem pricing', en: 'SQLite. The key-value backend is only for accounts that already have one. See pricing' } },
+        { capability: { vi: 'Queues', en: 'Queues' }, free: { vi: 'Pricing: 10.000 thao tác/ngày, giữ tin 24 giờ. Tutorial khác nói cần Paid để bật — xem dashboard', en: 'Pricing: 10,000 operations/day, 24-hour retention. Another tutorial says Paid is required to enable it. Check the dashboard' }, paid: { vi: '1 triệu thao tác/tháng rồi tính thêm. Giữ tin tới 14 ngày', en: '1 million operations/month, then more. Retention up to 14 days' } },
+        { capability: { vi: 'Workflows', en: 'Workflows' }, free: { vi: 'Có. 3.000 step/ngày, CPU 10 ms, request dùng chung Workers', en: 'Yes. 3,000 steps/day, 10 ms CPU, requests shared with Workers' }, paid: { vi: 'Hạn mức tháng cao hơn, xem pricing', en: 'Higher monthly allowance, see pricing' } },
+        { capability: { vi: 'Hyperdrive', en: 'Hyperdrive' }, free: { vi: '100.000 query/ngày', en: '100,000 queries/day' }, paid: { vi: 'Không trần query trên bảng pricing', en: 'No query cap on the pricing table' } },
+        { capability: { vi: 'Vectorize', en: 'Vectorize' }, free: { vi: 'Không gán gói: một câu nói chỉ Paid, một bảng có dòng Free', en: 'No plan assigned: one sentence says Paid only, a table still has a Free row' }, paid: { vi: 'Xem docs Vectorize và dashboard', en: 'See the Vectorize docs and the dashboard' } },
       ],
     },
     modules: [
@@ -794,16 +828,7 @@ export const tracks: Track[] = [
         },
         duration: { vi: '~15 phút', en: '~15 min', km: '~15 នាទី' },
         role: 'required',
-        lessons: [
-          {
-            title: { vi: 'Kiến trúc Developer Platform 2026', en: 'Developer Platform architecture 2026', km: 'ស្ថាបត្យកម្ម Developer Platform 2026' },
-            body: {
-              vi: 'User → Worker hoặc Pages → bindings → AI Gateway. Hub này là ví dụ Pages; project mới dùng C3.',
-              en: 'User → Worker or Pages → bindings → AI Gateway. This hub is a Pages example; new projects use C3.',
-              km: 'User → Worker ឬ Pages → binding → AI Gateway។ Hub នេះជាឧទាហរណ៍ Pages; project ថ្មីប្រើ C3។',
-            },
-          },
-        ],
+        lessons: [dpArchitectureLesson],
       },
       {
         id: 'dp-1',
@@ -816,7 +841,11 @@ export const tracks: Track[] = [
         duration: { vi: '~55 phút', en: '~55 min', km: '~55 នាទី' },
         role: 'required',
         lessons: [
+          dpWorkerLesson,
           {
+            dependsOn: ['dp-k-worker'],
+            kind: 'lab-hub',
+            duration: { vi: '~25 phút', en: '~25 min' },
             title: { vi: 'C3, wrangler login và deploy Hello World', en: 'C3, wrangler login, and deploy Hello World', km: 'C3, wrangler login និង deploy Hello World' },
             body: {
               vi: 'Hello World, Worker only, TypeScript. Checkpoint: localhost:8787 và *.workers.dev.',
@@ -826,11 +855,14 @@ export const tracks: Track[] = [
             hubLink: '/use-cases/build-serverless-app',
           },
           {
+            dependsOn: ['dp-k-worker'],
+            kind: 'lab-hub',
+            duration: { vi: '~30 phút', en: '~30 min' },
             title: { vi: 'wrangler.jsonc, vars và wrangler secret', en: 'wrangler.jsonc, vars, and wrangler secret', km: 'wrangler.jsonc, vars និង wrangler secret' },
             body: {
-              vi: 'File config là source of truth. Secret không nằm trong vars hay PUBLIC_*.',
-              en: 'The config file is the source of truth. Secrets do not live in vars or PUBLIC_*.',
-              km: 'ឯកសារ config គឺជាប្រភពពិត។ Secret មិនរស់នៅក្នុង vars ឬ PUBLIC_*។',
+              vi: 'File config là nguồn sự thật. Đừng để secret trong vars dạng chữ thường. Dùng wrangler secret.',
+              en: 'The config file is the source of truth. Do not put a secret in plaintext vars. Use wrangler secret.',
+              km: 'ឯកសារ config គឺប្រភពពិត។ កុំដាក់ secret ក្នុង vars អក្សរធម្មតា។ ប្រើ wrangler secret។',
             },
           },
         ],
@@ -846,7 +878,11 @@ export const tracks: Track[] = [
         duration: { vi: '~55 phút', en: '~55 min', km: '~55 នាទី' },
         role: 'recommended',
         lessons: [
+          dpPagesLesson,
           {
+            dependsOn: ['dp-k-pages'],
+            kind: 'lab-hub',
+            duration: { vi: '~30 phút', en: '~30 min' },
             title: { vi: 'Pages từ Git: build command và output dist', en: 'Pages from Git: build command and dist output', km: 'Pages ពី Git: build command និង output dist' },
             body: {
               vi: 'Connect Git, npm run build, output dist. Preview mỗi PR. Đọc guide migrate sang Workers khi sẵn sàng.',
@@ -856,6 +892,9 @@ export const tracks: Track[] = [
             hubLink: '/use-cases/deploy-static-site',
           },
           {
+            dependsOn: ['dp-k-pages'],
+            kind: 'lab-hub',
+            duration: { vi: '~25 phút', en: '~25 min' },
             title: { vi: 'Pages Functions /api/* và khi nào tách Worker', en: 'Pages Functions /api/* and when to split a Worker', km: 'Pages Functions /api/* និងពេលណាត្រូវបំបែក Worker' },
             body: {
               vi: 'Cùng Workers runtime. Tách Worker khi service không gắn UI tĩnh.',
@@ -876,7 +915,11 @@ export const tracks: Track[] = [
         duration: { vi: '~75 phút', en: '~75 min', km: '~75 នាទី' },
         role: 'required',
         lessons: [
+          dpStorageLesson,
           {
+            dependsOn: ['dp-k-storage'],
+            kind: 'lab-hub',
+            duration: { vi: '~25 phút', en: '~25 min' },
             title: { vi: 'KV cho config và cache nhẹ', en: 'KV for config and light cache', km: 'KV សម្រាប់ config និង cache ស្រាល' },
             body: {
               vi: 'Lưu feature flags, session token ngắn, rate limit counter. Không dùng KV cho giao dịch tài chính cần consistency cao.',
@@ -886,6 +929,9 @@ export const tracks: Track[] = [
             hubLink: '/glossary',
           },
           {
+            dependsOn: ['dp-k-storage'],
+            kind: 'lab-hub',
+            duration: { vi: '~30 phút', en: '~30 min' },
             title: { vi: 'D1 cho dữ liệu có schema', en: 'D1 for structured data', km: 'D1 សម្រាប់ទិន្នន័យមានរចនាសម្ព័ន្ធ' },
             body: {
               vi: 'Workshop signup, quiz results, user preferences — bảng SQL nhỏ. Chạy migration với `wrangler d1 migrations`.',
@@ -894,6 +940,9 @@ export const tracks: Track[] = [
             },
           },
           {
+            dependsOn: ['dp-k-storage'],
+            kind: 'lab-hub',
+            duration: { vi: '~20 phút', en: '~20 min' },
             title: { vi: 'R2 cho file và tài liệu', en: 'R2 for files and assets', km: 'R2 សម្រាប់ឯកសារ និង asset' },
             body: {
               vi: 'PDF, slides, upload user — object storage. Có thể phục vụ public hoặc signed URL sau này.',
@@ -914,7 +963,11 @@ export const tracks: Track[] = [
         duration: { vi: '~45 phút', en: '~45 min', km: '~45 នាទី' },
         role: 'recommended',
         lessons: [
+          dpOperateLesson,
           {
+            dependsOn: ['dp-k-operate'],
+            kind: 'lab-hub',
+            duration: { vi: '~20 phút', en: '~20 min' },
             title: { vi: 'Web Analytics và log Workers', en: 'Web Analytics and Worker logs', km: 'Web Analytics និង log Worker' },
             body: {
               vi: 'Bật Cloudflare Web Analytics cho traffic. Dùng `wrangler tail` hoặc observability khi debug API.',
@@ -923,6 +976,9 @@ export const tracks: Track[] = [
             },
           },
           {
+            dependsOn: ['dp-k-operate'],
+            kind: 'lab-hub',
+            duration: { vi: '~25 phút', en: '~25 min' },
             title: { vi: 'Turnstile cho form public', en: 'Turnstile for public forms', km: 'Turnstile សម្រាប់ form សាធារណៈ' },
             body: {
               vi: 'Chống bot trên đăng ký workshop, contact form. Verify token server-side trước khi ghi D1.',
@@ -944,7 +1000,11 @@ export const tracks: Track[] = [
         duration: { vi: '~110 phút', en: '~110 min', km: '~110 នាទី' },
         role: 'recommended',
         lessons: [
+          dpAiLesson,
           {
+            dependsOn: ['dp-k-ai'],
+            kind: 'lab-hub',
+            duration: { vi: '~25 phút', en: '~25 min' },
             title: { vi: 'Inference đầu tiên với Workers AI', en: 'First inference with Workers AI', km: 'inference ដំបូងជាមួយ Workers AI' },
             body: {
               vi: 'Thêm AI binding vào Worker, gọi model từ server-side và trả response tối thiểu. Bắt đầu bằng một task rõ ràng trước khi thêm chat UI hoặc nhiều provider.',
@@ -954,6 +1014,9 @@ export const tracks: Track[] = [
             hubLink: '/use-cases/build-ai-applications',
           },
           {
+            dependsOn: ['dp-k-ai'],
+            kind: 'lab-hub',
+            duration: { vi: '~25 phút', en: '~25 min' },
             title: { vi: 'Adopt AI có kiểm soát với AI Gateway', en: 'Adopt AI deliberately with AI Gateway', km: 'ប្រើ AI ដោយចេតនាជាមួយ AI Gateway' },
             body: {
               vi: 'Đặt AI Gateway giữa app và model provider để quan sát request, cache khi phù hợp và thay provider mà không làm lộ credential ở client.',
@@ -962,6 +1025,9 @@ export const tracks: Track[] = [
             },
           },
           {
+            dependsOn: ['dp-k-ai'],
+            kind: 'lab-hub',
+            duration: { vi: '~20 phút', en: '~20 min' },
             title: { vi: 'Baseline bảo mật cho ứng dụng AI', en: 'AI application security baseline', km: 'baseline សុវត្ថិភាពកម្មវិធី AI' },
             body: {
               vi: 'Giữ key ở Worker secrets, xác thực người dùng trước endpoint AI, rate limit input, validate tool input và áp dụng guardrails cho data/response nhạy cảm.',
@@ -971,6 +1037,9 @@ export const tracks: Track[] = [
             hubLink: '/cheatsheets/ai-protection-portfolio#ai-gateway',
           },
           {
+            dependsOn: ['dp-k-ai'],
+            kind: 'lab-hub',
+            duration: { vi: '~40 phút', en: '~40 min' },
             title: { vi: 'RAG với Vectorize và storage', en: 'RAG with Vectorize and storage', km: 'RAG ជាមួយ Vectorize និង storage' },
             body: {
               vi: 'Tách luồng ingest và query: lưu tài liệu trong R2, tạo embeddings vào Vectorize, retrieve context có nguồn trước khi gọi model. Đừng coi vector search là quyền truy cập dữ liệu.',
@@ -979,6 +1048,9 @@ export const tracks: Track[] = [
             },
           },
           {
+            dependsOn: ['dp-k-ai'],
+            kind: 'lab-hub',
+            duration: { vi: '~35 phút', en: '~35 min' },
             title: { vi: 'Agents: tools, skills và quyền hạn tối thiểu', en: 'Agents: tools, skills, and least privilege', km: 'Agent៖ tool, skill និង least privilege' },
             body: {
               vi: 'Dùng Agents SDK cho state/session khi cần. Mỗi tool cần schema input rõ ràng, authorization ở server và scope nhỏ; skill là hướng dẫn/versioned knowledge, không phải quyền truy cập bí mật.',
@@ -992,14 +1064,18 @@ export const tracks: Track[] = [
         id: 'dp-6',
         title: { vi: 'Phần 6: Durable Objects, Queues, Workflows, Hyperdrive', en: 'Part 6: Durable Objects, Queues, Workflows, Hyperdrive', km: 'ផ្នែក 6: Durable Objects, Queues, Workflows, Hyperdrive' },
         description: {
-          vi: 'Optional — chọn đúng một sản phẩm sau khi Worker + storage ổn. Thường cần Workers Paid.',
-          en: 'Optional — pick exactly one product after Worker + storage are stable. Often needs Workers Paid.',
+          vi: 'Optional — chọn đúng một sản phẩm sau khi Worker và storage đã ổn. Cả bốn đều có mức Free có hạn. Xem dashboard trước khi bật.',
+          en: 'Optional — pick exactly one product after the Worker and storage are stable. All four have a limited Free allowance. Check the dashboard before you turn one on.',
           km: 'ស្រេចចិត្ត — ជ្រើសរើសផលិតផលតែមួយបន្ទាប់ពី Worker + storage មានស្ថិរភាព។ ជាញឹកញាប់ត្រូវការ Workers Paid។',
         },
         duration: { vi: '~30 phút', en: '~30 min', km: '~30 នាទី' },
         role: 'optional',
         lessons: [
+          dpStatefulLesson,
           {
+            dependsOn: ['dp-k-stateful'],
+            kind: 'lab-hub',
+            duration: { vi: '~30 phút', en: '~30 min' },
             title: { vi: 'Khi nào thêm DO, Queue, Workflow hoặc Hyperdrive', en: 'When to add DO, Queue, Workflow, or Hyperdrive', km: 'ពេលណាត្រូវបន្ថែម DO, Queue, Workflow, ឬ Hyperdrive' },
             body: {
               vi: 'DO: state theo object. Queues: việc nền. Workflows: pipeline dài. Hyperdrive: Postgres/MySQL bên ngoài — không thay D1.',
@@ -1021,6 +1097,9 @@ export const tracks: Track[] = [
         role: 'reference',
         lessons: [
           {
+            kind: 'reference',
+            prerequisites: ['dp-6-l1'],
+            duration: { vi: '~15 phút', en: '~15 min' },
             title: { vi: '10 golden rules Developer Platform', en: '10 Developer Platform golden rules', km: '10 golden rules Developer Platform' },
             body: {
               vi: 'Worker-first; secret qua wrangler secret; chọn storage đúng; verify Turnstile; vector ≠ ACL.',
@@ -1029,6 +1108,8 @@ export const tracks: Track[] = [
             },
           },
           {
+            kind: 'reference',
+            prerequisites: ['dp-7-l1'],
             title: { vi: 'Sổ tay lệnh (C3 / wrangler / Pages)', en: 'Command runbook (C3 / wrangler / Pages)', km: 'Command runbook (C3 / wrangler / Pages)' },
             duration: { vi: '~10 phút', en: '~10 min', km: '~10 នាទី' },
             body: {
@@ -1044,7 +1125,7 @@ export const tracks: Track[] = [
       vi: [
         'Đọc kiến trúc: app mới = Worker; Git site = Pages',
         'C3 Hello World, wrangler login/dev/deploy — *.workers.dev',
-        'wrangler.jsonc + wrangler secret (không PUBLIC_* cho key)',
+        'wrangler.jsonc + wrangler secret (không để key trong biến chữ thường)',
         'Chọn KV / D1 / R2; apply migration D1 local và remote',
         'Nếu có framework Git: Pages + preview; Functions chỉ khi gắn site',
         'wrangler tail; Turnstile siteverify trước ghi D1',
@@ -1055,7 +1136,7 @@ export const tracks: Track[] = [
       en: [
         'Read the architecture: new app = Worker; Git site = Pages',
         'C3 Hello World, wrangler login/dev/deploy — *.workers.dev',
-        'wrangler.jsonc + wrangler secret (no PUBLIC_* for keys)',
+        'wrangler.jsonc + wrangler secret (no plaintext variable for a key)',
         'Choose KV / D1 / R2; apply D1 migrations local and remote',
         'If you have a Git framework: Pages + preview; Functions only when tied to the site',
         'wrangler tail; Turnstile siteverify before D1 writes',
@@ -1066,7 +1147,7 @@ export const tracks: Track[] = [
       km: [
         'Read the architecture: new app = Worker; Git site = Pages',
         'C3 Hello World, wrangler login/dev/deploy — *.workers.dev',
-        'wrangler.jsonc + wrangler secret (no PUBLIC_* for keys)',
+        'wrangler.jsonc + wrangler secret (no plaintext variable for a key)',
         'Choose KV / D1 / R2; apply D1 migrations local and remote',
         'If you have a Git framework: Pages + preview; Functions only when tied to the site',
         'wrangler tail; Turnstile siteverify before D1 writes',
@@ -1092,7 +1173,7 @@ export const tracks: Track[] = [
         },
         {
           title: 'Secret/API key lộ ở client',
-          detail: 'Chỉ `PUBLIC_*` được embed build. Token Turnstile secret, DB credentials phải ở Pages Functions/Worker env.',
+          detail: 'Đừng để secret trong biến chữ thường hoặc trong file build. Token Turnstile và credential database phải là secret trên Function hoặc Worker.',
         },
         {
           title: 'Không verify Turnstile server-side',
@@ -1104,7 +1185,7 @@ export const tracks: Track[] = [
         },
         {
           title: 'App mới bắt đầu bằng Pages Functions',
-          detail: 'On-ramp 2026 là C3 + Worker. Pages Functions hợp site Git hiện có (như hub này), không phải template API mới.',
+          detail: 'Lối vào là C3 + Worker. Pages Functions hợp site Git hiện có (như hub này), không phải khuôn API mới.',
         },
       ],
       en: [
@@ -1118,7 +1199,7 @@ export const tracks: Track[] = [
         },
         {
           title: 'Secrets/API keys exposed in the client',
-          detail: 'Only `PUBLIC_*` belongs in the build. Turnstile secrets and DB credentials belong in Pages Functions/Worker env.',
+          detail: 'Do not put a secret in a plaintext variable or in the build. Turnstile tokens and database credentials must be secrets on the Function or Worker.',
         },
         {
           title: 'No server-side Turnstile verification',
@@ -1130,7 +1211,7 @@ export const tracks: Track[] = [
         },
         {
           title: 'Starting a new app with Pages Functions',
-          detail: 'The 2026 on-ramp is C3 + Worker. Pages Functions fit existing Git sites (like this hub), not a new API template.',
+          detail: 'The on-ramp is C3 + Worker. Pages Functions fit existing Git sites (like this hub), not a new API template.',
         },
       ],
       km: [
@@ -1144,7 +1225,7 @@ export const tracks: Track[] = [
         },
         {
           title: 'Secrets/API keys exposed in the client',
-          detail: 'Only `PUBLIC_*` belongs in the build. Turnstile secrets and DB credentials belong in Pages Functions/Worker env.',
+          detail: 'Do not put a secret in a plaintext variable or in the build. Turnstile tokens and database credentials must be secrets on the Function or Worker.',
         },
         {
           title: 'No server-side Turnstile verification',
@@ -1156,7 +1237,7 @@ export const tracks: Track[] = [
         },
         {
           title: 'Starting a new app with Pages Functions',
-          detail: 'The 2026 on-ramp is C3 + Worker. Pages Functions fit existing Git sites (like this hub), not a new API template.',
+          detail: 'The on-ramp is C3 + Worker. Pages Functions fit existing Git sites (like this hub), not a new API template.',
         },
       ],
     },
@@ -1246,6 +1327,74 @@ export const tracks: Track[] = [
         href: 'https://zerotrust.cfsase.workers.dev/best-practice-guide.html',
       },
     ],
+    startHere: {
+      intro: {
+        vi: 'Đọc bài kiến thức của từng phần trước, rồi làm lab. Chọn team name và nhóm pilot trước khi bấm dashboard. Dừng sau một phần vẫn còn dùng được.',
+        en: 'Read each part’s knowledge lesson, then do the lab. Pick the team name and the pilot group before you click through the dashboard. Stopping after one part still leaves something you can use.',
+        km: 'អានមេរៀនចំណេះដឹងនៃផ្នែកនីមួយៗមុន រួចធ្វើ lab។ ជ្រើស team name និងក្រុម pilot មុនពេលចុច dashboard។ បញ្ឈប់បន្ទាប់ពីផ្នែកមួយ នៅតែមានអ្វីប្រើបាន។',
+      },
+      checklistTitle: { vi: 'Trước khi tạo tổ chức', en: 'Before you create the organization', km: 'មុនពេលបង្កើតអង្គភាព' },
+      checklist: {
+        vi: [
+          'Email công việc nhận được thư, và bật 2FA cho admin',
+          'Quyền admin trên IdP (Entra ID, Okta hoặc Google) khi tới phần đăng nhập',
+          'Team name ngắn. Nó thành https://<team>.cloudflareaccess.com',
+          'Nhóm pilot 5–25 người và một app nội bộ đầu tiên',
+          'Sẵn sàng nhập payment details. Gói Free vẫn cần bước này và không bị tính phí',
+        ],
+        en: [
+          'A work email that can receive mail, and 2FA on for the admin',
+          'Admin on the IdP (Entra ID, Okta, or Google) when you reach login',
+          'A short team name. It becomes https://<team>.cloudflareaccess.com',
+          'A pilot of 5–25 people and one first private app',
+          'Ready to enter payment details. The Free plan still needs this step and you are not charged',
+        ],
+        km: [
+          'អ៊ីមែលការងារដែលទទួលសំបុត្របាន និងបើក 2FA សម្រាប់ admin',
+          'សិទ្ធិ admin លើ IdP (Entra ID, Okta ឬ Google) ពេលដល់ផ្នែកចូល',
+          'Team name ខ្លី។ វាក្លាយជា https://<team>.cloudflareaccess.com',
+          'ក្រុម pilot 5–25 នាក់ និង app ខាងក្នុងដំបូងមួយ',
+          'រួចរាល់បញ្ចូល payment details។ គម្រោង Free នៅតែត្រូវការជំហាននេះ ហើយមិនគិតថ្លៃ',
+        ],
+      },
+      planNote: {
+        vi: 'Số và câu trong bảng lấy từ docs ngày 2026-11-14. Ô không có câu trích thì để trống ý “xem dashboard”, không bịa hạn mức. Đây không phải báo giá.',
+        en: 'The sentences in the table come from the docs on 2026-11-14. A cell without a quote says to check the dashboard. Nothing here is a price quote.',
+        km: 'ប្រយោគក្នុងតារាងយកពី docs ថ្ងៃ 2026-11-14។ ប្រអប់គ្មានសម្រង់ នោះសុំមើល dashboard។ នេះមិនមែនការដេញថ្លៃ។',
+      },
+      planFootnote: {
+        vi: 'Không phải báo giá. Đối chiếu product docs và dashboard. Kiểm tra lần cuối: 2026-11-14.',
+        en: 'Not a price quote. Check the product docs and the dashboard. Last checked: 2026-11-14.',
+        km: 'មិនមែនការដេញថ្លៃ។ ផ្ទៀង product docs និង dashboard។ ពិនិត្យចុងក្រោយ: 2026-11-14។',
+      },
+      planRows: [
+        {
+          capability: { vi: 'Tổ chức Zero Trust', en: 'Zero Trust organization' },
+          free: { vi: 'Chọn gói và nhập payment details. Free không bị tính phí', en: 'Select a plan and enter payment details. Free is not charged' },
+          paid: { vi: 'Pay-as-you-go hoặc Contract. Xem trang plans', en: 'Pay-as-you-go or Contract. See the plans page' },
+        },
+        {
+          capability: { vi: 'DLP', en: 'DLP' },
+          free: { vi: 'Hai profile sẵn: Financial Information, và Social Security, Insurance, Tax, and Identifier Numbers', en: 'Two predefined profiles: Financial Information, and Social Security, Insurance, Tax, and Identifier Numbers' },
+          paid: { vi: 'Bộ đầy đủ là add-on của Zero Trust Enterprise', en: 'The full set is an add-on to Zero Trust Enterprise' },
+        },
+        {
+          capability: { vi: 'Browser Isolation', en: 'Browser Isolation' },
+          free: { vi: 'Trang sản phẩm không nói có trên Free', en: 'The product page does not say it is included on Free' },
+          paid: { vi: 'Add-on của Pay-as-you-go và Enterprise', en: 'Add-on to Pay-as-you-go and Enterprise' },
+        },
+        {
+          capability: { vi: 'Cloudflare WAN', en: 'Cloudflare WAN' },
+          free: { vi: 'Không. Sản phẩm Enterprise-only', en: 'No. The product is Enterprise-only' },
+          paid: { vi: 'Enterprise-only. Liên hệ Cloudflare', en: 'Enterprise-only. Contact Cloudflare' },
+        },
+        {
+          capability: { vi: 'Số chỗ ngồi', en: 'Seats' },
+          free: { vi: 'Không chép số. Một seat bị dùng khi user đăng nhập hoặc enroll client', en: 'No number copied here. A seat is used when a user signs in or enrolls the client' },
+          paid: { vi: 'Xem trang plans và dashboard', en: 'See the plans page and the dashboard' },
+        },
+      ],
+    },
     modules: [
       {
         id: 'c1-1',
@@ -1255,32 +1404,27 @@ export const tracks: Track[] = [
           en: 'The SASE picture, pre-start checklist, creating the Cloudflare One organization, and least-privilege admins.',
         },
         duration: { vi: '~50 phút', en: '~50 min' },
+        role: 'required',
         lessons: [
+          c1ArchitectureLesson,
+          c1AccountLesson,
           {
-            title: { vi: 'Kiến trúc và quy trình onboarding', en: 'Architecture & workflow' },
-            body: {
-              vi: 'Bản đồ trực quan của toàn bộ dự án: bạn đang xây gì (kiến trúc tham chiếu) và thứ tự xây (quy trình onboarding). Mỗi khối gắn module (M1, M2, …) để nhảy thẳng sang hướng dẫn.',
-              en: 'A visual map of the whole project: what you are building (the reference architecture) and the order you build it in (the onboarding workflow). Every box is tagged with the module (M1, M2, …) that covers it, so you can jump straight to the how-to.',
-            },
-            tip: {
-              vi: 'Nhiều team làm Mô-đun 1–3 tuần đầu (identity + thiết bị), Access và Gateway tuần hai, DLP/AI/WAN sau.',
-              en: 'Many teams do Modules 1–3 in week one (identity + devices), Access and Gateway in week two, then DLP/AI/WAN later.',
-            },
-            hubLink: '/use-cases/cloudflare-one',
-          },
-          {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-account'],
             title: { vi: 'Tạo account, team name và Cloudflare One', en: 'Create the account, team name, and Cloudflare One' },
             body: {
-              vi: 'Đăng ký dash.cloudflare.com, xác thực email, bật 2FA cho admin. Mở Zero Trust, chọn team name (trở thành `https://<team>.cloudflareaccess.com`) và plan. Team name rất khó đổi — chọn tên ngắn, bền. Cloudflare tự là IdP mặc định; Restrict to account members rồi test login tại team domain.',
-              en: 'Sign up at dash.cloudflare.com, verify email, and enable admin 2FA. Open Zero Trust, pick a team name (it becomes `https://<team>.cloudflareaccess.com`) and a plan. The team name is hard to change — choose a short, durable name. Cloudflare is the default IdP; Restrict to account members, then test login at the team domain.',
+              vi: 'Đăng ký dash.cloudflare.com, xác thực email, bật 2FA cho admin. Mở Zero Trust, chọn team name (trở thành `https://<team>.cloudflareaccess.com`) và plan. Đổi team name được, nhưng phải cập nhật IdP và client. Cloudflare tự là IdP mặc định; Restrict to account members rồi test login tại team domain.',
+              en: 'Sign up at dash.cloudflare.com, verify email, and enable admin 2FA. Open Zero Trust, pick a team name (it becomes `https://<team>.cloudflareaccess.com`) and a plan. You can change the team name later, but you must update the IdP and the client. Cloudflare is the default IdP; Restrict to account members, then test login at the team domain.',
             },
             tip: {
-              vi: 'Cần phương thức thanh toán kể cả Free — Free không bị tính phí. Domain không bắt buộc để bắt đầu Zero Trust.',
-              en: 'A payment method is required even on Free — you are not charged on Free. A domain is not required to start Zero Trust.',
+              vi: 'Chọn gói và nhập payment details. Gói Zero Trust Free vẫn cần bước này, và bạn không bị tính phí. Domain không bắt buộc để bắt đầu.',
+              en: 'Select a plan and enter payment details. The Zero Trust Free plan still needs that step, and you are not charged. A domain is not required to start.',
             },
             hubLink: '/glossary',
           },
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-account'],
             title: { vi: 'Admin, vai trò và break-glass', en: 'Admins, roles, and break-glass' },
             body: {
               vi: 'Admin nhận account role; nhân viên dùng dịch vụ chỉ cần enrollment + Access policy — không cần role trên account. Mời ít nhất hai Super Admin, dùng role hẹp cho daily work, và giữ Cloudflare login / OTP làm đường break-glass nếu Access khóa dashboard. Token API account-owned + expiry; xem audit log sau mỗi thay đổi admin.',
@@ -1301,8 +1445,12 @@ export const tracks: Track[] = [
           en: 'Connect corporate login — the foundation for every later Access, enrollment, and Gateway policy.',
         },
         duration: { vi: '~45 phút', en: '~45 min' },
+        role: 'required',
         lessons: [
+          c1IdentityLesson,
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-identity'],
             title: { vi: 'Kết nối Entra ID, Okta hoặc Google', en: 'Connect Entra ID, Okta, or Google' },
             body: {
               vi: 'Callback URL: `https://<team-name>.cloudflareaccess.com/cdn-cgi/access/callback`. Đăng ký app trên IdP (không chọn gallery SaaS), dán callback, copy client ID / tenant / secret, cấp quyền đọc user và group, Grant admin consent, rồi Add IdP trong Cloudflare One → Settings → Authentication. Google còn cần JavaScript origin = team domain.',
@@ -1315,6 +1463,8 @@ export const tracks: Track[] = [
             hubLink: '/demo-guides#cloudflare-one',
           },
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-identity'],
             title: { vi: 'Test group claims, MFA và SCIM', en: 'Test group claims, MFA, and SCIM' },
             body: {
               vi: 'Dùng Test trên IdP: phải thấy email và groups. Bật MFA bắt buộc tại IdP trước khi enforce Access. Bật SCIM khi sẵn sàng để group/user đồng bộ khi offboard. Policy nên tham chiếu group IdP, không phải từng user. Cloudflare login mặc định vẫn giữ làm break-glass.',
@@ -1336,8 +1486,12 @@ export const tracks: Track[] = [
           en: 'Enrollment, device profiles (mode, split tunnel, BYOD), and posture — the on-ramp plus device-health signals.',
         },
         duration: { vi: '~60 phút', en: '~60 min' },
+        role: 'required',
         lessons: [
+          c1DeviceLesson,
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-device'],
             title: { vi: 'Enrollment và cài Cloudflare One Client', en: 'Enrollment and installing the Cloudflare One Client' },
             body: {
               vi: 'Trước khi cài: Settings → WARP Client → Device enrollment permissions — Allow email ending in `@yourcompany.com` với IdP vừa nối. Nếu bỏ bước này, client báo “not allowed to enroll.” Cài WARP/Cloudflare One Client, chọn login to Cloudflare Zero Trust (không phải consumer 1.1.1.1), nhập team name, đăng nhập IdP. Dashboard phải hiện thiết bị Connected.',
@@ -1350,6 +1504,8 @@ export const tracks: Track[] = [
             hubLink: '/use-cases/secure-remote-users',
           },
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-device'],
             title: { vi: 'Device profiles, split tunnel và BYOD', en: 'Device profiles, split tunnel, and BYOD' },
             body: {
               vi: 'Laptop công ty: Default profile → Gateway with WARP, Switch Locked on, Auto connect 1 phút. Split tunnel Exclude (full protection). BYOD: profile riêng, Include mode chỉ company apps/networks — Exclude trên máy cá nhân đưa browsing cá nhân qua công ty. Profile cụ thể đặt trên profile rộng. Prefer CIDR hơn domain trong split tunnel.',
@@ -1361,6 +1517,8 @@ export const tracks: Track[] = [
             },
           },
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-device'],
             title: { vi: 'Device posture checks', en: 'Device posture checks' },
             body: {
               vi: 'Tạo check tái sử dụng (disk encryption, firewall, OS version, client certificate, EDR). Gắn vào Access và/hoặc Gateway. Posture được đánh giá lại liên tục — thiết bị hết compliant mất quyền. Tanium không dùng được trong Gateway policy (chỉ Access). Service-token enrollment không match selector identity — dùng OS hoặc managed network.',
@@ -1381,8 +1539,12 @@ export const tracks: Track[] = [
           en: 'Publish apps by identity, not by whole network — outbound Tunnel, group policies, Mesh/Appliance when you need site-to-site.',
         },
         duration: { vi: '~60 phút', en: '~60 min' },
+        role: 'recommended',
         lessons: [
+          c1AccessLesson,
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-access'],
             title: { vi: 'Tunnel outbound và public hostname', en: 'Outbound Tunnel and public hostname' },
             body: {
               vi: 'Networks → Tunnels → Create cloudflared. Chạy connector trên host reach được app (outbound TCP 7844). Token là secret. Map public hostname (ví dụ `wiki.yourcompany.com`) → `localhost:port`. Checkpoint: connector Healthy. Cần zone trên Cloudflare cho hostname tự host.',
@@ -1395,6 +1557,8 @@ export const tracks: Track[] = [
             hubLink: '/use-cases/replace-vpn',
           },
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-access'],
             title: { vi: 'Access application và policy theo group', en: 'Access application and group policies' },
             body: {
               vi: 'Access controls → Applications → Self-hosted. Cùng hostname với Tunnel. Session 24h (ngắn hơn cho app nhạy cảm). Policy Allow: email ending in / IdP group + posture nếu cần. Instant auth khi một IdP; Authenticate with Cloudflare One Client cho user đã enroll. Dùng Access Group / rule group, không Allow Everyone.',
@@ -1407,6 +1571,8 @@ export const tracks: Track[] = [
             hubLink: '/use-cases/replace-vpn',
           },
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-access'],
             title: { vi: 'Chọn connector: Tunnel, Mesh hay Appliance', en: 'Pick a connector: Tunnel, Mesh, or Appliance' },
             body: {
               vi: 'Tunnel: app/server và CIDR riêng, một chiều tới Cloudflare. Mesh (ex-WARP Connector): any-to-any giữa host/device/site. Appliance: cả chi nhánh. Có thể kết hợp. Host tunnel phải ra được Cloudflare:7844.',
@@ -1427,8 +1593,12 @@ export const tracks: Track[] = [
           en: 'DNS first, then Network, then HTTP/TLS. Add egress, Browser Isolation, and SaaS/AI discovery once that is stable.',
         },
         duration: { vi: '~90 phút', en: '~90 min' },
+        role: 'recommended',
         lessons: [
+          c1GatewayLesson,
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-gateway'],
             title: { vi: 'Gateway theo lớp: DNS → Network → HTTP', en: 'Gateway in layers: DNS → Network → HTTP' },
             body: {
               vi: 'DNS policies: Block Security Categories (malware, phishing, C2, cryptomining…). Test `malware.testcategory.com` — phải ra block page. Rồi Network, rồi HTTP với TLS decryption (cần root CA). Do Not Inspect cho cert-pinning và Microsoft 365. Start log/monitor rồi mới Block hàng loạt.',
@@ -1441,6 +1611,8 @@ export const tracks: Track[] = [
             hubLink: '/use-cases/secure-remote-users',
           },
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-gateway'],
             title: { vi: 'Egress policies và phiên bản IP', en: 'Egress policies and IP version' },
             body: {
               vi: 'Dedicated egress IPs khi SaaS allowlist theo IP công ty. Policy egress theo identity/group. Tắt IPv6 trên profile nếu destination dual-stack làm lệch IP allowlist. Kiểm tra IP thoát trên pilot device sau khi bật.',
@@ -1448,6 +1620,8 @@ export const tracks: Track[] = [
             },
           },
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-gateway'],
             title: { vi: 'Remote Browser Isolation (RBI)', en: 'Remote Browser Isolation (RBI)' },
             body: {
               vi: 'Cô lập browsing rủi ro trên browser remote — clipboard, upload, print có thể tắt. Clientless cho contractor/BYOD không cài client (không có device posture). Dùng cho upload AI rủi ro cao hoặc site untrusted. Test user journey trước khi isolate cả category.',
@@ -1456,6 +1630,8 @@ export const tracks: Track[] = [
             hubLink: '/cheatsheets/ai-protection-portfolio#swg-rbi',
           },
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-gateway'],
             title: { vi: 'Shadow IT và khám phá AI SaaS', en: 'Shadow IT and AI SaaS discovery' },
             body: {
               vi: 'CASB / Shadow IT: inventory SaaS và AI tools đang dùng, owner và độ nhạy dữ liệu. Đừng block mù khi chưa có sanctioned alternative — người dùng sẽ sang điện thoại và bạn mất visibility. Discover → allow có guardrail / isolate / block có chủ đích.',
@@ -1469,16 +1645,20 @@ export const tracks: Track[] = [
         id: 'c1-6',
         title: { vi: 'Phần 6: DLP — bảo vệ dữ liệu', en: 'Part 6: DLP — data protection' },
         description: {
-          vi: 'Phát hiện PII, secret, source code trên HTTP đã giải mã — monitor trước, block sau. Thường cần Enterprise.',
-          en: 'Detect PII, secrets, and source code on decrypted HTTP — monitor first, block second. Typically Enterprise.',
+          vi: 'Phát hiện dữ liệu nhạy cảm trên HTTP đã giải mã. Free và Pay-as-you-go có hai profile sẵn. Bộ đầy đủ là add-on Enterprise.',
+          en: 'Detect sensitive data on decrypted HTTP. Free and Pay-as-you-go include two predefined profiles. The full set is an Enterprise add-on.',
         },
         duration: { vi: '~45 phút', en: '~45 min' },
+        role: 'optional',
         lessons: [
+          c1DlpLesson,
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-dlp'],
             title: { vi: 'DLP profile và chạy log-only', en: 'DLP profiles and log-only' },
             body: {
-              vi: 'Cần TLS decryption (Mô-đun 5). DLP Profiles: Credentials and Secrets, Financial, PII, Source Code — hoặc custom regex/dictionary. Confidence Medium; tăng nếu noisy. HTTP policy Allow + DLP profile trên mọi destination = log-only 1–2 tuần. Tune false positive trước Block.',
-              en: 'Needs TLS decryption (Part 5). DLP Profiles: Credentials and Secrets, Financial, PII, Source Code — or custom regex/dictionaries. Confidence Medium; raise it if noisy. HTTP policy Allow + DLP profile on all destinations = log-only for 1–2 weeks. Tune false positives before Block.',
+              vi: 'Cần TLS decryption (Mô-đun 5). Free và Pay-as-you-go dùng hai profile sẵn: Financial Information, và Social Security, Insurance, Tax, and Identifier Numbers. Bộ đầy đủ (custom và các profile sẵn còn lại) là add-on Enterprise. HTTP policy Allow + profile, 1–2 tuần, rồi mới Block.',
+              en: 'Needs TLS decryption (Part 5). Free and Pay-as-you-go use two predefined profiles: Financial Information, and Social Security, Insurance, Tax, and Identifier Numbers. The full set (custom profiles and the other predefined profiles) is an Enterprise add-on. HTTP policy Allow + a profile for 1–2 weeks, then Block.',
             },
             tip: {
               vi: 'Vàng cho DLP: monitor first, block second. Block ngay gây false positive và ticket.',
@@ -1486,6 +1666,8 @@ export const tracks: Track[] = [
             },
           },
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-dlp'],
             title: { vi: 'Enforce trên destination rủi ro cao', en: 'Enforce on high-risk destinations' },
             body: {
               vi: 'Sau baseline: Block (hoặc Isolate) khi DLP match tới unsanctioned file sharing / AI / personal email. Giữ Allow+log cho destination đã phê duyệt. Gắn profile tái sử dụng; sửa một profile là mọi policy đổi. Review DLP logs theo cadence.',
@@ -1503,8 +1685,12 @@ export const tracks: Track[] = [
           en: 'Govern workforce AI (do not ban), MCP portals, AI Gateway for apps/agents, and AI crawlers on your public content.',
         },
         duration: { vi: '~70 phút', en: '~70 min' },
+        role: 'optional',
         lessons: [
+          c1AiLesson,
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-ai'],
             title: { vi: 'Govern AI: thấy, cho phép an toàn, chặn data leak', en: 'Govern AI: see it, allow safely, stop data leaks' },
             body: {
               vi: 'Cấm ChatGPT khiến người dùng sang điện thoại — mất visibility. Dùng Gateway/CASB để thấy tool, allow sanctioned với DLP trên prompt, RBI cho upload rủi ro, block hoặc isolate tool không phê duyệt. Suite: Shadow AI (5d) → control apps → DLP prompts → MCP agents → AI Gateway cho app bạn build.',
@@ -1517,6 +1703,8 @@ export const tracks: Track[] = [
             hubLink: '/cheatsheets/ai-protection-portfolio#radar-sase',
           },
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-ai'],
             title: { vi: 'MCP portals: Access cho AI agents', en: 'MCP portals: Access for AI agents' },
             body: {
               vi: 'Đưa MCP server nội bộ sau Access; portal một URL với tool đã curate, identity per-user và log. Managed OAuth chỉ khi server validate JWT Access (`Cf-Access-Jwt-Assertion`). Policy trên portal chỉ ẩn tool — enforce thật = Access làm OAuth provider. Agent tự trị dùng service token; tool call vào Access/Gateway logs.',
@@ -1525,6 +1713,8 @@ export const tracks: Track[] = [
             hubLink: '/cheatsheets/ai-protection-portfolio#ai-gateway',
           },
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-ai'],
             title: { vi: 'AI Gateway: auth, DLP, cost cho model call', en: 'AI Gateway: auth, DLP, and cost for model calls' },
             body: {
               vi: 'AI Gateway ngồi trước model provider — không cần WARP hay TLS decrypt. Authenticated Gateway + token; BYOK để key không nằm trong app. Guardrails = an toàn nội dung; DLP = PII/secret (miễn phí trên mọi gói; không có Zero Trust thì có 2 profile sẵn). Response scanning buffer full body (chậm streaming). Không cache/rate-limit gateway dùng cho AI Search/RAG.',
@@ -1532,6 +1722,8 @@ export const tracks: Track[] = [
             },
           },
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-ai'],
             title: { vi: 'Agentic Internet: AI crawler trên site của bạn', en: 'Agentic Internet: AI crawlers on your site' },
             body: {
               vi: 'AI Audit xem crawler nào hit content. Policy theo purpose (Training / Agent / Search): allow, block, hoặc block trên trang có ads. Default mới (domain mới từ 15 Sep 2026): Training/Agent blocked trên trang ads; Search allowed. Enforce robots.txt; Pay Per Crawl trả 402 nếu crawler chưa đồng ý trả. Lớp inbound — tách với SWG cho nhân viên.',
@@ -1548,8 +1740,12 @@ export const tracks: Track[] = [
           en: 'Connect offices, DCs, and cloud to Cloudflare so whole sites — not only WARP laptops — are filtered and routed. Enterprise; this touches production networking.',
         },
         duration: { vi: '~90 phút', en: '~90 min' },
+        role: 'optional',
         lessons: [
+          c1WanLesson,
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-wan'],
             title: { vi: 'On-ramp, MSS clamping và tunnel dư thừa', en: 'On-ramp, MSS clamping, and redundant tunnels' },
             body: {
               vi: 'Chọn GRE / IPsec / Connector / CNI. Làm MSS clamping trước — quên thì HTTP chạy còn HTTPS treo. Tạo hai tunnel, match PSK/lifetime trên firewall, health check Healthy. Một site trước; có console + rollback. IP overlap giữa site (`192.168.1.0/24` hai nơi) phá routing.',
@@ -1562,6 +1758,8 @@ export const tracks: Track[] = [
             hubLink: '/use-cases/secure-remote-users',
           },
           {
+            kind: 'lab-hub',
+            dependsOn: ['c1-k-wan'],
             title: { vi: 'Routing, Magic Firewall và gửi traffic qua Gateway', en: 'Routing, Magic Firewall, and sending traffic through Gateway' },
             body: {
               vi: 'Static hoặc BGP vào Magic routing table. Magic Firewall baseline. Gửi site traffic qua Gateway để DNS/HTTP/DLP giống user WARP. Test connectivity, HTTPS (MSS), failover tunnel, rồi mới retire MPLS/VPN site-to-site. Logpush Access+Gateway từ đầu.',
@@ -1578,22 +1776,8 @@ export const tracks: Track[] = [
           en: 'Rollout strategy (10 golden rules) and the full dashboard field-by-field configuration runbook.',
         },
         duration: { vi: '~20 phút', en: '~20 min' },
-        lessons: [
-          {
-            title: { vi: 'Hướng dẫn thực hành tốt (best-practice guide)', en: 'Best-practice guide' },
-            body: {
-              vi: 'Thứ tự rollout, chiến lược pilot → validate → expand, và các golden rule cho identity, thiết bị, Access, Gateway, DLP, AI và Cloudflare WAN.',
-              en: 'Rollout order, the pilot → validate → expand strategy, and golden rules for identity, devices, Access, Gateway, DLP, AI, and Cloudflare WAN.',
-            },
-          },
-          {
-            title: { vi: 'Sổ tay cấu hình (configuration runbook)', en: 'Configuration runbook' },
-            body: {
-              vi: 'Bảng tham chiếu đầy đủ: đường dẫn dashboard, field và giá trị mẫu cho từng module khi bạn đã hiểu luồng.',
-              en: 'Full quick reference: dashboard paths, fields, and sample values for every module once you know the flow.',
-            },
-          },
-        ],
+        role: 'reference',
+        lessons: [c1BestPracticeLesson, c1RunbookLesson],
       },
     ],
     recommendedSequence: {

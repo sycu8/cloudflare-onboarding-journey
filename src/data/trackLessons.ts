@@ -810,8 +810,8 @@ export const trackLessonEnrichment: Record<string, TrackLessonEnrichment> = {
       en: ['Pick exactly one: DO, Queues, Workflows, or Hyperdrive.', 'Lab one product; leave the other three for later.'],
     },
     deepDive: {
-      vi: 'Hyperdrive không thay D1. Optional thường cần Workers Paid.',
-      en: 'Hyperdrive does not replace D1. Optional products usually need Workers Paid.',
+      vi: 'Hyperdrive không thay D1. Cả bốn sản phẩm optional có mức Free có hạn. Xem dashboard trước khi bật.',
+      en: 'Hyperdrive does not replace D1. All four optional products have a limited Free allowance. Check the dashboard before you turn one on.',
     },
     docsLinks: [],
     productSlugs: ['durable-objects'],
@@ -1319,7 +1319,7 @@ export const trackLessonEnrichment: Record<string, TrackLessonEnrichment> = {
       vi: [
         'Tạo AI Gateway; trỏ app/agent vào gateway endpoint; xác nhận request trong AI → AI Gateway.',
         'Bật Authenticated Gateway (token); BYOK / Store Keys cho provider key.',
-        'Guardrails cho unsafe content; DLP (miễn phí; Free có 2 profile sẵn) trên request — response scan làm chậm streaming.',
+        'Guardrails cho unsafe content; DLP (miễn phí; không có Zero Trust thì có 2 profile sẵn) trên request — response scan làm chậm streaming.',
         'Cost/rate limit; `cf-aig-collect-log-payload: false` nếu không được persist prompt. Gateway riêng cho RAG.',
       ],
       en: [
