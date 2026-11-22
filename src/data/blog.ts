@@ -67,6 +67,16 @@ export type BlogImage = {
   caption?: LocalizedString;
   /** e.g. Cloudflare Dashboard · Security → WAF */
   credit?: LocalizedString;
+  /**
+   * Where the image comes from (docs/blog/RUBRIC.md § Images). Required for
+   * new posts except files under /ref-diagrams/. Never use `illustration`
+   * for anything that looks like the Cloudflare dashboard.
+   */
+  provenance?: 'dashboard-capture' | 'official-diagram' | 'original-diagram' | 'illustration';
+  /** License for `illustration` (e.g. "Own work, CC BY 4.0"). */
+  license?: string;
+  /** Original diagram labels are product names/arrows only, so one SVG serves every language. */
+  labelsLanguageNeutral?: boolean;
 };
 
 export type BlogPost = {

@@ -1,0 +1,170 @@
+# Default-approved blog pipeline: generate → review against official
+# Cloudflare sources + docs/blog/RUBRIC.md → fix (max N rounds) → PR → publish.
+# Fail closed: a post that does not pass is HELD (never published) and the
+# editor is emailed with the blockers. See docs/blog/AUTO_REVIEW.md.
+#
+# Kill switch:     repository variable BLOG_AUTO_ENABLED must be 'true'.
+# Email override:  BLOG_REQUIRE_EMAIL_APPROVAL='true' brings back the old
+#                  email APPROVE gate (this workflow then skips every slot).
+# Auto-merge:      BLOG_AUTO_MERGE='true' squash-merges the PR and dispatches
+#                  Deploy (production environment approval still applies).
+#                  Otherwise the PR waits for a human merge.
+
+name: Blog auto publish
+
+on:
+  schedule:
+    # 00:15 Asia/Ho_Chi_Minh = 17:15 UTC previous day (after the queue date flips)
+    - cron: '15 17 * * *'
+  workflow_dispatch:
+    inputs:
+      date:
+        description: One YYYY-MM-DD or comma-separated dates (empty = today in Asia/Ho_Chi_Minh)
+        required: false
+        default: ''
+      slug:
+        description: One slug or comma-separated slugs (backfill)
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+
+concurrency:
+  group: blog-auto-publish
+  cancel-in-progress: false
+
+env:
+  D1_DATABASE_ID: df92a9b8-1410-41c3-8d95-ee0f9ebf84ca
+  CF_ACCOUNT_ID_FALLBACK: 4c15704ef706b9c8954cd6f9feb678d8
+
+jobs:
+  pipeline:
+    name: Generate, review, publish
+    if: vars.BLOG_AUTO_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Unit tests for the reviewer
+        run: npm run test:blog-review
+
+      - name: Generate + review + fix
+        id: run
+        env:
+          OVERRIDE_DATE: ${{ inputs.date }}
+          OVERRIDE_SLUG: ${{ inputs.slug }}
+          BLOG_AUTO_ENABLED: ${{ vars.BLOG_AUTO_ENABLED }}
+          BLOG_REQUIRE_EMAIL_APPROVAL: ${{ vars.BLOG_REQUIRE_EMAIL_APPROVAL }}
+          BLOG_REVIEW_MAX_ROUNDS: ${{ vars.BLOG_REVIEW_MAX_ROUNDS }}
+          BLOG_LLM_MODEL: ${{ vars.BLOG_LLM_MODEL }}
+          BLOG_AI_GATEWAY_ID: ${{ vars.BLOG_AI_GATEWAY_ID }}
+          BLOG_AI_API_TOKEN: ${{ secrets.BLOG_AI_API_TOKEN }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: node --experimental-strip-types scripts/blog-auto.mjs --out=/tmp/blog-auto/result.json
+
+      - name: Independent re-review of the written files (network, no model)
+        if: steps.run.outputs.approved != ''
+        env:
+          APPROVED: ${{ steps.run.outputs.approved }}
+        run: |
+          set -euo pipefail
+          IFS=',' read -ra SLUGS <<< "$APPROVED"
+          for s in "${SLUGS[@]}"; do
+            node --experimental-strip-types scripts/blog-review.mjs --slug="$s"
+          done
+
+      - name: Build + i18n + track flow (fail closed)
+        if: steps.run.outputs.approved != ''
+        env:
+          PUBLIC_SITE_URL: https://onboarding.orangecloud.vn
+        run: |
+          set -euo pipefail
+          npm run build
+          npm run verify:i18n
+          npm run test:track-flow
+          npm run test:blog-cadence
+
+      - name: Open PR (and optionally merge + deploy)
+        if: steps.run.outputs.approved != ''
+        id: pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          APPROVED: ${{ steps.run.outputs.approved }}
+          AUTO_MERGE: ${{ vars.BLOG_AUTO_MERGE }}
+        run: |
+          set -euo pipefail
+          git config user.name 'blog-editorial-bot'
+          git config user.email 'onboarding@orangecloud.vn'
+          BRANCH="blog-auto/$(date -u +%Y%m%d)-${GITHUB_RUN_ID}"
+          git checkout -b "$BRANCH"
+          git add -- src/data/blogPosts src/data/blogReviews src/data/blog.ts
+          git commit -m "blog: publish ${APPROVED} (auto-reviewed)"
+          # New branch name per run: never force-push.
+          git push -u origin "HEAD:refs/heads/${BRANCH}"
+          {
+            echo "Auto-generated and auto-reviewed posts: \`${APPROVED}\`"
+            echo
+            echo "Every Cloudflare claim maps to a verbatim quote on an official page (see \`src/data/blogReviews/<slug>.review.json\`)."
+            echo "Rubric: docs/blog/RUBRIC.md. Re-review, build, verify:i18n and test:track-flow passed in run ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}."
+          } > /tmp/pr-body.md
+          gh pr create --base main --head "$BRANCH" --title "Blog: ${APPROVED} (auto-reviewed)" --body-file /tmp/pr-body.md
+          SHA=$(git rev-parse HEAD)
+          if [ "${AUTO_MERGE:-}" = "true" ]; then
+            gh pr merge "$BRANCH" --squash --match-head-commit "$SHA" --delete-branch
+            # Pushes made with GITHUB_TOKEN do not trigger other workflows,
+            # so dispatch Deploy explicitly (production approval gate still applies).
+            gh workflow run deploy.yml --ref main -f target=production -f ref=main
+            echo "merged=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "merged=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Upload review artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: blog-auto
+          path: /tmp/blog-auto
+          if-no-files-found: ignore
+          retention-days: 30
+
+      - name: Mirror state to D1 (best effort)
+        if: always()
+        continue-on-error: true
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          D1_DATABASE_ID: ${{ env.D1_DATABASE_ID }}
+          CF_ACCOUNT_ID_FALLBACK: ${{ env.CF_ACCOUNT_ID_FALLBACK }}
+        run: |
+          test -f /tmp/blog-auto/result.json || exit 0
+          node --experimental-strip-types scripts/blog-auto.mjs --mirror-d1=/tmp/blog-auto/result.json
+
+      - name: Email the editor
+        if: always()
+        continue-on-error: true
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CF_ACCOUNT_ID_FALLBACK: ${{ env.CF_ACCOUNT_ID_FALLBACK }}
+          WORKSHOP_EMAIL_FROM: ${{ secrets.WORKSHOP_EMAIL_FROM }}
+          BLOG_EDITOR_EMAIL: sycu.lee@gmail.com
+        run: |
+          test -f /tmp/blog-auto/result.json || exit 0
+          node --experimental-strip-types scripts/blog-auto.mjs --notify=/tmp/blog-auto/result.json

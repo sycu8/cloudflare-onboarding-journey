@@ -3,6 +3,11 @@
 # Reuses Deploy credentials from the `production` GitHub Environment:
 #   CLOUDFLARE_API_TOKEN + CLOUDFLARE_ACCOUNT_ID
 # Sends ONE email to sycu.lee@gmail.com (Approve link + Reply APPROVE).
+#
+# 2026-11-22: topics are approved by default (blog-auto-publish.yml). This
+# email gate only runs on its schedule when the repository variable
+# BLOG_REQUIRE_EMAIL_APPROVAL is 'true' (optional override). Manual dispatch
+# still works for a one-off approval email.
 
 name: Blog every-3-days email
 
@@ -46,6 +51,7 @@ jobs:
     timeout-minutes: 15
     # Same env as Deploy → production so CLOUDFLARE_* secrets resolve
     environment: production
+    if: vars.BLOG_REQUIRE_EMAIL_APPROVAL == 'true' || github.event_name == 'workflow_dispatch'
     steps:
       - uses: actions/checkout@v4
 
