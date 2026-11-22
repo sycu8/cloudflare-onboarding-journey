@@ -11,7 +11,7 @@ const CF_RL = 'https://developers.cloudflare.com/waf/rate-limiting-rules/';
 const CF_BOTS = 'https://developers.cloudflare.com/bots/';
 const CF_CACHE = 'https://developers.cloudflare.com/cache/how-to/cache-rules/';
 const CF_APPSEC = 'https://developers.cloudflare.com/learning-paths/application-security/';
-const CF_DNS_BP = 'https://developers.cloudflare.com/learning-paths/dns-best-practices/';
+const CF_DNS_BP = 'https://developers.cloudflare.com/learning-paths/';
 const CF_DDOS = 'https://developers.cloudflare.com/learning-paths/prevent-ddos-attacks/';
 const CF_LB = 'https://developers.cloudflare.com/learning-paths/load-balancing/';
 const CF_API = 'https://developers.cloudflare.com/api-shield/';
@@ -108,7 +108,7 @@ export const applicationServicesFollowAlong: FollowAlongLesson[] = [
         see: t('Màn chọn plan, rồi Cloudflare quét record hiện có hoặc cho import zone file.', 'Plan picker, then Cloudflare scans existing records or lets you import a zone file.', 'Plan picker, រួច Cloudflare ស្កេន records ដែលមាន ឬឲ្យអ្នក import zone file។'),
       },
       {
-        action: t('Chọn plan. Free đủ để học Phần 1–4; nâng cấp sau nếu cần Bot Management / LB.', 'Pick a plan. Free is enough to learn Parts 1–4; upgrade later for Bot Management / LB.', 'ជ្រើស plan។ Free គ្រប់គ្រាន់ដើម្បីរៀន Parts 1–4; upgrade ក្រោយសម្រាប់ Bot Management / LB។'),
+        action: t('Chọn plan. Free đủ để học Phần 1–4. Load Balancing là add-on trả phí trên mọi gói, kể cả Free. Bot Management đầy đủ là Enterprise; Free/Pro/Business dùng Bot Fight Mode hoặc Super Bot Fight Mode.', 'Pick a plan. Free is enough to learn Parts 1–4. Load Balancing is a paid add-on on every plan, including Free. Full Bot Management is Enterprise; Free, Pro, and Business use Bot Fight Mode or Super Bot Fight Mode.', 'ជ្រើស plan។ Free គ្រប់គ្រាន់ដើម្បីរៀន Parts 1–4។ Load Balancing គឺ add-on បង់ប្រាក់លើគ្រប់ plan រួម Free។ Bot Management ពេញគឺ Enterprise; Free/Pro/Business ប្រើ Bot Fight Mode ឬ Super Bot Fight Mode។'),
         checkpoint: t('Plan đã chọn — bạn biết WAF nâng cao và LB có thể bị greyed out.', 'Plan selected — you know advanced WAF and LB may be greyed out.', 'Plan បានជ្រើស — អ្នកដឹងថា WAF កម្រិតខ្ពស់ និង LB អាច greyed out។'),
       },
       {
@@ -272,7 +272,7 @@ export const applicationServicesFollowAlong: FollowAlongLesson[] = [
     ],
     officialDocs: [
       { label: t('Origin CA', 'Origin CA', 'Origin CA'), url: CF_ORIGIN_CA },
-      { label: t('Cloudflare IP addresses', 'Cloudflare IP addresses', 'Cloudflare IP addresses'), url: 'https://developers.cloudflare.com/fundamentals/reference/cloudflare-ip-addresses/' },
+      { label: t('Cloudflare IP addresses', 'Cloudflare IP addresses', 'Cloudflare IP addresses'), url: 'https://developers.cloudflare.com/fundamentals/concepts/cloudflare-ip-addresses/' },
     ],
   },
   {
@@ -291,7 +291,7 @@ export const applicationServicesFollowAlong: FollowAlongLesson[] = [
       'Managed ruleset បើក; 24–48h នៃ logs ដោយគ្មាន false positives ធ្ងន់លើ /login និង /api; ការសម្រេច Block ដោយចេតនា។',
     ),
     beforeYouBegin: t('Hostname đã Proxied + HTTPS ổn (Phần 1–2). Biết path login/admin/API.', 'Hostname is Proxied and HTTPS is healthy (Parts 1–2). You know login/admin/API paths.', 'Hostname ជា Proxied និង HTTPS មានសុខភាព (Parts 1–2)។ អ្នកដឹង paths login/admin/API។'),
-    planNote: t('WAF managed cơ bản có trên Free/Pro với giới hạn. Ruleset đầy đủ và custom nâng cao tốt hơn ở Business/Enterprise.', 'Basic managed WAF exists on Free/Pro with limits. Fuller rulesets and advanced custom rules are better on Business/Enterprise.', 'WAF managed មូលដ្ឋានមានលើ Free/Pro ជាមួយដែនកំណត់។ Rulesets ពេញ និង custom rules កម្រិតខ្ពស់ល្អជាងលើ Business/Enterprise។'),
+    planNote: t('Free chỉ có Free Managed Ruleset. Pro trở lên có Cloudflare Managed Ruleset đầy đủ. Action Log chỉ có trên Enterprise.', 'Free gets only the Free Managed Ruleset. Pro and higher get the full Cloudflare Managed Ruleset. The Log action is Enterprise only.', 'Free មានតែ Free Managed Ruleset។ Pro ឡើងទៅមាន Cloudflare Managed Ruleset ពេញ។ Action Log មានតែ Enterprise។'),
     steps: [
       {
         action: t('Security → WAF → Managed rules. Bật Cloudflare Managed Ruleset / OWASP (tên menu có thể là Streamlined WAF).', 'Security → WAF → Managed rules. Enable the Cloudflare Managed Ruleset / OWASP (menu may say Streamlined WAF).', 'Security → WAF → Managed rules។ បើក Cloudflare Managed Ruleset / OWASP (menu អាចនិយាយ Streamlined WAF)។'),
@@ -335,20 +335,20 @@ export const applicationServicesFollowAlong: FollowAlongLesson[] = [
     who: t('Security', 'Security', 'Security'),
     time: t('~15 phút', '~15 min', '~15 នាទី'),
     finishWith: t(
-      'Rule 10 request/phút/IP trên /login. Action Log chỉ có trên Enterprise. Gói khác: Managed Challenge, xem Security Events, rồi mới Block.',
-      'A 10 request/min/IP rule on /login. The Log action is Enterprise only. On other plans, use Managed Challenge, check Security Events, then Block.',
-      'A 10 request/min/IP rule on /login. The Log action is Enterprise only. On other plans, use Managed Challenge, check Security Events, then Block.',
+      'Rule trên /login. Free: chu kỳ 10 giây, chỉ field Path. Pro trở lên mới dùng chu kỳ 1 phút. Action Log chỉ có trên Enterprise. Gói khác: Managed Challenge, xem Security Events, rồi mới Block.',
+      'A rule on /login. Free: a 10-second period and the Path field only. A 1-minute period needs Pro or higher. The Log action is Enterprise only. On other plans, use Managed Challenge, check Security Events, then Block.',
+      'Rule លើ /login។ Free: រយៈពេល 10 វិនាទី និង field Path តែប៉ុណ្ណោះ។ រយៈពេល 1 នាទីត្រូវការ Pro ឡើងទៅ។ Action Log មានតែ Enterprise។ Plan ផ្សេង: Managed Challenge, មើល Security Events, រួច Block។',
     ),
     beforeYouBegin: t('WAF đã bật (as-3-l1). Biết path login/signup/OTP thật (không đoán).', 'WAF is on (as-3-l1). You know the real login/signup/OTP paths (do not guess).', 'WAF បើក (as-3-l1)។ អ្នកដឹង paths login/signup/OTP ពិត (កុំទាយ)។'),
-    planNote: t('Rate limiting rules tùy plan — Free có giới hạn số rule. Advanced RL ở plan cao hơn.', 'Rate limiting rules depend on plan — Free has a rule cap. Advanced RL is on higher plans.', 'Rate limiting rules អាស្រ័យលើ plan — Free មាន rule cap។ Advanced RL មានលើ plans ខ្ពស់ជាង។'),
+    planNote: t('Free: 1 rule, chu kỳ 10 giây, chỉ Path và Verified Bot. Pro: 2 rule, chu kỳ tới 1 phút. Method từ Business. Advanced Rate Limiting là add-on Enterprise.', 'Free: 1 rule, a 10-second period, Path and Verified Bot only. Pro: 2 rules, periods up to 1 minute. Method starts at Business. Advanced Rate Limiting is an Enterprise add-on.', 'Free: 1 rule, រយៈពេល 10 វិនាទី, Path និង Verified Bot តែប៉ុណ្ណោះ។ Pro: 2 rule, រយៈពេលដល់ 1 នាទី។ Method ចាប់ពី Business។ Advanced Rate Limiting គឺ add-on Enterprise។'),
     steps: [
       {
         action: t('Security → WAF → Rate limiting rules → Create rule.', 'Security → WAF → Rate limiting rules → Create rule.', 'Security → WAF → Rate limiting rules → Create rule។'),
         click: t('Create rule', 'Create rule', 'Create rule'),
         enter: t(
-          'If: URI Path contains /login  |  With: 10 requests / 1 minute / IP  |  Then: Enterprise mới dùng Log. Gói khác: Managed Challenge, xem Security Events, rồi Block',
-          'If: URI Path contains /login  |  With: 10 requests / 1 minute / IP  |  Then: Log only on Enterprise. Other plans: Managed Challenge, check Security Events, then Block',
-          'If: URI Path contains /login  |  With: 10 requests / 1 minute / IP  |  Then: Log only on Enterprise. Other plans: Managed Challenge, check Security Events, then Block',
+          'If: URI Path contains /login  |  Free: 10 requests / 10 seconds / IP. Pro trở lên: 1 phút. Then: Enterprise mới dùng Log. Gói khác: Managed Challenge, xem Security Events, rồi Block',
+          'If: URI Path contains /login  |  Free: 10 requests / 10 seconds / IP. Pro and higher: 1 minute. Then: Log only on Enterprise. Other plans: Managed Challenge, check Security Events, then Block',
+          'If: URI Path contains /login  |  Free: 10 requests / 10 seconds / IP។ Pro ឡើងទៅ: 1 នាទី។ Then: Log តែ Enterprise។ Plan ផ្សេង: Managed Challenge, មើល Security Events, រួច Block',
         ),
       },
       {
@@ -426,7 +426,7 @@ export const applicationServicesFollowAlong: FollowAlongLesson[] = [
       'អ្នកអាចអាន cf-cache-status; static asset មួយ HIT; ទំព័រ login/cart មិន HIT ឆ្លងកាត់អ្នកប្រើ។',
     ),
     beforeYouBegin: t('Hostname Proxied. Có URL static (/assets/*.js) và URL động.', 'Hostname is Proxied. You have a static URL (/assets/*.js) and a dynamic URL.', 'Hostname គឺ Proxied។ អ្នកមាន URL static (/assets/*.js) និង URL dynamic។'),
-    planNote: t('CDN cache có trên mọi plan. Tiered Cache / Argo Smart Routing là add-on hoặc plan cao.', 'CDN cache is on every plan. Tiered Cache / Argo Smart Routing are add-ons or higher plans.', 'CDN cache មានលើគ្រប់ plan។ Tiered Cache / Argo Smart Routing គឺ add-on ឬ plan ខ្ពស់ជាង។'),
+    planNote: t('CDN cache và Tiered Cache (Smart Topology) có trên mọi gói. Regional Tiered Cache là Enterprise. Argo Smart Routing là add-on trả phí.', 'CDN cache and Tiered Cache (Smart Topology) are on every plan. Regional Tiered Cache is Enterprise. Argo Smart Routing is a paid add-on.', 'CDN cache និង Tiered Cache (Smart Topology) មានលើគ្រប់ plan។ Regional Tiered Cache គឺ Enterprise។ Argo Smart Routing គឺ add-on បង់ប្រាក់។'),
     steps: [
       {
         action: t('Gọi asset static hai lần, đọc header.', 'Fetch a static asset twice and read headers.', 'Fetch static asset ដូចគ្នាពីរដងហើយអាន header។'),

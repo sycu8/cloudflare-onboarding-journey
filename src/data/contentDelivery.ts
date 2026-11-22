@@ -226,7 +226,7 @@ export const deliveryChecklist: { vi: string; en: string }[] = [
   { vi: 'Proxy đúng bản ghi A/AAAA/CNAME cho website', en: 'Proxy the correct A/AAAA/CNAME records for the site' },
   { vi: 'SSL Full (strict) + HTTP→HTTPS redirect', en: 'SSL Full (strict) + HTTP→HTTPS redirect' },
   { vi: 'Cache rules: bypass dynamic, cache static assets', en: 'Cache rules: bypass dynamic paths, cache static assets' },
-  { vi: 'Purge plan khi release (URL hoặc tag nếu Enterprise)', en: 'Purge plan on release (URL or tags on Enterprise)' },
+  { vi: 'Purge khi release: URL, hostname, tag hoặc prefix — có trên mọi gói', en: 'Purge on release: URL, hostname, tag, or prefix — available on every plan' },
   { vi: 'Bật Brotli + HTTP/3', en: 'Enable Brotli + HTTP/3' },
   { vi: 'Review Zaraz: migrate tag nặng khỏi HTML (GTM/pixel)', en: 'Review Zaraz: migrate heavy tags off HTML (GTM/pixels)' },
   { vi: 'Bật Cloudflare Fonts nếu đang dùng Google Fonts / third-party font CDN', en: 'Enable Cloudflare Fonts if you use Google Fonts / a third-party font CDN' },

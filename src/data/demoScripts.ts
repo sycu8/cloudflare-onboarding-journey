@@ -473,7 +473,7 @@ export const applicationSecurityDemos: DemoVignette[] = [
     ],
     docsLinks: [
       { label: 'Bot Management', href: 'https://developers.cloudflare.com/bots/' },
-      { label: 'Verified bots', href: 'https://developers.cloudflare.com/bots/reference/verified-bots-policy/' },
+      { label: 'Verified bots', href: 'https://developers.cloudflare.com/bots/concepts/bot/verified-bots/policy/' },
     ],
   },
   {
@@ -527,8 +527,8 @@ export const applicationSecurityDemos: DemoVignette[] = [
     ],
     keyTakeaways: [
       {
-        vi: 'API Shield + Advanced RL = volumetric + sequential abuse; gắn với kế hoạch Business/Enterprise.',
-        en: 'API Shield + Advanced RL = volumetric + sequential abuse; ties to Business/Enterprise plans.',
+        vi: 'API Shield đầy đủ và Advanced Rate Limiting là add-on Enterprise, không phải tính năng Business.',
+        en: 'The full API Shield suite and Advanced Rate Limiting are Enterprise add-ons, not Business features.',
       },
     ],
     docsLinks: [{ label: 'API Shield', href: 'https://developers.cloudflare.com/api-shield/' }],
@@ -711,7 +711,7 @@ export const cloudflareOneDemos: DemoVignette[] = [
       },
     ],
     docsLinks: [
-      { label: 'Access', href: 'https://developers.cloudflare.com/cloudflare-one/access/' },
+      { label: 'Access', href: 'https://developers.cloudflare.com/cloudflare-one/access-controls/' },
       { label: 'Tunnel', href: 'https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/' },
     ],
   },

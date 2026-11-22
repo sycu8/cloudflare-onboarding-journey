@@ -176,8 +176,8 @@
           "paygo": "Limited predefined",
           "enterprise": "Full-featured (add-on)",
           "note": {
-            "vi": "Cả Free và Pay-as-you-go chỉ có predefined DLP profiles. Custom DLP profiles và mở rộng thường cần Contract Plan.",
-            "en": "Free and Pay-as-you-go include predefined DLP profiles only. Custom DLP profiles and expansion typically require the Contract plan."
+            "vi": "Free và Pay-as-you-go chỉ có hai profile DLP sẵn: Financial Information, và Social Security, Insurance, Tax and Identifier Numbers. Bộ DLP đầy đủ là add-on của Zero Trust Enterprise.",
+            "en": "Free and Pay-as-you-go include only two predefined DLP profiles: Financial Information, and Social Security, Insurance, Tax, and Identifier Numbers. The full DLP set is an add-on to Zero Trust Enterprise."
           }
         },
         {

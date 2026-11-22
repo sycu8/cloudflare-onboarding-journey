@@ -379,7 +379,7 @@ export const cf101Categories: Cf101Category[] = [
           vi: 'ZTNA — xác thực user/device trước khi vào app private (SSO, policy, không mở toàn mạng).',
           en: 'ZTNA — authenticate users/devices before private apps (SSO, policy, no full network access).',
         },
-        docsPath: '/cloudflare-one/access/',
+        docsPath: '/cloudflare-one/access-controls/',
       },
       {
         id: 'tunnel',

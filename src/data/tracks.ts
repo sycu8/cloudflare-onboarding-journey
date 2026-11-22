@@ -205,7 +205,7 @@ export const tracks: Track[] = [
           en: 'TTL, DNSSEC, cutover — read before changing production nameservers.',
           km: 'TTL, DNSSEC, cutover — អានមុនពេលផ្លាស់ប្តូរ nameserver production។',
         },
-        href: 'https://developers.cloudflare.com/learning-paths/dns-best-practices/',
+        href: 'https://developers.cloudflare.com/learning-paths/',
       },
     ],
     startHere: {
@@ -478,9 +478,9 @@ export const tracks: Track[] = [
             kind: 'lab-hub',
             title: { vi: 'Bảo vệ API sau khi proxy + WAF ổn', en: 'Protect APIs after proxy + WAF are stable', km: 'ការពារ API បន្ទាប់ពី proxy + WAF មានស្ថិរភាព' },
             body: {
-              vi: 'Free/Pro: WAF + rate limit /api + origin lockdown. Enterprise: API Shield schema, JWT, mTLS. Discover/log trước khi enforce.',
-              en: 'Free/Pro: WAF + /api rate limit + origin lockdown. Enterprise: API Shield schema, JWT, mTLS. Discover/log before enforce.',
-              km: 'Free/Pro: WAF + rate limit /api + origin lockdown។ Enterprise: API Shield schema, JWT, mTLS។ Discover/log មុនពេល enforce។',
+              vi: 'Free/Pro: WAF + rate limit /api + origin lockdown. mTLS với CA do Cloudflare quản lý dùng được trên mọi gói. Schema validation có hạn mức theo gói (Free: 100 endpoint, 5 schema, chỉ Block). Bộ API Shield đầy đủ (JWT và các tính năng còn lại) là add-on Enterprise.',
+              en: 'Free/Pro: WAF + /api rate limit + origin lockdown. mTLS with a Cloudflare-managed CA works on every plan. Schema validation has a per-plan allowance (Free: 100 endpoints, 5 schemas, Block only). The full API Shield suite (JWT and the rest) is an Enterprise add-on.',
+              km: 'Free/Pro: WAF + rate limit /api + origin lockdown។ mTLS ជាមួយ CA របស់ Cloudflare ប្រើបានលើគ្រប់ plan។ Schema validation មានដែនតាម plan (Free: 100 endpoint, 5 schema, Block តែប៉ុណ្ណោះ)។ API Shield ពេញ (JWT និងផ្សេងទៀត) គឺ add-on Enterprise។',
             },
             hubLink: '/use-cases/secure-api',
           },

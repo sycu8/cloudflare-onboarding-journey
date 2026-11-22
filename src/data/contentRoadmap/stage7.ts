@@ -41,7 +41,7 @@ export const stage7: ContentRoadmapStage = {
         filterTags: ['zero-trust'],
         sourceUrls: [
           'https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/warp/',
-          'https://developers.cloudflare.com/learning-paths/zero-trust/concepts/what-is-ztna/',
+          'https://developers.cloudflare.com/learning-paths/',
         ],
         relatedExistingRoutes: ['/products/ztna', '/use-cases/replace-vpn', '/reference-architecture/vpn-migration'],
         relatedCloudflareProducts: ['Access', 'ZTNA'],
