@@ -1,6 +1,13 @@
-# Blog every-3-days schedule (email approve)
+# Blog every-3-days schedule
 
 Cadence: **one bilingual post every 3 days** (`Asia/Ho_Chi_Minh`).
+
+> **2026-11-22:** topics are approved by default. Generation, review against
+> official sources, fixing and publishing run in
+> [`blog-auto-publish.yml`](../.github/workflows/blog-auto-publish.yml) — see
+> [docs/blog/AUTO_REVIEW.md](blog/AUTO_REVIEW.md) and the
+> [rubric](blog/RUBRIC.md). The email APPROVE flow below is now an optional
+> override: its cron only runs when `BLOG_REQUIRE_EMAIL_APPROVAL=true`.
 
 Notifications go **only** to `sycu.lee@gmail.com` (no GitHub issues).
 

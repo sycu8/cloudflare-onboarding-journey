@@ -145,13 +145,13 @@ export function resolveEditorialTargets(queue, selectors = {}) {
   });
 }
 
-function exportNameFromSlug(slug) {
+export function exportNameFromSlug(slug) {
   const parts = slug.split('-').filter(Boolean);
   const pascal = parts.map((p) => p.charAt(0).toUpperCase() + p.slice(1)).join('');
   return `post${pascal}`;
 }
 
-function fileStemFromSlug(slug) {
+export function fileStemFromSlug(slug) {
   const parts = slug.split('-');
   if (parts.length <= 5) return slug;
   return parts.slice(0, 5).join('-');
