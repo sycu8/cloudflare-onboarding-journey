@@ -1,7 +1,6 @@
 import {
   approveBlogItem,
   lookupEmailedToken,
-  parseApproveToken,
   resolveApproveSecret,
   type BlogEditorialEnv,
 } from '../../src/lib/server/blogEditorial';
@@ -34,56 +33,48 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     return htmlPage('Invalid', `<h1>Token không hợp lệ</h1><p>${lookedUp.error}</p>`, 403);
   }
 
-  const parsed = parseApproveToken(token);
-  const result = await approveBlogItem(context.env, {
-    date: lookedUp.date,
-    slug: lookedUp.slug,
-    nonce: parsed?.nonce,
-    source: 'link',
-  });
-
-  if (!result.ok) {
-    return htmlPage('Not found', `<h1>Không tìm thấy lịch</h1><p>${result.error}</p>`, result.status);
-  }
-
-  if (result.alreadyPublished) {
-    return htmlPage(
-      'Already published',
-      `<h1>Đã đăng rồi</h1><p><code>${result.item.slug}</code> đã có trên site.</p><p><a href="/blog/${result.item.slug}/">Xem bài</a></p>`,
-    );
-  }
-
-  const dispatchNote = result.dispatch.dispatched
-    ? 'Đã kích hoạt workflow GitHub để mở PR scaffold.'
-    : 'Đã ghi nhận duyệt trên D1. Workflow “Blog on approve” sẽ mở PR (dùng CLOUDFLARE_API_TOKEN có sẵn).';
-
+  // Email scanners may follow GET links. Only explicit POST may approve.
+  const escapeHtml = (value: string) =>
+    value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+  const safeToken = escapeHtml(token);
+  const safeDate = escapeHtml(lookedUp.date);
+  const safeSlug = escapeHtml(lookedUp.slug);
   return htmlPage(
-    'Approved',
-    `<h1>Đã APPROVE</h1>
-<p>Bài <strong>${result.item.workingTitle.vi}</strong></p>
-<p><code>${result.item.date}</code> · <code>${result.item.slug}</code></p>
-<p>${dispatchNote}</p>
-<p>Bạn cũng nhận email xác nhận tại <code>sycu.lee@gmail.com</code>.</p>
-<p><a href="/blog/">Về Blog</a></p>`,
+    'Confirm approval',
+    `<h1>Xác nhận duyệt bài</h1><p>Ngày ${safeDate} · ${safeSlug}</p>
+<form action="/api/blog-approve" method="post">
+<input type="hidden" name="date" value="${safeDate}">
+<input type="hidden" name="slug" value="${safeSlug}">
+<input type="hidden" name="token" value="${safeToken}">
+<button type="submit">Xác nhận APPROVE</button></form>`,
   );
 };
 
-/** Service endpoint for Email Worker reply → APPROVE */
+/** POST approve: confirmation form (token) or Email Worker (shared secret). */
 export const onRequestPost: PagesFunction<Env> = async (context) => {
-  // Prefer shared approve secret; allow CLOUDFLARE_* tokens already on Pages
+  // Dedicated BLOG_APPROVE_SECRET only (see resolveApproveSecret). Token in body still authorizes link confirms.
   const secret = resolveApproveSecret(context.env);
   const headerSecret = context.request.headers.get('x-blog-approve-secret') || '';
-  // If no shared secret configured, allow unauthenticated POST only from same-origin tooling is unsafe —
-  // require either matching secret OR a valid emailed token in body.
-  const body = (await context.request.json().catch(() => null)) as {
+  const contentType = context.request.headers.get('content-type') || '';
+  const formRequest = contentType.toLowerCase().startsWith('application/x-www-form-urlencoded');
+  const fields = formRequest ? await context.request.formData().catch(() => null) : null;
+  const body = (formRequest ? {
+    date: fields?.get('date'),
+    slug: fields?.get('slug'),
+    token: fields?.get('token'),
+  } : await context.request.json().catch(() => null)) as {
     date?: string;
     slug?: string;
     token?: string;
     source?: 'email-reply';
   } | null;
 
-  if (!body?.date || !body?.slug) {
+  if (typeof body?.date !== 'string' || typeof body?.slug !== 'string') {
     return Response.json({ ok: false, error: 'date_and_slug_required' }, { status: 400 });
+  }
+
+  if (formRequest && typeof body.token !== 'string') {
+    return htmlPage('Invalid', '<h1>Thiếu token</h1>', 401);
   }
 
   let authorized = false;
@@ -92,15 +83,6 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     const lookedUp = await lookupEmailedToken(context.env, body.token);
     if (lookedUp.ok && lookedUp.date === body.date && lookedUp.slug === body.slug) authorized = true;
   }
-  // Email worker may call with only date/slug after verifying editor From — allow when row exists as emailed
-  if (!authorized && context.env.DB) {
-    const row = await context.env.DB.prepare(
-      `SELECT status FROM blog_editorial WHERE date = ? AND slug = ? LIMIT 1`,
-    )
-      .bind(body.date, body.slug)
-      .first<{ status: string }>();
-    if (row && (row.status === 'emailed' || row.status === 'approved')) authorized = true;
-  }
   if (!authorized) {
     return Response.json({ ok: false, error: 'unauthorized' }, { status: 401 });
   }
@@ -108,11 +90,16 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
   const result = await approveBlogItem(context.env, {
     date: body.date,
     slug: body.slug,
-    source: 'email-reply',
+    source: formRequest ? 'link' : 'email-reply',
   });
 
   if (!result.ok) {
     return Response.json(result, { status: result.status });
+  }
+  if (formRequest) {
+    return htmlPage('Approved', result.alreadyPublished
+      ? '<h1>Bài đã được đăng trước đó</h1><p><a href="/blog/">Về Blog</a></p>'
+      : '<h1>Đã ghi nhận APPROVE</h1><p>Đang chờ PR, kiểm thử và xuất bản.</p>');
   }
   return Response.json({
     ok: true,
