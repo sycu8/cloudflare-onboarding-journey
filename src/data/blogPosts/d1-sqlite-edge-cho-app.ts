@@ -16,8 +16,8 @@ export const postD1SqliteEdgeChoAppNho: BlogPost = {
     en: 'A beginner guide to Cloudflare D1: when SQL beats KV, workshop signup and comments examples, and how migrations work with Wrangler.',
   },
   excerpt: {
-    vi: 'D1 là SQLite trên edge — phù hợp bảng quan hệ nhỏ (signup, quiz, metadata) gắn với Workers. Không thay Postgres lớn, nhưng rất tiện cho side project và MVP.',
-    en: 'D1 is SQLite at the edge — great for small relational tables (signups, quizzes, metadata) tied to Workers. It does not replace a large Postgres, but it is ideal for side projects and MVPs.',
+    vi: 'D1 là SQL dựa trên SQLite với một primary database; khi bật read replication và dùng Sessions API, truy vấn đọc có thể được phục vụ từ replica gần người dùng. Các truy vấn ghi vẫn về primary.',
+    en: 'D1 is SQLite-based SQL with a primary database; with read replication enabled and the Sessions API, reads can be served by replicas closer to users. Writes still go to the primary.',
   },
   keywords: {
     vi: 'Cloudflare D1 là gì, SQLite edge, database Workers, học D1 cơ bản, SQL serverless',
@@ -35,8 +35,8 @@ export const postD1SqliteEdgeChoAppNho: BlogPost = {
           en: 'Workers KV is like a key–value locker: fast reads by key, no JOINs or complex queries. R2 stores files (images, PDFs, backups). Many features need relational tables: “each user has many workshop signups,” “count attendees per event,” “filter comments by date.” That is when SQL makes sense.',
         },
         {
-          vi: 'D1 là dịch vụ SQL của Cloudflare, dựa trên SQLite, gắn với Workers qua binding. Các bài trên blog.cloudflare.com về D1 thường nhấn mạnh: bạn viết SQL quen thuộc, chạy gần logic ứng dụng trên edge — không phải tự dựng cluster database chỉ để lưu vài nghìn dòng.',
-          en: 'D1 is Cloudflare’s SQL service, built on SQLite, bound to Workers. D1 posts on blog.cloudflare.com often stress: you write familiar SQL, run it near app logic at the edge — without building a database cluster for a few thousand rows.',
+          vi: 'D1 là dịch vụ SQL dựa trên SQLite, kết nối Workers qua binding. Không nên hiểu là mọi truy vấn đều chạy tại edge gần nhất: mặc định truy vấn đến primary database; read replication chỉ phục vụ truy vấn đọc từ replica khi bật tính năng và dùng Sessions API, còn ghi luôn chuyển về primary.',
+          en: 'D1 is a SQLite-based SQL service connected through Workers bindings. Not every query executes at the nearest edge: queries use the primary database by default. To use read replicas, enable read replication and use the Sessions API; writes are still forwarded to the primary.',
         },
         {
           vi: 'Ví dụ trên hub này: form đăng ký workshop ghi vào bảng `signups` với `event_id`, `email`, `created_at`. Admin xem danh sách theo sự kiện — một câu `SELECT` đơn giản. KV vẫn hữu ích cho feature flag hoặc cache, nhưng không thay thế query quan hệ.',
@@ -131,6 +131,7 @@ export const postD1SqliteEdgeChoAppNho: BlogPost = {
     },
   ],
   sources: [
+    { title: 'Cloudflare official docs (verified 2026-11-22)', href: 'https://developers.cloudflare.com/d1/best-practices/read-replication/' },
     {
       title: 'The Cloudflare Blog — D1 topics',
       href: 'https://blog.cloudflare.com/tag/d1/',

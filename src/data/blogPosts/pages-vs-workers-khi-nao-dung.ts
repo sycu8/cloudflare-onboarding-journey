@@ -16,8 +16,8 @@ export const postPagesVsWorkersKhiNaoDungGi: BlogPost = {
     en: 'Compare Cloudflare Pages and Workers for beginners: static/frontend sites vs edge APIs and logic, and why many real projects use both.',
   },
   excerpt: {
-    vi: 'Pages thuận tiện deploy site tĩnh và frontend; Workers chạy code xử lý request tùy ý. Nhiều app hiện đại: Pages làm “mặt tiền”, Workers làm API và logic phía sau.',
-    en: 'Pages is great for static sites and frontends; Workers runs custom request-handling code. Many modern apps: Pages as the storefront, Workers as APIs and backend logic.',
+    vi: 'Workers Static Assets được Cloudflare khuyến nghị cho dự án mới, kể cả site tĩnh; Pages vẫn được hỗ trợ. Một ứng dụng có thể dùng Workers cho cả frontend và API, hoặc kết hợp Pages với Worker API.',
+    en: 'Cloudflare recommends Workers Static Assets for new projects, including static sites; Pages remains supported. Apps can serve both frontend and APIs from Workers, or combine Pages with a Worker API.',
   },
   keywords: {
     vi: 'Cloudflare Pages, Cloudflare Workers, Pages vs Workers, deploy static site, serverless edge, học Developer Platform',
@@ -35,8 +35,8 @@ export const postPagesVsWorkersKhiNaoDungGi: BlogPost = {
           en: 'Cloudflare Pages and Workers both live on the Developer Platform: you deploy to a global edge network without running physical servers. The mental model differs: Pages optimizes for static files and frontend builds (HTML, CSS, JS, frameworks like Astro/React/Vue); Workers optimizes for code that runs on each HTTP request — redirects, APIs, auth, data glue.',
         },
         {
-          vi: 'Câu hỏi đầu tiên: “Người dùng chủ yếu tải trang đã build sẵn, hay mỗi request cần logic riêng?” Nếu là portfolio, blog, landing marketing — Pages thường đủ và rất nhanh để bắt đầu. Nếu là API JSON, webhook, hoặc middleware phức tạp — Workers (hoặc Pages Functions) phù hợp hơn.',
-          en: 'First question: “Do users mostly load prebuilt pages, or does each request need custom logic?” For a portfolio, blog, or marketing landing — Pages is often enough and very fast to start. For JSON APIs, webhooks, or complex middleware — Workers (or Pages Functions) fits better.',
+          vi: 'Với dự án mới, Cloudflare khuyến nghị Workers Static Assets cho site tĩnh, SPA và ứng dụng full-stack: không cần Worker script nếu chỉ phục vụ file tĩnh. Pages vẫn được hỗ trợ và phù hợp với các dự án Pages hiện có; API, webhook hay middleware có thể đặt trên Workers hoặc Pages Functions.',
+          en: 'For new projects, Cloudflare recommends Workers Static Assets for static sites, SPAs, and full-stack apps: a purely static site needs no Worker script. Pages remains supported and can still suit existing Pages projects; APIs, webhooks, and middleware can use Workers or Pages Functions.',
         },
         {
           vi: 'Blog.cloudflare.com thường mô tả Pages và Workers như hai cánh của cùng một nhà: nhiều tutorial full-stack kết hợp Pages deploy frontend + Worker xử lý form/API. Bạn không bắt buộc chọn một và loại bỏ hẳn cái kia.',
@@ -96,12 +96,12 @@ export const postPagesVsWorkersKhiNaoDungGi: BlogPost = {
       },
       paragraphs: [
         {
-          vi: 'Mô hình 1 — Pages + Worker API: UI trên Pages, fetch tới worker.example.com/api. Mô hình 2 — Monorepo: frontend Pages, folder worker riêng deploy song song. Mô hình 3 — Chỉ Workers phục vụ HTML từ R2 hoặc template — ít phổ biến với người mới nhưng hợp lệ.',
-          en: 'Pattern 1 — Pages + Worker API: UI on Pages, fetch worker.example.com/api. Pattern 2 — Monorepo: frontend on Pages, separate worker folder deployed alongside. Pattern 3 — Workers-only serving HTML from R2 or templates — less common for beginners but valid.',
+          vi: 'Mô hình 1 — Workers Static Assets cho frontend, kèm Worker xử lý API và bindings trong một ứng dụng. Mô hình 2 — Pages hiện có + Worker API riêng. Mô hình 3 — Monorepo deploy nhiều dịch vụ độc lập nếu thực sự cần tách vòng đời.',
+          en: 'Pattern 1 — Workers Static Assets for the frontend, with a Worker for APIs and bindings in one app. Pattern 2 — an existing Pages frontend plus a separate Worker API. Pattern 3 — a monorepo with independent services when separate release lifecycles are needed.',
         },
         {
-          vi: 'Chọn Pages khi 80% công việc là nội dung và UI đã build. Chọn Workers khi 80% là logic request, tích hợp bên thứ ba, hoặc dữ liệu động. Phân vân? Bắt đầu Pages cho landing, thêm Worker khi form hoặc API xuất hiện — đúng với cách nhiều startup tiến hóa.',
-          en: 'Choose Pages when 80% of the work is content and built UI. Choose Workers when 80% is request logic, third-party integration, or dynamic data. Unsure? Start with Pages for the landing page, add a Worker when forms or APIs appear — how many startups evolve.',
+          vi: 'Với dự án mới, Cloudflare khuyến nghị Workers Static Assets — kể cả landing tĩnh; không cần Worker script nếu chỉ phục vụ file. Pages vẫn được hỗ trợ cho các dự án Pages hiện có. Có thể thêm API và bindings trong cùng một ứng dụng Workers khi cần.',
+          en: 'For new projects, Cloudflare recommends Workers Static Assets — including static landing pages; a purely static site needs no Worker script. Pages remains supported for existing Pages projects. You can add APIs and bindings in the same Workers app when needed.',
         },
         {
           vi: 'Tiếp theo trên hub: đọc Developer Platform overview, thử deploy static site use case, rồi bài Workers AI nếu bạn muốn thêm chatbot. Mỗi bước nhỏ, một repo demo — học edge tốt nhất bằng deploy thật.',
@@ -127,8 +127,8 @@ export const postPagesVsWorkersKhiNaoDungGi: BlogPost = {
         en: 'I only have an HTML landing — do I need Workers?',
       },
       answer: {
-        vi: 'Thường không. Pages (hoặc static hosting qua Pages) đủ. Chỉ thêm Worker khi bạn cần form backend, auth, hoặc API động.',
-        en: 'Usually no. Pages (or static hosting via Pages) is enough. Add a Worker only when you need a form backend, auth, or dynamic APIs.',
+        vi: 'Với dự án mới, dùng Workers Static Assets: site tĩnh thuần không cần Worker script. Pages vẫn được hỗ trợ nếu bạn đã có dự án Pages. Chỉ cần thêm logic Worker khi có form, xác thực hoặc API động.',
+        en: 'For a new project, use Workers Static Assets: a purely static site needs no Worker script. Pages remains supported if you already have a Pages project. Add Worker logic only when you need a form backend, auth, or dynamic APIs.',
       },
     },
     {
@@ -143,6 +143,7 @@ export const postPagesVsWorkersKhiNaoDungGi: BlogPost = {
     },
   ],
   sources: [
+    { title: 'Cloudflare official docs (verified 2026-11-22)', href: 'https://developers.cloudflare.com/workers/best-practices/workers-best-practices/' },
     {
       title: 'The Cloudflare Blog — Pages topics',
       href: 'https://blog.cloudflare.com/tag/cloudflare-pages/',
