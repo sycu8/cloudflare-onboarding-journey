@@ -31,6 +31,10 @@ export const postAiGateway: BlogPost = {
       },
       paragraphs: [
         {
+          vi: 'Từ ngày 03/11/2026, AI Gateway mới yêu cầu xác thực; gateway cũ chưa bật xác thực vẫn có thể hoạt động nhưng nên cấu hình bảo vệ. Workers binding được xác thực sẵn. Bản ghi log bật mặc định: khách hàng tạo gateway đầu tiên từ 24/09/2026 áp dụng chính sách giá và thời hạn lưu trữ Workers Logs; khách hàng trước thời điểm đó dùng Legacy Logs. Cần rà soát dữ liệu nhạy cảm trước khi ghi log.',
+           en: 'Since 2026-11-03, newly created AI Gateways require authentication; older unauthenticated gateways can continue operating but should be secured. Workers bindings are pre-authenticated. Logging is enabled by default: customers creating their first gateway on or after 2026-09-24 follow Workers Logs pricing and retention; earlier customers use Legacy Logs. Review sensitive-data handling before enabling or retaining request bodies.',
+         },
+        {
           vi: 'Nhiều prototype AI gọi thẳng API nhà cung cấp từ backend. Demo đẹp — rồi production đến: không biết user nào tốn token, lỗi upstream lúc cao điểm, một prompt lỗi làm chi phí nhảy vọt, hoặc dữ liệu nhạy cảm lọt vào log bên thứ ba.',
           en: 'Many AI prototypes call a provider API directly from the backend. The demo looks great — then production arrives: you cannot see which users burn tokens, upstream errors spike, one bad prompt explodes cost, or sensitive data leaks into a third-party log.',
         },
@@ -115,6 +119,7 @@ export const postAiGateway: BlogPost = {
     },
   ],
   sources: [
+    { title: 'Cloudflare official docs (verified 2026-11-22)', href: 'https://developers.cloudflare.com/ai-gateway/changelog/' },
     {
       title: 'Cloudflare’s AI Platform (Cloudflare Blog)',
       href: 'https://blog.cloudflare.com/ai-platform/',

@@ -33,9 +33,9 @@ const featured = getFeaturedDeploymentExamples();
           as="p"
           class="text-muted mt-2 text-sm leading-relaxed"
           text={{
-            vi: `Tutorial được crawl đầy đủ trên hub (hướng dẫn + lệnh + backlink từng section) — mở docs gốc khi cần ảnh/tab. Catalog: ${cloudflareResources.length} mục (đồng bộ ${RESOURCES_LAST_SYNCED}).`,
-            en: `Tutorials are fully synced on the hub (steps, commands, per-section doc links) — open official docs for images/tabs. Catalog: ${cloudflareResources.length} items (synced ${RESOURCES_LAST_SYNCED}).`,
-            km: `Tutorial ត្រូវបាន sync ពេញលើ hub (ជំហាន, ពាក្យបញ្ជា, តំណ doc ក្នុង section) — បើក docs ផ្លូវការនៅពេលត្រូវការរូបភាព/tab។ Catalog៖ ${cloudflareResources.length} ធាតុ (sync ${RESOURCES_LAST_SYNCED})។`,
+            vi: `Catalog đã nhập ${cloudflareResources.length} mục (lần đồng bộ ghi nhận: ${RESOURCES_LAST_SYNCED}); nội dung có thể đã thay đổi tại Cloudflare. Kiểm tra docs gốc trước khi làm theo lệnh, giá hoặc giới hạn dịch vụ.`,
+            en: `The imported catalog contains ${cloudflareResources.length} entries (recorded sync: ${RESOURCES_LAST_SYNCED}); Cloudflare documentation may have changed since then. Verify original docs before relying on commands, pricing or limits.`,
+            km: `Catalog មាន ${cloudflareResources.length} ធាតុ (sync ចុងក្រោយដែលបានកត់ត្រា៖ ${RESOURCES_LAST_SYNCED})។ ឯកសារ Cloudflare អាចបានផ្លាស់ប្តូរ។ សូមពិនិត្យឯកសារផ្លូវការមុនប្រើពាក្យបញ្ជា តម្លៃ ឬដែនកំណត់។`,
           }}
         />
       </div>
