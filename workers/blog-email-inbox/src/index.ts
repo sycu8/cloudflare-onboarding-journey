@@ -30,11 +30,8 @@ function hasApprove(text: string): boolean {
     .replace(/\r/g, '\n')
     .split('\n')
     .map((l) => l.trim())
-    .filter((l) => l && !l.startsWith('>'));
-  for (const line of lines.slice(0, 8)) {
-    if (/^approve\.?$/i.test(line)) return true;
-  }
-  return /\bAPPROVE\b/i.test(lines.slice(0, 5).join(' '));
+    .filter(Boolean);
+  return /^approved?\.?$/i.test(lines[0] || '');
 }
 
 async function readTextBody(message: ForwardableEmailMessage): Promise<string> {
@@ -62,6 +59,10 @@ async function readTextBody(message: ForwardableEmailMessage): Promise<string> {
 
 export default {
   async email(message: ForwardableEmailMessage, env: Env): Promise<void> {
+    if (!env.BLOG_APPROVE_SECRET) {
+      message.setReject('Blog approval receiver is not configured');
+      return;
+    }
     const from = extractEmail(message.from);
     const editor = (env.BLOG_EDITOR_EMAIL || EDITOR).toLowerCase();
     if (from !== editor) {

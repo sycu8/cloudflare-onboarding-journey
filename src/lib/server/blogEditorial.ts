@@ -19,14 +19,9 @@ export type BlogEditorialEnv = MailEnv & {
   GITHUB_REPO?: string;
 };
 
-/** Prefer dedicated secret; else reuse Cloudflare API / Email tokens already on Pages. */
+/** Dedicated shared secret only; never use broad Cloudflare API credentials for email approval. */
 export function resolveApproveSecret(env: BlogEditorialEnv): string | undefined {
-  return (
-    env.BLOG_APPROVE_SECRET ||
-    env.CLOUDFLARE_API_TOKEN ||
-    env.CLOUDFLARE_EMAIL_API_TOKEN ||
-    undefined
-  );
+  return env.BLOG_APPROVE_SECRET || undefined;
 }
 
 
@@ -201,11 +196,8 @@ export function bodyHasApprove(text: string): boolean {
   const lines = normalized
     .split('\n')
     .map((l) => l.trim())
-    .filter((l) => l && !l.startsWith('>') && !l.toLowerCase().startsWith('on ') && !l.startsWith('From:'));
-  for (const line of lines.slice(0, 8)) {
-    if (/^approve\.?$/i.test(line)) return true;
-  }
-  return /\bAPPROVE\b/i.test(lines.slice(0, 5).join(' '));
+    .filter(Boolean);
+  return /^approved?\.?$/i.test(lines[0] || '');
 }
 
 /** Parse `[Blog] Duyệt bài YYYY-MM-DD: slug` subjects. */
