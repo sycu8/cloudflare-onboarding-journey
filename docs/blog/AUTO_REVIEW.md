@@ -21,7 +21,7 @@ scheduled ─▶ generating ─▶ reviewing ──pass──▶ approved ─▶
 | Reviewer CLI | `scripts/blog-review.mjs` (`npm run blog:review -- --slug=…`, `npm run blog:audit`) |
 | Rules + thresholds | `scripts/lib/blog-review/rubric.mjs`, `docs/blog/RUBRIC.md` |
 | Prompts | `scripts/prompts/blog-{generate,review,fix}.md` |
-| Model client | `scripts/lib/llm.mjs` (Cloudflare AI REST API, OpenAI-compatible) |
+| Model client | `scripts/lib/llm.mjs` (`@cf/openai/gpt-oss-*` uses `/ai/v1/responses`; other models stay on chat completions) |
 | Records | `src/data/blogReviews/<slug>.claims.json` + `.review.json` |
 | Tests | `npm run test:blog-review` (offline, fake models) |
 

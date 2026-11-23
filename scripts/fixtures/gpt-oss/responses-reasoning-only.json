@@ -1,0 +1,15 @@
+{
+  "id": "resp_fixture_reasoning_only",
+  "object": "response",
+  "status": "incomplete",
+  "model": "@cf/openai/gpt-oss-120b",
+  "incomplete_details": { "reason": "max_output_tokens" },
+  "output": [
+    {
+      "type": "reasoning",
+      "content": [{ "type": "reasoning_text", "text": "Still planning the JSON shape." }],
+      "summary": []
+    }
+  ],
+  "output_text": ""
+}

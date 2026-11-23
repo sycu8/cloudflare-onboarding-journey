@@ -48,7 +48,7 @@
     "translate:tutorials:check": "node scripts/check-tutorial-overlays.mjs",
     "test:tutorial-html": "node --experimental-strip-types scripts/test-sanitize-tutorial-html.mjs",
     "test:blog-cadence": "node --experimental-strip-types scripts/test-blog-cadence.mjs",
-    "test:blog-review": "node --experimental-strip-types scripts/test-blog-review.mjs",
+    "test:blog-review": "node --experimental-strip-types scripts/test-blog-review.mjs && node --experimental-strip-types scripts/test-llm-gpt-oss.mjs",
     "blog:review": "node --experimental-strip-types scripts/blog-review.mjs",
     "blog:audit": "node --experimental-strip-types scripts/blog-review.mjs --audit",
     "blog:auto": "node --experimental-strip-types scripts/blog-auto.mjs",
