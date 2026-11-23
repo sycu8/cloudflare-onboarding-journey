@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chatJson, extractAssistantText, isGptOssModel } from './lib/llm.mjs';
+import { chatJson, extractAssistantText, extractJson, isGptOssModel } from './lib/llm.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const fixtureDir = path.join(root, 'scripts/fixtures/gpt-oss');
@@ -111,9 +111,26 @@ assert.equal(isGptOssModel('openai/gpt-5.5'), false);
     { status: 200, json: reasoningOnly },
     { status: 200, json: chatReasoning },
   ]);
+  await assert.rejects(chatJson(prompt, { env, fetchImpl }), /AI reply was reasoning only/);
+  assert.equal(calls.length, 2, 'reasoning text is never parsed as the answer');
+  assert.equal(calls[1].body.input[1].content.includes('strict JSON'), true);
+}
+
+{
+  const bad = {
+    output: [{ type: 'message', role: 'assistant', content: [{ type: 'output_text', text: 'title{vi,en} is a field note' }] }],
+    output_text: '',
+  };
+  const good = fixture('responses-output-text.json');
+  const { calls, fetchImpl } = fakeFetch([
+    { status: 200, json: bad },
+    { status: 200, json: good },
+  ]);
   const out = await chatJson(prompt, { env, fetchImpl });
-  assert.deepEqual(out, { ok: true, via: 'reasoning' });
-  assert.equal(calls.length, 2, 'reasoning-only is retried, then parsed from the reasoning channel');
+  assert.deepEqual(out, { ok: true, via: 'output_text' });
+  assert.equal(calls.length, 2);
+  assert.match(calls[1].body.input[1].content, /strict JSON/);
+  assert.equal(calls[1].body.input[1].content.includes('Still planning'), false);
 }
 
 {
@@ -168,5 +185,22 @@ assert.equal(isGptOssModel('openai/gpt-5.5'), false);
   assert.equal(seen.body.max_output_tokens, undefined);
   assert.deepEqual(seen.body.messages.map((m) => m.role), ['system', 'user']);
 }
+
+const column2 = /position 1 \(line 1 column 2\)/;
+for (const sample of ['{vi,en}', '{post:1}', "{'post':1}"]) {
+  assert.throws(() => JSON.parse(sample), column2);
+}
+assert.throws(() => extractJson('title{vi,en} only'), column2);
+const column2Reply = readFileSync(path.join(fixtureDir, 'reply-column-2.txt'), 'utf8');
+assert.throws(() => JSON.parse(column2Reply.slice(column2Reply.indexOf('{'), column2Reply.lastIndexOf('}') + 1)), column2);
+assert.deepEqual(extractJson(column2Reply), { post: { slug: 'snippets-javascript-tren-edge' }, claims: [] });
+assert.deepEqual(extractJson("{ 'post': { 'slug': 's' }, 'claims': [] }"), { post: { slug: 's' }, claims: [] });
+assert.deepEqual(extractJson('{ post: { slug: "s" }, claims: [], }'), { post: { slug: 's' }, claims: [] });
+assert.deepEqual(
+  extractJson('Here is the draft:\n```json\n{ "post": { "slug": "s" }, "claims": [] }\n```\nDone.'),
+  { post: { slug: 's' }, claims: [] },
+);
+assert.deepEqual(extractJson('{ "post": { "slug": "s" }, "claims": [] } // note'), { post: { slug: 's' }, claims: [] });
+assert.throws(() => extractJson('no json here'), /no JSON object/);
 
 console.log('test-llm-gpt-oss: all assertions passed');

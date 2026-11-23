@@ -22,15 +22,19 @@ if (!cfg.model.startsWith('@cf/openai/gpt-oss-')) {
 try {
   const parsed = await chatJson(
     {
-      system: 'Reply with one JSON object and no other text.',
-      user: 'Return {"ok":true,"model":"gpt-oss-120b"}.',
+      system: 'Return one strict JSON object and nothing else. Double-quoted keys. Shape: {"post":{"slug":string,"title":{"vi":string,"en":string},"sections":[{"heading":{"vi":string,"en":string},"paragraphs":[{"vi":string,"en":string}]}]},"claims":[]}.',
+      user: 'slug snippets-javascript-tren-edge. One section, one paragraph under 20 words per language, about Cloudflare Snippets running JavaScript at the edge. claims is an empty array.',
     },
     { env: process.env, temperature: 0 },
   );
-  const keys = parsed && typeof parsed === 'object' ? Object.keys(parsed).sort() : [];
-  const length = JSON.stringify(parsed ?? '').length;
-  if (!length) throw new Error('AI reply was empty');
-  console.log(`live gpt-oss check ok model=${cfg.model} bytes=${length} keys=${keys.join(',') || '(none)'} ok=${parsed?.ok === true}`);
+  const post = parsed && typeof parsed === 'object' ? parsed.post : null;
+  const claims = parsed && typeof parsed === 'object' ? parsed.claims : null;
+  const vi = post?.title?.vi;
+  const en = post?.title?.en;
+  const sections = Array.isArray(post?.sections) ? post.sections.length : 0;
+  if (!post || !Array.isArray(claims)) throw new Error('generation JSON missing post or claims');
+  if (typeof vi !== 'string' || typeof en !== 'string' || !vi || !en) throw new Error('generation JSON missing title.vi or title.en');
+  console.log(`live gpt-oss check ok model=${cfg.model} slug=${post.slug === 'snippets-javascript-tren-edge'} claims=${claims.length} sections=${sections} titleVi=${vi.length} titleEn=${en.length}`);
 } catch (error) {
   const message = error instanceof Error ? error.message : 'AI request failed';
   console.error(`live gpt-oss check failed: ${message}`);
