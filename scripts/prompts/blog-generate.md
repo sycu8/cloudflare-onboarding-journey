@@ -28,12 +28,19 @@ HARD RULES — a post that breaks one is rejected and rewritten:
 8. ≥ 450 words per language in sections+FAQ, ≥ 3 sections, ≥ 3 FAQ entries,
    paragraphs ≤ 120 words, no TODO/placeholder text.
 
-Return ONE JSON object and nothing else:
-{ "post": <BlogPost object>, "claims": [ ... ] }
+Return ONE strict JSON object and nothing else, with double-quoted keys:
+{"post": <BlogPost object>, "claims": []}
 
-BlogPost fields: slug, date, topic, level, readingMinutes, title{vi,en},
-description{vi,en} (70–200 chars), excerpt{vi,en}, keywords{vi,en} (3–10
-comma-separated), sections[{heading{vi,en}, paragraphs[{vi,en}], diagramSlug?}],
-faq[{question{vi,en}, answer{vi,en}}], sources[{title, href}], relatedTrack?,
-relatedProductSlugs[], relatedPostSlugs[] (only from the allowed list),
-hubLinks[{href (starts with /), label{vi,en}}] (≥ 2), diagramSlugs[].
+Name each language as its own field. Do not invent a brace shorthand for the language pair:
+slug, date, topic, level, readingMinutes,
+title.vi, title.en,
+description.vi, description.en (70–200 chars),
+excerpt.vi, excerpt.en,
+keywords.vi, keywords.en (3–10 comma-separated),
+sections: heading.vi, heading.en, paragraphs as objects with vi and en strings, optional diagramSlug,
+faq: question.vi, question.en, answer.vi, answer.en,
+sources: title, href,
+relatedTrack, relatedProductSlugs,
+relatedPostSlugs (only from the allowed list),
+hubLinks (at least 2; href starts with /, label.vi, label.en),
+diagramSlugs.
