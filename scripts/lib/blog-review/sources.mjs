@@ -66,6 +66,163 @@ export function quoteFound(pageText, quote) {
 }
 
 /**
+ * Plain text for prompts and sentence snapping. Tags and markdown markers
+ * come out; sentence punctuation stays so a snapped quote is still verbatim
+ * on the raw page after normalizeText.
+ * @param {string} input
+ */
+export function extractPlainText(input) {
+  return String(input)
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/^\s*[-*]\s+/gm, '')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;|&apos;/g, "'")
+    .replace(/[`*_>|]/g, ' ')
+    .replace(/[ \t]+\n/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .replace(/[ \t]{2,}/g, ' ')
+    .trim();
+}
+
+/** @param {string} raw @returns {string[]} original sentences, verbatim-capable, ≥ 20 normalized chars */
+export function pageSentences(raw) {
+  const plain = extractPlainText(raw);
+  const parts = plain.split(/(?<=[.!?])\s+|\n+/);
+  const seen = new Set();
+  /** @type {string[]} */
+  const out = [];
+  for (const part of parts) {
+    const text = part.replace(/\s+/g, ' ').trim();
+    const norm = normalizeText(text);
+    if (norm.length < 20 || seen.has(norm)) continue;
+    seen.add(norm);
+    out.push(text);
+  }
+  return out;
+}
+
+/** @param {string} text */
+function wordTokens(text) {
+  return normalizeText(text).split(/[^a-z0-9]+/).filter((word) => word.length > 2);
+}
+
+/** @param {string[]} a @param {string[]} b */
+function dice(a, b) {
+  if (!a.length || !b.length) return 0;
+  const counts = new Map();
+  for (const token of b) counts.set(token, (counts.get(token) || 0) + 1);
+  let shared = 0;
+  for (const token of a) {
+    const n = counts.get(token) || 0;
+    if (!n) continue;
+    shared += 1;
+    counts.set(token, n - 1);
+  }
+  return (2 * shared) / (a.length + b.length);
+}
+
+/** Share of needle words that appear in the sentence. Long docs sentences stay matchable. */
+function coverage(needle, sentence) {
+  if (!needle.length) return 0;
+  const have = new Set(sentence);
+  return needle.filter((token) => have.has(token)).length / needle.length;
+}
+
+/**
+ * Closest sentence that already appears on the page. The returned text is
+ * copied from the page, so quoteFound accepts it. Low scores return null.
+ * @param {string} pageText
+ * @param {string} needle
+ * @returns {{ text: string, score: number } | null}
+ */
+export function closestVerbatimSentence(pageText, needle) {
+  const sentences = pageSentences(pageText);
+  const pieces = String(needle || '')
+    .split('\n')
+    .map((part) => part.trim())
+    .filter((part) => part.length >= 8);
+  const needles = pieces.length ? pieces : [String(needle || '')];
+  /** @type {{ text: string, score: number } | null} */
+  let best = null;
+  for (const text of sentences) {
+    const sentenceNorm = normalizeText(text);
+    const sentenceTokens = wordTokens(text);
+    let score = 0;
+    for (const piece of needles) {
+      const pieceNorm = normalizeText(piece);
+      score = Math.max(score, dice(wordTokens(piece), sentenceTokens), coverage(wordTokens(piece), sentenceTokens));
+      if (pieceNorm.length >= 12 && sentenceNorm.includes(pieceNorm)) {
+        score = Math.max(score, 0.85 + pieceNorm.length / sentenceNorm.length);
+      }
+    }
+    if (!best || score > best.score) best = { text, score };
+  }
+  if (!best || best.score < 0.55) return null;
+  return best;
+}
+
+/**
+ * One level of child docs linked from a fetched page, same folder only.
+ * Skips images. Used so the generator sees limits and how-it-works pages,
+ * not only the landing page.
+ * @param {string} pageUrl
+ * @param {string} raw
+ * @param {number} [limit]
+ */
+export function discoverLinkedDocs(pageUrl, raw, limit = 4) {
+  let base;
+  try {
+    base = new URL(pageUrl);
+  } catch {
+    return [];
+  }
+  if (base.hostname !== 'developers.cloudflare.com') return [];
+  const folder = base.pathname.replace(/\/index\.md$/i, '/').replace(/\/[^/]*\.[a-z0-9]+$/i, '/');
+  const prefix = folder.endsWith('/') ? folder : `${folder}/`;
+  const seen = new Set([`${base.origin}${base.pathname}`.replace(/\/$/, '')]);
+  /** @type {string[]} */
+  const out = [];
+  for (const match of String(raw).matchAll(/(?:https:\/\/developers\.cloudflare\.com)?(\/[a-z0-9./_-]+)/gi)) {
+    const path = match[1].split(/[?#]/)[0];
+    if (!path.startsWith(prefix) || path === prefix) continue;
+    if (/\.(png|jpe?g|gif|svg|webp|ico)$/i.test(path)) continue;
+    const url = `https://${base.hostname}${path.endsWith('/') ? path : `${path}/`}`;
+    const key = url.replace(/\/$/, '');
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(url);
+    if (out.length >= limit) break;
+  }
+  return out;
+}
+
+/**
+ * Prompt-sized plain passages. Prefer sentences over a raw HTML prefix.
+ * @param {string} raw
+ * @param {number} [maxChars]
+ */
+export function toPromptPassages(raw, maxChars = 12_000) {
+  const lines = [];
+  let used = 0;
+  for (const sentence of pageSentences(raw)) {
+    if (used + sentence.length > maxChars) break;
+    lines.push(sentence);
+    used += sentence.length + 1;
+  }
+  return lines.join('\n');
+}
+
+/**
  * developers.cloudflare.com serves a Markdown copy at <page>/index.md, which
  * is cleaner to match than the rendered HTML. Fall back to HTML.
  * @param {string} url

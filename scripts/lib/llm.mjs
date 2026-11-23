@@ -299,7 +299,7 @@ export function gptOssRequestBody(cfg, prompt, attempt) {
     stream: false,
     temperature: cfg.temperature,
     reasoning: { effort: GPT_OSS_REASONING_EFFORT },
-    max_output_tokens: attempt > 0 ? GPT_OSS_MAX_OUTPUT_TOKENS_RETRY : GPT_OSS_MAX_OUTPUT_TOKENS,
+    max_output_tokens: cfg.maxOutputTokens || (attempt > 0 ? GPT_OSS_MAX_OUTPUT_TOKENS_RETRY : GPT_OSS_MAX_OUTPUT_TOKENS),
     input: [
       { role: 'system', content: prompt.system },
       { role: 'user', content: prompt.user },
@@ -309,7 +309,7 @@ export function gptOssRequestBody(cfg, prompt, attempt) {
 
 /**
  * @param {{ system: string, user: string }} prompt
- * @param {{ env?: NodeJS.ProcessEnv, fetchImpl?: typeof fetch, temperature?: number }} [options]
+ * @param {{ env?: NodeJS.ProcessEnv, fetchImpl?: typeof fetch, temperature?: number, maxOutputTokens?: number }} [options]
  * @returns {Promise<unknown>} parsed JSON object from the model
  */
 export async function chatJson(prompt, options = {}) {
@@ -330,7 +330,7 @@ export async function chatJson(prompt, options = {}) {
   for (let attempt = 0; attempt < 2; attempt++) {
     const callPrompt = attempt === 0 ? prompt : { ...prompt, user: `${prompt.user}${STRICT_JSON_SUFFIX}` };
     const body = oss
-      ? gptOssRequestBody({ model: cfg.model, temperature }, callPrompt, attempt)
+      ? gptOssRequestBody({ model: cfg.model, temperature, maxOutputTokens: options.maxOutputTokens }, callPrompt, attempt)
       : {
           model: cfg.model,
           temperature,
