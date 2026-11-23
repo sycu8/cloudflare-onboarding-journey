@@ -242,11 +242,17 @@ const modelsFixOnce = {
 };
 const approved = await runPipeline({ item, models: modelsFixOnce, fetchSource: fakeFetch, ctx, maxRounds: 3 });
 assert.equal(approved.state, 'approved', approved.reason);
-assert.equal(approved.reports.length, 2);
-assert.equal(approved.reports[0].verdict, 'fail');
-assert.equal(fixCalls, 1);
+assert.equal(approved.reports.length, 1, 'uncited Free-plan figure is removed before review');
+assert.equal(approved.reports[0].verdict, 'pass');
+assert.equal(fixCalls, 0);
+assert.equal(/Free plan|50 ms/i.test(approved.post.sections[1].paragraphs[0].en), false);
 
-const neverFixed = { ...modelsFixOnce, fix: async () => ({ post: broken(), claims: [] }) };
+const stillBroken = () => { const p = goodPost(); p.faq[0].answer.en = 'TODO leftover'; return p; };
+const neverFixed = {
+  ...modelsFixOnce,
+  generate: async () => ({ post: stillBroken(), claims: goodLedger().claims }),
+  fix: async () => ({ post: stillBroken(), claims: goodLedger().claims }),
+};
 const held = await runPipeline({ item, models: neverFixed, fetchSource: fakeFetch, ctx, maxRounds: 2 });
 assert.equal(held.state, 'held');
 assert.equal(held.reports.length, 2, 'stops after maxRounds');
@@ -256,7 +262,7 @@ assert.equal(moved.post.slug, item.slug, 'schedule owns slug/date');
 
 assert.equal((await runPipeline({ item, models: { ...modelsFixOnce, generate: throws }, fetchSource: fakeFetch, ctx })).state, 'held');
 assert.equal((await runPipeline({ item: { ...item, sourceHints: [], docsHints: ['https://developers.cloudflare.com/nope/'] }, models: modelsFixOnce, fetchSource: fakeFetch, ctx })).state, 'held', 'no sources → held');
-assert.equal((await runPipeline({ item, models: { ...modelsFixOnce, fix: throws, generate: async () => ({ post: broken(), claims: [] }) }, fetchSource: fakeFetch, ctx })).state, 'held');
+assert.equal((await runPipeline({ item, models: { ...modelsFixOnce, fix: throws, generate: async () => ({ post: stillBroken(), claims: goodLedger().claims }) }, fetchSource: fakeFetch, ctx })).state, 'held');
 
 // ---------------- orchestrator gate ----------------
 const queue = [{ date: '2026-11-22', slug: 'snippets-javascript-tren-edge' }, { date: '2026-11-25', slug: 'next-one' }];

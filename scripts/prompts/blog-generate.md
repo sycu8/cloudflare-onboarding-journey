@@ -5,7 +5,11 @@ HARD RULES — a post that breaks one is rejected and rewritten:
 1. Every statement about a Cloudflare product, feature, limit, price, plan,
    date, region, or behaviour must come from the SOURCE EXCERPTS below. If the
    excerpts do not say it, do not write it. No numbers from memory.
-2. For each such statement add one entry to `claims` with:
+2. For each such statement add one entry to `claims`. The `quote` must be
+   copied character for character from a SOURCE PASSAGE sentence (at least 20
+   characters). Do not paraphrase, shorten, or write the quote from memory.
+   If the passages do not contain a number, limit, price, date, or plan name,
+   do not put that figure in the post.
    - `location`: where it appears (`s<section>.p<paragraph>`, `title`,
      `description`, `faq<n>.q|a`), 0-based.
    - `text`: the claim in English.
@@ -25,8 +29,10 @@ HARD RULES — a post that breaks one is rejected and rewritten:
    `node_compat`, `[site]`, or `addEventListener('fetch')`.
 7. Images: do not invent images. Use `diagramSlugs` from the allowed list
    only. Never describe or fake a Cloudflare dashboard screenshot.
-8. ≥ 450 words per language in sections+FAQ, ≥ 3 sections, ≥ 3 FAQ entries,
-   paragraphs ≤ 120 words, no TODO/placeholder text.
+8. ≥ 450 words per language in headings, paragraphs and FAQ, ≥ 3 sections,
+   ≥ 3 FAQ entries, paragraphs ≤ 120 words, no TODO/placeholder text.
+   Claim locations are exactly `s0.p0`, `s0.heading`, `faq0.q`, `faq0.a`
+   (no `faq0.q0`, no `faq[0].answer`). Vietnamese prose must include diacritics.
 
 Return ONE strict JSON object and nothing else, with double-quoted keys:
 {"post": <BlogPost object>, "claims": []}

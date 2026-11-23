@@ -7,7 +7,10 @@
 # Email override:  BLOG_REQUIRE_EMAIL_APPROVAL='true' brings back the old
 #                  email APPROVE gate (this workflow then skips every slot).
 # Auto-merge:      BLOG_AUTO_MERGE='true' squash-merges the PR and dispatches
-#                  Deploy (production environment approval still applies).
+#                  Deploy. Email approval stays off unless
+#                  BLOG_REQUIRE_EMAIL_APPROVAL='true'. The production
+#                  environment has no required reviewers, so that deploy
+#                  does not wait for a person.
 #                  Otherwise the PR waits for a human merge.
 
 name: Blog auto publish
@@ -128,7 +131,7 @@ jobs:
           if [ "${AUTO_MERGE:-}" = "true" ]; then
             gh pr merge "$BRANCH" --squash --match-head-commit "$SHA" --delete-branch
             # Pushes made with GITHUB_TOKEN do not trigger other workflows,
-            # so dispatch Deploy explicitly (production approval gate still applies).
+            # so dispatch Deploy explicitly. It does not add an approval step.
             gh workflow run deploy.yml --ref main -f target=production -f ref=main
             echo "merged=true" >> "$GITHUB_OUTPUT"
           else
