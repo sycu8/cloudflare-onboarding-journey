@@ -1,0 +1,30 @@
+{
+  "id": "id-1795434342050",
+  "object": "response",
+  "status": "completed",
+  "model": "@cf/openai/gpt-oss-120b",
+  "max_output_tokens": 8192,
+  "temperature": 0,
+  "reasoning": { "effort": "low" },
+  "output": [
+    {
+      "id": "rs_ba7412b610d5cd38",
+      "type": "reasoning",
+      "summary": [],
+      "content": [{ "type": "reasoning_text", "text": "We need to output exactly that JSON." }]
+    },
+    {
+      "id": "msg_8d5f150599374b56",
+      "type": "message",
+      "role": "assistant",
+      "status": "completed",
+      "content": [
+        {
+          "type": "output_text",
+          "text": "{\"ok\":true,\"model\":\"gpt-oss-120b\"}",
+          "annotations": []
+        }
+      ]
+    }
+  ]
+}

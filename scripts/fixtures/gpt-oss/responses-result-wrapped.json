@@ -1,0 +1,15 @@
+{
+  "success": true,
+  "result": {
+    "id": "resp_fixture_wrapped",
+    "object": "response",
+    "model": "@cf/openai/gpt-oss-120b",
+    "output": [
+      {
+        "type": "message",
+        "role": "assistant",
+        "content": [{ "type": "output_text", "text": "{\"ok\":true,\"via\":\"result\"}" }]
+      }
+    ]
+  }
+}

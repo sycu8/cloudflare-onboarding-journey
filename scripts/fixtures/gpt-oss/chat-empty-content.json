@@ -1,0 +1,16 @@
+{
+  "id": "chatcmpl_fixture_empty",
+  "object": "chat.completion",
+  "model": "@cf/openai/gpt-oss-120b",
+  "choices": [
+    {
+      "index": 0,
+      "finish_reason": "length",
+      "message": {
+        "role": "assistant",
+        "content": "",
+        "reasoning": "{\"ok\":true,\"via\":\"reasoning\"}"
+      }
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "resp_fixture_parts",
+  "object": "response",
+  "status": "completed",
+  "model": "@cf/openai/gpt-oss-120b",
+  "output": [
+    {
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "type": "message",
+      "role": "assistant",
+      "status": "completed",
+      "content": [
+        { "type": "output_text", "text": "{\"ok\":true,", "annotations": [] },
+        { "type": "output_text", "text": "\"via\":\"parts\"}", "annotations": [] }
+      ]
+    }
+  ]
+}

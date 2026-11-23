@@ -281,12 +281,14 @@ assert.equal(llmConfig({ BLOG_LLM_MODEL: '@cf/x' }).gatewayId, 'default', '@cf m
 assert.equal(llmConfig({ BLOG_LLM_MODEL: 'openai/gpt-5.5' }).gatewayId, '');
 {
   let seen;
-  const fakeAi = async (url, init) => { seen = { url, headers: init.headers, body: JSON.parse(init.body) }; return { ok: true, status: 200, json: async () => ({ choices: [{ message: { content: '{"ok":true}' } }] }) }; };
+  const fakeAi = async (url, init) => { seen = { url, headers: init.headers, body: JSON.parse(init.body) }; return { ok: true, status: 200, json: async () => ({ output_text: '{"ok":true}' }) }; };
   const out = await chatJson({ system: 's', user: 'u' }, { env: { BLOG_LLM_MODEL: '@cf/openai/gpt-oss-120b', BLOG_AI_API_TOKEN: 'tok', CLOUDFLARE_ACCOUNT_ID: 'acc' }, fetchImpl: fakeAi });
   assert.deepEqual(out, { ok: true });
-  assert.equal(seen.url, 'https://api.cloudflare.com/client/v4/accounts/acc/ai/v1/chat/completions');
+  assert.equal(seen.url, 'https://api.cloudflare.com/client/v4/accounts/acc/ai/v1/responses');
   assert.equal(seen.headers['cf-aig-gateway-id'], 'default');
   assert.equal(seen.body.model, '@cf/openai/gpt-oss-120b');
+  assert.equal(seen.body.reasoning.effort, 'low');
+  assert.equal(seen.body.max_output_tokens >= 8192, true);
   await assert.rejects(chatJson({ system: 's', user: 'u' }, { env: {} }), /required/);
 }
 
